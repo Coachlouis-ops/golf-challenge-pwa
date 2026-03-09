@@ -33,6 +33,7 @@ export default function MembershipGuard({
       }
 
       const data = snap.data();
+      console.log("MEMBERSHIP DATA:", data);
 
       if (data.membershipStatus !== "active") {
   router.push("/payment");

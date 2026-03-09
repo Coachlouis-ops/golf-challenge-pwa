@@ -25,8 +25,8 @@ export async function POST(req: Request) {
         email: email,
       },
 
-      success_url: "https://teezgolfchallenge.com/dashboard",
-      cancel_url: "https://teezgolfchallenge.com/register",
+      success_url: "https://golf-challenge-pwa.vercel.app/dashboard",
+cancel_url: "https://golf-challenge-pwa.vercel.app/register",
     });
 
     return NextResponse.json({ url: session.url });

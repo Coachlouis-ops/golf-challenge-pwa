@@ -6,11 +6,9 @@ import { logout } from "@/src/lib/firebase";
 import { useAuth } from "@/src/lib/AuthContext";
 import MembershipGuard from "@/src/components/MembershipGuard";
 
-
-export default function Dashboard() {
+function DashboardContent() {
   const router = useRouter();
   const { user, loading } = useAuth();
-
 
   async function handleLogout() {
     await logout();
@@ -18,15 +16,14 @@ export default function Dashboard() {
   }
 
   if (loading) {
-  return (
-    <div className="min-h-screen flex items-center justify-center text-white">
-      Loading...
-    </div>
-  );
-}
+    return (
+      <div className="min-h-screen flex items-center justify-center text-white">
+        Loading...
+      </div>
+    );
+  }
 
- return (
-  <MembershipGuard>
+  return (
     <div
       className="min-h-screen flex items-center justify-center font-sans text-white"
       style={{
@@ -37,7 +34,6 @@ export default function Dashboard() {
       <main className="w-full max-w-md px-6">
         <div className="flex flex-col items-center gap-6">
 
-          {/* LOGO */}
           <Image
             src="/logo.png"
             alt="Teez Golf"
@@ -46,23 +42,16 @@ export default function Dashboard() {
             priority
           />
 
-          {/* TAGLINE */}
           <p className="text-center text-gray-300 text-lg">
             Settle the score. Play with purpose.
           </p>
 
-          {/* BUTTON STYLE */}
           <style jsx>{`
             .chrome-btn {
               width: 100%;
               height: 48px;
               border-radius: 12px;
-              background: linear-gradient(
-                145deg,
-                #ffffff,
-                #cfcfcf,
-                #9a9a9a
-              );
+              background: linear-gradient(145deg,#ffffff,#cfcfcf,#9a9a9a);
               color: black;
               font-weight: 600;
               box-shadow:
@@ -70,7 +59,6 @@ export default function Dashboard() {
                 inset 0 0 4px rgba(255,255,255,0.8);
               transition: all 0.2s ease;
             }
-
             .chrome-btn:hover {
               box-shadow:
                 0 0 18px rgba(255,255,255,0.7),
@@ -79,7 +67,6 @@ export default function Dashboard() {
             }
           `}</style>
 
-          {/* HOW IT WORKS */}
           <button
             onClick={() => router.push("/how-it-works")}
             className="chrome-btn"
@@ -87,27 +74,6 @@ export default function Dashboard() {
             How It Works
           </button>
 
-          {/* REGISTER */}
-          {!user && (
-            <button
-              onClick={() => router.push("/register")}
-              className="chrome-btn"
-            >
-              Register
-            </button>
-          )}
-
-          {/* SIGN IN */}
-          {!user && (
-            <button
-              onClick={() => router.push("/login")}
-              className="chrome-btn"
-            >
-              Sign In
-            </button>
-          )}
-
-          {/* AUTH USER ACTIONS */}
           {user && (
             <>
               <button
@@ -147,7 +113,6 @@ export default function Dashboard() {
             </>
           )}
 
-          {/* LOGOUT */}
           {user && (
             <button
               onClick={handleLogout}
@@ -157,25 +122,16 @@ export default function Dashboard() {
             </button>
           )}
 
-          {/* FOOTER */}
-          <div className="flex gap-4 pt-4">
-            <button
-              onClick={() => router.push("/privacy")}
-              className="text-xs text-gray-400 underline"
-            >
-              Privacy Policy
-            </button>
-            <button
-              onClick={() => router.push("/terms")}
-              className="text-xs text-gray-400 underline"
-            >
-              Terms & Conditions
-            </button>
-          </div>
-
         </div>
       </main>
     </div>
-  </MembershipGuard>
-);
+  );
+}
+
+export default function Dashboard() {
+  return (
+    <MembershipGuard>
+      <DashboardContent />
+    </MembershipGuard>
+  );
 }

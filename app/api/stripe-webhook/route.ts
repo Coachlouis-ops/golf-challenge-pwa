@@ -41,25 +41,29 @@ export async function POST(req: Request) {
       });
     }
 
-    const db = getFirestore();
+const db = getFirestore();
 
-    if (event.type === "checkout.session.completed") {
-      const session = event.data.object as Stripe.Checkout.Session;
+if (event.type === "checkout.session.completed") {
+  const session = event.data.object as Stripe.Checkout.Session;
 
-      const uid = session.metadata?.uid;
+  const uid = session.metadata?.uid;
 
-      if (uid) {
-        await db.collection("users").doc(uid).set(
-          {
-            membershipStatus: "active",
-            membershipType: "annual",
-            membershipStart: new Date(),
-          },
-          { merge: true }
-        );
-      }
-    }
+  if (uid) {
+    const start = new Date();
+    const expires = new Date();
+    expires.setFullYear(start.getFullYear() + 1);
 
+    await db.collection("users").doc(uid).set(
+      {
+        membershipStatus: "active",
+        membershipType: "annual",
+        membershipStart: start,
+        membershipExpires: expires,
+      },
+      { merge: true }
+    );
+  }
+}
     return NextResponse.json({ received: true });
 
   } catch (error) {

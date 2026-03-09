@@ -35,9 +35,18 @@ export default function MembershipGuard({
       const data = snap.data();
 
       if (data.membershipStatus !== "active") {
-        router.push("/payment");
-        return;
-      }
+  router.push("/payment");
+  return;
+}
+
+if (data.membershipExpires) {
+  const expires = data.membershipExpires.toDate();
+
+  if (new Date() > expires) {
+    router.push("/payment");
+    return;
+  }
+}
 
       setAllowed(true);
     })();

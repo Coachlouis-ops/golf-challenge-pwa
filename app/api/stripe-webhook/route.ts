@@ -7,7 +7,7 @@ import { initializeApp, getApps } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
-  apiVersion: "2023-10-16",
+  apiVersion: "2026-02-25.clover",
 });
 
 if (!getApps().length) {
@@ -18,7 +18,7 @@ const db = getFirestore();
 
 export async function POST(req: Request) {
   const body = await req.text();
-  const sig = headers().get("stripe-signature") as string;
+ const sig = (await headers()).get("stripe-signature") as string;
 
   let event: Stripe.Event;
 

@@ -17,13 +17,13 @@ export default function MembershipGuard({
 
   useEffect(() => {
     if (loading) return;
-
     if (!user) {
       router.push("/login");
       return;
     }
 
     (async () => {
+      console.log("Logged in UID:", user.uid);
       const ref = doc(db, "users", user.uid);
       const snap = await getDoc(ref);
 

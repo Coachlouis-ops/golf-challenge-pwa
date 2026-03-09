@@ -31,8 +31,8 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ url: session.url });
 
-  } catch (error) {
-    console.error(error);
-    return NextResponse.json({ error: "Stripe session error" });
-  }
+ } catch (error: any) {
+  console.error("Stripe error:", error);
+  return NextResponse.json({ error: error.message });
+}
 }

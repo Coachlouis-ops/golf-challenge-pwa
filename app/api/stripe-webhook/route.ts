@@ -18,7 +18,7 @@ const db = getFirestore();
 
 export async function POST(req: Request) {
   const body = await req.text();
- const sig = headers().get("stripe-signature") as string;
+const sig = (await headers()).get("stripe-signature") as string;
 
   let event: Stripe.Event;
 

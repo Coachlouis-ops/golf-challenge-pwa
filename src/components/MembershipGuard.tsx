@@ -17,18 +17,20 @@ export default function MembershipGuard({
 
   useEffect(() => {
     if (loading) return;
+
     if (!user) {
-      router.push("/login");
+      router.replace("/login");
       return;
     }
 
     (async () => {
       console.log("Logged in UID:", user.uid);
+
       const ref = doc(db, "users", user.uid);
       const snap = await getDoc(ref);
 
       if (!snap.exists()) {
-        router.push("/payment");
+        router.replace("/payment");
         return;
       }
 
@@ -36,25 +38,23 @@ export default function MembershipGuard({
       console.log("MEMBERSHIP DATA:", data);
 
       if (data.membershipStatus !== "active") {
-  router.push("/payment");
-  return;
-}
+        router.replace("/payment");
+        return;
+      }
 
-if (data.membershipExpires) {
+      if (data.membershipExpires) {
+        const expires =
+          typeof data.membershipExpires.toDate === "function"
+            ? data.membershipExpires.toDate()
+            : new Date(data.membershipExpires);
 
-  const expires =
-    typeof data.membershipExpires.toDate === "function"
-      ? data.membershipExpires.toDate()
-      : new Date(data.membershipExpires);
+        const now = new Date();
 
-  const now = new Date();
-
-  if (now.getTime() > expires.getTime()) {
-    router.push("/payment");
-    return;
-  }
-
-}
+        if (now.getTime() > expires.getTime()) {
+          router.replace("/payment");
+          return;
+        }
+      }
 
       setAllowed(true);
     })();

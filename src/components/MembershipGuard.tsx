@@ -40,12 +40,19 @@ export default function MembershipGuard({
 }
 
 if (data.membershipExpires) {
-  const expires = data.membershipExpires.toDate();
 
-  if (new Date() > expires) {
+  const expires =
+    typeof data.membershipExpires.toDate === "function"
+      ? data.membershipExpires.toDate()
+      : new Date(data.membershipExpires);
+
+  const now = new Date();
+
+  if (now.getTime() > expires.getTime()) {
     router.push("/payment");
     return;
   }
+
 }
 
       setAllowed(true);

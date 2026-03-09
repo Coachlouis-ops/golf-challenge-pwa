@@ -5,29 +5,31 @@ import { useRouter } from "next/navigation";
 export default function RegisterPage() {
   const router = useRouter();
 
-  const handleCheckout = async () => {
-    try {
-   const res = await fetch("/api/create-checkout-session", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-  },
-  body: JSON.stringify({
-    uid: "test-user",
-    email: "test@example.com",
-  }),
-});
-      const data = await res.json();
+const handleCheckout = async () => {
+  try {
+    const res = await fetch("/api/create-checkout-session", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        uid: "test-user",
+        email: "test@example.com",
+      }),
+    });
 
-      if (data.url) {
-        window.location.href = data.url;
-      } else {
-        console.error("Stripe session error");
-      }
-    } catch (error) {
-      console.error("Checkout error:", error);
+    const data = await res.json();
+
+    if (data.url) {
+      window.location.href = data.url;
+    } else {
+      console.error(data.error);
     }
-  };
+
+  } catch (error) {
+    console.error("Checkout error:", error);
+  }
+};
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center gap-6 bg-black text-white font-sans">

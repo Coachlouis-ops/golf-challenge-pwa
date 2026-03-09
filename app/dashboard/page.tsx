@@ -4,9 +4,6 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { logout } from "@/src/lib/firebase";
 import { useAuth } from "@/src/lib/AuthContext";
-import { useEffect } from "react";
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "@/src/lib/firebase";
 import MembershipGuard from "@/src/components/MembershipGuard";
 
 
@@ -14,30 +11,6 @@ export default function Dashboard() {
   const router = useRouter();
   const { user, loading } = useAuth();
 
- useEffect(() => {
-  if (!loading && !user) {
-    router.push("/login");
-    return;
-  }
-
-  if (user) {
-    (async () => {
-      const userRef = doc(db, "users", user.uid);
-      const userSnap = await getDoc(userRef);
-
-      if (!userSnap.exists()) {
-        router.push("/payment");
-        return;
-      }
-
-      const data = userSnap.data();
-
-      if (data.membershipStatus !== "active") {
-        router.push("/payment");
-      }
-    })();
-  }
-}, [user, loading, router]);
 
   async function handleLogout() {
     await logout();

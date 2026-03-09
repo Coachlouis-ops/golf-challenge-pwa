@@ -5,16 +5,39 @@ import { useRouter } from "next/navigation";
 import { logout } from "@/src/lib/firebase";
 import { useAuth } from "@/src/lib/AuthContext";
 import { useEffect } from "react";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "@/src/lib/firebase";
+import MembershipGuard from "@/src/components/MembershipGuard";
+
 
 export default function Dashboard() {
   const router = useRouter();
   const { user, loading } = useAuth();
 
-  useEffect(() => {
-    if (!loading && !user) {
-      router.push("/login");
-    }
-  }, [user, loading, router]);
+ useEffect(() => {
+  if (!loading && !user) {
+    router.push("/login");
+    return;
+  }
+
+  if (user) {
+    (async () => {
+      const userRef = doc(db, "users", user.uid);
+      const userSnap = await getDoc(userRef);
+
+      if (!userSnap.exists()) {
+        router.push("/payment");
+        return;
+      }
+
+      const data = userSnap.data();
+
+      if (data.membershipStatus !== "active") {
+        router.push("/payment");
+      }
+    })();
+  }
+}, [user, loading, router]);
 
   async function handleLogout() {
     await logout();
@@ -22,14 +45,15 @@ export default function Dashboard() {
   }
 
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center text-white">
-        Loading...
-      </div>
-    );
-  }
-
   return (
+    <div className="min-h-screen flex items-center justify-center text-white">
+      Loading...
+    </div>
+  );
+}
+
+ return (
+  <MembershipGuard>
     <div
       className="min-h-screen flex items-center justify-center font-sans text-white"
       style={{
@@ -179,5 +203,6 @@ export default function Dashboard() {
         </div>
       </main>
     </div>
-  );
+  </MembershipGuard>
+);
 }

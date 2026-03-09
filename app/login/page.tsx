@@ -13,26 +13,28 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setError(null);
-    setLoading(true);
+  e.preventDefault();
+  setError(null);
+  setLoading(true);
 
-    try {
-      // 1️⃣ Try sign in
-      await login(email, password);
-      router.push("/dashboard");
-    } catch {
+  try {
+    await login(email, password);
+    router.push("/dashboard");
+  } catch (err: any) {
+    if (err.code === "auth/user-not-found") {
       try {
-        // 2️⃣ If sign in fails → auto register
         await register(email, password);
         router.push("/dashboard");
-      } catch (err: any) {
-        setError(err.message || "Authentication failed");
+      } catch (regErr: any) {
+        setError(regErr.message || "Registration failed");
       }
-    } finally {
-      setLoading(false);
+    } else {
+      setError("Incorrect email or password");
     }
+  } finally {
+    setLoading(false);
   }
+}
 
   return (
     <main className="min-h-screen flex items-center justify-center">

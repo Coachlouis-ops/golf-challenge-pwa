@@ -7,10 +7,16 @@ export default function RegisterPage() {
 
   const handleCheckout = async () => {
     try {
-      const res = await fetch("/api/create-checkout-session", {
-        method: "POST",
-      });
-
+   const res = await fetch("/api/create-checkout-session", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({
+    uid: "test-user",
+    email: "test@example.com",
+  }),
+});
       const data = await res.json();
 
       if (data.url) {

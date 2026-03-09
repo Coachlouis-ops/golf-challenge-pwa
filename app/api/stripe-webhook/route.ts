@@ -41,29 +41,69 @@ export async function POST(req: Request) {
       });
     }
 
-const db = getFirestore();
+    const db = getFirestore();
 
-if (event.type === "checkout.session.completed") {
-  const session = event.data.object as Stripe.Checkout.Session;
+    // =====================================================
+    // PAYMENT SUCCESS (ACTIVATE MEMBERSHIP)
+    // =====================================================
+    if (event.type === "checkout.session.completed") {
+      const session = event.data.object as Stripe.Checkout.Session;
 
-  const uid = session.metadata?.uid;
+      const uid = session.metadata?.uid;
 
-  if (uid) {
-    const start = new Date();
-    const expires = new Date();
-    expires.setFullYear(start.getFullYear() + 1);
+      if (uid) {
+        const start = new Date();
+        const expires = new Date();
+        expires.setFullYear(start.getFullYear() + 1);
 
-    await db.collection("users").doc(uid).set(
-      {
-        membershipStatus: "active",
-        membershipType: "annual",
-        membershipStart: start,
-        membershipExpires: expires,
-      },
-      { merge: true }
-    );
-  }
-}
+        await db.collection("users").doc(uid).set(
+          {
+            membershipStatus: "active",
+            membershipType: "annual",
+            membershipStart: start,
+            membershipExpires: expires,
+          },
+          { merge: true }
+        );
+      }
+    }
+
+    // =====================================================
+    // PAYMENT FAILED (DEACTIVATE MEMBERSHIP)
+    // =====================================================
+    if (event.type === "invoice.payment_failed") {
+      const invoice = event.data.object as Stripe.Invoice;
+
+      const uid = invoice.metadata?.uid;
+
+      if (uid) {
+        await db.collection("users").doc(uid).set(
+          {
+            membershipStatus: "inactive",
+          },
+          { merge: true }
+        );
+      }
+    }
+
+    // =====================================================
+    // SUBSCRIPTION CANCELLED (DEACTIVATE MEMBERSHIP)
+    // =====================================================
+    if (event.type === "customer.subscription.deleted") {
+      const subscription = event.data.object as Stripe.Subscription;
+
+      const uid = subscription.metadata?.uid;
+
+      if (uid) {
+        await db.collection("users").doc(uid).set(
+          {
+            membershipStatus: "inactive",
+          },
+          { merge: true }
+        );
+      }
+    }
+
     return NextResponse.json({ received: true });
 
   } catch (error) {

@@ -44,10 +44,16 @@ export async function POST(req: Request) {
     const db = getFirestore();
 
     // =====================================================
-    // PAYMENT SUCCESS (ACTIVATE MEMBERSHIP)
+    // CHECKOUT SESSION COMPLETED
     // =====================================================
     if (event.type === "checkout.session.completed") {
+
       const session = event.data.object as Stripe.Checkout.Session;
+
+      console.log("SESSION MODE:", session.mode);
+      console.log("SESSION PRICE:", session.metadata?.priceId);
+      console.log("SESSION UID:", session.metadata?.uid);
+      console.log("SESSION METADATA:", session.metadata);
 
       const uid = session.metadata?.uid;
 

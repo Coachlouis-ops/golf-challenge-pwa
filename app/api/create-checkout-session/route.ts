@@ -16,7 +16,7 @@ export async function POST(req: Request) {
 
       line_items: [
         {
-          price: priceId,
+          price: priceId ?? process.env.STRIPE_MEMBERSHIP_PRICE_ID,
           quantity: 1,
         },
       ],
@@ -24,7 +24,7 @@ export async function POST(req: Request) {
       metadata: {
         uid,
         email,
-        priceId,
+        priceId: priceId ?? "membership",
       },
 
       success_url: "https://golf-challenge-pwa.vercel.app/dashboard",

@@ -318,10 +318,7 @@ console.log("Autocomplete effect triggered");
   ref={clubInputRef}
   className="border p-2 rounded"
   placeholder="Home Golf Club"
-  value={profile.club}
-  onChange={(e) =>
-    setProfile({ ...profile, club: e.target.value })
-  }
+  defaultValue={profile.club}
 />
 
           <input

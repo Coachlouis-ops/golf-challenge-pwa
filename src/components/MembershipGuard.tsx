@@ -26,31 +26,56 @@ export default function MembershipGuard({
     (async () => {
       console.log("Logged in UID:", user.uid);
 
-      const ref = doc(db, "users", user.uid);
-      const snap = await getDoc(ref);
+      // --------------------------------------------------
+      // PROFILE CHECK
+      // --------------------------------------------------
+      const profileRef = doc(db, "profiles", user.uid);
+      const profileSnap = await getDoc(profileRef);
 
-      if (!snap.exists()) {
+      if (!profileSnap.exists()) {
+        console.log("Profile missing → redirect to profile page");
+        router.replace("/profile");
+        return;
+      }
+
+      const profile = profileSnap.data();
+
+      if (!profile.name || !profile.surname || !profile.battleName) {
+        console.log("Profile incomplete → redirect to profile page");
+        router.replace("/profile");
+        return;
+      }
+
+      // --------------------------------------------------
+      // MEMBERSHIP CHECK
+      // --------------------------------------------------
+      const membershipRef = doc(db, "users", user.uid);
+      const membershipSnap = await getDoc(membershipRef);
+
+      if (!membershipSnap.exists()) {
+        console.log("Membership record missing → redirect to payment");
         router.replace("/payment");
         return;
       }
 
-      const data = snap.data();
-      console.log("MEMBERSHIP DATA:", data);
+      const membership = membershipSnap.data();
 
-      if (data.membershipStatus !== "active") {
+      if (membership.membershipStatus !== "active") {
+        console.log("Membership inactive → redirect to payment");
         router.replace("/payment");
         return;
       }
 
-      if (data.membershipExpires) {
+      if (membership.membershipExpires) {
         const expires =
-          typeof data.membershipExpires.toDate === "function"
-            ? data.membershipExpires.toDate()
-            : new Date(data.membershipExpires);
+          typeof membership.membershipExpires.toDate === "function"
+            ? membership.membershipExpires.toDate()
+            : new Date(membership.membershipExpires);
 
         const now = new Date();
 
         if (now.getTime() > expires.getTime()) {
+          console.log("Membership expired → redirect to payment");
           router.replace("/payment");
           return;
         }
@@ -63,7 +88,7 @@ export default function MembershipGuard({
   if (!allowed) {
     return (
       <div className="min-h-screen flex items-center justify-center text-white">
-        Checking membership...
+        Checking account...
       </div>
     );
   }

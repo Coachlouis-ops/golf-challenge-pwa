@@ -13,10 +13,12 @@ export default function PaymentPage() {
     const res = await fetch("/api/create-checkout-session", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        uid: user.uid,
-        email: user.email,
-      }),
+   body: JSON.stringify({
+  uid: user.uid,
+  email: user.email,
+  priceId: "PASTE_MEMBERSHIP_PRICE_ID_HERE",
+  mode: "subscription",
+}),
     });
 
     const data = await res.json();

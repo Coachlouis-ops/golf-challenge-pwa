@@ -5,31 +5,6 @@ import { useRouter } from "next/navigation";
 export default function RegisterPage() {
   const router = useRouter();
 
-const handleCheckout = async () => {
-  try {
-    const res = await fetch("/api/create-checkout-session", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        uid: "test-user",
-        email: "test@example.com",
-      }),
-    });
-
-    const data = await res.json();
-
-    if (data.url) {
-      window.location.href = data.url;
-    } else {
-      console.error(data.error);
-    }
-
-  } catch (error) {
-    console.error("Checkout error:", error);
-  }
-};
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center gap-6 bg-black text-white font-sans">
@@ -50,12 +25,12 @@ const handleCheckout = async () => {
         Continue to Sign In
       </button>
 
-      <button
-        onClick={handleCheckout}
-        className="px-8 py-3 rounded-xl bg-blue-600 text-white font-semibold"
-      >
-        Pay Membership ($10.99 / year)
-      </button>
+<button
+  onClick={() => router.push("/payment")}
+  className="px-8 py-3 rounded-xl bg-blue-600 text-white font-semibold"
+>
+  Pay Membership ($10.99 / year)
+</button>
 
       <button
         onClick={() => router.push("/")}

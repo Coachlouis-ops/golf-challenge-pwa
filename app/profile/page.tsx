@@ -8,6 +8,8 @@ import { countries } from "@/src/lib/countries";
 import { Loader } from "@googlemaps/js-api-loader";
 
 
+declare const google: any;
+
 type Profile = {
   uid: string;
   name: string;
@@ -74,33 +76,63 @@ export default function ProfilePage() {
     },
   });
 
-  useEffect(() => {
-    if (!user) return;
+ useEffect(() => {
+  if (!user) return;
 
-    (async () => {
-      const profileRef = doc(db, "profiles", user.uid);
-      const profileSnap = await getDoc(profileRef);
+  (async () => {
+    const profileRef = doc(db, "profiles", user.uid);
+    const profileSnap = await getDoc(profileRef);
 
-      if (profileSnap.exists()) {
-        setProfile(profileSnap.data() as Profile);
-        setProfileExists(true);
-        setIsEditing(false);
-      } else {
-        setProfileExists(false);
-        setIsEditing(true);
+    if (profileSnap.exists()) {
+      setProfile(profileSnap.data() as Profile);
+      setProfileExists(true);
+      setIsEditing(false);
+    } else {
+      setProfileExists(false);
+      setIsEditing(true);
+    }
+
+    // Load ranking positions
+    const rankingRef = doc(db, "playerRankings", user.uid);
+    const rankingSnap = await getDoc(rankingRef);
+
+    if (rankingSnap.exists()) {
+      setRankingPosition(rankingSnap.data() as RankingPosition);
+    }
+
+    setLoading(false);
+  })();
+}, [user]);
+
+useEffect(() => {
+  if (!clubInputRef.current) return;
+
+  const loader = new Loader({
+    apiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string,
+    version: "weekly",
+    libraries: ["places"],
+  });
+
+  loader.load().then(() => {
+    const autocomplete = new google.maps.places.Autocomplete(
+      clubInputRef.current as HTMLInputElement,
+      {
+        types: ["establishment"],
       }
+    );
 
-      // Load ranking positions
-      const rankingRef = doc(db, "playerRankings", user.uid);
-      const rankingSnap = await getDoc(rankingRef);
+    autocomplete.addListener("place_changed", () => {
+      const place = autocomplete.getPlace();
 
-      if (rankingSnap.exists()) {
-        setRankingPosition(rankingSnap.data() as RankingPosition);
-      }
+      if (!place || !place.name) return;
 
-      setLoading(false);
-    })();
-  }, [user]);
+      setProfile((prev) => ({
+        ...prev,
+        club: place.name || "",
+      }));
+    });
+  });
+}, []);
 
   async function saveProfile() {
     if (!user) return;

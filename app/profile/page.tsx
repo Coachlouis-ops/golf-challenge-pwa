@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useAuth } from "@/src/lib/AuthContext";
 import { db } from "@/src/lib/firebase";
 import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
 import { countries } from "@/src/lib/countries";
-
+import { Loader } from "@googlemaps/js-api-loader";
 
 
 type Profile = {
@@ -50,6 +50,8 @@ export default function ProfilePage() {
     national: 0,
     international: 0,
   });
+
+  const clubInputRef = useRef<HTMLInputElement | null>(null);
 
   const [profile, setProfile] = useState<Profile>({
     uid: "",

@@ -47,19 +47,25 @@ function CapsuleGroup({
 }) {
   return (
     <div className="flex flex-col gap-3">
-      <h3 className="font-semibold">{title}</h3>
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+      <h3 className="font-semibold text-green-400 tracking-wider">
+        {title}
+      </h3>
+
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
         {items.map((item) => {
           const isSelected = selected === item;
+
           return (
             <button
               key={item}
               type="button"
               onClick={() => onSelect(item)}
-              className={`px-3 py-2 rounded-full border text-sm ${
+              className={`px-3 py-2 rounded-full border text-sm transition-all duration-300
+              
+              ${
                 isSelected
-                  ? "bg-green-500 text-black border-green-500 font-semibold"
-                  : "bg-white text-gray-700 border-gray-300"
+                  ? "bg-green-400 text-black border-green-400 shadow-[0_0_20px_#39FF14] scale-105"
+                  : "bg-neutral-800 text-gray-300 border-neutral-600 hover:border-green-400 hover:shadow-[0_0_10px_#39FF14]"
               }`}
             >
               {item}
@@ -125,66 +131,106 @@ export default function CreateChallengePage() {
 
   return (
     <RequireAuth>
-      <main className="min-h-screen max-w-3xl mx-auto p-6 flex flex-col gap-6">
-        <h1 className="text-2xl font-semibold">Create Challenge</h1>
+      <main className="min-h-screen flex justify-center items-center px-4 py-16 text-white relative overflow-hidden bg-black">
 
-        <input
-          placeholder="Challenge Title"
-          value={challengeTitle}
-          onChange={(e) => setChallengeTitle(e.target.value)}
-          className="border p-2 rounded"
+        {/* PARTICLES */}
+        <div className="absolute inset-0 opacity-20 animate-pulse pointer-events-none bg-[radial-gradient(circle,#39FF14_1px,transparent_1px)] bg-[size:40px_40px]" />
+
+        {/* STADIUM LIGHTS */}
+        <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[400px] bg-green-400 opacity-10 blur-[120px] animate-pulse"></div>
+        </div>
+
+        {/* BADGER LEFT */}
+        <img
+          src="/badger-left.png"
+          className="hidden lg:block absolute left-0 bottom-0 h-[90%] opacity-25 animate-pulse"
         />
 
-        <input
-          type="number"
-          placeholder="Entry Tokens"
-          value={entryTokens}
-          onChange={(e) => setEntryTokens(Number(e.target.value))}
-          className="border p-2 rounded"
+        {/* BADGER RIGHT */}
+        <img
+          src="/badger-right.png"
+          className="hidden lg:block absolute right-0 bottom-0 h-[90%] opacity-25 animate-pulse"
         />
 
-        <input
-          placeholder="Course Name"
-          value={courseName}
-          onChange={(e) => setCourseName(e.target.value)}
-          className="border p-2 rounded"
-        />
+        {/* MAIN PANEL */}
+        <div className="relative z-10 w-full max-w-3xl bg-neutral-900/80 backdrop-blur-xl border border-neutral-700 rounded-2xl p-10 shadow-[0_0_40px_rgba(0,255,120,0.25)] flex flex-col gap-7">
 
-        <CapsuleGroup
-          title="Team Format"
-          items={TEAM_FORMATS}
-          selected={teamFormat}
-          onSelect={setTeamFormat}
-        />
+          <h1 className="text-4xl font-bold text-green-400 text-center tracking-widest drop-shadow-[0_0_10px_#39FF14]">
+            CREATE CHALLENGE
+          </h1>
 
-        <CapsuleGroup
-          title="Game Format"
-          items={GAME_FORMATS}
-          selected={gameFormat}
-          onSelect={setGameFormat}
-        />
+          {/* INPUTS */}
 
-        <CapsuleGroup
-          title="Type Of Game"
-          items={TYPE_OF_GAME}
-          selected={typeOfGame}
-          onSelect={setTypeOfGame}
-        />
+          <input
+            placeholder="Challenge Title"
+            value={challengeTitle}
+            onChange={(e) => setChallengeTitle(e.target.value)}
+            className="bg-black border border-neutral-700 focus:border-green-400 rounded p-3 outline-none transition-all focus:shadow-[0_0_10px_#39FF14]"
+          />
 
-        <CapsuleGroup
-          title="Scoring Method"
-          items={SCORING_METHODS}
-          selected={scoringMethod}
-          onSelect={setScoringMethod}
-        />
+          <input
+            type="number"
+            placeholder="Entry Tokens"
+            value={entryTokens}
+            onChange={(e) => setEntryTokens(Number(e.target.value))}
+            className="bg-black border border-neutral-700 focus:border-green-400 rounded p-3 outline-none transition-all focus:shadow-[0_0_10px_#39FF14]"
+          />
 
-        <button
-          onClick={handleCreate}
-          disabled={!isValid || loading}
-          className="bg-blue-600 text-white px-4 py-2 rounded disabled:opacity-50"
-        >
-          {loading ? "Creating..." : "Create Challenge"}
-        </button>
+          <input
+            placeholder="Course Name"
+            value={courseName}
+            onChange={(e) => setCourseName(e.target.value)}
+            className="bg-black border border-neutral-700 focus:border-green-400 rounded p-3 outline-none transition-all focus:shadow-[0_0_10px_#39FF14]"
+          />
+
+          {/* CAPSULE GROUPS */}
+
+          <CapsuleGroup
+            title="Team Format"
+            items={TEAM_FORMATS}
+            selected={teamFormat}
+            onSelect={setTeamFormat}
+          />
+
+          <CapsuleGroup
+            title="Game Format"
+            items={GAME_FORMATS}
+            selected={gameFormat}
+            onSelect={setGameFormat}
+          />
+
+          <CapsuleGroup
+            title="Type Of Game"
+            items={TYPE_OF_GAME}
+            selected={typeOfGame}
+            onSelect={setTypeOfGame}
+          />
+
+          <CapsuleGroup
+            title="Scoring Method"
+            items={SCORING_METHODS}
+            selected={scoringMethod}
+            onSelect={setScoringMethod}
+          />
+
+          {/* CREATE BUTTON */}
+
+          <button
+            onClick={handleCreate}
+            disabled={!isValid || loading}
+            className="mt-6 py-4 rounded-xl font-bold text-black text-lg bg-green-400 hover:bg-green-300 transition-all duration-300 shadow-[0_0_25px_#39FF14] hover:shadow-[0_0_50px_#39FF14] disabled:opacity-50"
+          >
+            {loading ? "Creating Challenge..." : "CREATE CHALLENGE"}
+          </button>
+
+          {/* ENERGY BAR */}
+
+          <div className="w-full h-[3px] bg-neutral-800 overflow-hidden rounded-full">
+            <div className="h-full w-1/2 bg-green-400 animate-[pulse_2s_infinite]"></div>
+          </div>
+
+        </div>
       </main>
     </RequireAuth>
   );

@@ -285,13 +285,14 @@ useEffect(() => {
           />
 
           <input
-            className="border p-2 rounded"
-            placeholder="Home Golf Club"
-            value={profile.club}
-            onChange={(e) =>
-              setProfile({ ...profile, club: e.target.value })
-            }
-          />
+  ref={clubInputRef}
+  className="border p-2 rounded"
+  placeholder="Home Golf Club"
+  value={profile.club}
+  onChange={(e) =>
+    setProfile({ ...profile, club: e.target.value })
+  }
+/>
 
           <input
             className="border p-2 rounded"

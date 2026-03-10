@@ -76,193 +76,201 @@ export default function ProfilePage() {
     },
   });
 
- useEffect(() => {
-  if (!user) return;
+  /* LOAD PROFILE */
 
-  (async () => {
-    const profileRef = doc(db, "profiles", user.uid);
-    const profileSnap = await getDoc(profileRef);
+  useEffect(() => {
+    if (!user) return;
 
-    if (profileSnap.exists()) {
-      setProfile(profileSnap.data() as Profile);
-      setProfileExists(true);
-      setIsEditing(false);
-    } else {
-      setProfileExists(false);
-      setIsEditing(true);
-    }
+    (async () => {
+      const profileRef = doc(db, "profiles", user.uid);
+      const profileSnap = await getDoc(profileRef);
 
-    // Load ranking positions
-    const rankingRef = doc(db, "playerRankings", user.uid);
-    const rankingSnap = await getDoc(rankingRef);
-
-    if (rankingSnap.exists()) {
-      setRankingPosition(rankingSnap.data() as RankingPosition);
-    }
-
-    setLoading(false);
-  })();
-}, [user]);
-
-useEffect(() => {
-console.log("Autocomplete effect triggered");
-
-  if (!isEditing) return;
-  
-
-  function initAutocomplete() {
-    if (!clubInputRef.current) return;
-
-   const autocomplete = new (window as any).google.maps.places.PlaceAutocompleteElement();
-
-autocomplete.placeholder = "Home Golf Club";
-
-clubInputRef.current.parentNode?.insertBefore(
-  autocomplete,
-  clubInputRef.current
-);
-
-clubInputRef.current.style.display = "none";
-
-autocomplete.addEventListener("gmp-select", async (event: any) => {
-  const place = event.placePrediction.toPlace();
-  await place.fetchFields({
-    fields: ["displayName", "addressComponents"],
-  });
-
-  let province = "";
-  let country = "";
-
-  if (place.addressComponents) {
-    place.addressComponents.forEach((component: any) => {
-      if (component.types.includes("administrative_area_level_1")) {
-        province = component.longText;
+      if (profileSnap.exists()) {
+        setProfile(profileSnap.data() as Profile);
+        setProfileExists(true);
+        setIsEditing(false);
+      } else {
+        setProfileExists(false);
+        setIsEditing(true);
       }
 
-      if (component.types.includes("country")) {
-        country = component.longText;
+      const rankingRef = doc(db, "playerRankings", user.uid);
+      const rankingSnap = await getDoc(rankingRef);
+
+      if (rankingSnap.exists()) {
+        setRankingPosition(rankingSnap.data() as RankingPosition);
       }
-    });
-  }
 
-  setProfile((prev) => ({
-    ...prev,
-    club: place.displayName || "",
-    stateProvince: province || prev.stateProvince,
-    country: country || prev.country,
-  }));
-});
-  }
+      setLoading(false);
+    })();
+  }, [user]);
 
-  const scriptId = "google-maps-script";
+  /* GOOGLE CLUB SEARCH */
 
-  if ((window as any).google && (window as any).google.maps) {
-    initAutocomplete();
-    return;
-  }
+  useEffect(() => {
+    if (!isEditing) return;
 
-  let script = document.getElementById(scriptId) as HTMLScriptElement | null;
+    function initAutocomplete() {
+      if (!clubInputRef.current) return;
 
-  if (!script) {
-    script = document.createElement("script");
-    script.id = scriptId;
-    script.src =
-      "https://maps.googleapis.com/maps/api/js?key=" +
-      process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY +
-      "&libraries=places";
+      const autocomplete =
+        new (window as any).google.maps.places.Autocomplete(
+          clubInputRef.current,
+          { types: ["establishment"] }
+        );
 
-    script.async = true;
-    script.defer = true;
+      autocomplete.addListener("place_changed", () => {
+        const place = autocomplete.getPlace();
 
-    script.onload = () => {
+        if (!place || !place.name) return;
+
+        let province = "";
+        let country = "";
+
+        if (place.address_components) {
+          place.address_components.forEach((component: any) => {
+            if (component.types.includes("administrative_area_level_1")) {
+              province = component.long_name;
+            }
+
+            if (component.types.includes("country")) {
+              country = component.long_name;
+            }
+          });
+        }
+
+        setProfile((prev) => ({
+          ...prev,
+          club: place.name || "",
+          stateProvince: province || prev.stateProvince,
+          country: country || prev.country,
+        }));
+      });
+    }
+
+    const scriptId = "google-maps-script";
+
+    if ((window as any).google && (window as any).google.maps) {
       initAutocomplete();
-    };
+      return;
+    }
 
-    document.head.appendChild(script);
-  } else {
-    script.addEventListener("load", initAutocomplete);
-  }
-}, [isEditing]);
+    let script = document.getElementById(scriptId) as HTMLScriptElement | null;
+
+    if (!script) {
+      script = document.createElement("script");
+      script.id = scriptId;
+      script.src =
+        "https://maps.googleapis.com/maps/api/js?key=" +
+        process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY +
+        "&libraries=places";
+
+      script.async = true;
+      script.defer = true;
+
+      script.onload = () => initAutocomplete();
+
+      document.head.appendChild(script);
+    }
+  }, [isEditing]);
+
+  /* SAVE PROFILE */
 
   async function saveProfile() {
-  if (!user) return;
+    if (!user) return;
 
-  const uid = user.uid;
+    const uid = user.uid;
 
-  setSaving(true);
+    setSaving(true);
 
-  const searchIndex = `${profile.name} ${profile.surname} ${profile.battleName} ${profile.club} ${profile.country} ${profile.stateProvince}`.toLowerCase();
+    const searchIndex = `${profile.name} ${profile.surname} ${profile.battleName} ${profile.club} ${profile.country} ${profile.stateProvince}`.toLowerCase();
 
-  await setDoc(
-    doc(db, "profiles", uid),
-    {
-      ...profile,
-      uid,
-      searchIndex,
-      updatedAt: serverTimestamp(),
-      createdAt: serverTimestamp(),
-    },
-    { merge: true }
-  );
-
-  setSaving(false);
-  setProfileExists(true);
-  setIsEditing(false);
-
-  router.push("/payment");
-}
-
-  if (!user) {
-    return (
-      <main className="min-h-screen flex items-center justify-center">
-        <p>No user loaded</p>
-      </main>
+    await setDoc(
+      doc(db, "profiles", uid),
+      {
+        ...profile,
+        uid,
+        searchIndex,
+        updatedAt: serverTimestamp(),
+        createdAt: serverTimestamp(),
+      },
+      { merge: true }
     );
+
+    setSaving(false);
+    setProfileExists(true);
+    setIsEditing(false);
+
+    router.push("/payment");
   }
 
-  if (loading) {
+  if (!user)
     return (
-      <main className="min-h-screen flex items-center justify-center">
-        <p>Loading profile…</p>
+      <main className="min-h-screen flex items-center justify-center text-white">
+        No user loaded
       </main>
     );
-  }
+
+  if (loading)
+    return (
+      <main className="min-h-screen flex items-center justify-center text-white">
+        Loading profile...
+      </main>
+    );
 
   return (
-    <main className="min-h-screen max-w-md mx-auto p-6 flex flex-col gap-4">
-      <h1 className="text-2xl font-semibold text-center">My Profile</h1>
+    <main className="min-h-screen bg-black text-white px-6 py-8 max-w-md mx-auto space-y-6">
 
-      <p className="text-sm text-gray-600 text-center">
-        Signed in as {user.email}
-      </p>
+      {/* HEADER */}
 
-      {/* VIEW MODE */}
+      <div className="text-center">
+        <h1 className="text-3xl font-bold tracking-wide text-green-400">
+          TEEZ PROFILE
+        </h1>
+        <p className="text-gray-400 text-sm">{user.email}</p>
+      </div>
+
+      {/* PLAYER CARD */}
+
       {profileExists && !isEditing && (
         <>
-          <div className="border rounded p-6 flex flex-col gap-2">
-            <p><strong>Name:</strong> {profile.name}</p>
-            <p><strong>Surname:</strong> {profile.surname}</p>
-            <p><strong>Battle Name:</strong> {profile.battleName}</p>
-            <p><strong>Country:</strong> {profile.country}</p>
-            <p><strong>State / Province:</strong> {profile.stateProvince}</p>
-            <p><strong>Club:</strong> {profile.club}</p>
-            <p><strong>Date of Birth:</strong> {profile.dateOfBirth}</p>
-            <p><strong>ID Number:</strong> {profile.idNumber}</p>
-            <p><strong>Phone:</strong> {profile.phoneNumber}</p>
+          <div className="bg-neutral-900 border border-green-500 rounded-xl p-6 space-y-2 shadow-lg">
 
-            {/* ================= RANKING ================= */}
-            <div className="mt-4 border-t pt-4">
-              <h3 className="font-semibold mb-2">Ranking</h3>
-              <p><strong>Club Rank:</strong> #{rankingPosition.club}</p>
-              <p><strong>Province Rank:</strong> #{rankingPosition.province}</p>
-              <p><strong>National Rank:</strong> #{rankingPosition.national}</p>
-              <p><strong>International Rank:</strong> #{rankingPosition.international}</p>
+            <h2 className="text-xl font-semibold text-green-400">
+              {profile.battleName}
+            </h2>
+
+            <p className="text-sm text-gray-400">
+              {profile.name} {profile.surname}
+            </p>
+
+            <div className="pt-3 border-t border-neutral-700 text-sm space-y-1">
+
+              <p><strong>Club:</strong> {profile.club}</p>
+              <p><strong>Province:</strong> {profile.stateProvince}</p>
+              <p><strong>Country:</strong> {profile.country}</p>
+
+              <p><strong>DOB:</strong> {profile.dateOfBirth}</p>
+              <p><strong>ID:</strong> {profile.idNumber}</p>
+              <p><strong>Phone:</strong> {profile.phoneNumber}</p>
+
             </div>
+          </div>
+
+          {/* RANKINGS */}
+
+          <div className="grid grid-cols-2 gap-3">
+
+            <RankCard title="Club Rank" value={rankingPosition.club} />
+            <RankCard title="Province Rank" value={rankingPosition.province} />
+            <RankCard title="National Rank" value={rankingPosition.national} />
+            <RankCard title="Global Rank" value={rankingPosition.international} />
+
           </div>
 
           <button
             onClick={() => setIsEditing(true)}
-            className="bg-blue-600 text-white py-2 rounded"
+            className="w-full bg-green-500 hover:bg-green-400 text-black font-semibold py-3 rounded-xl"
           >
             Edit Profile
           </button>
@@ -270,100 +278,102 @@ autocomplete.addEventListener("gmp-select", async (event: any) => {
       )}
 
       {/* EDIT MODE */}
+
       {isEditing && (
-        <>
-          <input
-            className="border p-2 rounded"
-            placeholder="Name"
-            value={profile.name}
-            onChange={(e) => setProfile({ ...profile, name: e.target.value })}
-          />
+        <div className="space-y-3">
 
-          <input
-            className="border p-2 rounded"
-            placeholder="Surname"
-            value={profile.surname}
-            onChange={(e) =>
-              setProfile({ ...profile, surname: e.target.value })
-            }
-          />
+          <Input label="Name" value={profile.name}
+            onChange={(v)=>setProfile({...profile,name:v})} />
 
-          <input
-            className="border p-2 rounded"
-            placeholder="Battle Name"
-            value={profile.battleName}
-            onChange={(e) =>
-              setProfile({ ...profile, battleName: e.target.value })
-            }
-          />
+          <Input label="Surname" value={profile.surname}
+            onChange={(v)=>setProfile({...profile,surname:v})} />
 
-    <select
-  className="border p-2 rounded"
-  value={profile.country}
-  onChange={(e) =>
-    setProfile({ ...profile, country: e.target.value })
-  }
->
-  <option value="">Select Country</option>
+          <Input label="Battle Name" value={profile.battleName}
+            onChange={(v)=>setProfile({...profile,battleName:v})} />
 
-  {countries.map((country) => (
-    <option key={country} value={country}>
-      {country}
-    </option>
-  ))}
-</select>
-          <input
-            className="border p-2 rounded"
-            placeholder="State / Province"
+          {/* COUNTRY */}
+
+          <select
+            className="input"
+            value={profile.country}
+            onChange={(e)=>setProfile({...profile,country:e.target.value})}
+          >
+            <option value="">Select Country</option>
+            {countries.map((c)=>(
+              <option key={c}>{c}</option>
+            ))}
+          </select>
+
+          <Input
+            label="Province"
             value={profile.stateProvince}
-            onChange={(e) =>
-              setProfile({ ...profile, stateProvince: e.target.value })
-            }
+            onChange={(v)=>setProfile({...profile,stateProvince:v})}
           />
 
-<input
-  ref={clubInputRef}
-  className="border p-2 rounded"
-  placeholder="Home Golf Club"
-  defaultValue={profile.club}
-/>
+          {/* CLUB */}
 
           <input
-            className="border p-2 rounded"
-            placeholder="Date of Birth (yyyy/mm/dd)"
+            ref={clubInputRef}
+            className="input"
+            placeholder="Home Golf Club"
+            defaultValue={profile.club}
+          />
+
+          <Input
+            label="Date of Birth"
             value={profile.dateOfBirth}
-            onChange={(e) =>
-              setProfile({ ...profile, dateOfBirth: e.target.value })
-            }
+            onChange={(v)=>setProfile({...profile,dateOfBirth:v})}
           />
 
-          <input
-            className="border p-2 rounded"
-            placeholder="ID Number"
+          <Input
+            label="ID Number"
             value={profile.idNumber}
-            onChange={(e) =>
-              setProfile({ ...profile, idNumber: e.target.value })
-            }
+            onChange={(v)=>setProfile({...profile,idNumber:v})}
           />
 
-          <input
-            className="border p-2 rounded"
-            placeholder="Phone Number"
+          <Input
+            label="Phone Number"
             value={profile.phoneNumber}
-            onChange={(e) =>
-              setProfile({ ...profile, phoneNumber: e.target.value })
-            }
+            onChange={(v)=>setProfile({...profile,phoneNumber:v})}
           />
 
           <button
             onClick={saveProfile}
             disabled={saving}
-            className="bg-green-600 text-white py-2 rounded mt-2 disabled:opacity-50"
+            className="w-full bg-green-500 hover:bg-green-400 text-black font-semibold py-3 rounded-xl"
           >
-            {saving ? "Saving…" : "Save Profile"}
+            {saving ? "Saving..." : "Save Profile"}
           </button>
-        </>
+
+        </div>
       )}
+
     </main>
+  );
+}
+
+/* RANK CARD */
+
+function RankCard({title,value}:{title:string,value:number}) {
+  return (
+    <div className="bg-neutral-900 border border-neutral-700 rounded-lg p-4 text-center">
+      <p className="text-xs text-gray-400">{title}</p>
+      <p className="text-2xl font-bold text-green-400">#{value}</p>
+    </div>
+  );
+}
+
+/* INPUT COMPONENT */
+
+function Input({label,value,onChange}:{label:string,value:string,onChange:(v:string)=>void}) {
+  return (
+    <div className="space-y-1">
+      <p className="text-xs text-gray-400">{label}</p>
+      <input
+        className="input"
+        value={value}
+        onChange={(e)=>onChange(e.target.value)}
+      />
+    </div>
   );
 }

@@ -105,7 +105,7 @@ export default function ProfilePage() {
 
 useEffect(() => {
   if (!isEditing) return;
-  if (!clubInputRef.current) return;
+
 
   function initAutocomplete() {
     if (!clubInputRef.current) return;

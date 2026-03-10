@@ -104,8 +104,10 @@ export default function ProfilePage() {
 }, [user]);
 
 useEffect(() => {
-  if (!isEditing) return;
+console.log("Autocomplete effect triggered");
 
+  if (!isEditing) return;
+  
 
   function initAutocomplete() {
     if (!clubInputRef.current) return;

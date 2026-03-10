@@ -14,6 +14,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
 TOKEN PRICE → TOKEN AMOUNT MAP
 ================================ */
 const TOKEN_MAP: Record<string, number> = {
+ "price_1T9JktCplvzmJJByFE9l8n77": 0,
   "price_1T964DCpIvzmJJByQ7HgCd2o": 1,
   "price_1T964DCplvzmJJBy51o17VLO": 2,
   "price_1T9675CplvzmJJByfja065o9": 3,

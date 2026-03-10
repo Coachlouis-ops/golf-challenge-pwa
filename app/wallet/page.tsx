@@ -1,7 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "@/src/lib/AuthContext";
+import { doc, onSnapshot } from "firebase/firestore";
+import { db } from "@/src/lib/firebase";
 
 const TOKEN_PACKS = [
   { tokens: 1, priceId: "price_1T964DCpIvzmJJByQ7HgCd2o" },
@@ -28,9 +30,34 @@ const TOKEN_PACKS = [
 
 export default function WalletPage() {
   const { user } = useAuth();
- const [selected, setSelected] = useState("price_1T9JktCplvzmJJByFE9l8n77");
 
+  const [selected, setSelected] = useState("price_1T9JktCplvzmJJByFE9l8n77");
+  const [balance, setBalance] = useState(0);
+
+  /* ===============================
+     LOAD WALLET BALANCE
+  =============================== */
+  useEffect(() => {
+    if (!user) return;
+
+    const ref = doc(db, "wallets", user.uid);
+
+    const unsub = onSnapshot(ref, (snap) => {
+      if (snap.exists()) {
+        const data = snap.data();
+        setBalance(data.balance || 0);
+      }
+    });
+
+    return () => unsub();
+  }, [user]);
+
+  /* ===============================
+     STRIPE CHECKOUT
+  =============================== */
   async function checkout() {
+    if (!selected) return;
+
     const res = await fetch("/api/create-checkout-session", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -48,25 +75,28 @@ export default function WalletPage() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center gap-6 text-white">
+
       <h1 className="text-2xl font-bold">Buy Entry Credits</h1>
 
-     <select
-  className="px-4 py-2 text-black rounded"
-  value={selected}
-  onChange={(e) => setSelected(e.target.value)}
->
+      <h2 className="text-lg">
+        Wallet Balance: <span className="font-semibold">{balance}</span> Tokens
+      </h2>
 
-  <option value="price_1T9JktCplvzmJJByFE9l8n77">
-    Select Tokens
-  </option>
+      <select
+        className="px-4 py-2 text-black rounded"
+        value={selected}
+        onChange={(e) => setSelected(e.target.value)}
+      >
+        <option value="price_1T9JktCplvzmJJByFE9l8n77">
+          Select Tokens
+        </option>
 
-  {TOKEN_PACKS.map((pack) => (
-    <option key={pack.priceId} value={pack.priceId}>
-      {pack.tokens} Tokens
-    </option>
-  ))}
-
-</select>
+        {TOKEN_PACKS.map((pack) => (
+          <option key={pack.priceId} value={pack.priceId}>
+            {pack.tokens} Tokens
+          </option>
+        ))}
+      </select>
 
       <button
         onClick={checkout}
@@ -74,6 +104,7 @@ export default function WalletPage() {
       >
         Checkout
       </button>
+
     </div>
   );
 }

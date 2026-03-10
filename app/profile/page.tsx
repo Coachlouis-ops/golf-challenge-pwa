@@ -112,41 +112,45 @@ console.log("Autocomplete effect triggered");
   function initAutocomplete() {
     if (!clubInputRef.current) return;
 
-    const autocomplete = new (window as any).google.maps.places.Autocomplete(
-      clubInputRef.current,
-      {
-        types: ["establishment"],
-        fields: ["name", "address_components", "geometry"],
-      }
-    );
+   const autocomplete = new (window as any).google.maps.places.PlaceAutocompleteElement();
 
-    autocomplete.addListener("place_changed", () => {
-      const place = autocomplete.getPlace();
+autocomplete.placeholder = "Home Golf Club";
 
-      if (!place || !place.name) return;
+clubInputRef.current.parentNode?.insertBefore(
+  autocomplete,
+  clubInputRef.current
+);
 
-      let province = "";
-      let country = "";
+clubInputRef.current.style.display = "none";
 
-      if (place.address_components) {
-        place.address_components.forEach((component: any) => {
-          if (component.types.includes("administrative_area_level_1")) {
-            province = component.long_name;
-          }
+autocomplete.addEventListener("gmp-select", async (event: any) => {
+  const place = event.placePrediction.toPlace();
+  await place.fetchFields({
+    fields: ["displayName", "addressComponents"],
+  });
 
-          if (component.types.includes("country")) {
-            country = component.long_name;
-          }
-        });
+  let province = "";
+  let country = "";
+
+  if (place.addressComponents) {
+    place.addressComponents.forEach((component: any) => {
+      if (component.types.includes("administrative_area_level_1")) {
+        province = component.longText;
       }
 
-      setProfile((prev) => ({
-        ...prev,
-        club: place.name || "",
-        stateProvince: province || prev.stateProvince,
-        country: country || prev.country,
-      }));
+      if (component.types.includes("country")) {
+        country = component.longText;
+      }
     });
+  }
+
+  setProfile((prev) => ({
+    ...prev,
+    club: place.displayName || "",
+    stateProvince: province || prev.stateProvince,
+    country: country || prev.country,
+  }));
+});
   }
 
   const scriptId = "google-maps-script";

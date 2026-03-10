@@ -107,23 +107,24 @@ export default function ProfilePage() {
 useEffect(() => {
   if (!clubInputRef.current) return;
 
-  const loader = new Loader({
-    apiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string,
-    version: "weekly",
-    libraries: ["places"],
-  });
+const loader: any = new Loader({
+  apiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string,
+  version: "weekly",
+  libraries: ["places"],
+});
 
-  loader.load().then(() => {
-    const autocomplete = new google.maps.places.Autocomplete(
-      clubInputRef.current as HTMLInputElement,
-      {
-        types: ["establishment"],
-      }
-    );
+loader.load().then(() => {
 
-    autocomplete.addListener("place_changed", () => {
+ loader.load().then(() => {
+  const autocomplete = new (google as any).maps.places.Autocomplete(
+    clubInputRef.current as HTMLInputElement,
+    {
+      types: ["establishment"],
+    }
+  );
+
+  autocomplete.addListener("place_changed", () => {
     const place = autocomplete.getPlace();
-
 if (!place || !place.name) return;
 
 let province = "";

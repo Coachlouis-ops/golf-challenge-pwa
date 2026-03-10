@@ -37,28 +37,28 @@ export default function WalletPage() {
   /* ===============================
      LOAD WALLET BALANCE
   =============================== */
- useEffect(() => {
-  if (!user?.uid) return;
 
-  const ref = doc(db, "wallets", user.uid);
+  useEffect(() => {
+    if (!user) return;
 
-  const unsub = onSnapshot(ref, (snap) => {
-    if (snap.exists()) {
-      const data = snap.data();
-      setBalance(data.balance || 0);
-    } else {
-      setBalance(0);
-    }
-  });
+    const ref = doc(db, "wallets", user.uid);
 
-  return () => unsub();
-}, [user?.uid]);
+    const unsub = onSnapshot(ref, (snap) => {
+      if (snap.exists()) {
+        const data = snap.data();
+        setBalance(data.balance || 0);
+      }
+    });
+
+    return () => unsub();
+  }, [user]);
 
   /* ===============================
      STRIPE CHECKOUT
   =============================== */
+
   async function checkout() {
-    if (!selected) return;
+    if (selected === "price_1T9JktCplvzmJJByFE9l8n77") return;
 
     const res = await fetch("/api/create-checkout-session", {
       method: "POST",
@@ -76,36 +76,79 @@ export default function WalletPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center gap-6 text-white">
+    <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center gap-10">
 
-      <h1 className="text-2xl font-bold">Buy Entry Credits</h1>
+      {/* TITLE */}
+      <h1 className="text-4xl font-bold tracking-wide">
+        Wallet
+      </h1>
 
-      <h2 className="text-lg">
-        Wallet Balance: <span className="font-semibold">{balance}</span> Tokens
-      </h2>
+      {/* SPINNING TOKEN */}
+      <div className="animate-spin-slow text-6xl">
+        🪙
+      </div>
 
-      <select
-        className="px-4 py-2 text-black rounded"
-        value={selected}
-        onChange={(e) => setSelected(e.target.value)}
-      >
-        <option value="price_1T9JktCplvzmJJByFE9l8n77">
-          Select Tokens
-        </option>
+      {/* BALANCE DISPLAY */}
+      <div className="text-center">
 
-        {TOKEN_PACKS.map((pack) => (
-          <option key={pack.priceId} value={pack.priceId}>
-            {pack.tokens} Tokens
+        <p className="text-gray-400 text-sm">
+          Token Balance
+        </p>
+
+        <p className="text-5xl font-bold text-green-400 drop-shadow-[0_0_10px_#00ff88]">
+          {balance}
+        </p>
+
+        <p className="text-gray-400">
+          Tokens
+        </p>
+
+      </div>
+
+      {/* BUY TOKENS CARD */}
+      <div className="bg-zinc-900 p-8 rounded-xl shadow-lg flex flex-col gap-5">
+
+        <select
+          className="px-4 py-3 text-black rounded"
+          value={selected}
+          onChange={(e) => setSelected(e.target.value)}
+        >
+          <option value="price_1T9JktCplvzmJJByFE9l8n77">
+            Select Tokens
           </option>
-        ))}
-      </select>
 
-      <button
-        onClick={checkout}
-        className="px-6 py-3 bg-white text-black rounded-lg"
-      >
-        Checkout
-      </button>
+          {TOKEN_PACKS.map((pack) => (
+            <option key={pack.priceId} value={pack.priceId}>
+              {pack.tokens} Tokens
+            </option>
+          ))}
+        </select>
+
+        <button
+          onClick={checkout}
+          disabled={selected === "price_1T9JktCplvzmJJByFE9l8n77"}
+          className="bg-green-500 hover:bg-green-400 text-black px-6 py-3 rounded-lg font-semibold disabled:bg-gray-600"
+        >
+          Buy Tokens
+        </button>
+
+      </div>
+
+      {/* CSS ANIMATION */}
+      <style jsx>{`
+        .animate-spin-slow {
+          animation: spin 8s linear infinite;
+        }
+
+        @keyframes spin {
+          from {
+            transform: rotateY(0deg);
+          }
+          to {
+            transform: rotateY(360deg);
+          }
+        }
+      `}</style>
 
     </div>
   );

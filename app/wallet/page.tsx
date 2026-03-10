@@ -37,20 +37,22 @@ export default function WalletPage() {
   /* ===============================
      LOAD WALLET BALANCE
   =============================== */
-  useEffect(() => {
-    if (!user) return;
+ useEffect(() => {
+  if (!user?.uid) return;
 
-    const ref = doc(db, "wallets", user.uid);
+  const ref = doc(db, "wallets", user.uid);
 
-    const unsub = onSnapshot(ref, (snap) => {
-      if (snap.exists()) {
-        const data = snap.data();
-        setBalance(data.balance || 0);
-      }
-    });
+  const unsub = onSnapshot(ref, (snap) => {
+    if (snap.exists()) {
+      const data = snap.data();
+      setBalance(data.balance || 0);
+    } else {
+      setBalance(0);
+    }
+  });
 
-    return () => unsub();
-  }, [user]);
+  return () => unsub();
+}, [user?.uid]);
 
   /* ===============================
      STRIPE CHECKOUT

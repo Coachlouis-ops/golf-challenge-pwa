@@ -4,6 +4,9 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@/src/lib/AuthContext";
 import { db } from "@/src/lib/firebase";
 import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
+import { countries } from "@/src/lib/countries";
+
+
 
 type Profile = {
   uid: string;
@@ -208,7 +211,7 @@ export default function ProfilePage() {
             }
           />
 
-         <select
+    <select
   className="border p-2 rounded"
   value={profile.country}
   onChange={(e) =>
@@ -216,12 +219,13 @@ export default function ProfilePage() {
   }
 >
   <option value="">Select Country</option>
-  <option value="South Africa">South Africa</option>
-  <option value="United States">United States</option>
-  <option value="United Kingdom">United Kingdom</option>
-  <option value="Australia">Australia</option>
-</select>
 
+  {countries.map((country) => (
+    <option key={country} value={country}>
+      {country}
+    </option>
+  ))}
+</select>
           <input
             className="border p-2 rounded"
             placeholder="State / Province"

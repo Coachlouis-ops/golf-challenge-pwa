@@ -104,12 +104,21 @@ function DashboardContent() {
                 My Invites
               </button>
 
-              <button
-                onClick={() => router.push("/profile")}
-                className="chrome-btn"
-              >
-                My Profile
-              </button>
+              
+
+             <button
+  onClick={() => router.push("/profile")}
+  className="chrome-btn"
+>
+  My Profile
+</button>
+
+<button
+  onClick={() => router.push("/wallet")}
+  className="chrome-btn"
+>
+  Wallet
+</button>
             </>
           )}
 

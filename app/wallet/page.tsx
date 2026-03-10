@@ -28,7 +28,7 @@ const TOKEN_PACKS = [
 
 export default function WalletPage() {
   const { user } = useAuth();
-  const [selected, setSelected] = useState(TOKEN_PACKS[0].priceId);
+ const [selected, setSelected] = useState("price_1T9JktCplvzmJJByFE9l8n77");
 
   async function checkout() {
     const res = await fetch("/api/create-checkout-session", {
@@ -50,16 +50,23 @@ export default function WalletPage() {
     <div className="min-h-screen flex flex-col items-center justify-center gap-6 text-white">
       <h1 className="text-2xl font-bold">Buy Entry Credits</h1>
 
-      <select
-        className="px-4 py-2 text-black rounded"
-        onChange={(e) => setSelected(e.target.value)}
-      >
-        {TOKEN_PACKS.map((pack) => (
-          <option key={pack.priceId} value={pack.priceId}>
-            {pack.tokens} Tokens
-          </option>
-        ))}
-      </select>
+     <select
+  className="px-4 py-2 text-black rounded"
+  value={selected}
+  onChange={(e) => setSelected(e.target.value)}
+>
+
+  <option value="price_1T9JktCplvzmJJByFE9l8n77">
+    Select Tokens
+  </option>
+
+  {TOKEN_PACKS.map((pack) => (
+    <option key={pack.priceId} value={pack.priceId}>
+      {pack.tokens} Tokens
+    </option>
+  ))}
+
+</select>
 
       <button
         onClick={checkout}

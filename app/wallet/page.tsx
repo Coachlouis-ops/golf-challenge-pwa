@@ -106,9 +106,7 @@ return (
     </div>
 
     {/* BUY TOKENS CARD */}
-    <div className="bg-gradient-to-br from-zinc-700 via-zinc-800 to-zinc-900
-    p-8 rounded-xl shadow-[0_0_30px_rgba(0,255,136,0.15)]
-    flex flex-col gap-5 border border-zinc-600">
+  <div className="bg-gradient-to-br from-zinc-700 via-zinc-800 to-zinc-900 p-8 rounded-xl shadow-[0_0_30px_rgba(0,255,136,0.15)] flex flex-col gap-5 border border-zinc-600">
 
       <select
         className="px-4 py-3 rounded bg-zinc-200 text-black font-semibold shadow-inner"

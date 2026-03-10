@@ -219,7 +219,8 @@ export default function ProfilePage() {
     );
 
   return (
-    <main className="min-h-screen bg-black text-white px-6 py-8 max-w-md mx-auto space-y-6">
+    <main className="min-h-screen w-full bg-black text-white px-6 py-8 flex flex-col items-center">
+  <div className="w-full max-w-md space-y-6">
 
       {/* HEADER */}
 
@@ -348,7 +349,8 @@ export default function ProfilePage() {
         </div>
       )}
 
-    </main>
+     </div>
+</main>
   );
 }
 

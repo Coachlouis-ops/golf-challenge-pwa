@@ -115,7 +115,6 @@ const loader: any = new Loader({
 
 loader.load().then(() => {
 
- loader.load().then(() => {
   const autocomplete = new (google as any).maps.places.Autocomplete(
     clubInputRef.current as HTMLInputElement,
     {

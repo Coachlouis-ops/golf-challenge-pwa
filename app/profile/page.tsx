@@ -122,14 +122,31 @@ useEffect(() => {
     );
 
     autocomplete.addListener("place_changed", () => {
-      const place = autocomplete.getPlace();
+    const place = autocomplete.getPlace();
 
-      if (!place || !place.name) return;
+if (!place || !place.name) return;
 
-      setProfile((prev) => ({
-        ...prev,
-        club: place.name || "",
-      }));
+let province = "";
+let country = "";
+
+if (place.address_components) {
+  place.address_components.forEach((component: any) => {
+    if (component.types.includes("administrative_area_level_1")) {
+      province = component.long_name;
+    }
+
+    if (component.types.includes("country")) {
+      country = component.long_name;
+    }
+  });
+}
+
+setProfile((prev) => ({
+  ...prev,
+  club: place.name || "",
+  stateProvince: province || prev.stateProvince,
+  country: country || prev.country,
+}));
     });
   });
 }, []);

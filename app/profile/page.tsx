@@ -284,7 +284,7 @@ useEffect(() => {
             }
           />
 
-          <input
+<input
   ref={clubInputRef}
   className="border p-2 rounded"
   placeholder="Home Golf Club"

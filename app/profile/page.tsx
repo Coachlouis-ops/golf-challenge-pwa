@@ -112,10 +112,13 @@ useEffect(() => {
   function initAutocomplete() {
     if (!clubInputRef.current) return;
 
-    const autocomplete = new (window as any).google.maps.places.Autocomplete(
-      clubInputRef.current,
-      { types: ["establishment"] }
-    );
+   const autocomplete = new (window as any).google.maps.places.Autocomplete(
+  clubInputRef.current,
+  {
+    types: ["establishment"],
+    fields: ["name", "address_components", "geometry"]
+  }
+);
 
     autocomplete.addListener("place_changed", () => {
       const place = autocomplete.getPlace();

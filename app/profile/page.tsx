@@ -5,7 +5,6 @@ import { useAuth } from "@/src/lib/AuthContext";
 import { db } from "@/src/lib/firebase";
 import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
 import { countries } from "@/src/lib/countries";
-import { Loader } from "@googlemaps/js-api-loader";
 
 
 declare const google: any;
@@ -107,48 +106,47 @@ export default function ProfilePage() {
 useEffect(() => {
   if (!clubInputRef.current) return;
 
-const loader: any = new Loader({
-  apiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string,
-  version: "weekly",
-  libraries: ["places"],
-});
+  const script = document.createElement("script");
 
-loader.load().then(() => {
+  script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&libraries=places`;
+  script.async = true;
 
-  const autocomplete = new (google as any).maps.places.Autocomplete(
-    clubInputRef.current as HTMLInputElement,
-    {
-      types: ["establishment"],
-    }
-  );
+  script.onload = () => {
+    const autocomplete = new (window as any).google.maps.places.Autocomplete(
+      clubInputRef.current,
+      { types: ["establishment"] }
+    );
 
-  autocomplete.addListener("place_changed", () => {
-    const place = autocomplete.getPlace();
-if (!place || !place.name) return;
+    autocomplete.addListener("place_changed", () => {
+      const place = autocomplete.getPlace();
 
-let province = "";
-let country = "";
+      if (!place || !place.name) return;
 
-if (place.address_components) {
-  place.address_components.forEach((component: any) => {
-    if (component.types.includes("administrative_area_level_1")) {
-      province = component.long_name;
-    }
+      let province = "";
+      let country = "";
 
-    if (component.types.includes("country")) {
-      country = component.long_name;
-    }
-  });
-}
+      if (place.address_components) {
+        place.address_components.forEach((component: any) => {
+          if (component.types.includes("administrative_area_level_1")) {
+            province = component.long_name;
+          }
 
-setProfile((prev) => ({
-  ...prev,
-  club: place.name || "",
-  stateProvince: province || prev.stateProvince,
-  country: country || prev.country,
-}));
+          if (component.types.includes("country")) {
+            country = component.long_name;
+          }
+        });
+      }
+
+      setProfile((prev) => ({
+        ...prev,
+        club: place.name || "",
+        stateProvince: province || prev.stateProvince,
+        country: country || prev.country,
+      }));
     });
-  });
+  };
+
+  document.head.appendChild(script);
 }, []);
 
   async function saveProfile() {

@@ -5,7 +5,7 @@ import { useAuth } from "@/src/lib/AuthContext";
 import { db } from "@/src/lib/firebase";
 import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
 import { countries } from "@/src/lib/countries";
-
+import { useRouter } from "next/navigation";
 
 declare const google: any;
 
@@ -38,6 +38,7 @@ type RankingPosition = {
 };
 
 export default function ProfilePage() {
+  const router = useRouter();
   const { user } = useAuth();
 
   const [loading, setLoading] = useState(true);
@@ -184,30 +185,32 @@ autocomplete.addEventListener("gmp-select", async (event: any) => {
 }, [isEditing]);
 
   async function saveProfile() {
-    if (!user) return;
+  if (!user) return;
 
-    const uid = user.uid;
+  const uid = user.uid;
 
-    setSaving(true);
+  setSaving(true);
 
-    const searchIndex = `${profile.name} ${profile.surname} ${profile.battleName} ${profile.club} ${profile.country} ${profile.stateProvince}`.toLowerCase();
+  const searchIndex = `${profile.name} ${profile.surname} ${profile.battleName} ${profile.club} ${profile.country} ${profile.stateProvince}`.toLowerCase();
 
-    await setDoc(
-      doc(db, "profiles", uid),
-      {
-        ...profile,
-        uid,
-        searchIndex,
-        updatedAt: serverTimestamp(),
-        createdAt: serverTimestamp(),
-      },
-      { merge: true }
-    );
+  await setDoc(
+    doc(db, "profiles", uid),
+    {
+      ...profile,
+      uid,
+      searchIndex,
+      updatedAt: serverTimestamp(),
+      createdAt: serverTimestamp(),
+    },
+    { merge: true }
+  );
 
-    setSaving(false);
-    setProfileExists(true);
-    setIsEditing(false);
-  }
+  setSaving(false);
+  setProfileExists(true);
+  setIsEditing(false);
+
+  router.push("/payment");
+}
 
   if (!user) {
     return (

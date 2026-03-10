@@ -106,10 +106,12 @@ export default function WalletPage() {
       </div>
 
       {/* BUY TOKENS CARD */}
-      <div className="bg-zinc-900 p-8 rounded-xl shadow-lg flex flex-col gap-5">
+      <div className="bg-gradient-to-br from-zinc-300 via-zinc-400 to-zinc-500 
+p-8 rounded-xl shadow-[0_0_25px_rgba(255,255,255,0.25)] 
+flex flex-col gap-5 border border-zinc-200">
 
         <select
-          className="px-4 py-3 text-black rounded"
+        className="px-4 py-3 rounded bg-zinc-200 text-black font-semibold shadow-inner"
           value={selected}
           onChange={(e) => setSelected(e.target.value)}
         >

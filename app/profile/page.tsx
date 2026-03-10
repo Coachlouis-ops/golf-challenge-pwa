@@ -107,18 +107,16 @@ useEffect(() => {
   if (!isEditing) return;
   if (!clubInputRef.current) return;
 
-  const scriptId = "google-maps-script";
-
   function initAutocomplete() {
     if (!clubInputRef.current) return;
 
-   const autocomplete = new (window as any).google.maps.places.Autocomplete(
-  clubInputRef.current,
-  {
-    types: ["establishment"],
-    fields: ["name", "address_components", "geometry"]
-  }
-);
+    const autocomplete = new (window as any).google.maps.places.Autocomplete(
+      clubInputRef.current,
+      {
+        types: ["establishment"],
+        fields: ["name", "address_components", "geometry"],
+      }
+    );
 
     autocomplete.addListener("place_changed", () => {
       const place = autocomplete.getPlace();
@@ -149,19 +147,33 @@ useEffect(() => {
     });
   }
 
-  if (!(window as any).google) {
-    if (!document.getElementById(scriptId)) {
-      const script = document.createElement("script");
+  const scriptId = "google-maps-script";
 
-      script.id = scriptId;
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&libraries=places`;
-      script.async = true;
-      script.onload = initAutocomplete;
-
-      document.head.appendChild(script);
-    }
-  } else {
+  if ((window as any).google && (window as any).google.maps) {
     initAutocomplete();
+    return;
+  }
+
+  let script = document.getElementById(scriptId) as HTMLScriptElement | null;
+
+  if (!script) {
+    script = document.createElement("script");
+    script.id = scriptId;
+    script.src =
+      "https://maps.googleapis.com/maps/api/js?key=" +
+      process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY +
+      "&libraries=places";
+
+    script.async = true;
+    script.defer = true;
+
+    script.onload = () => {
+      initAutocomplete();
+    };
+
+    document.head.appendChild(script);
+  } else {
+    script.addEventListener("load", initAutocomplete);
   }
 }, [isEditing]);
 

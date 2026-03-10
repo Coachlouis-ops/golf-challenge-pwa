@@ -4,11 +4,37 @@ import Stripe from "stripe";
 import { NextResponse } from "next/server";
 import { headers } from "next/headers";
 import { initializeApp, getApps, cert } from "firebase-admin/app";
-import { getFirestore } from "firebase-admin/firestore";
+import { getFirestore, FieldValue } from "firebase-admin/firestore";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
   apiVersion: "2026-02-25.clover",
 });
+
+/* ================================
+TOKEN PRICE → TOKEN AMOUNT MAP
+================================ */
+const TOKEN_MAP: Record<string, number> = {
+  "price_1T964DCpIvzmJJByQ7HgCd2o": 1,
+  "price_1T964DCplvzmJJBy51o17VLO": 2,
+  "price_1T9675CplvzmJJByfja065o9": 3,
+  "price_1T967TCplvzmJJByOlpPfhg7": 4,
+  "price_1T964DCplvzmJJBy9OGtL9pT": 5,
+  "price_1T964DCplvzmJJByB9QKG3Ao": 10,
+  "price_1T965yCplvzmJJByXJQ3uXUO": 15,
+  "price_1T966gCplvzmJJBy7Ny1wjso": 20,
+  "price_1T967yCplvzmJJByN1GuKG0j": 25,
+  "price_1T968ZCplvzmJJByDDYam7iR": 40,
+  "price_1T9695CplvzmJJByqDhhamoo": 50,
+  "price_1T969TCplvzmJJByMhQTiajD": 75,
+  "price_1T969uCplvzmJJBy6znELwaV": 100,
+  "price_1T96AaCplvzmJJByqi7gIdHt": 150,
+  "price_1T96AtCplvzmJJByagaEcW0o": 200,
+  "price_1T96BGCplvzmJJByUhCFSPG9": 250,
+  "price_1T96BcCplvzmJJBy7mx9UVBt": 350,
+  "price_1T96CFCpIvzmJJByyUatXDDZ": 500,
+  "price_1T96CdCpIvzmJJBy1kEhBwv": 750,
+  "price_1T96D8CpIvzmJJBy4c99aP7j": 1000,
+};
 
 export async function POST(req: Request) {
   const body = await req.text();
@@ -29,7 +55,6 @@ export async function POST(req: Request) {
 
   try {
 
-    // Initialize Firebase Admin ONLY at runtime
     if (!getApps().length) {
       const serviceAccount = JSON.parse(
         process.env.FIREBASE_SERVICE_ACCOUNT_KEY as string
@@ -43,9 +68,9 @@ export async function POST(req: Request) {
 
     const db = getFirestore();
 
-    // =====================================================
-    // CHECKOUT SESSION COMPLETED
-    // =====================================================
+    /* =========================================
+       CHECKOUT COMPLETED
+    ========================================= */
     if (event.type === "checkout.session.completed") {
 
       const session = event.data.object as Stripe.Checkout.Session;
@@ -53,11 +78,20 @@ export async function POST(req: Request) {
       console.log("SESSION MODE:", session.mode);
       console.log("SESSION PRICE:", session.metadata?.priceId);
       console.log("SESSION UID:", session.metadata?.uid);
-      console.log("SESSION METADATA:", session.metadata);
 
       const uid = session.metadata?.uid;
+      const priceId = session.metadata?.priceId;
 
-      if (uid) {
+      if (!uid) {
+        console.log("No UID found in metadata");
+        return NextResponse.json({ received: true });
+      }
+
+      /* =============================
+         MEMBERSHIP PAYMENT
+      ============================= */
+      if (session.mode === "subscription") {
+
         const start = new Date();
         const expires = new Date();
         expires.setFullYear(start.getFullYear() + 1);
@@ -71,12 +105,38 @@ export async function POST(req: Request) {
           },
           { merge: true }
         );
+
+        console.log("Membership activated for:", uid);
+      }
+
+      /* =============================
+         TOKEN PURCHASE
+      ============================= */
+      if (session.mode === "payment" && priceId) {
+
+        const tokens = TOKEN_MAP[priceId];
+
+        if (!tokens) {
+          console.log("Unknown priceId:", priceId);
+          return NextResponse.json({ received: true });
+        }
+
+        const walletRef = db.collection("wallets").doc(uid);
+
+        await walletRef.set(
+          {
+            balance: FieldValue.increment(tokens),
+          },
+          { merge: true }
+        );
+
+        console.log(`Added ${tokens} tokens to wallet for user ${uid}`);
       }
     }
 
-    // =====================================================
-    // PAYMENT FAILED (DEACTIVATE MEMBERSHIP)
-    // =====================================================
+    /* =========================================
+       PAYMENT FAILED
+    ========================================= */
     if (event.type === "invoice.payment_failed") {
       const invoice = event.data.object as Stripe.Invoice;
 
@@ -92,9 +152,9 @@ export async function POST(req: Request) {
       }
     }
 
-    // =====================================================
-    // SUBSCRIPTION CANCELLED (DEACTIVATE MEMBERSHIP)
-    // =====================================================
+    /* =========================================
+       SUBSCRIPTION CANCELLED
+    ========================================= */
     if (event.type === "customer.subscription.deleted") {
       const subscription = event.data.object as Stripe.Subscription;
 

@@ -208,14 +208,19 @@ export default function ProfilePage() {
             }
           />
 
-          <input
-            className="border p-2 rounded"
-            placeholder="Country"
-            value={profile.country}
-            onChange={(e) =>
-              setProfile({ ...profile, country: e.target.value })
-            }
-          />
+         <select
+  className="border p-2 rounded"
+  value={profile.country}
+  onChange={(e) =>
+    setProfile({ ...profile, country: e.target.value })
+  }
+>
+  <option value="">Select Country</option>
+  <option value="South Africa">South Africa</option>
+  <option value="United States">United States</option>
+  <option value="United Kingdom">United Kingdom</option>
+  <option value="Australia">Australia</option>
+</select>
 
           <input
             className="border p-2 rounded"

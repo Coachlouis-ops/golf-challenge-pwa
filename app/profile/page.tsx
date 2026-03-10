@@ -104,14 +104,14 @@ export default function ProfilePage() {
 }, [user]);
 
 useEffect(() => {
+  if (!isEditing) return;
   if (!clubInputRef.current) return;
 
-  const script = document.createElement("script");
+  const scriptId = "google-maps-script";
 
-  script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&libraries=places`;
-  script.async = true;
+  function initAutocomplete() {
+    if (!clubInputRef.current) return;
 
-  script.onload = () => {
     const autocomplete = new (window as any).google.maps.places.Autocomplete(
       clubInputRef.current,
       { types: ["establishment"] }
@@ -144,10 +144,23 @@ useEffect(() => {
         country: country || prev.country,
       }));
     });
-  };
+  }
 
-  document.head.appendChild(script);
-}, []);
+  if (!(window as any).google) {
+    if (!document.getElementById(scriptId)) {
+      const script = document.createElement("script");
+
+      script.id = scriptId;
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&libraries=places`;
+      script.async = true;
+      script.onload = initAutocomplete;
+
+      document.head.appendChild(script);
+    }
+  } else {
+    initAutocomplete();
+  }
+}, [isEditing]);
 
   async function saveProfile() {
     if (!user) return;

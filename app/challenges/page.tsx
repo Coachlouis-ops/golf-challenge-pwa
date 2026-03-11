@@ -76,10 +76,10 @@ export default function ChallengesPage() {
       <div className="absolute inset-0 opacity-20 pointer-events-none bg-[radial-gradient(circle,#39FF14_1px,transparent_1px)] bg-[size:40px_40px]" />
 
       {/* KNEELING BADGER */}
-      <img
-        src="/badger-kneeling-yellow.png"
-        className="absolute bottom-0 left-10 h-[65%] opacity-30 pointer-events-none"
-      />
+     <img
+  src="/badger-kneeling-yellow.png"
+  className="absolute bottom-0 left-0 h-[95%] opacity-80 drop-shadow-[0_0_40px_rgba(255,220,0,0.7)] pointer-events-none"
+/>
 
       {/* MAIN PANEL */}
       <div className="relative z-10 w-full max-w-4xl flex flex-col gap-6">

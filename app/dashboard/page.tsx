@@ -48,15 +48,6 @@ function DashboardContent() {
 
         <div className="flex flex-col items-center gap-6">
 
-          <Image
-            src="/logo.png"
-            alt="Teez Golf"
-            width={220}
-            height={220}
-            priority
-            className="drop-shadow-[0_0_30px_rgba(0,255,120,0.8)]"
-          />
-
           <p className="text-center text-gray-300 text-lg tracking-wide">
             Settle the score. Play with purpose.
           </p>

@@ -356,16 +356,16 @@ return (
 
   <div className="relative z-10 w-full max-w-3xl flex flex-col gap-6">
 
-    <button
-      onClick={() => router.push("/")}
-      className="mb-4 text-sm underline"
-    >
-      Back to Main
-    </button>
+  <button
+    onClick={() => router.push("/dashboard")}
+    className="mb-4 text-sm underline"
+  >
+    Back to Dashboard
+  </button>
 
-    <h1 className="text-2xl font-semibold">
-      {challenge.challengeTitle}
-    </h1>
+  <h1 className="text-2xl font-semibold">
+    {challenge.challengeTitle}
+  </h1>
 
     <div className="flex items-center gap-3">
       <span className="text-xs px-2 py-1 rounded bg-gray-200">

@@ -29,28 +29,29 @@ export default function MyInvitesPage() {
   const [loading, setLoading] = useState(true);
   const [processingId, setProcessingId] = useState<string | null>(null);
 
-async function loadInvites(uid: string) {
-  setLoading(true);
+  async function loadInvites(uid: string) {
+    setLoading(true);
 
-  const results: InviteItem[] = [];
+    const results: InviteItem[] = [];
 
-  const snap = await getDocs(
-    collection(db, "userInvites", uid, "invites")
-  );
+    const snap = await getDocs(
+      collection(db, "userInvites", uid, "invites")
+    );
 
-  snap.forEach((docSnap) => {
-    const data = docSnap.data();
+    snap.forEach((docSnap) => {
+      const data = docSnap.data();
 
-    results.push({
-      challengeId: data.challengeId,
-      challengeTitle: data.challengeTitle,
-      status: data.status,
+      results.push({
+        challengeId: data.challengeId,
+        challengeTitle: data.challengeTitle,
+        status: data.status,
+      });
     });
-  });
 
-  setInvites(results);
-  setLoading(false);
-}
+    setInvites(results);
+    setLoading(false);
+  }
+
   useEffect(() => {
     if (!user) return;
     loadInvites(user.uid);
@@ -77,99 +78,111 @@ async function loadInvites(uid: string) {
     }
   }
 
-  // Decline disabled until moved to Cloud Function
   async function handleDecline() {
     alert("Decline not available yet.");
   }
 
   if (!user) {
     return (
-      <main className="min-h-screen flex items-center justify-center">
-        <p>Please log in to view invites</p>
+      <main className="min-h-screen flex items-center justify-center text-white bg-black">
+        Please log in to view invites
       </main>
     );
   }
 
   if (loading) {
     return (
-      <main className="min-h-screen flex items-center justify-center">
-        <p>Loading invites…</p>
+      <main className="min-h-screen flex items-center justify-center text-white bg-black">
+        Loading invites…
       </main>
     );
   }
 
- return (
-  <main className="min-h-screen max-w-3xl mx-auto p-6 flex flex-col gap-6">
+  return (
+    <main className="min-h-screen bg-black text-white flex justify-center">
 
-      {/* Back Button */}
-      <button
-        onClick={() => router.push("/")}
-        className="bg-gray-800 text-white px-4 py-2 rounded w-fit"
-      >
-        ← Back to Main Menu
-      </button>
+      {/* subtle particle grid */}
+      <div className="absolute inset-0 opacity-20 pointer-events-none bg-[radial-gradient(circle,#39FF14_1px,transparent_1px)] bg-[size:40px_40px]" />
 
-      <h1 className="text-2xl font-semibold mt-2">My Invites</h1>
+      {/* stadium light glow */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[350px] bg-green-400 opacity-10 blur-[140px] animate-pulse pointer-events-none" />
 
+      <div className="relative z-10 max-w-3xl w-full p-6 flex flex-col gap-6">
 
-      {invites.length === 0 && (
-        <p className="text-gray-500">No invites yet</p>
-      )}
-
-      {invites.map((invite) => (
-        <div
-          key={invite.challengeId}
-          className="border rounded p-4 flex flex-col gap-3"
+        <button
+          onClick={() => router.push("/")}
+          className="bg-green-500 text-black px-4 py-2 rounded font-semibold shadow-[0_0_20px_rgba(57,255,20,0.6)] hover:scale-[1.02] transition"
         >
-          <div className="flex justify-between items-center">
-            <h2 className="font-semibold">
-              {invite.challengeTitle}
-            </h2>
-            <span className="text-sm uppercase text-gray-500">
-              {invite.status}
-            </span>
-          </div>
+          ← Back to Main Menu
+        </button>
 
-          {invite.status === "pending" && (
-  <div className="flex gap-3">
-    <button
-      onClick={() =>
-        handleAccept(invite.challengeId)
-      }
-      disabled={
-        processingId === invite.challengeId ||
-        invite.status !== "pending"
-      }
-      className="bg-green-600 text-white px-4 py-2 rounded disabled:opacity-50"
-    >
-      {processingId === invite.challengeId
-        ? "Processing..."
-        : "Accept"}
-    </button>
+        <h1 className="text-3xl font-semibold tracking-wide">
+          My Invites
+        </h1>
 
-              <button
-                onClick={handleDecline}
-                className="bg-gray-500 text-white px-4 py-2 rounded"
-              >
-                Decline
-              </button>
+        {invites.length === 0 && (
+          <p className="text-gray-400">No invites yet</p>
+        )}
+
+        {invites.map((invite) => (
+          <div
+            key={invite.challengeId}
+            className="bg-black/60 backdrop-blur-md border border-gray-700 rounded-xl p-5 flex flex-col gap-4 shadow-[0_0_18px_rgba(57,255,20,0.15)]"
+          >
+            <div className="flex justify-between items-center">
+              <h2 className="font-semibold text-lg">
+                {invite.challengeTitle}
+              </h2>
+
+              <span className="text-xs uppercase text-gray-400">
+                {invite.status}
+              </span>
             </div>
-          )}
 
-          {invite.status === "accepted" && (
-            <button
-              onClick={() =>
-                router.push(
-                  `/challenges/${invite.challengeId}`
-                )
-              }
-              className="bg-blue-600 text-white px-4 py-2 rounded"
-            >
-              Open Challenge
-            </button>
-          )}
-        </div>
-      ))}
+            {invite.status === "pending" && (
+              <div className="flex gap-3">
+
+                <button
+                  onClick={() =>
+                    handleAccept(invite.challengeId)
+                  }
+                  disabled={
+                    processingId === invite.challengeId ||
+                    invite.status !== "pending"
+                  }
+                  className="bg-green-500 text-black px-4 py-2 rounded font-semibold shadow-[0_0_20px_rgba(57,255,20,0.6)] hover:scale-[1.02] transition disabled:opacity-50"
+                >
+                  {processingId === invite.challengeId
+                    ? "Processing..."
+                    : "Accept"}
+                </button>
+
+                <button
+                  onClick={handleDecline}
+                  className="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded"
+                >
+                  Decline
+                </button>
+
+              </div>
+            )}
+
+            {invite.status === "accepted" && (
+              <button
+                onClick={() =>
+                  router.push(
+                    `/challenges/${invite.challengeId}`
+                  )
+                }
+                className="bg-green-500 text-black px-4 py-2 rounded font-semibold shadow-[0_0_20px_rgba(57,255,20,0.6)] hover:scale-[1.02] transition"
+              >
+                Open Challenge
+              </button>
+            )}
+
+          </div>
+        ))}
+      </div>
     </main>
   );
 }

@@ -29,7 +29,8 @@ export default function MyInvitesPage() {
   const [loading, setLoading] = useState(true);
   const [processingId, setProcessingId] = useState<string | null>(null);
 
-  async function loadInvites(uid: string) {
+ async function loadInvites(uid: string) {
+  try {
     setLoading(true);
 
     const results: InviteItem[] = [];
@@ -49,8 +50,13 @@ export default function MyInvitesPage() {
     });
 
     setInvites(results);
+  } catch (e) {
+    console.error("Failed to load invites", e);
+    setInvites([]);
+  } finally {
     setLoading(false);
   }
+}
 
   useEffect(() => {
     if (!user) return;

@@ -118,32 +118,44 @@ export default function ChallengeDetailPage() {
     })();
   }, [user, challengeId]);
 
-  // ===============================
-  // LOAD INVITED + PLAYERS
-  // ===============================
-  // LOAD PLAYERS ONLY
+// ===============================
+// LOAD INVITED + PLAYERS
+// ===============================
 
 useEffect(() => {
   if (!challengeId) return;
 
   (async () => {
     try {
+
+      // LOAD PLAYERS
       const playersSnap = await getDocs(
         collection(db, "challenges", challengeId, "players")
       );
 
-      const data = playersSnap.docs.map((d) => ({
+      const playersData = playersSnap.docs.map((d) => ({
         uid: d.id,
         displayName: d.get("displayName") || d.id,
       }));
 
-      setPlayers(data);
-    } catch (e) {
-      console.error("Failed to load players", e);
-    }
-  })();
-}, [challengeId]);
+      setPlayers(playersData);
 
+      // LOAD INVITES
+      const invitesSnap = await getDocs(
+        collection(db, "challenges", challengeId, "invites")
+      );
+
+      const invited = invitesSnap.docs.map((d) => d.id);
+
+      setInvitedUids(invited);
+
+    } catch (e) {
+      console.error("Failed to load players/invites", e);
+    }
+
+  })();
+
+}, [challengeId]);
 
   // ===============================
   // LIVE SEARCH

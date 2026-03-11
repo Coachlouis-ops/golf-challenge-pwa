@@ -115,11 +115,11 @@ const snap = await getDocs(invitesRef);
       <div className="relative z-10 max-w-3xl w-full p-6 flex flex-col gap-6">
 
         <button
-          onClick={() => router.push("/")}
-          className="bg-green-500 text-black px-4 py-2 rounded font-semibold shadow-[0_0_20px_rgba(57,255,20,0.6)] hover:scale-[1.02] transition"
-        >
-          ← Back to Main Menu
-        </button>
+  onClick={() => router.push("/dashboard")}
+  className="bg-green-500 text-black px-4 py-2 rounded font-semibold shadow-[0_0_20px_rgba(57,255,20,0.6)] hover:scale-[1.02] transition"
+>
+  ← Back to Dashboard
+</button>
 
         <h1 className="text-3xl font-semibold tracking-wide">
           My Invites

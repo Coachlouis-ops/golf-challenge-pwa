@@ -328,7 +328,21 @@ const showResults =
   challenge.status === "completed";
 
 return (
-  <main className="min-h-screen max-w-3xl mx-auto p-6 flex flex-col gap-6">
+ <main className="relative min-h-screen flex justify-center px-4 py-12 bg-black text-white overflow-hidden">
+
+  {/* STADIUM LIGHT */}
+  <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[400px] bg-green-400 opacity-10 blur-[120px] pointer-events-none" />
+
+  {/* PARTICLE GRID */}
+  <div className="absolute inset-0 opacity-20 pointer-events-none bg-[radial-gradient(circle,#39FF14_1px,transparent_1px)] bg-[size:40px_40px]" />
+
+  {/* KNEELING BADGER */}
+  <img
+    src="/badger-kneeling-yellow.png"
+    className="absolute bottom-0 left-10 h-[65%] opacity-30 pointer-events-none"
+  />
+
+  <div className="relative z-10 w-full max-w-3xl flex flex-col gap-6">
 
     <button
       onClick={() => router.push("/")}
@@ -510,6 +524,7 @@ return (
     {showResults && (
       <ResultsList challengeId={challengeId as string} />
     )}
-  </main>
+  </div>
+</main>
 );
 }

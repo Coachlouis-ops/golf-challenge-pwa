@@ -35,10 +35,9 @@ export default function MyInvitesPage() {
 
     const results: InviteItem[] = [];
 
-    const snap = await getDocs(
-      collection(db, "userInvites", uid, "invites")
-    );
+    const invitesRef = collection(db, "userInvites", uid, "invites");
 
+const snap = await getDocs(invitesRef);
     snap.forEach((docSnap) => {
       const data = docSnap.data();
 

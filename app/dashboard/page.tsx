@@ -17,21 +17,35 @@ function DashboardContent() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center text-white">
+      <div className="min-h-screen flex items-center justify-center text-white bg-black">
         Loading...
       </div>
     );
   }
 
   return (
-    <div
-      className="min-h-screen flex items-center justify-center font-sans text-white"
-      style={{
-        background:
-          "radial-gradient(circle at center, #0a0a0a 0%, #000000 70%)",
-      }}
-    >
-      <main className="w-full max-w-md px-6">
+    <div className="relative min-h-screen flex items-center justify-center text-white overflow-hidden bg-black">
+
+      {/* VS ENERGY BACKGROUND */}
+      <Image
+        src="/vs-energy.png"
+        alt="VS Energy"
+        fill
+        priority
+        className="object-cover opacity-40"
+      />
+
+      {/* ARENA LIGHT */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[420px] bg-green-400 opacity-20 blur-[140px] animate-pulse pointer-events-none" />
+
+      {/* ENERGY FLOOR */}
+      <div className="absolute bottom-0 w-full h-[300px] bg-gradient-to-t from-green-500/10 to-transparent blur-[40px]" />
+
+      {/* PARTICLE GRID */}
+      <div className="absolute inset-0 opacity-20 pointer-events-none bg-[radial-gradient(circle,#39FF14_1px,transparent_1px)] bg-[size:40px_40px]" />
+
+      <main className="relative z-10 w-full max-w-md px-6">
+
         <div className="flex flex-col items-center gap-6">
 
           <Image
@@ -40,36 +54,43 @@ function DashboardContent() {
             width={220}
             height={220}
             priority
+            className="drop-shadow-[0_0_30px_rgba(0,255,120,0.8)]"
           />
 
-          <p className="text-center text-gray-300 text-lg">
+          <p className="text-center text-gray-300 text-lg tracking-wide">
             Settle the score. Play with purpose.
           </p>
 
           <style jsx>{`
-            .chrome-btn {
+            .arena-btn {
               width: 100%;
-              height: 48px;
+              height: 50px;
               border-radius: 12px;
-              background: linear-gradient(145deg,#ffffff,#cfcfcf,#9a9a9a);
-              color: black;
               font-weight: 600;
+              letter-spacing: 0.5px;
+              background: linear-gradient(145deg,#39ff14,#1c8f0b);
+              color: black;
               box-shadow:
-                0 0 12px rgba(255,255,255,0.35),
-                inset 0 0 4px rgba(255,255,255,0.8);
+                0 0 20px rgba(57,255,20,0.6),
+                inset 0 0 6px rgba(255,255,255,0.4);
               transition: all 0.2s ease;
             }
-            .chrome-btn:hover {
+
+            .arena-btn:hover {
+              transform: translateY(-2px) scale(1.02);
               box-shadow:
-                0 0 18px rgba(255,255,255,0.7),
-                inset 0 0 6px rgba(255,255,255,1);
-              transform: translateY(-1px);
+                0 0 30px rgba(57,255,20,0.9),
+                inset 0 0 10px rgba(255,255,255,0.6);
+            }
+
+            .arena-btn:active {
+              transform: scale(0.98);
             }
           `}</style>
 
           <button
             onClick={() => router.push("/how-it-works")}
-            className="chrome-btn"
+            className="arena-btn"
           >
             How It Works
           </button>
@@ -78,60 +99,59 @@ function DashboardContent() {
             <>
               <button
                 onClick={() => router.push("/challenges/create")}
-                className="chrome-btn"
+                className="arena-btn"
               >
                 Create Challenge
               </button>
 
               <button
                 onClick={() => router.push("/my-challenges")}
-                className="chrome-btn"
+                className="arena-btn"
               >
                 My Challenges
               </button>
 
               <button
                 onClick={() => router.push("/join")}
-                className="chrome-btn"
+                className="arena-btn"
               >
                 Join Challenge
               </button>
 
               <button
                 onClick={() => router.push("/my-invites")}
-                className="chrome-btn"
+                className="arena-btn"
               >
                 My Invites
               </button>
 
-              
+              <button
+                onClick={() => router.push("/profile")}
+                className="arena-btn"
+              >
+                My Profile
+              </button>
 
-             <button
-  onClick={() => router.push("/profile")}
-  className="chrome-btn"
->
-  My Profile
-</button>
-
-<button
-  onClick={() => router.push("/wallet")}
-  className="chrome-btn"
->
-  Wallet
-</button>
+              <button
+                onClick={() => router.push("/wallet")}
+                className="arena-btn"
+              >
+                Wallet
+              </button>
             </>
           )}
 
           {user && (
             <button
               onClick={handleLogout}
-              className="text-sm text-gray-400 underline mt-2"
+              className="text-sm text-gray-400 underline mt-2 hover:text-white"
             >
               Logout
             </button>
           )}
 
         </div>
+
       </main>
     </div>
   );

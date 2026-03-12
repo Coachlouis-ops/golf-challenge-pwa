@@ -105,22 +105,22 @@ export default function ProfilePage() {
     })();
   }, [user]);
 
-  /* GOOGLE CLUB SEARCH */
+/* GOOGLE CLUB SEARCH */
 
-  useEffect(() => {
-    if (!isEditing) return;
-function initAutocomplete() {
-  if (
-    !(window as any).google ||
-    !(window as any).google.maps ||
-    !(window as any).google.maps.places ||
-    !clubInputRef.current
-  ) {
-    return;
-  }
+useEffect(() => {
+  if (!isEditing) return;
 
-  const autocomplete =
-    new (window as any).google.maps.places.Autocomplete(
+  const initAutocomplete = () => {
+    if (
+      !(window as any).google ||
+      !(window as any).google.maps ||
+      !(window as any).google.maps.places ||
+      !clubInputRef.current
+    ) {
+      return false;
+    }
+
+    const autocomplete = new (window as any).google.maps.places.Autocomplete(
       clubInputRef.current,
       {
         types: ["establishment"],
@@ -128,60 +128,66 @@ function initAutocomplete() {
       }
     );
 
-      autocomplete.addListener("place_changed", () => {
-        const place = autocomplete.getPlace();
+    autocomplete.addListener("place_changed", () => {
+      const place = autocomplete.getPlace();
 
-        if (!place || !place.name) return;
+      if (!place || !place.name) return;
 
-        let province = "";
-        let country = "";
+      let province = "";
+      let country = "";
 
-        if (place.address_components) {
-          place.address_components.forEach((component: any) => {
-            if (component.types.includes("administrative_area_level_1")) {
-              province = component.long_name;
-            }
+      if (place.address_components) {
+        place.address_components.forEach((component: any) => {
+          if (component.types.includes("administrative_area_level_1")) {
+            province = component.long_name;
+          }
 
-            if (component.types.includes("country")) {
-              country = component.long_name;
-            }
-          });
-        }
+          if (component.types.includes("country")) {
+            country = component.long_name;
+          }
+        });
+      }
 
-        setProfile((prev) => ({
-          ...prev,
-          club: place.name || "",
-          stateProvince: province || prev.stateProvince,
-          country: country || prev.country,
-        }));
-      });
+      setProfile((prev) => ({
+        ...prev,
+        club: place.name || "",
+        stateProvince: province || prev.stateProvince,
+        country: country || prev.country,
+      }));
+    });
+
+    return true;
+  };
+
+  const tryInit = () => {
+    if (!initAutocomplete()) {
+      setTimeout(tryInit, 300);
     }
+  };
 
-    const scriptId = "google-maps-script";
+  const scriptId = "google-maps-script";
 
-    if ((window as any).google && (window as any).google.maps) {
-      initAutocomplete();
-      return;
-    }
-
+  if (!(window as any).google) {
     let script = document.getElementById(scriptId) as HTMLScriptElement | null;
 
     if (!script) {
       script = document.createElement("script");
       script.id = scriptId;
       script.src =
-  "https://maps.googleapis.com/maps/api/js?key=" +
-  process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY +
-  "&libraries=places&loading=async";
-
+        "https://maps.googleapis.com/maps/api/js?key=" +
+        process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY +
+        "&libraries=places";
       script.async = true;
       script.defer = true;
 
-      script.onload = () => initAutocomplete();
+      script.onload = tryInit;
 
       document.head.appendChild(script);
     }
-  }, [isEditing]);
+  } else {
+    tryInit();
+  }
+}, [isEditing]);
 
   /* SAVE PROFILE */
 

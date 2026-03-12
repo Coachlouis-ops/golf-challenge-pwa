@@ -109,18 +109,24 @@ export default function ProfilePage() {
 
   useEffect(() => {
     if (!isEditing) return;
-
-    function initAutocomplete() {
-      if (!clubInputRef.current) return;
+function initAutocomplete() {
+  if (
+    !(window as any).google ||
+    !(window as any).google.maps ||
+    !(window as any).google.maps.places ||
+    !clubInputRef.current
+  ) {
+    return;
+  }
 
   const autocomplete =
-  new (window as any).google.maps.places.Autocomplete(
-    clubInputRef.current,
-    {
-      types: ["establishment"],
-      fields: ["name", "address_components"],
-    }
-  );
+    new (window as any).google.maps.places.Autocomplete(
+      clubInputRef.current,
+      {
+        types: ["establishment"],
+        fields: ["name", "address_components"],
+      }
+    );
 
       autocomplete.addListener("place_changed", () => {
         const place = autocomplete.getPlace();

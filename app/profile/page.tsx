@@ -294,16 +294,16 @@ export default function ProfilePage() {
 
           {/* COUNTRY */}
 
-          <select
-            className="input"
-            value={profile.country}
-            onChange={(e)=>setProfile({...profile,country:e.target.value})}
-          >
-            <option value="">Select Country</option>
-            {countries.map((c)=>(
-              <option key={c}>{c}</option>
-            ))}
-          </select>
+         <select 
+  className="w-full bg-neutral-900 border border-gray-500 text-white px-3 py-2 rounded"
+  value={profile.country}
+  onChange={(e)=>setProfile({...profile,country:e.target.value})}
+>
+  <option value="">Select Country</option>
+  {countries.map((c)=>(
+    <option key={c}>{c}</option>
+  ))}
+</select>
 
           <Input
             label="Province"
@@ -314,11 +314,12 @@ export default function ProfilePage() {
           {/* CLUB */}
 
           <input
-            ref={clubInputRef}
-            className="input"
-            placeholder="Home Golf Club"
-            defaultValue={profile.club}
-          />
+  ref={clubInputRef}
+  className="input bg-neutral-900 border border-gray-500 text-white placeholder-gray-400 px-3 py-2 rounded"
+  placeholder="Home Golf Club"
+  value={profile.club}
+  onChange={(e)=>setProfile({...profile,club:e.target.value})}
+/>
 
           <Input
             label="Date of Birth"

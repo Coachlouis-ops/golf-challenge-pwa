@@ -21,16 +21,19 @@ export default function LoginPage() {
     await login(email, password);
     router.push("/dashboard");
   } catch (err: any) {
-    if (err.code === "auth/user-not-found") {
-      try {
-        await register(email, password);
-        router.push("/dashboard");
-      } catch (regErr: any) {
-        setError(regErr.message || "Registration failed");
-      }
-    } else {
-      setError("Incorrect email or password");
-    }
+   if (
+  err.code === "auth/user-not-found" ||
+  err.code === "auth/invalid-credential"
+) {
+  try {
+    await register(email, password);
+    router.push("/dashboard");
+  } catch (regErr: any) {
+    setError(regErr.message || "Registration failed");
+  }
+} else {
+  setError(err.message || "Login failed");
+}
   } finally {
     setLoading(false);
   }

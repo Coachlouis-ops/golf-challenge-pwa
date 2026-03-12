@@ -113,11 +113,14 @@ export default function ProfilePage() {
     function initAutocomplete() {
       if (!clubInputRef.current) return;
 
-      const autocomplete =
-        new (window as any).google.maps.places.Autocomplete(
-          clubInputRef.current,
-          { types: ["establishment"] }
-        );
+  const autocomplete =
+  new (window as any).google.maps.places.Autocomplete(
+    clubInputRef.current,
+    {
+      types: ["establishment"],
+      fields: ["name", "address_components"],
+    }
+  );
 
       autocomplete.addListener("place_changed", () => {
         const place = autocomplete.getPlace();
@@ -161,9 +164,9 @@ export default function ProfilePage() {
       script = document.createElement("script");
       script.id = scriptId;
       script.src =
-        "https://maps.googleapis.com/maps/api/js?key=" +
-        process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY +
-        "&libraries=places";
+  "https://maps.googleapis.com/maps/api/js?key=" +
+  process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY +
+  "&libraries=places&loading=async";
 
       script.async = true;
       script.defer = true;

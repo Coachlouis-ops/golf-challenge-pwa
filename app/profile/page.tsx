@@ -313,9 +313,9 @@ export default function ProfilePage() {
 
           {/* CLUB */}
 
-          <input
+ <input
   ref={clubInputRef}
-  className="input bg-neutral-900 border border-gray-500 text-white placeholder-gray-400 px-3 py-2 rounded"
+  className="w-full bg-[#1f1f1f] border border-gray-500 text-white px-3 py-2 rounded-md focus:border-green-400 focus:outline-none"
   placeholder="Home Golf Club"
   value={profile.club}
   onChange={(e)=>setProfile({...profile,club:e.target.value})}
@@ -373,7 +373,7 @@ function Input({label,value,onChange}:{label:string,value:string,onChange:(v:str
     <div className="space-y-1">
       <p className="text-xs text-gray-400">{label}</p>
       <input
-        className="input"
+        className="w-full bg-[#1f1f1f] border border-gray-500 text-white px-3 py-2 rounded-md focus:border-green-400 focus:outline-none"
         value={value}
         onChange={(e)=>onChange(e.target.value)}
       />

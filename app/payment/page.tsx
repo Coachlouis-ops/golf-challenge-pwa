@@ -33,13 +33,18 @@ export default function PaymentPage() {
 
     const data = await res.json();
 
-    console.log("Stripe response data:", data);
+console.log("Stripe response data:", data);
 
-    if (data.url) {
-      window.location.href = data.url;
-    } else {
-      console.error("Stripe URL missing");
-    }
+if (data.error) {
+  console.error("Stripe backend error:", data.error);
+  return;
+}
+
+if (data.url) {
+  window.location.href = data.url;
+} else {
+  console.error("Stripe URL missing");
+}
 
   } catch (err) {
     console.error("Stripe checkout error:", err);

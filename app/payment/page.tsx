@@ -25,7 +25,7 @@ export default function PaymentPage() {
         uid: user.uid,
         email: user.email,
         priceId: "price_1T8a8PCplvzmJJBy8krfB9Gq",
-        mode: "subscription",
+        mode: "payment",
       }),
     });
 

@@ -7,8 +7,16 @@ export default function PaymentPage() {
   const router = useRouter();
   const { user, loading } = useAuth();
 
-  async function startPayment() {
-    if (!user) return;
+ async function startPayment() {
+
+  console.log("Payment button clicked");
+
+  if (!user) {
+    console.error("No user loaded");
+    return;
+  }
+
+  try {
 
     const res = await fetch("/api/create-checkout-session", {
       method: "POST",
@@ -21,12 +29,22 @@ export default function PaymentPage() {
       }),
     });
 
+    console.log("Stripe response status:", res.status);
+
     const data = await res.json();
+
+    console.log("Stripe response data:", data);
 
     if (data.url) {
       window.location.href = data.url;
+    } else {
+      console.error("Stripe URL missing");
     }
+
+  } catch (err) {
+    console.error("Stripe checkout error:", err);
   }
+}
 
   if (loading) {
     return (

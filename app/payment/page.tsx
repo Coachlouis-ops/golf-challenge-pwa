@@ -18,16 +18,16 @@ export default function PaymentPage() {
 
   try {
 
-    const res = await fetch("/api/create-checkout-session", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        uid: user.uid,
-        email: user.email,
-        priceId: "price_1T8a8PCplvzmJJBy8krfB9Gq",
-        mode: "payment",
-      }),
-    });
+ const res = await fetch("/api/create-checkout-session", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    uid: user.uid,
+    email: user.email,
+    priceId: "price_1T8a8PCplvzmJJBy8krfB9Gq",
+    mode: "subscription",
+  }),
+});
 
     console.log("Stripe response status:", res.status);
 

@@ -402,9 +402,9 @@ return (
      {searchResults.map((p) => {
   const isYou = user.uid === p.uid;
   const alreadyInvited = invitedUids.includes(p.uid);
-  const alreadyPlayer = players.some(
-    (player) => player.uid === p.uid
-  );
+ const alreadyPlayer = players.some(
+  (player) => String(player.uid) === String(p.uid)
+);
 
 
         return (

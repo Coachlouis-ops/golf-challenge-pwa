@@ -32,6 +32,23 @@ const TYPE_OF_GAME = [
   "VEGAS",
 ];
 
+const TYPE_DESCRIPTIONS: Record<string, string> = {
+  SINGLES: "Each player competes individually. Best total score wins.",
+  BETTER_BALL: "Team of 2. Best score per hole counts.",
+  WORST_BALL: "Team of 2. Worst score per hole counts.",
+  AGGREGATE: "All team scores are added together.",
+  MULTIPLICATION: "Scores multiplied per hole. Big swings.",
+  NASSAU: "Front 9, Back 9, Overall.",
+  SKINS: "Each hole is a prize. Ties carry over.",
+  SIX_SIX_SIX: "Different format every 6 holes.",
+  QUOTA: "Players aim to beat a target.",
+  WOLF: "Rotating captain selects teams.",
+  LONE_RANGER: "One player rotates as solo scorer.",
+  CHICAGO: "Points system starting negative.",
+  FLAGS: "Flag placed when strokes run out.",
+  VEGAS: "Scores combined into a number (e.g. 45).",
+};
+
 const SCORING_METHODS = ["STROKES", "POINTS"];
 
 function CapsuleGroup({
@@ -45,6 +62,8 @@ function CapsuleGroup({
   selected: string;
   onSelect: (val: string) => void;
 }) {
+  const [activeTooltip, setActiveTooltip] = useState<string | null>(null);
+
   return (
     <div className="flex flex-col gap-3">
       <h3 className="font-semibold text-green-400 tracking-wider">
@@ -54,22 +73,39 @@ function CapsuleGroup({
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
         {items.map((item) => {
           const isSelected = selected === item;
+          const showTooltip = activeTooltip === item;
 
           return (
-            <button
+            <div
               key={item}
-              type="button"
-              onClick={() => onSelect(item)}
-              className={`px-3 py-2 rounded-full border text-sm transition-all duration-300
+              className="relative"
+              onMouseEnter={() => setActiveTooltip(item)}
+              onMouseLeave={() => setActiveTooltip(null)}
+            >
+              <button
+                type="button"
+                onClick={() => {
+                  onSelect(item);
+                  setActiveTooltip((prev) => (prev === item ? null : item));
+                }}
+                className={`px-3 py-2 rounded-full border text-sm transition-all duration-300
               
               ${
                 isSelected
                   ? "bg-green-400 text-black border-green-400 shadow-[0_0_20px_#39FF14] scale-105"
                   : "bg-neutral-800 text-gray-300 border-neutral-600 hover:border-green-400 hover:shadow-[0_0_10px_#39FF14]"
               }`}
-            >
-              {item}
-            </button>
+              >
+                {item}
+              </button>
+
+              {/* TOOLTIP ONLY FOR TYPE OF GAME */}
+              {title === "Type Of Game" && showTooltip && (
+                <div className="absolute z-50 bottom-full mb-2 left-1/2 -translate-x-1/2 w-56 p-3 text-xs bg-black border border-green-400 rounded-lg shadow-[0_0_15px_#39FF14] text-gray-200">
+                  {TYPE_DESCRIPTIONS[item]}
+                </div>
+              )}
+            </div>
           );
         })}
       </div>
@@ -133,34 +169,27 @@ export default function CreateChallengePage() {
     <RequireAuth>
       <main className="min-h-screen flex justify-center items-center px-4 py-16 text-white relative overflow-hidden bg-black">
 
-        {/* PARTICLES */}
         <div className="absolute inset-0 opacity-20 animate-pulse pointer-events-none bg-[radial-gradient(circle,#39FF14_1px,transparent_1px)] bg-[size:40px_40px]" />
 
-        {/* STADIUM LIGHTS */}
         <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[400px] bg-green-400 opacity-10 blur-[120px] animate-pulse"></div>
         </div>
 
-        {/* BADGER LEFT */}
         <img
           src="/badger-left.png"
           className="hidden lg:block absolute left-0 bottom-0 h-[90%] opacity-25 animate-pulse"
         />
 
-        {/* BADGER RIGHT */}
         <img
           src="/badger-right.png"
           className="hidden lg:block absolute right-0 bottom-0 h-[90%] opacity-25 animate-pulse"
         />
 
-        {/* MAIN PANEL */}
         <div className="relative z-10 w-full max-w-3xl bg-neutral-900/80 backdrop-blur-xl border border-neutral-700 rounded-2xl p-10 shadow-[0_0_40px_rgba(0,255,120,0.25)] flex flex-col gap-7">
 
           <h1 className="text-4xl font-bold text-green-400 text-center tracking-widest drop-shadow-[0_0_10px_#39FF14]">
             CREATE CHALLENGE
           </h1>
-
-          {/* INPUTS */}
 
           <input
             placeholder="Challenge Title"
@@ -183,8 +212,6 @@ export default function CreateChallengePage() {
             onChange={(e) => setCourseName(e.target.value)}
             className="bg-black border border-neutral-700 focus:border-green-400 rounded p-3 outline-none transition-all focus:shadow-[0_0_10px_#39FF14]"
           />
-
-          {/* CAPSULE GROUPS */}
 
           <CapsuleGroup
             title="Team Format"
@@ -214,8 +241,6 @@ export default function CreateChallengePage() {
             onSelect={setScoringMethod}
           />
 
-          {/* CREATE BUTTON */}
-
           <button
             onClick={handleCreate}
             disabled={!isValid || loading}
@@ -223,8 +248,6 @@ export default function CreateChallengePage() {
           >
             {loading ? "Creating Challenge..." : "CREATE CHALLENGE"}
           </button>
-
-          {/* ENERGY BAR */}
 
           <div className="w-full h-[3px] bg-neutral-800 overflow-hidden rounded-full">
             <div className="h-full w-1/2 bg-green-400 animate-[pulse_2s_infinite]"></div>

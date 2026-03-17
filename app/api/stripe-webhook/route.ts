@@ -110,30 +110,30 @@ export async function POST(req: Request) {
         console.log("Membership activated for:", uid);
       }
 
-      /* =============================
-         TOKEN PURCHASE
-      ============================= */
-      if (session.mode === "payment" && priceId) {
+/* ============================= 
+   TOKEN PURCHASE
+============================= */
+if (session.mode === "payment" && priceId) {
 
-        const tokens = TOKEN_MAP[priceId];
+  const tokens = TOKEN_MAP[priceId];
 
-        if (!tokens) {
-          console.log("Unknown priceId:", priceId);
-          return NextResponse.json({ received: true });
-        }
+  if (!tokens) {
+    console.log("Unknown priceId:", priceId);
+    return NextResponse.json({ received: true });
+  }
 
-        const walletRef = db.collection("wallets").doc(uid);
+  const walletRef = db.collection("wallets").doc(uid);
 
-        await walletRef.set(
-          {
-            balance: FieldValue.increment(tokens),
-          },
-          { merge: true }
-        );
+  await walletRef.set(
+    {
+      purchasedTokens: FieldValue.increment(tokens),
+      updatedAt: new Date(),
+    },
+    { merge: true }
+  );
 
-        console.log(`Added ${tokens} tokens to wallet for user ${uid}`);
-      }
-    }
+  console.log(`Added ${tokens} tokens to wallet for user ${uid}`);
+}
 
     /* =========================================
        PAYMENT FAILED

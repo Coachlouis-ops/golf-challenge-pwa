@@ -22,6 +22,8 @@ type Profile = {
   idNumber: string;
   photoUrl: string;
   searchIndex: string;
+  tokensPlayed?: number;
+  tokensWon?: number;
   ranking?: {
     club: number;
     province: number;
@@ -55,26 +57,28 @@ export default function ProfilePage() {
 
   const clubInputRef = useRef<HTMLInputElement | null>(null);
 
-  const [profile, setProfile] = useState<Profile>({
-    uid: "",
-    name: "",
-    surname: "",
-    battleName: "",
-    country: "",
-    stateProvince: "",
-    club: "",
-    phoneNumber: "",
-    dateOfBirth: "",
-    idNumber: "",
-    photoUrl: "",
-    searchIndex: "",
-    ranking: {
-      club: 0,
-      province: 0,
-      national: 0,
-      international: 0,
-    },
-  });
+ const [profile, setProfile] = useState<Profile>({
+  uid: "",
+  name: "",
+  surname: "",
+  battleName: "",
+  country: "",
+  stateProvince: "",
+  club: "",
+  phoneNumber: "",
+  dateOfBirth: "",
+  idNumber: "",
+  photoUrl: "",
+  searchIndex: "",
+  tokensPlayed: 0,
+  tokensWon: 0,
+  ranking: {
+    club: 0,
+    province: 0,
+    national: 0,
+    international: 0,
+  },
+});
 
   /* LOAD PROFILE */
 
@@ -283,6 +287,26 @@ useEffect(() => {
             <RankCard title="Global Rank" value={rankingPosition.international} />
 
           </div>
+
+          {/* TOKEN STATS */}
+
+<div className="grid grid-cols-2 gap-3">
+
+  <div className="bg-neutral-900 border border-neutral-700 rounded-lg p-4 text-center">
+    <p className="text-xs text-gray-400">Tokens Played</p>
+    <p className="text-2xl font-bold text-green-400">
+      {profile.tokensPlayed ?? 0}
+    </p>
+  </div>
+
+  <div className="bg-neutral-900 border border-neutral-700 rounded-lg p-4 text-center">
+    <p className="text-xs text-gray-400">Tokens Won</p>
+    <p className="text-2xl font-bold text-green-400">
+      {profile.tokensWon ?? 0}
+    </p>
+  </div>
+
+</div>
 
           <button
             onClick={() => setIsEditing(true)}

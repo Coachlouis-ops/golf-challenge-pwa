@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { login, register, auth, db } from "@/src/lib/firebase";
+import { login, register, db } from "@/src/lib/firebase";
 import { doc, getDoc } from "firebase/firestore";
 
 export default function LoginPage() {
@@ -20,19 +20,7 @@ export default function LoginPage() {
 
     try {
       const userCred = await login(email, password);
-
-      const uid = userCred.user.uid;
-
-      const profileRef = doc(db, "profiles", uid);
-      const profileSnap = await getDoc(profileRef);
-
-      const role = profileSnap.exists() ? profileSnap.get("role") : null;
-
-      if (role === "admin") {
-        router.push("/admin/security");
-      } else {
-        router.push("/dashboard");
-      }
+      await handleRouting(userCred.user.uid);
 
     } catch (err: any) {
 
@@ -42,19 +30,7 @@ export default function LoginPage() {
       ) {
         try {
           const userCred = await register(email, password);
-
-          const uid = userCred.user.uid;
-
-          const profileRef = doc(db, "profiles", uid);
-          const profileSnap = await getDoc(profileRef);
-
-          const role = profileSnap.exists() ? profileSnap.get("role") : null;
-
-          if (role === "admin") {
-            router.push("/admin/security");
-          } else {
-            router.push("/dashboard");
-          }
+          await handleRouting(userCred.user.uid);
 
         } catch (regErr: any) {
           setError(regErr.message || "Registration failed");
@@ -66,6 +42,32 @@ export default function LoginPage() {
     } finally {
       setLoading(false);
     }
+  }
+
+  // -------------------------------
+  // CENTRAL ROUTING LOGIC
+  // -------------------------------
+  async function handleRouting(uid: string) {
+
+    const profileRef = doc(db, "profiles", uid);
+    const profileSnap = await getDoc(profileRef);
+
+    // 🔴 NEW USER → must create profile
+    if (!profileSnap.exists()) {
+      router.push("/create-profile");
+      return;
+    }
+
+    const role = profileSnap.get("role") || "player";
+
+    // 🔴 ADMIN FLOW
+    if (role === "admin") {
+      router.push("/admin/security");
+      return;
+    }
+
+    // 🔴 NORMAL USER
+    router.push("/dashboard");
   }
 
   return (

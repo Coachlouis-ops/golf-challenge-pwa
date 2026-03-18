@@ -31,27 +31,34 @@ const TOKEN_PACKS = [
 export default function WalletPage() {
   const { user } = useAuth();
 
-  const [selected, setSelected] = useState("price_1T9JktCplvzmJJByFE9l8n77");
-  const [balance, setBalance] = useState(0);
+const [selected, setSelected] = useState("price_1T9JktCplvzmJJByFE9l8n77");
+const [available, setAvailable] = useState(0);
 
-  /* ===============================
-     LOAD WALLET BALANCE
-  =============================== */
+/* ===============================
+   LOAD WALLET (NEW STRUCTURE)
+=============================== */
 
-  useEffect(() => {
-    if (!user) return;
+useEffect(() => {
+  if (!user) return;
 
-    const ref = doc(db, "wallets", user.uid);
+  const ref = doc(db, "wallets", user.uid);
 
-    const unsub = onSnapshot(ref, (snap) => {
-      if (snap.exists()) {
-        const data = snap.data();
-        setBalance(data.balance || 0);
-      }
-    });
+  const unsub = onSnapshot(ref, (snap) => {
+    if (snap.exists()) {
+      const data = snap.data();
 
-    return () => unsub();
-  }, [user]);
+      const purchased = data.purchasedTokens || 0;
+      const winning = data.winningTokens || 0;
+      const locked = data.lockedTokens || 0;
+
+      const availableTokens = purchased + winning - locked;
+
+      setAvailable(availableTokens);
+    }
+  });
+
+  return () => unsub();
+}, [user]);
 
   /* ===============================
      STRIPE CHECKOUT
@@ -95,9 +102,9 @@ return (
         Token Balance
       </p>
 
-      <p className="text-5xl font-bold text-green-400 drop-shadow-[0_0_10px_#00ff88]">
-        {balance}
-      </p>
+     <p className="text-5xl font-bold text-green-400 drop-shadow-[0_0_10px_#00ff88]">
+  {available}
+</p>
 
       <p className="text-gray-400">
         Tokens

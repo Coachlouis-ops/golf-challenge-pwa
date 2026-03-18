@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { login, register } from "@/src/lib/firebase";
+import { login, register, auth, db } from "@/src/lib/firebase";
+import { doc, getDoc } from "firebase/firestore";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -13,31 +14,59 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
-  e.preventDefault();
-  setError(null);
-  setLoading(true);
+    e.preventDefault();
+    setError(null);
+    setLoading(true);
 
-  try {
-    await login(email, password);
-    router.push("/dashboard");
-  } catch (err: any) {
-   if (
-  err.code === "auth/user-not-found" ||
-  err.code === "auth/invalid-credential"
-) {
-  try {
-    await register(email, password);
-    router.push("/dashboard");
-  } catch (regErr: any) {
-    setError(regErr.message || "Registration failed");
+    try {
+      const userCred = await login(email, password);
+
+      const uid = userCred.user.uid;
+
+      const profileRef = doc(db, "profiles", uid);
+      const profileSnap = await getDoc(profileRef);
+
+      const role = profileSnap.exists() ? profileSnap.get("role") : null;
+
+      if (role === "admin") {
+        router.push("/admin/security");
+      } else {
+        router.push("/dashboard");
+      }
+
+    } catch (err: any) {
+
+      if (
+        err.code === "auth/user-not-found" ||
+        err.code === "auth/invalid-credential"
+      ) {
+        try {
+          const userCred = await register(email, password);
+
+          const uid = userCred.user.uid;
+
+          const profileRef = doc(db, "profiles", uid);
+          const profileSnap = await getDoc(profileRef);
+
+          const role = profileSnap.exists() ? profileSnap.get("role") : null;
+
+          if (role === "admin") {
+            router.push("/admin/security");
+          } else {
+            router.push("/dashboard");
+          }
+
+        } catch (regErr: any) {
+          setError(regErr.message || "Registration failed");
+        }
+      } else {
+        setError(err.message || "Login failed");
+      }
+
+    } finally {
+      setLoading(false);
+    }
   }
-} else {
-  setError(err.message || "Login failed");
-}
-  } finally {
-    setLoading(false);
-  }
-}
 
   return (
     <main className="min-h-screen flex items-center justify-center">

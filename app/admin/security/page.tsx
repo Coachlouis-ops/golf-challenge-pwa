@@ -7,13 +7,12 @@ export default function AdminSecurityPage() {
   const router = useRouter();
 
   const [q1, setQ1] = useState("");
-  const [q2, setQ2] = useState("");
 
   function verify() {
-    if (q1 === "badger" && q2 === "golf") {
+    if (q1 === "taBo") {
       router.push("/admin");
     } else {
-      alert("Incorrect answers");
+      alert("Incorrect answer");
     }
   }
 
@@ -21,17 +20,14 @@ export default function AdminSecurityPage() {
     <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center gap-6">
       <h1 className="text-3xl font-bold">Admin Verification</h1>
 
-      <input
-        placeholder="Security Answer 1"
-        value={q1}
-        onChange={(e) => setQ1(e.target.value)}
-        className="px-4 py-2 text-black rounded"
-      />
+      <p className="text-lg">
+        What is the name of the 1st dog you owned?
+      </p>
 
       <input
-        placeholder="Security Answer 2"
-        value={q2}
-        onChange={(e) => setQ2(e.target.value)}
+        placeholder="Enter answer exactly"
+        value={q1}
+        onChange={(e) => setQ1(e.target.value)}
         className="px-4 py-2 text-black rounded"
       />
 

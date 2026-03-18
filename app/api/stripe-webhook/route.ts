@@ -96,27 +96,28 @@ export async function POST(req: Request) {
         );
       }
 
-// TOKENS
-if (session.mode === "payment" && priceId) {
-  const tokens = TOKEN_MAP[priceId];
+      // TOKENS
+      if (session.mode === "payment" && priceId) {
+        const tokens = TOKEN_MAP[priceId];
 
-  if (!tokens) {
-    return NextResponse.json({ received: true });
-  }
+        if (!tokens) {
+          return NextResponse.json({ received: true });
+        }
 
-  const walletRef = db.collection("wallets").doc(uid);
+        const walletRef = db.collection("wallets").doc(uid);
 
-  await walletRef.set(
-    {
-      purchasedTokens: FieldValue.increment(tokens),
-      winningTokens: FieldValue.increment(0),
-      lockedTokens: FieldValue.increment(0),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    { merge: true }
-  );
-}
+        await walletRef.set(
+          {
+            purchasedTokens: FieldValue.increment(tokens),
+            winningTokens: FieldValue.increment(0),
+            lockedTokens: FieldValue.increment(0),
+            createdAt: new Date(),
+            updatedAt: new Date(),
+          },
+          { merge: true }
+        );
+      }
+    }
 
     /* =========================================
        PAYMENT FAILED

@@ -7,14 +7,14 @@ import { initializeApp, getApps, cert } from "firebase-admin/app";
 import { getFirestore, FieldValue } from "firebase-admin/firestore";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
-  apiVersion: "2026-02-25.clover",
+  apiVersion: "2024-06-20",
 });
 
 /* ================================
 TOKEN PRICE → TOKEN AMOUNT MAP
 ================================ */
 const TOKEN_MAP: Record<string, number> = {
- "price_1T9JktCplvzmJJByFE9l8n77": 0,
+  "price_1T9JktCplvzmJJByFE9l8n77": 0,
   "price_1T964DCpIvzmJJByQ7HgCd2o": 1,
   "price_1T964DCplvzmJJBy51o17VLO": 2,
   "price_1T9675CplvzmJJByfja065o9": 3,
@@ -55,7 +55,6 @@ export async function POST(req: Request) {
   }
 
   try {
-
     if (!getApps().length) {
       const serviceAccount = JSON.parse(
         process.env.FIREBASE_SERVICE_ACCOUNT_KEY as string
@@ -73,26 +72,17 @@ export async function POST(req: Request) {
        CHECKOUT COMPLETED
     ========================================= */
     if (event.type === "checkout.session.completed") {
-
       const session = event.data.object as Stripe.Checkout.Session;
-
-      console.log("SESSION MODE:", session.mode);
-      console.log("SESSION PRICE:", session.metadata?.priceId);
-      console.log("SESSION UID:", session.metadata?.uid);
 
       const uid = session.metadata?.uid;
       const priceId = session.metadata?.priceId;
 
       if (!uid) {
-        console.log("No UID found in metadata");
         return NextResponse.json({ received: true });
       }
 
-      /* =============================
-         MEMBERSHIP PAYMENT
-      ============================= */
+      // MEMBERSHIP
       if (session.mode === "subscription") {
-
         const start = new Date();
         const expires = new Date();
         expires.setFullYear(start.getFullYear() + 1);
@@ -106,48 +96,38 @@ export async function POST(req: Request) {
           },
           { merge: true }
         );
-
-        console.log("Membership activated for:", uid);
       }
 
-/* ============================= 
-   TOKEN PURCHASE
-============================= */
-if (session.mode === "payment" && priceId) {
+      // TOKENS
+      if (session.mode === "payment" && priceId) {
+        const tokens = TOKEN_MAP[priceId];
 
-  const tokens = TOKEN_MAP[priceId];
+        if (!tokens) {
+          return NextResponse.json({ received: true });
+        }
 
-  if (!tokens) {
-    console.log("Unknown priceId:", priceId);
-    return NextResponse.json({ received: true });
-  }
+        const walletRef = db.collection("wallets").doc(uid);
 
-  const walletRef = db.collection("wallets").doc(uid);
-
-  await walletRef.set(
-    {
-      purchasedTokens: FieldValue.increment(tokens),
-      updatedAt: new Date(),
-    },
-    { merge: true }
-  );
-
-  console.log(`Added ${tokens} tokens to wallet for user ${uid}`);
-}
+        await walletRef.set(
+          {
+            purchasedTokens: FieldValue.increment(tokens),
+            updatedAt: new Date(),
+          },
+          { merge: true }
+        );
+      }
+    }
 
     /* =========================================
        PAYMENT FAILED
     ========================================= */
     if (event.type === "invoice.payment_failed") {
       const invoice = event.data.object as Stripe.Invoice;
-
       const uid = invoice.metadata?.uid;
 
       if (uid) {
         await db.collection("users").doc(uid).set(
-          {
-            membershipStatus: "inactive",
-          },
+          { membershipStatus: "inactive" },
           { merge: true }
         );
       }
@@ -158,14 +138,11 @@ if (session.mode === "payment" && priceId) {
     ========================================= */
     if (event.type === "customer.subscription.deleted") {
       const subscription = event.data.object as Stripe.Subscription;
-
       const uid = subscription.metadata?.uid;
 
       if (uid) {
         await db.collection("users").doc(uid).set(
-          {
-            membershipStatus: "inactive",
-          },
+          { membershipStatus: "inactive" },
           { merge: true }
         );
       }
@@ -175,6 +152,9 @@ if (session.mode === "payment" && priceId) {
 
   } catch (error) {
     console.error("Webhook processing error:", error);
-    return NextResponse.json({ error: "Webhook handler failed" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Webhook handler failed" },
+      { status: 500 }
+    );
   }
 }

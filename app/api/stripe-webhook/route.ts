@@ -106,19 +106,24 @@ export async function POST(req: Request) {
 
         const walletRef = db.collection("wallets").doc(uid);
 
-        await walletRef.set(
-          {
-            purchasedTokens: FieldValue.increment(tokens),
-            winningTokens: FieldValue.increment(0),
-            lockedTokens: FieldValue.increment(0),
-            createdAt: new Date(),
-            updatedAt: new Date(),
-          },
-          { merge: true }
-        );
-      }
-    }
+const walletSnap = await walletRef.get();
 
+if (!walletSnap.exists) {
+  // ✅ FIRST TIME — CREATE CLEAN WALLET
+  await walletRef.set({
+    purchasedTokens: tokens,
+    winningTokens: 0,
+    lockedTokens: 0,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  });
+} else {
+  // ✅ EXISTING — INCREMENT SAFELY
+  await walletRef.update({
+    purchasedTokens: FieldValue.increment(tokens),
+    updatedAt: new Date(),
+  });
+}
     /* =========================================
        PAYMENT FAILED
     ========================================= */

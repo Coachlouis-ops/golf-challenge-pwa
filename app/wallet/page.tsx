@@ -10,7 +10,7 @@ import { useRouter } from "next/navigation";
 
 
 const TOKEN_PACKS = [
-  { tokens: 1, priceId: "price_1T964DCpIvzmJJByQ7HgCd2o" },
+  { tokens: 1, priceId: "price_1T964DCplvzmJJByQ7HgCd2o" },
   { tokens: 2, priceId: "price_1T964DCplvzmJJBy51o17VLO" },
   { tokens: 3, priceId: "price_1T9675CplvzmJJByfja065o9" },
   { tokens: 4, priceId: "price_1T967TCplvzmJJByOlpPfhg7" },
@@ -27,9 +27,9 @@ const TOKEN_PACKS = [
   { tokens: 200, priceId: "price_1T96AtCplvzmJJByagaEcW0o" },
   { tokens: 250, priceId: "price_1T96BGCplvzmJJByUhCFSPG9" },
   { tokens: 350, priceId: "price_1T96BcCplvzmJJBy7mx9UVBt" },
- { tokens: 500, priceId: "price_1T96CFCplvzmJJByyUatXDDZ" },
-  { tokens: 750, priceId: "price_1T96CdCpIvzmJJBy1kEhBwv" },
-  { tokens: 1000, priceId: "price_1T96D8CpIvzmJJBy4c99aP7j" },
+  { tokens: 500, priceId: "price_1T96CFCplvzmJJByyUatXDDZ" },
+  { tokens: 750, priceId: "price_1T96CdCplvzmJJBy1kEhBwvv" },
+  { tokens: 1000, priceId: "price_1T96D8CplvzmJJBy4c99aP7j" },
 ];
 
 export default function WalletPage() {

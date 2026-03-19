@@ -12,7 +12,7 @@ export default function AdminDashboard() {
   <div
     className="absolute inset-0 bg-cover bg-center"
     style={{
-      backgroundImage: "url('/teez-bg.png')", // put image in /public
+      backgroundImage: "url('/logo.png')",
     }}
   />
 

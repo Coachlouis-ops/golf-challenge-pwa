@@ -80,11 +80,15 @@ export default function RequireAuth({
 
       // 🔹 Enforce completion
       const data = snap.data();
-      if (!isProfileComplete(data)) {
-        if (pathname !== "/profile") {
-          router.replace("/profile");
-        }
-      }
+    if (!isProfileComplete(data)) {
+  if (pathname !== "/profile") {
+    router.replace("/profile");
+  }
+  return;
+}
+
+// ✅ allow Stripe return + normal flow
+if (pathname === "/profile") return;
     })();
   }, [user, loading, router, pathname]);
 

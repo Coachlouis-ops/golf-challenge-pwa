@@ -67,6 +67,9 @@ export default function WalletPage() {
   // STRIPE CHECKOUT
   // -------------------------------
   async function checkout() {
+
+console.log("PRICE ID:", selected);
+
     if (selected === "price_1T9JktCplvzmJJByFE9l8n77") return;
 
     const res = await fetch("/api/create-checkout-session", {

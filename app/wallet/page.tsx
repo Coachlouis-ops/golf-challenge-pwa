@@ -72,19 +72,27 @@ console.log("PRICE ID:", selected);
 
     if (selected === "price_1T9JktCplvzmJJByFE9l8n77") return;
 
-    const res = await fetch("/api/create-checkout-session", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        uid: user?.uid,
-        email: user?.email,
-        priceId: selected,
-        mode: "payment",
-      }),
-    });
+ const res = await fetch("/api/create-checkout-session", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    uid: user?.uid,
+    email: user?.email,
+    priceId: selected,
+    mode: "payment",
+  }),
+});
 
-    const data = await res.json();
-    window.location.href = data.url;
+const data = await res.json();
+
+console.log("FULL RESPONSE:", data);
+
+if (!data.url) {
+  alert("Stripe error: " + JSON.stringify(data));
+  return;
+}
+
+window.location.href = data.url;
   }
 
   // -------------------------------

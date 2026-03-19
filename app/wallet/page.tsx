@@ -5,6 +5,9 @@ import { useAuth } from "@/src/lib/AuthContext";
 import { doc, onSnapshot } from "firebase/firestore";
 import { db, functions } from "@/src/lib/firebase";
 import { httpsCallable } from "firebase/functions";
+import { useRouter } from "next/navigation";
+
+
 
 const TOKEN_PACKS = [
   { tokens: 1, priceId: "price_1T964DCpIvzmJJByQ7HgCd2o" },
@@ -31,7 +34,7 @@ const TOKEN_PACKS = [
 
 export default function WalletPage() {
   const { user } = useAuth();
-
+  const router = useRouter();
   const [selected, setSelected] = useState("price_1T9JktCplvzmJJByFE9l8n77");
   const [available, setAvailable] = useState(0);
 
@@ -149,8 +152,8 @@ export default function WalletPage() {
         </button>
 
         {/* REDEEM BUTTON */}
-        <button
-          onClick={redeem}
+       <button
+  onClick={() => router.push("/wallet/redeem")}
           className="bg-yellow-500 hover:bg-yellow-400 text-black px-6 py-3 rounded-lg font-semibold shadow-[0_0_12px_#ffaa00]"
         >
           Redeem Tokens

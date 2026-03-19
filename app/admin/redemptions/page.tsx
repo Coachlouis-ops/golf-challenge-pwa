@@ -11,6 +11,8 @@ type Request = {
   amount: number;
   type: string;
   provider?: string;
+  category?: string;
+  beneficiary?: string;
   status: string;
   createdAt?: any;
   name?: string;
@@ -45,7 +47,6 @@ export default function AdminRedemptions() {
         });
       }
 
-      // 🔥 sort newest first
       data.sort((a, b) => {
         const aTime = a.createdAt?.seconds || 0;
         const bTime = b.createdAt?.seconds || 0;
@@ -67,7 +68,6 @@ export default function AdminRedemptions() {
     });
   }
 
-  // 🔥 totals
   const pendingTotal = requests
     .filter((r) => r.status === "pending")
     .reduce((sum, r) => sum + r.amount, 0);
@@ -84,25 +84,44 @@ export default function AdminRedemptions() {
       <div className="flex flex-col gap-4">
 
         {requests
-          .filter((r) => r.status === "pending") // 🔥 only pending
+          .filter((r) => r.status === "pending")
           .map((r) => (
 
           <div
             key={r.id}
-            className="p-4 border border-gray-700 rounded-lg flex justify-between items-center bg-zinc-900"
+            className="p-5 border border-cyan-500/30 rounded-xl bg-zinc-900 flex justify-between items-center"
           >
-            <div>
+            <div className="space-y-1">
+
               <p><b>User:</b> {r.name}</p>
-              <p><b>Amount:</b> {r.amount}</p>
-              <p><b>Type:</b> {r.type}</p>
-              <p><b>Provider:</b> {r.provider || "-"}</p>
-              <p className="text-yellow-400"><b>Status:</b> {r.status}</p>
+
+              <p className="text-lg">
+                <b>Amount:</b> {r.amount} tokens
+              </p>
+
+              <p>
+                <b>Category:</b> {r.category || "-"}
+              </p>
+
+              <p>
+                <b>Supplier:</b> {r.provider || "-"}
+              </p>
+
+              <p>
+                <b>Beneficiary:</b> {r.beneficiary || "-"}
+              </p>
+
+              <p className="text-yellow-400">
+                <b>Status:</b> {r.status}
+              </p>
+
             </div>
 
             <div className="flex gap-3">
+
               <button
                 onClick={() => process(r.id, "approve")}
-                className="bg-green-500 px-4 py-2 rounded hover:bg-green-400"
+                className="bg-cyan-500 px-4 py-2 rounded hover:bg-cyan-400"
               >
                 Approve
               </button>
@@ -113,6 +132,7 @@ export default function AdminRedemptions() {
               >
                 Reject
               </button>
+
             </div>
           </div>
 

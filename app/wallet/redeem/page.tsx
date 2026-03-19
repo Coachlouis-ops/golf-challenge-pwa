@@ -79,7 +79,7 @@ export default function RedeemPage() {
           setCategory(e.target.value);
           setSupplier("");
         }}
-        className="px-4 py-2 text-black rounded w-64"
+        className="px-4 py-3 rounded w-72 bg-cyan-200 text-black font-semibold shadow-[0_0_10px_#00f0ff]"
       >
         <option value="">Select Category</option>
         {CATEGORIES.map((c) => (
@@ -91,7 +91,7 @@ export default function RedeemPage() {
       <select
         value={beneficiary}
         onChange={(e) => setBeneficiary(e.target.value)}
-        className="px-4 py-2 text-black rounded w-64"
+        className="px-4 py-3 rounded w-72 bg-cyan-200 text-black font-semibold shadow-[0_0_10px_#00f0ff]"
       >
         <option value="">Select Beneficiary</option>
         {BENEFICIARY.map((b) => (
@@ -105,7 +105,7 @@ export default function RedeemPage() {
         placeholder="Amount (tokens)"
         value={amount}
         onChange={(e) => setAmount(e.target.value)}
-        className="px-4 py-2 text-black rounded w-64"
+        className="px-4 py-3 rounded w-72 bg-cyan-200 text-black font-semibold shadow-[0_0_10px_#00f0ff]"
       />
 
       {/* SUPPLIER */}
@@ -113,7 +113,7 @@ export default function RedeemPage() {
         <select
           value={supplier}
           onChange={(e) => setSupplier(e.target.value)}
-          className="px-4 py-2 text-black rounded w-64"
+          className="px-4 py-3 rounded w-72 bg-cyan-200 text-black font-semibold shadow-[0_0_10px_#00f0ff]"
         >
           <option value="">Select Supplier</option>
           {SUPPLIERS_BY_CATEGORY[category].map((s) => (

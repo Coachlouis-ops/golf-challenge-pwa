@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { httpsCallable } from "firebase/functions";
+import { functions } from "@/src/lib/firebase";
 
 const CATEGORIES = ["GOLF", "SHOPPING", "FOOD", "GROCERY"];
 
@@ -34,6 +36,36 @@ export default function RedeemPage() {
   const [beneficiary, setBeneficiary] = useState("");
   const [supplier, setSupplier] = useState("");
   const [amount, setAmount] = useState("");
+
+  async function submit() {
+    try {
+      if (!category || !beneficiary || !supplier || !amount) {
+        alert("Complete all fields");
+        return;
+      }
+
+      const fn = httpsCallable(functions, "createRedemptionRequest");
+
+      await fn({
+        amount: Number(amount),
+        type: "voucher",
+        provider: supplier,
+        category,
+        beneficiary,
+      });
+
+      alert("Voucher request submitted");
+
+      // reset
+      setCategory("");
+      setBeneficiary("");
+      setSupplier("");
+      setAmount("");
+
+    } catch (err: any) {
+      alert(err?.message || "Error");
+    }
+  }
 
   return (
     <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center gap-6 p-6">
@@ -90,8 +122,9 @@ export default function RedeemPage() {
         </select>
       )}
 
-      {/* SUBMIT (NEXT STEP WILL WIRE THIS) */}
+      {/* SUBMIT */}
       <button
+        onClick={submit}
         className="bg-cyan-400 text-black px-6 py-3 rounded font-bold shadow-[0_0_15px_#00f0ff]"
       >
         Submit Redemption

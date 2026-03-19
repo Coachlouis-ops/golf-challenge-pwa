@@ -23,12 +23,20 @@ export default function MembershipGuard({
       return;
     }
 
+    // ✅ FIX: allow Stripe return to bypass checks temporarily
+    const isStripeReturn =
+      typeof window !== "undefined" &&
+      document.referrer.includes("stripe.com");
+
+    if (isStripeReturn) {
+      setAllowed(true);
+      return;
+    }
+
     (async () => {
       console.log("Logged in UID:", user.uid);
 
-      // --------------------------------------------------
-      // PROFILE CHECK
-      // --------------------------------------------------
+      // ---------------- PROFILE CHECK ----------------
       const profileRef = doc(db, "profiles", user.uid);
       const profileSnap = await getDoc(profileRef);
 
@@ -46,9 +54,7 @@ export default function MembershipGuard({
         return;
       }
 
-      // --------------------------------------------------
-      // MEMBERSHIP CHECK
-      // --------------------------------------------------
+      // ---------------- MEMBERSHIP CHECK ----------------
       const membershipRef = doc(db, "users", user.uid);
       const membershipSnap = await getDoc(membershipRef);
 
@@ -72,9 +78,7 @@ export default function MembershipGuard({
             ? membership.membershipExpires.toDate()
             : new Date(membership.membershipExpires);
 
-        const now = new Date();
-
-        if (now.getTime() > expires.getTime()) {
+        if (new Date().getTime() > expires.getTime()) {
           console.log("Membership expired → redirect to payment");
           router.replace("/payment");
           return;

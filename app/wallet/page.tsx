@@ -27,7 +27,7 @@ const TOKEN_PACKS = [
   { tokens: 200, priceId: "price_1T96AtCplvzmJJByagaEcW0o" },
   { tokens: 250, priceId: "price_1T96BGCplvzmJJByUhCFSPG9" },
   { tokens: 350, priceId: "price_1T96BcCplvzmJJBy7mx9UVBt" },
-  { tokens: 500, priceId: "price_1T96CFCpIvzmJJByyUatXDDZ" },
+ { tokens: 500, priceId: "price_1T96CFCplvzmJJByyUatXDDZ" },
   { tokens: 750, priceId: "price_1T96CdCpIvzmJJBy1kEhBwv" },
   { tokens: 1000, priceId: "price_1T96D8CpIvzmJJBy4c99aP7j" },
 ];

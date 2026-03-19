@@ -39,9 +39,8 @@ export default function RequireAuth({
       return;
     }
 
-    // 🔒 Run once per session
+    // 🔒 Run once AFTER route stabilizes
     if (profileCheckedRef.current) return;
-    profileCheckedRef.current = true;
 
     (async () => {
       const ref = doc(db, "profiles", user.uid);
@@ -71,24 +70,34 @@ export default function RequireAuth({
           { merge: true }
         );
 
-        // force profile completion
         if (pathname !== "/profile") {
           router.replace("/profile");
         }
+
+        profileCheckedRef.current = true;
         return;
       }
 
       // 🔹 Enforce completion
       const data = snap.data();
-    if (!isProfileComplete(data)) {
-  if (pathname !== "/profile") {
-    router.replace("/profile");
-  }
-  return;
-}
 
-// ✅ allow Stripe return + normal flow
-if (pathname === "/profile") return;
+      if (!isProfileComplete(data)) {
+        if (pathname !== "/profile") {
+          router.replace("/profile");
+        }
+
+        profileCheckedRef.current = true;
+        return;
+      }
+
+      // ✅ allow Stripe return + normal flow
+      if (pathname === "/profile") {
+        profileCheckedRef.current = true;
+        return;
+      }
+
+      // ✅ mark complete AFTER everything
+      profileCheckedRef.current = true;
     })();
   }, [user, loading, router, pathname]);
 

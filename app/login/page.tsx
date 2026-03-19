@@ -47,28 +47,33 @@ export default function LoginPage() {
   // -------------------------------
   // CENTRAL ROUTING LOGIC
   // -------------------------------
-  async function handleRouting(uid: string) {
+ async function handleRouting(uid: string) {
 
-    const profileRef = doc(db, "profiles", uid);
-    const profileSnap = await getDoc(profileRef);
+  const profileRef = doc(db, "profiles", uid);
+  const profileSnap = await getDoc(profileRef);
 
-    // 🔴 NEW USER → must create profile
-    if (!profileSnap.exists()) {
-      router.push("/create-profile");
-      return;
-    }
-
-    const role = profileSnap.get("role") || "player";
-
-    // 🔴 ADMIN FLOW
-    if (role === "admin") {
-      router.push("/admin/security");
-      return;
-    }
-
-    // 🔴 NORMAL USER
-    router.push("/dashboard");
+  if (!profileSnap.exists()) {
+    router.push("/create-profile");
+    return;
   }
+
+  // ✅ READ ROLE FROM USERS COLLECTION (CORRECT)
+  const userRef = doc(db, "users", uid);
+  const userSnap = await getDoc(userRef);
+
+  const role = userSnap.exists()
+    ? userSnap.get("role") || "player"
+    : "player";
+
+  // 🔴 ADMIN
+  if (role === "admin") {
+    router.push("/admin");
+    return;
+  }
+
+  // 🔴 PLAYER
+  router.push("/dashboard");
+}
 
   return (
     <main className="min-h-screen flex items-center justify-center">

@@ -22,30 +22,16 @@ export default function AdminRedemptions() {
   const [requests, setRequests] = useState<Request[]>([]);
 
   useEffect(() => {
-    const ref = collection(db, "redemptionRequests");
+  const ref = collection(db, "redemptionRequests");
 
-    const unsub = onSnapshot(ref, async (snap) => {
-      const data: Request[] = [];
-
-      for (const d of snap.docs) {
-        const r = d.data() as any;
-
-        let name = r.uid;
-
-        try {
-          const profileSnap = await getDoc(doc(db, "profiles", r.uid));
-          if (profileSnap.exists()) {
-            const p = profileSnap.data();
-            name = `${p.name || ""} ${p.surname || ""} (${p.battleName || ""})`;
-          }
-        } catch {}
-
-        data.push({
-          id: d.id,
-          ...r,
-          name,
-        });
-      }
+  const unsub = onSnapshot(
+    ref,
+    (snap) => {
+      const data: Request[] = snap.docs.map((d) => ({
+        id: d.id,
+        ...(d.data() as any),
+        name: d.data().uid, // temporary fallback
+      }));
 
       data.sort((a, b) => {
         const aTime = a.createdAt?.seconds || 0;
@@ -54,10 +40,14 @@ export default function AdminRedemptions() {
       });
 
       setRequests(data);
-    });
+    },
+    (error) => {
+      console.error("SNAPSHOT ERROR:", error);
+    }
+  );
 
-    return () => unsub();
-  }, []);
+  return () => unsub();
+}, []);
 
   async function process(id: string, action: "approve" | "reject") {
     const fn = httpsCallable(functions, "processRedemptionRequest");

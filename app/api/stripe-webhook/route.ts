@@ -66,9 +66,9 @@ export async function POST(req: Request) {
 
     const db = getFirestore();
 
-    /* =========================================
-       CHECKOUT COMPLETED
-    ========================================= */
+    // =========================================
+    // CHECKOUT COMPLETED
+    // =========================================
     if (event.type === "checkout.session.completed") {
       const session = event.data.object as Stripe.Checkout.Session;
 
@@ -79,7 +79,7 @@ export async function POST(req: Request) {
         return NextResponse.json({ received: true });
       }
 
-      // MEMBERSHIP
+      // ---------------- MEMBERSHIP ----------------
       if (session.mode === "subscription") {
         const start = new Date();
         const expires = new Date();
@@ -95,36 +95,38 @@ export async function POST(req: Request) {
           { merge: true }
         );
       }
-// TOKENS
-if (session.mode === "payment" && priceId) {
-  const tokens = TOKEN_MAP[priceId];
 
-  if (!tokens) {
-    return NextResponse.json({ received: true });
-  }
+      // ---------------- TOKENS ----------------
+      if (session.mode === "payment" && priceId) {
+        const tokens = TOKEN_MAP[priceId];
 
-  const walletRef = db.collection("wallets").doc(uid);
-  const walletSnap = await walletRef.get();
+        if (!tokens) {
+          return NextResponse.json({ received: true });
+        }
 
-  if (!walletSnap.exists) {
-    await walletRef.set({
-      purchasedTokens: tokens,
-      winningTokens: 0,
-      lockedTokens: 0,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    });
-  } else {
-    await walletRef.update({
-      purchasedTokens: FieldValue.increment(tokens),
-      updatedAt: new Date(),
-    });
-  }
-}
+        const walletRef = db.collection("wallets").doc(uid);
+        const walletSnap = await walletRef.get();
 
-    /* =========================================
-       PAYMENT FAILED
-    ========================================= */
+        if (!walletSnap.exists) {
+          await walletRef.set({
+            purchasedTokens: tokens,
+            winningTokens: 0,
+            lockedTokens: 0,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+          });
+        } else {
+          await walletRef.update({
+            purchasedTokens: FieldValue.increment(tokens),
+            updatedAt: new Date(),
+          });
+        }
+      }
+    }
+
+    // =========================================
+    // PAYMENT FAILED
+    // =========================================
     if (event.type === "invoice.payment_failed") {
       const invoice = event.data.object as Stripe.Invoice;
       const uid = invoice.metadata?.uid;
@@ -137,9 +139,9 @@ if (session.mode === "payment" && priceId) {
       }
     }
 
-    /* =========================================
-       SUBSCRIPTION CANCELLED
-    ========================================= */
+    // =========================================
+    // SUBSCRIPTION CANCELLED
+    // =========================================
     if (event.type === "customer.subscription.deleted") {
       const subscription = event.data.object as Stripe.Subscription;
       const uid = subscription.metadata?.uid;

@@ -95,35 +95,33 @@ export async function POST(req: Request) {
           { merge: true }
         );
       }
+// TOKENS
+if (session.mode === "payment" && priceId) {
+  const tokens = TOKEN_MAP[priceId];
 
-      // TOKENS
-      if (session.mode === "payment" && priceId) {
-        const tokens = TOKEN_MAP[priceId];
+  if (!tokens) {
+    return NextResponse.json({ received: true });
+  }
 
-        if (!tokens) {
-          return NextResponse.json({ received: true });
-        }
+  const walletRef = db.collection("wallets").doc(uid);
+  const walletSnap = await walletRef.get();
 
-        const walletRef = db.collection("wallets").doc(uid);
-
-const walletSnap = await walletRef.get();
-
-if (!walletSnap.exists) {
-  // ✅ FIRST TIME — CREATE CLEAN WALLET
-  await walletRef.set({
-    purchasedTokens: tokens,
-    winningTokens: 0,
-    lockedTokens: 0,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  });
-} else {
-  // ✅ EXISTING — INCREMENT SAFELY
-  await walletRef.update({
-    purchasedTokens: FieldValue.increment(tokens),
-    updatedAt: new Date(),
-  });
+  if (!walletSnap.exists) {
+    await walletRef.set({
+      purchasedTokens: tokens,
+      winningTokens: 0,
+      lockedTokens: 0,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+  } else {
+    await walletRef.update({
+      purchasedTokens: FieldValue.increment(tokens),
+      updatedAt: new Date(),
+    });
+  }
 }
+
     /* =========================================
        PAYMENT FAILED
     ========================================= */

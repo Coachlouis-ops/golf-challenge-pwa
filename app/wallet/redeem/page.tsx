@@ -1,8 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { httpsCallable } from "firebase/functions";
 import { functions } from "@/src/lib/firebase";
+
+
+
 
 const CATEGORIES = ["GOLF", "SHOPPING", "FOOD", "GROCERY"];
 
@@ -36,6 +40,7 @@ export default function RedeemPage() {
   const [beneficiary, setBeneficiary] = useState("");
   const [supplier, setSupplier] = useState("");
   const [amount, setAmount] = useState("");
+  const router = useRouter();
 
   async function submit() {
     try {
@@ -54,13 +59,16 @@ export default function RedeemPage() {
         beneficiary,
       });
 
-      alert("Voucher request submitted");
+     alert("Voucher request submitted");
 
-      // reset
-      setCategory("");
-      setBeneficiary("");
-      setSupplier("");
-      setAmount("");
+// reset
+setCategory("");
+setBeneficiary("");
+setSupplier("");
+setAmount("");
+
+// ✅ NAVIGATE TO DASHBOARD
+router.push("/dashboard");
 
     } catch (err: any) {
       alert(err?.message || "Error");

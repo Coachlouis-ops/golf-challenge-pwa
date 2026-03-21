@@ -131,32 +131,50 @@ export async function POST(req: Request) {
     }
   }
 
-  // ---------------- INVOICE (BASIC) ----------------
-  const invoiceRef = db.collection("invoices").doc();
+// ---------------- INVOICE (SEQUENTIAL) ----------------
+const year = new Date().getFullYear().toString();
 
-  await invoiceRef.set({
-    uid,
+const counterRef = db.collection("counters").doc(`invoice_${year}`);
 
-    type,
+const invoiceNumber = await db.runTransaction(async (tx) => {
+  const counterSnap = await tx.get(counterRef);
 
-    amount,
-    currency,
+  let nextNumber = 1;
 
-    vatRegistered: false,
-    vatAmount: 0,
+  if (counterSnap.exists) {
+    nextNumber = (counterSnap.data()?.current || 0) + 1;
+  }
 
-    totalAmount: amount,
+  tx.set(counterRef, { current: nextNumber }, { merge: true });
 
-    paymentProvider: "stripe",
-    paymentReference,
+  return `INV-${year}-${nextNumber.toString().padStart(6, "0")}`;
+});
 
-    invoiceNumber: `INV-${new Date().getFullYear()}-${invoiceRef.id.slice(0,6).toUpperCase()}`,
+const invoiceRef = db.collection("invoices").doc();
 
-    createdAt: new Date(),
+await invoiceRef.set({
+  uid,
 
-    pdfUrl: "",
-  });
-}
+  type,
+
+  amount,
+  currency,
+
+  vatRegistered: false,
+  vatAmount: 0,
+
+  totalAmount: amount,
+
+  paymentProvider: "stripe",
+  paymentReference,
+
+  invoiceNumber,
+
+  createdAt: new Date(),
+
+  pdfUrl: "",
+});
+
 
     // =========================================
     // PAYMENT FAILED

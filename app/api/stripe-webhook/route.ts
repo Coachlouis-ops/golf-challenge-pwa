@@ -69,60 +69,94 @@ export async function POST(req: Request) {
     // =========================================
     // CHECKOUT COMPLETED
     // =========================================
-    if (event.type === "checkout.session.completed") {
-      const session = event.data.object as Stripe.Checkout.Session;
+ if (event.type === "checkout.session.completed") {
+  const session = event.data.object as Stripe.Checkout.Session;
 
-      const uid = session.metadata?.uid;
-      const priceId = session.metadata?.priceId;
+  const uid = session.metadata?.uid;
+  const priceId = session.metadata?.priceId;
 
-      if (!uid) {
-        return NextResponse.json({ received: true });
-      }
+  if (!uid) {
+    return NextResponse.json({ received: true });
+  }
 
-      // ---------------- MEMBERSHIP ----------------
-      if (session.mode === "subscription") {
-        const start = new Date();
-        const expires = new Date();
-        expires.setFullYear(start.getFullYear() + 1);
+  const amount = (session.amount_total || 0) / 100;
+  const currency = session.currency || "usd";
+  const paymentReference = session.payment_intent as string;
 
-        await db.collection("users").doc(uid).set(
-          {
-            membershipStatus: "active",
-            membershipType: "annual",
-            membershipStart: start,
-            membershipExpires: expires,
-          },
-          { merge: true }
-        );
-      }
+  let type: "membership" | "token_purchase" = "token_purchase";
 
-      // ---------------- TOKENS ----------------
-      if (session.mode === "payment" && priceId) {
-        const tokens = TOKEN_MAP[priceId];
+  // ---------------- MEMBERSHIP ----------------
+  if (session.mode === "subscription") {
+    type = "membership";
 
-        if (!tokens) {
-          return NextResponse.json({ received: true });
-        }
+    const start = new Date();
+    const expires = new Date();
+    expires.setFullYear(start.getFullYear() + 1);
 
-        const walletRef = db.collection("wallets").doc(uid);
-        const walletSnap = await walletRef.get();
+    await db.collection("users").doc(uid).set(
+      {
+        membershipStatus: "active",
+        membershipType: "annual",
+        membershipStart: start,
+        membershipExpires: expires,
+      },
+      { merge: true }
+    );
+  }
 
-        if (!walletSnap.exists) {
-          await walletRef.set({
-            purchasedTokens: tokens,
-            winningTokens: 0,
-            lockedTokens: 0,
-            createdAt: new Date(),
-            updatedAt: new Date(),
-          });
-        } else {
-          await walletRef.update({
-            purchasedTokens: FieldValue.increment(tokens),
-            updatedAt: new Date(),
-          });
-        }
-      }
+  // ---------------- TOKENS ----------------
+  if (session.mode === "payment" && priceId) {
+    const tokens = TOKEN_MAP[priceId];
+
+    if (!tokens) {
+      return NextResponse.json({ received: true });
     }
+
+    const walletRef = db.collection("wallets").doc(uid);
+    const walletSnap = await walletRef.get();
+
+    if (!walletSnap.exists) {
+      await walletRef.set({
+        purchasedTokens: tokens,
+        winningTokens: 0,
+        lockedTokens: 0,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
+    } else {
+      await walletRef.update({
+        purchasedTokens: FieldValue.increment(tokens),
+        updatedAt: new Date(),
+      });
+    }
+  }
+
+  // ---------------- INVOICE (BASIC) ----------------
+  const invoiceRef = db.collection("invoices").doc();
+
+  await invoiceRef.set({
+    uid,
+
+    type,
+
+    amount,
+    currency,
+
+    vatRegistered: false,
+    vatAmount: 0,
+
+    totalAmount: amount,
+
+    paymentProvider: "stripe",
+    paymentReference,
+
+    invoiceNumber: `INV-${new Date().getFullYear()}-${invoiceRef.id.slice(0,6).toUpperCase()}`,
+
+    createdAt: new Date(),
+
+    pdfUrl: "",
+  });
+}
 
     // =========================================
     // PAYMENT FAILED

@@ -44,74 +44,54 @@ export default function VouchersPage() {
     return () => unsub();
   }, [user]);
 
-  return (
-    <RequireAuth>
-      <div className="relative min-h-screen flex items-center justify-center text-white overflow-hidden bg-black">
+ return (
+  <RequireAuth>
+    <div className="relative min-h-screen text-white bg-black overflow-hidden">
 
-        {/* BADGER HERO IMAGE */}
-        <img
-          src="/voucher_badger.png"
-          alt="Voucher Background"
-          className="absolute top-10 left-1/2 -translate-x-1/2 w-[380px] max-w-[90%] object-contain pointer-events-none z-0 animate-pulse drop-shadow-[0_0_25px_rgba(255,215,0,0.9)]"
-        />
+      {/* BACKGROUND IMAGE (FULL FIT) */}
+      <img
+        src="/voucher_badger.png"
+        alt="Voucher Background"
+        className="absolute inset-0 w-full h-full object-contain opacity-30 pointer-events-none"
+      />
 
-        {/* FLICKER ANIMATION */}
-        <style jsx>{`
-          @keyframes flicker {
-            0%, 100% { opacity: 1; }
-            45% { opacity: 0.85; }
-            50% { opacity: 0.6; }
-            55% { opacity: 0.9; }
-          }
+      {/* DARK OVERLAY (for readability) */}
+      <div className="absolute inset-0 bg-black/70" />
 
-          .flicker {
-            animation: flicker 2.5s infinite;
-          }
-        `}</style>
+      <main className="relative z-10 w-full max-w-md mx-auto px-6 py-20">
 
-        {/* ARENA LIGHT */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[420px] bg-yellow-400 opacity-20 blur-[140px] flicker pointer-events-none" />
+        <h1 className="text-3xl font-bold mb-6 text-center">
+          My Vouchers
+        </h1>
 
-        {/* FLOOR GLOW */}
-        <div className="absolute bottom-0 w-full h-[300px] bg-gradient-to-t from-yellow-500/10 to-transparent blur-[40px]" />
+        {vouchers.length === 0 && (
+          <p className="text-center text-gray-400">
+            No vouchers yet
+          </p>
+        )}
 
-        {/* GRID */}
-        <div className="absolute inset-0 opacity-20 pointer-events-none bg-[radial-gradient(circle,#FFD700_1px,transparent_1px)] bg-[size:40px_40px]" />
+        <div className="flex flex-col gap-4">
 
-        <main className="relative z-10 w-full max-w-md px-6">
+          {vouchers.map((v) => (
+            <div
+              key={v.id}
+              className="border border-white/20 rounded-xl p-4 bg-black/60 backdrop-blur-md"
+            >
+              <p><strong>Amount:</strong> {v.amount}</p>
+              <p><strong>Provider:</strong> {v.provider}</p>
+              <p><strong>Category:</strong> {v.category}</p>
+              <p><strong>Beneficiary:</strong> {v.beneficiary}</p>
 
-          <h1 className="text-3xl font-bold mb-6 text-center">
-            My Vouchers
-          </h1>
+              <p className="text-green-400 font-semibold">
+                Status: {v.status}
+              </p>
+            </div>
+          ))}
 
-          {vouchers.length === 0 && (
-            <p className="text-center text-gray-400">
-              No vouchers yet
-            </p>
-          )}
+        </div>
 
-          <div className="flex flex-col gap-4">
-
-            {vouchers.map((v) => (
-              <div
-                key={v.id}
-                className="border border-yellow-400/40 rounded-xl p-4 bg-black/70 backdrop-blur-md shadow-[0_0_20px_rgba(255,215,0,0.3)]"
-              >
-                <p><strong>Amount:</strong> {v.amount}</p>
-                <p><strong>Provider:</strong> {v.provider}</p>
-                <p><strong>Category:</strong> {v.category}</p>
-                <p><strong>Beneficiary:</strong> {v.beneficiary}</p>
-
-                <p className="text-yellow-400 font-semibold">
-                  Status: {v.status}
-                </p>
-              </div>
-            ))}
-
-          </div>
-
-        </main>
-      </div>
-    </RequireAuth>
-  );
+      </main>
+    </div>
+  </RequireAuth>
+);
 }

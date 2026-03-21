@@ -88,7 +88,9 @@ export default function VouchersPage() {
 )}
         <div className="flex flex-col gap-4">
 
-          {vouchers.map((v) => (
+          {vouchers
+  .filter((v) => v.status === "active")
+  .map((v) => (
             <div
               key={v.id}
               className="border border-white/20 rounded-xl p-4 bg-black/60 backdrop-blur-md"
@@ -98,9 +100,27 @@ export default function VouchersPage() {
               <p><strong>Category:</strong> {v.category}</p>
               <p><strong>Beneficiary:</strong> {v.beneficiary}</p>
 
-              <p className="text-green-400 font-semibold">
-                Status: {v.status}
-              </p>
+             <div className="flex items-center justify-between mt-2">
+  <p className="text-green-400 font-semibold">
+    Status: {v.status}
+  </p>
+
+  {v.status === "active" && (
+    <button
+      onClick={async () => {
+        const { httpsCallable } = await import("firebase/functions");
+        const { functions } = await import("@/src/lib/firebase");
+
+        const useVoucher = httpsCallable(functions, "useVoucher");
+
+        await useVoucher({ voucherId: v.id });
+      }}
+      className="px-3 py-1 rounded bg-yellow-400 text-black font-semibold hover:scale-105 transition"
+    >
+      USE
+    </button>
+  )}
+</div>
             </div>
           ))}
 

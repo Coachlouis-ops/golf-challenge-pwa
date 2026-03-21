@@ -49,14 +49,13 @@ export default function VouchersPage() {
     <div className="relative min-h-screen text-white bg-black overflow-hidden">
 
       {/* BACKGROUND IMAGE (FULL FIT) */}
-      <img
-        src="/voucher_badger.png"
-        alt="Voucher Background"
-        className="absolute inset-0 w-full h-full object-contain opacity-30 pointer-events-none"
-      />
+    <img
+  src="/voucher_badger.png"
+  alt="Voucher Background"
+  className="absolute inset-0 w-full h-full object-contain opacity-80 brightness-110 contrast-110 pointer-events-none"
+/>
 
-      {/* DARK OVERLAY (for readability) */}
-      <div className="absolute inset-0 bg-black/70" />
+<div className="absolute inset-0 bg-black/40" />
 
       <main className="relative z-10 w-full max-w-md mx-auto px-6 py-20">
 

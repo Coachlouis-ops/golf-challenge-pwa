@@ -107,14 +107,14 @@ export default function VouchersPage() {
 
   {v.status === "active" && (
     <button
-      onClick={async () => {
-        const { httpsCallable } = await import("firebase/functions");
-        const { functions } = await import("@/src/lib/firebase");
+    onClick={async () => {
+  const { httpsCallable } = await import("firebase/functions");
+  const { functions } = await import("@/src/lib/firebase");
 
-        const useVoucher = httpsCallable(functions, "useVoucher");
+  const useVoucher = httpsCallable(functions, "useVoucher");
 
-        await useVoucher({ voucherId: v.id });
-      }}
+  await useVoucher({ voucherId: v.id });
+}}
       className="px-3 py-1 rounded bg-yellow-400 text-black font-semibold hover:scale-105 transition"
     >
       USE

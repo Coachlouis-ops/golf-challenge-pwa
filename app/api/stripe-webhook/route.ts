@@ -6,6 +6,9 @@ import { headers } from "next/headers";
 import { initializeApp, getApps, cert } from "firebase-admin/app";
 import { getFirestore, FieldValue } from "firebase-admin/firestore";
 
+import PDFDocument from "pdfkit";
+import { PassThrough } from "stream";
+
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
 
 /* ================================
@@ -34,6 +37,56 @@ const TOKEN_MAP: Record<string, number> = {
   "price_1T96CdCpIvzmJJBy1kEhBwv": 750,
   "price_1T96D8CpIvzmJJBy4c99aP7j": 1000,
 };
+
+/* ================================
+PDF GENERATOR
+================================ */
+function generateInvoicePDF(data: {
+  invoiceNumber: string;
+  amount: number;
+  currency: string;
+  type: string;
+  paymentReference: string;
+}) {
+  const doc = new PDFDocument();
+  const stream = new PassThrough();
+  const buffers: any[] = [];
+
+  doc.pipe(stream);
+  stream.on("data", (chunk) => buffers.push(chunk));
+
+  doc.fontSize(20).text("HONEY BADGER TECHNOLOGIES (PTY) LTD");
+  doc.fontSize(10).text("Reg: 2026 / 102722 / 07");
+  doc.moveDown();
+
+  doc.fontSize(16).text("INVOICE (NOT A TAX INVOICE)");
+  doc.fontSize(10).text("VAT: Not Applicable – Supplier not VAT registered");
+
+  doc.moveDown();
+
+  doc.text(`Invoice #: ${data.invoiceNumber}`);
+  doc.text(`Date: ${new Date().toISOString().split("T")[0]}`);
+  doc.text(`Payment Ref: ${data.paymentReference}`);
+
+  doc.moveDown();
+
+  doc.text(
+    `Description: ${
+      data.type === "membership" ? "Membership" : "Token Purchase"
+    }`
+  );
+  doc.text(`Amount: ${data.amount} ${data.currency.toUpperCase()}`);
+  doc.text(`VAT: 0`);
+  doc.text(`Total: ${data.amount} ${data.currency.toUpperCase()}`);
+
+  doc.end();
+
+  return new Promise<Buffer>((resolve) => {
+    stream.on("end", () => {
+      resolve(Buffer.concat(buffers));
+    });
+  });
+}
 
 export async function POST(req: Request) {
   const body = await req.text();
@@ -69,112 +122,126 @@ export async function POST(req: Request) {
     // =========================================
     // CHECKOUT COMPLETED
     // =========================================
- if (event.type === "checkout.session.completed") {
-  const session = event.data.object as Stripe.Checkout.Session;
+    if (event.type === "checkout.session.completed") {
+      const session = event.data.object as Stripe.Checkout.Session;
 
-  const uid = session.metadata?.uid;
-  const priceId = session.metadata?.priceId;
+      const uid = session.metadata?.uid;
+      const priceId = session.metadata?.priceId;
 
-  if (!uid) {
-    return NextResponse.json({ received: true });
-  }
+      if (!uid) {
+        return NextResponse.json({ received: true });
+      }
 
-  const amount = (session.amount_total || 0) / 100;
-  const currency = session.currency || "usd";
-  const paymentReference = session.payment_intent as string;
+      const amount = (session.amount_total || 0) / 100;
+      const currency = session.currency || "usd";
+      const paymentReference = session.payment_intent as string;
 
-  let type: "membership" | "token_purchase" = "token_purchase";
+      let type: "membership" | "token_purchase" = "token_purchase";
 
-  // ---------------- MEMBERSHIP ----------------
-  if (session.mode === "subscription") {
-    type = "membership";
+      // ---------------- MEMBERSHIP ----------------
+      if (session.mode === "subscription") {
+        type = "membership";
 
-    const start = new Date();
-    const expires = new Date();
-    expires.setFullYear(start.getFullYear() + 1);
+        const start = new Date();
+        const expires = new Date();
+        expires.setFullYear(start.getFullYear() + 1);
 
-    await db.collection("users").doc(uid).set(
-      {
-        membershipStatus: "active",
-        membershipType: "annual",
-        membershipStart: start,
-        membershipExpires: expires,
-      },
-      { merge: true }
-    );
-  }
+        await db.collection("users").doc(uid).set(
+          {
+            membershipStatus: "active",
+            membershipType: "annual",
+            membershipStart: start,
+            membershipExpires: expires,
+          },
+          { merge: true }
+        );
+      }
 
-  // ---------------- TOKENS ----------------
-  if (session.mode === "payment" && priceId) {
-    const tokens = TOKEN_MAP[priceId];
+      // ---------------- TOKENS ----------------
+      if (session.mode === "payment" && priceId) {
+        const tokens = TOKEN_MAP[priceId];
 
-    if (!tokens) {
-      return NextResponse.json({ received: true });
-    }
+        if (!tokens) {
+          return NextResponse.json({ received: true });
+        }
 
-    const walletRef = db.collection("wallets").doc(uid);
-    const walletSnap = await walletRef.get();
+        const walletRef = db.collection("wallets").doc(uid);
+        const walletSnap = await walletRef.get();
 
-    if (!walletSnap.exists) {
-      await walletRef.set({
-        purchasedTokens: tokens,
-        winningTokens: 0,
-        lockedTokens: 0,
+        if (!walletSnap.exists) {
+          await walletRef.set({
+            purchasedTokens: tokens,
+            winningTokens: 0,
+            lockedTokens: 0,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+          });
+        } else {
+          await walletRef.update({
+            purchasedTokens: FieldValue.increment(tokens),
+            updatedAt: new Date(),
+          });
+        }
+      }
+
+      // ---------------- INVOICE (SEQUENTIAL) ----------------
+      const year = new Date().getFullYear().toString();
+
+      const counterRef = db.collection("counters").doc(`invoice_${year}`);
+
+      const invoiceNumber = await db.runTransaction(async (tx) => {
+        const counterSnap = await tx.get(counterRef);
+
+        let nextNumber = 1;
+
+        if (counterSnap.exists) {
+          nextNumber = (counterSnap.data()?.current || 0) + 1;
+        }
+
+        tx.set(counterRef, { current: nextNumber }, { merge: true });
+
+        return `INV-${year}-${nextNumber
+          .toString()
+          .padStart(6, "0")}`;
+      });
+
+      const invoiceRef = db.collection("invoices").doc();
+
+      const pdfBuffer = await generateInvoicePDF({
+        invoiceNumber,
+        amount,
+        currency,
+        type,
+        paymentReference,
+      });
+
+      const base64Pdf = pdfBuffer.toString("base64");
+
+      await invoiceRef.set({
+        uid,
+
+        type,
+
+        amount,
+        currency,
+
+        vatRegistered: false,
+        vatAmount: 0,
+
+        totalAmount: amount,
+
+        paymentProvider: "stripe",
+        paymentReference,
+
+        invoiceNumber,
+
         createdAt: new Date(),
-        updatedAt: new Date(),
-      });
-    } else {
-      await walletRef.update({
-        purchasedTokens: FieldValue.increment(tokens),
-        updatedAt: new Date(),
+
+        pdfUrl: "",
+
+        pdfBase64: base64Pdf,
       });
     }
-  }
-
-// ---------------- INVOICE (SEQUENTIAL) ----------------
-const year = new Date().getFullYear().toString();
-
-const counterRef = db.collection("counters").doc(`invoice_${year}`);
-
-const invoiceNumber = await db.runTransaction(async (tx) => {
-  const counterSnap = await tx.get(counterRef);
-
-  let nextNumber = 1;
-
-  if (counterSnap.exists) {
-    nextNumber = (counterSnap.data()?.current || 0) + 1;
-  }
-
-  tx.set(counterRef, { current: nextNumber }, { merge: true });
-
-  return `INV-${year}-${nextNumber.toString().padStart(6, "0")}`;
-});
-
-const invoiceRef = db.collection("invoices").doc();
-
-await invoiceRef.set({
-  uid,
-
-  type,
-
-  amount,
-  currency,
-
-  vatRegistered: false,
-  vatAmount: 0,
-
-  totalAmount: amount,
-
-  paymentProvider: "stripe",
-  paymentReference,
-
-  invoiceNumber,
-
-  createdAt: new Date(),
-
-  pdfUrl: "",
-});
-
 
     // =========================================
     // PAYMENT FAILED
@@ -207,7 +274,6 @@ await invoiceRef.set({
     }
 
     return NextResponse.json({ received: true });
-
   } catch (error) {
     console.error("Webhook processing error:", error);
     return NextResponse.json(

@@ -59,16 +59,33 @@ export default function VouchersPage() {
 
       <main className="relative z-10 w-full max-w-md mx-auto px-6 py-20">
 
-        <h1 className="text-3xl font-bold mb-6 text-center">
-          My Vouchers
-        </h1>
+        <style jsx>{`
+  @keyframes neonPulse {
+    0%, 100% {
+      text-shadow: 0 0 10px #FFD700, 0 0 20px #FFD700;
+      opacity: 1;
+    }
+    50% {
+      text-shadow: 0 0 20px #FFD700, 0 0 40px #FFD700;
+      opacity: 0.85;
+    }
+  }
 
-        {vouchers.length === 0 && (
-          <p className="text-center text-gray-400">
-            No vouchers yet
-          </p>
-        )}
+  .neon-text {
+    color: #FFD700;
+    animation: neonPulse 2s infinite;
+  }
+`}</style>
 
+<h1 className="text-3xl font-bold mb-6 text-center neon-text">
+  My Vouchers
+</h1>
+
+{vouchers.length === 0 && (
+  <p className="text-center neon-text">
+    No vouchers yet
+  </p>
+)}
         <div className="flex flex-col gap-4">
 
           {vouchers.map((v) => (

@@ -48,15 +48,29 @@ export default function VouchersPage() {
     <RequireAuth>
       <div className="relative min-h-screen flex items-center justify-center text-white overflow-hidden bg-black">
 
-        {/* BACKGROUND IMAGE */}
+        {/* BADGER HERO IMAGE */}
         <img
           src="/voucher_badger.png"
           alt="Voucher Background"
-          className="absolute inset-0 w-full h-full object-cover opacity-40"
+          className="absolute top-10 left-1/2 -translate-x-1/2 w-[380px] max-w-[90%] object-contain pointer-events-none z-0 animate-pulse drop-shadow-[0_0_25px_rgba(255,215,0,0.9)]"
         />
 
+        {/* FLICKER ANIMATION */}
+        <style jsx>{`
+          @keyframes flicker {
+            0%, 100% { opacity: 1; }
+            45% { opacity: 0.85; }
+            50% { opacity: 0.6; }
+            55% { opacity: 0.9; }
+          }
+
+          .flicker {
+            animation: flicker 2.5s infinite;
+          }
+        `}</style>
+
         {/* ARENA LIGHT */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[420px] bg-yellow-400 opacity-20 blur-[140px] animate-pulse pointer-events-none" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[420px] bg-yellow-400 opacity-20 blur-[140px] flicker pointer-events-none" />
 
         {/* FLOOR GLOW */}
         <div className="absolute bottom-0 w-full h-[300px] bg-gradient-to-t from-yellow-500/10 to-transparent blur-[40px]" />

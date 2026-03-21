@@ -19,6 +19,8 @@ type Voucher = {
   category: string;
   beneficiary: string;
   status: string;
+  voucherCode?: string; // ✅ NEW
+  qrUrl?: string;       // optional
 };
 
 export default function VouchersPage() {
@@ -49,19 +51,16 @@ export default function VouchersPage() {
     <RequireAuth>
       <div className="relative min-h-screen text-white bg-black overflow-hidden">
 
-        {/* BACKGROUND IMAGE */}
         <img
           src="/voucher_badger.png"
           alt="Voucher Background"
           className="absolute inset-0 w-full h-full object-contain opacity-80 brightness-110 contrast-110 pointer-events-none"
         />
 
-        {/* OVERLAY */}
         <div className="absolute inset-0 bg-black/40" />
 
         <main className="relative z-10 w-full max-w-md mx-auto px-6 py-20">
 
-          {/* NEON STYLE */}
           <style jsx>{`
             @keyframes neonPulse {
               0%, 100% {
@@ -104,7 +103,17 @@ export default function VouchersPage() {
                   <p><strong>Category:</strong> {v.category}</p>
                   <p><strong>Beneficiary:</strong> {v.beneficiary}</p>
 
-                  <div className="flex items-center justify-between mt-2">
+                  {/* ✅ NEW — VOUCHER CODE */}
+                  {v.voucherCode && (
+                    <div className="mt-3 p-2 border border-yellow-400/40 rounded bg-black/70">
+                      <p className="text-yellow-400 text-sm">Voucher Code</p>
+                      <p className="text-lg font-bold tracking-wider">
+                        {v.voucherCode}
+                      </p>
+                    </div>
+                  )}
+
+                  <div className="flex items-center justify-between mt-3">
                     <p className="text-green-400 font-semibold">
                       Status: {v.status}
                     </p>

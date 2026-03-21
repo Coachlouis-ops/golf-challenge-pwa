@@ -5,6 +5,7 @@ import { NextResponse } from "next/server";
 import { headers } from "next/headers";
 import { initializeApp, getApps, cert } from "firebase-admin/app";
 import { getFirestore, FieldValue } from "firebase-admin/firestore";
+import { getStorage } from "firebase-admin/storage";
 
 import PDFDocument from "pdfkit";
 import { PassThrough } from "stream";
@@ -207,17 +208,31 @@ export async function POST(req: Request) {
 
       const invoiceRef = db.collection("invoices").doc();
 
-      const pdfBuffer = await generateInvoicePDF({
-        invoiceNumber,
-        amount,
-        currency,
-        type,
-        paymentReference,
-      });
+    const pdfBuffer = await generateInvoicePDF({
+  invoiceNumber,
+  amount,
+  currency,
+  type,
+  paymentReference,
+});
 
-      const base64Pdf = pdfBuffer.toString("base64");
+const bucket = getStorage().bucket();
 
-      await invoiceRef.set({
+const filePath = `invoices/${uid}/${invoiceNumber}.pdf`;
+
+const file = bucket.file(filePath);
+
+await file.save(pdfBuffer, {
+  metadata: {
+    contentType: "application/pdf",
+  },
+});
+
+await file.makePublic();
+
+const pdfUrl = `https://storage.googleapis.com/${bucket.name}/${filePath}`;
+
+await invoiceRef.set({
         uid,
 
         type,
@@ -239,7 +254,7 @@ export async function POST(req: Request) {
 
         pdfUrl: "",
 
-        pdfBase64: base64Pdf,
+        pdfUrl,
       });
     }
 

@@ -116,7 +116,7 @@ function DashboardContent() {
                 My Invites
               </button>
 
-              <button
+                         <button
                 onClick={() => router.push("/profile")}
                 className="arena-btn"
               >
@@ -128,6 +128,13 @@ function DashboardContent() {
                 className="arena-btn"
               >
                 Wallet
+              </button>
+
+              <button
+                onClick={() => router.push("/vouchers")}
+                className="arena-btn"
+              >
+                My Vouchers
               </button>
             </>
           )}

@@ -6,7 +6,6 @@ import { headers } from "next/headers";
 import { initializeApp, getApps, cert } from "firebase-admin/app";
 import { getFirestore, FieldValue } from "firebase-admin/firestore";
 import { Resend } from "resend";
-import { Resend } from "resend";
 
 
 

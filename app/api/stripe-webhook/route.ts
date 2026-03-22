@@ -11,7 +11,6 @@ import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
-const resend = new Resend(process.env.RESEND_API_KEY);
 
 
 /* ================================

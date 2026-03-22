@@ -49,7 +49,15 @@ function generateInvoicePDF(data: {
   type: string;
   paymentReference: string;
 }) {
-  const doc = new PDFDocument();
+ const doc = new PDFDocument({
+  font: "Helvetica",
+});
+const doc = new PDFDocument({
+  font: "Helvetica",
+});
+
+doc.font("Helvetica");
+
   const stream = new PassThrough();
   const buffers: any[] = [];
 

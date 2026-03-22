@@ -138,9 +138,16 @@ export async function POST(req: Request) {
         return NextResponse.json({ received: true });
       }
 
-      const amount = (session.amount_total || 0) / 100;
-      const currency = session.currency || "usd";
-      const paymentReference = session.payment_intent as string;
+   const amount = (session.amount_total || 0) / 100;
+const currency = session.currency || "usd";
+const paymentReference = session.payment_intent as string;
+
+// ---------------- CUSTOMER ----------------
+const customerEmail =
+  session.customer_details?.email || session.customer_email || "";
+
+const customerName =
+  session.customer_details?.name || "";
 
       let type: "membership" | "token_purchase" = "token_purchase";
 
@@ -216,23 +223,40 @@ export async function POST(req: Request) {
 await invoiceRef.set({
   uid,
 
+  // CUSTOMER
+  customerEmail,
+  customerName,
+
+  // TYPE
   type,
 
-  amount,
-  currency,
+  // PAYMENT
+  paymentProvider: "stripe",
+  paymentReference,
+  status: "paid",
 
+  // ITEM
+  description:
+    type === "membership" ? "Membership" : "Token Purchase",
+  quantity: type === "membership" ? 1 : (TOKEN_MAP[priceId] || 0),
+  unitPrice:
+    type === "membership"
+      ? amount
+      : amount / (TOKEN_MAP[priceId] || 1),
+  amount,
+
+  // TAX
   vatRegistered: false,
   vatAmount: 0,
 
+  // TOTAL
   totalAmount: amount,
 
-  paymentProvider: "stripe",
-  paymentReference,
-
+  // INVOICE
   invoiceNumber,
-
   createdAt: new Date(),
 
+  // OUTPUT
   pdfUrl: null,
 });
 

@@ -7,11 +7,7 @@ import { initializeApp, getApps, cert } from "firebase-admin/app";
 import { getFirestore, FieldValue } from "firebase-admin/firestore";
 import { Resend } from "resend";
 
-
-
-const resend = new Resend(process.env.RESEND_API_KEY);
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
-
 
 /* ================================
 TOKEN PRICE → TOKEN AMOUNT MAP
@@ -202,9 +198,10 @@ await invoiceRef.set({
   pdfUrl: null,
 });
 
+const resend = new Resend(process.env.RESEND_API_KEY);
+
 // EMAIL (CORRECT POSITION)
-await resend.emails.send({
-  from: "invoices@yourdomain.com",
+await resend.emails.send({  from: "invoices@yourdomain.com",
   to: [customerEmail, "YOUR_ADMIN_EMAIL@gmail.com"],
   subject: `Invoice ${invoiceNumber}`,
   html: `

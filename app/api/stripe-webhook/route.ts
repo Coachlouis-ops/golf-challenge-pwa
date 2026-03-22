@@ -50,10 +50,9 @@ function generateInvoicePDF(data: {
   paymentReference: string;
 }) {
 const doc = new PDFDocument({
-  font: "Helvetica",
+  bufferPages: true,
 });
 
-doc.font("Helvetica");
 
   const stream = new PassThrough();
   const buffers: any[] = [];

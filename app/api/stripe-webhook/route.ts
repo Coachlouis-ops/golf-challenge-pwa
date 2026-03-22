@@ -5,8 +5,10 @@ import { NextResponse } from "next/server";
 import { headers } from "next/headers";
 import { initializeApp, getApps, cert } from "firebase-admin/app";
 import { getFirestore, FieldValue } from "firebase-admin/firestore";
+import { Resend } from "resend";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 /* ================================
 TOKEN PRICE → TOKEN AMOUNT MAP
@@ -66,9 +68,6 @@ export async function POST(req: Request) {
 
     const db = getFirestore();
 
-    // =========================================
-    // CHECKOUT COMPLETED
-    // =========================================
     if (event.type === "checkout.session.completed") {
       const session = event.data.object as Stripe.Checkout.Session;
 
@@ -83,7 +82,6 @@ export async function POST(req: Request) {
       const currency = session.currency || "usd";
       const paymentReference = session.payment_intent as string;
 
-      // CUSTOMER
       const customerEmail =
         session.customer_details?.email || session.customer_email || "";
 
@@ -92,7 +90,6 @@ export async function POST(req: Request) {
 
       let type: "membership" | "token_purchase" = "token_purchase";
 
-      // MEMBERSHIP
       if (session.mode === "subscription") {
         type = "membership";
 
@@ -111,7 +108,6 @@ export async function POST(req: Request) {
         );
       }
 
-      // TOKENS
       if (session.mode === "payment" && priceId) {
         const tokens = TOKEN_MAP[priceId];
 
@@ -138,9 +134,7 @@ export async function POST(req: Request) {
         }
       }
 
-      // INVOICE
       const year = new Date().getFullYear().toString();
-
       const counterRef = db.collection("counters").doc(`invoice_${year}`);
 
       const invoiceNumber = await db.runTransaction(async (tx) => {
@@ -154,23 +148,17 @@ export async function POST(req: Request) {
 
         tx.set(counterRef, { current: nextNumber }, { merge: true });
 
-        return `INV-${year}-${nextNumber
-          .toString()
-          .padStart(6, "0")}`;
+        return `INV-${year}-${nextNumber.toString().padStart(6, "0")}`;
       });
 
       const invoiceRef = db.collection("invoices").doc();
-
       const tokens = priceId ? TOKEN_MAP[priceId] || 0 : 0;
 
       await invoiceRef.set({
         uid,
-
         customerEmail,
         customerName,
-
         type,
-
         paymentProvider: "stripe",
         paymentReference,
         status: "paid",
@@ -188,40 +176,36 @@ export async function POST(req: Request) {
 
         vatRegistered: false,
         vatAmount: 0,
-
         totalAmount: amount,
 
         invoiceNumber,
         createdAt: new Date(),
-
         pdfUrl: null,
       });
-    }
 
-    // PAYMENT FAILED
-    if (event.type === "invoice.payment_failed") {
-      const invoice = event.data.object as Stripe.Invoice;
-      const uid = invoice.metadata?.uid;
+      // ================= EMAIL =================
+      await resend.emails.send({
+        from: "invoices@yourdomain.com",
+        to: [customerEmail, "YOUR_ADMIN_EMAIL@gmail.com"],
+        subject: `Invoice ${invoiceNumber}`,
+        html: `
+          <h2>Invoice ${invoiceNumber}</h2>
+          <p><strong>Customer:</strong> ${customerName}</p>
+          <p><strong>Email:</strong> ${customerEmail}</p>
 
-      if (uid) {
-        await db.collection("users").doc(uid).set(
-          { membershipStatus: "inactive" },
-          { merge: true }
-        );
-      }
-    }
+          <hr/>
 
-    // SUB CANCELLED
-    if (event.type === "customer.subscription.deleted") {
-      const subscription = event.data.object as Stripe.Subscription;
-      const uid = subscription.metadata?.uid;
+          <p><strong>Description:</strong> ${
+            type === "membership" ? "Membership" : "Token Purchase"
+          }</p>
+          <p><strong>Quantity:</strong> ${
+            type === "membership" ? 1 : tokens
+          }</p>
+          <p><strong>Total Paid:</strong> ${amount} ${currency.toUpperCase()}</p>
 
-      if (uid) {
-        await db.collection("users").doc(uid).set(
-          { membershipStatus: "inactive" },
-          { merge: true }
-        );
-      }
+          <p>Status: Paid</p>
+        `,
+      });
     }
 
     return NextResponse.json({ received: true });

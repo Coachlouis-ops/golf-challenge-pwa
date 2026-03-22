@@ -213,54 +213,30 @@ export async function POST(req: Request) {
 
       const invoiceRef = db.collection("invoices").doc();
 
-    const pdfBuffer = await generateInvoicePDF({
-  invoiceNumber,
+await invoiceRef.set({
+  uid,
+
+  type,
+
   amount,
   currency,
-  type,
+
+  vatRegistered: false,
+  vatAmount: 0,
+
+  totalAmount: amount,
+
+  paymentProvider: "stripe",
   paymentReference,
+
+  invoiceNumber,
+
+  createdAt: new Date(),
+
+  pdfUrl: null,
 });
 
-const bucket = getStorage().bucket();
-
-const filePath = `invoices/${uid}/${invoiceNumber}.pdf`;
-
-const file = bucket.file(filePath);
-
-await file.save(pdfBuffer, {
-  metadata: {
-    contentType: "application/pdf",
-  },
-});
-
-await file.makePublic();
-
-const pdfUrl = `https://storage.googleapis.com/${bucket.name}/${filePath}`;
-
-await invoiceRef.set({
-        uid,
-
-        type,
-
-        amount,
-        currency,
-
-        vatRegistered: false,
-        vatAmount: 0,
-
-        totalAmount: amount,
-
-        paymentProvider: "stripe",
-        paymentReference,
-
-        invoiceNumber,
-
-        createdAt: new Date(),
-
-        pdfUrl,
-
-      });
-    }
+}
 
     // =========================================
     // PAYMENT FAILED

@@ -238,8 +238,13 @@ await invoiceRef.set({
   // ITEM
   description:
     type === "membership" ? "Membership" : "Token Purchase",
-  const tokens = priceId ? TOKEN_MAP[priceId] || 0 : 0;
 
+ // BEFORE invoiceRef.set
+const tokens = priceId ? TOKEN_MAP[priceId] || 0 : 0;
+
+// ITEM
+description:
+  type === "membership" ? "Membership" : "Token Purchase",
 quantity: type === "membership" ? 1 : tokens,
 unitPrice:
   type === "membership"
@@ -247,7 +252,7 @@ unitPrice:
     : tokens > 0
     ? amount / tokens
     : amount,
-  amount,
+amount,
 
   // TAX
   vatRegistered: false,

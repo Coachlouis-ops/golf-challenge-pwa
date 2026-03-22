@@ -220,71 +220,50 @@ const customerName =
 
       const invoiceRef = db.collection("invoices").doc();
 
-await invoiceRef.set({
-  uid,
+      // ✅ SAFE TOKENS
+      const tokens = priceId ? TOKEN_MAP[priceId] || 0 : 0;
 
-  // CUSTOMER
-  customerEmail,
-  customerName,
+      await invoiceRef.set({
+        uid,
 
-  // TYPE
-  type,
+        // CUSTOMER
+        customerEmail,
+        customerName,
 
-  // PAYMENT
-  paymentProvider: "stripe",
-  paymentReference,
-  status: "paid",
+        // TYPE
+        type,
 
-  // ITEM
-  description:
-    type === "membership" ? "Membership" : "Token Purchase",
+        // PAYMENT
+        paymentProvider: "stripe",
+        paymentReference,
+        status: "paid",
 
- // BEFORE invoiceRef.set
-const tokens = priceId ? TOKEN_MAP[priceId] || 0 : 0;
+        // ITEM
+        description:
+          type === "membership" ? "Membership" : "Token Purchase",
+        quantity: type === "membership" ? 1 : tokens,
+        unitPrice:
+          type === "membership"
+            ? amount
+            : tokens > 0
+            ? amount / tokens
+            : amount,
+        amount,
 
-await invoiceRef.set({
-  uid,
+        // TAX
+        vatRegistered: false,
+        vatAmount: 0,
 
-  // CUSTOMER
-  customerEmail,
-  customerName,
+        // TOTAL
+        totalAmount: amount,
 
-  // TYPE
-  type,
+        // INVOICE
+        invoiceNumber,
+        createdAt: new Date(),
 
-  // PAYMENT
-  paymentProvider: "stripe",
-  paymentReference,
-  status: "paid",
-
-  // ITEM
-  description:
-    type === "membership" ? "Membership" : "Token Purchase",
-  quantity: type === "membership" ? 1 : tokens,
-  unitPrice:
-    type === "membership"
-      ? amount
-      : tokens > 0
-      ? amount / tokens
-      : amount,
-  amount,
-
-  // TAX
-  vatRegistered: false,
-  vatAmount: 0,
-
-  // TOTAL
-  totalAmount: amount,
-
-  // INVOICE
-  invoiceNumber,
-  createdAt: new Date(),
-
-  // OUTPUT
-  pdfUrl: null,
-});
-
-}
+        // OUTPUT
+        pdfUrl: null,
+      });
 
     // =========================================
     // PAYMENT FAILED

@@ -289,11 +289,12 @@ await invoiceRef.set({
     }
 
     return NextResponse.json({ received: true });
-  } catch (error) {
-    console.error("Webhook processing error:", error);
-    return NextResponse.json(
-      { error: "Webhook handler failed" },
-      { status: 500 }
-    );
-  }
+ } catch (error: any) {
+  console.error("Webhook processing error:", error);
+
+  return NextResponse.json(
+    { error: error?.message || "Webhook handler failed" },
+    { status: 500 }
+  );
+}
 }

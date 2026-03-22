@@ -107,16 +107,17 @@ export async function POST(req: Request) {
   }
 
   try {
-    if (!getApps().length) {
-      const serviceAccount = JSON.parse(
-        process.env.FIREBASE_SERVICE_ACCOUNT_KEY as string
-      );
+  if (!getApps().length) {
+  const serviceAccount = JSON.parse(
+    process.env.FIREBASE_SERVICE_ACCOUNT_KEY as string
+  );
 
-      initializeApp({
-        credential: cert(serviceAccount),
-        projectId: serviceAccount.project_id,
-      });
-    }
+  initializeApp({
+    credential: cert(serviceAccount),
+    projectId: serviceAccount.project_id,
+    storageBucket: `${serviceAccount.project_id}.appspot.com`,
+  });
+}
 
     const db = getFirestore();
 

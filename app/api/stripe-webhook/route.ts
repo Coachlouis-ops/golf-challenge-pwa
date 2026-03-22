@@ -201,8 +201,8 @@ await invoiceRef.set({
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 // EMAIL (CORRECT POSITION)
-await resend.emails.send({  from: "invoices@yourdomain.com",
-  to: [customerEmail, "YOUR_ADMIN_EMAIL@gmail.com"],
+await resend.emails.send({  from: "invoices@teezgolfchallenge.com",
+  to: [customerEmail, "honeybagderapps5@gmail.com"],
   subject: `Invoice ${invoiceNumber}`,
   html: `
     <h2>Invoice ${invoiceNumber}</h2>

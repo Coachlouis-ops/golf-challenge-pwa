@@ -252,9 +252,8 @@ await invoiceRef.set({
 
         createdAt: new Date(),
 
-        pdfUrl: "",
-
         pdfUrl,
+
       });
     }
 

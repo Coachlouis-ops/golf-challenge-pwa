@@ -49,9 +49,6 @@ function generateInvoicePDF(data: {
   type: string;
   paymentReference: string;
 }) {
- const doc = new PDFDocument({
-  font: "Helvetica",
-});
 const doc = new PDFDocument({
   font: "Helvetica",
 });

@@ -242,17 +242,32 @@ await invoiceRef.set({
  // BEFORE invoiceRef.set
 const tokens = priceId ? TOKEN_MAP[priceId] || 0 : 0;
 
-// ITEM
-description:
-  type === "membership" ? "Membership" : "Token Purchase",
-quantity: type === "membership" ? 1 : tokens,
-unitPrice:
-  type === "membership"
-    ? amount
-    : tokens > 0
-    ? amount / tokens
-    : amount,
-amount,
+await invoiceRef.set({
+  uid,
+
+  // CUSTOMER
+  customerEmail,
+  customerName,
+
+  // TYPE
+  type,
+
+  // PAYMENT
+  paymentProvider: "stripe",
+  paymentReference,
+  status: "paid",
+
+  // ITEM
+  description:
+    type === "membership" ? "Membership" : "Token Purchase",
+  quantity: type === "membership" ? 1 : tokens,
+  unitPrice:
+    type === "membership"
+      ? amount
+      : tokens > 0
+      ? amount / tokens
+      : amount,
+  amount,
 
   // TAX
   vatRegistered: false,

@@ -201,8 +201,6 @@ await invoiceRef.set({
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 // EMAIL (CORRECT POSITION)
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 try {
   const emailResponse = await resend.emails.send({
     from: "invoices@teezgolfchallenge.com",

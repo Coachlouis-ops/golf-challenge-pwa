@@ -202,8 +202,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 // EMAIL (CORRECT POSITION)
 
-try {
- // SEND TO CLIENT
+// SEND TO CLIENT
 try {
   const res1 = await resend.emails.send({
     from: "invoices@teezgolfchallenge.com",
@@ -255,7 +254,6 @@ try {
 
 // CLOSE checkout.session.completed
 }
-
 // PAYMENT FAILED
 if (event.type === "invoice.payment_failed") {
   const invoice = event.data.object as Stripe.Invoice;

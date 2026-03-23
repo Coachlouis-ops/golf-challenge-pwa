@@ -202,7 +202,6 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 // EMAIL (CORRECT POSITION)
 
-// SEND TO CLIENT
 try {
   // SEND TO CLIENT
   await resend.emails.send({
@@ -247,40 +246,43 @@ try {
   console.error("EMAIL ERROR:", err);
 }
 
-    // PAYMENT FAILED
-    if (event.type === "invoice.payment_failed") {
-      const invoice = event.data.object as Stripe.Invoice;
-      const uid = invoice.metadata?.uid;
+// CLOSE checkout.session.completed
+}
 
-      if (uid) {
-        await db.collection("users").doc(uid).set(
-          { membershipStatus: "inactive" },
-          { merge: true }
-        );
-      }
-    }
+// PAYMENT FAILED
+if (event.type === "invoice.payment_failed") {
+  const invoice = event.data.object as Stripe.Invoice;
+  const uid = invoice.metadata?.uid;
 
-    // SUB CANCELLED
-    if (event.type === "customer.subscription.deleted") {
-      const subscription = event.data.object as Stripe.Subscription;
-      const uid = subscription.metadata?.uid;
-
-      if (uid) {
-        await db.collection("users").doc(uid).set(
-          { membershipStatus: "inactive" },
-          { merge: true }
-        );
-      }
-    }
-
-    return NextResponse.json({ received: true });
-
-  } catch (error: any) {
-    console.error("Webhook processing error:", error);
-
-    return NextResponse.json(
-      { error: error?.message || "Webhook handler failed" },
-      { status: 500 }
+  if (uid) {
+    await db.collection("users").doc(uid).set(
+      { membershipStatus: "inactive" },
+      { merge: true }
     );
   }
+}
+
+// SUB CANCELLED
+if (event.type === "customer.subscription.deleted") {
+  const subscription = event.data.object as Stripe.Subscription;
+  const uid = subscription.metadata?.uid;
+
+  if (uid) {
+    await db.collection("users").doc(uid).set(
+      { membershipStatus: "inactive" },
+      { merge: true }
+    );
+  }
+}
+
+return NextResponse.json({ received: true });
+
+} catch (error: any) {
+  console.error("Webhook processing error:", error);
+
+  return NextResponse.json(
+    { error: error?.message || "Webhook handler failed" },
+    { status: 500 }
+  );
+}
 }

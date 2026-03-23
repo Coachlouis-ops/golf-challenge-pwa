@@ -203,8 +203,9 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 // EMAIL (CORRECT POSITION)
 
 try {
-  // SEND TO CLIENT
-  await resend.emails.send({
+ // SEND TO CLIENT
+try {
+  const res1 = await resend.emails.send({
     from: "invoices@teezgolfchallenge.com",
     to: [customerEmail],
     subject: `Invoice ${invoiceNumber}`,
@@ -225,8 +226,14 @@ try {
     `,
   });
 
-  // SEND TO ADMIN
-  await resend.emails.send({
+  console.log("CLIENT EMAIL SUCCESS:", res1);
+} catch (err) {
+  console.error("CLIENT EMAIL ERROR:", err);
+}
+
+// SEND TO ADMIN
+try {
+  const res2 = await resend.emails.send({
     from: "invoices@teezgolfchallenge.com",
     to: ["honeybagderapps5@gmail.com"],
     subject: `ADMIN COPY - Invoice ${invoiceNumber}`,
@@ -241,9 +248,9 @@ try {
     `,
   });
 
-  console.log("EMAIL SUCCESS");
+  console.log("ADMIN EMAIL SUCCESS:", res2);
 } catch (err) {
-  console.error("EMAIL ERROR:", err);
+  console.error("ADMIN EMAIL ERROR:", err);
 }
 
 // CLOSE checkout.session.completed

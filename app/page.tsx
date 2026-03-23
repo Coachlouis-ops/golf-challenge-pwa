@@ -1,28 +1,9 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 
 export default function LandingPage() {
   const router = useRouter();
-
-  // HERO IMAGES (add more if needed)
-  const images = [
-    "/hero-teez.jpg",
-    "/hero-teez-2.jpg",
-    "/hero-teez-3.jpg",
-  ];
-
-  const [current, setCurrent] = useState(0);
-
-  // AUTO SLIDE
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrent((prev) => (prev + 1) % images.length);
-    }, 3500);
-
-    return () => clearInterval(interval);
-  }, []);
 
   return (
     <div className="min-h-screen bg-black text-white font-sans flex flex-col">
@@ -39,17 +20,17 @@ export default function LandingPage() {
           </h1>
         </div>
 
-        {/* HERO IMAGE (OVERLAP STYLE) */}
+        {/* HERO IMAGE */}
         <div className="mt-6 px-4">
           <div className="relative rounded-3xl overflow-hidden shadow-2xl">
 
             <img
-              src={images[current]}
+              src="/hero-teez.jpg"
               alt="Hero"
-              className="w-full h-[260px] object-cover transition-all duration-700"
+              className="w-full h-[35vh] md:h-[45vh] object-cover"
             />
 
-            {/* DARK GRADIENT OVERLAY */}
+            {/* OVERLAY */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
 
           </div>

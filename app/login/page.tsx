@@ -85,7 +85,16 @@ export default function LoginPage() {
           Sign In or Register
         </h1>
 
-     <div className="relative">
+   <input
+  type="email"
+  placeholder="Email"
+  value={email}
+  onChange={(e) => setEmail(e.target.value)}
+  className="w-full border p-2"
+  required
+/>
+
+<div className="relative">
   <input
     type={showPassword ? "text" : "password"}
     placeholder="Password"
@@ -103,15 +112,6 @@ export default function LoginPage() {
     {showPassword ? "🙈" : "👁"}
   </button>
 </div>
-
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="w-full border p-2"
-          required
-        />
 
         {error && (
           <p className="text-red-600 text-sm">{error}</p>

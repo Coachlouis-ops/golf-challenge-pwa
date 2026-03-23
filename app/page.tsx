@@ -32,73 +32,32 @@ export default function LandingPage() {
           </div>
         </div>
 
-        {/* ACTION BUTTONS */}
-        <div className="px-6 mt-8 flex flex-col gap-4">
+       <div className="px-6 mt-8 flex flex-col gap-4">
 
-          <button
-            onClick={() => router.push("/register")}
-            className="w-full py-4 rounded-2xl bg-[#00ff88] text-black font-semibold text-lg animate-pulse shadow-[0_0_15px_#00ff88]"
-          >
-            Create Account
-          </button>
+  <button
+    onClick={() => router.push("/register")}
+    className="w-full py-4 rounded-2xl bg-[#00ff88] text-black font-semibold text-lg animate-pulse shadow-[0_0_15px_#00ff88]"
+  >
+    Create Account
+  </button>
 
-          <button
-            onClick={() => router.push("/how-it-works")}
-            className="w-full py-4 rounded-2xl bg-[#00ff88] text-black text-lg animate-pulse shadow-[0_0_15px_#00ff88]"
-          >
-            How It Works
-          </button>
+  <button
+    onClick={() => router.push("/login")}
+    className="w-full py-4 rounded-2xl bg-[#00ff88] text-black text-lg animate-pulse shadow-[0_0_15px_#00ff88]"
+  >
+    Login
+  </button>
 
-        </div>
+  <button
+    onClick={() => router.push("/how-it-works")}
+    className="w-full py-4 rounded-2xl bg-[#00ff88] text-black text-lg animate-pulse shadow-[0_0_15px_#00ff88]"
+  >
+    How It Works
+  </button>
 
-        {/* LOGIN TEXT */}
-        <div className="mt-6 text-center text-sm">
-          Already have an account?{" "}
-          <button
-            onClick={() => router.push("/login")}
-            className="text-[#00ff88] underline animate-pulse"
-          >
-            Sign In
-          </button>
-        </div>
+</div>
 
       </div>
-
-      {/* BOTTOM APP NAV */}
-      <div className="fixed bottom-0 left-0 right-0 bg-[#0f0f0f] border-t border-[#1f1f1f] px-4 py-3 flex justify-between z-50">
-
-        <button
-          onClick={() => router.push("/")}
-          className="flex-1 mx-1 py-3 rounded-xl bg-[#00ff88] text-black animate-pulse shadow-[0_0_10px_#00ff88]"
-        >
-          Home
-        </button>
-
-        <button
-          onClick={() => router.push("/how-it-works")}
-          className="flex-1 mx-1 py-3 rounded-xl bg-[#00ff88] text-black animate-pulse shadow-[0_0_10px_#00ff88]"
-        >
-          How It Works
-        </button>
-
-        <button
-          onClick={() => router.push("/login")}
-          className="flex-1 mx-1 py-3 rounded-xl bg-[#00ff88] text-black animate-pulse shadow-[0_0_10px_#00ff88]"
-        >
-          Login
-        </button>
-
-        <button
-          onClick={() => router.push("/register")}
-          className="flex-1 mx-1 py-3 rounded-xl bg-[#00ff88] text-black font-semibold animate-pulse shadow-[0_0_12px_#00ff88]"
-        >
-          Register
-        </button>
-
-      </div>
-
-      {/* SPACING */}
-      <div className="h-20" />
 
     </div>
   );

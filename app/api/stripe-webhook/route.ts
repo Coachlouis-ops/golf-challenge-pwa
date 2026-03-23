@@ -201,51 +201,50 @@ await invoiceRef.set({
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 // EMAIL (CORRECT POSITION)
+
 // SEND TO CLIENT
-await resend.emails.send({
-  from: "invoices@teezgolfchallenge.com",
-  to: [customerEmail],
-  subject: `Invoice ${invoiceNumber}`,
-  html: `
-    <h2>Invoice ${invoiceNumber}</h2>
-    <p><strong>Customer:</strong> ${customerName}</p>
-    <p><strong>Email:</strong> ${customerEmail}</p>
-    <hr/>
-    <p><strong>Description:</strong> ${
-      type === "membership" ? "Membership" : "Token Purchase"
-    }</p>
-    <p><strong>Quantity:</strong> ${
-      type === "membership" ? 1 : tokens
-    }</p>
-    <hr/>
-    <p><strong>Total Paid:</strong> ${amount} ${currency.toUpperCase()}</p>
-    <p>Status: Paid</p>
-  `,
-});
+try {
+  // SEND TO CLIENT
+  await resend.emails.send({
+    from: "invoices@teezgolfchallenge.com",
+    to: [customerEmail],
+    subject: `Invoice ${invoiceNumber}`,
+    html: `
+      <h2>Invoice ${invoiceNumber}</h2>
+      <p><strong>Customer:</strong> ${customerName}</p>
+      <p><strong>Email:</strong> ${customerEmail}</p>
+      <hr/>
+      <p><strong>Description:</strong> ${
+        type === "membership" ? "Membership" : "Token Purchase"
+      }</p>
+      <p><strong>Quantity:</strong> ${
+        type === "membership" ? 1 : tokens
+      }</p>
+      <hr/>
+      <p><strong>Total Paid:</strong> ${amount} ${currency.toUpperCase()}</p>
+      <p>Status: Paid</p>
+    `,
+  });
 
-// SEND TO ADMIN
-await resend.emails.send({
-  from: "invoices@teezgolfchallenge.com",
-  to: ["honeybagderapps5@gmail.com"],
-  subject: `ADMIN COPY - Invoice ${invoiceNumber}`,
-  html: `
-    <h2>ADMIN COPY - Invoice ${invoiceNumber}</h2>
-    <p><strong>Customer:</strong> ${customerName}</p>
-    <p><strong>Email:</strong> ${customerEmail}</p>
-    <p><strong>UID:</strong> ${uid}</p>
-    <p><strong>Payment Ref:</strong> ${paymentReference}</p>
-    <hr/>
-    <p><strong>Total Paid:</strong> ${amount} ${currency.toUpperCase()}</p>
-  `,
-});
+  // SEND TO ADMIN
+  await resend.emails.send({
+    from: "invoices@teezgolfchallenge.com",
+    to: ["honeybagderapps5@gmail.com"],
+    subject: `ADMIN COPY - Invoice ${invoiceNumber}`,
+    html: `
+      <h2>ADMIN COPY - Invoice ${invoiceNumber}</h2>
+      <p><strong>Customer:</strong> ${customerName}</p>
+      <p><strong>Email:</strong> ${customerEmail}</p>
+      <p><strong>UID:</strong> ${uid}</p>
+      <p><strong>Payment Ref:</strong> ${paymentReference}</p>
+      <hr/>
+      <p><strong>Total Paid:</strong> ${amount} ${currency.toUpperCase()}</p>
+    `,
+  });
 
-  console.log("EMAIL SUCCESS:", emailResponse);
+  console.log("EMAIL SUCCESS");
 } catch (err) {
   console.error("EMAIL ERROR:", err);
-}
-
-
-// CLOSE BLOCK
 }
 
     // PAYMENT FAILED

@@ -23,16 +23,12 @@ export default function LandingPage() {
         {/* HERO IMAGE */}
         <div className="mt-6 px-4">
           <div className="relative rounded-3xl overflow-hidden shadow-2xl">
-
             <img
               src="/hero-teez.jpg"
               alt="Hero"
               className="w-full h-[35vh] md:h-[45vh] object-cover"
             />
-
-            {/* OVERLAY */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
-
           </div>
         </div>
 
@@ -41,14 +37,14 @@ export default function LandingPage() {
 
           <button
             onClick={() => router.push("/register")}
-            className="w-full py-4 rounded-2xl bg-[#00ff88] text-black font-semibold text-lg"
+            className="w-full py-4 rounded-2xl bg-[#00ff88] text-black font-semibold text-lg animate-pulse shadow-[0_0_15px_#00ff88]"
           >
             Create Account
           </button>
 
           <button
             onClick={() => router.push("/how-it-works")}
-            className="w-full py-4 rounded-2xl bg-[#1f1f1f] text-white text-lg"
+            className="w-full py-4 rounded-2xl bg-[#00ff88] text-black text-lg animate-pulse shadow-[0_0_15px_#00ff88]"
           >
             How It Works
           </button>
@@ -60,7 +56,7 @@ export default function LandingPage() {
           Already have an account?{" "}
           <button
             onClick={() => router.push("/login")}
-            className="text-[#00ff88] underline"
+            className="text-[#00ff88] underline animate-pulse"
           >
             Sign In
           </button>
@@ -73,35 +69,35 @@ export default function LandingPage() {
 
         <button
           onClick={() => router.push("/")}
-          className="flex-1 mx-1 py-3 rounded-xl bg-[#1a1a1a]"
+          className="flex-1 mx-1 py-3 rounded-xl bg-[#00ff88] text-black animate-pulse shadow-[0_0_10px_#00ff88]"
         >
           Home
         </button>
 
         <button
           onClick={() => router.push("/how-it-works")}
-          className="flex-1 mx-1 py-3 rounded-xl bg-[#1a1a1a]"
+          className="flex-1 mx-1 py-3 rounded-xl bg-[#00ff88] text-black animate-pulse shadow-[0_0_10px_#00ff88]"
         >
           How It Works
         </button>
 
         <button
           onClick={() => router.push("/login")}
-          className="flex-1 mx-1 py-3 rounded-xl bg-[#1a1a1a]"
+          className="flex-1 mx-1 py-3 rounded-xl bg-[#00ff88] text-black animate-pulse shadow-[0_0_10px_#00ff88]"
         >
           Login
         </button>
 
         <button
           onClick={() => router.push("/register")}
-          className="flex-1 mx-1 py-3 rounded-xl bg-[#00ff88] text-black font-semibold"
+          className="flex-1 mx-1 py-3 rounded-xl bg-[#00ff88] text-black font-semibold animate-pulse shadow-[0_0_12px_#00ff88]"
         >
           Register
         </button>
 
       </div>
 
-      {/* SPACING FOR FIXED NAV */}
+      {/* SPACING */}
       <div className="h-20" />
 
     </div>

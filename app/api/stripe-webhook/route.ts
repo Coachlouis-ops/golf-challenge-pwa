@@ -254,6 +254,7 @@ try {
 
 // CLOSE checkout.session.completed
 }
+
 // PAYMENT FAILED
 if (event.type === "invoice.payment_failed") {
   const invoice = event.data.object as Stripe.Invoice;

@@ -79,12 +79,6 @@ function DashboardContent() {
             }
           `}</style>
 
-          <button
-            onClick={() => router.push("/how-it-works")}
-            className="arena-btn"
-          >
-            How It Works
-          </button>
 
           {user && (
             <>
@@ -139,14 +133,12 @@ function DashboardContent() {
             </>
           )}
 
-          {user && (
-            <button
-              onClick={handleLogout}
-              className="text-sm text-gray-400 underline mt-2 hover:text-white"
-            >
-              Logout
-            </button>
-          )}
+        <button
+  onClick={() => router.push("/")}
+  className="text-sm text-gray-400 underline mt-2 hover:text-white"
+>
+  Back to Home
+</button>
 
         </div>
 

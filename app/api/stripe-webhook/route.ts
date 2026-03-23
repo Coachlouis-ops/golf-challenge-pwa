@@ -201,31 +201,41 @@ await invoiceRef.set({
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 // EMAIL (CORRECT POSITION)
-await resend.emails.send({  from: "invoices@teezgolfchallenge.com",
-  to: [customerEmail, "honeybagderapps5@gmail.com"],
-  subject: `Invoice ${invoiceNumber}`,
-  html: `
-    <h2>Invoice ${invoiceNumber}</h2>
+const resend = new Resend(process.env.RESEND_API_KEY);
 
-    <p><strong>Customer:</strong> ${customerName}</p>
-    <p><strong>Email:</strong> ${customerEmail}</p>
+try {
+  const emailResponse = await resend.emails.send({
+    from: "invoices@teezgolfchallenge.com",
+    to: [customerEmail, "honeybagderapps5@gmail.com"],
+    subject: `Invoice ${invoiceNumber}`,
+    html: `
+      <h2>Invoice ${invoiceNumber}</h2>
 
-    <hr/>
+      <p><strong>Customer:</strong> ${customerName}</p>
+      <p><strong>Email:</strong> ${customerEmail}</p>
 
-    <p><strong>Description:</strong> ${
-      type === "membership" ? "Membership" : "Token Purchase"
-    }</p>
-    <p><strong>Quantity:</strong> ${
-      type === "membership" ? 1 : tokens
-    }</p>
+      <hr/>
 
-    <hr/>
+      <p><strong>Description:</strong> ${
+        type === "membership" ? "Membership" : "Token Purchase"
+      }</p>
+      <p><strong>Quantity:</strong> ${
+        type === "membership" ? 1 : tokens
+      }</p>
 
-    <p><strong>Total Paid:</strong> ${amount} ${currency.toUpperCase()}</p>
+      <hr/>
 
-    <p>Status: Paid</p>
-  `,
-});
+      <p><strong>Total Paid:</strong> ${amount} ${currency.toUpperCase()}</p>
+
+      <p>Status: Paid</p>
+    `,
+  });
+
+  console.log("EMAIL SUCCESS:", emailResponse);
+} catch (err) {
+  console.error("EMAIL ERROR:", err);
+}
+
 
 // CLOSE BLOCK
 }

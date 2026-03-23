@@ -12,6 +12,8 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -52,6 +54,7 @@ export default function LoginPage() {
   const profileRef = doc(db, "profiles", uid);
   const profileSnap = await getDoc(profileRef);
 
+
   if (!profileSnap.exists()) {
     router.push("/create-profile");
     return;
@@ -82,14 +85,24 @@ export default function LoginPage() {
           Sign In or Register
         </h1>
 
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="w-full border p-2"
-          required
-        />
+     <div className="relative">
+  <input
+    type={showPassword ? "text" : "password"}
+    placeholder="Password"
+    value={password}
+    onChange={(e) => setPassword(e.target.value)}
+    className="w-full border p-2 pr-10"
+    required
+  />
+
+  <button
+    type="button"
+    onClick={() => setShowPassword((prev) => !prev)}
+    className="absolute right-2 top-1/2 -translate-y-1/2 text-sm text-gray-500"
+  >
+    {showPassword ? "🙈" : "👁"}
+  </button>
+</div>
 
         <input
           type="password"

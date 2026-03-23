@@ -119,7 +119,7 @@ export default function CreateChallengePage() {
   const router = useRouter();
 
   const [challengeTitle, setChallengeTitle] = useState("");
-  const [entryTokens, setEntryTokens] = useState<number>(0);
+  const [entryTokens, setEntryTokens] = useState<string>("");
   const [teamFormat, setTeamFormat] = useState("");
   const [gameFormat, setGameFormat] = useState("");
   const [typeOfGame, setTypeOfGame] = useState("");
@@ -129,7 +129,7 @@ export default function CreateChallengePage() {
 
   const isValid =
     challengeTitle.trim().length > 0 &&
-    entryTokens > 0 &&
+    Number(entryTokens) > 0 &&
     teamFormat &&
     gameFormat &&
     typeOfGame &&
@@ -147,16 +147,15 @@ export default function CreateChallengePage() {
 
       const createChallenge = httpsCallable(functions, "createChallenge");
 
-      const result: any = await createChallenge({
-        challengeTitle: challengeTitle.trim(),
-        entryTokens,
-        teamFormat,
-        gameFormat,
-        typeOfGame,
-        scoringMethod,
-        courseName: courseName.trim(),
-      });
-
+     const result: any = await createChallenge({
+  challengeTitle: challengeTitle.trim(),
+  entryTokens: Number(entryTokens),
+  teamFormat,
+  gameFormat,
+  typeOfGame,
+  scoringMethod,
+  courseName: courseName.trim(),
+});
       const challengeId = result.data.challengeId;
 
       router.push(`/challenges/${challengeId}`);
@@ -200,11 +199,11 @@ export default function CreateChallengePage() {
             className="bg-black border border-neutral-700 focus:border-green-400 rounded p-3 outline-none transition-all focus:shadow-[0_0_10px_#39FF14]"
           />
 
-          <input
-            type="number"
-            placeholder="Entry Tokens"
-            value={entryTokens}
-            onChange={(e) => setEntryTokens(Number(e.target.value))}
+         <input
+  type="number"
+  placeholder="Entry Tokens"
+  value={entryTokens}
+  onChange={(e) => setEntryTokens(e.target.value)}
             className="bg-black border border-neutral-700 focus:border-green-400 rounded p-3 outline-none transition-all focus:shadow-[0_0_10px_#39FF14]"
           />
 

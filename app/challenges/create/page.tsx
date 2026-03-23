@@ -70,7 +70,8 @@ function CapsuleGroup({
         {title}
       </h3>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+      {/* FIX: responsive wrapping instead of rigid grid */}
+      <div className="flex flex-wrap gap-2">
         {items.map((item) => {
           const isSelected = selected === item;
           const showTooltip = activeTooltip === item;
@@ -79,8 +80,6 @@ function CapsuleGroup({
             <div
               key={item}
               className="relative"
-              onMouseEnter={() => setActiveTooltip(item)}
-              onMouseLeave={() => setActiveTooltip(null)}
             >
               <button
                 type="button"
@@ -88,7 +87,10 @@ function CapsuleGroup({
                   onSelect(item);
                   setActiveTooltip((prev) => (prev === item ? null : item));
                 }}
-                className={`px-3 py-2 rounded-full border text-sm transition-all duration-300
+                onTouchStart={() => {
+                  setActiveTooltip((prev) => (prev === item ? null : item));
+                }}
+                className={`px-3 py-2 rounded-full border text-xs sm:text-sm whitespace-nowrap flex-shrink-0 transition-all duration-300
               
               ${
                 isSelected
@@ -185,9 +187,9 @@ export default function CreateChallengePage() {
           className="hidden lg:block absolute right-0 bottom-0 h-[90%] opacity-25 animate-pulse"
         />
 
-        <div className="relative z-10 w-full max-w-3xl bg-neutral-900/80 backdrop-blur-xl border border-neutral-700 rounded-2xl p-10 shadow-[0_0_40px_rgba(0,255,120,0.25)] flex flex-col gap-7">
+        <div className="relative z-10 w-full max-w-3xl bg-neutral-900/80 backdrop-blur-xl border border-neutral-700 rounded-2xl p-6 sm:p-10 shadow-[0_0_40px_rgba(0,255,120,0.25)] flex flex-col gap-7">
 
-          <h1 className="text-4xl font-bold text-green-400 text-center tracking-widest drop-shadow-[0_0_10px_#39FF14]">
+          <h1 className="text-2xl sm:text-4xl font-bold text-green-400 text-center tracking-widest drop-shadow-[0_0_10px_#39FF14]">
             CREATE CHALLENGE
           </h1>
 

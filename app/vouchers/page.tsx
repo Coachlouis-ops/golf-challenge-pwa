@@ -19,8 +19,8 @@ type Voucher = {
   category: string;
   beneficiary: string;
   status: string;
-  voucherCode?: string; // ✅ NEW
-  qrUrl?: string;       // optional
+  voucherCode?: string;
+  qrUrl?: string;
 };
 
 export default function VouchersPage() {
@@ -51,6 +51,7 @@ export default function VouchersPage() {
     <RequireAuth>
       <div className="relative min-h-screen text-white bg-black overflow-hidden">
 
+        {/* BACKGROUND */}
         <img
           src="/voucher_badger.png"
           alt="Voucher Background"
@@ -59,37 +60,46 @@ export default function VouchersPage() {
 
         <div className="absolute inset-0 bg-black/40" />
 
-        <main className="relative z-10 w-full max-w-md mx-auto px-6 py-20">
+        <main className="relative z-10 w-full max-w-md mx-auto px-6 py-20 flex flex-col items-center">
 
           <style jsx>{`
-            @keyframes neonPulse {
+            @keyframes neonPulseYellow {
               0%, 100% {
-                text-shadow: 0 0 10px #FFD700, 0 0 20px #FFD700;
+                text-shadow: 0 0 10px #ffff00, 0 0 20px #ffff00;
                 opacity: 1;
               }
               50% {
-                text-shadow: 0 0 20px #FFD700, 0 0 40px #FFD700;
+                text-shadow: 0 0 25px #ffff00, 0 0 50px #ffff00;
                 opacity: 0.85;
               }
             }
 
-            .neon-text {
-              color: #FFD700;
-              animation: neonPulse 2s infinite;
+            .neon-yellow {
+              color: #ffff00;
+              animation: neonPulseYellow 2s infinite;
             }
           `}</style>
 
-          <h1 className="text-3xl font-bold mb-6 text-center neon-text">
+          {/* HEADING */}
+          <h1 className="text-3xl font-bold mb-4 text-center neon-yellow">
             My Vouchers
           </h1>
 
+          {/* LOGO BELOW HEADING */}
+          <img
+            src="/voucher_badger.png"
+            alt="Voucher Logo"
+            className="w-40 mb-6 opacity-90"
+          />
+
           {vouchers.length === 0 && (
-            <p className="text-center neon-text">
+            <p className="text-center neon-yellow">
               No vouchers yet
             </p>
           )}
 
-          <div className="flex flex-col gap-4">
+          {/* VOUCHERS LIST */}
+          <div className="flex flex-col gap-4 w-full">
 
             {vouchers
               .filter((v) => v.status === "active")
@@ -103,11 +113,10 @@ export default function VouchersPage() {
                   <p><strong>Category:</strong> {v.category}</p>
                   <p><strong>Beneficiary:</strong> {v.beneficiary}</p>
 
-                  {/* ✅ NEW — VOUCHER CODE */}
                   {v.voucherCode && (
                     <div className="mt-3 p-2 border border-yellow-400/40 rounded bg-black/70">
                       <p className="text-yellow-400 text-sm">Voucher Code</p>
-                      <p className="text-lg font-bold tracking-wider">
+                      <p className="text-lg font-bold tracking-wider text-yellow-300">
                         {v.voucherCode}
                       </p>
                     </div>

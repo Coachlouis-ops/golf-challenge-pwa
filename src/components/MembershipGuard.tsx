@@ -18,12 +18,19 @@ export default function MembershipGuard({
   useEffect(() => {
     if (loading) return;
 
+    // 🔒 NOT LOGGED IN
     if (!user) {
       router.replace("/login");
       return;
     }
 
-    // ✅ FIX: allow Stripe return to bypass checks temporarily
+    // 🔴 EMAIL NOT VERIFIED (GLOBAL BLOCK)
+    if (!user.emailVerified) {
+      router.replace("/verify-email");
+      return;
+    }
+
+    // ✅ Stripe return bypass
     const isStripeReturn =
       typeof window !== "undefined" &&
       document.referrer.includes("stripe.com");
@@ -41,7 +48,6 @@ export default function MembershipGuard({
       const profileSnap = await getDoc(profileRef);
 
       if (!profileSnap.exists()) {
-        console.log("Profile missing → redirect to profile page");
         router.replace("/profile");
         return;
       }
@@ -49,7 +55,6 @@ export default function MembershipGuard({
       const profile = profileSnap.data();
 
       if (!profile.name || !profile.surname || !profile.battleName) {
-        console.log("Profile incomplete → redirect to profile page");
         router.replace("/profile");
         return;
       }
@@ -59,7 +64,6 @@ export default function MembershipGuard({
       const membershipSnap = await getDoc(membershipRef);
 
       if (!membershipSnap.exists()) {
-        console.log("Membership record missing → redirect to payment");
         router.replace("/payment");
         return;
       }
@@ -67,7 +71,6 @@ export default function MembershipGuard({
       const membership = membershipSnap.data();
 
       if (membership.membershipStatus !== "active") {
-        console.log("Membership inactive → redirect to payment");
         router.replace("/payment");
         return;
       }
@@ -79,7 +82,6 @@ export default function MembershipGuard({
             : new Date(membership.membershipExpires);
 
         if (new Date().getTime() > expires.getTime()) {
-          console.log("Membership expired → redirect to payment");
           router.replace("/payment");
           return;
         }

@@ -4,7 +4,7 @@ import { useAuth } from "./AuthContext";
 import { useRouter, usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { db } from "./firebase";
-import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 
 function isProfileComplete(data: any): boolean {
   return (
@@ -34,8 +34,17 @@ export default function RequireAuth({
   useEffect(() => {
     if (loading) return;
 
+    // 🔒 NOT LOGGED IN
     if (!user) {
       router.replace("/login");
+      return;
+    }
+
+    // 🔴 EMAIL NOT VERIFIED (GLOBAL BLOCK)
+    if (!user.emailVerified) {
+      if (pathname !== "/verify-email") {
+        router.replace("/verify-email");
+      }
       return;
     }
 
@@ -46,41 +55,16 @@ export default function RequireAuth({
       const ref = doc(db, "profiles", user.uid);
       const snap = await getDoc(ref);
 
-      // 🔹 Create empty profile on first login
+      // ❌ DO NOT CREATE PROFILE HERE (handled by Cloud Function)
       if (!snap.exists()) {
-        await setDoc(
-          ref,
-          {
-            uid: user.uid,
-            name: "",
-            surname: "",
-            battleName: "",
-            country: "",
-            stateProvince: "",
-            dateOfBirth: "",
-            idNumber: "",
-            club: "",
-            clubPlaceId: "",
-            phoneNumber: "",
-            photoUrl: "",
-            createdAt: serverTimestamp(),
-            updatedAt: serverTimestamp(),
-            searchIndex: "",
-          },
-          { merge: true }
-        );
-
-        if (pathname !== "/profile") {
-          router.replace("/profile");
-        }
-
+        router.replace("/profile");
         profileCheckedRef.current = true;
         return;
       }
 
-      // 🔹 Enforce completion
       const data = snap.data();
 
+      // 🔹 Enforce completion
       if (!isProfileComplete(data)) {
         if (pathname !== "/profile") {
           router.replace("/profile");
@@ -90,13 +74,7 @@ export default function RequireAuth({
         return;
       }
 
-      // ✅ allow Stripe return + normal flow
-      if (pathname === "/profile") {
-        profileCheckedRef.current = true;
-        return;
-      }
-
-      // ✅ mark complete AFTER everything
+      // ✅ allow normal flow
       profileCheckedRef.current = true;
     })();
   }, [user, loading, router, pathname]);

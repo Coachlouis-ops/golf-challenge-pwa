@@ -29,8 +29,14 @@ export const db = getFirestore(app);
 export const functions = getFunctions(app, "europe-west1");
 
 /* ===== AUTH HELPERS ===== */
-export async function login(email: string, password: string) {
-  return signInWithEmailAndPassword(auth, email, password);
+import { sendEmailVerification } from "firebase/auth";
+
+export async function register(email: string, password: string) {
+  const userCred = await createUserWithEmailAndPassword(auth, email, password);
+
+  await sendEmailVerification(userCred.user);
+
+  return userCred;
 }
 
 export async function register(email: string, password: string) {

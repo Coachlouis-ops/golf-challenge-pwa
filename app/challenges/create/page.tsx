@@ -70,17 +70,13 @@ function CapsuleGroup({
         {title}
       </h3>
 
-      {/* FIX: responsive wrapping instead of rigid grid */}
       <div className="flex flex-wrap gap-2">
         {items.map((item) => {
           const isSelected = selected === item;
           const showTooltip = activeTooltip === item;
 
           return (
-            <div
-              key={item}
-              className="relative"
-            >
+            <div key={item} className="relative">
               <button
                 type="button"
                 onClick={() => {
@@ -91,7 +87,6 @@ function CapsuleGroup({
                   setActiveTooltip((prev) => (prev === item ? null : item));
                 }}
                 className={`px-3 py-2 rounded-full border text-xs sm:text-sm whitespace-nowrap flex-shrink-0 transition-all duration-300
-              
               ${
                 isSelected
                   ? "bg-green-400 text-black border-green-400 shadow-[0_0_20px_#39FF14] scale-105"
@@ -101,7 +96,6 @@ function CapsuleGroup({
                 {item}
               </button>
 
-              {/* TOOLTIP ONLY FOR TYPE OF GAME */}
               {title === "Type Of Game" && showTooltip && (
                 <div className="absolute z-50 bottom-full mb-2 left-1/2 -translate-x-1/2 w-56 p-3 text-xs bg-black border border-green-400 rounded-lg shadow-[0_0_15px_#39FF14] text-gray-200">
                   {TYPE_DESCRIPTIONS[item]}
@@ -147,15 +141,16 @@ export default function CreateChallengePage() {
 
       const createChallenge = httpsCallable(functions, "createChallenge");
 
-     const result: any = await createChallenge({
-  challengeTitle: challengeTitle.trim(),
-  entryTokens: Number(entryTokens),
-  teamFormat,
-  gameFormat,
-  typeOfGame,
-  scoringMethod,
-  courseName: courseName.trim(),
-});
+      const result: any = await createChallenge({
+        challengeTitle: challengeTitle.trim(),
+        entryTokens: Number(entryTokens),
+        teamFormat,
+        gameFormat,
+        typeOfGame,
+        scoringMethod,
+        courseName: courseName.trim(),
+      });
+
       const challengeId = result.data.challengeId;
 
       router.push(`/challenges/${challengeId}`);
@@ -188,21 +183,19 @@ export default function CreateChallengePage() {
 
         <div className="relative z-10 w-full max-w-3xl bg-neutral-900/80 backdrop-blur-xl border border-neutral-700 rounded-2xl p-6 sm:p-10 shadow-[0_0_40px_rgba(0,255,120,0.25)] flex flex-col gap-7">
 
-         <div className="relative flex items-center justify-center">
-  
-  {/* BACK BUTTON */}
-  <button
-    onClick={() => router.back()}
-    className="absolute left-0 text-sm sm:text-base px-3 py-2 rounded-lg border border-neutral-600 text-gray-300 hover:border-green-400 hover:text-green-400 transition-all"
-  >
-    ← Back
-  </button>
+          {/* HEADER */}
+          <div className="relative flex items-center justify-center">
+            <button
+              onClick={() => router.back()}
+              className="absolute left-0 text-sm sm:text-base px-3 py-2 rounded-lg border border-neutral-600 text-gray-300 hover:border-green-400 hover:text-green-400 transition-all"
+            >
+              ← Back
+            </button>
 
-  <h1 className="text-2xl sm:text-4xl font-bold text-green-400 text-center tracking-widest drop-shadow-[0_0_10px_#39FF14]">
-    CREATE CHALLENGE
-  </h1>
-
-</div>
+            <h1 className="text-2xl sm:text-4xl font-bold text-green-400 text-center tracking-widest drop-shadow-[0_0_10px_#39FF14]">
+              CREATE CHALLENGE
+            </h1>
+          </div>
 
           <input
             placeholder="Challenge Title"
@@ -211,11 +204,11 @@ export default function CreateChallengePage() {
             className="bg-black border border-neutral-700 focus:border-green-400 rounded p-3 outline-none transition-all focus:shadow-[0_0_10px_#39FF14]"
           />
 
-         <input
-  type="number"
-  placeholder="Entry Tokens"
-  value={entryTokens}
-  onChange={(e) => setEntryTokens(e.target.value)}
+          <input
+            type="number"
+            placeholder="Entry Tokens"
+            value={entryTokens}
+            onChange={(e) => setEntryTokens(e.target.value)}
             className="bg-black border border-neutral-700 focus:border-green-400 rounded p-3 outline-none transition-all focus:shadow-[0_0_10px_#39FF14]"
           />
 
@@ -226,33 +219,10 @@ export default function CreateChallengePage() {
             className="bg-black border border-neutral-700 focus:border-green-400 rounded p-3 outline-none transition-all focus:shadow-[0_0_10px_#39FF14]"
           />
 
-          <CapsuleGroup
-            title="Team Format"
-            items={TEAM_FORMATS}
-            selected={teamFormat}
-            onSelect={setTeamFormat}
-          />
-
-          <CapsuleGroup
-            title="Game Format"
-            items={GAME_FORMATS}
-            selected={gameFormat}
-            onSelect={setGameFormat}
-          />
-
-          <CapsuleGroup
-            title="Type Of Game"
-            items={TYPE_OF_GAME}
-            selected={typeOfGame}
-            onSelect={setTypeOfGame}
-          />
-
-          <CapsuleGroup
-            title="Scoring Method"
-            items={SCORING_METHODS}
-            selected={scoringMethod}
-            onSelect={setScoringMethod}
-          />
+          <CapsuleGroup title="Team Format" items={TEAM_FORMATS} selected={teamFormat} onSelect={setTeamFormat} />
+          <CapsuleGroup title="Game Format" items={GAME_FORMATS} selected={gameFormat} onSelect={setGameFormat} />
+          <CapsuleGroup title="Type Of Game" items={TYPE_OF_GAME} selected={typeOfGame} onSelect={setTypeOfGame} />
+          <CapsuleGroup title="Scoring Method" items={SCORING_METHODS} selected={scoringMethod} onSelect={setScoringMethod} />
 
           <button
             onClick={handleCreate}
@@ -265,6 +235,14 @@ export default function CreateChallengePage() {
           <div className="w-full h-[3px] bg-neutral-800 overflow-hidden rounded-full">
             <div className="h-full w-1/2 bg-green-400 animate-[pulse_2s_infinite]"></div>
           </div>
+
+          {/* BACK TO DASHBOARD */}
+          <button
+            onClick={() => router.push("/dashboard")}
+            className="text-center text-xs text-gray-400 hover:text-green-400 transition-all mt-4"
+          >
+            ← Back to Dashboard
+          </button>
 
         </div>
       </main>

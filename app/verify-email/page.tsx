@@ -15,7 +15,10 @@ export default function VerifyEmailPage() {
 
     try {
       setSending(true);
-      await sendEmailVerification(user);
+      await sendEmailVerification(user, {
+        url: "https://teezgolfchallenges.com/verify-success",
+        handleCodeInApp: true,
+      });
       alert("Verification email sent");
     } catch (e: any) {
       alert(e.message);
@@ -45,10 +48,10 @@ export default function VerifyEmailPage() {
       </button>
 
       <button
-        onClick={() => router.push("/login")}
+        onClick={() => router.push("/")}
         className="text-sm underline text-gray-400"
       >
-        Back to Login
+        Back to Home
       </button>
 
     </div>

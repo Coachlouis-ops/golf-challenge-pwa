@@ -29,11 +29,12 @@ if (!userCred.user.emailVerified) {
 }
 
 await handleRouting(userCred.user.uid);
-    } catch (err: any) {
+  } catch (err: any) {
 
-      setError("Invalid email or password");
+  console.log("LOGIN ERROR:", err);
+  setError(err.code || err.message);
 
-    } finally {
+} finally {
       setLoading(false);
     }
   }

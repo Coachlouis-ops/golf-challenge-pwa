@@ -20,13 +20,13 @@ export default function LandingPage() {
           </h1>
         </div>
 
-        {/* HERO IMAGE */}
+        {/* HERO IMAGE (FIXED - NO CROP) */}
         <div className="mt-6 px-4">
-          <div className="relative rounded-3xl overflow-hidden shadow-2xl">
+          <div className="relative rounded-3xl overflow-hidden shadow-2xl bg-black">
             <img
               src="/hero-teez.jpg"
               alt="Hero"
-              className="w-full h-[35vh] md:h-[45vh] object-cover brightness-110 contrast-110"
+              className="w-full h-[35vh] md:h-[45vh] object-contain object-center"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
           </div>

@@ -44,7 +44,7 @@ function DashboardContent() {
 
           {/* HERO LOGO */}
           <Image
-            src="/hero-logo.png"
+            src="/hero-teez.jpg"
             alt="Hero Logo"
             width={140}
             height={140}

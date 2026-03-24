@@ -70,13 +70,13 @@ export default function VouchersPage() {
         `}</style>
 
         {/* HERO BANNER */}
-        <div className="w-full h-[180px] overflow-hidden">
-          <img
-            src="/voucher_badger.png"
-            alt="Voucher Banner"
-            className="w-full h-full object-cover"
-          />
-        </div>
+        <div className="w-full bg-black flex items-center justify-center py-4">
+  <img
+    src="/voucher_badger.png"
+    alt="Voucher Banner"
+    className="w-full max-w-md h-auto object-contain"
+  />
+</div>
 
         <main className="w-full max-w-md mx-auto px-6 py-10">
 

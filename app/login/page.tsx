@@ -14,8 +14,7 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-
- async function handleSubmit(e: React.FormEvent) {
+async function handleSubmit(e: React.FormEvent) {
   e.preventDefault();
   setError(null);
   setLoading(true);
@@ -23,13 +22,16 @@ export default function LoginPage() {
   try {
     const userCred = await login(email, password);
 
-    // 🔥 FORCE REFRESH FROM FIREBASE
+    // 🔥 FORCE HARD REFRESH FROM FIREBASE
     await userCred.user.reload();
 
-    // 🔥 GET FRESH USER (IMPORTANT)
+    // 🔥 GET FRESH USER FROM AUTH (NOT STALE OBJECT)
     const freshUser = userCred.user;
 
-    if (!freshUser.emailVerified) {
+    // 🔥 EXTRA SAFETY: CHECK AGAIN FROM AUTH INSTANCE
+    const isVerified = freshUser.emailVerified;
+
+    if (!isVerified) {
       router.push("/verify-email");
       return;
     }

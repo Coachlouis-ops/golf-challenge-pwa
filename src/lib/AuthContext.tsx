@@ -4,7 +4,6 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { onAuthStateChanged, User } from "firebase/auth";
 import { auth } from "./firebase";
 
-
 type AuthContextType = {
   user: User | null;
   loading: boolean;
@@ -20,8 +19,26 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsub = onAuthStateChanged(auth, (firebaseUser) => {
-      setUser(firebaseUser);
+    const unsub = onAuthStateChanged(auth, async (firebaseUser) => {
+      if (!firebaseUser) {
+        setUser(null);
+        setLoading(false);
+        return;
+      }
+
+      // 🔥 FORCE REFRESH USER STATE FROM FIREBASE
+      await firebaseUser.reload();
+
+      const freshUser = auth.currentUser;
+
+      if (!freshUser) {
+        setUser(null);
+        setLoading(false);
+        return;
+      }
+
+      // ✅ ALWAYS SET FRESH USER (NO STALE STATE)
+      setUser(freshUser);
       setLoading(false);
     });
 

@@ -97,13 +97,6 @@ function DashboardContent() {
               </button>
 
               <button
-                onClick={() => router.push("/join")}
-                className="arena-btn"
-              >
-                Join Challenge
-              </button>
-
-              <button
                 onClick={() => router.push("/my-invites")}
                 className="arena-btn"
               >

@@ -15,32 +15,34 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
 
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setError(null);
-    setLoading(true);
+ async function handleSubmit(e: React.FormEvent) {
+  e.preventDefault();
+  setError(null);
+  setLoading(true);
 
-    try {
+  try {
     const userCred = await login(email, password);
 
-// 🔥 FORCE REFRESH USER (CRITICAL FIX)
-await userCred.user.reload();
+    // 🔥 FORCE REFRESH FROM FIREBASE
+    await userCred.user.reload();
 
-if (!userCred.user.emailVerified) {
-  router.push("/verify-email");
-  return;
-}
+    // 🔥 GET FRESH USER (IMPORTANT)
+    const freshUser = userCred.user;
 
-await handleRouting(userCred.user.uid);
-  } catch (err: any) {
-
-  console.log("LOGIN ERROR:", err);
-  setError(err.code || err.message);
-
-} finally {
-      setLoading(false);
+    if (!freshUser.emailVerified) {
+      router.push("/verify-email");
+      return;
     }
+
+    await handleRouting(freshUser.uid);
+
+  } catch (err: any) {
+    console.log("LOGIN ERROR:", err);
+    setError(err.code || err.message);
+  } finally {
+    setLoading(false);
   }
+}
 
   // -------------------------------
   // CENTRAL ROUTING LOGIC

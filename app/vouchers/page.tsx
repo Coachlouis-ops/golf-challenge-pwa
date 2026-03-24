@@ -49,48 +49,41 @@ export default function VouchersPage() {
 
   return (
     <RequireAuth>
-      <div className="relative min-h-screen text-white bg-black overflow-hidden">
+      <div className="min-h-screen text-white bg-black">
 
-        {/* BACKGROUND */}
-        <img
-          src="/voucher_badger.png"
-          alt="Voucher Background"
-          className="absolute inset-0 w-full h-full object-contain opacity-80 brightness-110 contrast-110 pointer-events-none"
-        />
-
-        <div className="absolute inset-0 bg-black/40" />
-
-        <main className="relative z-10 w-full max-w-md mx-auto px-6 py-20 flex flex-col items-center">
-
-          <style jsx>{`
-            @keyframes neonPulseYellow {
-              0%, 100% {
-                text-shadow: 0 0 10px #ffff00, 0 0 20px #ffff00;
-                opacity: 1;
-              }
-              50% {
-                text-shadow: 0 0 25px #ffff00, 0 0 50px #ffff00;
-                opacity: 0.85;
-              }
+        <style jsx>{`
+          @keyframes neonPulseYellow {
+            0%, 100% {
+              text-shadow: 0 0 10px #ffff00, 0 0 20px #ffff00;
+              opacity: 1;
             }
-
-            .neon-yellow {
-              color: #ffff00;
-              animation: neonPulseYellow 2s infinite;
+            50% {
+              text-shadow: 0 0 25px #ffff00, 0 0 50px #ffff00;
+              opacity: 0.85;
             }
-          `}</style>
+          }
 
-          {/* HEADING */}
-          <h1 className="text-3xl font-bold mb-4 text-center neon-yellow">
-            My Vouchers
-          </h1>
+          .neon-yellow {
+            color: #ffff00;
+            animation: neonPulseYellow 2s infinite;
+          }
+        `}</style>
 
-          {/* LOGO BELOW HEADING */}
+        {/* HERO BANNER */}
+        <div className="w-full h-[180px] overflow-hidden">
           <img
             src="/voucher_badger.png"
-            alt="Voucher Logo"
-            className="w-40 mb-6 opacity-90"
+            alt="Voucher Banner"
+            className="w-full h-full object-cover"
           />
+        </div>
+
+        <main className="w-full max-w-md mx-auto px-6 py-10">
+
+          {/* HEADING */}
+          <h1 className="text-3xl font-bold mb-6 text-center neon-yellow">
+            My Vouchers
+          </h1>
 
           {vouchers.length === 0 && (
             <p className="text-center neon-yellow">
@@ -98,23 +91,23 @@ export default function VouchersPage() {
             </p>
           )}
 
-          {/* VOUCHERS LIST */}
-          <div className="flex flex-col gap-4 w-full">
+          {/* VOUCHER LIST */}
+          <div className="flex flex-col gap-4">
 
             {vouchers
               .filter((v) => v.status === "active")
               .map((v) => (
                 <div
                   key={v.id}
-                  className="border border-white/20 rounded-xl p-4 bg-black/60 backdrop-blur-md"
+                  className="border border-yellow-400/40 rounded-xl p-4 bg-black/70 backdrop-blur-md"
                 >
-                  <p><strong>Amount:</strong> {v.amount}</p>
-                  <p><strong>Provider:</strong> {v.provider}</p>
-                  <p><strong>Category:</strong> {v.category}</p>
-                  <p><strong>Beneficiary:</strong> {v.beneficiary}</p>
+                  <p className="text-yellow-300"><strong>Amount:</strong> {v.amount}</p>
+                  <p className="text-yellow-300"><strong>Provider:</strong> {v.provider}</p>
+                  <p className="text-yellow-300"><strong>Category:</strong> {v.category}</p>
+                  <p className="text-yellow-300"><strong>Beneficiary:</strong> {v.beneficiary}</p>
 
                   {v.voucherCode && (
-                    <div className="mt-3 p-2 border border-yellow-400/40 rounded bg-black/70">
+                    <div className="mt-3 p-2 border border-yellow-400 rounded bg-black">
                       <p className="text-yellow-400 text-sm">Voucher Code</p>
                       <p className="text-lg font-bold tracking-wider text-yellow-300">
                         {v.voucherCode}

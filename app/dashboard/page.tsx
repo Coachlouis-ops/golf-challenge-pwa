@@ -43,13 +43,15 @@ function DashboardContent() {
         <div className="flex flex-col items-center gap-8">
 
           {/* HERO LOGO */}
-          <Image
-            src="/hero-teez.jpg"
-            alt="Hero Logo"
-            width={140}
-            height={140}
-            className="mb-2"
-          />
+         <div className="w-full h-[180px] relative mb-4">
+  <Image
+    src="/hero-teez.jpg"
+    alt="Hero"
+    fill
+    className="object-cover rounded-2xl"
+  />
+  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent rounded-2xl" />
+</div>
 
           <p className="text-center text-gray-300 text-lg tracking-wide">
             Settle the score. Play with purpose.

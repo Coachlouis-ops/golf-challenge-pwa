@@ -21,7 +21,10 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-     const userCred = await login(email, password);
+    const userCred = await login(email, password);
+
+// 🔥 FORCE REFRESH USER (CRITICAL FIX)
+await userCred.user.reload();
 
 if (!userCred.user.emailVerified) {
   router.push("/verify-email");

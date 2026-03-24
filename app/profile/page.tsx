@@ -241,14 +241,25 @@ useEffect(() => {
     <main className="min-h-screen w-full bg-black text-white px-6 py-8 flex flex-col items-center">
   <div className="w-full max-w-md space-y-6">
 
-      {/* HEADER */}
+     {/* HEADER */}
 
-      <div className="text-center">
-        <h1 className="text-3xl font-bold tracking-wide text-green-400">
-          TEEZ PROFILE
-        </h1>
-        <p className="text-gray-400 text-sm">{user.email}</p>
-      </div>
+<div className="text-center space-y-2">
+
+  {/* BACK TO DASHBOARD */}
+  <button
+    onClick={() => router.push("/dashboard")}
+    className="text-xs text-gray-400 hover:text-green-400 transition"
+  >
+    ← Back to Dashboard
+  </button>
+
+  <h1 className="text-3xl font-bold tracking-wide text-green-400">
+    TEEZ PROFILE
+  </h1>
+
+  <p className="text-gray-400 text-sm">{user.email}</p>
+
+</div>
 
       {/* PLAYER CARD */}
 

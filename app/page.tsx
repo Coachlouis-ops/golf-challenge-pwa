@@ -1,9 +1,11 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function LandingPage() {
   const router = useRouter();
+  const [showCookies, setShowCookies] = useState(true);
 
   return (
     <div className="min-h-screen bg-black text-white font-sans flex flex-col">
@@ -20,7 +22,7 @@ export default function LandingPage() {
           </h1>
         </div>
 
-        {/* HERO IMAGE (FIXED - NO CROP) */}
+        {/* HERO IMAGE */}
         <div className="mt-6 px-4">
           <div className="relative rounded-3xl overflow-hidden shadow-2xl bg-black">
             <img
@@ -36,7 +38,7 @@ export default function LandingPage() {
         <div className="px-6 mt-8 flex flex-col gap-4">
 
           <button
-            onClick={() => router.push("/register")}
+            onClick={() => router.push("/terms")}
             className="w-full py-4 rounded-2xl bg-[#00ff88] text-black font-semibold text-lg animate-pulse shadow-[0_0_15px_#00ff88]"
           >
             Create Account
@@ -59,6 +61,22 @@ export default function LandingPage() {
         </div>
 
       </div>
+
+      {/* COOKIES BAR */}
+      {showCookies && (
+        <div className="fixed bottom-0 left-0 right-0 bg-black border-t border-gray-700 p-4 text-sm flex flex-col md:flex-row items-center justify-between gap-3 z-50">
+          <p className="text-white text-center md:text-left">
+            This site uses cookies to improve your experience.
+          </p>
+
+          <button
+            onClick={() => setShowCookies(false)}
+            className="px-4 py-2 bg-[#00ff88] text-black rounded-lg font-semibold"
+          >
+            Accept
+          </button>
+        </div>
+      )}
 
     </div>
   );

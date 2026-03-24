@@ -115,78 +115,85 @@ window.location.href = data.url;
 }
   }
 
-  return (
-    <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center gap-10">
+ return (
+  <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center gap-10">
 
-      <h1 className="text-4xl font-bold tracking-wide">
-        Wallet
-      </h1>
+    <h1 className="text-4xl font-bold tracking-wide">
+      Wallet
+    </h1>
 
-      <div className="animate-spin-slow text-6xl">
-        🪙
-      </div>
+    <div className="animate-spin-slow text-6xl">
+      🪙
+    </div>
 
-      <div className="text-center">
-        <p className="text-gray-400 text-sm">Token Balance</p>
+    <div className="text-center">
+      <p className="text-gray-400 text-sm">Token Balance</p>
 
-        <p className="text-5xl font-bold text-green-400 drop-shadow-[0_0_10px_#00ff88]">
-          {available}
-        </p>
+      <p className="text-5xl font-bold text-green-400 drop-shadow-[0_0_10px_#00ff88]">
+        {available}
+      </p>
 
-        <p className="text-gray-400">Tokens</p>
-      </div>
+      <p className="text-gray-400">Tokens</p>
+    </div>
 
-      <div className="bg-gradient-to-br from-zinc-700 via-zinc-800 to-zinc-900 p-8 rounded-xl shadow-[0_0_30px_rgba(0,255,136,0.15)] flex flex-col gap-5 border border-zinc-600">
+    <div className="bg-gradient-to-br from-zinc-700 via-zinc-800 to-zinc-900 p-8 rounded-xl shadow-[0_0_30px_rgba(0,255,136,0.15)] flex flex-col gap-5 border border-zinc-600">
 
-        <select
-          className="px-4 py-3 rounded bg-zinc-200 text-black font-semibold shadow-inner"
-          value={selected}
-          onChange={(e) => setSelected(e.target.value)}
-        >
-          <option value="price_1T9JktCplvzmJJByFE9l8n77">
-            Select Tokens
+      <select
+        className="px-4 py-3 rounded bg-zinc-200 text-black font-semibold shadow-inner"
+        value={selected}
+        onChange={(e) => setSelected(e.target.value)}
+      >
+        <option value="price_1T9JktCplvzmJJByFE9l8n77">
+          Select Tokens
+        </option>
+
+        {TOKEN_PACKS.map((pack) => (
+          <option key={pack.priceId} value={pack.priceId}>
+            {pack.tokens} Tokens
           </option>
+        ))}
+      </select>
 
-          {TOKEN_PACKS.map((pack) => (
-            <option key={pack.priceId} value={pack.priceId}>
-              {pack.tokens} Tokens
-            </option>
-          ))}
-        </select>
+      <button
+        onClick={checkout}
+        disabled={selected === "price_1T9JktCplvzmJJByFE9l8n77"}
+        className="bg-green-500 hover:bg-green-400 text-black px-6 py-3 rounded-lg font-semibold shadow-[0_0_12px_#00ff88] disabled:bg-gray-600"
+      >
+        Buy Tokens
+      </button>
 
-        <button
-          onClick={checkout}
-          disabled={selected === "price_1T9JktCplvzmJJByFE9l8n77"}
-          className="bg-green-500 hover:bg-green-400 text-black px-6 py-3 rounded-lg font-semibold shadow-[0_0_12px_#00ff88] disabled:bg-gray-600"
-        >
-          Buy Tokens
-        </button>
-
-        {/* REDEEM BUTTON */}
-       <button
-  onClick={() => router.push("/wallet/redeem")}
-          className="bg-yellow-500 hover:bg-yellow-400 text-black px-6 py-3 rounded-lg font-semibold shadow-[0_0_12px_#ffaa00]"
-        >
-          Redeem Tokens
-        </button>
-
-      </div>
-
-      <style jsx>{`
-        .animate-spin-slow {
-          animation: spin 8s linear infinite;
-        }
-
-        @keyframes spin {
-          from {
-            transform: rotateY(0deg);
-          }
-          to {
-            transform: rotateY(360deg);
-          }
-        }
-      `}</style>
+      <button
+        onClick={() => router.push("/wallet/redeem")}
+        className="bg-yellow-500 hover:bg-yellow-400 text-black px-6 py-3 rounded-lg font-semibold shadow-[0_0_12px_#ffaa00]"
+      >
+        Redeem Tokens
+      </button>
 
     </div>
-  );
+
+    {/* BACK TO DASHBOARD */}
+    <button
+      onClick={() => router.push("/dashboard")}
+      className="text-gray-400 hover:text-white text-sm underline mt-4"
+    >
+      ← Back to Dashboard
+    </button>
+
+    <style jsx>{`
+      .animate-spin-slow {
+        animation: spin 8s linear infinite;
+      }
+
+      @keyframes spin {
+        from {
+          transform: rotateY(0deg);
+        }
+        to {
+          transform: rotateY(360deg);
+        }
+      }
+    `}</style>
+
+  </div>
+);
 }

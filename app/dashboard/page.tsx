@@ -2,18 +2,12 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { logout } from "@/src/lib/firebase";
 import { useAuth } from "@/src/lib/AuthContext";
 import MembershipGuard from "@/src/components/MembershipGuard";
 
 function DashboardContent() {
   const router = useRouter();
   const { user, loading } = useAuth();
-
-  async function handleLogout() {
-    await logout();
-    router.push("/");
-  }
 
   if (loading) {
     return (
@@ -44,9 +38,18 @@ function DashboardContent() {
       {/* PARTICLE GRID */}
       <div className="absolute inset-0 opacity-20 pointer-events-none bg-[radial-gradient(circle,#39FF14_1px,transparent_1px)] bg-[size:40px_40px]" />
 
-      <main className="relative z-10 w-full max-w-md px-6">
+      <main className="relative z-10 w-full max-w-md px-6 py-12 overflow-y-auto max-h-screen">
 
-        <div className="flex flex-col items-center gap-6">
+        <div className="flex flex-col items-center gap-8">
+
+          {/* HERO LOGO */}
+          <Image
+            src="/hero-logo.png"
+            alt="Hero Logo"
+            width={140}
+            height={140}
+            className="mb-2"
+          />
 
           <p className="text-center text-gray-300 text-lg tracking-wide">
             Settle the score. Play with purpose.
@@ -79,7 +82,6 @@ function DashboardContent() {
             }
           `}</style>
 
-
           {user && (
             <>
               <button
@@ -103,7 +105,7 @@ function DashboardContent() {
                 My Invites
               </button>
 
-                         <button
+              <button
                 onClick={() => router.push("/profile")}
                 className="arena-btn"
               >
@@ -126,12 +128,12 @@ function DashboardContent() {
             </>
           )}
 
-        <button
-  onClick={() => router.push("/")}
-  className="text-sm text-gray-400 underline mt-2 hover:text-white"
->
-  Back to Home
-</button>
+          <button
+            onClick={() => router.push("/")}
+            className="text-sm text-gray-400 underline mt-2 hover:text-white"
+          >
+            Back to Home
+          </button>
 
         </div>
 

@@ -56,11 +56,11 @@ export default function MyChallengesPage() {
     <RequireAuth>
       <main className="relative min-h-screen bg-black text-white overflow-hidden">
 
-        {/* BACKGROUND */}
+        {/* BACKGROUND LOGO VISUAL */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[420px] bg-red-500 opacity-10 blur-[120px] pointer-events-none" />
+
         <div className="absolute inset-0 opacity-20 pointer-events-none bg-[radial-gradient(circle,#ff0000_1px,transparent_1px)] bg-[size:40px_40px]" />
 
-        {/* BADGER */}
         <img
           src="/badger-red-guardian.png"
           className="absolute right-0 bottom-0 h-[85%] opacity-60 pointer-events-none"
@@ -76,15 +76,6 @@ export default function MyChallengesPage() {
             <p className="text-sm text-gray-400">
               View and manage your challenges
             </p>
-          </div>
-
-          {/* HERO LOGO */}
-          <div className="w-full flex justify-center">
-            <img
-              src="/hero-teez.jpg"
-              alt="Hero"
-              className="w-full h-[180px] object-cover rounded-3xl shadow-[0_0_25px_rgba(255,0,0,0.25)]"
-            />
           </div>
 
           {/* EMPTY STATE */}

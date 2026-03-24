@@ -188,9 +188,21 @@ export default function CreateChallengePage() {
 
         <div className="relative z-10 w-full max-w-3xl bg-neutral-900/80 backdrop-blur-xl border border-neutral-700 rounded-2xl p-6 sm:p-10 shadow-[0_0_40px_rgba(0,255,120,0.25)] flex flex-col gap-7">
 
-          <h1 className="text-2xl sm:text-4xl font-bold text-green-400 text-center tracking-widest drop-shadow-[0_0_10px_#39FF14]">
-            CREATE CHALLENGE
-          </h1>
+         <div className="relative flex items-center justify-center">
+  
+  {/* BACK BUTTON */}
+  <button
+    onClick={() => router.back()}
+    className="absolute left-0 text-sm sm:text-base px-3 py-2 rounded-lg border border-neutral-600 text-gray-300 hover:border-green-400 hover:text-green-400 transition-all"
+  >
+    ← Back
+  </button>
+
+  <h1 className="text-2xl sm:text-4xl font-bold text-green-400 text-center tracking-widest drop-shadow-[0_0_10px_#39FF14]">
+    CREATE CHALLENGE
+  </h1>
+
+</div>
 
           <input
             placeholder="Challenge Title"

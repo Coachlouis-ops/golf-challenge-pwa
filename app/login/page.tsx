@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { login, register, db } from "@/src/lib/firebase";
+import { login, db } from "@/src/lib/firebase";
 import { doc, getDoc } from "firebase/firestore";
 
 export default function LoginPage() {

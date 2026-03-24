@@ -21,25 +21,17 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      const userCred = await login(email, password);
-      await handleRouting(userCred.user.uid);
+     const userCred = await login(email, password);
 
+if (!userCred.user.emailVerified) {
+  router.push("/verify-email");
+  return;
+}
+
+await handleRouting(userCred.user.uid);
     } catch (err: any) {
 
-      if (
-        err.code === "auth/user-not-found" ||
-        err.code === "auth/invalid-credential"
-      ) {
-        try {
-          const userCred = await register(email, password);
-          await handleRouting(userCred.user.uid);
-
-        } catch (regErr: any) {
-          setError(regErr.message || "Registration failed");
-        }
-      } else {
-        setError(err.message || "Login failed");
-      }
+      setError("Invalid email or password");
 
     } finally {
       setLoading(false);

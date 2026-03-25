@@ -34,33 +34,31 @@ export default function RequireAuth({
   useEffect(() => {
     if (loading) return;
 
-    // 🔒 NOT LOGGED IN
     if (!user) {
       router.replace("/login");
       return;
     }
 
-// 🔴 EMAIL NOT VERIFIED (USE FRESH STATE)
-(async () => {
-  await user.reload();
-
-  const freshUser = user;
-
-  if (!freshUser.emailVerified) {
-    if (pathname !== "/verify-email") {
-      router.replace("/verify-email");
-    }
-  }
-})();
-
-    // 🔒 Run once AFTER route stabilizes
-    if (profileCheckedRef.current) return;
-
     (async () => {
-      const ref = doc(db, "profiles", user.uid);
+      // 🔥 ALWAYS REFRESH USER FIRST
+      await user.reload();
+
+      const freshUser = user;
+
+      // 🔴 EMAIL NOT VERIFIED
+      if (!freshUser.emailVerified) {
+        if (pathname !== "/verify-email") {
+          router.replace("/verify-email");
+        }
+        return;
+      }
+
+      // 🔒 Run once AFTER route stabilizes
+      if (profileCheckedRef.current) return;
+
+      const ref = doc(db, "profiles", freshUser.uid);
       const snap = await getDoc(ref);
 
-      // ❌ DO NOT CREATE PROFILE HERE (handled by Cloud Function)
       if (!snap.exists()) {
         router.replace("/profile");
         profileCheckedRef.current = true;
@@ -69,17 +67,14 @@ export default function RequireAuth({
 
       const data = snap.data();
 
-      // 🔹 Enforce completion
       if (!isProfileComplete(data)) {
         if (pathname !== "/profile") {
           router.replace("/profile");
         }
-
         profileCheckedRef.current = true;
         return;
       }
 
-      // ✅ allow normal flow
       profileCheckedRef.current = true;
     })();
   }, [user, loading, router, pathname]);

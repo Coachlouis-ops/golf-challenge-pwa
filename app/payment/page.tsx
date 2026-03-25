@@ -111,7 +111,7 @@ if (data.url) {
 
       </div>
 
-      {/* BACK */}
+      {/* BACK TO DASHBOARD*/}
       <button
         onClick={() => router.push("/dashboard")}
         className="text-sm text-gray-400 underline hover:text-white"

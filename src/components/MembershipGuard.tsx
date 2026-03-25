@@ -18,38 +18,35 @@ export default function MembershipGuard({
   useEffect(() => {
     if (loading) return;
 
-    // 🔒 NOT LOGGED IN
     if (!user) {
       router.replace("/login");
       return;
     }
 
-// 🔴 EMAIL NOT VERIFIED (USE FRESH STATE)
-(async () => {
-  await user.reload();
-
-  const freshUser = user;
-
-  if (!freshUser.emailVerified) {
-    router.replace("/verify-email");
-  }
-})();
-
-    // ✅ Stripe return bypass
-    const isStripeReturn =
-      typeof window !== "undefined" &&
-      document.referrer.includes("stripe.com");
-
-    if (isStripeReturn) {
-      setAllowed(true);
-      return;
-    }
-
     (async () => {
-      console.log("Logged in UID:", user.uid);
+      // 🔥 ALWAYS REFRESH USER FIRST
+      await user.reload();
+
+      const freshUser = user;
+
+      // 🔴 EMAIL NOT VERIFIED
+      if (!freshUser.emailVerified) {
+        router.replace("/verify-email");
+        return;
+      }
+
+      // ✅ Stripe return bypass
+      const isStripeReturn =
+        typeof window !== "undefined" &&
+        document.referrer.includes("stripe.com");
+
+      if (isStripeReturn) {
+        setAllowed(true);
+        return;
+      }
 
       // ---------------- PROFILE CHECK ----------------
-      const profileRef = doc(db, "profiles", user.uid);
+      const profileRef = doc(db, "profiles", freshUser.uid);
       const profileSnap = await getDoc(profileRef);
 
       if (!profileSnap.exists()) {
@@ -65,7 +62,7 @@ export default function MembershipGuard({
       }
 
       // ---------------- MEMBERSHIP CHECK ----------------
-      const membershipRef = doc(db, "users", user.uid);
+      const membershipRef = doc(db, "users", freshUser.uid);
       const membershipSnap = await getDoc(membershipRef);
 
       if (!membershipSnap.exists()) {

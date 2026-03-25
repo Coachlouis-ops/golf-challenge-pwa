@@ -40,13 +40,18 @@ export default function RequireAuth({
       return;
     }
 
-    // 🔴 EMAIL NOT VERIFIED (GLOBAL BLOCK)
-    if (!user.emailVerified) {
-      if (pathname !== "/verify-email") {
-        router.replace("/verify-email");
-      }
-      return;
+// 🔴 EMAIL NOT VERIFIED (USE FRESH STATE)
+(async () => {
+  await user.reload();
+
+  const freshUser = user;
+
+  if (!freshUser.emailVerified) {
+    if (pathname !== "/verify-email") {
+      router.replace("/verify-email");
     }
+  }
+})();
 
     // 🔒 Run once AFTER route stabilizes
     if (profileCheckedRef.current) return;

@@ -24,11 +24,16 @@ export default function MembershipGuard({
       return;
     }
 
-    // 🔴 EMAIL NOT VERIFIED (GLOBAL BLOCK)
-    if (!user.emailVerified) {
-      router.replace("/verify-email");
-      return;
-    }
+// 🔴 EMAIL NOT VERIFIED (USE FRESH STATE)
+(async () => {
+  await user.reload();
+
+  const freshUser = user;
+
+  if (!freshUser.emailVerified) {
+    router.replace("/verify-email");
+  }
+})();
 
     // ✅ Stripe return bypass
     const isStripeReturn =

@@ -330,75 +330,73 @@ useEffect(() => {
 
       {/* EDIT MODE */}
 
-      {isEditing && (
-        <div className="space-y-3">
+ {isEditing && (
+  <div className="space-y-3">
 
-          <Input label="Name" value={profile.name}
-            onChange={(v)=>setProfile({...profile,name:v})} />
+    <Input label="Name" value={profile.name}
+      onChange={(v)=>setProfile({...profile,name:v})} />
 
-          <Input label="Surname" value={profile.surname}
-            onChange={(v)=>setProfile({...profile,surname:v})} />
+    <Input label="Surname" value={profile.surname}
+      onChange={(v)=>setProfile({...profile,surname:v})} />
 
-          <Input label="Battle Name" value={profile.battleName}
-            onChange={(v)=>setProfile({...profile,battleName:v})} />
+    <Input label="Battle Name" value={profile.battleName}
+      onChange={(v)=>setProfile({...profile,battleName:v})} />
 
-          {/* COUNTRY */}
+    {/* CLUB */}
+    <input
+      ref={clubInputRef}
+      className="w-full bg-[#1f1f1f] border border-gray-500 text-white px-3 py-2 rounded-md focus:border-green-400 focus:outline-none"
+      placeholder="Home Golf Club"
+      value={profile.club}
+      onChange={(e)=>setProfile({...profile,club:e.target.value})}
+    />
 
-         <select 
-  className="w-full bg-neutral-900 border border-gray-500 text-white px-3 py-2 rounded"
-  value={profile.country}
-  onChange={(e)=>setProfile({...profile,country:e.target.value})}
->
-  <option value="">Select Country</option>
-  {countries.map((c)=>(
-    <option key={c}>{c}</option>
-  ))}
-</select>
+    <Input
+      label="Province / State"
+      value={profile.stateProvince}
+      onChange={(v)=>setProfile({...profile,stateProvince:v})}
+    />
 
-          <Input
-            label="Province"
-            value={profile.stateProvince}
-            onChange={(v)=>setProfile({...profile,stateProvince:v})}
-          />
+    {/* COUNTRY */}
+    <select 
+      className="w-full bg-neutral-900 border border-gray-500 text-white px-3 py-2 rounded"
+      value={profile.country}
+      onChange={(e)=>setProfile({...profile,country:e.target.value})}
+    >
+      <option value="">Select Country</option>
+      {countries.map((c)=>(
+        <option key={c}>{c}</option>
+      ))}
+    </select>
 
-          {/* CLUB */}
+    <Input
+      label="Date of Birth"
+      value={profile.dateOfBirth}
+      onChange={(v)=>setProfile({...profile,dateOfBirth:v})}
+    />
 
- <input
-  ref={clubInputRef}
-  className="w-full bg-[#1f1f1f] border border-gray-500 text-white px-3 py-2 rounded-md focus:border-green-400 focus:outline-none"
-  placeholder="Home Golf Club"
-  value={profile.club}
-  onChange={(e)=>setProfile({...profile,club:e.target.value})}
-/>
+    <Input
+      label="ID Number"
+      value={profile.idNumber}
+      onChange={(v)=>setProfile({...profile,idNumber:v})}
+    />
 
-          <Input
-            label="Date of Birth"
-            value={profile.dateOfBirth}
-            onChange={(v)=>setProfile({...profile,dateOfBirth:v})}
-          />
+    <Input
+      label="Phone Number"
+      value={profile.phoneNumber}
+      onChange={(v)=>setProfile({...profile,phoneNumber:v})}
+    />
 
-          <Input
-            label="ID Number"
-            value={profile.idNumber}
-            onChange={(v)=>setProfile({...profile,idNumber:v})}
-          />
+    <button
+      onClick={saveProfile}
+      disabled={saving}
+      className="w-full bg-green-500 hover:bg-green-400 text-black font-semibold py-3 rounded-xl"
+    >
+      {saving ? "Saving..." : "Save Profile"}
+    </button>
 
-          <Input
-            label="Phone Number"
-            value={profile.phoneNumber}
-            onChange={(v)=>setProfile({...profile,phoneNumber:v})}
-          />
-
-          <button
-            onClick={saveProfile}
-            disabled={saving}
-            className="w-full bg-green-500 hover:bg-green-400 text-black font-semibold py-3 rounded-xl"
-          >
-            {saving ? "Saving..." : "Save Profile"}
-          </button>
-
-        </div>
-      )}
+  </div>
+)}
 
      </div>
 </main>

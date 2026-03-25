@@ -10,22 +10,28 @@ export default function VerifyEmailPage() {
   const router = useRouter();
   const [sending, setSending] = useState(false);
 
-  async function resendEmail() {
-    if (!user) return;
+async function resendEmail() {
+  if (!user) return;
 
-    try {
-      setSending(true);
-      await sendEmailVerification(user, {
-        url: "https://teezgolfchallenges.com/verify-success",
-        handleCodeInApp: true,
-      });
-      alert("Verification email sent");
-    } catch (e: any) {
-      alert(e.message);
-    } finally {
-      setSending(false);
-    }
+  try {
+    setSending(true);
+
+    await sendEmailVerification(user, {
+      url: "https://teezgolfchallenges.com/verify-success",
+      handleCodeInApp: true,
+    });
+
+    alert("Verification email sent");
+
+  } catch (e: any) {
+
+    console.log("RESEND ERROR FULL:", e);
+    alert(e.code || e.message);
+
+  } finally {
+    setSending(false);
   }
+}
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-black text-white px-6 text-center">

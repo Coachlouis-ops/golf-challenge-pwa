@@ -2,7 +2,7 @@
 
 import { useAuth } from "./AuthContext";
 import { useRouter, usePathname } from "next/navigation";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { db } from "./firebase";
 import { doc, getDoc } from "firebase/firestore";
 
@@ -29,7 +29,9 @@ export default function RequireAuth({
   const { user, loading } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
-  const profileCheckedRef = useRef(false);
+
+  const [checking, setChecking] = useState(true);
+  const hasCheckedRef = useRef(false);
 
   useEffect(() => {
     if (loading) return;
@@ -39,47 +41,53 @@ export default function RequireAuth({
       return;
     }
 
+    if (hasCheckedRef.current) return;
+    hasCheckedRef.current = true;
+
     (async () => {
-      // 🔥 ALWAYS REFRESH USER FIRST
-      await user.reload();
+      try {
+        // 🔥 HARD SYNC WITH FIREBASE
+        await user.reload();
 
-      const freshUser = user;
+        // 🔥 IMPORTANT: ALWAYS READ FROM AUTH (NOT STALE OBJECT)
+        const freshUser = user;
 
-      // 🔴 EMAIL NOT VERIFIED
-      if (!freshUser.emailVerified) {
-        if (pathname !== "/verify-email") {
-          router.replace("/verify-email");
+        // 🔴 EMAIL VERIFICATION CHECK (AFTER RELOAD ONLY)
+        if (!freshUser.emailVerified) {
+          if (pathname !== "/verify-email") {
+            router.replace("/verify-email");
+          }
+          return;
         }
-        return;
-      }
 
-      // 🔒 Run once AFTER route stabilizes
-      if (profileCheckedRef.current) return;
+        // 🔴 PROFILE CHECK
+        const ref = doc(db, "profiles", freshUser.uid);
+        const snap = await getDoc(ref);
 
-      const ref = doc(db, "profiles", freshUser.uid);
-      const snap = await getDoc(ref);
-
-      if (!snap.exists()) {
-        router.replace("/profile");
-        profileCheckedRef.current = true;
-        return;
-      }
-
-      const data = snap.data();
-
-      if (!isProfileComplete(data)) {
-        if (pathname !== "/profile") {
+        if (!snap.exists()) {
           router.replace("/profile");
+          return;
         }
-        profileCheckedRef.current = true;
-        return;
-      }
 
-      profileCheckedRef.current = true;
+        const data = snap.data();
+
+        if (!isProfileComplete(data)) {
+          if (pathname !== "/profile") {
+            router.replace("/profile");
+          }
+          return;
+        }
+
+      } catch (err) {
+        console.error("AUTH CHECK ERROR:", err);
+      } finally {
+        setChecking(false);
+      }
     })();
   }, [user, loading, router, pathname]);
 
-  if (loading) return null;
+  // 🔒 BLOCK RENDER UNTIL EVERYTHING IS VERIFIED
+  if (loading || checking) return null;
 
   return <>{children}</>;
 }

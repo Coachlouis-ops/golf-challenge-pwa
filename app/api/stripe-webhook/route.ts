@@ -234,7 +234,7 @@ try {
 try {
   const res2 = await resend.emails.send({
     from: "invoices@teezgolfchallenge.com",
-    to: ["honeybadgerapps5@gmail.com"],
+    to: ["admin@teezgolfchallenges.com"],
     subject: `ADMIN COPY - Invoice ${invoiceNumber}`,
     html: `
       <h2>ADMIN COPY - Invoice ${invoiceNumber}</h2>

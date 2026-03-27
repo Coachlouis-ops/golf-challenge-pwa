@@ -18,69 +18,67 @@ function DashboardContent() {
   }
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center text-white overflow-hidden bg-black">
+    <div className="relative min-h-screen text-white overflow-hidden bg-black">
 
-      {/* VS ENERGY BACKGROUND */}
+      {/* NEW BACKGROUND */}
       <Image
-        src="/vs-energy.png"
-        alt="VS Energy"
+        src="/vs_energy1.png"
+        alt="Background"
         fill
         priority
-        className="object-cover opacity-40"
+        className="object-cover opacity-50 animate-pulse"
       />
 
-      {/* ARENA LIGHT */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[420px] bg-green-400 opacity-20 blur-[140px] animate-pulse pointer-events-none" />
+      {/* DARK OVERLAY */}
+      <div className="absolute inset-0 bg-black/60" />
 
-      {/* ENERGY FLOOR */}
-      <div className="absolute bottom-0 w-full h-[300px] bg-gradient-to-t from-green-500/10 to-transparent blur-[40px]" />
+      <main className="relative z-10 w-full max-w-md mx-auto px-6 pb-10 overflow-y-auto max-h-screen">
 
-      {/* PARTICLE GRID */}
-      <div className="absolute inset-0 opacity-20 pointer-events-none bg-[radial-gradient(circle,#39FF14_1px,transparent_1px)] bg-[size:40px_40px]" />
+        {/* FULL TOP HERO */}
+        <div className="w-full h-[260px] relative mb-6">
+          <Image
+            src="/vs_energy.png"
+            alt="Hero"
+            fill
+            className="object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/20 to-black/80" />
+        </div>
 
-      <main className="relative z-10 w-full max-w-md px-6 py-12 overflow-y-auto max-h-screen">
+        <div className="flex flex-col items-center gap-6">
 
-        <div className="flex flex-col items-center gap-8">
-
-          {/* HERO LOGO */}
-         <div className="w-full h-[180px] relative mb-4">
-  <Image
-    src="/hero-teez.jpg"
-    alt="Hero"
-    fill
-    className="object-cover rounded-2xl"
-  />
-  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent rounded-2xl" />
-</div>
-
-          <p className="text-center text-gray-300 text-lg tracking-wide">
-            Settle the score. Play with purpose.
+          {/* HEADLINE */}
+          <p className="text-center text-[15px] tracking-[2px] font-semibold text-transparent bg-clip-text bg-gradient-to-r from-gray-300 via-white to-gray-400 drop-shadow-[0_0_12px_rgba(200,200,200,0.9)]">
+            SETTLE THE SCORE. PLAY WITH PURPOSE
           </p>
 
+          {/* BUTTON STYLE */}
           <style jsx>{`
             .arena-btn {
               width: 100%;
-              height: 50px;
-              border-radius: 12px;
+              height: 52px;
+              border-radius: 14px;
               font-weight: 600;
-              letter-spacing: 0.5px;
-              background: linear-gradient(145deg,#39ff14,#1c8f0b);
+              letter-spacing: 1px;
+              background: linear-gradient(145deg,#d9d9d9,#7a7a7a);
               color: black;
               box-shadow:
-                0 0 20px rgba(57,255,20,0.6),
-                inset 0 0 6px rgba(255,255,255,0.4);
+                0 0 15px rgba(255,255,255,0.6),
+                0 0 30px rgba(200,200,200,0.4),
+                inset 0 0 6px rgba(255,255,255,0.7);
               transition: all 0.2s ease;
             }
 
             .arena-btn:hover {
               transform: translateY(-2px) scale(1.02);
               box-shadow:
-                0 0 30px rgba(57,255,20,0.9),
-                inset 0 0 10px rgba(255,255,255,0.6);
+                0 0 25px rgba(255,255,255,0.9),
+                0 0 40px rgba(220,220,220,0.6),
+                inset 0 0 10px rgba(255,255,255,0.9);
             }
 
             .arena-btn:active {
-              transform: scale(0.98);
+              transform: scale(0.97);
             }
           `}</style>
 
@@ -90,51 +88,51 @@ function DashboardContent() {
                 onClick={() => router.push("/challenges/create")}
                 className="arena-btn"
               >
-                Create Challenge
+                CREATE CHALLENGE
               </button>
 
               <button
                 onClick={() => router.push("/my-challenges")}
                 className="arena-btn"
               >
-                My Challenges
+                MY CHALLENGES
               </button>
 
               <button
                 onClick={() => router.push("/my-invites")}
                 className="arena-btn"
               >
-                My Invites
+                MY INVITES
               </button>
 
               <button
                 onClick={() => router.push("/profile")}
                 className="arena-btn"
               >
-                My Profile
+                MY PROFILE
               </button>
 
               <button
                 onClick={() => router.push("/wallet")}
                 className="arena-btn"
               >
-                Wallet
+                WALLET
               </button>
 
               <button
                 onClick={() => router.push("/vouchers")}
                 className="arena-btn"
               >
-                My Vouchers
+                MY VOUCHERS
               </button>
             </>
           )}
 
           <button
             onClick={() => router.push("/")}
-            className="text-sm text-gray-400 underline mt-2 hover:text-white"
+            className="text-xs tracking-widest text-gray-400 underline mt-2 hover:text-white"
           >
-            Back to Home
+            BACK TO HOME
           </button>
 
         </div>

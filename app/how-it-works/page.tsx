@@ -25,7 +25,7 @@ export default function HowItWorksPage() {
       <main className="max-w-4xl mx-auto px-6 pt-28 pb-20">
 
         <h1 className="text-4xl md:text-5xl font-bold mb-10 text-center">
-          How Teez Golf Challenges Works
+How Teez Golf Challenges Works 
         </h1>
 
         <div className="space-y-10 text-gray-300 text-lg leading-relaxed">
@@ -36,8 +36,8 @@ export default function HowItWorksPage() {
             </h2>
             <p>
               Join the global golf challenge platform by creating your account.
-              Members gain access to create and join golf challenges, earn
-              ranking points and compete with golfers around the world.
+              Members can create and join challenges, earn ranking points and
+              compete with golfers around the world.
             </p>
           </section>
 
@@ -46,37 +46,96 @@ export default function HowItWorksPage() {
               2. Buy Tokens
             </h2>
             <p>
-              Tokens are used to enter challenges and tournaments. Purchase
-              tokens securely through the platform wallet and use them to
-              compete in matches against other golfers.
+              Tokens are used to enter challenges. Purchase tokens securely
+              through your wallet and use them to compete against other golfers.
             </p>
           </section>
 
           <section>
             <h2 className="text-2xl font-semibold text-white mb-2">
-              3. Create or Join Challenges
+              3. Compete in Challenges
             </h2>
             <p>
-              Challenge other golfers at your club or anywhere in the world.
-              Choose your course, format and entry tokens. Players compete and
-              the winner takes the token prize pool.
+              Create or join challenges at your club or globally. Choose your
+              format and scoring method, submit your scores and compete on the
+              leaderboard.
             </p>
           </section>
 
           <section>
             <h2 className="text-2xl font-semibold text-white mb-2">
-              4. Climb the Rankings
+              4. Leaderboards
             </h2>
             <p>
-              Every challenge awards ranking points. Build your reputation and
-              move up the rankings from club level to national and global
-              leaderboards.
+              Each challenge generates a leaderboard based on the selected format:
+              <br /><br />
+              <strong>• Stroke / Nett / Medal:</strong> Lowest score wins<br />
+              <strong>• Points / Stableford:</strong> Highest score wins<br />
+              <strong>• Matchplay:</strong> Win = 1, Draw = 0.5, Loss = 0<br /><br />
+              Players with the same score share the same position, and the next
+              position is skipped (e.g. 1, 2, 2, 4).
             </p>
           </section>
 
           <section>
             <h2 className="text-2xl font-semibold text-white mb-2">
-              5. Win Rewards
+              5. Token Payouts
+            </h2>
+            <p>
+              At the end of each challenge, the token pool is distributed based on performance:
+              <br /><br />
+              <strong>• 2–7 Players:</strong> Winner takes 100% of the pool<br />
+              <strong>• 8+ Players:</strong> Top 25% of players are paid<br /><br />
+              The winner receives <strong>65% of the total pool</strong>.
+              The remaining 35% is distributed across the other winning positions,
+              decreasing by 10% per position.
+              <br /><br />
+              If players tie, their combined winnings are split evenly.
+              All payouts are rounded to whole tokens, and any leftover tokens are
+              awarded to the winner.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-semibold text-white mb-2">
+              6. Ranking Points
+            </h2>
+            <p>
+              Every challenge awards ranking points that contribute to your global standing:
+              <br /><br />
+              <strong>Matchplay:</strong><br />
+              Win = 130 points<br />
+              Draw = 65 points<br />
+              Loss = 25 points<br /><br />
+              <strong>Stroke / Points Formats:</strong><br />
+              Points are based on your final position and the size of the field.
+              Better positions and larger fields earn more points.
+              <br /><br />
+              If players tie, their average position is used for point calculation.
+              <br /><br />
+              Every player earns points, with a minimum of 25% of the winner’s points.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-semibold text-white mb-2">
+              7. Global Rankings
+            </h2>
+            <p>
+              Your points are tracked across four ranking levels:
+              <br /><br />
+              <strong>• Club</strong><br />
+              <strong>• Province</strong><br />
+              <strong>• National</strong><br />
+              <strong>• International</strong><br /><br />
+              Each challenge contributes to all ranking levels, allowing you to
+              climb leaderboards locally and globally.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-semibold text-white mb-2">
+              8. Redeem Rewards
             </h2>
             <p>
               Winning players earn tokens that can be redeemed for prizes,

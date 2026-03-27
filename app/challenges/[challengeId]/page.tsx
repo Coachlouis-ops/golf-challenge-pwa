@@ -231,43 +231,19 @@ async function handleUpdateScoreboard() {
   }
 }
 
-// ===============================
-// REOPEN CHALLENGE
-// ===============================
-async function handleReopenChallenge() {
-  if (!challengeId) {
-    console.log("No challengeId");
-    return;
-  }
 
-  try {
-    console.log("Calling reopenChallenge...");
-
-    const reopen = httpsCallable(functions, "reopenChallenge");
-
-    const result = await reopen({ challengeId });
-
-    console.log("Reopen success:", result);
-
-    const snap = await getDoc(doc(db, "challenges", challengeId));
-
-    if (snap.exists()) {
-      setChallenge((prev) =>
-        prev ? { ...prev, status: snap.get("status") } : prev
-      );
-    }
-
-  } catch (e: any) {
-    console.error("Reopen error:", e);
-    alert(e.message || "Failed to reopen challenge");
-  }
-}
 
 // ===============================
 // FINALIZE CHALLENGE
 // ===============================
 async function handleFinalizeChallenge() {
   if (!challengeId) return;
+
+  const confirmFinalize = window.confirm(
+    "Are you sure you want to finalize this challenge?\n\nThis action cannot be undone."
+  );
+
+  if (!confirmFinalize) return;
 
   try {
     const finalize = httpsCallable(functions, "finalizeChallenge");
@@ -518,16 +494,6 @@ return (
 
 
 {/* ================= REOPEN ================= */}
-{isCreator && challenge?.status === "completed" && (
-  <div className="border rounded p-4 flex flex-col gap-3">
-    <button
-      onClick={handleReopenChallenge}
-      className="bg-orange-600 text-white px-4 py-2 rounded"
-    >
-      Reopen Challenge
-    </button>
-  </div>
-)}
 
 <ParticipantsList challengeId={challengeId as string} />
 <PlayerSummaryList challengeId={challengeId as string} />

@@ -52,7 +52,7 @@ export default function RedeemPage() {
     const amountNum = Number(amount);
 
     // ✅ MINIMUM REDEEM (EDIT THIS VALUE)
-    const MIN_REDEEM = 10;
+    const MIN_REDEEM = 5;
 
     if (amountNum < MIN_REDEEM) {
       alert(`Minimum redeem is ${MIN_REDEEM} tokens`);

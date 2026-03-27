@@ -77,45 +77,61 @@ How Teez Golf Challenges Works
             </p>
           </section>
 
-          <section>
-            <h2 className="text-2xl font-semibold text-white mb-2">
-              5. Token Payouts
-            </h2>
-            <p>
-              At the end of each challenge, the token pool is distributed based on performance:
-              <br /><br />
-              <strong>• 2–7 Players:</strong> Winner takes 100% of the pool<br />
-              <strong>• 8+ Players:</strong> Top 25% of players are paid<br /><br />
-              The winner receives <strong>65% of the total pool</strong>.
-              The remaining 35% is distributed across the other winning positions,
-              decreasing by 10% per position.
-              <br /><br />
-              If players tie, their combined winnings are split evenly.
-              All payouts are rounded to whole tokens, and any leftover tokens are
-              awarded to the winner.
-            </p>
-          </section>
+         <section>
+  <h2 className="text-2xl font-semibold text-white mb-2">
+    5. Token Payouts
+  </h2>
+  <p>
+    All players contribute tokens to a shared prize pool when entering a challenge.
+    There is no house cut — 100% of tokens are redistributed to players.
+    <br /><br />
 
-          <section>
-            <h2 className="text-2xl font-semibold text-white mb-2">
-              6. Ranking Points
-            </h2>
-            <p>
-              Every challenge awards ranking points that contribute to your global standing:
-              <br /><br />
-              <strong>Matchplay:</strong><br />
-              Win = 130 points<br />
-              Draw = 65 points<br />
-              Loss = 25 points<br /><br />
-              <strong>Stroke / Points Formats:</strong><br />
-              Points are based on your final position and the size of the field.
-              Better positions and larger fields earn more points.
-              <br /><br />
-              If players tie, their average position is used for point calculation.
-              <br /><br />
-              Every player earns points, with a minimum of 25% of the winner’s points.
-            </p>
-          </section>
+    <strong>Matchplay Challenges:</strong><br />
+    Players earn results based on matches (Win = 1, Draw = 0.5, Loss = 0).<br />
+    Drawn players receive their entry tokens back.<br />
+    The remaining pool is then split equally between winning players.<br />
+    Losing players do not receive tokens.
+    <br /><br />
+
+    <strong>Stroke / Points Challenges:</strong><br />
+    • 2–7 Players: Winner takes 100% of the pool<br />
+    • 8+ Players: Top 25% of players are paid<br /><br />
+
+    The winner receives <strong>65% of the total pool</strong>.
+    The remaining 35% is distributed across the other winning positions,
+    decreasing by 10% per position.
+    <br /><br />
+
+    If players tie, their combined winnings are split evenly.
+    All payouts are rounded to whole tokens, and any leftover tokens are
+    awarded to the winner.
+  </p>
+</section>
+
+<section>
+  <h2 className="text-2xl font-semibold text-white mb-2">
+    6. Ranking Points
+  </h2>
+  <p>
+    Every challenge awards ranking points based on performance:
+    <br /><br />
+
+    <strong>Matchplay:</strong><br />
+    Win = 130 points<br />
+    Draw = 65 points<br />
+    Loss = 25 points<br /><br />
+
+    <strong>Stroke / Points Formats:</strong><br />
+    Points are calculated based on your final position and the number of players in the field.
+    Higher positions and larger fields result in more points.
+    <br /><br />
+
+    If players tie, their average finishing position is used for calculation.
+    <br /><br />
+
+    Every player earns points, with a minimum of 25% of the winner’s points.
+  </p>
+</section>
 
           <section>
             <h2 className="text-2xl font-semibold text-white mb-2">

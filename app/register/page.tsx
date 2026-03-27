@@ -11,6 +11,7 @@ export default function RegisterPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   async function handleRegister() {
     if (!email || !password) return;
@@ -20,10 +21,8 @@ export default function RegisterPage() {
 
       const cred = await createUserWithEmailAndPassword(auth, email, password);
 
-      // 🔥 SEND VERIFICATION EMAIL
       await sendEmailVerification(cred.user);
 
-      // 🚫 DO NOT GO DASHBOARD
       router.push("/verify-email");
 
     } catch (err: any) {
@@ -48,13 +47,23 @@ export default function RegisterPage() {
         className="w-full max-w-md px-4 py-3 rounded-xl bg-gray-900 border border-gray-700"
       />
 
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        className="w-full max-w-md px-4 py-3 rounded-xl bg-gray-900 border border-gray-700"
-      />
+      <div className="relative w-full max-w-md">
+        <input
+          type={showPassword ? "text" : "password"}
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          className="w-full px-4 py-3 pr-10 rounded-xl bg-gray-900 border border-gray-700"
+        />
+
+        <button
+          type="button"
+          onClick={() => setShowPassword((prev) => !prev)}
+          className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-gray-400"
+        >
+          {showPassword ? "🙈" : "👁"}
+        </button>
+      </div>
 
       <button
         onClick={handleRegister}

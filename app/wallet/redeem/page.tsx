@@ -42,38 +42,47 @@ export default function RedeemPage() {
   const [amount, setAmount] = useState("");
   const router = useRouter();
 
-  async function submit() {
-    try {
-      if (!category || !beneficiary || !supplier || !amount) {
-        alert("Complete all fields");
-        return;
-      }
-
-      const fn = httpsCallable(functions, "createRedemptionRequest");
-
-      await fn({
-        amount: Number(amount),
-        type: "voucher",
-        provider: supplier,
-        category,
-        beneficiary,
-      });
-
-     alert("Voucher request submitted");
-
-// reset
-setCategory("");
-setBeneficiary("");
-setSupplier("");
-setAmount("");
-
-// ✅ NAVIGATE TO DASHBOARD
-router.push("/dashboard");
-
-    } catch (err: any) {
-      alert(err?.message || "Error");
+ async function submit() {
+  try {
+    if (!category || !beneficiary || !supplier || !amount) {
+      alert("Complete all fields");
+      return;
     }
+
+    const amountNum = Number(amount);
+
+    // ✅ MINIMUM REDEEM (EDIT THIS VALUE)
+    const MIN_REDEEM = 10;
+
+    if (amountNum < MIN_REDEEM) {
+      alert(`Minimum redeem is ${MIN_REDEEM} tokens`);
+      return;
+    }
+
+    const fn = httpsCallable(functions, "createRedemptionRequest");
+
+    await fn({
+      amount: amountNum,
+      type: "voucher",
+      provider: supplier,
+      category,
+      beneficiary,
+    });
+
+    alert("Voucher request submitted");
+
+    // reset
+    setCategory("");
+    setBeneficiary("");
+    setSupplier("");
+    setAmount("");
+
+    router.push("/dashboard");
+
+  } catch (err: any) {
+    alert(err?.message || "Error");
   }
+}
 
   return (
     <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center gap-6 p-6">

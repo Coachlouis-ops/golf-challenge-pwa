@@ -40,7 +40,7 @@ export default function PlayerSummaryList({
         rows.sort((a, b) => {
           const pa = a.position ?? 999;
           const pb = b.position ?? 999;
-          return pa - pb;
+          return pb - pa;
         });
 
         setItems(rows);

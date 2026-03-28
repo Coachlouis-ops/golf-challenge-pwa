@@ -480,7 +480,7 @@ return (
   placeholder={
     challenge?.typeOfGame?.toLowerCase().includes("match")
       ? "win / lost / draw"
-      : "score / points"
+      : "score / points / win / lost / draw"
   }
   disabled={challenge?.status === "completed"}
   className="border rounded p-2 disabled:opacity-50"

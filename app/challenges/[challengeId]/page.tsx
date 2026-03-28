@@ -450,18 +450,37 @@ return (
         <label className="text-sm font-medium">
           Score for {player.displayName}
         </label>
-        <input
-          type="text"
-          value={scoreInputs[player.uid] || ""}
-          onChange={(e) =>
-            setScoreInputs((prev) => ({
-              ...prev,
-              [player.uid]: e.target.value,
-            }))
-          }
-          disabled={challenge?.status === "completed"}
-          className="border rounded p-2 disabled:opacity-50"
-        />
+       {challenge?.typeOfGame?.toLowerCase().includes("match") ? (
+  <select
+    value={scoreInputs[player.uid] || ""}
+    onChange={(e) =>
+      setScoreInputs((prev) => ({
+        ...prev,
+        [player.uid]: e.target.value,
+      }))
+    }
+    disabled={challenge?.status === "completed"}
+    className="border rounded p-2 disabled:opacity-50"
+  >
+    <option value="">Select result</option>
+    <option value="win">Win</option>
+    <option value="lost">Lost</option>
+    <option value="draw">Draw</option>
+  </select>
+) : (
+  <input
+    type="text"
+    value={scoreInputs[player.uid] || ""}
+    onChange={(e) =>
+      setScoreInputs((prev) => ({
+        ...prev,
+        [player.uid]: e.target.value,
+      }))
+    }
+    disabled={challenge?.status === "completed"}
+    className="border rounded p-2 disabled:opacity-50"
+  />
+)}
       </div>
     ))}
 

@@ -468,18 +468,23 @@ return (
     <option value="draw">Draw</option>
   </select>
 ) : (
-  <input
-    type="text"
-    value={scoreInputs[player.uid] || ""}
-    onChange={(e) =>
-      setScoreInputs((prev) => ({
-        ...prev,
-        [player.uid]: e.target.value,
-      }))
-    }
-    disabled={challenge?.status === "completed"}
-    className="border rounded p-2 disabled:opacity-50"
-  />
+ <input
+  type="text"
+  value={scoreInputs[player.uid] || ""}
+  onChange={(e) =>
+    setScoreInputs((prev) => ({
+      ...prev,
+      [player.uid]: e.target.value,
+    }))
+  }
+  placeholder={
+    challenge?.typeOfGame?.toLowerCase().includes("match")
+      ? "win / lost / draw"
+      : "score / points"
+  }
+  disabled={challenge?.status === "completed"}
+  className="border rounded p-2 disabled:opacity-50"
+/>
 )}
       </div>
     ))}

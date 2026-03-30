@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 
 declare const google: any;
 
-type Profile = {
+type Profile = { 
   uid: string;
   name: string;
   surname: string;
@@ -24,11 +24,33 @@ type Profile = {
   searchIndex: string;
   tokensPlayed?: number;
   tokensWon?: number;
+
   ranking?: {
     club: number;
     province: number;
     national: number;
     international: number;
+  };
+
+  // -------------------------------------------------
+  // LAST CHALLENGE SNAPSHOT (NEW)
+  // -------------------------------------------------
+  lastChallenge?: {
+    ranking?: {
+      before?: {
+        club: number;
+        province: number;
+        national: number;
+        international: number;
+      };
+      after?: {
+        club: number;
+        province: number;
+        national: number;
+        international: number;
+      };
+    };
+    createdAt?: any;
   };
 };
 
@@ -261,76 +283,99 @@ useEffect(() => {
 
 </div>
 
-      {/* PLAYER CARD */}
+     {/* PLAYER CARD */}
 
-      {profileExists && !isEditing && (
-        <>
-          <div className="bg-neutral-900 border border-green-500 rounded-xl p-6 space-y-2 shadow-lg">
+{profileExists && !isEditing && (
+  <>
+    <div className="bg-neutral-900 border border-green-500 rounded-xl p-6 space-y-2 shadow-lg">
 
-            <h2 className="text-xl font-semibold text-green-400">
-              {profile.battleName}
-            </h2>
+      <h2 className="text-xl font-semibold text-green-400">
+        {profile.battleName}
+      </h2>
 
-            <p className="text-sm text-gray-400">
-              {profile.name} {profile.surname}
-            </p>
+      <p className="text-sm text-gray-400">
+        {profile.name} {profile.surname}
+      </p>
 
-            <div className="pt-3 border-t border-neutral-700 text-sm space-y-1">
+      <div className="pt-3 border-t border-neutral-700 text-sm space-y-1">
 
-              <p><strong>Club:</strong> {profile.club}</p>
-              <p><strong>Province:</strong> {profile.stateProvince}</p>
-              <p><strong>Country:</strong> {profile.country}</p>
+        <p><strong>Club:</strong> {profile.club}</p>
+        <p><strong>Province:</strong> {profile.stateProvince}</p>
+        <p><strong>Country:</strong> {profile.country}</p>
 
-              <p><strong>DOB:</strong> {profile.dateOfBirth}</p>
-              <p><strong>ID:</strong> {profile.idNumber}</p>
-              <p><strong>Phone:</strong> {profile.phoneNumber}</p>
+        <p><strong>DOB:</strong> {profile.dateOfBirth}</p>
+        <p><strong>ID:</strong> {profile.idNumber}</p>
+        <p><strong>Phone:</strong> {profile.phoneNumber}</p>
 
-            </div>
-          </div>
+      </div>
+    </div>
 
-          {/* RANKINGS */}
+    {/* RANKINGS + LAST CHANGE */}
 
-          <div className="grid grid-cols-2 gap-3">
+    <div className="grid grid-cols-2 gap-3">
 
-            <RankCard title="Club Rank" value={rankingPosition.club} />
-            <RankCard title="Province Rank" value={rankingPosition.province} />
-            <RankCard title="National Rank" value={rankingPosition.national} />
-            <RankCard title="Global Rank" value={rankingPosition.international} />
+      <RankCardAdvanced
+        title="Club Rank"
+        value={rankingPosition.club}
+        before={profile.lastChallenge?.ranking?.before?.club ?? 0}
+        after={profile.lastChallenge?.ranking?.after?.club ?? 0}
+      />
 
-          </div>
+      <RankCardAdvanced
+        title="Province Rank"
+        value={rankingPosition.province}
+        before={profile.lastChallenge?.ranking?.before?.province ?? 0}
+        after={profile.lastChallenge?.ranking?.after?.province ?? 0}
+      />
 
-          {/* TOKEN STATS */}
+      <RankCardAdvanced
+        title="National Rank"
+        value={rankingPosition.national}
+        before={profile.lastChallenge?.ranking?.before?.national ?? 0}
+        after={profile.lastChallenge?.ranking?.after?.national ?? 0}
+      />
 
-<div className="grid grid-cols-2 gap-3">
+      <RankCardAdvanced
+        title="Global Rank"
+        value={rankingPosition.international}
+        before={profile.lastChallenge?.ranking?.before?.international ?? 0}
+        after={profile.lastChallenge?.ranking?.after?.international ?? 0}
+      />
 
-  <div className="bg-neutral-900 border border-neutral-700 rounded-lg p-4 text-center">
-    <p className="text-xs text-gray-400">Tokens Played</p>
-    <p className="text-2xl font-bold text-green-400">
-      {profile.tokensPlayed ?? 0}
-    </p>
-  </div>
+    </div>
 
-  <div className="bg-neutral-900 border border-neutral-700 rounded-lg p-4 text-center">
-    <p className="text-xs text-gray-400">Tokens Won</p>
-    <p className="text-2xl font-bold text-green-400">
-      {profile.tokensWon ?? 0}
-    </p>
-  </div>
+    {/* TOKEN STATS */}
 
-</div>
+    <div className="grid grid-cols-2 gap-3">
 
-          <button
-            onClick={() => setIsEditing(true)}
-            className="w-full bg-green-500 hover:bg-green-400 text-black font-semibold py-3 rounded-xl"
-          >
-            Edit Profile
-          </button>
-        </>
-      )}
+      <div className="bg-neutral-900 border border-neutral-700 rounded-lg p-4 text-center">
+        <p className="text-xs text-gray-400">Tokens Played</p>
+        <p className="text-2xl font-bold text-green-400">
+          {profile.tokensPlayed ?? 0}
+        </p>
+      </div>
 
-      {/* EDIT MODE */}
+      <div className="bg-neutral-900 border border-neutral-700 rounded-lg p-4 text-center">
+        <p className="text-xs text-gray-400">Tokens Won</p>
+        <p className="text-2xl font-bold text-green-400">
+          {profile.tokensWon ?? 0}
+        </p>
+      </div>
 
- {isEditing && (
+    </div>
+
+    <button
+      onClick={() => setIsEditing(true)}
+      className="w-full bg-green-500 hover:bg-green-400 text-black font-semibold py-3 rounded-xl"
+    >
+      Edit Profile
+    </button>
+  </>
+)}
+
+/* EDIT MODE */
+
+{isEditing && (
   <div className="space-y-3">
 
     <Input label="Name" value={profile.name}
@@ -398,9 +443,9 @@ useEffect(() => {
   </div>
 )}
 
-     </div>
+</div>
 </main>
-  );
+);
 }
 
 /* RANK CARD */
@@ -410,6 +455,43 @@ function RankCard({title,value}:{title:string,value:number}) {
     <div className="bg-neutral-900 border border-neutral-700 rounded-lg p-4 text-center">
       <p className="text-xs text-gray-400">{title}</p>
       <p className="text-2xl font-bold text-green-400">#{value}</p>
+    </div>
+  );
+}
+
+/* NEW ADVANCED RANK CARD */
+
+function RankCardAdvanced({
+  title,
+  value,
+  before,
+  after,
+}: {
+  title: string;
+  value: number;
+  before: number;
+  after: number;
+}) {
+  const change = after - before;
+
+  const isUp = change > 0;
+  const isDown = change < 0;
+
+  return (
+    <div className="bg-neutral-900 border border-neutral-700 rounded-lg p-4 text-center space-y-1">
+
+      <p className="text-xs text-gray-400">{title}</p>
+
+      <p className="text-2xl font-bold text-green-400">#{value}</p>
+
+      <p
+        className={`text-xs ${
+          isUp ? "text-green-400" : isDown ? "text-red-400" : "text-gray-400"
+        }`}
+      >
+        {change > 0 ? `+${change}` : change}
+      </p>
+
     </div>
   );
 }

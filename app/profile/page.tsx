@@ -55,10 +55,10 @@ type Profile = {
 };
 
 type RankingPosition = {
-  club: number;
-  province: number;
-  national: number;
-  international: number;
+  clubPosition: number;
+  provincePosition: number;
+  nationalPosition: number;
+  internationalPosition: number;
 };
 
 export default function ProfilePage() {
@@ -71,10 +71,10 @@ export default function ProfilePage() {
   const [profileExists, setProfileExists] = useState(false);
 
   const [rankingPosition, setRankingPosition] = useState<RankingPosition>({
-    club: 0,
-    province: 0,
-    national: 0,
-    international: 0,
+    clubPosition: 0,
+    provincePosition: 0,
+    nationalPosition: 0,
+    internationalPosition: 0,
   });
 
   const clubInputRef = useRef<HTMLInputElement | null>(null);
@@ -102,34 +102,41 @@ export default function ProfilePage() {
   },
 });
 
-  /* LOAD PROFILE */
+ /* LOAD PROFILE */
 
-  useEffect(() => {
-    if (!user) return;
+useEffect(() => {
+  if (!user) return;
 
-    (async () => {
-      const profileRef = doc(db, "profiles", user.uid);
-      const profileSnap = await getDoc(profileRef);
+  (async () => {
+    const profileRef = doc(db, "profiles", user.uid);
+    const profileSnap = await getDoc(profileRef);
 
-      if (profileSnap.exists()) {
-        setProfile(profileSnap.data() as Profile);
-        setProfileExists(true);
-        setIsEditing(false);
-      } else {
-        setProfileExists(false);
-        setIsEditing(true);
-      }
+    if (profileSnap.exists()) {
+      setProfile(profileSnap.data() as Profile);
+      setProfileExists(true);
+      setIsEditing(false);
+    } else {
+      setProfileExists(false);
+      setIsEditing(true);
+    }
 
-      const rankingRef = doc(db, "playerRankings", user.uid);
-      const rankingSnap = await getDoc(rankingRef);
+    const rankingRef = doc(db, "playerRankings", user.uid);
+    const rankingSnap = await getDoc(rankingRef);
 
-      if (rankingSnap.exists()) {
-        setRankingPosition(rankingSnap.data() as RankingPosition);
-      }
+    if (rankingSnap.exists()) {
+      const data = rankingSnap.data();
 
-      setLoading(false);
-    })();
-  }, [user]);
+      setRankingPosition({
+        clubPosition: data.clubPosition || 0,
+        provincePosition: data.provincePosition || 0,
+        nationalPosition: data.nationalPosition || 0,
+        internationalPosition: data.internationalPosition || 0,
+      });
+    }
+
+    setLoading(false);
+  })();
+}, [user]);
 
 /* GOOGLE CLUB SEARCH */
 
@@ -312,37 +319,37 @@ useEffect(() => {
 
     {/* RANKINGS + LAST CHANGE */}
 
-    <div className="grid grid-cols-2 gap-3">
+  <div className="grid grid-cols-2 gap-3">
 
-      <RankCardAdvanced
-        title="Club Rank"
-        value={rankingPosition.club}
-        before={profile.lastChallenge?.ranking?.before?.club ?? 0}
-        after={profile.lastChallenge?.ranking?.after?.club ?? 0}
-      />
+  <RankCardAdvanced
+    title="Club Rank"
+    value={rankingPosition.clubPosition}
+    before={profile.lastChallenge?.ranking?.before?.club ?? 0}
+    after={profile.lastChallenge?.ranking?.after?.club ?? 0}
+  />
 
-      <RankCardAdvanced
-        title="Province Rank"
-        value={rankingPosition.province}
-        before={profile.lastChallenge?.ranking?.before?.province ?? 0}
-        after={profile.lastChallenge?.ranking?.after?.province ?? 0}
-      />
+  <RankCardAdvanced
+    title="Province Rank"
+    value={rankingPosition.provincePosition}
+    before={profile.lastChallenge?.ranking?.before?.province ?? 0}
+    after={profile.lastChallenge?.ranking?.after?.province ?? 0}
+  />
 
-      <RankCardAdvanced
-        title="National Rank"
-        value={rankingPosition.national}
-        before={profile.lastChallenge?.ranking?.before?.national ?? 0}
-        after={profile.lastChallenge?.ranking?.after?.national ?? 0}
-      />
+  <RankCardAdvanced
+    title="National Rank"
+    value={rankingPosition.nationalPosition}
+    before={profile.lastChallenge?.ranking?.before?.national ?? 0}
+    after={profile.lastChallenge?.ranking?.after?.national ?? 0}
+  />
 
-      <RankCardAdvanced
-        title="Global Rank"
-        value={rankingPosition.international}
-        before={profile.lastChallenge?.ranking?.before?.international ?? 0}
-        after={profile.lastChallenge?.ranking?.after?.international ?? 0}
-      />
+  <RankCardAdvanced
+    title="Global Rank"
+    value={rankingPosition.internationalPosition}
+    before={profile.lastChallenge?.ranking?.before?.international ?? 0}
+    after={profile.lastChallenge?.ranking?.after?.international ?? 0}
+  />
 
-    </div>
+</div>
 
     {/* TOKEN STATS */}
 

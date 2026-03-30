@@ -373,7 +373,7 @@ useEffect(() => {
   </>
 )}
 
-/* EDIT MODE */
+{/* EDIT MODE */}
 
 {isEditing && (
   <div className="space-y-3">

@@ -51,16 +51,20 @@ export default function AdminRedemptions() {
     return () => unsub();
   }, []);
 
-  async function process(id: string, action: "approve" | "reject") {
-    const fn = httpsCallable(functions, "processRedemptionRequest");
+async function process(
+  id: string,
+  action: "approve" | "reject",
+  mode: "code" | "qr" | "email"
+) {
+  const fn = httpsCallable(functions, "processRedemptionRequest");
 
-    await fn({
-      requestId: id,
-      action,
-      voucherCode: codes[id] || "",
-      qrUrl: qrUrls[id] || "",
-    });
-  }
+  await fn({
+    requestId: id,
+    action,
+    voucherCode: mode === "code" ? codes[id] || "" : "",
+    qrUrl: mode === "qr" ? qrUrls[id] || "" : "",
+  });
+}
 
   const pendingTotal = requests
     .filter((r) => r.status === "pending")
@@ -135,21 +139,37 @@ export default function AdminRedemptions() {
                   className="px-3 py-2 rounded bg-black border border-cyan-500/30 text-white"
                 />
 
-                <div className="flex gap-3 mt-2">
-                  <button
-                    onClick={() => process(r.id, "approve")}
-                    className="bg-cyan-500 px-4 py-2 rounded hover:bg-cyan-400"
-                  >
-                    Approve
-                  </button>
+                <div className="flex flex-col gap-2 mt-2">
 
-                  <button
-                    onClick={() => process(r.id, "reject")}
-                    className="bg-red-500 px-4 py-2 rounded hover:bg-red-400"
-                  >
-                    Reject
-                  </button>
-                </div>
+  <button
+    onClick={() => process(r.id, "approve", "code")}
+    className="bg-cyan-500 px-4 py-2 rounded hover:bg-cyan-400"
+  >
+    Approve (Code)
+  </button>
+
+  <button
+    onClick={() => process(r.id, "approve", "qr")}
+    className="bg-purple-500 px-4 py-2 rounded hover:bg-purple-400"
+  >
+    Approve (QR)
+  </button>
+
+  <button
+    onClick={() => process(r.id, "approve", "email")}
+    className="bg-yellow-400 text-black px-4 py-2 rounded hover:bg-yellow-300"
+  >
+    Mark as Email Sent
+  </button>
+
+  <button
+    onClick={() => process(r.id, "reject", "code")}
+    className="bg-red-500 px-4 py-2 rounded hover:bg-red-400"
+  >
+    Reject
+  </button>
+
+</div>
               </div>
             </div>
           ))}

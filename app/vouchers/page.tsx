@@ -19,8 +19,13 @@ type Voucher = {
   category: string;
   beneficiary: string;
   status: string;
+
   voucherCode?: string;
   qrUrl?: string;
+
+  deliveryMethod?: "code" | "qr" | "email";
+  emailSentTo?: string;
+  emailSentAt?: any;
 };
 
 export default function VouchersPage() {
@@ -114,6 +119,21 @@ export default function VouchersPage() {
                       </p>
                     </div>
                   )}
+{v.deliveryMethod === "email" && v.emailSentTo && (
+  <div className="mt-3 p-2 border border-yellow-400 rounded bg-black">
+    <p className="text-yellow-400 text-sm">Voucher Sent via Email</p>
+    <p className="text-lg font-bold text-yellow-300">
+      {v.emailSentTo}
+    </p>
+
+    {v.emailSentAt && (
+      <p className="text-xs text-yellow-500 mt-1">
+        Sent at: {new Date(v.emailSentAt.seconds * 1000).toLocaleString()}
+      </p>
+    )}
+  </div>
+)}
+
 
                   <div className="flex items-center justify-between mt-3">
                     <p className="text-green-400 font-semibold">

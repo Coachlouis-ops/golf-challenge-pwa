@@ -35,23 +35,29 @@ type Profile = {
   // -------------------------------------------------
   // LAST CHALLENGE SNAPSHOT (NEW)
   // -------------------------------------------------
-  lastChallenge?: {
-    ranking?: {
-      before?: {
-        club: number;
-        province: number;
-        national: number;
-        international: number;
-      };
-      after?: {
-        club: number;
-        province: number;
-        national: number;
-        international: number;
-      };
+ lastChallenge?: {
+  ranking?: {
+    before?: {
+      club: number;
+      province: number;
+      national: number;
+      international: number;
     };
-    createdAt?: any;
+    after?: {
+      club: number;
+      province: number;
+      national: number;
+      international: number;
+    };
   };
+
+  tokens?: {
+    played: number;
+    won: number;
+  };
+
+  createdAt?: any;
+};
 };
 
 type RankingPosition = {
@@ -69,6 +75,11 @@ export default function ProfilePage() {
   const [saving, setSaving] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [profileExists, setProfileExists] = useState(false);
+
+  const [profileWallet, setProfileWallet] = useState({
+  winningTokens: 0,
+  lockedTokens: 0,
+});
 
   const [rankingPosition, setRankingPosition] = useState<RankingPosition>({
     clubPosition: 0,
@@ -122,6 +133,18 @@ useEffect(() => {
 
     const rankingRef = doc(db, "playerRankings", user.uid);
     const rankingSnap = await getDoc(rankingRef);
+
+const walletRef = doc(db, "wallets", user.uid);
+const walletSnap = await getDoc(walletRef);
+
+if (walletSnap.exists()) {
+  const data = walletSnap.data();
+
+  setProfileWallet({
+    winningTokens: data.winningTokens || 0,
+    lockedTokens: data.lockedTokens || 0,
+  });
+}
 
     if (rankingSnap.exists()) {
       const data = rankingSnap.data();
@@ -351,25 +374,32 @@ useEffect(() => {
 
 </div>
 
-    {/* TOKEN STATS */}
+  {/* TOKEN STATS + LAST CHANGE */}
 
-    <div className="grid grid-cols-2 gap-3">
+<div className="grid grid-cols-3 gap-3">
 
-      <div className="bg-neutral-900 border border-neutral-700 rounded-lg p-4 text-center">
-        <p className="text-xs text-gray-400">Tokens Played</p>
-        <p className="text-2xl font-bold text-green-400">
-          {profile.tokensPlayed ?? 0}
-        </p>
-      </div>
+  <TokenCardAdvanced
+    title="Played"
+    total={profile.tokensPlayed ?? 0}
+    last={profile.lastChallenge?.tokens?.played ?? 0}
+  />
 
-      <div className="bg-neutral-900 border border-neutral-700 rounded-lg p-4 text-center">
-        <p className="text-xs text-gray-400">Tokens Won</p>
-        <p className="text-2xl font-bold text-green-400">
-          {profile.tokensWon ?? 0}
-        </p>
-      </div>
+  <TokenCardAdvanced
+    title="Won"
+    total={profile.tokensWon ?? 0}
+    last={profile.lastChallenge?.tokens?.won ?? 0}
+  />
 
-    </div>
+  <TokenCard
+    title="Available"
+   value={Math.max(
+  (profileWallet?.winningTokens ?? 0) - (profileWallet?.lockedTokens ?? 0),
+  0
+)}
+  />
+
+</div>
+
 
     <button
       onClick={() => setIsEditing(true)}
@@ -479,7 +509,7 @@ function RankCardAdvanced({
   before: number;
   after: number;
 }) {
-  const change = after - before;
+ const change = before - after;
 
   const isUp = change > 0;
   const isDown = change < 0;
@@ -514,6 +544,33 @@ function Input({label,value,onChange}:{label:string,value:string,onChange:(v:str
         value={value}
         onChange={(e)=>onChange(e.target.value)}
       />
+    </div>
+  );
+}
+
+function TokenCard({ title, value }: { title: string; value: number }) {
+  return (
+    <div className="bg-neutral-900 border border-neutral-700 rounded-lg p-4 text-center">
+      <p className="text-xs text-gray-400">{title}</p>
+      <p className="text-2xl font-bold text-green-400">{value}</p>
+    </div>
+  );
+}
+
+function TokenCardAdvanced({
+  title,
+  total,
+  last,
+}: {
+  title: string;
+  total: number;
+  last: number;
+}) {
+  return (
+    <div className="bg-neutral-900 border border-neutral-700 rounded-lg p-4 text-center space-y-1">
+      <p className="text-xs text-gray-400">{title}</p>
+      <p className="text-2xl font-bold text-green-400">{total}</p>
+      <p className="text-xs text-green-400">+{last}</p>
     </div>
   );
 }

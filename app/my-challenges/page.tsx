@@ -33,21 +33,17 @@ export default function MyChallengesPage() {
     if (!user) return;
 
     async function fetchChallenges() {
+      const uid = user!.uid;
 
-     async function fetchChallenges() {
-  if (!user) return;
-
-  const uid = user.uid;
-
-  // 🔹 1. CREATOR CHALLENGES
-  const creatorQuery = query(
-    collection(db, "challenges"),
-    where("creatorUid", "==", uid)
-  );
+      // 🔹 1. CREATOR CHALLENGES
+      const creatorQuery = query(
+        collection(db, "challenges"),
+        where("creatorUid", "==", uid)
+      );
 
       const creatorSnap = await getDocs(creatorQuery);
 
-      const creatorList = creatorSnap.docs.map((docSnap) => {
+      const creatorList: ChallengeItem[] = creatorSnap.docs.map((docSnap) => {
         const data = docSnap.data();
 
         return {
@@ -71,7 +67,7 @@ export default function MyChallengesPage() {
           "challenges",
           docSnap.id,
           "players",
-          user.uid
+          uid
         );
 
         const playerDoc = await getDoc(playerRef);

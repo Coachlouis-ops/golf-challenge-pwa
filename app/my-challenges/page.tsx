@@ -34,11 +34,16 @@ export default function MyChallengesPage() {
 
     async function fetchChallenges() {
 
-      // 🔹 1. CREATOR CHALLENGES
-      const creatorQuery = query(
-        collection(db, "challenges"),
-        where("creatorUid", "==", user.uid)
-      );
+     async function fetchChallenges() {
+  if (!user) return;
+
+  const uid = user.uid;
+
+  // 🔹 1. CREATOR CHALLENGES
+  const creatorQuery = query(
+    collection(db, "challenges"),
+    where("creatorUid", "==", uid)
+  );
 
       const creatorSnap = await getDocs(creatorQuery);
 

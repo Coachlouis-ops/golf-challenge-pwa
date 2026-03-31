@@ -2,7 +2,14 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { collection, query, where, getDocs } from "firebase/firestore";
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  doc,
+  getDoc,
+} from "firebase/firestore";
 import { db } from "@/src/lib/firebase";
 import { useAuth } from "@/src/lib/AuthContext";
 import RequireAuth from "@/src/lib/RequireAuth";
@@ -26,36 +33,75 @@ export default function MyChallengesPage() {
     if (!user) return;
 
     async function fetchChallenges() {
-      const q = query(
+
+      // 🔹 1. CREATOR CHALLENGES
+      const creatorQuery = query(
         collection(db, "challenges"),
-        where("creatorUid", "==", user!.uid)
+        where("creatorUid", "==", user.uid)
       );
 
-      const snap = await getDocs(q);
+      const creatorSnap = await getDocs(creatorQuery);
 
-      const list: ChallengeItem[] = snap.docs.map((doc) => {
-        const data = doc.data();
-
-        const isCompleted =
-          data.status === "completed" || !!data.finalizedAt;
+      const creatorList = creatorSnap.docs.map((docSnap) => {
+        const data = docSnap.data();
 
         return {
-          id: doc.id,
+          id: docSnap.id,
           challengeTitle: data.challengeTitle,
           createdAt: data.createdAt,
           finalizedAt: data.finalizedAt,
-          isCompleted,
+          isCompleted:
+            data.status === "completed" || !!data.finalizedAt,
         };
       });
 
-      // SORT → latest first
-      list.sort((a, b) => {
+      // 🔹 2. PLAYER CHALLENGES (SCAN)
+      const allSnap = await getDocs(collection(db, "challenges"));
+
+      const playerList: ChallengeItem[] = [];
+
+      for (const docSnap of allSnap.docs) {
+        const playerRef = doc(
+          db,
+          "challenges",
+          docSnap.id,
+          "players",
+          user.uid
+        );
+
+        const playerDoc = await getDoc(playerRef);
+
+        if (playerDoc.exists()) {
+          const data = docSnap.data();
+
+          playerList.push({
+            id: docSnap.id,
+            challengeTitle: data.challengeTitle,
+            createdAt: data.createdAt,
+            finalizedAt: data.finalizedAt,
+            isCompleted:
+              data.status === "completed" || !!data.finalizedAt,
+          });
+        }
+      }
+
+      // 🔹 3. MERGE + REMOVE DUPLICATES
+      const map = new Map<string, ChallengeItem>();
+
+      [...creatorList, ...playerList].forEach((c) => {
+        map.set(c.id, c);
+      });
+
+      const finalList = Array.from(map.values());
+
+      // 🔹 4. SORT
+      finalList.sort((a, b) => {
         const aTime = a.createdAt?.seconds || 0;
         const bTime = b.createdAt?.seconds || 0;
         return bTime - aTime;
       });
 
-      setChallenges(list);
+      setChallenges(finalList);
       setLoading(false);
     }
 
@@ -96,24 +142,23 @@ export default function MyChallengesPage() {
             </p>
           </div>
 
-          {/* EMPTY STATE */}
+          {/* EMPTY */}
           {challenges.length === 0 && (
             <div className="bg-[#111] p-4 rounded-2xl text-center text-gray-400">
-              No challenges created yet.
+              No challenges yet.
             </div>
           )}
 
-          {/* CHALLENGE LIST */}
+          {/* LIST */}
           <div className="flex flex-col gap-4">
             {challenges.map((challenge) => (
               <button
                 key={challenge.id}
                 onClick={() => router.push(`/challenges/${challenge.id}`)}
-                className="w-full p-4 bg-[#111] rounded-2xl text-left transition-all shadow-[0_0_15px_rgba(255,0,0,0.2)] hover:shadow-[0_0_30px_rgba(255,0,0,0.5)]"
+                className="w-full p-4 bg-[#111] rounded-2xl text-left shadow-[0_0_15px_rgba(255,0,0,0.2)] hover:shadow-[0_0_30px_rgba(255,0,0,0.5)]"
               >
                 <div className="flex flex-col gap-2">
 
-                  {/* TOP ROW */}
                   <div className="flex justify-between items-center">
 
                     <div className="text-base font-semibold text-red-400">
@@ -132,7 +177,6 @@ export default function MyChallengesPage() {
 
                   </div>
 
-                  {/* DATE */}
                   <div className="text-xs text-gray-400">
                     {challenge.createdAt
                       ? new Date(
@@ -141,7 +185,6 @@ export default function MyChallengesPage() {
                       : ""}
                   </div>
 
-                  {/* SUBTEXT */}
                   <div className="text-xs text-gray-500">
                     Tap to view challenge
                   </div>
@@ -151,7 +194,7 @@ export default function MyChallengesPage() {
             ))}
           </div>
 
-          {/* BACK TO DASHBOARD */}
+          {/* BACK */}
           <button
             onClick={() => router.push("/dashboard")}
             className="w-full py-4 rounded-2xl bg-[#1f1f1f] text-white font-semibold"

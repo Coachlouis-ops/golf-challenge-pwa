@@ -11,6 +11,8 @@ type ChallengeItem = {
   id: string;
   challengeTitle: string;
   createdAt?: any;
+  finalizedAt?: any;
+  isCompleted?: boolean;
 };
 
 export default function MyChallengesPage() {
@@ -31,11 +33,27 @@ export default function MyChallengesPage() {
 
       const snap = await getDocs(q);
 
-      const list: ChallengeItem[] = snap.docs.map((doc) => ({
-        id: doc.id,
-        challengeTitle: doc.data().challengeTitle,
-        createdAt: doc.data().createdAt,
-      }));
+      const list: ChallengeItem[] = snap.docs.map((doc) => {
+        const data = doc.data();
+
+        const isCompleted =
+          data.status === "completed" || !!data.finalizedAt;
+
+        return {
+          id: doc.id,
+          challengeTitle: data.challengeTitle,
+          createdAt: data.createdAt,
+          finalizedAt: data.finalizedAt,
+          isCompleted,
+        };
+      });
+
+      // SORT → latest first
+      list.sort((a, b) => {
+        const aTime = a.createdAt?.seconds || 0;
+        const bTime = b.createdAt?.seconds || 0;
+        return bTime - aTime;
+      });
 
       setChallenges(list);
       setLoading(false);
@@ -56,7 +74,7 @@ export default function MyChallengesPage() {
     <RequireAuth>
       <main className="relative min-h-screen bg-black text-white overflow-hidden">
 
-        {/* BACKGROUND LOGO VISUAL */}
+        {/* BACKGROUND */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[420px] bg-red-500 opacity-10 blur-[120px] pointer-events-none" />
 
         <div className="absolute inset-0 opacity-20 pointer-events-none bg-[radial-gradient(circle,#ff0000_1px,transparent_1px)] bg-[size:40px_40px]" />
@@ -85,21 +103,49 @@ export default function MyChallengesPage() {
             </div>
           )}
 
-          {/* CHALLENGES LIST */}
+          {/* CHALLENGE LIST */}
           <div className="flex flex-col gap-4">
             {challenges.map((challenge) => (
               <button
                 key={challenge.id}
                 onClick={() => router.push(`/challenges/${challenge.id}`)}
-                className="w-full p-4 bg-[#111] rounded-2xl text-left transition-all shadow-[0_0_15px_rgba(255,0,0,0.25)] hover:shadow-[0_0_35px_rgba(255,0,0,0.6)] animate-pulse"
+                className="w-full p-4 bg-[#111] rounded-2xl text-left transition-all shadow-[0_0_15px_rgba(255,0,0,0.2)] hover:shadow-[0_0_30px_rgba(255,0,0,0.5)]"
               >
-                <div className="flex flex-col gap-1">
-                  <div className="text-base font-semibold text-red-400">
-                    {challenge.challengeTitle}
+                <div className="flex flex-col gap-2">
+
+                  {/* TOP ROW */}
+                  <div className="flex justify-between items-center">
+
+                    <div className="text-base font-semibold text-red-400">
+                      {challenge.challengeTitle}
+                    </div>
+
+                    <div
+                      className={`text-[10px] px-2 py-1 rounded-full ${
+                        challenge.isCompleted
+                          ? "bg-gray-700 text-gray-300"
+                          : "bg-red-500 text-black shadow-[0_0_10px_#ff0000]"
+                      }`}
+                    >
+                      {challenge.isCompleted ? "COMPLETED" : "ACTIVE"}
+                    </div>
+
                   </div>
+
+                  {/* DATE */}
                   <div className="text-xs text-gray-400">
+                    {challenge.createdAt
+                      ? new Date(
+                          challenge.createdAt.seconds * 1000
+                        ).toLocaleDateString()
+                      : ""}
+                  </div>
+
+                  {/* SUBTEXT */}
+                  <div className="text-xs text-gray-500">
                     Tap to view challenge
                   </div>
+
                 </div>
               </button>
             ))}

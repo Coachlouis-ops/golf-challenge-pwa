@@ -46,11 +46,11 @@ export default function HomePage() {
 </a>
 
         <a
-          href="mailto:admin@teezgolfchallenges.com"
-          className="bg-white text-black px-4 py-2 text-sm rounded"
-        >
-          Contact us
-        </a>
+  href="mailto:admin@teezgolfchallenges.com?subject=Teez%20Enquiry&body=Hi%20Teez%20Team,%0A%0AI%20would%20like%20to%20enquire%20about..."
+  className="bg-white text-black px-4 py-2 text-sm rounded hover:bg-gray-200 transition"
+>
+  Contact us
+</a>
 
       </header>
 
@@ -212,12 +212,12 @@ export default function HomePage() {
   </svg>
 </a>
 
-            <a
-              href="mailto:admin@teezgolfchallenges.com"
-              className="bg-black text-white px-4 py-2 text-sm"
-            >
-              EMAIL
-            </a>
+          <a
+  href="mailto:admin@teezgolfchallenges.com?subject=Teez%20Support&body=Hi%20Teez%20Team,%0A%0A"
+  className="bg-black text-white px-4 py-2 text-sm hover:bg-gray-800 transition"
+>
+  EMAIL
+</a>
 
           </div>
 

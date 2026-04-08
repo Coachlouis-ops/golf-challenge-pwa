@@ -76,12 +76,23 @@ export default function HomePage() {
             Compete. Win. Elevate your game.
           </p>
 
-          <button
-            onClick={() => router.push("/app")}
-            className="bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-full font-semibold"
-          >
-            REGISTER
-          </button>
+          <div className="flex justify-center gap-4 flex-wrap">
+
+            <button
+              onClick={() => router.push("/app")}
+              className="bg-green-400 text-black px-8 py-3 rounded-full font-semibold animate-pulse shadow-[0_0_20px_rgba(34,197,94,0.8)] hover:scale-105 transition"
+            >
+              REGISTER
+            </button>
+
+            <button
+              onClick={() => router.push("/app")}
+              className="border border-black px-8 py-3 rounded-full font-semibold hover:bg-black hover:text-white transition"
+            >
+              LOGIN
+            </button>
+
+          </div>
 
         </div>
       </section>
@@ -109,7 +120,7 @@ export default function HomePage() {
 
           <button
             onClick={() => router.push("/app")}
-            className="bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-full font-semibold"
+            className="bg-green-400 text-black px-8 py-3 rounded-full font-semibold animate-pulse shadow-[0_0_20px_rgba(34,197,94,0.8)] hover:scale-105 transition"
           >
             Join Now
           </button>
@@ -127,7 +138,6 @@ export default function HomePage() {
 
           <div className="grid md:grid-cols-2 gap-12">
 
-            {/* 1 */}
             <div className="text-center">
               <img src="/hero-teez.jpg" className="w-full mb-4" />
               <h3 className="font-semibold mb-2">Play a Match against an Opponent</h3>
@@ -136,7 +146,6 @@ export default function HomePage() {
               </p>
             </div>
 
-            {/* 2 */}
             <div className="text-center">
               <img src="/wallet.png" className="w-full mb-4" />
               <h3 className="font-semibold mb-2">Your Golf Wallet</h3>
@@ -145,7 +154,6 @@ export default function HomePage() {
               </p>
             </div>
 
-            {/* 3 */}
             <div className="text-center">
               <img src="/voucher_badger.png" className="w-full mb-4" />
               <h3 className="font-semibold mb-2">Redeem your Vouchers</h3>
@@ -154,7 +162,6 @@ export default function HomePage() {
               </p>
             </div>
 
-            {/* 4 */}
             <div className="text-center">
               <img src="/main_ranking.png" className="w-full mb-4" />
               <h3 className="font-semibold mb-2">Rankings</h3>

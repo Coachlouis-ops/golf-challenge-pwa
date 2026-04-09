@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     siteName: "Teez Golf Challenges",
     images: [
       {
-        url: "/hero-teez.jpg",
+        url: "/teezman_1.png",
         width: 1200,
         height: 630,
         alt: "Teez Golf Challenges",
@@ -46,7 +46,7 @@ export const metadata: Metadata = {
     title: "Teez Golf Challenges",
     description:
       "Compete in global golf challenges and win rewards.",
-    images: ["/hero-teez.jpg"],
+    images: ["/teezman_1.png"],
   },
 };
 
@@ -56,8 +56,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+    <html
+      lang="en"
+      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+    >
+      <body className="min-h-full flex flex-col">
         <AuthProvider>{children}</AuthProvider>
       </body>
     </html>

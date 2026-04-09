@@ -252,7 +252,15 @@ useEffect(() => {
 
     const uid = user.uid;
 
-    setSaving(true);
+   // DOB VALIDATION (YYYY/MM/DD)
+const dobRegex = /^\d{4}\/\d{2}\/\d{2}$/;
+
+if (!dobRegex.test(profile.dateOfBirth)) {
+  alert("Date of Birth must be in format YYYY/MM/DD (e.g. 1977/12/30)");
+  return;
+}
+
+setSaving(true);
 
     const searchIndex = `${profile.name} ${profile.surname} ${profile.battleName} ${profile.club} ${profile.country} ${profile.stateProvince}`.toLowerCase();
 
@@ -451,11 +459,16 @@ useEffect(() => {
       ))}
     </select>
 
-    <Input
-      label="Date of Birth"
-      value={profile.dateOfBirth}
-      onChange={(v)=>setProfile({...profile,dateOfBirth:v})}
-    />
+   <div className="space-y-1">
+  <p className="text-xs text-gray-400">Date of Birth</p>
+  <input
+    className="w-full bg-[#1f1f1f] border border-gray-500 text-white px-3 py-2 rounded-md focus:border-green-400 focus:outline-none"
+    placeholder="YYYY/MM/DD"
+    value={profile.dateOfBirth}
+    onChange={(e)=>setProfile({...profile,dateOfBirth:e.target.value})}
+  />
+  <p className="text-[10px] text-gray-500">Format: 1977/12/30</p>
+</div>
 
     <Input
       label="ID Number"

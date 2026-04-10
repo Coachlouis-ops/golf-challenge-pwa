@@ -24,6 +24,16 @@ export const metadata: Metadata = {
   description:
     "Compete in global golf challenges, climb rankings, and win real rewards. Play with purpose.",
 
+  // ✅ THIS WAS MISSING
+  manifest: "/manifest.json",
+
+  // ✅ THIS WAS MISSING
+  icons: {
+    icon: "/icons/icon-192.png",
+    shortcut: "/icons/icon-192.png",
+    apple: "/icons/icon-192.png",
+  },
+
   openGraph: {
     title: "Teez Golf Challenges",
     description:

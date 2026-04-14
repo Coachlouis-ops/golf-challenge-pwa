@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/src/lib/firebase";
 
 export default function RegisterPage() {
@@ -19,11 +19,21 @@ export default function RegisterPage() {
     try {
       setLoading(true);
 
-      const cred = await createUserWithEmailAndPassword(auth, email, password);
+ const cred = await createUserWithEmailAndPassword(auth, email, password);
 
-      await sendEmailVerification(cred.user);
+// CALL YOUR API (Resend email)
+await fetch("/api/send-verification", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({
+    uid: cred.user.uid,
+    email: cred.user.email,
+  }),
+});
 
-      router.push("/verify-email");
+router.push("/verify-email");
 
     } catch (err: any) {
       alert(err.message);

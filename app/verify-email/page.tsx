@@ -2,7 +2,6 @@
 
 import { useAuth } from "@/src/lib/AuthContext";
 import { useRouter } from "next/navigation";
-import { sendEmailVerification } from "firebase/auth";
 import { useState } from "react";
 
 export default function VerifyEmailPage() {
@@ -16,18 +15,22 @@ async function resendEmail() {
   try {
     setSending(true);
 
-    await sendEmailVerification(user, {
-      url: "https://teezgolfchallenges.com/verify-success",
-      handleCodeInApp: true,
+    await fetch("/api/send-verification", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        uid: user.uid,
+        email: user.email,
+      }),
     });
 
     alert("Verification email sent");
 
   } catch (e: any) {
-
     console.log("RESEND ERROR FULL:", e);
-    alert(e.code || e.message);
-
+    alert(e.message);
   } finally {
     setSending(false);
   }

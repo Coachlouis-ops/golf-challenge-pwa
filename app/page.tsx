@@ -180,7 +180,7 @@ export default function HomePage() {
 
           <div className="text-center md:text-left">
             <p className="font-semibold">Teez Golf Challenges</p>
-            <p className="text-sm text-gray-600">Honey Badger Technologies PTY.LTD</p>
+            <p className="text-sm text-gray-600">Developed and Managed by Honey Badger Technologies PTY.LTD</p>
           </div>
 
           <div className="flex items-center gap-4">

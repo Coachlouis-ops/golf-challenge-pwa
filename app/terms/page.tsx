@@ -16,46 +16,94 @@ export default function TermsPage() {
       </div>
 
       {/* CONTENT */}
-      <div className="flex-1 overflow-y-auto px-6 mt-6 text-sm leading-relaxed space-y-4">
+    <div className="flex-1 overflow-y-auto px-6 mt-6 text-sm leading-relaxed space-y-4">
 
-        <p className="font-semibold">Teez Golf Challenges – Terms and Conditions</p>
+  <p className="font-semibold">Teez Golf Challenges – Terms and Conditions</p>
 
-        <p>By creating an account and using this platform, you agree to these Terms.</p>
+  <p>
+    These Terms govern your use of the Teez Golf Challenges platform (“the Platform”), operated by Honey Badger Technologies PTY LTD.
+    By accessing or using the Platform, you agree to be bound by these Terms.
+  </p>
 
-        <p className="font-semibold">Platform</p>
-        <p>Skill-based golf challenges using tokens. No gambling.</p>
+  <p className="font-semibold">1. Nature of the Platform</p>
+  <p>
+    Teez Golf Challenges is a skill-based competition platform. It does not facilitate gambling, betting, or wagering between users.
+  </p>
 
-        <p className="font-semibold">Eligibility</p>
-        <p>18+ or parental consent.</p>
+  <p className="font-semibold">2. Eligibility</p>
+  <p>
+    You must be at least 18 years old or have verified parental consent to use the Platform.
+  </p>
 
-        <p className="font-semibold">Tokens</p>
-        <p>Tokens have no cash value, are non-refundable, and cannot be withdrawn.</p>
+  <p className="font-semibold">3. Digital Tokens</p>
+  <p>
+    The Platform uses digital tokens for participation in challenges. Tokens are not currency, have no monetary value,
+    are non-refundable, non-transferable, and cannot be withdrawn or exchanged for cash.
+  </p>
 
-        <p className="font-semibold">Payments</p>
-        <p>Processed via Stripe / PayFast. Final once completed.</p>
+  <p className="font-semibold">4. Payments</p>
+  <p>
+    All payments are processed through secure third-party providers including Stripe and PayFast.
+    Payments are final and non-reversible once completed.
+  </p>
 
-        <p className="font-semibold">Competitions</p>
-        <p>Skill-based. Teez may verify or cancel results.</p>
+  <p className="font-semibold">5. Competitions</p>
+  <p>
+    All competitions are based on skill. The Platform reserves the right to verify, review, modify, or cancel results
+    in cases of suspected fraud, error, or rule violations.
+  </p>
 
-        <p className="font-semibold">Rewards</p>
-        <p>Vouchers, goods, or cash equivalents (where allowed). Final once issued.</p>
+  <p className="font-semibold">6. Rewards</p>
+  <p>
+    Rewards may include vouchers, goods, or other non-cash equivalents depending on user category and applicable regulations.
+    Rewards are final once issued.
+  </p>
 
-        <p className="font-semibold">Risk</p>
-        <p>You may lose tokens. Teez is not liable.</p>
+  <p className="font-semibold">7. Risk Disclaimer</p>
+  <p>
+    Participation involves risk. Users may lose tokens through unsuccessful challenge outcomes.
+    The Platform does not guarantee any winnings or returns.
+  </p>
 
-        <p className="font-semibold">Fraud</p>
-        <p>Accounts may be suspended for abuse or manipulation.</p>
+  <p className="font-semibold">8. Fraud & Misuse</p>
+  <p>
+    Any attempt to manipulate results, exploit the system, or engage in fraudulent activity may result in account suspension,
+    forfeiture of tokens, and permanent banning.
+  </p>
 
-        <p className="font-semibold">Data</p>
-        <p>Data may be processed for platform operation.</p>
+  <p className="font-semibold">9. Data & Privacy</p>
+  <p>
+    User data is processed in accordance with the Platform’s Privacy Policy and is used to operate, maintain, and improve services.
+  </p>
 
-        <p className="font-semibold">Liability</p>
-        <p>Platform provided “as is”. No guarantees.</p>
+  <p className="font-semibold">10. Platform Availability</p>
+  <p>
+    The Platform is provided “as is” and “as available.” We do not guarantee uninterrupted access, accuracy, or reliability.
+  </p>
 
-        <p className="font-semibold">Governing Law</p>
-        <p>South Africa</p>
+  <p className="font-semibold">11. Limitation of Liability</p>
+  <p>
+    To the maximum extent permitted by law, Honey Badger Technologies and Teez Golf Challenges shall not be liable for any
+    direct, indirect, incidental, or consequential damages arising from use of the Platform.
+  </p>
 
-      </div>
+  <p className="font-semibold">12. Intellectual Property</p>
+  <p>
+    All platform content, systems, and branding remain the property of Honey Badger Technologies PTY LTD.
+  </p>
+
+  <p className="font-semibold">13. Governing Law</p>
+  <p>
+    These Terms are governed by the laws of South Africa.
+  </p>
+
+  <p className="font-semibold">14. Updates</p>
+  <p>
+    These Terms may be updated at any time. Continued use of the Platform constitutes acceptance of the updated Terms.
+  </p>
+
+</div>
+
 
       {/* ACCEPT SECTION */}
       <div className="px-6 pb-8 pt-4 border-t border-gray-800">

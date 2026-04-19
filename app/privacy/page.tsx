@@ -10,6 +10,10 @@ export default function PrivacyPage() {
         This Privacy Policy explains how Teez Golf Challenges (“the Platform”), developed and operated by Honey Badger Technologies PTY LTD, collects, uses, and protects your information when you use the platform.
       </p>
 
+      <p className="text-gray-400 mb-6">
+        Honey Badger Technologies PTY LTD, a company registered in South Africa, is the data controller responsible for the collection and processing of personal information on this platform.
+      </p>
+
       {/* ================= DATA COLLECTION ================= */}
       <section className="mb-10">
         <h2 className="text-2xl font-bold mb-4">1. Information We Collect</h2>
@@ -30,7 +34,9 @@ export default function PrivacyPage() {
       <section className="mb-10">
         <h2 className="text-2xl font-bold mb-4">3. Payments</h2>
         <p className="text-gray-300">
-          Payments are processed through secure third-party providers such as Stripe. Teez Golf Challenges and Honey Badger Technologies do not store full payment card details.
+          Payments are processed through secure third-party providers including Stripe and PayFast. 
+          All payments are made to Honey Badger Technologies PTY LTD. 
+          We do not store full payment card details. Payment providers process your data in accordance with their own privacy policies.
         </p>
       </section>
 

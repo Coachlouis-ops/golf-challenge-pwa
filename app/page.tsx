@@ -76,6 +76,12 @@ export default function HomePage() {
             Compete. Win. Elevate your game.
           </p>
 
+          <p className="text-xs text-gray-500 mb-6 max-w-xl mx-auto">
+  Teez Golf Challenges is operated by Honey Badger Technologies PTY LTD. 
+  All payments are made to Honey Badger Technologies PTY LTD for digital tokens and membership access to participate in skill-based challenges. 
+  Tokens are non-refundable, non-transferable, and cannot be exchanged for cash.
+</p>
+
           <div className="flex justify-center gap-4 flex-wrap">
 
             <button

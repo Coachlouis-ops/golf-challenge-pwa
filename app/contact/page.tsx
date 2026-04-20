@@ -17,24 +17,31 @@ export default function ContactPage() {
     setLoading(true);
 
     try {
-      await fetch("/api/email", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          type: "contact",
-          name: form.name,
-          email: form.email,
-          message: form.message,
-        }),
-      });
+  const res = await fetch("/api/email", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      type: "contact",
+      name: form.name,
+      email: form.email,
+      message: form.message,
+    }),
+  });
 
-      setSuccess(true);
-      setForm({ name: "", email: "", message: "" });
-    } catch (err) {
-      console.error(err);
-    }
+  const data = await res.json();
+  console.log("API RESPONSE:", data);
+
+  if (!res.ok) {
+    throw new Error("Request failed");
+  }
+
+  setSuccess(true);
+  setForm({ name: "", email: "", message: "" });
+} catch (err) {
+  console.error("FRONTEND ERROR:", err);
+}
 
     setLoading(false);
   };

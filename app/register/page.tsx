@@ -2,8 +2,10 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/src/lib/firebase";
+import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
+
+
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -19,18 +21,10 @@ export default function RegisterPage() {
     try {
       setLoading(true);
 
- const cred = await createUserWithEmailAndPassword(auth, email, password);
+const cred = await createUserWithEmailAndPassword(auth, email, password);
 
-// CALL YOUR API (Resend email)
-await fetch("/api/send-verification", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-  },
-  body: JSON.stringify({
-    uid: cred.user.uid,
-    email: cred.user.email,
-  }),
+await sendEmailVerification(cred.user, {
+  url: "https://www.teezgolfchallenges.com/verify-success",
 });
 
 router.push("/verify-email");

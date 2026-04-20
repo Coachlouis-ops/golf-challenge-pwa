@@ -7,8 +7,14 @@ export default function PaymentPage() {
   const router = useRouter();
   const { user, loading } = useAuth();
 
-  function startPayment() {
-    alert("South African payments available. International payment portal opening soon.");
+  async function startPayment() {
+    if (!user) {
+      alert("User not loaded");
+      return;
+    }
+
+    // TEMP: Stripe disabled
+    alert("International payment portal opening soon");
   }
 
   if (loading) {
@@ -22,25 +28,25 @@ export default function PaymentPage() {
   return (
     <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center gap-10 px-6">
 
-      {/* NOTICE */}
-      <div className="bg-yellow-500/10 border border-yellow-500 text-yellow-400 px-6 py-3 rounded-lg text-center max-w-md">
-        South African payments are currently supported.  
-        International payment portal opening soon.
-      </div>
-
       {/* HERO */}
       <div className="text-center flex flex-col gap-3">
         <h1 className="text-5xl font-bold text-green-400 drop-shadow-lg">
-          MEMBERSHIP
+          WELCOME
         </h1>
 
-        <h2 className="text-2xl font-semibold">
-          Activate Your Access
+        <h2 className="text-3xl font-semibold">
+          Start Your Journey
         </h2>
 
         <p className="text-gray-400 max-w-xl">
-          Join the competitive golf ecosystem and unlock challenges, rankings, and rewards.
+          Enter the world of competitive golf challenges.
+          Compete against players worldwide and climb the rankings.
         </p>
+      </div>
+
+      {/* TOKEN ICON */}
+      <div className="text-7xl animate-spin">
+        🪙
       </div>
 
       {/* MEMBERSHIP CARD */}
@@ -51,7 +57,7 @@ export default function PaymentPage() {
         </h3>
 
         <p className="text-4xl font-bold">
-          R199
+          $10.99
           <span className="text-sm text-gray-400"> / year</span>
         </p>
 
@@ -66,12 +72,12 @@ export default function PaymentPage() {
           onClick={startPayment}
           className="bg-green-500 hover:bg-green-400 text-black font-semibold px-8 py-3 rounded-lg"
         >
-          Pay (South Africa)
+          Start Your Journey
         </button>
 
       </div>
 
-      {/* BACK */}
+      {/* BACK TO DASHBOARD */}
       <button
         onClick={() => router.push("/dashboard")}
         className="text-sm text-gray-400 underline hover:text-white"

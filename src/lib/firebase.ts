@@ -10,12 +10,12 @@ import { getFirestore } from "firebase/firestore";
 import { getFunctions } from "firebase/functions";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyA8NcOQDCoC2L-Jdy9nJ6_02rtVrTf7Hao",
-  authDomain: "teez-golf-challenges-v2.firebaseapp.com",
-  projectId: "teez-golf-challenges-v2",
-  storageBucket: "teez-golf-challenges-v2.firebasestorage.app",
-  messagingSenderId: "121769323903",
-  appId: "1:121769323903:web:2996e322c72bf1b32cbe4a",
+  apiKey: "AIzaSyCnSwLt32Mnln_UfQKwtEvpSm6TLdqhlYg",
+  authDomain: "teez-golf-challenges-v3.firebaseapp.com",
+  projectId: "teez-golf-challenges-v3",
+  storageBucket: "teez-golf-challenges-v3.firebasestorage.app",
+  messagingSenderId: "549147966794",
+  appId: "1:549147966794:web:8ddc1cbec036e639bd55b3",
 };
 
 const app = initializeApp(firebaseConfig);

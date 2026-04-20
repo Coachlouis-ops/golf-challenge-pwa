@@ -7,7 +7,7 @@ export default function PaymentPage() {
   const router = useRouter();
   const { user, loading } = useAuth();
 
-  async function startPayment() {
+  function startPayment() {
     alert("South African payments available. International payment portal opening soon.");
   }
 
@@ -31,22 +31,16 @@ export default function PaymentPage() {
       {/* HERO */}
       <div className="text-center flex flex-col gap-3">
         <h1 className="text-5xl font-bold text-green-400 drop-shadow-lg">
-          WELCOME
+          MEMBERSHIP
         </h1>
 
-        <h2 className="text-3xl font-semibold">
-          Start Your Journey
+        <h2 className="text-2xl font-semibold">
+          Activate Your Access
         </h2>
 
         <p className="text-gray-400 max-w-xl">
-          Enter the world of competitive golf challenges.
-          Compete against players worldwide and climb the rankings.
+          Join the competitive golf ecosystem and unlock challenges, rankings, and rewards.
         </p>
-      </div>
-
-      {/* TOKEN ICON */}
-      <div className="text-7xl animate-spin">
-        🪙
       </div>
 
       {/* MEMBERSHIP CARD */}
@@ -72,12 +66,12 @@ export default function PaymentPage() {
           onClick={startPayment}
           className="bg-green-500 hover:bg-green-400 text-black font-semibold px-8 py-3 rounded-lg"
         >
-          Start Your Journey
+          Pay (South Africa)
         </button>
 
       </div>
 
-      {/* BACK TO DASHBOARD */}
+      {/* BACK */}
       <button
         onClick={() => router.push("/dashboard")}
         className="text-sm text-gray-400 underline hover:text-white"

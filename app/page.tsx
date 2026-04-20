@@ -164,7 +164,7 @@ export default function HomePage() {
               <img src="/voucher_badger.png" className="w-full mb-4" />
               <h3 className="font-semibold mb-2">Redeem your Vouchers</h3>
               <p className="text-gray-400 text-sm">
-                Tokens can be redeemed for prizes, equipment, vouchers or cash withdrawals.
+                Tokens can be redeemed for prizes, equipment, vouchers.
               </p>
             </div>
 

@@ -13,7 +13,6 @@ export async function POST(req: Request) {
       payload = {},
     } = body;
 
-    // ✅ Prevent crash if no API key
     const apiKey = process.env.RESEND_API_KEY;
     if (!apiKey) {
       console.warn("RESEND_API_KEY missing");
@@ -23,7 +22,6 @@ export async function POST(req: Request) {
       );
     }
 
-    // ✅ Lazy load Resend (prevents build errors)
     const { Resend } = await import("resend");
     const resend = new Resend(apiKey);
 
@@ -33,15 +31,46 @@ export async function POST(req: Request) {
     // ================= TYPE SWITCH =================
     switch (type) {
       case "contact":
-        emailSubject = "New Contact Form Submission";
-        emailHtml = `
-          <h2>Contact Request</h2>
-          <p><strong>Name:</strong> ${name}</p>
-          <p><strong>Email:</strong> ${email}</p>
-          <p><strong>Message:</strong></p>
-          <p>${message}</p>
-        `;
-        break;
+        // ===== ADMIN EMAIL =====
+        await resend.emails.send({
+          from: "Teez <noreply@teezgolfchallenges.com>",
+          to: ["admin@teezgolfchallenges.com"],
+          subject: "New Contact Form Submission",
+          html: `
+            <h2>Contact Request</h2>
+            <p><strong>Name:</strong> ${name}</p>
+            <p><strong>Email:</strong> ${email}</p>
+            <p><strong>Message:</strong></p>
+            <p>${message}</p>
+          `,
+        });
+
+        // ===== USER CONFIRMATION =====
+        await resend.emails.send({
+          from: "Teez Golf Challenges <noreply@teezgolfchallenges.com>",
+          to: [email],
+          subject: "We’ve received your message",
+          html: `
+            <div style="font-family: Arial, sans-serif; max-width: 500px; margin: auto;">
+              <h2 style="color:#00ff88;">Teez Golf Challenges</h2>
+              
+              <p>Hi ${name || "there"},</p>
+              
+              <p>We’ve received your message and our team will get back to you shortly.</p>
+              
+              <div style="background:#111; padding:15px; border-radius:8px; margin:20px 0;">
+                <p style="margin:0;"><strong>Your Message:</strong></p>
+                <p style="margin:5px 0 0;">${message}</p>
+              </div>
+
+              <p style="font-size:12px; color:#888;">
+                Teez Golf Challenges is operated by Honey Badger Technologies PTY LTD.
+              </p>
+            </div>
+          `,
+        });
+
+        return NextResponse.json({ success: true });
 
       case "register":
         emailSubject = "New User Registration";
@@ -76,7 +105,7 @@ export async function POST(req: Request) {
         `;
     }
 
-    // ================= SEND EMAIL =================
+    // ================= DEFAULT EMAIL =================
     await resend.emails.send({
       from: "Teez <noreply@teezgolfchallenges.com>",
       to: ["admin@teezgolfchallenges.com"],

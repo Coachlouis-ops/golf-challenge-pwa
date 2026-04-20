@@ -10,7 +10,7 @@ import { getFirestore } from "firebase/firestore";
 import { getFunctions } from "firebase/functions";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBYlVR67x2Y3KTm6NQ7eERtAGB44Fy2DVA",
+  apiKey: "AIzaSyA8NcOQDCoC2L-Jdy9nJ6_02rtVrTf7Hao",
   authDomain: "teez-golf-challenges-v2.firebaseapp.com",
   projectId: "teez-golf-challenges-v2",
   storageBucket: "teez-golf-challenges-v2.firebasestorage.app",

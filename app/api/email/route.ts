@@ -32,8 +32,8 @@ export async function POST(req: Request) {
     switch (type) {
       case "contact":
         // ===== ADMIN EMAIL =====
-        await resend.emails.send({
-          from: "Teez Golf Challenges <noreply@teezgolfchallenges.com>",
+        const adminResult = await resend.emails.send({
+          from: "onboarding@resend.dev",
           to: ["admin@teezgolfchallenges.com"],
           subject: "New Contact Form Submission",
           html: `
@@ -45,9 +45,11 @@ export async function POST(req: Request) {
           `,
         });
 
+        console.log("ADMIN EMAIL RESULT:", adminResult);
+
         // ===== USER CONFIRMATION =====
-        await resend.emails.send({
-          from: "Teez Golf Challenges <noreply@teezgolfchallenges.com>",
+        const userResult = await resend.emails.send({
+          from: "onboarding@resend.dev",
           to: [email],
           subject: "We’ve received your message",
           html: `
@@ -69,6 +71,8 @@ export async function POST(req: Request) {
             </div>
           `,
         });
+
+        console.log("USER EMAIL RESULT:", userResult);
 
         return NextResponse.json({ success: true });
 
@@ -106,12 +110,14 @@ export async function POST(req: Request) {
     }
 
     // ================= DEFAULT EMAIL =================
-    await resend.emails.send({
-      from: "Teez Golf Challenges <noreply@teezgolfchallenges.com>",
+    const defaultResult = await resend.emails.send({
+      from: "onboarding@resend.dev",
       to: ["admin@teezgolfchallenges.com"],
       subject: emailSubject,
       html: emailHtml,
     });
+
+    console.log("DEFAULT EMAIL RESULT:", defaultResult);
 
     return NextResponse.json({ success: true });
   } catch (err: any) {

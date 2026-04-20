@@ -24,7 +24,7 @@ export default function PaymentPage() {
 body: JSON.stringify({
   uid: user.uid,
   email: user.email,
-  priceId: process.env.NEXT_PUBLIC_STRIPE_MEMBERSHIP_PRICE_ID,
+  priceId: "price_1T0LkS2eIFxZHo3ZqL2J9oEr",
   mode: "subscription",
 }),
 });

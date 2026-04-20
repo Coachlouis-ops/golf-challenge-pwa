@@ -16,23 +16,23 @@ export async function POST(req: Request) {
 
       line_items: [
         {
-          price: process.env.STRIPE_MEMBERSHIP_PRICE_ID as string,
+          price: priceId || (process.env.STRIPE_MEMBERSHIP_PRICE_ID as string),
           quantity: 1,
         },
       ],
 
-     metadata: {
-  uid,
-  email,
-  priceId: priceId ?? process.env.STRIPE_MEMBERSHIP_PRICE_ID,
-},
+      metadata: {
+        uid,
+        email,
+        priceId:
+          priceId || (process.env.STRIPE_MEMBERSHIP_PRICE_ID as string),
+      },
 
       success_url: "https://golf-challenge-pwa.vercel.app/dashboard",
       cancel_url: "https://golf-challenge-pwa.vercel.app/dashboard",
     });
 
     return NextResponse.json({ url: session.url });
-
   } catch (error: any) {
     console.error("Stripe error:", error);
     return NextResponse.json({ error: error.message });

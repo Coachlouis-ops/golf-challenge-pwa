@@ -15,7 +15,7 @@ const firebaseConfig = {
   projectId: "teez-golf-challenges-v2",
   storageBucket: "teez-golf-challenges-v2.firebasestorage.app",
   messagingSenderId: "121769323903",
-  appId: "1:121769323903:web:108c71d502e2a4d22cbe4a",
+  appId: "1:121769323903:web:2996e322c72bf1b32cbe4a",
 };
 
 const app = initializeApp(firebaseConfig);

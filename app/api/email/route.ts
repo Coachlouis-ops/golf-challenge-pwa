@@ -33,7 +33,7 @@ export async function POST(req: Request) {
       case "contact":
         // ===== ADMIN EMAIL =====
         const adminResult = await resend.emails.send({
-          from: "onboarding@resend.dev",
+          from: "Teez Golf Challenges <noreply@teezgolfchallenges.com>",
           to: ["admin@teezgolfchallenges.com"],
           subject: "New Contact Form Submission",
           html: `
@@ -49,7 +49,7 @@ export async function POST(req: Request) {
 
         // ===== USER CONFIRMATION =====
         const userResult = await resend.emails.send({
-          from: "onboarding@resend.dev",
+          from: "Teez Golf Challenges <noreply@teezgolfchallenges.com>",
           to: [email],
           subject: "We’ve received your message",
           html: `
@@ -111,7 +111,7 @@ export async function POST(req: Request) {
 
     // ================= DEFAULT EMAIL =================
     const defaultResult = await resend.emails.send({
-      from: "onboarding@resend.dev",
+      from: "Teez Golf Challenges <noreply@teezgolfchallenges.com>",
       to: ["admin@teezgolfchallenges.com"],
       subject: emailSubject,
       html: emailHtml,

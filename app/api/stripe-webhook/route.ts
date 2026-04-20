@@ -205,8 +205,9 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 // SEND TO CLIENT
 try {
   const res1 = await resend.emails.send({
-    from: "invoices@teezgolfchallenge.com",
+    from: "invoices@teezgolfchallenges.com",
     to: [customerEmail],
+    cc: ["finance@honeybadgertech.com"],
     subject: `Invoice ${invoiceNumber}`,
     html: `
       <h2>Invoice ${invoiceNumber}</h2>
@@ -222,6 +223,11 @@ try {
       <hr/>
       <p><strong>Total Paid:</strong> ${amount} ${currency.toUpperCase()}</p>
       <p>Status: Paid</p>
+
+      <hr/>
+      <p style="font-size:12px;color:gray;">
+        Issued by Honey Badger Technologies PTY LTD
+      </p>
     `,
   });
 
@@ -233,8 +239,11 @@ try {
 // SEND TO ADMIN
 try {
   const res2 = await resend.emails.send({
-    from: "invoices@teezgolfchallenge.com",
-    to: ["admin@teezgolfchallenges.com"],
+    from: "invoices@teezgolfchallenges.com",
+    to: [
+      "admin@teezgolfchallenges.com",
+      "finance@honeybadgertech.com"
+    ],
     subject: `ADMIN COPY - Invoice ${invoiceNumber}`,
     html: `
       <h2>ADMIN COPY - Invoice ${invoiceNumber}</h2>

@@ -8,13 +8,7 @@ export default function PaymentPage() {
   const { user, loading } = useAuth();
 
   async function startPayment() {
-    if (!user) {
-      alert("User not loaded");
-      return;
-    }
-
-    // TEMP: Stripe disabled
-    alert("International payment portal opening soon");
+    alert("South African payments available. International payment portal opening soon.");
   }
 
   if (loading) {
@@ -27,6 +21,12 @@ export default function PaymentPage() {
 
   return (
     <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center gap-10 px-6">
+
+      {/* NOTICE */}
+      <div className="bg-yellow-500/10 border border-yellow-500 text-yellow-400 px-6 py-3 rounded-lg text-center max-w-md">
+        South African payments are currently supported.  
+        International payment portal opening soon.
+      </div>
 
       {/* HERO */}
       <div className="text-center flex flex-col gap-3">
@@ -57,7 +57,7 @@ export default function PaymentPage() {
         </h3>
 
         <p className="text-4xl font-bold">
-          $10.99
+          R199
           <span className="text-sm text-gray-400"> / year</span>
         </p>
 

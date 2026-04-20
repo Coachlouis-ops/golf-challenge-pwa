@@ -38,7 +38,9 @@ export async function login(email: string, password: string) {
 export async function register(email: string, password: string) {
   const userCred = await createUserWithEmailAndPassword(auth, email, password);
 
-  await sendEmailVerification(userCred.user);
+  await sendEmailVerification(userCred.user, {
+  url: "https://www.teezgolfchallenges.com/verify-success",
+});
 
   return userCred;
 }

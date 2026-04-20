@@ -21,12 +21,11 @@ export default function PaymentPage() {
  const res = await fetch("/api/create-checkout-session", {
   method: "POST",
   headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({
-    uid: user.uid,
-    email: user.email,
-    priceId: "price_1TOLkS2eIFxZHo3ZqL2J9oEr",
-    mode: "subscription",
-  }),
+ body: JSON.stringify({
+  uid: user.uid,
+  email: user.email,
+  mode: "subscription",
+}),
 });
 
     console.log("Stripe response status:", res.status);

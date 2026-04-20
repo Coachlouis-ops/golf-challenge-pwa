@@ -229,10 +229,8 @@ useEffect(() => {
     if (!script) {
       script = document.createElement("script");
       script.id = scriptId;
-      script.src =
-        "https://maps.googleapis.com/maps/api/js?key=" +
-        process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY +
-        "&libraries=places";
+     script.src =
+  "https://maps.googleapis.com/maps/api/js?key=AIzaSyCm0D7ebZaqVDoWSOvR4sjBLMT7XEEuVdk&libraries=places";
       script.async = true;
       script.defer = true;
 

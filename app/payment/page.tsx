@@ -7,49 +7,15 @@ export default function PaymentPage() {
   const router = useRouter();
   const { user, loading } = useAuth();
 
- async function startPayment() {
+  async function startPayment() {
+    if (!user) {
+      alert("User not loaded");
+      return;
+    }
 
-  console.log("Payment button clicked");
-
-  if (!user) {
-    console.error("No user loaded");
-    return;
+    // TEMP: Stripe disabled
+    alert("International payment portal opening soon");
   }
-
-  try {
-
- const res = await fetch("/api/create-checkout-session", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-body: JSON.stringify({
-  uid: user.uid,
-  email: user.email,
-  priceId: "price_1T0LkS2eIFxZHo3ZqL2J9oEr",
-  mode: "subscription",
-}),
-});
-
-    console.log("Stripe response status:", res.status);
-
-    const data = await res.json();
-
-console.log("Stripe response data:", data);
-
-if (data.error) {
-  console.error("Stripe backend error:", data.error);
-  return;
-}
-
-if (data.url) {
-  window.location.href = data.url;
-} else {
-  console.error("Stripe URL missing");
-}
-
-  } catch (err) {
-    console.error("Stripe checkout error:", err);
-  }
-}
 
   if (loading) {
     return (
@@ -111,13 +77,13 @@ if (data.url) {
 
       </div>
 
-   {/* BACK TO DASHBOARD */}
-<button
-  onClick={() => router.push("/dashboard")}
-  className="text-sm text-gray-400 underline hover:text-white"
->
-  Back to Dashboard
-</button>
+      {/* BACK TO DASHBOARD */}
+      <button
+        onClick={() => router.push("/dashboard")}
+        className="text-sm text-gray-400 underline hover:text-white"
+      >
+        Back to Dashboard
+      </button>
 
     </div>
   );

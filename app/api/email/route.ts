@@ -33,7 +33,7 @@ export async function POST(req: Request) {
       case "contact":
         // ===== ADMIN EMAIL =====
         await resend.emails.send({
-          from: "Teez <noreply@teezgolfchallenges.com>",
+          from: "Teez Golf Challenges <noreply@send.teezgolfchallenges.com>",
           to: ["admin@teezgolfchallenges.com"],
           subject: "New Contact Form Submission",
           html: `
@@ -47,7 +47,7 @@ export async function POST(req: Request) {
 
         // ===== USER CONFIRMATION =====
         await resend.emails.send({
-          from: "Teez Golf Challenges <noreply@teezgolfchallenges.com>",
+          from: "Teez Golf Challenges <noreply@send.teezgolfchallenges.com>",
           to: [email],
           subject: "We’ve received your message",
           html: `
@@ -107,7 +107,7 @@ export async function POST(req: Request) {
 
     // ================= DEFAULT EMAIL =================
     await resend.emails.send({
-      from: "Teez <noreply@teezgolfchallenges.com>",
+      from: "Teez Golf Challenges <noreply@send.teezgolfchallenges.com>",
       to: ["admin@teezgolfchallenges.com"],
       subject: emailSubject,
       html: emailHtml,

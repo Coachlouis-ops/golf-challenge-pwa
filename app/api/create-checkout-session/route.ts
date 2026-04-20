@@ -16,7 +16,7 @@ export async function POST(req: Request) {
 
       line_items: [
         {
-          price: process.env.STRIPE_MEMBERSHIP_PRICE_ID,
+          price: process.env.STRIPE_MEMBERSHIP_PRICE_ID as string,
           quantity: 1,
         },
       ],

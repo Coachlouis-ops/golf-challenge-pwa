@@ -21,9 +21,10 @@ export default function PaymentPage() {
  const res = await fetch("/api/create-checkout-session", {
   method: "POST",
   headers: { "Content-Type": "application/json" },
- body: JSON.stringify({
+body: JSON.stringify({
   uid: user.uid,
   email: user.email,
+  priceId: process.env.NEXT_PUBLIC_STRIPE_MEMBERSHIP_PRICE_ID,
   mode: "subscription",
 }),
 });

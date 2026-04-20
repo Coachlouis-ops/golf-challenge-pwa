@@ -37,7 +37,7 @@ export async function POST(req: Request) {
     // ================================
 
 const verificationLink = await auth.generateEmailVerificationLink(email, {
-  url: "https://www.teezgolfchallenges.com/verify-success",
+  url: "https://www.teezgolfchallenges.com/login",
   handleCodeInApp: true,
 });
 

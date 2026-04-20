@@ -46,7 +46,7 @@ export async function POST(req: Request) {
     const resend = new Resend(process.env.RESEND_API_KEY);
 
     const response = await resend.emails.send({
-      from: "Teez Golf <noreply@teezgolfchallenge.com>",
+      from: "Teez Golf <verify@teezgolfchallenges.com>",
       to: [email],
       subject: "Verify your email - Teez Golf",
       html: `

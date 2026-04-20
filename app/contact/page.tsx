@@ -39,24 +39,42 @@ export default function ContactPage() {
     setLoading(false);
   };
 
-  return (
-    <main className="min-h-screen bg-black text-white px-6 py-16 flex flex-col items-center">
+ return (
+  <main className="min-h-screen bg-black text-white px-6 py-16 flex flex-col items-center">
 
-      {/* ================= HEADER ================= */}
-      <div className="max-w-2xl w-full text-center mb-12">
-        <h1 className="text-3xl font-bold mb-4">Contact Us</h1>
+    {/* ================= HEADER ================= */}
+    <div className="w-full max-w-2xl flex items-center justify-between mb-8">
 
-        <p className="text-gray-400 text-sm mb-4">
-          Teez Golf Challenges is operated by Honey Badger Technologies PTY LTD.
-        </p>
+      <button
+        onClick={() => window.history.back()}
+        className="text-sm text-gray-400 hover:text-white transition"
+      >
+        ← Back
+      </button>
 
-        <p className="text-gray-400 text-sm">
-          South Africa<br />
-          Email: info@honeybadgertech.com
-        </p>
-      </div>
+      <h1 className="text-3xl font-bold text-center flex-1">
+        Contact Us
+      </h1>
 
-      {/* ================= FORM ================= */}
+      <div className="w-[60px]" />
+
+    </div>
+
+    {/* ================= COMPANY INFO ================= */}
+    <div className="max-w-2xl w-full text-center mb-12">
+
+      <p className="text-gray-400 text-sm mb-4">
+        Teez Golf Challenges is operated by Honey Badger Technologies PTY LTD.
+      </p>
+
+      <p className="text-gray-400 text-sm">
+        South Africa<br />
+        Email: info@honeybadgertech.com
+      </p>
+
+    </div>
+
+    {/* ================= FORM ================= */}
       <form
         onSubmit={handleSubmit}
         className="w-full max-w-2xl flex flex-col gap-4"

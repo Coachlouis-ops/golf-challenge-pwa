@@ -35,10 +35,16 @@ export async function POST(req: Request) {
     // ================================
     // GENERATE VERIFICATION LINK
     // ================================
-    const verificationLink = await auth.generateEmailVerificationLink(email, {
-      url: "https://www.teezgolfchallenges.com/verify-success",
-      handleCodeInApp: true,
-    });
+   let verificationLink = await auth.generateEmailVerificationLink(email, {
+  url: "https://www.teezgolfchallenges.com/verify-success",
+  handleCodeInApp: true,
+});
+
+// FORCE correct API key
+verificationLink = verificationLink.replace(
+  /apiKey=[^&]*/,
+  "apiKey=AIzaSyBYlVR67x2Y3KTm6NQ7eERtAGB44Fy2DVA"
+);
 
     // ================================
     // SEND EMAIL VIA RESEND

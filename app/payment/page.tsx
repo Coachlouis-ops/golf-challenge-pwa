@@ -24,7 +24,7 @@ export default function PaymentPage() {
   body: JSON.stringify({
     uid: user.uid,
     email: user.email,
-    priceId: "price_1T8a8PCplvzmJJBy8krfB9Gq",
+    priceId: "price_1TOLkS2eIFxZHo3ZqL2J9oEr",
     mode: "subscription",
   }),
 });

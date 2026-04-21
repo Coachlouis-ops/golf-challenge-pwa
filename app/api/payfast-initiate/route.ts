@@ -54,7 +54,12 @@ export async function POST(req: Request) {
     // -----------------------------------
     // BUILD STRING (CURRENT METHOD)
     // -----------------------------------
-    const pfString = querystring.stringify(data);
+   const pfString = Object.entries(data)
+  .map(
+    ([key, value]) =>
+      `${key}=${encodeURIComponent(value).replace(/%20/g, "+")}`
+  )
+  .join("&");
 
     // -----------------------------------
     // DEBUG (CRITICAL)

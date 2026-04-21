@@ -2,21 +2,81 @@
 
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/src/lib/AuthContext";
+import { useEffect, useState } from "react";
+import { db } from "@/src/lib/firebase";
+import { doc, getDoc } from "firebase/firestore";
 
 export default function PaymentPage() {
   const router = useRouter();
   const { user, loading } = useAuth();
 
-  async function startPayment() {
-    if (!user) {
-      alert("User not loaded");
+  const [profile, setProfile] = useState<any>(null);
+
+  // -----------------------------------
+  // LOAD PROFILE (FOR PAYFAST)
+  // -----------------------------------
+  useEffect(() => {
+    if (!user) return;
+
+    (async () => {
+      const ref = doc(db, "profiles", user.uid);
+      const snap = await getDoc(ref);
+
+      if (snap.exists()) {
+        setProfile(snap.data());
+      }
+    })();
+  }, [user]);
+
+  // -----------------------------------
+  // STRIPE (DISABLED UI ONLY)
+  // -----------------------------------
+  async function startStripe() {
+    alert("Stripe (International) coming soon");
+  }
+
+  // -----------------------------------
+  // PAYFAST (ACTIVE)
+  // -----------------------------------
+  async function startPayFast() {
+    if (!user || !profile) {
+      alert("User profile not loaded");
       return;
     }
 
-    // TEMP: Stripe disabled
-    alert("International payment portal opening soon");
+    const res = await fetch("/api/payfast-initiate", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        amount: 10.99,
+        item_name: "Teez Golf Membership",
+
+        name_first: profile.name || "",
+        name_last: profile.surname || "",
+        email_address: user.email,
+
+        // CUSTOM FIELDS
+        custom_str1: user.uid,
+        custom_str2: "membership",
+        custom_str3: "0",
+      }),
+    });
+
+    const data = await res.json();
+
+    if (!data.url) {
+      alert("PayFast error");
+      return;
+    }
+
+    window.location.href = data.url;
   }
 
+  // -----------------------------------
+  // LOADING
+  // -----------------------------------
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-black text-white">
@@ -68,16 +128,25 @@ export default function PaymentPage() {
           <p>• Access global leaderboards</p>
         </div>
 
+        {/* PAYFAST BUTTON */}
         <button
-          onClick={startPayment}
+          onClick={startPayFast}
           className="bg-green-500 hover:bg-green-400 text-black font-semibold px-8 py-3 rounded-lg"
         >
-          Start Your Journey
+          Pay with PayFast (South African Users)
+        </button>
+
+        {/* STRIPE (DISABLED) */}
+        <button
+          onClick={startStripe}
+          className="bg-gray-500 text-black font-semibold px-8 py-3 rounded-lg cursor-not-allowed"
+        >
+          Pay with Stripe (International - Coming Soon)
         </button>
 
       </div>
 
-      {/* BACK TO DASHBOARD */}
+      {/* BACK */}
       <button
         onClick={() => router.push("/dashboard")}
         className="text-sm text-gray-400 underline hover:text-white"

@@ -81,12 +81,11 @@ export async function POST(req: Request) {
     // RETURN FOR POST
     // -----------------------------------
     return NextResponse.json({
-      url: "https://sandbox.payfast.co.za/eng/process",
-      data: {
-        ...data,
-        signature,
-      },
-    });
+  url: "https://sandbox.payfast.co.za/eng/process",
+  data: {
+    ...data
+  },
+});
 
   } catch (error: any) {
     console.error("PayFast error:", error);

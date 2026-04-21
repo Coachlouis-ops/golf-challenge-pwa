@@ -24,40 +24,48 @@ export async function POST(req: Request) {
     const m_payment_id = `${uid}_${Date.now()}`;
 
     // -----------------------------------
-    // BUILD PARAM LIST (CORRECT ORDER)
+    // BUILD PARAM OBJECT
     // -----------------------------------
-    const params: [string, string][] = [
-      ["merchant_id", merchant_id],
-      ["merchant_key", merchant_key],
-
-      ["return_url", return_url],
-      ["cancel_url", cancel_url],
-      ["notify_url", notify_url],
-
-      ["m_payment_id", m_payment_id],
-      ["amount", Number(amount).toFixed(2)],
-      ["item_name", item_name],
-
-      ["name_first", name_first || ""],
-      ["name_last", name_last || ""],
-      ["email_address", email_address],
-
-      ["custom_str1", uid],
-      ["custom_str2", type],
-      ["custom_str3", tokens ? tokens.toString() : "0"],
-    ];
+    const data: Record<string, string> = {
+      merchant_id,
+      merchant_key,
+      return_url,
+      cancel_url,
+      notify_url,
+      m_payment_id,
+      amount: Number(amount).toFixed(2),
+      item_name,
+      name_first: name_first || "",
+      name_last: name_last || "",
+      email_address,
+      custom_str1: uid,
+      custom_str2: type,
+      custom_str3: tokens ? tokens.toString() : "0",
+    };
 
     // -----------------------------------
-    // BUILD STRING (ONE SOURCE OF TRUTH)
+    // REMOVE EMPTY VALUES (CRITICAL)
     // -----------------------------------
-    const pfString = params
-      .map(([key, val]) =>
-        `${key}=${encodeURIComponent(val).replace(/%20/g, "+")}`
+    Object.keys(data).forEach((key) => {
+      if (data[key] === "" || data[key] === null || data[key] === undefined) {
+        delete data[key];
+      }
+    });
+
+    // -----------------------------------
+    // SORT KEYS (CRITICAL FIX)
+    // -----------------------------------
+    const sortedKeys = Object.keys(data).sort();
+
+    const pfString = sortedKeys
+      .map(
+        (key) =>
+          `${key}=${encodeURIComponent(data[key]).replace(/%20/g, "+")}`
       )
       .join("&");
 
     // -----------------------------------
-    // SIGNATURE (NO PASSPHRASE IN SANDBOX)
+    // SIGNATURE
     // -----------------------------------
     const signature = crypto
       .createHash("md5")
@@ -70,7 +78,7 @@ export async function POST(req: Request) {
     const url = `https://sandbox.payfast.co.za/eng/process?${pfString}&signature=${signature}`;
 
     // -----------------------------------
-    // DEBUG LOGS
+    // DEBUG
     // -----------------------------------
     console.log("PF STRING:", pfString);
     console.log("SIGNATURE:", signature);

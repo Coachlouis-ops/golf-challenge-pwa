@@ -67,23 +67,35 @@ export async function POST(req: Request) {
     console.log("PF STRING:", pfString);
     console.log("DATA OBJECT:", data);
 
-    // -----------------------------------
-    // SIGNATURE
-    // -----------------------------------
-    const signature = crypto
-      .createHash("md5")
-      .update(pfString)
-      .digest("hex");
+  // -----------------------------------
+// BUILD STRING (ENCODED - MATCH PAYFAST)
+// -----------------------------------
+const pfString = Object.entries(data)
+  .map(
+    ([key, value]) =>
+      `${key}=${encodeURIComponent(value).replace(/%20/g, "+")}`
+  )
+  .join("&");
 
-    console.log("SIGNATURE:", signature);
+// -----------------------------------
+// SIGNATURE
+// -----------------------------------
+const signature = crypto
+  .createHash("md5")
+  .update(pfString)
+  .digest("hex");
 
-    // -----------------------------------
-    // RETURN FOR POST
-    // -----------------------------------
-    return NextResponse.json({
+console.log("PF STRING:", pfString);
+console.log("SIGNATURE:", signature);
+
+// -----------------------------------
+// RETURN FOR POST
+// -----------------------------------
+return NextResponse.json({
   url: "https://sandbox.payfast.co.za/eng/process",
   data: {
-    ...data
+    ...data,
+    signature,
   },
 });
 

@@ -44,24 +44,22 @@ export async function POST(req: Request) {
     };
 
     // -----------------------------------
-    // REMOVE EMPTY VALUES (CRITICAL)
+    // REMOVE EMPTY VALUES
     // -----------------------------------
     Object.keys(data).forEach((key) => {
-      if (data[key] === "" || data[key] === null || data[key] === undefined) {
-        delete data[key];
-      }
+      if (!data[key]) delete data[key];
     });
 
     // -----------------------------------
-    // SORT KEYS (CRITICAL FIX)
+    // SORT KEYS
     // -----------------------------------
     const sortedKeys = Object.keys(data).sort();
 
-    const pfString = sortedKeys
-      .map(
-        (key) =>
-          `${key}=${encodeURIComponent(data[key]).replace(/%20/g, "+")}`
-      )
+    // -----------------------------------
+    // RAW STRING (FOR SIGNATURE) ❗ NO ENCODING
+    // -----------------------------------
+    const pfStringRaw = sortedKeys
+      .map((key) => `${key}=${data[key]}`)
       .join("&");
 
     // -----------------------------------
@@ -69,20 +67,30 @@ export async function POST(req: Request) {
     // -----------------------------------
     const signature = crypto
       .createHash("md5")
-      .update(pfString)
+      .update(pfStringRaw)
       .digest("hex");
+
+    // -----------------------------------
+    // ENCODED STRING (FOR URL)
+    // -----------------------------------
+    const pfStringEncoded = sortedKeys
+      .map(
+        (key) =>
+          `${key}=${encodeURIComponent(data[key]).replace(/%20/g, "+")}`
+      )
+      .join("&");
 
     // -----------------------------------
     // FINAL URL
     // -----------------------------------
-    const url = `https://sandbox.payfast.co.za/eng/process?${pfString}&signature=${signature}`;
+    const url = `https://sandbox.payfast.co.za/eng/process?${pfStringEncoded}&signature=${signature}`;
 
     // -----------------------------------
     // DEBUG
     // -----------------------------------
-    console.log("PF STRING:", pfString);
+    console.log("PF RAW:", pfStringRaw);
+    console.log("PF ENCODED:", pfStringEncoded);
     console.log("SIGNATURE:", signature);
-    console.log("FINAL URL:", url);
 
     return NextResponse.json({ url });
 

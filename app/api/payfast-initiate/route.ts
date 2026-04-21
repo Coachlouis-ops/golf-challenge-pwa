@@ -23,56 +23,41 @@ export async function POST(req: Request) {
 
     const m_payment_id = `${uid}_${Date.now()}`;
 
-    // -----------------------------
-    // STEP 1: FORCE CORRECT ORDER
-    // -----------------------------
-    const data: Record<string, string> = {
-      merchant_id,
-      merchant_key,
-      return_url,
-      cancel_url,
-      notify_url,
+    // -----------------------------------
+    // BUILD STRING IN EXACT PAYFAST ORDER
+    // -----------------------------------
+    const pfString =
+      `merchant_id=${merchant_id}` +
+      `&merchant_key=${merchant_key}` +
+      `&return_url=${encodeURIComponent(return_url)}` +
+      `&cancel_url=${encodeURIComponent(cancel_url)}` +
+      `&notify_url=${encodeURIComponent(notify_url)}` +
+      `&name_first=${encodeURIComponent(name_first).replace(/%20/g, "+")}` +
+      `&name_last=${encodeURIComponent(name_last).replace(/%20/g, "+")}` +
+      `&email_address=${encodeURIComponent(email_address)}` +
+      `&m_payment_id=${m_payment_id}` +
+      `&amount=${Number(amount).toFixed(2)}` +
+      `&item_name=${encodeURIComponent(item_name).replace(/%20/g, "+")}` +
+      `&custom_str1=${uid}` +
+      `&custom_str2=${type}` +
+      `&custom_str3=${tokens ? tokens.toString() : "0"}`;
 
-      name_first,
-      name_last,
-      email_address,
-
-      m_payment_id,
-
-      amount: Number(amount).toFixed(2),
-      item_name,
-
-      custom_str1: uid,
-      custom_str2: type,
-      custom_str3: tokens ? tokens.toString() : "0",
-    };
-
-    // -----------------------------
-    // STEP 2: BUILD STRING MANUALLY
-    // (CRITICAL FIX)
-    // -----------------------------
-    const pfString = Object.keys(data)
-      .sort()
-      .map(key => {
-        return `${key}=${encodeURIComponent(data[key]).replace(/%20/g, "+")}`;
-      })
-      .join("&");
-
-    // -----------------------------
-    // STEP 3: SIGNATURE (NO PASSPHRASE)
-    // -----------------------------
+    // -----------------------------------
+    // SIGNATURE (NO PASSPHRASE)
+    // -----------------------------------
     const signature = crypto
       .createHash("md5")
       .update(pfString)
       .digest("hex");
 
-    // -----------------------------
-    // STEP 4: FINAL URL
-    // -----------------------------
+    // -----------------------------------
+    // FINAL URL
+    // -----------------------------------
     const url = `https://sandbox.payfast.co.za/eng/process?${pfString}&signature=${signature}`;
 
     console.log("PAYFAST STRING:", pfString);
     console.log("SIGNATURE:", signature);
+    console.log("FINAL URL:", url);
 
     return NextResponse.json({ url });
 

@@ -49,7 +49,7 @@ export default function PaymentPage() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
+ body: JSON.stringify({
   amount: 10.99,
   item_name: "Teez Golf Membership",
 

@@ -22,7 +22,7 @@ export async function POST(req: Request) {
     const cancel_url = "https://golf-challenge-pwa.vercel.app/payment";
     const notify_url = "https://golf-challenge-pwa.vercel.app/api/payfast-notify";
 
-    const m_payment_id = `${uid}_${Date.now()}`;
+   const m_payment_id = uid
 
     // -----------------------------------
     // BUILD PARAM OBJECT (ORDER = SOURCE OF TRUTH)

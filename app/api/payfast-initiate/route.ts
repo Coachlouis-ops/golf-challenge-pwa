@@ -9,8 +9,6 @@ export async function POST(req: Request) {
       name_first,
       name_last,
       email_address,
-
-      // NEW
       uid,
       type,
       tokens,
@@ -24,7 +22,6 @@ export async function POST(req: Request) {
     const cancel_url = "https://golf-challenge-pwa.vercel.app/payment";
     const notify_url = "https://golf-challenge-pwa.vercel.app/api/payfast-notify";
 
-    // UNIQUE PAYMENT ID (UID + TIMESTAMP)
     const m_payment_id = `${uid}_${Date.now()}`;
 
     const data: Record<string, string> = {
@@ -40,25 +37,50 @@ export async function POST(req: Request) {
 
       m_payment_id,
 
-    amount: Number(amount).toFixed(2),
+      amount: Number(amount).toFixed(2),
       item_name,
 
-      // -----------------------
-      // CUSTOM FIELDS (CRITICAL)
-      // -----------------------
       custom_str1: uid,
-      custom_str2: type, // membership | tokens
+      custom_str2: type,
       custom_str3: tokens ? tokens.toString() : "0",
     };
 
-    const query = new URLSearchParams(data).toString();
+    // -----------------------------
+    // CORRECT SIGNATURE GENERATION
+    // -----------------------------
+    const sortedKeys = Object.keys(data).sort();
+
+    let queryString = "";
+    sortedKeys.forEach((key) => {
+      if (data[key] !== "") {
+        queryString += `${key}=${encodeURIComponent(data[key].trim()).replace(/%20/g, "+")}&`;
+      }
+    });
+
+    queryString = queryString.slice(0, -1);
+
+    if (passphrase) {
+      queryString += `&passphrase=${encodeURIComponent(passphrase.trim()).replace(/%20/g, "+")}`;
+    }
 
     const signature = crypto
       .createHash("md5")
-      .update(query + `&passphrase=${passphrase}`)
+      .update(queryString)
       .digest("hex");
 
-    const url = `https://sandbox.payfast.co.za/eng/process?${query}&signature=${signature}`;
+    // -----------------------------
+    // FINAL URL (WITHOUT PASSPHRASE)
+    // -----------------------------
+    let finalQuery = "";
+    sortedKeys.forEach((key) => {
+      if (data[key] !== "") {
+        finalQuery += `${key}=${encodeURIComponent(data[key].trim()).replace(/%20/g, "+")}&`;
+      }
+    });
+
+    finalQuery = finalQuery.slice(0, -1);
+
+    const url = `https://sandbox.payfast.co.za/eng/process?${finalQuery}&signature=${signature}`;
 
     return NextResponse.json({ url });
 

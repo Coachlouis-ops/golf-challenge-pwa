@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import crypto from "crypto";
+import querystring from "querystring";
 
 export async function POST(req: Request) {
   try {
@@ -51,32 +52,41 @@ export async function POST(req: Request) {
     });
 
     // -----------------------------------
-    // SORT KEYS
+    // SORT KEYS (CRITICAL)
     // -----------------------------------
     const sortedKeys = Object.keys(data).sort();
 
-    // -----------------------------------
-    // RAW STRING (SIGNATURE)
-    // -----------------------------------
-    const pfStringRaw = sortedKeys
-      .map((key) => `${key}=${data[key]}`)
-      .join("&");
+    const sortedData: Record<string, string> = {};
+    sortedKeys.forEach((key) => {
+      sortedData[key] = data[key];
+    });
 
+    // -----------------------------------
+    // BUILD STRING USING NODE (MATCHES FORM POST)
+    // -----------------------------------
+    const pfString = querystring.stringify(sortedData);
+
+    // -----------------------------------
+    // SIGNATURE
+    // -----------------------------------
     const signature = crypto
       .createHash("md5")
-      .update(pfStringRaw)
+      .update(pfString)
       .digest("hex");
 
     // -----------------------------------
-    // RETURN FOR POST (NO URL BUILDING)
+    // DEBUG
     // -----------------------------------
-    console.log("PF RAW:", pfStringRaw);
+    console.log("PF STRING:", pfString);
     console.log("SIGNATURE:", signature);
 
+    // -----------------------------------
+    // RETURN FOR POST
+    // -----------------------------------
     return NextResponse.json({
       url: "https://sandbox.payfast.co.za/eng/process",
       data: {
-        ...data,
+        ...sortedData,
         signature,
       },
     });

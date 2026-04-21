@@ -16,7 +16,6 @@ export async function POST(req: Request) {
 
     const merchant_id = process.env.PAYFAST_MERCHANT_ID as string;
     const merchant_key = process.env.PAYFAST_MERCHANT_KEY as string;
-    const passphrase = process.env.PAYFAST_PASSPHRASE as string;
 
     const return_url = "https://golf-challenge-pwa.vercel.app/dashboard";
     const cancel_url = "https://golf-challenge-pwa.vercel.app/payment";
@@ -24,9 +23,9 @@ export async function POST(req: Request) {
 
     const m_payment_id = `${uid}_${Date.now()}`;
 
-    // -----------------------
-    // DATA OBJECT
-    // -----------------------
+    // -----------------------------
+    // STEP 1: FORCE CORRECT ORDER
+    // -----------------------------
     const data: Record<string, string> = {
       merchant_id,
       merchant_key,
@@ -48,50 +47,32 @@ export async function POST(req: Request) {
       custom_str3: tokens ? tokens.toString() : "0",
     };
 
-    // -----------------------
-    // STEP 1 — SORT KEYS
-    // -----------------------
-    const sortedKeys = Object.keys(data).sort();
+    // -----------------------------
+    // STEP 2: BUILD STRING MANUALLY
+    // (CRITICAL FIX)
+    // -----------------------------
+    const pfString = Object.keys(data)
+      .sort()
+      .map(key => {
+        return `${key}=${encodeURIComponent(data[key]).replace(/%20/g, "+")}`;
+      })
+      .join("&");
 
-    // -----------------------
-    // STEP 2 — BUILD STRING
-    // -----------------------
-    let pfString = "";
-
-    sortedKeys.forEach((key) => {
-      const value = data[key];
-
-      if (value !== "") {
-        pfString += `${key}=${encodeURIComponent(value.trim()).replace(/%20/g, "+")}&`;
-      }
-    });
-
-    // REMOVE LAST &
-    pfString = pfString.slice(0, -1);
-
-    // -----------------------
-    // STEP 3 — ADD PASSPHRASE
-    // -----------------------
-    if (passphrase) {
-      pfString += `&passphrase=${encodeURIComponent(passphrase.trim()).replace(/%20/g, "+")}`;
-    }
-
-    // -----------------------
-    // STEP 4 — SIGNATURE
-    // -----------------------
+    // -----------------------------
+    // STEP 3: SIGNATURE (NO PASSPHRASE)
+    // -----------------------------
     const signature = crypto
       .createHash("md5")
       .update(pfString)
       .digest("hex");
 
-    // -----------------------
-    // FINAL URL
-    // -----------------------
+    // -----------------------------
+    // STEP 4: FINAL URL
+    // -----------------------------
     const url = `https://sandbox.payfast.co.za/eng/process?${pfString}&signature=${signature}`;
 
     console.log("PAYFAST STRING:", pfString);
     console.log("SIGNATURE:", signature);
-    console.log("FINAL URL:", url);
 
     return NextResponse.json({ url });
 

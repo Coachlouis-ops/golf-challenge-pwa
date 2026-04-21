@@ -1,6 +1,5 @@
-import { NextResponse } from "next/server"; 
+import { NextResponse } from "next/server";  
 import crypto from "crypto";
-import querystring from "querystring";
 
 export async function POST(req: Request) {
   try {
@@ -22,7 +21,7 @@ export async function POST(req: Request) {
     const cancel_url = "https://golf-challenge-pwa.vercel.app/payment";
     const notify_url = "https://golf-challenge-pwa.vercel.app/api/payfast-notify";
 
-   const m_payment_id = uid
+    const m_payment_id = uid;
 
     // -----------------------------------
     // BUILD PARAM OBJECT (ORDER = SOURCE OF TRUTH)
@@ -45,59 +44,48 @@ export async function POST(req: Request) {
     };
 
     // -----------------------------------
-    // REMOVE EMPTY VALUES (WITHOUT CHANGING ORDER)
+    // REMOVE EMPTY VALUES
     // -----------------------------------
     Object.keys(data).forEach((key) => {
       if (!data[key]) delete data[key];
     });
 
     // -----------------------------------
-    // BUILD STRING (CURRENT METHOD)
+    // BUILD STRING (ENCODED - MATCH PAYFAST)
     // -----------------------------------
-   const pfString = Object.entries(data)
-  .map(
-    ([key, value]) =>
-      `${key}=${encodeURIComponent(value).replace(/%20/g, "+")}`
-  )
-  .join("&");
+    const pfString = Object.entries(data)
+      .map(
+        ([key, value]) =>
+          `${key}=${encodeURIComponent(value).replace(/%20/g, "+")}`
+      )
+      .join("&");
 
     // -----------------------------------
-    // DEBUG (CRITICAL)
+    // DEBUG
     // -----------------------------------
     console.log("PF STRING:", pfString);
     console.log("DATA OBJECT:", data);
 
-  // -----------------------------------
-// BUILD STRING (ENCODED - MATCH PAYFAST)
-// -----------------------------------
-const pfString = Object.entries(data)
-  .map(
-    ([key, value]) =>
-      `${key}=${encodeURIComponent(value).replace(/%20/g, "+")}`
-  )
-  .join("&");
+    // -----------------------------------
+    // SIGNATURE
+    // -----------------------------------
+    const signature = crypto
+      .createHash("md5")
+      .update(pfString)
+      .digest("hex");
 
-// -----------------------------------
-// SIGNATURE
-// -----------------------------------
-const signature = crypto
-  .createHash("md5")
-  .update(pfString)
-  .digest("hex");
+    console.log("SIGNATURE:", signature);
 
-console.log("PF STRING:", pfString);
-console.log("SIGNATURE:", signature);
-
-// -----------------------------------
-// RETURN FOR POST
-// -----------------------------------
-return NextResponse.json({
-  url: "https://sandbox.payfast.co.za/eng/process",
-  data: {
-    ...data,
-    signature,
-  },
-});
+    // -----------------------------------
+    // RETURN FOR POST
+    // -----------------------------------
+    return NextResponse.json({
+      url: "https://sandbox.payfast.co.za/eng/process",
+      data: {
+        ...data,
+        signature,
+      },
+    });
 
   } catch (error: any) {
     console.error("PayFast error:", error);

@@ -45,39 +45,50 @@ export async function POST(req: Request) {
     };
 
     // -----------------------------
-    // SIGNATURE (RAW VALUES ONLY)
+    // BUILD SIGNATURE STRING (RAW)
     // -----------------------------
     const sortedKeys = Object.keys(data).sort();
 
     let signatureString = "";
 
     sortedKeys.forEach((key) => {
-      if (data[key] !== "") {
-        signatureString += `${key}=${data[key].trim()}&`;
+      const value = data[key];
+
+      if (value !== undefined && value !== null && value !== "") {
+        signatureString += `${key}=${value.trim()}&`;
       }
     });
 
     signatureString = signatureString.slice(0, -1);
+
+    // DEBUG LOGS
+    console.log("SIGNATURE STRING:", signatureString);
 
     const signature = crypto
       .createHash("md5")
       .update(signatureString)
       .digest("hex");
 
+    console.log("SIGNATURE HASH:", signature);
+
     // -----------------------------
-    // FINAL URL (ENCODED)
+    // BUILD FINAL URL (ENCODED)
     // -----------------------------
     let query = "";
 
     sortedKeys.forEach((key) => {
-      if (data[key] !== "") {
-        query += `${key}=${encodeURIComponent(data[key].trim()).replace(/%20/g, "+")}&`;
+      const value = data[key];
+
+      if (value !== undefined && value !== null && value !== "") {
+        query += `${key}=${encodeURIComponent(value.trim()).replace(/%20/g, "+")}&`;
       }
     });
 
     query = query.slice(0, -1);
 
     const url = `https://sandbox.payfast.co.za/eng/process?${query}&signature=${signature}`;
+
+    console.log("FINAL URL:", url);
 
     return NextResponse.json({ url });
 

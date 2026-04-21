@@ -50,18 +50,17 @@ export default function PaymentPage() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        amount: 10.99,
-        item_name: "Teez Golf Membership",
+  amount: 10.99,
+  item_name: "Teez Golf Membership",
 
-        name_first: profile.name || "",
-        name_last: profile.surname || "",
-        email_address: user.email,
+  name_first: profile.name || "",
+  name_last: profile.surname || "",
+  email_address: user.email,
 
-        // CUSTOM FIELDS
-        custom_str1: user.uid,
-        custom_str2: "membership",
-        custom_str3: "0",
-      }),
+  uid: user.uid,
+  type: "membership",
+  tokens: 0,
+}),
     });
 
     const data = await res.json();

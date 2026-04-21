@@ -25,7 +25,7 @@ export async function POST(req: Request) {
     const m_payment_id = `${uid}_${Date.now()}`;
 
     // -----------------------------------
-    // BUILD PARAM OBJECT
+    // BUILD PARAM OBJECT (ORDER = SOURCE OF TRUTH)
     // -----------------------------------
     const data: Record<string, string> = {
       merchant_id,
@@ -45,26 +45,17 @@ export async function POST(req: Request) {
     };
 
     // -----------------------------------
-    // REMOVE EMPTY VALUES
+    // REMOVE EMPTY VALUES (WITHOUT CHANGING ORDER)
     // -----------------------------------
     Object.keys(data).forEach((key) => {
       if (!data[key]) delete data[key];
     });
 
     // -----------------------------------
-    // SORT KEYS (CRITICAL)
+    // BUILD STRING (DO NOT SORT)
+    // MUST MATCH FORM ORDER EXACTLY
     // -----------------------------------
-    const sortedKeys = Object.keys(data).sort();
-
-    const sortedData: Record<string, string> = {};
-    sortedKeys.forEach((key) => {
-      sortedData[key] = data[key];
-    });
-
-    // -----------------------------------
-    // BUILD STRING USING NODE (MATCHES FORM POST)
-    // -----------------------------------
-    const pfString = querystring.stringify(sortedData);
+    const pfString = querystring.stringify(data);
 
     // -----------------------------------
     // SIGNATURE
@@ -86,7 +77,7 @@ export async function POST(req: Request) {
     return NextResponse.json({
       url: "https://sandbox.payfast.co.za/eng/process",
       data: {
-        ...sortedData,
+        ...data,
         signature,
       },
     });

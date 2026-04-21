@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextResponse } from "next/server"; 
 import crypto from "crypto";
 import querystring from "querystring";
 
@@ -52,10 +52,15 @@ export async function POST(req: Request) {
     });
 
     // -----------------------------------
-    // BUILD STRING (DO NOT SORT)
-    // MUST MATCH FORM ORDER EXACTLY
+    // BUILD STRING (CURRENT METHOD)
     // -----------------------------------
     const pfString = querystring.stringify(data);
+
+    // -----------------------------------
+    // DEBUG (CRITICAL)
+    // -----------------------------------
+    console.log("PF STRING:", pfString);
+    console.log("DATA OBJECT:", data);
 
     // -----------------------------------
     // SIGNATURE
@@ -65,10 +70,6 @@ export async function POST(req: Request) {
       .update(pfString)
       .digest("hex");
 
-    // -----------------------------------
-    // DEBUG
-    // -----------------------------------
-    console.log("PF STRING:", pfString);
     console.log("SIGNATURE:", signature);
 
     // -----------------------------------

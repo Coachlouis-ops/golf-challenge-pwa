@@ -16,7 +16,6 @@ export async function POST(req: Request) {
 
     const merchant_id = process.env.PAYFAST_MERCHANT_ID as string;
     const merchant_key = process.env.PAYFAST_MERCHANT_KEY as string;
-    const passphrase = process.env.PAYFAST_PASSPHRASE as string;
 
     const return_url = "https://golf-challenge-pwa.vercel.app/dashboard";
     const cancel_url = "https://golf-challenge-pwa.vercel.app/payment";
@@ -46,41 +45,39 @@ export async function POST(req: Request) {
     };
 
     // -----------------------------
-    // CORRECT SIGNATURE GENERATION
+    // SIGNATURE (RAW VALUES ONLY)
     // -----------------------------
     const sortedKeys = Object.keys(data).sort();
 
-    let queryString = "";
+    let signatureString = "";
+
     sortedKeys.forEach((key) => {
       if (data[key] !== "") {
-        queryString += `${key}=${encodeURIComponent(data[key].trim()).replace(/%20/g, "+")}&`;
+        signatureString += `${key}=${data[key].trim()}&`;
       }
     });
 
-    queryString = queryString.slice(0, -1);
-
-    if (passphrase) {
-      queryString += `&passphrase=${encodeURIComponent(passphrase.trim()).replace(/%20/g, "+")}`;
-    }
+    signatureString = signatureString.slice(0, -1);
 
     const signature = crypto
       .createHash("md5")
-      .update(queryString)
+      .update(signatureString)
       .digest("hex");
 
     // -----------------------------
-    // FINAL URL (WITHOUT PASSPHRASE)
+    // FINAL URL (ENCODED)
     // -----------------------------
-    let finalQuery = "";
+    let query = "";
+
     sortedKeys.forEach((key) => {
       if (data[key] !== "") {
-        finalQuery += `${key}=${encodeURIComponent(data[key].trim()).replace(/%20/g, "+")}&`;
+        query += `${key}=${encodeURIComponent(data[key].trim()).replace(/%20/g, "+")}&`;
       }
     });
 
-    finalQuery = finalQuery.slice(0, -1);
+    query = query.slice(0, -1);
 
-    const url = `https://sandbox.payfast.co.za/eng/process?${finalQuery}&signature=${signature}`;
+    const url = `https://sandbox.payfast.co.za/eng/process?${query}&signature=${signature}`;
 
     return NextResponse.json({ url });
 

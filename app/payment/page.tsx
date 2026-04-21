@@ -39,39 +39,55 @@ export default function PaymentPage() {
   // PAYFAST (ACTIVE)
   // -----------------------------------
   async function startPayFast() {
-    if (!user || !profile) {
-      alert("User profile not loaded");
-      return;
-    }
-
-    const res = await fetch("/api/payfast-initiate", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
- body: JSON.stringify({
-  amount: 10.99,
-  item_name: "Teez Golf Membership",
-
-  name_first: profile.name || "",
-  name_last: profile.surname || "",
-  email_address: user.email,
-
-  uid: user.uid,
-  type: "membership",
-  tokens: 0,
-}),
-    });
-
-    const data = await res.json();
-
-    if (!data.url) {
-      alert("PayFast error");
-      return;
-    }
-
-    window.location.href = data.url;
+  if (!user || !profile) {
+    alert("User profile not loaded");
+    return;
   }
+
+  const res = await fetch("/api/payfast-initiate", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      amount: 10.99,
+      item_name: "Teez Golf Membership",
+
+      name_first: profile.name || "",
+      name_last: profile.surname || "",
+      email_address: user.email,
+
+      uid: user.uid,
+      type: "membership",
+      tokens: 0,
+    }),
+  });
+
+  const response = await res.json();
+
+  if (!response.url || !response.data) {
+    alert("PayFast error");
+    return;
+  }
+
+  // -----------------------------------
+  // CREATE FORM (POST TO PAYFAST)
+  // -----------------------------------
+  const form = document.createElement("form");
+  form.method = "POST";
+  form.action = response.url;
+
+  Object.entries(response.data).forEach(([key, value]) => {
+    const input = document.createElement("input");
+    input.type = "hidden";
+    input.name = key;
+    input.value = value as string;
+    form.appendChild(input);
+  });
+
+  document.body.appendChild(form);
+  form.submit();
+}
 
   // -----------------------------------
   // LOADING

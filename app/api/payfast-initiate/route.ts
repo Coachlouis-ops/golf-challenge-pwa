@@ -56,43 +56,30 @@ export async function POST(req: Request) {
     const sortedKeys = Object.keys(data).sort();
 
     // -----------------------------------
-    // RAW STRING (FOR SIGNATURE) ❗ NO ENCODING
+    // RAW STRING (SIGNATURE)
     // -----------------------------------
     const pfStringRaw = sortedKeys
       .map((key) => `${key}=${data[key]}`)
       .join("&");
 
-    // -----------------------------------
-    // SIGNATURE
-    // -----------------------------------
     const signature = crypto
       .createHash("md5")
       .update(pfStringRaw)
       .digest("hex");
 
     // -----------------------------------
-    // ENCODED STRING (FOR URL)
-    // -----------------------------------
-    const pfStringEncoded = sortedKeys
-      .map(
-        (key) =>
-          `${key}=${encodeURIComponent(data[key]).replace(/%20/g, "+")}`
-      )
-      .join("&");
-
-    // -----------------------------------
-    // FINAL URL
-    // -----------------------------------
-    const url = `https://sandbox.payfast.co.za/eng/process?${pfStringEncoded}&signature=${signature}`;
-
-    // -----------------------------------
-    // DEBUG
+    // RETURN FOR POST (NO URL BUILDING)
     // -----------------------------------
     console.log("PF RAW:", pfStringRaw);
-    console.log("PF ENCODED:", pfStringEncoded);
     console.log("SIGNATURE:", signature);
 
-    return NextResponse.json({ url });
+    return NextResponse.json({
+      url: "https://sandbox.payfast.co.za/eng/process",
+      data: {
+        ...data,
+        signature,
+      },
+    });
 
   } catch (error: any) {
     console.error("PayFast error:", error);

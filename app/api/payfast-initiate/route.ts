@@ -40,7 +40,7 @@ export async function POST(req: Request) {
 
       m_payment_id,
 
-      amount: amount.toString(),
+    amount: Number(amount).toFixed(2),
       item_name,
 
       // -----------------------

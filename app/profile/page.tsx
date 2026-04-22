@@ -400,21 +400,58 @@ setSaving(true);
 
   <TokenCard
     title="Available"
-   value={Math.max(
-  (profileWallet?.winningTokens ?? 0) - (profileWallet?.lockedTokens ?? 0),
-  0
-)}
+    value={Math.max(
+      (profile.tokensWon ?? 0) - (profileWallet?.lockedTokens ?? 0),
+      0
+    )}
   />
 
 </div>
 
+<div className="space-y-3 mt-4">
 
-    <button
-      onClick={() => setIsEditing(true)}
-      className="w-full bg-green-500 hover:bg-green-400 text-black font-semibold py-3 rounded-xl"
-    >
-      Edit Profile
-    </button>
+  <button
+    onClick={() => setIsEditing(true)}
+    className="w-full bg-green-500 hover:bg-green-400 text-black font-semibold py-3 rounded-xl"
+  >
+    Edit Profile
+  </button>
+
+  <details className="bg-neutral-900 border border-green-500 rounded-xl p-4">
+    <summary className="cursor-pointer text-green-400 font-semibold">
+      How Rankings Work
+    </summary>
+
+    <div className="mt-3 text-sm text-gray-300 space-y-2">
+
+      <p>
+        Rankings are earned by competing in challenges and finishing higher than other players.
+      </p>
+
+      <p>
+        • More players = more points  
+        • Better finish = higher points  
+      </p>
+
+      <p>
+        Points are distributed across:
+      </p>
+
+      <p>
+        • Club Ranking (highest weight)  
+        • Province Ranking  
+        • National Ranking  
+        • Global Ranking  
+      </p>
+
+      <p>
+        Your latest challenge impact is shown above your rankings.
+      </p>
+
+    </div>
+  </details>
+
+</div>
   </>
 )}
 

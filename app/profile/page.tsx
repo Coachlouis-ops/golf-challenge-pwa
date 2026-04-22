@@ -459,15 +459,30 @@ setSaving(true);
       ))}
     </select>
 
-   <div className="space-y-1">
+ <div className="space-y-1">
   <p className="text-xs text-gray-400">Date of Birth</p>
+
   <input
+    type="date"
     className="w-full bg-[#1f1f1f] border border-gray-500 text-white px-3 py-2 rounded-md focus:border-green-400 focus:outline-none"
-    placeholder="YYYY/MM/DD"
-    value={profile.dateOfBirth}
-    onChange={(e)=>setProfile({...profile,dateOfBirth:e.target.value})}
+    value={
+      profile.dateOfBirth
+        ? profile.dateOfBirth.replace(/\//g, "-")
+        : ""
+    }
+    onChange={(e) => {
+      const raw = e.target.value; // YYYY-MM-DD
+
+      setProfile({
+        ...profile,
+        dateOfBirth: raw.replace(/-/g, "/"), // store as YYYY/MM/DD
+      });
+    }}
   />
-  <p className="text-[10px] text-gray-500">Format: 1977/12/30</p>
+
+  <p className="text-[10px] text-gray-500">
+    Select your birthdate
+  </p>
 </div>
 
     <Input

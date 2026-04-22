@@ -135,14 +135,31 @@ export default function WalletPage() {
       }),
     });
 
-    const data = await res.json();
+const response = await res.json();
 
-    if (!data.url) {
-      alert("PayFast error");
-      return;
-    }
+if (!response.url || !response.data) {
+  alert("PayFast error");
+  return;
+}
 
-    window.location.href = data.url;
+// -----------------------------------
+// CREATE FORM (POST TO PAYFAST)
+// -----------------------------------
+const form = document.createElement("form");
+form.method = "POST";
+form.action = response.url;
+
+Object.entries(response.data).forEach(([key, value]) => {
+  const input = document.createElement("input");
+  input.type = "hidden";
+  input.name = key;
+  input.value = value as string;
+  form.appendChild(input);
+});
+
+document.body.appendChild(form);
+form.submit();
+
   }
 
   // -------------------------------

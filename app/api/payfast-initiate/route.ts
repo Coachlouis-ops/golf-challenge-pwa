@@ -17,7 +17,7 @@ export async function POST(req: Request) {
     const merchant_id = process.env.PAYFAST_MERCHANT_ID as string;
     const merchant_key = process.env.PAYFAST_MERCHANT_KEY as string;
 
-    const return_url = "https://golf-challenge-pwa.vercel.app/dashboard";
+   const return_url = `https://golf-challenge-pwa.vercel.app/dashboard?uid=${uid}`;
     const cancel_url = "https://golf-challenge-pwa.vercel.app/payment";
     const notify_url = "https://golf-challenge-pwa.vercel.app/api/payfast-notify";
 

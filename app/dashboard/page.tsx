@@ -32,7 +32,7 @@ function DashboardContent() {
       {/* DARK OVERLAY */}
       <div className="absolute inset-0 bg-black/60" />
 
-      <main className="relative z-10 w-full max-w-md mx-auto px-6 pb-10 overflow-y-auto max-h-screen">
+     <main className="relative z-10 w-full max-w-md mx-auto px-6 pb-10">
 
         {/* FULL TOP HERO */}
         <div className="w-full h-[260px] relative mb-6">

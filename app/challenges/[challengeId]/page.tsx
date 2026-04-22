@@ -123,7 +123,6 @@ export default function ChallengeDetailPage() {
 // ===============================
 async function handleRefresh() {
 
-async function handleRefresh() {
   if (!challengeId) return;
 
   try {

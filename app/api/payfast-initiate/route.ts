@@ -83,7 +83,6 @@ export async function POST(req: Request) {
       url: "https://sandbox.payfast.co.za/eng/process",
       data: {
         ...data,
-        signature,
       },
     });
 

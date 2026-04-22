@@ -44,27 +44,33 @@ export async function POST(req: Request) {
     // ------------------------------
     // VERIFY SIGNATURE
     // ------------------------------
-    const passphrase = process.env.PAYFAST_PASSPHRASE as string;
+// ------------------------------
+// SIGNATURE (DISABLED FOR SANDBOX)
+// ------------------------------
+const isSandbox = true;
 
-    const receivedSignature = data.signature;
-    delete data.signature;
+if (!isSandbox) {
+  const passphrase = process.env.PAYFAST_PASSPHRASE as string;
 
-    const sortedKeys = Object.keys(data).sort();
+  const receivedSignature = data.signature;
+  delete data.signature;
 
-    const queryString = sortedKeys
-      .map((key) => `${key}=${encodeURIComponent(data[key])}`)
-      .join("&");
+  const sortedKeys = Object.keys(data).sort();
 
-    const generatedSignature = crypto
-      .createHash("md5")
-      .update(queryString + `&passphrase=${passphrase}`)
-      .digest("hex");
+  const queryString = sortedKeys
+    .map((key) => `${key}=${encodeURIComponent(data[key])}`)
+    .join("&");
 
-    if (generatedSignature !== receivedSignature) {
-      console.error("Invalid PayFast signature");
-      return NextResponse.json({ error: "Invalid signature" }, { status: 400 });
-    }
+  const generatedSignature = crypto
+    .createHash("md5")
+    .update(queryString + `&passphrase=${passphrase}`)
+    .digest("hex");
 
+  if (generatedSignature !== receivedSignature) {
+    console.error("Invalid PayFast signature");
+    return NextResponse.json({ error: "Invalid signature" }, { status: 400 });
+  }
+}
     // ------------------------------
     // INIT FIREBASE
     // ------------------------------

@@ -27,6 +27,8 @@ type Voucher = {
   deliveryMethod?: "code" | "qr" | "email";
   emailSentTo?: string;
   emailSentAt?: any;
+
+  message?: string; // ✅ ADD THIS
 };
 
 export default function VouchersPage() {
@@ -131,12 +133,23 @@ export default function VouchersPage() {
                       </p>
                     </div>
                   )}
-{v.deliveryMethod === "email" && v.emailSentTo && (
+{v.deliveryMethod === "email" && (
   <div className="mt-3 p-2 border border-yellow-400 rounded bg-black">
-    <p className="text-yellow-400 text-sm">Voucher Sent via Email</p>
-    <p className="text-lg font-bold text-yellow-300">
-      {v.emailSentTo}
+    <p className="text-yellow-400 text-sm">
+      Voucher Sent via Email
     </p>
+
+    {v.message && (
+      <p className="text-yellow-300 font-semibold mt-1">
+        {v.message}
+      </p>
+    )}
+
+    {v.emailSentTo && (
+      <p className="text-sm text-yellow-300 mt-1">
+        {v.emailSentTo}
+      </p>
+    )}
 
     {v.emailSentAt && (
       <p className="text-xs text-yellow-500 mt-1">

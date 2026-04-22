@@ -3,6 +3,7 @@
 import { httpsCallable } from "firebase/functions";
 import { functions, db } from "@/src/lib/firebase";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   collection,
   onSnapshot,
@@ -30,6 +31,7 @@ type Voucher = {
 
 export default function VouchersPage() {
   const { user } = useAuth();
+  const router = useRouter();
   const [vouchers, setVouchers] = useState<Voucher[]>([]);
 
   useEffect(() => {
@@ -85,11 +87,21 @@ export default function VouchersPage() {
 
         <main className="w-full max-w-md mx-auto px-6 py-10">
 
-          {/* HEADING */}
-          <h1 className="text-3xl font-bold mb-6 text-center neon-yellow">
-            My Vouchers
-          </h1>
+       {/* HEADER */}
+<div className="flex items-center justify-between mb-6">
+  <button
+    onClick={() => router.push("/app")}
+    className="px-3 py-1 rounded border border-yellow-400 text-yellow-300 hover:bg-yellow-400 hover:text-black transition"
+  >
+    ← Dashboard
+  </button>
 
+  <h1 className="text-2xl font-bold neon-yellow">
+    My Vouchers
+  </h1>
+
+  <div className="w-[90px]" /> {/* spacer to balance layout */}
+</div>
           {vouchers.length === 0 && (
             <p className="text-center neon-yellow">
               No vouchers yet

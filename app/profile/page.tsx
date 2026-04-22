@@ -418,38 +418,61 @@ setSaving(true);
   </button>
 
   <details className="bg-neutral-900 border border-green-500 rounded-xl p-4">
-    <summary className="cursor-pointer text-green-400 font-semibold">
-      How Rankings Work
-    </summary>
+  <summary className="cursor-pointer text-green-400 font-semibold">
+    How Rankings Work
+  </summary>
 
-    <div className="mt-3 text-sm text-gray-300 space-y-2">
+  <div className="mt-3 text-sm text-gray-300 space-y-3">
 
-      <p>
-        Rankings are earned by competing in challenges and finishing higher than other players.
-      </p>
+    <p>
+      Rankings are calculated based on your performance in challenges relative to other players.
+    </p>
 
-      <p>
-        • More players = more points  
-        • Better finish = higher points  
-      </p>
+    <p>
+      <strong>Core Formula:</strong><br/>
+      • Your position vs total players determines your base score<br/>
+      • More players = higher total points available<br/>
+      • Higher finish = higher percentage of available points
+    </p>
 
-      <p>
-        Points are distributed across:
-      </p>
+    <p>
+      <strong>How points are calculated:</strong><br/>
+      • Position Score = (Players − Position + 1) ÷ Players<br/>
+      • Volume Multiplier = log₁₀(Players) + 1<br/>
+      • Final Points = Position Score × Volume Multiplier × 100
+    </p>
 
-      <p>
-        • Club Ranking (highest weight)  
-        • Province Ranking  
-        • National Ranking  
-        • Global Ranking  
-      </p>
+    <p>
+      A minimum floor ensures even lower positions still earn points, while winners receive the highest allocation.
+    </p>
 
-      <p>
-        Your latest challenge impact is shown above your rankings.
-      </p>
+    <p>
+      <strong>Ranking Distribution:</strong><br/>
+      • Club = 100% of points<br/>
+      • Province ≈ 70%<br/>
+      • National ≈ 40%<br/>
+      • Global ≈ 20%
+    </p>
 
-    </div>
-  </details>
+    <p>
+      <strong>Understanding the tiles above:</strong><br/>
+      • Large number = your current rank position (#)<br/>
+      • Small number below = movement from your last challenge<br/>
+      &nbsp;&nbsp;(+ means improved position, − means dropped)
+    </p>
+
+    <p>
+      <strong>Token Stats:</strong><br/>
+      • Top number = total accumulated<br/>
+      • Bottom (+X) = change from your last challenge
+    </p>
+
+    <p>
+      Your latest challenge impact is always reflected in both ranking movement and token changes.
+    </p>
+
+  </div>
+</details>
 
 </div>
   </>

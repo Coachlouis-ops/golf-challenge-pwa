@@ -33,7 +33,10 @@ export async function POST(req: Request) {
       cancel_url,
       notify_url,
       m_payment_id,
-      amount: Number(amount).toFixed(2),
+      amount:
+  type === "membership"
+    ? "189.99"
+    : Number(amount).toFixed(2),
       item_name,
       name_first: name_first || "",
       name_last: name_last || "",

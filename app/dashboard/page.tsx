@@ -4,10 +4,29 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/src/lib/AuthContext";
 import MembershipGuard from "@/src/components/MembershipGuard";
+import { useEffect } from "react";
 
 function DashboardContent() {
   const router = useRouter();
   const { user, loading } = useAuth();
+
+  // ------------------------------
+  // FIX: HANDLE PAYFAST RETURN STATE
+  // ------------------------------
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const paymentUid = params.get("uid");
+
+    if (paymentUid) {
+      console.log("RETURN UID:", paymentUid);
+      console.log("AUTH UID:", user?.uid);
+
+      // force clean reload once after payment
+      setTimeout(() => {
+        window.location.replace("/dashboard");
+      }, 500);
+    }
+  }, [user]);
 
   if (loading) {
     return (
@@ -32,7 +51,7 @@ function DashboardContent() {
       {/* DARK OVERLAY */}
       <div className="absolute inset-0 bg-black/60" />
 
-     <main className="relative z-10 w-full max-w-md mx-auto px-6 pb-10">
+      <main className="relative z-10 w-full max-w-md mx-auto px-6 pb-10">
 
         {/* FULL TOP HERO */}
         <div className="w-full h-[260px] relative mb-6">

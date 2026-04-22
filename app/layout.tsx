@@ -1,7 +1,6 @@
-import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { AuthProvider } from "../src/lib/AuthContext";
+import { AuthProvider } from "@/src/lib/AuthContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -13,7 +12,7 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
+export const metadata = {
   metadataBase: new URL("https://www.teezgolfchallenges.com"),
 
   title: {
@@ -24,10 +23,8 @@ export const metadata: Metadata = {
   description:
     "Compete in global golf challenges, climb rankings, and win real rewards. Play with purpose.",
 
-  // ✅ THIS WAS MISSING
-  manifest: "/manifest.json",
+  manifest: "https://golf-challenge-pwa.vercel.app/manifest.json",
 
-  // ✅ THIS WAS MISSING
   icons: {
     icon: "/icons/icon-192.png",
     shortcut: "/icons/icon-192.png",

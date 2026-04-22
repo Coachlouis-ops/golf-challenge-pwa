@@ -33,9 +33,11 @@ export async function POST(req: Request) {
       cancel_url,
       notify_url,
       m_payment_id,
-      amount:
+    amount:
   type === "membership"
     ? "189.99"
+    : type === "tokens"
+    ? (Number(tokens) * 18).toFixed(2)
     : Number(amount).toFixed(2),
       item_name,
       name_first: name_first || "",

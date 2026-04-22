@@ -90,7 +90,7 @@ export default function VouchersPage() {
        {/* HEADER */}
 <div className="flex items-center justify-between mb-6">
   <button
-    onClick={() => router.push("/app")}
+    onClick={() => router.replace("/dashboard")}
     className="px-3 py-1 rounded border border-yellow-400 text-yellow-300 hover:bg-yellow-400 hover:text-black transition"
   >
     ← Dashboard

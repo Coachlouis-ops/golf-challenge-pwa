@@ -42,35 +42,33 @@ export async function POST(req: Request) {
     });
 
     // ------------------------------
-    // VERIFY SIGNATURE
+    // SIGNATURE (DISABLED FOR SANDBOX)
     // ------------------------------
-// ------------------------------
-// SIGNATURE (DISABLED FOR SANDBOX)
-// ------------------------------
-const isSandbox = true;
+    const isSandbox = true;
 
-if (!isSandbox) {
-  const passphrase = process.env.PAYFAST_PASSPHRASE as string;
+    if (!isSandbox) {
+      const passphrase = process.env.PAYFAST_PASSPHRASE as string;
 
-  const receivedSignature = data.signature;
-  delete data.signature;
+      const receivedSignature = data.signature;
+      delete data.signature;
 
-  const sortedKeys = Object.keys(data).sort();
+      const sortedKeys = Object.keys(data).sort();
 
-  const queryString = sortedKeys
-    .map((key) => `${key}=${encodeURIComponent(data[key])}`)
-    .join("&");
+      const queryString = sortedKeys
+        .map((key) => `${key}=${encodeURIComponent(data[key])}`)
+        .join("&");
 
-  const generatedSignature = crypto
-    .createHash("md5")
-    .update(queryString + `&passphrase=${passphrase}`)
-    .digest("hex");
+      const generatedSignature = crypto
+        .createHash("md5")
+        .update(queryString + `&passphrase=${passphrase}`)
+        .digest("hex");
 
-  if (generatedSignature !== receivedSignature) {
-    console.error("Invalid PayFast signature");
-    return NextResponse.json({ error: "Invalid signature" }, { status: 400 });
-  }
-}
+      if (generatedSignature !== receivedSignature) {
+        console.error("Invalid PayFast signature");
+        return NextResponse.json({ error: "Invalid signature" }, { status: 400 });
+      }
+    }
+
     // ------------------------------
     // INIT FIREBASE
     // ------------------------------
@@ -91,7 +89,7 @@ if (!isSandbox) {
     // EXTRACT DATA
     // ------------------------------
     const uid = data.custom_str1;
-    const type = data.custom_str2; // membership | tokens
+    const type = data.custom_str2;
     const tokenAmount = Number(data.custom_str3 || 0);
 
     const amount = Number(data.amount_gross || 0);
@@ -99,6 +97,14 @@ if (!isSandbox) {
 
     const customerEmail = data.email_address || "";
     const customerName = `${data.name_first || ""} ${data.name_last || ""}`;
+
+    // ------------------------------
+    // DEBUG (CRITICAL)
+    // ------------------------------
+    console.log("PAYFAST UID:", uid);
+    console.log("PAYFAST TYPE:", type);
+    console.log("PAYFAST TOKENS:", tokenAmount);
+    console.log("FULL ITN DATA:", data);
 
     if (!uid) {
       return NextResponse.json({ received: true });

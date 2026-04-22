@@ -2,8 +2,7 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 import { onAuthStateChanged, User } from "firebase/auth";
-import { auth, db } from "./firebase";
-import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
+import { auth } from "./firebase"; // ✅ THIS WAS MISSING
 
 type AuthContextType = {
   user: User | null;
@@ -28,66 +27,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         return;
       }
 
-      const uid = firebaseUser.uid;
-
       try {
         // -------------------------------------------------
-        // PROFILE CHECK / CREATE
+        // PROFILE / WALLET / RANKING
+        // HANDLED BY CLOUD FUNCTIONS (DO NOT WRITE FROM FRONTEND)
         // -------------------------------------------------
-        const profileRef = doc(db, "profiles", uid);
-        const profileSnap = await getDoc(profileRef);
-
-        if (!profileSnap.exists()) {
-          await setDoc(profileRef, {
-            uid,
-            email: firebaseUser.email ?? "",
-            name: "",
-            surname: "",
-            battleName: "",
-            ranking: {
-              club: 0,
-              province: 0,
-              national: 0,
-              international: 0,
-            },
-            tokensPlayed: 0,
-            tokensWon: 0,
-            createdAt: serverTimestamp(),
-          });
-        }
-
-        // -------------------------------------------------
-        // WALLET CHECK / CREATE
-        // -------------------------------------------------
-        const walletRef = doc(db, "wallets", uid);
-        const walletSnap = await getDoc(walletRef);
-
-        if (!walletSnap.exists()) {
-          await setDoc(walletRef, {
-            purchasedTokens: 0,
-            winningTokens: 0,
-            lockedTokens: 0,
-            createdAt: serverTimestamp(),
-            updatedAt: serverTimestamp(),
-          });
-        }
-
-        // -------------------------------------------------
-        // PLAYER RANKING CHECK / CREATE
-        // -------------------------------------------------
-        const rankingRef = doc(db, "playerRankings", uid);
-        const rankingSnap = await getDoc(rankingRef);
-
-        if (!rankingSnap.exists()) {
-          await setDoc(rankingRef, {
-            club: 0,
-            province: 0,
-            national: 0,
-            international: 0,
-            updatedAt: serverTimestamp(),
-          });
-        }
-
       } catch (err) {
         console.error("Auth bootstrap error:", err);
       }

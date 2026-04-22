@@ -118,6 +118,67 @@ export default function ChallengeDetailPage() {
     })();
   }, [user, challengeId]);
 
+  // ===============================
+// MANUAL REFRESH (RELOAD DATA)
+// ===============================
+async function handleRefresh() {
+
+async function handleRefresh() {
+  if (!challengeId) return;
+
+  try {
+    setLoading(true);
+
+    // reload challenge
+    const ref = doc(db, "challenges", challengeId);
+    const snap = await getDoc(ref);
+
+    if (snap.exists()) {
+      const data = snap.data() as any;
+
+      setChallenge({
+        challengeId: data.challengeId || snap.id,
+        challengeTitle: data.challengeTitle || "—",
+        courseName: data.courseName || "—",
+        gameFormat: data.gameFormat || "—",
+        scoringMethod: data.scoringMethod || "—",
+        teamFormat: data.teamFormat || "—",
+        typeOfGame: data.typeOfGame || "—",
+        entryTokens: data.entryTokens || 0,
+        status: data.status || "—",
+        creatorUid: data.creatorUid,
+        joinCode: data.joinCode,
+        createdAt: data.createdAt,
+      });
+    }
+
+    // reload players
+    const playersSnap = await getDocs(
+      collection(db, "challenges", challengeId, "players")
+    );
+
+    const playersData = playersSnap.docs.map((d) => ({
+      uid: d.id,
+      displayName: d.get("displayName") || d.id,
+    }));
+
+    setPlayers(playersData);
+
+    // reload invites
+    const invitesSnap = await getDocs(
+      collection(db, "challenges", challengeId, "invites")
+    );
+
+    const invited = invitesSnap.docs.map((d) => d.id);
+    setInvitedUids(invited);
+
+  } catch (e) {
+    console.error("Refresh failed", e);
+  } finally {
+    setLoading(false);
+  }
+}
+
 // ===============================
 // LOAD INVITED + PLAYERS
 // ===============================
@@ -331,6 +392,15 @@ return (
   />
 
   <div className="relative z-10 w-full max-w-3xl flex flex-col gap-6">
+
+  <div className="flex justify-end">
+    <button
+      onClick={handleRefresh}
+      className="bg-green-500 text-black px-4 py-2 rounded font-semibold shadow-[0_0_20px_rgba(57,255,20,0.6)] hover:scale-[1.02] transition"
+    >
+      Refresh
+    </button>
+  </div>
 
   <button
     onClick={() => router.push("/dashboard")}

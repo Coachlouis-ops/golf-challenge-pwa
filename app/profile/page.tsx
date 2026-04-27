@@ -400,11 +400,7 @@ setSaving(true);
 
   <TokenCard
   title="Available"
-  value={Math.max(
-    (profileWallet?.winningTokens ?? 0) -
-    (profileWallet?.lockedTokens ?? 0),
-    0
-  )}
+  value={profileWallet?.winningTokens ?? 0}
 />
 
 </div>

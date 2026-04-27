@@ -7,60 +7,30 @@ import { db, functions } from "@/src/lib/firebase";
 import { httpsCallable } from "firebase/functions";
 import { useRouter } from "next/navigation";
 
+// ✅ FIXED TOKEN PACKS WITH MARGIN
 const TOKEN_PACKS = [
-  { tokens: 1, priceId: "price_1T964DCplvzmJJByQ7HgCd2o" },
-  { tokens: 2, priceId: "price_1T964DCplvzmJJBy51o17VLO" },
-  { tokens: 3, priceId: "price_1T9675CplvzmJJByfja065o9" },
-  { tokens: 4, priceId: "price_1T967TCplvzmJJByOlpPfhg7" },
-  { tokens: 5, priceId: "price_1T964DCplvzmJJBy9OGtL9pT" },
-  { tokens: 10, priceId: "price_1T964DCplvzmJJByB9QKG3Ao" },
-  { tokens: 15, priceId: "price_1T965yCplvzmJJByXJQ3uXUO" },
-  { tokens: 20, priceId: "price_1T966gCplvzmJJBy7Ny1wjso" },
-  { tokens: 25, priceId: "price_1T967yCplvzmJJByN1GuKG0j" },
-  { tokens: 40, priceId: "price_1T968ZCplvzmJJByDDYam7iR" },
-  { tokens: 50, priceId: "price_1T9695CplvzmJJByqDhhamoo" },
-  { tokens: 75, priceId: "price_1T969TCplvzmJJByMhQTiajD" },
-  { tokens: 100, priceId: "price_1T969uCplvzmJJBy6znELwaV" },
-  { tokens: 150, priceId: "price_1T96AaCplvzmJJByqi7gIdHt" },
-  { tokens: 200, priceId: "price_1T96AtCplvzmJJByagaEcW0o" },
-  { tokens: 250, priceId: "price_1T96BGCplvzmJJByUhCFSPG9" },
-  { tokens: 350, priceId: "price_1T96BcCplvzmJJBy7mx9UVBt" },
-  { tokens: 500, priceId: "price_1T96CFCplvzmJJByyUatXDDZ" },
-  { tokens: 750, priceId: "price_1T96CdCplvzmJJBy1kEhBwvv" },
-  { tokens: 1000, priceId: "price_1T96D8CplvzmJJBy4c99aP7j" },
+  {
+    tokens: 100,
+    price: 109,
+    label: "100 Tokens – R109",
+  },
+  {
+    tokens: 500,
+    price: 525,
+    label: "500 Tokens – R525",
+  },
+  {
+    tokens: 1000,
+    price: 1020,
+    label: "1000 Tokens – R1020",
+  },
 ];
-
-// -------------------------------
-// MATCH STRIPE TOKEN MAP → USD
-// -------------------------------
-const PRICE_MAP: Record<string, number> = {
-  "price_1T964DCplvzmJJByQ7HgCd2o": 1,
-  "price_1T964DCplvzmJJBy51o17VLO": 2,
-  "price_1T9675CplvzmJJByfja065o9": 3,
-  "price_1T967TCplvzmJJByOlpPfhg7": 4,
-  "price_1T964DCplvzmJJBy9OGtL9pT": 5,
-  "price_1T964DCplvzmJJByB9QKG3Ao": 10,
-  "price_1T965yCplvzmJJByXJQ3uXUO": 15,
-  "price_1T966gCplvzmJJBy7Ny1wjso": 20,
-  "price_1T967yCplvzmJJByN1GuKG0j": 25,
-  "price_1T968ZCplvzmJJByDDYam7iR": 40,
-  "price_1T9695CplvzmJJByqDhhamoo": 50,
-  "price_1T969TCplvzmJJByMhQTiajD": 75,
-  "price_1T969uCplvzmJJBy6znELwaV": 100,
-  "price_1T96AaCplvzmJJByqi7gIdHt": 150,
-  "price_1T96AtCplvzmJJByagaEcW0o": 200,
-  "price_1T96BGCplvzmJJByUhCFSPG9": 250,
-  "price_1T96BcCplvzmJJBy7mx9UVBt": 350,
-  "price_1T96CFCplvzmJJByyUatXDDZ": 500,
-  "price_1T96CdCplvzmJJBy1kEhBwvv": 750,
-  "price_1T96D8CplvzmJJBy4c99aP7j": 1000,
-};
 
 export default function WalletPage() {
   const { user } = useAuth();
   const router = useRouter();
 
-  const [selected, setSelected] = useState("price_1T9JktCplvzmJJByFE9l8n77");
+  const [selected, setSelected] = useState<number | null>(null);
   const [available, setAvailable] = useState(0);
   const [profile, setProfile] = useState<any>(null);
 
@@ -88,7 +58,7 @@ export default function WalletPage() {
   }, [user]);
 
   // -------------------------------
-  // LOAD PROFILE (FOR PAYFAST)
+  // LOAD PROFILE
   // -------------------------------
   useEffect(() => {
     if (!user) return;
@@ -112,9 +82,11 @@ export default function WalletPage() {
       return;
     }
 
-    if (selected === "price_1T9JktCplvzmJJByFE9l8n77") return;
+    if (selected === null) return;
 
-    const tokens = PRICE_MAP[selected] || 0;
+    const pack = TOKEN_PACKS[selected];
+    const tokens = pack.tokens;
+    const amount = pack.price;
 
     const res = await fetch("/api/payfast-initiate", {
       method: "POST",
@@ -122,7 +94,7 @@ export default function WalletPage() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        amount: tokens,
+        amount,
         item_name: `${tokens} Tokens`,
 
         name_first: profile.name || "",
@@ -135,31 +107,30 @@ export default function WalletPage() {
       }),
     });
 
-const response = await res.json();
+    const response = await res.json();
 
-if (!response.url || !response.data) {
-  alert("PayFast error");
-  return;
-}
+    if (!response.url || !response.data) {
+      alert("PayFast error");
+      return;
+    }
 
-// -----------------------------------
-// CREATE FORM (POST TO PAYFAST)
-// -----------------------------------
-const form = document.createElement("form");
-form.method = "POST";
-form.action = response.url;
+    // -----------------------------------
+    // CREATE FORM (POST TO PAYFAST)
+    // -----------------------------------
+    const form = document.createElement("form");
+    form.method = "POST";
+    form.action = response.url;
 
-Object.entries(response.data).forEach(([key, value]) => {
-  const input = document.createElement("input");
-  input.type = "hidden";
-  input.name = key;
-  input.value = value as string;
-  form.appendChild(input);
-});
+    Object.entries(response.data).forEach(([key, value]) => {
+      const input = document.createElement("input");
+      input.type = "hidden";
+      input.name = key;
+      input.value = value as string;
+      form.appendChild(input);
+    });
 
-document.body.appendChild(form);
-form.submit();
-
+    document.body.appendChild(form);
+    form.submit();
   }
 
   // -------------------------------
@@ -207,23 +178,23 @@ form.submit();
 
         <select
           className="px-4 py-3 rounded bg-zinc-200 text-black font-semibold shadow-inner"
-          value={selected}
-          onChange={(e) => setSelected(e.target.value)}
+          value={selected ?? ""}
+          onChange={(e) => setSelected(e.target.value === "" ? null : Number(e.target.value))}
         >
-          <option value="price_1T9JktCplvzmJJByFE9l8n77">
+          <option value="">
             Select Tokens
           </option>
 
-          {TOKEN_PACKS.map((pack) => (
-            <option key={pack.priceId} value={pack.priceId}>
-              {pack.tokens} Tokens
+          {TOKEN_PACKS.map((pack, i) => (
+            <option key={i} value={i}>
+              {pack.label}
             </option>
           ))}
         </select>
 
         <button
           onClick={checkout}
-          disabled={selected === "price_1T9JktCplvzmJJByFE9l8n77"}
+          disabled={selected === null}
           className="bg-green-500 hover:bg-green-400 text-black px-6 py-3 rounded-lg font-semibold shadow-[0_0_12px_#00ff88] disabled:bg-gray-600"
         >
           Buy Tokens (PayFast)

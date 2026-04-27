@@ -392,7 +392,7 @@ setSaving(true);
     last={profile.lastChallenge?.tokens?.played ?? 0}
   />
 
-  <TokenCardAdvanced
+  <TokenCardAdvanced 
     title="Won"
     total={profile.tokensWon ?? 0}
     last={profile.lastChallenge?.tokens?.won ?? 0}

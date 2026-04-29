@@ -7,13 +7,6 @@ export default function LandingPage() {
   const router = useRouter();
   const [showCookies, setShowCookies] = useState(true);
 
-  const handleExit = () => {
-    if (typeof window !== "undefined") {
-      window.open("", "_self");
-      window.close();
-    }
-  };
-
   return (
     <div className="min-h-screen bg-black text-white font-sans flex flex-col">
 
@@ -24,13 +17,6 @@ export default function LandingPage() {
           className="px-4 py-2 rounded-xl bg-white/10 text-white text-sm"
         >
           ← Back
-        </button>
-
-        <button
-          onClick={handleExit}
-          className="px-4 py-2 rounded-xl bg-red-500 text-white text-sm"
-        >
-          Exit
         </button>
       </div>
 

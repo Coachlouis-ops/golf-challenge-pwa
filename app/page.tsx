@@ -1,10 +1,50 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import React from "react";
 
 export default function HomePage() {
   const router = useRouter();
 
+  const [showCookies, setShowCookies] = React.useState(false);
+
+  // ================= COOKIE LOAD =================
+  React.useEffect(() => {
+    if (typeof window !== "undefined") {
+      const stored = localStorage.getItem("cookie_consent");
+      if (!stored) {
+        setShowCookies(true);
+      }
+    }
+  }, []);
+
+  // ================= ACCEPT ALL =================
+  const acceptCookies = () => {
+    const consent = {
+      necessary: true,
+      analytics: true,
+      marketing: true,
+      timestamp: Date.now(),
+    };
+
+    localStorage.setItem("cookie_consent", JSON.stringify(consent));
+    setShowCookies(false);
+  };
+
+  // ================= REJECT NON-ESSENTIAL =================
+  const rejectCookies = () => {
+    const consent = {
+      necessary: true,
+      analytics: false,
+      marketing: false,
+      timestamp: Date.now(),
+    };
+
+    localStorage.setItem("cookie_consent", JSON.stringify(consent));
+    setShowCookies(false);
+  };
+
+  // ================= EXIT =================
   const handleExit = () => {
     if (typeof window !== "undefined") {
       try {
@@ -261,6 +301,36 @@ export default function HomePage() {
 
         </div>
       </footer>
+      {/* ================= COOKIE BANNER ================= */}
+      {showCookies && (
+        <div className="fixed bottom-0 left-0 w-full bg-black text-white px-6 py-4 z-50 border-t border-white/10">
+          <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+
+            <p className="text-xs text-gray-300 text-center md:text-left">
+              We use cookies to improve your experience, analyze traffic, and support marketing.
+              By clicking accept, you agree to our use of cookies.
+            </p>
+
+            <div className="flex gap-3 flex-wrap justify-center">
+
+              <button
+                onClick={acceptCookies}
+                className="bg-green-400 text-black px-4 py-2 rounded text-xs font-semibold hover:scale-105 transition"
+              >
+                Accept All
+              </button>
+
+              <button
+                onClick={rejectCookies}
+                className="border border-white px-4 py-2 rounded text-xs hover:bg-white hover:text-black transition"
+              >
+                Reject
+              </button>
+
+            </div>
+          </div>
+        </div>
+      )}
 
     </main>
   );

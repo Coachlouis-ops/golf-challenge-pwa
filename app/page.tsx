@@ -7,8 +7,11 @@ export default function HomePage() {
 
   const handleExit = () => {
     if (typeof window !== "undefined") {
-      window.open("", "_self");
-      window.close();
+      try {
+        window.close();
+      } catch (e) {
+        window.location.href = "about:blank";
+      }
     }
   };
 
@@ -16,48 +19,41 @@ export default function HomePage() {
     <main className="bg-black text-white">
 
       {/* ================= HEADER ================= */}
-      <header className="w-full bg-black px-6 py-4 flex justify-between items-center gap-4">
+      <header className="w-full bg-black px-4 py-3 flex flex-wrap items-center justify-between gap-2">
 
-        {/* LEFT NAV */}
-        <div className="flex items-center gap-3">
-          <button
-            onClick={() => router.push("/")}
-            className="px-3 py-1 rounded-lg bg-white/10 text-white text-sm"
-          >
-            ← Home
-          </button>
-
+        {/* LEFT */}
+        <div className="flex items-center">
           <button
             onClick={handleExit}
-            className="px-3 py-1 rounded-lg bg-red-500 text-white text-sm"
+            className="px-3 py-1 rounded-lg bg-red-500 text-white text-xs whitespace-nowrap"
           >
             Exit
           </button>
         </div>
 
-        {/* RIGHT SOCIALS */}
-        <div className="flex items-center gap-4">
+        {/* RIGHT */}
+        <div className="flex items-center gap-3 flex-wrap justify-end">
 
           <a href="https://facebook.com/profile.php?id=61575742530808" target="_blank" className="hover:scale-110 transition">
-            <svg width="20" height="20" fill="#1877F2" viewBox="0 0 24 24">
+            <svg width="18" height="18" fill="#1877F2" viewBox="0 0 24 24">
               <path d="M22 12a10 10 0 1 0-11.5 9.87v-6.99H8v-2.88h2.5V9.41c0-2.47 1.47-3.84 3.72-3.84 1.08 0 2.2.19 2.2.19v2.42h-1.24c-1.23 0-1.61.76-1.61 1.54v1.85H16l-.4 2.88h-2.21v6.99A10 10 0 0 0 22 12z"/>
             </svg>
           </a>
 
           <a href="https://youtube.com/teezgolfchallenges" target="_blank" className="hover:scale-110 transition">
-            <svg width="22" height="22" fill="#FF0000" viewBox="0 0 24 24">
+            <svg width="18" height="18" fill="#FF0000" viewBox="0 0 24 24">
               <path d="M23.5 6.2s-.2-1.7-.8-2.4c-.8-.9-1.7-.9-2.1-1C17.8 2.5 12 2.5 12 2.5h0s-5.8 0-8.6.3c-.4.1-1.3.1-2.1 1C.7 4.5.5 6.2.5 6.2S.3 8.2.3 10.2v1.6c0 2 .2 4 .2 4s.2 1.7.8 2.4c.8.9 1.9.9 2.4 1 1.7.2 7.3.3 7.3.3s5.8 0 8.6-.3c.4-.1 1.3-.1 2.1-1 .6-.7.8-2.4.8-2.4s.2-2 .2-4v-1.6c0-2-.2-4-.2-4zM9.8 14.7V7.9l6.4 3.4-6.4 3.4z"/>
             </svg>
           </a>
 
           <a href="https://tiktok.com/teezgolfchallenges" target="_blank" className="hover:scale-110 transition">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="black">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="black">
               <path fill="#25F4EE" d="M9 3v12.5a2.5 2.5 0 1 1-2.5-2.5H8V9H6.5A6.5 6.5 0 1 0 13 15.5V8.5c1.1 1 2.6 1.5 4 1.5V6.5c-1.6 0-3-1.3-3-3H9z"/>
             </svg>
           </a>
 
           <a href="https://instagram.com/teezgolfchallenges" target="_blank" className="hover:scale-110 transition">
-            <svg width="20" height="20" viewBox="0 0 24 24">
+            <svg width="18" height="18" viewBox="0 0 24 24">
               <defs>
                 <linearGradient id="ig" x1="0%" y1="0%" x2="100%" y2="100%">
                   <stop offset="0%" stopColor="#feda75"/>
@@ -74,9 +70,9 @@ export default function HomePage() {
 
           <button
             onClick={() => router.push("/contact")}
-            className="bg-white text-black px-4 py-2 text-sm rounded hover:bg-gray-200 transition"
+            className="bg-white text-black px-3 py-1 text-xs rounded whitespace-nowrap"
           >
-            Contact us
+            Contact
           </button>
 
         </div>

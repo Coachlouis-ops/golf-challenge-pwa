@@ -124,62 +124,55 @@ export default function CreateChallengePage() {
   const courseInputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
-    const initAutocomplete = () => {
-      if (!(window as any).google || !courseInputRef.current) return false;
+  const initAutocomplete = () => {
+    if (!(window as any).google || !courseInputRef.current) return false;
 
-      const autocomplete = new (window as any).google.maps.places.Autocomplete(
-        courseInputRef.current,
-        {
-          types: ["establishment"],
-        }
-      );
-
-      autocomplete.setFields(["name"]);
-
-      courseInputRef.current.addEventListener("input", () => {
-        const val = courseInputRef.current?.value || "";
-        if (!val.toLowerCase().includes("golf")) {
-          courseInputRef.current!.value = val + " golf";
-        }
-      });
-
-      autocomplete.addListener("place_changed", () => {
-        const place = autocomplete.getPlace();
-        if (!place || !place.name) return;
-
-        setCourseName(place.name);
-      });
-
-      return true;
-    };
-
-    const tryInit = () => {
-      if (!initAutocomplete()) {
-        setTimeout(tryInit, 300);
+    const autocomplete = new (window as any).google.maps.places.Autocomplete(
+      courseInputRef.current,
+      {
+        types: ["establishment"],
       }
-    };
+    );
 
-    const scriptId = "google-maps-script";
+    autocomplete.setFields(["name"]);
 
-    if (!(window as any).google) {
-      let script = document.getElementById(scriptId) as HTMLScriptElement | null;
+    autocomplete.addListener("place_changed", () => {
+      const place = autocomplete.getPlace();
+      if (!place || !place.name) return;
 
-      if (!script) {
-        script = document.createElement("script");
-        script.id = scriptId;
-        script.src =
-          "https://maps.googleapis.com/maps/api/js?key=" +
-          process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY +
-          "&libraries=places";
-        script.async = true;
-        script.defer = true;
-        script.onload = tryInit;
-        document.head.appendChild(script);
-      }
-    } else {
-      tryInit();
+      setCourseName(place.name);
+    });
+
+    return true;
+  };
+
+  const tryInit = () => {
+    if (!initAutocomplete()) {
+      setTimeout(tryInit, 300);
     }
-  }, []);
+  };
+
+  const scriptId = "google-maps-script";
+
+  if (!(window as any).google) {
+    let script = document.getElementById(scriptId) as HTMLScriptElement | null;
+
+    if (!script) {
+      script = document.createElement("script");
+      script.id = scriptId;
+      script.src =
+        "https://maps.googleapis.com/maps/api/js?key=" +
+        process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY +
+        "&libraries=places";
+      script.async = true;
+      script.defer = true;
+      script.onload = tryInit;
+      document.head.appendChild(script);
+    }
+  } else {
+    tryInit();
+  }
+}, []);
 
   const isValid =
     challengeTitle.trim().length > 0 &&

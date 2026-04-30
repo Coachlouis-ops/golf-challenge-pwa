@@ -180,7 +180,7 @@ const snap = await getDocs(invitesRef);
                 </button>
 
                 <button
-                  onClick={handleDecline}
+                  onClick={() => handleDecline(invite.challengeId)}
                   className="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded"
                 >
                   Decline

@@ -83,9 +83,26 @@ const snap = await getDocs(invitesRef);
     }
   }
 
-  async function handleDecline() {
-    alert("Decline not available yet.");
+  async function handleDecline(challengeId: string) {
+  if (!user) return;
+
+  try {
+    setProcessingId(challengeId);
+
+    const declineSecure = httpsCallable(
+      functions,
+      "declineInviteSecure"
+    );
+
+    await declineSecure({ challengeId });
+
+    await loadInvites(user.uid);
+  } catch (e: any) {
+    alert(e.message || "Failed to decline invite");
+  } finally {
+    setProcessingId(null);
   }
+}
 
   if (!user) {
     return (

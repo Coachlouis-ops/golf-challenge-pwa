@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "@/src/lib/AuthContext";
 import { db } from "@/src/lib/firebase";
-import { collection, getDocs, orderBy, query } from "firebase/firestore";
+import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
+
 
 type Challenge = {
   challengeId: string;
@@ -24,10 +25,11 @@ export default function ChallengesPage() {
     if (!user) return;
 
     (async () => {
-      const q = query(
-        collection(db, "challenges"),
-        orderBy("createdAt", "desc")
-      );
+     const q = query(
+  collection(db, "challenges"),
+  where("participants", "array-contains", user.uid),
+  orderBy("createdAt", "desc")
+);
 
       const snap = await getDocs(q);
 

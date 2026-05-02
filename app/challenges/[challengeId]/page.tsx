@@ -334,10 +334,10 @@ async function handleInvite(targetUid: string) {
 
     const sendInvite = httpsCallable(functions, "sendInvite");
 
-    await sendInvite({
-      challengeId,
-      uid: targetUid,
-    });
+  await sendInvite({
+  challengeId,
+  targetUid: targetUid,
+});
 
     setInvitedUids((prev) => [...prev, targetUid]);
   } catch (e: any) {

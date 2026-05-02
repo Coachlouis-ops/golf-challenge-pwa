@@ -336,7 +336,7 @@ async function handleInvite(targetUid: string) {
 
   await sendInvite({
   challengeId,
-  targetUid: targetUid,
+  targetUid,
 });
 
     setInvitedUids((prev) => [...prev, targetUid]);

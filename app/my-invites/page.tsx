@@ -38,15 +38,32 @@ export default function MyInvitesPage() {
     const invitesRef = collection(db, "userInvites", uid, "invites");
 
 const snap = await getDocs(invitesRef);
-    snap.forEach((docSnap) => {
-      const data = docSnap.data();
+   for (const docSnap of snap.docs) {
+  const data = docSnap.data();
 
-      results.push({
-        challengeId: data.challengeId,
-        challengeTitle: data.challengeTitle,
-        status: data.status,
-      });
-    });
+  let challengeTitle = "";
+  let courseName = "";
+  let gameFormat = "";
+
+  if (data.challengeId) {
+    const challengeRef = doc(db, "challenges", data.challengeId);
+    const challengeSnap = await getDoc(challengeRef);
+
+    if (challengeSnap.exists()) {
+      challengeTitle = challengeSnap.get("challengeTitle") || "";
+      courseName = challengeSnap.get("courseName") || "";
+      gameFormat = challengeSnap.get("gameFormat") || "";
+    }
+  }
+
+  results.push({
+    challengeId: data.challengeId,
+    challengeTitle,
+    status: data.status,
+    courseName,
+    gameFormat,
+  } as any);
+}
 
     setInvites(results);
   } catch (e) {

@@ -29,13 +29,18 @@ export default function PlayerSummaryList({
     const unsubscribe = onSnapshot(
       ref,
       (snap) => {
-        const rows: PlayerSummary[] = snap.docs.map((d) => ({
-          uid: d.id,
-          displayName: d.get("displayName"),
-          position: d.get("position"),
-          total: d.get("total"),
-          status: d.get("resultText") || d.get("status"),
-        }));
+       const rows: PlayerSummary[] = snap.docs.map((d) => {
+  const name = d.get("displayName");
+
+  return {
+    uid: d.id,
+    displayName:
+      name && name !== d.id ? name : "Player",
+    position: d.get("position"),
+    total: d.get("total"),
+    status: d.get("resultText") || d.get("status"),
+  };
+});
 
         rows.sort((a, b) => {
           const pa = a.position ?? 999;

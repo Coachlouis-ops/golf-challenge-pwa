@@ -3,17 +3,14 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
-  collectionGroup,
+  collection,
   doc,
   getDoc,
   getDocs,
-  query,
-  where,
 } from "firebase/firestore";
 import { httpsCallable } from "firebase/functions";
 import { db, functions } from "@/src/lib/firebase";
 import { useAuth } from "@/src/lib/AuthContext";
-import { collection } from "firebase/firestore";
 
 type InviteItem = {
   challengeId: string;
@@ -33,53 +30,65 @@ export default function MyInvitesPage() {
   const [loading, setLoading] = useState(true);
   const [processingId, setProcessingId] = useState<string | null>(null);
 
- async function loadInvites(uid: string) {
-  try {
-    setLoading(true);
+  async function loadInvites(uid: string) {
+    try {
+      setLoading(true);
 
-    const results: InviteItem[] = [];
+      const results: InviteItem[] = [];
 
-    const invitesRef = collection(db, "userInvites", uid, "invites");
+      const invitesRef = collection(db, "userInvites", uid, "invites");
+      const snap = await getDocs(invitesRef);
 
-const snap = await getDocs(invitesRef);
-   for (const docSnap of snap.docs) {
-  const data = docSnap.data();
+      for (const docSnap of snap.docs) {
+        const data = docSnap.data();
 
+        console.log("INVITE DATA", data);
 
-   console.log("INVITE DATA", data);
+        let challengeTitle = "";
+        let gameFormat = "";
+        let scoringMethod = "";
+        let entryTokens = 0;
 
-  let challengeTitle = "";
-  let courseName = "";
-  let gameFormat = "";
+        if (data.challengeId) {
+          const challengeRef = doc(db, "challenges", data.challengeId);
+          const challengeSnap = await getDoc(challengeRef);
 
-  if (data.challengeId) {
-    const challengeRef = doc(db, "challenges", data.challengeId);
-    const challengeSnap = await getDoc(challengeRef);
+          if (challengeSnap.exists()) {
+            challengeTitle =
+              challengeSnap.get("challengeTitle") || "";
+            gameFormat =
+              challengeSnap.get("gameFormat") || "";
+            scoringMethod =
+              challengeSnap.get("scoringMethod") || "";
+            entryTokens =
+              challengeSnap.get("entryTokens") || 0;
+          }
+        }
 
-    if (challengeSnap.exists()) {
-      challengeTitle = challengeSnap.get("challengeTitle") || "";
-      courseName = challengeSnap.get("courseName") || "";
-      gameFormat = challengeSnap.get("gameFormat") || "";
+        results.push({
+          challengeId: data.challengeId,
+          challengeTitle:
+            challengeTitle || data.challengeTitle || "",
+          status: data.status,
+
+          gameFormat:
+            gameFormat || data.gameFormat || "",
+          scoringMethod:
+            scoringMethod || data.scoringMethod || "",
+          entryTokens:
+            entryTokens || data.entryTokens || 0,
+          creatorName: data.creatorName || "",
+        });
+      }
+
+      setInvites(results);
+    } catch (e) {
+      console.error("Failed to load invites", e);
+      setInvites([]);
+    } finally {
+      setLoading(false);
     }
   }
-
-  results.push({
-    challengeId: data.challengeId,
-    challengeTitle,
-    status: data.status,
-    courseName,
-    gameFormat,
-  } as any);
-}
-
-    setInvites(results);
-  } catch (e) {
-    console.error("Failed to load invites", e);
-    setInvites([]);
-  } finally {
-    setLoading(false);
-  }
-}
 
   useEffect(() => {
     if (!user) return;
@@ -108,25 +117,25 @@ const snap = await getDocs(invitesRef);
   }
 
   async function handleDecline(challengeId: string) {
-  if (!user) return;
+    if (!user) return;
 
-  try {
-    setProcessingId(challengeId);
+    try {
+      setProcessingId(challengeId);
 
-    const declineSecure = httpsCallable(
-      functions,
-      "declineInviteSecure"
-    );
+      const declineSecure = httpsCallable(
+        functions,
+        "declineInviteSecure"
+      );
 
-    await declineSecure({ challengeId });
+      await declineSecure({ challengeId });
 
-    await loadInvites(user.uid);
-  } catch (e: any) {
-    alert(e.message || "Failed to decline invite");
-  } finally {
-    setProcessingId(null);
+      await loadInvites(user.uid);
+    } catch (e: any) {
+      alert(e.message || "Failed to decline invite");
+    } finally {
+      setProcessingId(null);
+    }
   }
-}
 
   if (!user) {
     return (
@@ -147,22 +156,16 @@ const snap = await getDocs(invitesRef);
   return (
     <main className="min-h-screen bg-black text-white flex justify-center">
 
-      {/* subtle particle grid */}
-      <div className="absolute inset-0 opacity-20 pointer-events-none bg-[radial-gradient(circle,#39FF14_1px,transparent_1px)] bg-[size:40px_40px]" />
-
-      {/* stadium light glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[350px] bg-green-400 opacity-10 blur-[140px] animate-pulse pointer-events-none" />
-
       <div className="relative z-10 max-w-3xl w-full p-6 flex flex-col gap-6">
 
         <button
-  onClick={() => router.push("/dashboard")}
-  className="bg-green-500 text-black px-4 py-2 rounded font-semibold shadow-[0_0_20px_rgba(57,255,20,0.6)] hover:scale-[1.02] transition"
->
-  ← Back to Dashboard
-</button>
+          onClick={() => router.push("/dashboard")}
+          className="bg-green-500 text-black px-4 py-2 rounded font-semibold"
+        >
+          ← Back to Dashboard
+        </button>
 
-        <h1 className="text-3xl font-semibold tracking-wide">
+        <h1 className="text-3xl font-semibold">
           My Invites
         </h1>
 
@@ -173,7 +176,7 @@ const snap = await getDocs(invitesRef);
         {invites.map((invite) => (
           <div
             key={invite.challengeId}
-            className="bg-black/60 backdrop-blur-md border border-gray-700 rounded-xl p-5 flex flex-col gap-4 shadow-[0_0_18px_rgba(57,255,20,0.15)]"
+            className="bg-black/60 border border-gray-700 rounded-xl p-5 flex flex-col gap-4"
           >
             <div className="flex justify-between items-center">
               <h2 className="font-semibold text-lg">
@@ -185,31 +188,35 @@ const snap = await getDocs(invitesRef);
               </span>
             </div>
 
+            <div className="text-sm text-gray-300 flex flex-col gap-1">
+              <p><strong>Format:</strong> {invite.gameFormat}</p>
+              <p><strong>Scoring:</strong> {invite.scoringMethod}</p>
+              <p><strong>Tokens:</strong> {invite.entryTokens}</p>
+              <p><strong>Creator:</strong> {invite.creatorName}</p>
+            </div>
+
             {invite.status === "pending" && (
               <div className="flex gap-3">
-
                 <button
                   onClick={() =>
                     handleAccept(invite.challengeId)
                   }
                   disabled={
-                    processingId === invite.challengeId ||
-                    invite.status !== "pending"
+                    processingId === invite.challengeId
                   }
-                  className="bg-green-500 text-black px-4 py-2 rounded font-semibold shadow-[0_0_20px_rgba(57,255,20,0.6)] hover:scale-[1.02] transition disabled:opacity-50"
+                  className="bg-green-500 text-black px-4 py-2 rounded"
                 >
-                  {processingId === invite.challengeId
-                    ? "Processing..."
-                    : "Accept"}
+                  Accept
                 </button>
 
                 <button
-                  onClick={() => handleDecline(invite.challengeId)}
-                  className="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded"
+                  onClick={() =>
+                    handleDecline(invite.challengeId)
+                  }
+                  className="bg-gray-700 px-4 py-2 rounded"
                 >
                   Decline
                 </button>
-
               </div>
             )}
 
@@ -220,12 +227,11 @@ const snap = await getDocs(invitesRef);
                     `/challenges/${invite.challengeId}`
                   )
                 }
-                className="bg-green-500 text-black px-4 py-2 rounded font-semibold shadow-[0_0_20px_rgba(57,255,20,0.6)] hover:scale-[1.02] transition"
+                className="bg-green-500 text-black px-4 py-2 rounded"
               >
                 Open Challenge
               </button>
             )}
-
           </div>
         ))}
       </div>

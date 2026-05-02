@@ -45,6 +45,9 @@ const snap = await getDocs(invitesRef);
    for (const docSnap of snap.docs) {
   const data = docSnap.data();
 
+
+   console.log("INVITE DATA", data);
+
   let challengeTitle = "";
   let courseName = "";
   let gameFormat = "";

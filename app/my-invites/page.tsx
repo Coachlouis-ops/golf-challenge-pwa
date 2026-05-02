@@ -19,6 +19,10 @@ type InviteItem = {
   challengeId: string;
   challengeTitle: string;
   status: string;
+  gameFormat: string;
+  scoringMethod: string;
+  entryTokens: number;
+  creatorName: string;
 };
 
 export default function MyInvitesPage() {

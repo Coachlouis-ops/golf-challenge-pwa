@@ -76,6 +76,17 @@ const handleExit = () => {
         {/* RIGHT */}
         <div className="flex items-center gap-3 flex-wrap justify-end">
 
+  {/* ================= HONEY BADGER SHOP ================= */}
+  <button
+    onClick={() => router.push("/honeybadgergolfshop")}
+    className="px-4 py-2 rounded-xl text-sm font-semibold 
+    bg-cyan-400 text-black 
+    shadow-[0_0_15px_rgba(34,211,238,0.9)] 
+    animate-pulse hover:scale-110 transition whitespace-nowrap"
+  >
+    Honey Badger Golf Shop
+  </button>
+
           <a href="https://facebook.com/profile.php?id=61575742530808" target="_blank" className="hover:scale-110 transition">
             <svg width="18" height="18" fill="#1877F2" viewBox="0 0 24 24">
               <path d="M22 12a10 10 0 1 0-11.5 9.87v-6.99H8v-2.88h2.5V9.41c0-2.47 1.47-3.84 3.72-3.84 1.08 0 2.2.19 2.2.19v2.42h-1.24c-1.23 0-1.61.76-1.61 1.54v1.85H16l-.4 2.88h-2.21v6.99A10 10 0 0 0 22 12z"/>

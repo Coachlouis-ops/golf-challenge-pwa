@@ -19,8 +19,8 @@ const SUPPLIERS_BY_CATEGORY: Record<
   { name: string; url: string }[]
 > = {
   CHARITY: [
-    { name: "JK6", url: "https://jk6.org" },
-    { name: "Golfing for Teddies", url: "https://golfingforteddies.com" },
+    { name: "JK6", url: "https://www.jk6.co.za/" },
+    { name: "Golfing for Teddies", url: "https://golfing4teddy.com/" },
   ],
   SHOPPING: [
     { name: "Temu", url: "https://www.temu.com" },
@@ -41,11 +41,15 @@ const SUPPLIERS_BY_CATEGORY: Record<
   GOLF: [
     { name: "The Pro Shop", url: "https://www.theproshop.co.za" },
     { name: "The Golfers Club", url: "https://www.thegolfersclub.co.za" },
-    { name: "Your registered Local Club", url: "#" },
+    { name: "Your registered Local Club", url: "" },
+    { name: "Honey Badger Apparel", url: "https://www.teezgolfchallenges.com" },
   ],
   DIGITAL: [
-    { name: "Airtime / Data", url: "#" },
-    { name: "Electricity", url: "#" },
+    { name: "MTN Airtime / Data", url: "https://www.mtn.co.za" },
+    { name: "Vodacom Airtime / Data", url: "https://www.vodacom.co.za" },
+    { name: "Cell C Airtime / Data", url: "https://www.cellc.co.za" },
+    { name: "Telkom Airtime / Data", url: "https://www.telkom.co.za" },
+    { name: "Electricity", url: "" },
   ],
 };
 
@@ -91,6 +95,10 @@ export default function RedeemPage() {
     }
   }
 
+  const selectedSupplier = SUPPLIERS_BY_CATEGORY[category]?.find(
+    (s) => s.name === supplier
+  );
+
   return (
     <div className="min-h-screen bg-black text-white flex flex-col items-center gap-6 p-6">
 
@@ -130,34 +138,33 @@ export default function RedeemPage() {
       />
 
       {/* SUPPLIER */}
-    {category && (
-  <>
-    <select
-      value={supplier}
-      onChange={(e) => setSupplier(e.target.value)}
-      className="px-4 py-3 rounded w-72 bg-blue-400 text-black font-bold shadow-[0_0_20px_#00aaff]"
-    >
-      <option value="">Select Supplier</option>
-      {SUPPLIERS_BY_CATEGORY[category].map((s) => (
-        <option key={s.name} value={s.name}>
-          {s.name}
-        </option>
-      ))}
-    </select>
+      {category && (
+        <>
+          <select
+            value={supplier}
+            onChange={(e) => setSupplier(e.target.value)}
+            className="px-4 py-3 rounded w-72 bg-blue-400 text-black font-bold shadow-[0_0_20px_#00aaff]"
+          >
+            <option value="">Select Supplier</option>
+            {SUPPLIERS_BY_CATEGORY[category].map((s) => (
+              <option key={s.name} value={s.name}>
+                {s.name}
+              </option>
+            ))}
+          </select>
 
-    {supplier && (
-      <a
-        href={
-          SUPPLIERS_BY_CATEGORY[category].find((s) => s.name === supplier)?.url
-        }
-        target="_blank"
-        className="text-blue-300 underline"
-      >
-        Visit Website
-      </a>
-    )}
-  </>
-)}
+          {supplier && selectedSupplier?.url && (
+            <a
+              href={selectedSupplier.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-300 underline"
+            >
+              Visit Website
+            </a>
+          )}
+        </>
+      )}
 
       <button
         onClick={submit}

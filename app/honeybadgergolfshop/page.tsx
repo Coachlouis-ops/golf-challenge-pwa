@@ -65,8 +65,8 @@ export default function HoneyBadgerGolfShop() {
 
           {/* CATEGORY CARD */}
           <div className="bg-white/5 p-4 rounded-xl hover:bg-white/10 transition cursor-pointer">
-            <img src="/shop-clubs.jpg" className="w-full h-32 object-cover rounded-lg mb-3" />
-            <p className="text-sm text-center">Clubs</p>
+            <img src="/hoody.png" className="w-full h-32 object-cover rounded-lg mb-3" />
+<p className="text-sm text-center">Hoodies</p>
           </div>
 
           <div className="bg-white/5 p-4 rounded-xl hover:bg-white/10 transition cursor-pointer">

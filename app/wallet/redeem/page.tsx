@@ -5,89 +5,105 @@ import { useRouter } from "next/navigation";
 import { httpsCallable } from "firebase/functions";
 import { functions } from "@/src/lib/firebase";
 
+const CATEGORIES = [
+  "CHARITY",
+  "SHOPPING",
+  "GROCERY",
+  "FOOD",
+  "GOLF",
+  "DIGITAL",
+];
 
-
-
-const CATEGORIES = ["GOLF", "SHOPPING", "FOOD", "GROCERY"];
-
-const BENEFICIARY = ["ME", "FAMILY", "FRIEND", "CHARITY"];
-
-const SUPPLIERS_BY_CATEGORY: Record<string, string[]> = {
-  GOLF: [
-    "The Pro Shop",
-    "PGA TOUR Superstore",
-    "GlobalGolf",
-    "American Golf",
-    "Decathlon",
-    "Drummond Golf",
+const SUPPLIERS_BY_CATEGORY: Record<
+  string,
+  { name: string; url: string }[]
+> = {
+  CHARITY: [
+    { name: "JK6", url: "https://jk6.org" },
+    { name: "Golfing for Teddies", url: "https://golfingforteddies.com" },
   ],
-  SHOPPING: ["Takealot", "Shein", "Temu", "Amazon", "Walmart"],
+  SHOPPING: [
+    { name: "Temu", url: "https://www.temu.com" },
+    { name: "Shein", url: "https://www.shein.com" },
+    { name: "Takealot", url: "https://www.takealot.com" },
+    { name: "Superbalist", url: "https://www.superbalist.com" },
+  ],
+  GROCERY: [
+    { name: "Woolworths", url: "https://www.woolworths.co.za" },
+    { name: "Checkers", url: "https://www.checkers.co.za" },
+    { name: "Pick n Pay", url: "https://www.pnp.co.za" },
+    { name: "Makro", url: "https://www.makro.co.za" },
+  ],
   FOOD: [
-    "Uber Eats",
-    "Mr D Food",
-    "DoorDash",
-    "Just Eat",
-    "Deliveroo",
-    "GrabFood",
-    "Foodpanda",
-    "Talabat",
+    { name: "Uber Eats", url: "https://www.ubereats.com" },
+    { name: "Mr D Food", url: "https://www.mrdfood.com" },
   ],
-  GROCERY: ["Makro", "Woolworths", "Costco", "Tesco", "Carrefour", "Coles"],
+  GOLF: [
+    { name: "The Pro Shop", url: "https://www.theproshop.co.za" },
+    { name: "The Golfers Club", url: "https://www.thegolfersclub.co.za" },
+    { name: "Your registered Local Club", url: "#" },
+  ],
+  DIGITAL: [
+    { name: "Airtime / Data", url: "#" },
+    { name: "Electricity", url: "#" },
+  ],
 };
 
 export default function RedeemPage() {
   const [category, setCategory] = useState("");
-  const [beneficiary, setBeneficiary] = useState("");
   const [supplier, setSupplier] = useState("");
   const [amount, setAmount] = useState("");
   const router = useRouter();
 
- async function submit() {
-  try {
-    if (!category || !beneficiary || !supplier || !amount) {
-      alert("Complete all fields");
-      return;
+  async function submit() {
+    try {
+      if (!category || !supplier || !amount) {
+        alert("Complete all fields");
+        return;
+      }
+
+      const amountNum = Number(amount);
+      const MIN_REDEEM = 5;
+
+      if (amountNum < MIN_REDEEM) {
+        alert(`Minimum redeem is ${MIN_REDEEM} tokens`);
+        return;
+      }
+
+      const fn = httpsCallable(functions, "createRedemptionRequest");
+
+      await fn({
+        amount: amountNum,
+        type: "voucher",
+        provider: supplier,
+        category,
+      });
+
+      alert("Voucher request submitted");
+
+      setCategory("");
+      setSupplier("");
+      setAmount("");
+
+      router.push("/dashboard");
+    } catch (err: any) {
+      alert(err?.message || "Error");
     }
-
-    const amountNum = Number(amount);
-
-    // ✅ MINIMUM REDEEM (EDIT THIS VALUE)
-    const MIN_REDEEM = 5;
-
-    if (amountNum < MIN_REDEEM) {
-      alert(`Minimum redeem is ${MIN_REDEEM} tokens`);
-      return;
-    }
-
-    const fn = httpsCallable(functions, "createRedemptionRequest");
-
-    await fn({
-      amount: amountNum,
-      type: "voucher",
-      provider: supplier,
-      category,
-      beneficiary,
-    });
-
-    alert("Voucher request submitted");
-
-    // reset
-    setCategory("");
-    setBeneficiary("");
-    setSupplier("");
-    setAmount("");
-
-    router.push("/dashboard");
-
-  } catch (err: any) {
-    alert(err?.message || "Error");
   }
-}
 
   return (
-    <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center gap-6 p-6">
+    <div className="min-h-screen bg-black text-white flex flex-col items-center gap-6 p-6">
 
-      <h1 className="text-3xl font-bold">Build Your Voucher</h1>
+      {/* BANNER */}
+      <img
+        src="/wallet.png"
+        alt="wallet"
+        className="w-full max-w-md rounded-xl shadow-[0_0_25px_#00f0ff]"
+      />
+
+      <h1 className="text-3xl font-bold text-center">
+        Collect Your Prize
+      </h1>
 
       {/* CATEGORY */}
       <select
@@ -96,23 +112,11 @@ export default function RedeemPage() {
           setCategory(e.target.value);
           setSupplier("");
         }}
-        className="px-4 py-3 rounded w-72 bg-cyan-200 text-black font-semibold shadow-[0_0_10px_#00f0ff]"
+        className="px-4 py-3 rounded w-72 bg-blue-400 text-black font-bold shadow-[0_0_20px_#00aaff]"
       >
         <option value="">Select Category</option>
         {CATEGORIES.map((c) => (
           <option key={c}>{c}</option>
-        ))}
-      </select>
-
-      {/* BENEFICIARY */}
-      <select
-        value={beneficiary}
-        onChange={(e) => setBeneficiary(e.target.value)}
-        className="px-4 py-3 rounded w-72 bg-cyan-200 text-black font-semibold shadow-[0_0_10px_#00f0ff]"
-      >
-        <option value="">Select Beneficiary</option>
-        {BENEFICIARY.map((b) => (
-          <option key={b}>{b}</option>
         ))}
       </select>
 
@@ -122,7 +126,7 @@ export default function RedeemPage() {
         placeholder="Amount (tokens)"
         value={amount}
         onChange={(e) => setAmount(e.target.value)}
-        className="px-4 py-3 rounded w-72 bg-cyan-200 text-black font-semibold shadow-[0_0_10px_#00f0ff]"
+        className="px-4 py-3 rounded w-72 bg-blue-400 text-black font-bold shadow-[0_0_20px_#00aaff]"
       />
 
       {/* SUPPLIER */}
@@ -130,23 +134,23 @@ export default function RedeemPage() {
         <select
           value={supplier}
           onChange={(e) => setSupplier(e.target.value)}
-          className="px-4 py-3 rounded w-72 bg-cyan-200 text-black font-semibold shadow-[0_0_10px_#00f0ff]"
+          className="px-4 py-3 rounded w-72 bg-blue-400 text-black font-bold shadow-[0_0_20px_#00aaff]"
         >
           <option value="">Select Supplier</option>
           {SUPPLIERS_BY_CATEGORY[category].map((s) => (
-            <option key={s}>{s}</option>
+            <option key={s.name} value={s.name}>
+              {s.name} ({s.url})
+            </option>
           ))}
         </select>
       )}
 
-      {/* SUBMIT */}
       <button
         onClick={submit}
-        className="bg-cyan-400 text-black px-6 py-3 rounded font-bold shadow-[0_0_15px_#00f0ff]"
+        className="bg-blue-400 text-black px-6 py-3 rounded font-bold shadow-[0_0_25px_#00aaff]"
       >
         Submit Redemption
       </button>
-
     </div>
   );
 }

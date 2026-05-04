@@ -6,7 +6,19 @@ export default function HoneyBadgerGolfShop() {
   const router = useRouter();
 
   return (
-    <main className="bg-black text-white min-h-screen">
+    <main className="relative text-white min-h-screen overflow-hidden">
+  
+  {/* BACKGROUND IMAGE */}
+  <img
+    src="/shopbadger.png"
+    className="absolute inset-0 w-full h-full object-cover opacity-40"
+  />
+
+  {/* OVERLAY */}
+  <div className="absolute inset-0 bg-black/70" />
+  
+  {/* CONTENT */}
+  <div className="relative z-10">
 
       {/* ================= HEADER ================= */}
       <div className="px-6 py-4 flex items-center justify-between border-b border-white/10">
@@ -122,6 +134,7 @@ export default function HoneyBadgerGolfShop() {
         </div>
       </section>
 
+         </div>
     </main>
   );
 }

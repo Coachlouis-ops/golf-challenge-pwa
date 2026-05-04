@@ -293,19 +293,27 @@ async function handleUpdateScoreboard() {
 
 
 
+let finalizing = false;
+
 // ===============================
 // FINALIZE CHALLENGE
 // ===============================
 async function handleFinalizeChallenge() {
   if (!challengeId) return;
 
-    console.log("FINALIZE CLICKED"); // <-- ADD HERE
+  if (finalizing) return;
+  finalizing = true;
+
+  console.log("FINALIZE CLICKED");
 
   const confirmFinalize = window.confirm(
     "Are you sure you want to finalize this challenge?\n\nThis action cannot be undone."
   );
 
-  if (!confirmFinalize) return;
+  if (!confirmFinalize) {
+    finalizing = false;
+    return;
+  }
 
   try {
     const finalize = httpsCallable(functions, "finalizeChallenge");
@@ -322,6 +330,8 @@ async function handleFinalizeChallenge() {
 
   } catch (e: any) {
     alert(e.message || "Failed to finalize challenge");
+  } finally {
+    finalizing = false;
   }
 }
 

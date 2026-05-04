@@ -299,6 +299,8 @@ async function handleUpdateScoreboard() {
 async function handleFinalizeChallenge() {
   if (!challengeId) return;
 
+    console.log("FINALIZE CLICKED"); // <-- ADD HERE
+
   const confirmFinalize = window.confirm(
     "Are you sure you want to finalize this challenge?\n\nThis action cannot be undone."
   );

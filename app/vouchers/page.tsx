@@ -28,7 +28,7 @@ type Voucher = {
   emailSentTo?: string;
   emailSentAt?: any;
 
-  message?: string; // ✅ ADD THIS
+  message?: string;
 };
 
 export default function VouchersPage() {
@@ -80,30 +80,30 @@ export default function VouchersPage() {
 
         {/* HERO BANNER */}
         <div className="w-full bg-black flex items-center justify-center py-4">
-  <img
-    src="/voucher_badger.png"
-    alt="Voucher Banner"
-    className="w-full max-w-md h-auto object-contain"
-  />
-</div>
+          <img
+            src="/voucher_badger.png"
+            alt="Voucher Banner"
+            className="w-full max-w-md h-auto object-contain"
+          />
+        </div>
 
-        <main className="w-full max-w-md mx-auto px-6 py-10">
+        <main className="w-full max-w-md mx-auto px-6 py-6">
 
-       {/* HEADER */}
-<div className="flex items-center justify-between mb-6">
-  <button
-    onClick={() => router.replace("/dashboard")}
-    className="px-3 py-1 rounded border border-yellow-400 text-yellow-300 hover:bg-yellow-400 hover:text-black transition"
-  >
-    ← Dashboard
-  </button>
+          {/* BACK BUTTON (1 LINER) */}
+          <div className="text-center mb-2">
+            <button
+              onClick={() => router.replace("/dashboard")}
+              className="text-sm text-yellow-400 hover:underline"
+            >
+              ← Back to Dashboard
+            </button>
+          </div>
 
-  <h1 className="text-2xl font-bold neon-yellow">
-    My Vouchers
-  </h1>
+          {/* HEADER */}
+          <h1 className="text-2xl font-bold neon-yellow text-center mb-6">
+            My Vouchers
+          </h1>
 
-  <div className="w-[90px]" /> {/* spacer to balance layout */}
-</div>
           {vouchers.length === 0 && (
             <p className="text-center neon-yellow">
               No vouchers yet
@@ -133,32 +133,32 @@ export default function VouchersPage() {
                       </p>
                     </div>
                   )}
-{v.deliveryMethod === "email" && (
-  <div className="mt-3 p-2 border border-yellow-400 rounded bg-black">
-    <p className="text-yellow-400 text-sm">
-      Voucher Sent via Email
-    </p>
 
-    {v.message && (
-      <p className="text-yellow-300 font-semibold mt-1">
-        {v.message}
-      </p>
-    )}
+                  {v.deliveryMethod === "email" && (
+                    <div className="mt-3 p-2 border border-yellow-400 rounded bg-black">
+                      <p className="text-yellow-400 text-sm">
+                        Voucher Sent via Email
+                      </p>
 
-    {v.emailSentTo && (
-      <p className="text-sm text-yellow-300 mt-1">
-        {v.emailSentTo}
-      </p>
-    )}
+                      {v.message && (
+                        <p className="text-yellow-300 font-semibold mt-1">
+                          {v.message}
+                        </p>
+                      )}
 
-    {v.emailSentAt && (
-      <p className="text-xs text-yellow-500 mt-1">
-        Sent at: {new Date(v.emailSentAt.seconds * 1000).toLocaleString()}
-      </p>
-    )}
-  </div>
-)}
+                      {v.emailSentTo && (
+                        <p className="text-sm text-yellow-300 mt-1">
+                          {v.emailSentTo}
+                        </p>
+                      )}
 
+                      {v.emailSentAt && (
+                        <p className="text-xs text-yellow-500 mt-1">
+                          Sent at: {new Date(v.emailSentAt.seconds * 1000).toLocaleString()}
+                        </p>
+                      )}
+                    </div>
+                  )}
 
                   <div className="flex items-center justify-between mt-3">
                     <p className="text-green-400 font-semibold">

@@ -130,20 +130,34 @@ export default function RedeemPage() {
       />
 
       {/* SUPPLIER */}
-      {category && (
-        <select
-          value={supplier}
-          onChange={(e) => setSupplier(e.target.value)}
-          className="px-4 py-3 rounded w-72 bg-blue-400 text-black font-bold shadow-[0_0_20px_#00aaff]"
-        >
-          <option value="">Select Supplier</option>
-          {SUPPLIERS_BY_CATEGORY[category].map((s) => (
-            <option key={s.name} value={s.name}>
-              {s.name} ({s.url})
-            </option>
-          ))}
-        </select>
-      )}
+    {category && (
+  <>
+    <select
+      value={supplier}
+      onChange={(e) => setSupplier(e.target.value)}
+      className="px-4 py-3 rounded w-72 bg-blue-400 text-black font-bold shadow-[0_0_20px_#00aaff]"
+    >
+      <option value="">Select Supplier</option>
+      {SUPPLIERS_BY_CATEGORY[category].map((s) => (
+        <option key={s.name} value={s.name}>
+          {s.name}
+        </option>
+      ))}
+    </select>
+
+    {supplier && (
+      <a
+        href={
+          SUPPLIERS_BY_CATEGORY[category].find((s) => s.name === supplier)?.url
+        }
+        target="_blank"
+        className="text-blue-300 underline"
+      >
+        Visit Website
+      </a>
+    )}
+  </>
+)}
 
       <button
         onClick={submit}

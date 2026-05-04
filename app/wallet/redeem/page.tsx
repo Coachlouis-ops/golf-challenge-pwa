@@ -35,12 +35,12 @@ const SUPPLIERS_BY_CATEGORY: Record<
     { name: "Makro", url: "https://www.makro.co.za" },
   ],
   FOOD: [
-    { name: "Uber Eats", url: "https://www.ubereats.com" },
+    { name: "Uber Eats", url: "https://www.ubereats.com/za" },
     { name: "Mr D Food", url: "https://www.mrdfood.com" },
   ],
   GOLF: [
     { name: "The Pro Shop", url: "https://www.theproshop.co.za" },
-    { name: "The Golfers Club", url: "https://www.thegolfersclub.co.za" },
+    { name: "The Golfers Club", url: "https://www.golfersclub.co.za" },
     { name: "Your registered Local Club", url: "" },
     { name: "Honey Badger Apparel", url: "https://www.teezgolfchallenges.com" },
   ],

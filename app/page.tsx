@@ -45,15 +45,17 @@ export default function HomePage() {
   };
 
   // ================= EXIT =================
-  const handleExit = () => {
-    if (typeof window !== "undefined") {
-      try {
-        window.close();
-      } catch (e) {
-        window.location.href = "about:blank";
-      }
-    }
-  };
+const handleExit = () => {
+  if (typeof window !== "undefined") {
+    window.open("", "_self");
+    window.close();
+
+    // fallback if blocked
+    setTimeout(() => {
+      window.location.href = "/";
+    }, 100);
+  }
+};
 
   return (
     <main className="bg-black text-white">

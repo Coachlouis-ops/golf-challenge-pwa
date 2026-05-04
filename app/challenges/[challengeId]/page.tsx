@@ -247,7 +247,7 @@ useEffect(() => {
     runSearch();
   }, [searchTerm]);
 
-// ===============================
+// =============================== 
 // UPDATE SCOREBOARD
 // ===============================
 async function handleUpdateScoreboard() {
@@ -293,7 +293,7 @@ async function handleUpdateScoreboard() {
 
 
 
-let finalizing = false;
+const [finalizing, setFinalizing] = useState(false);
 
 // ===============================
 // FINALIZE CHALLENGE
@@ -302,7 +302,7 @@ async function handleFinalizeChallenge() {
   if (!challengeId) return;
 
   if (finalizing) return;
-  finalizing = true;
+  setFinalizing(true);
 
   console.log("FINALIZE CLICKED");
 
@@ -311,7 +311,7 @@ async function handleFinalizeChallenge() {
   );
 
   if (!confirmFinalize) {
-    finalizing = false;
+    setFinalizing(false);
     return;
   }
 
@@ -331,7 +331,7 @@ async function handleFinalizeChallenge() {
   } catch (e: any) {
     alert(e.message || "Failed to finalize challenge");
   } finally {
-    finalizing = false;
+    setFinalizing(false);
   }
 }
 

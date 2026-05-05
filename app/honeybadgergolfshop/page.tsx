@@ -72,10 +72,23 @@ export default function HoneyBadgerGolfShop() {
   <p className="text-sm text-center">Hoodies</p>
 </div>
 
-          <div className="bg-white/5 p-4 rounded-xl hover:bg-white/10 transition cursor-pointer">
-            <img src="/shop-balls.jpg" className="w-full h-32 object-cover rounded-lg mb-3" />
-            <p className="text-sm text-center">Balls</p>
-          </div>
+          <div
+  onClick={() => router.push("/honeybadgergolfshop/caps")}
+  className="relative cursor-pointer group"
+>
+  <img
+    src="/header_cap.png"
+    className="w-full h-40 object-cover rounded-xl opacity-80 group-hover:opacity-100 transition"
+  />
+
+  <div className="absolute inset-0 flex items-center justify-center">
+    <h2 className="text-2xl font-bold text-white tracking-wide 
+    drop-shadow-[0_0_10px_rgba(0,0,0,0.9)]
+    group-hover:scale-110 transition">
+      CAPS
+    </h2>
+  </div>
+</div>
 
           <div className="bg-white/5 p-4 rounded-xl hover:bg-white/10 transition cursor-pointer">
             <img src="/shop-apparel.jpg" className="w-full h-32 object-cover rounded-lg mb-3" />

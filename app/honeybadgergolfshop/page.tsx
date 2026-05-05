@@ -29,36 +29,36 @@ export default function HoneyBadgerGolfShop() {
           <div />
         </div>
 
-        {/* CATEGORIES (LARGE IMAGES) */}
+        {/* CATEGORIES */}
         <section className="px-6 py-10 max-w-5xl mx-auto space-y-10">
 
           {/* HOODIES */}
-          <div onClick={() => router.push("/honeybadgergolfshop/hoody")} className="cursor-pointer">
-            <img src="/hoody.png" className="w-full h-64 object-cover rounded-xl hover:scale-[1.02] transition" />
+          <div onClick={() => router.push("/honeybadgergolfshop/hoody")} className="cursor-pointer flex flex-col items-center">
+            <img src="/hoody.png" className="w-full h-auto object-contain rounded-xl hover:scale-[1.02] transition bg-black/20" />
             <p className="text-center mt-3 text-lg">Hoodies</p>
           </div>
 
           {/* CAPS */}
-          <div onClick={() => router.push("/honeybadgergolfshop/caps")} className="cursor-pointer">
-            <img src="/cap_yellow.png" className="w-full h-64 object-cover rounded-xl hover:scale-[1.02] transition" />
+          <div onClick={() => router.push("/honeybadgergolfshop/caps")} className="cursor-pointer flex flex-col items-center">
+            <img src="/cap_yellow.png" className="w-full h-auto object-contain rounded-xl hover:scale-[1.02] transition bg-black/20" />
             <p className="text-center mt-3 text-lg">Caps</p>
           </div>
 
           {/* PANTS */}
-          <div onClick={() => router.push("/honeybadgergolfshop/pants")} className="cursor-pointer">
-            <img src="/cargo_main.png" className="w-full h-64 object-cover rounded-xl hover:scale-[1.02] transition" />
+          <div onClick={() => router.push("/honeybadgergolfshop/pants")} className="cursor-pointer flex flex-col items-center">
+            <img src="/cargo_main.png" className="w-full h-auto object-contain rounded-xl hover:scale-[1.02] transition bg-black/20" />
             <p className="text-center mt-3 text-lg">Pants</p>
           </div>
 
-          {/* T-SHIRTS (NEW) */}
-          <div onClick={() => router.push("/honeybadgergolfshop/teeshirt")} className="cursor-pointer">
-            <img src="/teeshirt_main.png" className="w-full h-64 object-cover rounded-xl hover:scale-[1.02] transition" />
+          {/* T-SHIRTS */}
+          <div onClick={() => router.push("/honeybadgergolfshop/teeshirt")} className="cursor-pointer flex flex-col items-center">
+            <img src="/teeshirt_main.png" className="w-full h-auto object-contain rounded-xl hover:scale-[1.02] transition bg-black/20" />
             <p className="text-center mt-3 text-lg">T-Shirts</p>
           </div>
 
           {/* RANGEFINDER */}
-          <div onClick={() => setPreview("/rangefinder.png")} className="cursor-pointer">
-            <img src="/rangefinder.png" className="w-full h-64 object-cover rounded-xl hover:scale-[1.02] transition" />
+          <div onClick={() => setPreview("/rangefinder.png")} className="cursor-pointer flex flex-col items-center">
+            <img src="/rangefinder.png" className="w-full h-auto object-contain rounded-xl hover:scale-[1.02] transition bg-black/20" />
             <p className="text-center mt-3 text-lg">Range Finder</p>
           </div>
 
@@ -68,8 +68,14 @@ export default function HoneyBadgerGolfShop() {
 
       {/* FULLSCREEN PREVIEW */}
       {preview && (
-        <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50" onClick={() => setPreview(null)}>
-          className="w-full h-auto object-contain rounded-xl hover:scale-[1.02] transition bg-black/20"
+        <div
+          className="fixed inset-0 bg-black/90 flex items-center justify-center z-50"
+          onClick={() => setPreview(null)}
+        >
+          <img
+            src={preview}
+            className="max-w-full max-h-full object-contain"
+          />
         </div>
       )}
 

@@ -16,64 +16,59 @@ export default function HoodiePage() {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   return (
-    <main className="relative text-white min-h-screen overflow-hidden">
+    <main className="bg-[#0a0f1f] text-white min-h-screen">
 
-      {/* BACKGROUND */}
-      <img
-        src="/hoody_background.png"
-        className="absolute inset-0 w-full h-full object-contain opacity-100"
-      />
+      {/* ================= HEADER ================= */}
+      <div className="px-4 py-4 flex items-center justify-between border-b border-white/10">
+        <button
+          onClick={() => router.push("/honeybadgergolfshop")}
+          className="text-xs px-3 py-1 bg-white/10 rounded-lg"
+        >
+          ← Back
+        </button>
 
-      {/* LIGHT OVERLAY */}
-      <div className="absolute inset-0 bg-black/10" />
+        <h1 className="text-sm font-semibold text-cyan-400">
+          HOODIES
+        </h1>
 
-      {/* CONTENT */}
-      <div className="relative z-10">
-
-        {/* HEADER */}
-        <div className="px-4 py-4 flex items-center justify-between border-b border-white/10">
-          <button
-            onClick={() => router.push("/honeybadgergolfshop")}
-            className="text-xs px-3 py-1 bg-white/10 rounded-lg"
-          >
-            ← Back
-          </button>
-
-          <h1 className="text-sm font-semibold text-cyan-400">
-            HOODIES
-          </h1>
-
-          <div />
-        </div>
-
-        {/* PRODUCTS */}
-        <section className="px-4 py-6 max-w-5xl mx-auto space-y-10">
-
-          {PRODUCTS.map((item, i) => (
-            <div key={i} className="flex flex-col items-center">
-
-              <img
-                src={item.image}
-                onClick={() => setSelectedImage(item.image)}
-                className="w-full max-w-xl object-contain cursor-pointer"
-              />
-
-              <p className="text-base mt-4">
-                {item.name}
-              </p>
-
-              <p className="text-cyan-400 text-lg font-semibold">
-                R1499
-              </p>
-
-            </div>
-          ))}
-
-        </section>
-
+        <div />
       </div>
 
-      {/* FULLSCREEN IMAGE VIEW */}
+      {/* ================= HERO IMAGE ================= */}
+      <section className="w-full">
+        <img
+          src="/hoody_background.png"
+          className="w-full max-h-[400px] object-contain mx-auto"
+          alt="Badger Hero"
+        />
+      </section>
+
+      {/* ================= PRODUCTS ================= */}
+      <section className="px-4 py-8 max-w-5xl mx-auto space-y-12">
+
+        {PRODUCTS.map((item, i) => (
+          <div key={i} className="flex flex-col items-center">
+
+            <img
+              src={item.image}
+              onClick={() => setSelectedImage(item.image)}
+              className="w-full max-w-xl object-contain cursor-pointer"
+            />
+
+            <p className="text-base mt-4">
+              {item.name}
+            </p>
+
+            <p className="text-cyan-400 text-lg font-semibold">
+              R1499
+            </p>
+
+          </div>
+        ))}
+
+      </section>
+
+      {/* ================= FULLSCREEN IMAGE ================= */}
       {selectedImage && (
         <div
           className="fixed inset-0 bg-black/90 flex items-center justify-center z-50"

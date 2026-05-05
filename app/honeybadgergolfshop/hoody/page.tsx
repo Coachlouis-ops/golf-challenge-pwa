@@ -47,33 +47,29 @@ export default function HoodiePage() {
         </div>
 
         {/* PRODUCTS GRID */}
-        <section className="px-4 py-6 max-w-6xl mx-auto">
+       <section className="px-4 py-6 max-w-5xl mx-auto space-y-8">
 
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+  {PRODUCTS.map((item, i) => (
+    <div key={i} className="flex flex-col items-center">
 
-            {PRODUCTS.map((item, i) => (
-              <div
-                key={i}
-                className="bg-white/5 backdrop-blur-md p-3 rounded-xl border border-white/10"
-              >
-                <img
-                  src={item.image}
-                  onClick={() => setSelectedImage(item.image)}
-                  className="w-full h-64 md:h-80 object-contain mb-3 cursor-pointer"
-                />
+      <img
+        src={item.image}
+        onClick={() => setSelectedImage(item.image)}
+        className="w-full max-w-xl object-contain cursor-pointer"
+      />
 
-                <p className="text-sm text-center mb-1">
-                  {item.name}
-                </p>
+      <p className="text-base mt-3">
+        {item.name}
+      </p>
 
-                <p className="text-cyan-400 text-base font-semibold text-center">
-                  R1499
-                </p>
-              </div>
-            ))}
+      <p className="text-cyan-400 text-lg font-semibold">
+        R1499
+      </p>
 
-          </div>
-        </section>
+    </div>
+  ))}
+
+</section>
 
       </div>
 

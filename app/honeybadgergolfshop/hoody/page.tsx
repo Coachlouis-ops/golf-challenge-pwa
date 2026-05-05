@@ -20,9 +20,11 @@ export default function HoodiePage() {
 
       {/* BACKGROUND */}
       <img
-        src="/hoodybackground.png"
-        className="absolute inset-0 w-full h-full object-cover scale-110 blur-[2px]"
-      />
+  src="/hoody_background.png"
+  className="absolute inset-0 w-full h-full object-cover scale-110 opacity-60"
+/>
+
+<div className="absolute inset-0 bg-black/60" />
 
       {/* OVERLAY */}
       <div className="absolute inset-0 bg-black/80" />

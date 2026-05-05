@@ -66,13 +66,17 @@ export default function HoneyBadgerGolfShop() {
             </div>
 
             {/* PANTS */}
-            <div
-              onClick={() => router.push("/honeybadgergolfshop/pants")}
-              className="bg-white/5 p-4 rounded-xl hover:bg-white/10 transition cursor-pointer hover:scale-105"
-            >
-              <img src="/cargo_header.png" className="w-full h-32 object-cover rounded-lg mb-3" alt="Pants" />
-              <p className="text-sm text-center">Pants</p>
-            </div>
+<div
+  onClick={() => router.push("/honeybadgergolfshop/pants")}
+  className="bg-white/5 p-4 rounded-xl hover:bg-white/10 transition cursor-pointer hover:scale-105"
+>
+  <img
+    src="/cargo_main.png"
+    className="w-full h-32 object-cover rounded-lg mb-3"
+    alt="Pants"
+  />
+  <p className="text-sm text-center">Pants</p>
+</div>
 
             {/* OTHER */}
             <div className="bg-white/5 p-4 rounded-xl hover:bg-white/10 transition cursor-pointer">

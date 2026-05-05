@@ -36,22 +36,13 @@ export default function HoneyBadgerGolfShop() {
           <div />
         </div>
 
-        {/* ================= HERO ================= */}
-        <section className="relative w-full">
+        {/* ================= MAIN HERO (REPLACED) ================= */}
+        <section className="w-full">
           <img
-            src="/shop-hero.jpg"
-            className="w-full h-[300px] object-cover opacity-70"
-            alt="Shop Hero"
+            src="/cargo_main.png"
+            className="w-full h-[400px] object-cover"
+            alt="Cargo Hero"
           />
-
-          <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
-            <h2 className="text-2xl md:text-4xl font-bold mb-2">
-              Fearless Gear Up 
-            </h2>
-            <p className="text-gray-300 text-sm max-w-xl">
-              Premium golf gear. Apparel. Accessories. Built for competitors.
-            </p>
-          </div>
         </section>
 
         {/* ================= CATEGORY GRID ================= */}

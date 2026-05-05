@@ -65,7 +65,7 @@ export default function PantsPage() {
               </p>
 
               <p className="text-cyan-400 text-lg font-semibold">
-                R899
+                R599
               </p>
 
             </div>

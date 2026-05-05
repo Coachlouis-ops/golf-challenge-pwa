@@ -8,6 +8,9 @@ const PRODUCTS = [
   { name: "Blue Cargo Pants", image: "/cargo_blue.png" },
   { name: "Cream Cargo Pants", image: "/cargo_cream.png" },
   { name: "Khaki Cargo Pants", image: "/cargo_kakhi.png" },
+  { name: "Maroon Cargo Pants", image: "/cargo_maroon.png" },
+  { name: "Grey Cargo Pants", image: "/cargo_grey.png" },
+  { name: "Green Cargo Pants", image: "/cargo_green.png" },
 ];
 
 export default function PantsPage() {
@@ -17,14 +20,14 @@ export default function PantsPage() {
   return (
     <main className="relative text-white min-h-screen overflow-hidden bg-[#050816]">
 
-   {/* HERO IMAGE */}
-<div className="relative w-full h-[400px]">
-  <img
-    src="/cargo_main.png"
-    className="w-full h-full object-cover"
-    alt="Cargo Main"
-  />
-</div>
+      {/* HERO IMAGE */}
+      <div className="relative w-full h-[400px]">
+        <img
+          src="/cargo_main.png"
+          className="w-full h-full object-cover"
+          alt="Cargo Main"
+        />
+      </div>
 
       {/* CONTENT */}
       <div className="relative z-10">

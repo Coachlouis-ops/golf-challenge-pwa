@@ -19,12 +19,12 @@ export default function HoodiePage() {
     <main className="relative text-white min-h-screen overflow-hidden">
 
       {/* BACKGROUND */}
-    <img
+  <img
   src="/hoody_background.png"
-  className="absolute inset-0 w-full h-full object-cover scale-105 opacity-80"
+  className="absolute inset-0 w-full h-full object-cover scale-100 opacity-100"
 />
 
-<div className="absolute inset-0 bg-black/40" />
+<div className="absolute inset-0 bg-black/10" />
 
       {/* OVERLAY */}
       <div className="absolute inset-0 bg-black/80" />

@@ -19,15 +19,13 @@ export default function HoodiePage() {
     <main className="relative text-white min-h-screen overflow-hidden">
 
       {/* BACKGROUND */}
-  <img
-  src="/hoody_background.png"
-  className="absolute inset-0 w-full h-full object-cover scale-100 opacity-100"
-/>
+      <img
+        src="/hoody_background.png"
+        className="absolute inset-0 w-full h-full object-contain opacity-100"
+      />
 
-<div className="absolute inset-0 bg-black/10" />
-
-      {/* OVERLAY */}
-      <div className="absolute inset-0 bg-black/80" />
+      {/* LIGHT OVERLAY */}
+      <div className="absolute inset-0 bg-black/10" />
 
       {/* CONTENT */}
       <div className="relative z-10">
@@ -78,7 +76,7 @@ export default function HoodiePage() {
       {/* FULLSCREEN IMAGE VIEW */}
       {selectedImage && (
         <div
-          className="fixed inset-0 bg-black/95 flex items-center justify-center z-50"
+          className="fixed inset-0 bg-black/90 flex items-center justify-center z-50"
           onClick={() => setSelectedImage(null)}
         >
           <img

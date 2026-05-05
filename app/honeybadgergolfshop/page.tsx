@@ -69,7 +69,7 @@ export default function HoneyBadgerGolfShop() {
       {/* FULLSCREEN PREVIEW */}
       {preview && (
         <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50" onClick={() => setPreview(null)}>
-          <img src={preview} className="max-w-full max-h-full object-contain" />
+          className="w-full h-auto object-contain rounded-xl hover:scale-[1.02] transition bg-black/20"
         </div>
       )}
 

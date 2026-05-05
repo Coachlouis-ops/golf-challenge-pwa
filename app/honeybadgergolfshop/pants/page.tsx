@@ -17,14 +17,14 @@ export default function PantsPage() {
   return (
     <main className="relative text-white min-h-screen overflow-hidden bg-[#050816]">
 
-      {/* HERO IMAGE */}
-      <div className="relative w-full h-[300px] md:h-[420px]">
-        <img
-          src="/cargo_header.png"
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-black/40" />
-      </div>
+   {/* HERO IMAGE */}
+<div className="relative w-full h-[400px]">
+  <img
+    src="/cargo_main.png"
+    className="w-full h-full object-cover"
+    alt="Cargo Main"
+  />
+</div>
 
       {/* CONTENT */}
       <div className="relative z-10">

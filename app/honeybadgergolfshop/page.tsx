@@ -37,14 +37,6 @@ export default function HoneyBadgerGolfShop() {
           <div />
         </div>
 
-        {/* ================= MAIN HERO ================= */}
-        <section className="w-full">
-          <img
-            src="/cargo_main.png"
-            className="w-full h-[400px] object-cover"
-            alt="Cargo Main"
-          />
-        </section>
 
         {/* ================= CATEGORY GRID ================= */}
         <section className="px-6 py-12 max-w-6xl mx-auto">

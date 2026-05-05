@@ -21,11 +21,11 @@ export default function HoodiePage() {
       {/* BACKGROUND */}
       <img
         src="/hoodybackground.png"
-        className="absolute inset-0 w-full h-full object-cover"
+        className="absolute inset-0 w-full h-full object-cover scale-110 blur-[2px]"
       />
 
-      {/* DARK OVERLAY */}
-      <div className="absolute inset-0 bg-black/70" />
+      {/* OVERLAY */}
+      <div className="absolute inset-0 bg-black/80" />
 
       {/* CONTENT */}
       <div className="relative z-10">
@@ -46,30 +46,30 @@ export default function HoodiePage() {
           <div />
         </div>
 
-        {/* PRODUCTS GRID */}
-       <section className="px-4 py-6 max-w-5xl mx-auto space-y-8">
+        {/* PRODUCTS */}
+        <section className="px-4 py-6 max-w-5xl mx-auto space-y-10">
 
-  {PRODUCTS.map((item, i) => (
-    <div key={i} className="flex flex-col items-center">
+          {PRODUCTS.map((item, i) => (
+            <div key={i} className="flex flex-col items-center">
 
-      <img
-        src={item.image}
-        onClick={() => setSelectedImage(item.image)}
-        className="w-full max-w-xl object-contain cursor-pointer"
-      />
+              <img
+                src={item.image}
+                onClick={() => setSelectedImage(item.image)}
+                className="w-full max-w-xl object-contain cursor-pointer"
+              />
 
-      <p className="text-base mt-3">
-        {item.name}
-      </p>
+              <p className="text-base mt-4">
+                {item.name}
+              </p>
 
-      <p className="text-cyan-400 text-lg font-semibold">
-        R1499
-      </p>
+              <p className="text-cyan-400 text-lg font-semibold">
+                R1499
+              </p>
 
-    </div>
-  ))}
+            </div>
+          ))}
 
-</section>
+        </section>
 
       </div>
 

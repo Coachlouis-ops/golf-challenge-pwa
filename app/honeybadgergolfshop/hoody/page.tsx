@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 const PRODUCTS = [
   { name: "Red Hoodie", image: "/hoody.png" },
@@ -12,6 +13,7 @@ const PRODUCTS = [
 
 export default function HoodiePage() {
   const router = useRouter();
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   return (
     <main className="relative text-white min-h-screen overflow-hidden">
@@ -56,14 +58,15 @@ export default function HoodiePage() {
               >
                 <img
                   src={item.image}
-                  className="w-full h-40 object-contain mb-2"
+                  onClick={() => setSelectedImage(item.image)}
+                  className="w-full h-64 md:h-80 object-contain mb-3 cursor-pointer"
                 />
 
-                <p className="text-xs text-center mb-1">
+                <p className="text-sm text-center mb-1">
                   {item.name}
                 </p>
 
-                <p className="text-cyan-400 text-sm font-semibold text-center">
+                <p className="text-cyan-400 text-base font-semibold text-center">
                   R1499
                 </p>
               </div>
@@ -73,6 +76,20 @@ export default function HoodiePage() {
         </section>
 
       </div>
+
+      {/* FULLSCREEN IMAGE VIEW */}
+      {selectedImage && (
+        <div
+          className="fixed inset-0 bg-black/95 flex items-center justify-center z-50"
+          onClick={() => setSelectedImage(null)}
+        >
+          <img
+            src={selectedImage}
+            className="w-full h-full object-contain p-4"
+          />
+        </div>
+      )}
+
     </main>
   );
 }

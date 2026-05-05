@@ -1,9 +1,11 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function HoneyBadgerGolfShop() {
   const router = useRouter();
+  const [preview, setPreview] = useState<string | null>(null);
 
   return (
     <main className="relative text-white min-h-screen overflow-hidden">
@@ -37,7 +39,6 @@ export default function HoneyBadgerGolfShop() {
           <div />
         </div>
 
-
         {/* ================= CATEGORY GRID ================= */}
         <section className="px-6 py-12 max-w-6xl mx-auto">
 
@@ -52,7 +53,7 @@ export default function HoneyBadgerGolfShop() {
               onClick={() => router.push("/honeybadgergolfshop/hoody")}
               className="bg-white/5 p-4 rounded-xl hover:bg-white/10 transition cursor-pointer hover:scale-105"
             >
-              <img src="/hoody.png" className="w-full h-32 object-cover rounded-lg mb-3" alt="Hoodies" />
+              <img src="/hoody.png" className="w-full h-32 object-cover rounded-lg mb-3" />
               <p className="text-sm text-center">Hoodies</p>
             </div>
 
@@ -61,41 +62,46 @@ export default function HoneyBadgerGolfShop() {
               onClick={() => router.push("/honeybadgergolfshop/caps")}
               className="bg-white/5 p-4 rounded-xl hover:bg-white/10 transition cursor-pointer hover:scale-105"
             >
-              <img src="/cap_yellow.png" className="w-full h-32 object-cover rounded-lg mb-3" alt="Caps" />
+              <img src="/cap_yellow.png" className="w-full h-32 object-cover rounded-lg mb-3" />
               <p className="text-sm text-center">Caps</p>
             </div>
 
             {/* PANTS */}
-<div
-  onClick={() => router.push("/honeybadgergolfshop/pants")}
-  className="bg-white/5 p-4 rounded-xl hover:bg-white/10 transition cursor-pointer hover:scale-105"
->
-  <img
-    src="/cargo_main.png"
-    className="w-full h-32 object-cover rounded-lg mb-3"
-    alt="Pants"
-  />
-  <p className="text-sm text-center">Pants</p>
-</div>
+            <div
+              onClick={() => router.push("/honeybadgergolfshop/pants")}
+              className="bg-white/5 p-4 rounded-xl hover:bg-white/10 transition cursor-pointer hover:scale-105"
+            >
+              <img src="/cargo_main.png" className="w-full h-32 object-cover rounded-lg mb-3" />
+              <p className="text-sm text-center">Pants</p>
+            </div>
+
+            {/* RANGEFINDER (NEW) */}
+            <div
+              onClick={() => setPreview("/rangefinder.png")}
+              className="bg-white/5 p-4 rounded-xl hover:bg-white/10 transition cursor-pointer hover:scale-105"
+            >
+              <img src="/rangefinder.png" className="w-full h-32 object-cover rounded-lg mb-3" />
+              <p className="text-sm text-center">Range Finder</p>
+            </div>
 
             {/* OTHER */}
             <div className="bg-white/5 p-4 rounded-xl hover:bg-white/10 transition cursor-pointer">
-              <img src="/shop-apparel.jpg" className="w-full h-32 object-cover rounded-lg mb-3" alt="Apparel" />
+              <img src="/shop-apparel.jpg" className="w-full h-32 object-cover rounded-lg mb-3" />
               <p className="text-sm text-center">Apparel</p>
             </div>
 
             <div className="bg-white/5 p-4 rounded-xl hover:bg-white/10 transition cursor-pointer">
-              <img src="/shop-shoes.jpg" className="w-full h-32 object-cover rounded-lg mb-3" alt="Shoes" />
+              <img src="/shop-shoes.jpg" className="w-full h-32 object-cover rounded-lg mb-3" />
               <p className="text-sm text-center">Shoes</p>
             </div>
 
             <div className="bg-white/5 p-4 rounded-xl hover:bg-white/10 transition cursor-pointer">
-              <img src="/shop-accessories.jpg" className="w-full h-32 object-cover rounded-lg mb-3" alt="Accessories" />
+              <img src="/shop-accessories.jpg" className="w-full h-32 object-cover rounded-lg mb-3" />
               <p className="text-sm text-center">Accessories</p>
             </div>
 
             <div className="bg-white/5 p-4 rounded-xl hover:bg-white/10 transition cursor-pointer">
-              <img src="/shop-bags.jpg" className="w-full h-32 object-cover rounded-lg mb-3" alt="Bags" />
+              <img src="/shop-bags.jpg" className="w-full h-32 object-cover rounded-lg mb-3" />
               <p className="text-sm text-center">Bags</p>
             </div>
 
@@ -112,25 +118,25 @@ export default function HoneyBadgerGolfShop() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
 
             <div className="bg-white/5 p-3 rounded-xl">
-              <img src="/product-1.jpg" className="w-full h-32 object-cover rounded-lg mb-2" alt="Driver" />
+              <img src="/product-1.jpg" className="w-full h-32 object-cover rounded-lg mb-2" />
               <p className="text-xs">Pro Driver</p>
               <p className="text-cyan-400 text-sm font-semibold">R3 499</p>
             </div>
 
             <div className="bg-white/5 p-3 rounded-xl">
-              <img src="/product-2.jpg" className="w-full h-32 object-cover rounded-lg mb-2" alt="Balls" />
+              <img src="/product-2.jpg" className="w-full h-32 object-cover rounded-lg mb-2" />
               <p className="text-xs">Premium Balls</p>
               <p className="text-cyan-400 text-sm font-semibold">R799</p>
             </div>
 
             <div className="bg-white/5 p-3 rounded-xl">
-              <img src="/product-3.jpg" className="w-full h-32 object-cover rounded-lg mb-2" alt="Shirt" />
+              <img src="/product-3.jpg" className="w-full h-32 object-cover rounded-lg mb-2" />
               <p className="text-xs">Golf Shirt</p>
               <p className="text-cyan-400 text-sm font-semibold">R899</p>
             </div>
 
             <div className="bg-white/5 p-3 rounded-xl">
-              <img src="/product-4.jpg" className="w-full h-32 object-cover rounded-lg mb-2" alt="Shoes" />
+              <img src="/product-4.jpg" className="w-full h-32 object-cover rounded-lg mb-2" />
               <p className="text-xs">Golf Shoes</p>
               <p className="text-cyan-400 text-sm font-semibold">R2 199</p>
             </div>
@@ -139,6 +145,20 @@ export default function HoneyBadgerGolfShop() {
         </section>
 
       </div>
+
+      {/* ================= FULLSCREEN PREVIEW ================= */}
+      {preview && (
+        <div
+          className="fixed inset-0 bg-black/90 flex items-center justify-center z-50"
+          onClick={() => setPreview(null)}
+        >
+          <img
+            src={preview}
+            className="max-w-full max-h-full object-contain"
+          />
+        </div>
+      )}
+
     </main>
   );
 }

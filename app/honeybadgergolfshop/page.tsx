@@ -46,7 +46,7 @@ export default function HoneyBadgerGolfShop() {
 
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
           <h2 className="text-2xl md:text-4xl font-bold mb-2">
-            Gear Up Like a Badger
+            Fearless Gear Up 
           </h2>
           <p className="text-gray-300 text-sm max-w-xl">
             Premium golf gear. Apparel. Accessories. Built for competitors.
@@ -64,10 +64,13 @@ export default function HoneyBadgerGolfShop() {
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
 
           {/* CATEGORY CARD */}
-          <div className="bg-white/5 p-4 rounded-xl hover:bg-white/10 transition cursor-pointer">
-            <img src="/hoody.png" className="w-full h-32 object-cover rounded-lg mb-3" />
-<p className="text-sm text-center">Hoodies</p>
-          </div>
+          <div
+  onClick={() => router.push("/honeybadgergolfshop/hoody")}
+  className="bg-white/5 p-4 rounded-xl hover:bg-white/10 transition cursor-pointer hover:scale-105"
+>
+  <img src="/hoody.png" className="w-full h-32 object-cover rounded-lg mb-3" />
+  <p className="text-sm text-center">Hoodies</p>
+</div>
 
           <div className="bg-white/5 p-4 rounded-xl hover:bg-white/10 transition cursor-pointer">
             <img src="/shop-balls.jpg" className="w-full h-32 object-cover rounded-lg mb-3" />

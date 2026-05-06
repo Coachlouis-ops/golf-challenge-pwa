@@ -281,13 +281,6 @@ const handleExit = () => {
       Terms & Conditions
     </span>
 
-    <span
-      onClick={() => router.push("/terms")}
-      className="underline cursor-pointer hover:text-gray-800"
-    >
-      Platform Terms
-    </span>
-
   </div>
 </div>
 

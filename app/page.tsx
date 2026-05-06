@@ -266,10 +266,30 @@ const handleExit = () => {
       <footer className="bg-gray-100 text-black py-12 px-6">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
 
-          <div className="text-center md:text-left">
-            <p className="font-semibold">Teez Golf Challenges</p>
-            <p className="text-sm text-gray-600">Developed and Managed by Honey Badger Technologies PTY.LTD</p>
-          </div>
+          <div className="text-center md:text-left space-y-2">
+  <p className="font-semibold">Teez Golf Challenges</p>
+  <p className="text-sm text-gray-600">
+    Developed and Managed by Honey Badger Technologies (PTY) LTD
+  </p>
+
+  <div className="flex gap-4 justify-center md:justify-start text-xs">
+
+    <span
+      onClick={() => router.push("/legal/terms")}
+      className="underline cursor-pointer hover:text-gray-800"
+    >
+      Terms & Conditions
+    </span>
+
+    <span
+      onClick={() => router.push("/terms")}
+      className="underline cursor-pointer hover:text-gray-800"
+    >
+      Platform Terms
+    </span>
+
+  </div>
+</div>
 
           <div className="flex items-center gap-4">
 

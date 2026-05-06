@@ -11,9 +11,10 @@ export default function PaymentPage() {
   const { user, loading } = useAuth();
 
   const [profile, setProfile] = useState<any>(null);
+  const [accepted, setAccepted] = useState(false);
 
   // -----------------------------------
-  // LOAD PROFILE (FOR PAYFAST)
+  // LOAD PROFILE
   // -----------------------------------
   useEffect(() => {
     if (!user) return;
@@ -29,65 +30,65 @@ export default function PaymentPage() {
   }, [user]);
 
   // -----------------------------------
-  // STRIPE (DISABLED UI ONLY)
+  // STRIPE (DISABLED)
   // -----------------------------------
   async function startStripe() {
     alert("Stripe (International) coming soon");
   }
 
   // -----------------------------------
-  // PAYFAST (ACTIVE)
+  // PAYFAST
   // -----------------------------------
   async function startPayFast() {
-  if (!user || !profile) {
-    alert("User profile not loaded");
-    return;
+    if (!accepted) {
+      alert("You must accept the Terms & Conditions");
+      return;
+    }
+
+    if (!user || !profile) {
+      alert("User profile not loaded");
+      return;
+    }
+
+    const res = await fetch("/api/payfast-initiate", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        amount: 10.99,
+        item_name: "Teez Golf Membership",
+        name_first: profile.name || "",
+        name_last: profile.surname || "",
+        email_address: user.email,
+        uid: user.uid,
+        type: "membership",
+        tokens: 0,
+      }),
+    });
+
+    const response = await res.json();
+
+    if (!response.url || !response.data) {
+      alert("PayFast error");
+      return;
+    }
+
+    const form = document.createElement("form");
+    form.method = "POST";
+    form.action = response.url;
+
+    Object.entries(response.data).forEach(([key, value]) => {
+      const input = document.createElement("input");
+      input.type = "hidden";
+      input.name = key;
+      input.value = value as string;
+      form.appendChild(input);
+    });
+
+    document.body.appendChild(form);
+    form.submit();
   }
-
-  const res = await fetch("/api/payfast-initiate", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      amount: 10.99,
-      item_name: "Teez Golf Membership",
-
-      name_first: profile.name || "",
-      name_last: profile.surname || "",
-      email_address: user.email,
-
-      uid: user.uid,
-      type: "membership",
-      tokens: 0,
-    }),
-  });
-
-  const response = await res.json();
-
-  if (!response.url || !response.data) {
-    alert("PayFast error");
-    return;
-  }
-
-  // -----------------------------------
-  // CREATE FORM (POST TO PAYFAST)
-  // -----------------------------------
-  const form = document.createElement("form");
-  form.method = "POST";
-  form.action = response.url;
-
-  Object.entries(response.data).forEach(([key, value]) => {
-    const input = document.createElement("input");
-    input.type = "hidden";
-    input.name = key;
-    input.value = value as string;
-    form.appendChild(input);
-  });
-
-  document.body.appendChild(form);
-  form.submit();
-}
 
   // -----------------------------------
   // LOADING
@@ -105,7 +106,7 @@ export default function PaymentPage() {
 
       {/* HERO */}
       <div className="text-center flex flex-col gap-3">
-        <h1 className="text-5xl font-bold text-green-400 drop-shadow-lg">
+        <h1 className="text-5xl font-bold text-green-400">
           WELCOME
         </h1>
 
@@ -115,16 +116,10 @@ export default function PaymentPage() {
 
         <p className="text-gray-400 max-w-xl">
           Enter the world of competitive golf challenges.
-          Compete against players worldwide and climb the rankings.
         </p>
       </div>
 
-      {/* TOKEN ICON */}
-      <div className="text-7xl animate-spin">
-        🪙
-      </div>
-
-      {/* MEMBERSHIP CARD */}
+      {/* CARD */}
       <div className="bg-zinc-800 border border-zinc-600 p-8 rounded-xl shadow-xl flex flex-col gap-6 text-center max-w-md">
 
         <h3 className="text-xl font-bold text-green-400">
@@ -132,31 +127,57 @@ export default function PaymentPage() {
         </h3>
 
         <p className="text-4xl font-bold">
-          $10.99
+          R189.99
           <span className="text-sm text-gray-400"> / year</span>
         </p>
 
-        <div className="text-sm text-gray-300 flex flex-col gap-2">
-          <p>• Enter competitive golf challenges</p>
-          <p>• Compete against players worldwide</p>
-          <p>• Earn tokens and climb the rankings</p>
-          <p>• Access global leaderboards</p>
+        {/* LEGAL BLOCK */}
+        <div className="text-xs text-gray-400 space-y-2 text-left">
+
+          <p>
+            Payments are processed by <strong>Honey Badger Technologies (PTY) LTD</strong> via PayFast.
+          </p>
+
+          <p>
+            By proceeding, you agree to the{" "}
+            <span
+              onClick={() => router.push("/legal/terms")}
+              className="underline cursor-pointer text-green-400"
+            >
+              Terms & Conditions
+            </span>.
+          </p>
+
+          <label className="flex items-center gap-2 mt-2">
+            <input
+              type="checkbox"
+              checked={accepted}
+              onChange={(e) => setAccepted(e.target.checked)}
+            />
+            <span>I agree to the Terms & Conditions</span>
+          </label>
+
         </div>
 
-        {/* PAYFAST BUTTON */}
+        {/* PAYFAST */}
         <button
           onClick={startPayFast}
-          className="bg-green-500 hover:bg-green-400 text-black font-semibold px-8 py-3 rounded-lg"
+          disabled={!accepted}
+          className={`px-8 py-3 rounded-lg font-semibold ${
+            accepted
+              ? "bg-green-500 hover:bg-green-400 text-black"
+              : "bg-gray-600 text-gray-300"
+          }`}
         >
-          Pay with PayFast (South African Users)
+          Pay with PayFast
         </button>
 
-        {/* STRIPE (DISABLED) */}
+        {/* STRIPE */}
         <button
           onClick={startStripe}
           className="bg-gray-500 text-black font-semibold px-8 py-3 rounded-lg cursor-not-allowed"
         >
-          Pay with Stripe (International - Coming Soon)
+          Pay with Stripe (Coming Soon)
         </button>
 
       </div>
@@ -164,7 +185,7 @@ export default function PaymentPage() {
       {/* BACK */}
       <button
         onClick={() => router.push("/dashboard")}
-        className="text-sm text-gray-400 underline hover:text-white"
+        className="text-sm text-gray-400 underline"
       >
         Back to Dashboard
       </button>

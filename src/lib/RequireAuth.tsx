@@ -60,31 +60,20 @@ export default function RequireAuth({
           return;
         }
 
-        // 🔴 PROFILE CHECK
-        const ref = doc(db, "profiles", freshUser.uid);
-        const snap = await getDoc(ref);
+// 🔴 PROFILE CHECK
+const ref = doc(db, "profiles", freshUser.uid);
+const snap = await getDoc(ref);
 
-        if (!snap.exists()) {
-          router.replace("/profile");
-          return;
-        }
+if (!snap.exists()) {
+  router.replace("/profile");
+  return;
+}
 
-        const data = snap.data();
+const data = snap.data();
 
-        if (!isProfileComplete(data)) {
-          if (pathname !== "/profile") {
-            router.replace("/profile");
-          }
-          return;
-        }
-
-// 🔴 FORCE PAYMENT BEFORE ACCESS
-const membershipRef = doc(db, "memberships", freshUser.uid);
-const membershipSnap = await getDoc(membershipRef);
-
-if (!membershipSnap.exists()) {
-  if (pathname !== "/payment") {
-    router.replace("/payment");
+if (!isProfileComplete(data)) {
+  if (pathname !== "/profile") {
+    router.replace("/profile");
   }
   return;
 }

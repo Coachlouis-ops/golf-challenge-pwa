@@ -78,6 +78,18 @@ export default function RequireAuth({
           return;
         }
 
+// 🔴 FORCE PAYMENT BEFORE ACCESS
+const membershipRef = doc(db, "memberships", freshUser.uid);
+const membershipSnap = await getDoc(membershipRef);
+
+if (!membershipSnap.exists()) {
+  if (pathname !== "/payment") {
+    router.replace("/payment");
+  }
+  return;
+}
+
+
       } catch (err) {
         console.error("AUTH CHECK ERROR:", err);
       } finally {

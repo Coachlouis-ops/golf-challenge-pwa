@@ -109,9 +109,9 @@ export async function POST(req: Request) {
     return NextResponse.json({
       url: "https://sandbox.payfast.co.za/eng/process",
       data: {
-        ...data,
-        signature,
-      },
+  ...data,
+  signature: signature,
+},
     });
 
   } catch (error: any) {

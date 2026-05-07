@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";  
+import { NextResponse } from "next/server";
 import crypto from "crypto";
 
 export async function POST(req: Request) {
@@ -16,15 +16,40 @@ export async function POST(req: Request) {
 
     const merchant_id = process.env.PAYFAST_MERCHANT_ID as string;
     const merchant_key = process.env.PAYFAST_MERCHANT_KEY as string;
+    const passphrase = process.env.PAYFAST_PASSPHRASE || "";
 
-   const return_url = `https://golf-challenge-pwa.vercel.app/dashboard?uid=${uid}`;
+    const return_url = `https://golf-challenge-pwa.vercel.app/dashboard?uid=${uid}`;
     const cancel_url = "https://golf-challenge-pwa.vercel.app/payment";
     const notify_url = "https://golf-challenge-pwa.vercel.app/api/payfast-notify";
 
-    const m_payment_id = uid;
+    // -----------------------------------
+    // UNIQUE PAYMENT ID
+    // -----------------------------------
+    const m_payment_id = `${uid}_${Date.now()}`;
 
     // -----------------------------------
-    // BUILD PARAM OBJECT (ORDER = SOURCE OF TRUTH)
+    // SERVER SIDE SOURCE OF TRUTH
+    // -----------------------------------
+    let finalAmount = "0.00";
+
+    if (type === "membership") {
+      finalAmount = "189.99";
+    }
+
+    if (type === "tokens") {
+      const tokenMap: Record<number, number> = {
+        100: 109,
+        500: 525,
+        1000: 1020,
+      };
+
+      finalAmount = Number(
+        tokenMap[Number(tokens)] || amount || 0
+      ).toFixed(2);
+    }
+
+    // -----------------------------------
+    // BUILD PARAM OBJECT
     // -----------------------------------
     const data: Record<string, string> = {
       merchant_id,
@@ -33,16 +58,14 @@ export async function POST(req: Request) {
       cancel_url,
       notify_url,
       m_payment_id,
-    amount:
-  type === "membership"
-    ? "189.99"
-    : type === "tokens"
-    ? (Number(tokens) * 18).toFixed(2)
-    : Number(amount).toFixed(2),
+
+      amount: finalAmount,
+
       item_name,
       name_first: name_first || "",
       name_last: name_last || "",
       email_address,
+
       custom_str1: uid,
       custom_str2: type,
       custom_str3: tokens ? tokens.toString() : "0",
@@ -56,14 +79,24 @@ export async function POST(req: Request) {
     });
 
     // -----------------------------------
-    // BUILD STRING (ENCODED - MATCH PAYFAST)
+    // BUILD STRING
     // -----------------------------------
-    const pfString = Object.entries(data)
+    let pfString = Object.entries(data)
       .map(
         ([key, value]) =>
           `${key}=${encodeURIComponent(value).replace(/%20/g, "+")}`
       )
       .join("&");
+
+    // -----------------------------------
+    // PASS PHRASE
+    // -----------------------------------
+    if (passphrase) {
+      pfString += `&passphrase=${encodeURIComponent(passphrase).replace(
+        /%20/g,
+        "+"
+      )}`;
+    }
 
     // -----------------------------------
     // DEBUG
@@ -88,11 +121,16 @@ export async function POST(req: Request) {
       url: "https://sandbox.payfast.co.za/eng/process",
       data: {
         ...data,
+        signature,
       },
     });
 
   } catch (error: any) {
     console.error("PayFast error:", error);
-    return NextResponse.json({ error: error.message });
+
+    return NextResponse.json(
+      { error: error.message },
+      { status: 500 }
+    );
   }
 }

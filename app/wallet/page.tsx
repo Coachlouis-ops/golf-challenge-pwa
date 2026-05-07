@@ -230,7 +230,7 @@ export default function WalletPage() {
     Secure Payments via PayFast
   </p>
 
-  <div className="flex items-center gap-3 flex-wrap justify-center bg-black/40 px-4 py-2 rounded-lg border border-white/10">
+  <div className="flex items-center gap-3 flex-wrap justify-center bg-white px-4 py-2 rounded-lg border border-gray-200">
 
     <img src="/Payfast logo.svg" className="h-6 object-contain opacity-90" />
     <img src="/Visa.png" className="h-5 object-contain opacity-90" />

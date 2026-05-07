@@ -221,28 +221,48 @@ export default function WalletPage() {
             <span>I agree to the Terms & Conditions</span>
           </label>
 
-        </div>
+    </div>
 
-        <button
-          onClick={checkout}
-          disabled={selected === null || !accepted}
-          className={`px-6 py-3 rounded-lg font-semibold ${
-            selected !== null && accepted
-              ? "bg-green-500 hover:bg-green-400 text-black"
-              : "bg-gray-600 text-gray-300"
-          }`}
-        >
-          Buy Tokens (PayFast)
-        </button>
+{/* PAYMENT METHODS */}
+<div className="flex flex-col items-center gap-2 mt-2">
 
-        <button
-          onClick={() => router.push("/wallet/redeem")}
-          className="bg-yellow-500 hover:bg-yellow-400 text-black px-6 py-3 rounded-lg font-semibold shadow-[0_0_12px_#ffaa00]"
-        >
-          Redeem Tokens
-        </button>
+  <p className="text-[10px] text-gray-500 uppercase tracking-wide">
+    Secure Payments via PayFast
+  </p>
 
-      </div>
+  <div className="flex items-center gap-3 flex-wrap justify-center bg-black/40 px-4 py-2 rounded-lg border border-white/10">
+
+    <img src="/Payfast logo.svg" className="h-6 object-contain opacity-90" />
+    <img src="/Visa.png" className="h-5 object-contain opacity-90" />
+    <img src="/Master Card.png" className="h-5 object-contain opacity-90" />
+    <img src="/American Express Logo.png" className="h-5 object-contain opacity-90" />
+    <img src="/Diners Club Logo.png" className="h-5 object-contain opacity-90" />
+    <img src="/instantEFT_hi-Res_logo.png" className="h-5 object-contain opacity-90" />
+
+  </div>
+
+</div>
+
+<button
+  onClick={checkout}
+  disabled={selected === null || !accepted}
+  className={`px-6 py-3 rounded-lg font-semibold ${
+    selected !== null && accepted
+      ? "bg-green-500 hover:bg-green-400 text-black"
+      : "bg-gray-600 text-gray-300"
+  }`}
+>
+  Buy Tokens (PayFast)
+</button>
+
+<button
+  onClick={() => router.push("/wallet/redeem")}
+  className="bg-yellow-500 hover:bg-yellow-400 text-black px-6 py-3 rounded-lg font-semibold shadow-[0_0_12px_#ffaa00]"
+>
+  Redeem Tokens
+</button>
+
+</div>
 
       <button
         onClick={() => router.push("/dashboard")}

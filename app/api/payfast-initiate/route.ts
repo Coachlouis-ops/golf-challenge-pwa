@@ -80,12 +80,9 @@ export async function POST(req: Request) {
     // -----------------------------------
     // BUILD STRING
     // -----------------------------------
-    let pfString = Object.entries(data)
-      .map(
-        ([key, value]) =>
-          `${key}=${encodeURIComponent(value).replace(/%20/g, "+")}`
-      )
-      .join("&");
+  let pfString = Object.entries(data)
+  .map(([key, value]) => `${key}=${value}`)
+  .join("&");
 
     // -----------------------------------
     // DEBUG

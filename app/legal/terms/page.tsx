@@ -34,15 +34,21 @@ export default function LegalTermsPage() {
           and/or email notification.
         </p>
 
-        {/* 4. REFUNDS */}
-        <h2 className="text-white font-semibold">4. Returns & Refunds Policy</h2>
+        {/* 4. EXPORT RESTRICTION */}
+        <h2 className="text-white font-semibold">4. Export Restriction</h2>
+        <p>
+          The offering on this website is available to South African clients only.
+        </p>
+
+        {/* 5. REFUNDS */}
+        <h2 className="text-white font-semibold">5. Returns & Refunds Policy</h2>
         <p>
           All digital purchases are final. Refunds may only be issued in cases of system error,
           duplicate transactions, or where required by law.
         </p>
 
-        {/* 5. PAYMENT */}
-        <h2 className="text-white font-semibold">5. Payment Methods</h2>
+        {/* 6. PAYMENT */}
+        <h2 className="text-white font-semibold">6. Payment Methods</h2>
         <p>
           Payment may be made via Visa, MasterCard, American Express, or other supported methods
           through PayFast.
@@ -57,43 +63,43 @@ export default function LegalTermsPage() {
           PayFast uses Secure Socket Layer (SSL) encryption and no card details are stored on this website.
         </p>
 
-        {/* 6. CUSTOMER DATA */}
-        <h2 className="text-white font-semibold">6. Customer Data</h2>
+        {/* 7. CUSTOMER DATA */}
+        <h2 className="text-white font-semibold">7. Customer Data</h2>
         <p>
           Customer details are stored separately from card details, which are processed securely
           on PayFast systems. Honey Badger Technologies complies with the Protection of Personal
           Information Act (POPIA).
         </p>
 
-        {/* 7. PRIVACY */}
-        <h2 className="text-white font-semibold">7. Privacy Policy</h2>
+        {/* 8. PRIVACY */}
+        <h2 className="text-white font-semibold">8. Privacy Policy</h2>
         <p>
           We take all reasonable steps to protect user information. For more information,
           refer to PayFast privacy policy at https://payfast.io/privacy-policy/
         </p>
 
-        {/* 8. RESPONSIBILITY */}
-        <h2 className="text-white font-semibold">8. Responsibility</h2>
+        {/* 9. RESPONSIBILITY */}
+        <h2 className="text-white font-semibold">9. Responsibility</h2>
         <p>
           Honey Badger Technologies takes full responsibility for all aspects relating to
           transactions, including sale of services, customer support, dispute resolution,
           and service delivery.
         </p>
 
-        {/* 9. COUNTRY */}
-        <h2 className="text-white font-semibold">9. Country of Domicile</h2>
+        {/* 10. COUNTRY */}
+        <h2 className="text-white font-semibold">10. Country of Domicile</h2>
         <p>
           This website is governed by the laws of South Africa.
         </p>
 
-        {/* 10. CURRENCY */}
-        <h2 className="text-white font-semibold">10. Currency</h2>
+        {/* 11. CURRENCY */}
+        <h2 className="text-white font-semibold">11. Currency</h2>
         <p>
           All transactions are processed in South African Rand (ZAR).
         </p>
 
-        {/* 11. COMPANY INFO */}
-        <h2 className="text-white font-semibold">11. Company Information</h2>
+        {/* 12. COMPANY INFO */}
+        <h2 className="text-white font-semibold">12. Company Information</h2>
         <p>
           Company Name: Honey Badger Technologies (PTY) LTD<br />
           Registration Number: 2026/102722/07<br />
@@ -102,8 +108,8 @@ export default function LegalTermsPage() {
           Phone: +27 082 837 0266
         </p>
 
-        {/* 12. VARIATION */}
-        <h2 className="text-white font-semibold">12. Variation</h2>
+        {/* 13. VARIATION */}
+        <h2 className="text-white font-semibold">13. Variation</h2>
         <p>
           Honey Badger Technologies may update these Terms at any time without prior notice.
         </p>

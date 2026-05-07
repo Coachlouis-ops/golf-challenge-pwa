@@ -88,16 +88,7 @@ export default function ProfilePage() {
   internationalPosition: 0,
 });
 
-const [rankingConfig, setRankingConfig] = useState({
-  baselineClub: 50,
-  baselineProvince: 500,
-  baselineNational: 10000,
-  baselineGlobal: 100000,
-});
-
-const [totalPlayers, setTotalPlayers] = useState(0);
-
-  const clubInputRef = useRef<HTMLInputElement | null>(null);
+const clubInputRef = useRef<HTMLInputElement | null>(null);
 
  const [profile, setProfile] = useState<Profile>({
   uid: "",
@@ -129,25 +120,19 @@ useEffect(() => {
 
   (async () => {
 
-    const profileRef = doc(db, "profiles", user.uid);
-    const rankingRef = doc(db, "playerRankings", user.uid);
-    const walletRef = doc(db, "wallets", user.uid);
-    const configRef = doc(db, "system", "rankingConfig");
-    const statsRef = doc(db, "system", "stats");
+const profileRef = doc(db, "profiles", user.uid);
+const rankingRef = doc(db, "playerRankings", user.uid);
+const walletRef = doc(db, "wallets", user.uid);
 
-    const [
-      profileSnap,
-      rankingSnap,
-      walletSnap,
-      configSnap,
-      statsSnap,
-    ] = await Promise.all([
-      getDoc(profileRef),
-      getDoc(rankingRef),
-      getDoc(walletRef),
-      getDoc(configRef),
-      getDoc(statsRef),
-    ]);
+const [
+  profileSnap,
+  rankingSnap,
+  walletSnap,
+] = await Promise.all([
+  getDoc(profileRef),
+  getDoc(rankingRef),
+  getDoc(walletRef),
+]);
 
     // ---------------- PROFILE ----------------
     if (profileSnap.exists()) {
@@ -169,53 +154,17 @@ useEffect(() => {
       });
     }
 
-    // ---------------- CONFIG ----------------
-    let baselineClub = 50;
-    let baselineProvince = 500;
-    let baselineNational = 10000;
-    let baselineGlobal = 100000;
+   // ---------------- RANKING (REAL ONLY — NO OFFSET) ----------------
+if (rankingSnap.exists()) {
+  const data = rankingSnap.data();
 
-    if (configSnap.exists()) {
-      const c = configSnap.data();
-
-      baselineClub = c.baselineClub || 50;
-      baselineProvince = c.baselineProvince || 500;
-      baselineNational = c.baselineNational || 10000;
-      baselineGlobal = c.baselineGlobal || 100000;
-
-      setRankingConfig({
-        baselineClub,
-        baselineProvince,
-        baselineNational,
-        baselineGlobal,
-      });
-    }
-
-    // ---------------- STATS ----------------
-    let totalPlayersCount = 0;
-
-    if (statsSnap.exists()) {
-      const s = statsSnap.data();
-      totalPlayersCount = s.totalPlayers || 0;
-      setTotalPlayers(totalPlayersCount);
-    }
-
-    // ---------------- RANKING (OFFSET APPLIED) ----------------
-    if (rankingSnap.exists()) {
-      const data = rankingSnap.data();
-
-      const clubOffset = Math.max(baselineClub - totalPlayersCount, 0);
-      const provinceOffset = Math.max(baselineProvince - totalPlayersCount, 0);
-      const nationalOffset = Math.max(baselineNational - totalPlayersCount, 0);
-      const globalOffset = Math.max(baselineGlobal - totalPlayersCount, 0);
-
-      setRankingPosition({
-        clubPosition: (data.clubPosition || 0) + clubOffset,
-        provincePosition: (data.provincePosition || 0) + provinceOffset,
-        nationalPosition: (data.nationalPosition || 0) + nationalOffset,
-        internationalPosition: (data.internationalPosition || 0) + globalOffset,
-      });
-    }
+  setRankingPosition({
+    clubPosition: data.clubPosition || 0,
+    provincePosition: data.provincePosition || 0,
+    nationalPosition: data.nationalPosition || 0,
+    internationalPosition: data.internationalPosition || 0,
+  });
+}
 
     setLoading(false);
 

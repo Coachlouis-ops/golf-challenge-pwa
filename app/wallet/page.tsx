@@ -34,6 +34,9 @@ export default function WalletPage() {
   const [available, setAvailable] = useState(0);
   const [profile, setProfile] = useState<any>(null);
 
+  // ✅ NEW
+  const [accepted, setAccepted] = useState(false);
+
   // -------------------------------
   // LOAD WALLET
   // -------------------------------
@@ -77,6 +80,11 @@ export default function WalletPage() {
   // PAYFAST CHECKOUT
   // -------------------------------
   async function checkout() {
+    if (!accepted) {
+      alert("You must accept the Terms & Conditions");
+      return;
+    }
+
     if (!user || !profile) {
       alert("Profile not loaded");
       return;
@@ -96,11 +104,9 @@ export default function WalletPage() {
       body: JSON.stringify({
         amount,
         item_name: `${tokens} Tokens`,
-
         name_first: profile.name || "",
         name_last: profile.surname || "",
         email_address: user.email,
-
         uid: user.uid,
         type: "tokens",
         tokens,
@@ -114,9 +120,6 @@ export default function WalletPage() {
       return;
     }
 
-    // -----------------------------------
-    // CREATE FORM (POST TO PAYFAST)
-    // -----------------------------------
     const form = document.createElement("form");
     form.method = "POST";
     form.action = response.url;
@@ -192,10 +195,42 @@ export default function WalletPage() {
           ))}
         </select>
 
+        {/* ✅ LEGAL BLOCK */}
+        <div className="text-xs text-gray-400 text-left space-y-2">
+
+          <p>
+            Payments are processed by <strong>Honey Badger Technologies (PTY) LTD</strong> via PayFast.
+          </p>
+
+          <p>
+            By proceeding, you agree to the{" "}
+            <span
+              onClick={() => router.push("/legal/terms")}
+              className="underline cursor-pointer text-green-400"
+            >
+              Terms & Conditions
+            </span>.
+          </p>
+
+          <label className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              checked={accepted}
+              onChange={(e) => setAccepted(e.target.checked)}
+            />
+            <span>I agree to the Terms & Conditions</span>
+          </label>
+
+        </div>
+
         <button
           onClick={checkout}
-          disabled={selected === null}
-          className="bg-green-500 hover:bg-green-400 text-black px-6 py-3 rounded-lg font-semibold shadow-[0_0_12px_#00ff88] disabled:bg-gray-600"
+          disabled={selected === null || !accepted}
+          className={`px-6 py-3 rounded-lg font-semibold ${
+            selected !== null && accepted
+              ? "bg-green-500 hover:bg-green-400 text-black"
+              : "bg-gray-600 text-gray-300"
+          }`}
         >
           Buy Tokens (PayFast)
         </button>

@@ -26,55 +26,32 @@ export default function AdminRedemptions() {
   const [codes, setCodes] = useState<Record<string, string>>({});
   const [qrUrls, setQrUrls] = useState<Record<string, string>>({});
 
-  useEffect(() => {
-    const ref = collection(db, "redemptionRequests");
+useEffect(() => {
+  const ref = collection(db, "redemptionRequests");
 
-    const unsub = onSnapshot(
-      ref,
-      async (snap) => {
-        const data: Request[] = await Promise.all(
-          snap.docs.map(async (d) => {
-            const redemption = d.data() as any;
+  const unsub = onSnapshot(
+    ref,
+    (snap) => {
+      const data: Request[] = snap.docs.map((d) => ({
+        id: d.id,
+        ...(d.data() as any),
+      }));
 
-            let profileData: any = {};
+      data.sort((a, b) => {
+        const aTime = a.createdAt?.seconds || 0;
+        const bTime = b.createdAt?.seconds || 0;
+        return bTime - aTime;
+      });
 
-            try {
-              const profileSnap = await fetch(
-                `/api/admin-profile?uid=${redemption.uid}`
-              ).then((r) => r.json());
+      setRequests(data);
+    },
+    (error) => {
+      console.error("SNAPSHOT ERROR:", error);
+    }
+  );
 
-              profileData = profileSnap || {};
-            } catch (err) {
-              console.log(err);
-            }
-
-            return {
-              id: d.id,
-              ...redemption,
-
-              name: profileData.name || "",
-              surname: profileData.surname || "",
-              battleName: profileData.battleName || "",
-              email: profileData.email || "",
-            };
-          })
-        );
-
-        data.sort((a, b) => {
-          const aTime = a.createdAt?.seconds || 0;
-          const bTime = b.createdAt?.seconds || 0;
-          return bTime - aTime;
-        });
-
-        setRequests(data);
-      },
-      (error) => {
-        console.error("SNAPSHOT ERROR:", error);
-      }
-    );
-
-    return () => unsub();
-  }, []);
+  return () => unsub();
+}, []);
 
   async function process(
     id: string,

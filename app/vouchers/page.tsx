@@ -18,7 +18,6 @@ type Voucher = {
   amount: number;
   provider: string;
   category: string;
-  beneficiary: string;
   status: string;
 
   voucherCode?: string;
@@ -123,7 +122,7 @@ export default function VouchersPage() {
                   <p className="text-yellow-300"><strong>Amount:</strong> {v.amount}</p>
                   <p className="text-yellow-300"><strong>Provider:</strong> {v.provider}</p>
                   <p className="text-yellow-300"><strong>Category:</strong> {v.category}</p>
-                  <p className="text-yellow-300"><strong>Beneficiary:</strong> {v.beneficiary}</p>
+                
 
                   {v.voucherCode && (
                     <div className="mt-3 p-2 border border-yellow-400 rounded bg-black">

@@ -12,10 +12,13 @@ type Request = {
   type: string;
   provider?: string;
   category?: string;
-  beneficiary?: string;
   status: string;
   createdAt?: any;
+
   name?: string;
+  surname?: string;
+  battleName?: string;
+  email?: string;
 };
 
 export default function AdminRedemptions() {
@@ -28,12 +31,34 @@ export default function AdminRedemptions() {
 
     const unsub = onSnapshot(
       ref,
-      (snap) => {
-        const data: Request[] = snap.docs.map((d) => ({
-          id: d.id,
-          ...(d.data() as any),
-          name: d.data().uid,
-        }));
+      async (snap) => {
+        const data: Request[] = await Promise.all(
+          snap.docs.map(async (d) => {
+            const redemption = d.data() as any;
+
+            let profileData: any = {};
+
+            try {
+              const profileSnap = await fetch(
+                `/api/admin-profile?uid=${redemption.uid}`
+              ).then((r) => r.json());
+
+              profileData = profileSnap || {};
+            } catch (err) {
+              console.log(err);
+            }
+
+            return {
+              id: d.id,
+              ...redemption,
+
+              name: profileData.name || "",
+              surname: profileData.surname || "",
+              battleName: profileData.battleName || "",
+              email: profileData.email || "",
+            };
+          })
+        );
 
         data.sort((a, b) => {
           const aTime = a.createdAt?.seconds || 0;
@@ -51,20 +76,20 @@ export default function AdminRedemptions() {
     return () => unsub();
   }, []);
 
-async function process(
-  id: string,
-  action: "approve" | "reject",
-  mode: "code" | "qr" | "email"
-) {
-  const fn = httpsCallable(functions, "processRedemptionRequest");
+  async function process(
+    id: string,
+    action: "approve" | "reject",
+    mode: "code" | "qr" | "email"
+  ) {
+    const fn = httpsCallable(functions, "processRedemptionRequest");
 
-  await fn({
-    requestId: id,
-    action,
-    voucherCode: mode === "code" ? codes[id] || "" : "",
-    qrUrl: mode === "qr" ? qrUrls[id] || "" : "",
-  });
-}
+    await fn({
+      requestId: id,
+      action,
+      voucherCode: mode === "code" ? codes[id] || "" : "",
+      qrUrl: mode === "qr" ? qrUrls[id] || "" : "",
+    });
+  }
 
   const pendingTotal = requests
     .filter((r) => r.status === "pending")
@@ -86,9 +111,26 @@ async function process(
               key={r.id}
               className="p-5 border border-cyan-500/30 rounded-xl bg-zinc-900 flex justify-between items-center"
             >
-              <div className="space-y-1">
+              <div className="space-y-2">
+
                 <p>
-                  <b>User:</b> {r.name}
+                  <b>User:</b> {r.uid}
+                </p>
+
+                <p>
+                  <b>Name:</b> {r.name || "-"}
+                </p>
+
+                <p>
+                  <b>Surname:</b> {r.surname || "-"}
+                </p>
+
+                <p>
+                  <b>BattleName:</b> {r.battleName || "-"}
+                </p>
+
+                <p>
+                  <b>Email:</b> {r.email || "-"}
                 </p>
 
                 <p className="text-lg">
@@ -103,13 +145,10 @@ async function process(
                   <b>Supplier:</b> {r.provider || "-"}
                 </p>
 
-                <p>
-                  <b>Beneficiary:</b> {r.beneficiary || "-"}
-                </p>
-
                 <p className="text-yellow-400">
                   <b>Status:</b> {r.status}
                 </p>
+
               </div>
 
               <div className="flex flex-col gap-2">
@@ -141,35 +180,35 @@ async function process(
 
                 <div className="flex flex-col gap-2 mt-2">
 
-  <button
-    onClick={() => process(r.id, "approve", "code")}
-    className="bg-cyan-500 px-4 py-2 rounded hover:bg-cyan-400"
-  >
-    Approve (Code)
-  </button>
+                  <button
+                    onClick={() => process(r.id, "approve", "code")}
+                    className="bg-cyan-500 px-4 py-2 rounded hover:bg-cyan-400"
+                  >
+                    Approve (Code)
+                  </button>
 
-  <button
-    onClick={() => process(r.id, "approve", "qr")}
-    className="bg-purple-500 px-4 py-2 rounded hover:bg-purple-400"
-  >
-    Approve (QR)
-  </button>
+                  <button
+                    onClick={() => process(r.id, "approve", "qr")}
+                    className="bg-purple-500 px-4 py-2 rounded hover:bg-purple-400"
+                  >
+                    Approve (QR)
+                  </button>
 
-  <button
-    onClick={() => process(r.id, "approve", "email")}
-    className="bg-yellow-400 text-black px-4 py-2 rounded hover:bg-yellow-300"
-  >
-    Mark as Email Sent
-  </button>
+                  <button
+                    onClick={() => process(r.id, "approve", "email")}
+                    className="bg-yellow-400 text-black px-4 py-2 rounded hover:bg-yellow-300"
+                  >
+                    Mark as Email Sent
+                  </button>
 
-  <button
-    onClick={() => process(r.id, "reject", "code")}
-    className="bg-red-500 px-4 py-2 rounded hover:bg-red-400"
-  >
-    Reject
-  </button>
+                  <button
+                    onClick={() => process(r.id, "reject", "code")}
+                    className="bg-red-500 px-4 py-2 rounded hover:bg-red-400"
+                  >
+                    Reject
+                  </button>
 
-</div>
+                </div>
               </div>
             </div>
           ))}

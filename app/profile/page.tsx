@@ -396,20 +396,18 @@ setSaving(true);
 
 <div className="grid grid-cols-3 gap-3">
 
-  <TokenCardAdvanced
-    title="Played"
-    total={profile.tokensPlayed ?? 0}
-    last={profile.lastChallenge?.tokens?.played ?? 0}
-  />
+  <TokenCard
+  title="Total Games"
+  value={(profile as any)?.totalGames ?? 0}
+/>
 
-  <TokenCardAdvanced 
-    title="Won"
-    total={profile.tokensWon ?? 0}
-    last={profile.lastChallenge?.tokens?.won ?? 0}
-  />
+<TokenCard
+  title="Matches Won"
+  value={(profile as any)?.matchesWon ?? 0}
+/>
 
   <TokenCard
-  title="Available"
+  title="Tokens Available to Redeem"
   value={profileWallet?.winningTokens ?? 0}
 />
 

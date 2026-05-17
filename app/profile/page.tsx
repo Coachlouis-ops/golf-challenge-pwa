@@ -24,6 +24,8 @@ type Profile = {
   searchIndex: string;
   tokensPlayed?: number;
   tokensWon?: number;
+  totalGames?: number;
+matchesWon?: number;
 
   ranking?: {
     club: number;

@@ -216,6 +216,75 @@ const handleExit = () => {
         </div>
       </section>
 
+
+            {/* ================= ABOUT US ================= */}
+      <section className="bg-white text-black py-24 px-6">
+        <div className="max-w-5xl mx-auto">
+
+          <div className="text-center mb-14">
+            <h2 className="text-3xl md:text-5xl font-bold mb-6">
+              ABOUT TEEZ GOLF CHALLENGES
+            </h2>
+
+            <div className="w-24 h-1 bg-green-400 mx-auto rounded-full" />
+          </div>
+
+          <div className="space-y-8 text-gray-700 text-base md:text-lg leading-8">
+
+            <p>
+              Teez Golf Challenges is built around the original essence of golf — 
+              competition between players, where every round matters and every match has a winner.
+            </p>
+
+            <p>
+              Golf was never meant to be played only against the course. 
+              At its core, it is a game of matchplay — player versus player, strategizing, 
+              out thinking, where the combinations of decisions backed by skill determines the outcome.
+            </p>
+
+            <p>
+              Teez Golf Challenges brings that format back into focus by creating structured 
+              challenges where golfers compete directly against one another.
+            </p>
+
+            <p>
+              Players enter matches using tokens as entry credits and compete over real rounds of golf. 
+              Whether it’s stroke play, matchplay, or challenge-based formats, each competition is designed 
+              to produce a clear result — a winner and a loser — just as the game was always intended.
+            </p>
+
+            <p>
+              Performance drives everything. There are no shortcuts, no luck, and no randomness. 
+              The outcome is determined entirely by how you think and how you back it by play.
+            </p>
+
+            <p>
+              Tokens are won through competition and can be redeemed for vouchers, products, 
+              and approved rewards, giving real value to strong performance on the course.
+            </p>
+
+            <p className="font-semibold text-black">
+              Teez Golf Challenges is not a betting platform. 
+              It is a structured, skill-based competitive system that restores the competitive edge of golf — 
+              where players don’t just play rounds, they play to win.
+            </p>
+
+          </div>
+
+          <div className="flex justify-center mt-14">
+            <button
+              onClick={() => router.push("/app")}
+              className="bg-green-400 text-black px-10 py-4 rounded-full font-bold 
+              shadow-[0_0_25px_rgba(34,197,94,0.8)] 
+              hover:scale-105 transition"
+            >
+              START COMPETING
+            </button>
+          </div>
+
+        </div>
+      </section>
+
       {/* ================= HOW IT WORKS ================= */}
       <section className="bg-black text-white py-20 px-6">
         <div className="max-w-6xl mx-auto">

@@ -28,7 +28,7 @@ export default function LandingPage() {
             <img
               src="/app_app_main.png"
               alt="Teez Dashboard"
-              className="w-full h-[34vh] md:h-[52vh] object-contain object-center"
+              className="w-full h-[40vh] md:h-[52vh] object-contain object-center"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
           </div>

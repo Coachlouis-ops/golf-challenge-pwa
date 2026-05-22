@@ -28,14 +28,14 @@ export default function LandingPage() {
             <img
               src="/app_app_main.png"
               alt="Teez Dashboard"
-              className="w-full h-[60vh] md:h-[70vh] object-contain object-center"
+             className="w-full h-[68vh] md:h-[82vh] object-cover object-center"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
           </div>
         </div>
 
         {/* ACTION BUTTONS */}
-        <div className="px-6 mt-8 flex flex-col gap-4">
+        <div className="px-6 -mt-2 flex flex-col gap-4 relative z-10">
 
           <button
             onClick={() => router.push("/terms")}

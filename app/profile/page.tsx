@@ -14,18 +14,33 @@ type Profile = {
   name: string;
   surname: string;
   battleName: string;
+
+  // -------------------------------------------------
+  // DIVISION SYSTEM
+  // -------------------------------------------------
+  division:
+    | "junior"
+    | "amateur"
+    | "open"
+    | "senior"
+    | "professional";
+
   country: string;
   stateProvince: string;
   club: string;
+
   phoneNumber: string;
   dateOfBirth: string;
   idNumber: string;
+
   photoUrl: string;
   searchIndex: string;
+
   tokensPlayed?: number;
   tokensWon?: number;
+
   totalGames?: number;
-matchesWon?: number;
+  matchesWon?: number;
 
   ranking?: {
     club: number;
@@ -94,19 +109,36 @@ const clubInputRef = useRef<HTMLInputElement | null>(null);
 
  const [profile, setProfile] = useState<Profile>({
   uid: "",
+
   name: "",
   surname: "",
+
   battleName: "",
+
+  // -------------------------------------------------
+  // DEFAULT DIVISION
+  // -------------------------------------------------
+  division: "amateur",
+
   country: "",
   stateProvince: "",
+
   club: "",
+
   phoneNumber: "",
   dateOfBirth: "",
+
   idNumber: "",
+
   photoUrl: "",
   searchIndex: "",
+
   tokensPlayed: 0,
   tokensWon: 0,
+
+  totalGames: 0,
+  matchesWon: 0,
+
   ranking: {
     club: 0,
     province: 0,
@@ -513,6 +545,49 @@ setSaving(true);
       value={profile.stateProvince}
       onChange={(v)=>setProfile({...profile,stateProvince:v})}
     />
+
+    {/* DIVISION */}
+
+<div className="space-y-2">
+
+  <p className="text-xs text-gray-400">
+    Player Division
+  </p>
+
+  <select
+    className="w-full bg-[#1f1f1f] border border-gray-500 text-white px-3 py-2 rounded-md focus:border-green-400 focus:outline-none"
+    value={profile.division}
+    onChange={(e) =>
+      setProfile({
+        ...profile,
+        division: e.target.value as
+          | "junior"
+          | "amateur"
+          | "open"
+          | "senior"
+          | "professional",
+      })
+    }
+  >
+    <option value="junior">Junior Division</option>
+    <option value="amateur">Amateur Division</option>
+    <option value="open">Open Division</option>
+    <option value="senior">Senior Division</option>
+    <option value="professional">Professional Division</option>
+  </select>
+
+  {(profile.division === "open" ||
+    profile.division === "professional") && (
+    <div className="bg-yellow-900/30 border border-yellow-600 rounded-lg p-3">
+      <p className="text-xs text-yellow-300 leading-relaxed">
+        By selecting this division, you acknowledge that
+        participation in cash prize competitions may affect
+        your amateur status under applicable golf regulations.
+      </p>
+    </div>
+  )}
+
+</div>
 
     {/* COUNTRY */}
     <select 

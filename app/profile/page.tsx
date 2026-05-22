@@ -535,7 +535,7 @@ setSaving(true);
     <input
       ref={clubInputRef}
       className="w-full bg-[#1f1f1f] border border-gray-500 text-white px-3 py-2 rounded-md focus:border-green-400 focus:outline-none"
-      placeholder="No Club Membeship Required"
+      placeholder="Select Club - No Club Membership Required"
       value={profile.club}
       onChange={(e)=>setProfile({...profile,club:e.target.value})}
     />

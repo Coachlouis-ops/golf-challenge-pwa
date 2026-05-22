@@ -164,20 +164,31 @@ const handleExit = () => {
             Tokens are non-refundable, non-transferable, and cannot be exchanged for cash.
           </p>
 
-          <div className="flex justify-center gap-4 flex-wrap">
+         <div className="flex flex-col items-center gap-4">
+
+  <div className="flex justify-center gap-4 flex-wrap">
+
+              <button
+                onClick={() => router.push("/app")}
+                className="bg-green-400 text-black px-8 py-3 rounded-full font-semibold animate-pulse shadow-[0_0_20px_rgba(34,197,94,0.8)] hover:scale-105 transition"
+              >
+                REGISTER
+              </button>
+
+              <button
+                onClick={() => router.push("/app")}
+                className="border border-black px-8 py-3 rounded-full font-semibold hover:bg-black hover:text-white transition"
+              >
+                LOGIN
+              </button>
+
+            </div>
 
             <button
-              onClick={() => router.push("/app")}
-              className="bg-green-400 text-black px-8 py-3 rounded-full font-semibold animate-pulse shadow-[0_0_20px_rgba(34,197,94,0.8)] hover:scale-105 transition"
+              onClick={() => router.push("/about")}
+              className="bg-black text-white px-8 py-3 rounded-full font-semibold hover:bg-gray-800 transition"
             >
-              REGISTER
-            </button>
-
-            <button
-              onClick={() => router.push("/app")}
-              className="border border-black px-8 py-3 rounded-full font-semibold hover:bg-black hover:text-white transition"
-            >
-              LOGIN
+              ABOUT
             </button>
 
           </div>

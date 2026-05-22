@@ -127,9 +127,9 @@ export default function VouchersPage() {
                   {v.voucherCode && (
                     <div className="mt-3 p-2 border border-yellow-400 rounded bg-black">
                       <p className="text-yellow-400 text-sm">Voucher Code</p>
-                      <p className="text-lg font-bold tracking-wider text-yellow-300">
-                        {v.voucherCode}
-                      </p>
+                      <p className="text-lg font-bold tracking-wider text-yellow-300 break-words overflow-hidden">
+  {v.voucherCode}
+</p>
                     </div>
                   )}
 

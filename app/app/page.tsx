@@ -57,7 +57,7 @@ export default function LandingPage() {
         <img
           src="/app_app_main.png"
           alt="Teez Golf Challenges"
-          className="w-full h-[78vh] object-cover object-top"
+          className="w-full h-[65vh] object-cover object-top"
         />
 
       </div>

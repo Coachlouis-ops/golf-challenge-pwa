@@ -2,7 +2,14 @@
 
 import { useEffect, useState, useRef } from "react";
 import { useAuth } from "@/src/lib/AuthContext";
-import { db } from "@/src/lib/firebase";
+
+import {
+  db,
+  auth,
+  RecaptchaVerifier,
+  signInWithPhoneNumber,
+} from "@/src/lib/firebase";
+
 import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
 import { countries } from "@/src/lib/countries";
 import { useRouter } from "next/navigation";
@@ -306,25 +313,106 @@ if (!dobRegex.test(profile.dateOfBirth)) {
 
 setSaving(true);
 
-    const searchIndex = `${profile.name} ${profile.surname} ${profile.battleName} ${profile.club} ${profile.country} ${profile.stateProvince}`.toLowerCase();
+try {
 
-    await setDoc(
-      doc(db, "profiles", uid),
-      {
-        ...profile,
-        uid,
-        searchIndex,
-        updatedAt: serverTimestamp(),
-        createdAt: serverTimestamp(),
-      },
-      { merge: true }
+  // -------------------------------------------------
+  // FORMAT PHONE NUMBER
+  // -------------------------------------------------
+  let formattedPhone = profile.phoneNumber
+    .replace(/\s/g, "")
+    .replace(/-/g, "");
+
+  // SOUTH AFRICA AUTO FORMAT
+  if (formattedPhone.startsWith("0")) {
+    formattedPhone =
+      "+27" + formattedPhone.substring(1);
+  }
+
+  // -------------------------------------------------
+  // SEARCH INDEX
+  // -------------------------------------------------
+  const searchIndex =
+    `${profile.name} ${profile.surname} ${profile.battleName} ${profile.club} ${profile.country} ${profile.stateProvince}`
+      .toLowerCase();
+
+  // -------------------------------------------------
+  // SAVE PROFILE
+  // -------------------------------------------------
+  await setDoc(
+    doc(db, "profiles", uid),
+    {
+      ...profile,
+
+      uid,
+
+      phoneNumber: formattedPhone,
+
+      // -------------------------------------------------
+      // PHONE VERIFICATION
+      // -------------------------------------------------
+      phoneVerified: false,
+      phoneVerifiedAt: null,
+
+      searchIndex,
+
+      updatedAt: serverTimestamp(),
+      createdAt: serverTimestamp(),
+    },
+    { merge: true }
+  );
+
+  // -------------------------------------------------
+  // CREATE RECAPTCHA
+  // -------------------------------------------------
+  if (!(window as any).recaptchaVerifier) {
+
+    (window as any).recaptchaVerifier =
+      new RecaptchaVerifier(
+        auth,
+        "recaptcha-container",
+        {
+          size: "invisible",
+        }
+      );
+  }
+
+  const appVerifier =
+    (window as any).recaptchaVerifier;
+
+  // -------------------------------------------------
+  // SEND OTP
+  // -------------------------------------------------
+  const confirmationResult =
+    await signInWithPhoneNumber(
+      auth,
+      formattedPhone,
+      appVerifier
     );
 
-    setSaving(false);
-    setProfileExists(true);
-    setIsEditing(false);
+  // -------------------------------------------------
+  // STORE SESSION
+  // -------------------------------------------------
+  (window as any).confirmationResult =
+    confirmationResult;
 
-    router.push("/payment");
+  alert("OTP sent to your mobile number.");
+
+  setProfileExists(true);
+  setIsEditing(false);
+
+  router.push("/verify-phone");
+
+} catch (err: any) {
+
+  console.error(err);
+
+  alert(
+    err.message || "Failed to send OTP"
+  );
+
+}
+
+setSaving(false);
   }
 
   if (!user)
@@ -651,6 +739,11 @@ setSaving(true);
 )}
 
 </div>
+
+{/* RECAPTCHA */}
+
+<div id="recaptcha-container"></div>
+
 </main>
 );
 }

@@ -22,31 +22,15 @@ export default function LandingPage() {
       {/* CONTENT */}
       <div className="flex-1 flex flex-col">
 
-        {/* HEADLINE */}
-        <div className="px-6 pt-10 text-center">
-          <h1 className="leading-tight">
-            <span className="block text-4xl md:text-6xl font-extrabold tracking-tight uppercase
-              bg-gradient-to-r from-white via-[#00ff88] to-white
-              bg-clip-text text-transparent
-              drop-shadow-[0_0_10px_#00ff88]">
-              Teez
-            </span>
-
-            <span className="block mt-2 text-lg md:text-xl font-semibold text-white/90 tracking-wide">
-              Your Golf Challenge Platform
-            </span>
-          </h1>
-        </div>
-
-        {/* HERO IMAGE */}
-        <div className="mt-6 px-4">
+               {/* HERO IMAGE */}
+        <div className="mt-8 px-4">
           <div className="relative rounded-3xl overflow-hidden shadow-2xl bg-black">
             <img
-              src="/hero-teez.jpg"
-              alt="Hero"
-              className="w-full h-[35vh] md:h-[45vh] object-contain object-center"
+              src="/app_app_main.png"
+              alt="Teez Dashboard"
+              className="w-full h-[55vh] md:h-[75vh] object-cover object-top"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
           </div>
         </div>
 

@@ -318,14 +318,41 @@ try {
   // -------------------------------------------------
   // FORMAT PHONE NUMBER
   // -------------------------------------------------
-  let formattedPhone = profile.phoneNumber
+    let formattedPhone = profile.phoneNumber
     .replace(/\s/g, "")
     .replace(/-/g, "");
 
-  // SOUTH AFRICA AUTO FORMAT
+  // -------------------------------------------------
+  // SOUTH AFRICA PHONE NORMALIZATION
+  // ACCEPTS:
+  // 0828370266
+  // +27828370266
+  // 27828370266
+  // -------------------------------------------------
+
   if (formattedPhone.startsWith("0")) {
+
     formattedPhone =
       "+27" + formattedPhone.substring(1);
+
+  } else if (
+    formattedPhone.startsWith("27")
+  ) {
+
+    formattedPhone =
+      "+" + formattedPhone;
+
+  } else if (
+    !formattedPhone.startsWith("+27")
+  ) {
+
+    alert(
+      "Phone number must be South African format"
+    );
+
+    setSaving(false);
+
+    return;
   }
 
   // -------------------------------------------------

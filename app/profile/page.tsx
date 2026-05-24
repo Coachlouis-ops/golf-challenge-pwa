@@ -723,13 +723,6 @@ setSaving(false);
       {saving ? "Saving..." : "Save Profile"}
     </button>
 
-    <button
-      onClick={() => router.push("/verify-phone")}
-      className="w-full border border-green-500 text-green-400 hover:bg-green-500 hover:text-black font-semibold py-3 rounded-xl"
-    >
-      Verify Phone Number
-    </button>
-
   </div>
 )}
 

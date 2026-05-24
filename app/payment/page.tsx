@@ -12,6 +12,7 @@ export default function PaymentPage() {
 
   const [profile, setProfile] = useState<any>(null);
   const [accepted, setAccepted] = useState(false);
+  const [checkingVerification, setCheckingVerification] = useState(true);
 
   // -----------------------------------
   // LOAD PROFILE
@@ -20,14 +21,37 @@ export default function PaymentPage() {
     if (!user) return;
 
     (async () => {
-      const ref = doc(db, "profiles", user.uid);
-      const snap = await getDoc(ref);
+      try {
+        const ref = doc(db, "profiles", user.uid);
+        const snap = await getDoc(ref);
 
-      if (snap.exists()) {
-        setProfile(snap.data());
+        if (!snap.exists()) {
+          alert("Profile not found");
+          router.push("/profile");
+          return;
+        }
+
+        const data = snap.data();
+
+        setProfile(data);
+
+        // -----------------------------------
+        // BLOCK UNVERIFIED USERS
+        // -----------------------------------
+        if (!data.phoneVerified) {
+          router.push("/verify-phone");
+          return;
+        }
+
+        setCheckingVerification(false);
+
+      } catch (err) {
+        console.error(err);
+        alert("Failed to load profile");
+        router.push("/verify-phone");
       }
     })();
-  }, [user]);
+  }, [user, router]);
 
   // -----------------------------------
   // STRIPE (DISABLED)
@@ -40,13 +64,29 @@ export default function PaymentPage() {
   // PAYFAST
   // -----------------------------------
   async function startPayFast() {
+
+    // -----------------------------------
+    // TERMS
+    // -----------------------------------
     if (!accepted) {
       alert("You must accept the Terms & Conditions");
       return;
     }
 
+    // -----------------------------------
+    // USER CHECK
+    // -----------------------------------
     if (!user || !profile) {
       alert("User profile not loaded");
+      return;
+    }
+
+    // -----------------------------------
+    // PHONE VERIFICATION CHECK
+    // -----------------------------------
+    if (!profile.phoneVerified) {
+      alert("Phone number not verified");
+      router.push("/verify-phone");
       return;
     }
 
@@ -93,7 +133,7 @@ export default function PaymentPage() {
   // -----------------------------------
   // LOADING
   // -----------------------------------
-  if (loading) {
+  if (loading || checkingVerification) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-black text-white">
         Loading...

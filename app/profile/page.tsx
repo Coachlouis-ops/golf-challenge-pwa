@@ -5,9 +5,6 @@ import { useAuth } from "@/src/lib/AuthContext";
 
 import {
   db,
-  auth,
-  RecaptchaVerifier,
-  signInWithPhoneNumber,
 } from "@/src/lib/firebase";
 
 import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
@@ -388,46 +385,10 @@ try {
     { merge: true }
   );
 
-  // -------------------------------------------------
-  // CREATE RECAPTCHA
-  // -------------------------------------------------
-  if (!(window as any).recaptchaVerifier) {
+  alert("Profile saved successfully.");
 
-    (window as any).recaptchaVerifier =
-      new RecaptchaVerifier(
-        auth,
-        "recaptcha-container",
-        {
-          size: "invisible",
-        }
-      );
-  }
-
-  const appVerifier =
-    (window as any).recaptchaVerifier;
-
-  // -------------------------------------------------
-  // SEND OTP
-  // -------------------------------------------------
-  const confirmationResult =
-    await signInWithPhoneNumber(
-      auth,
-      formattedPhone,
-      appVerifier
-    );
-
-  // -------------------------------------------------
-  // STORE SESSION
-  // -------------------------------------------------
-  (window as any).confirmationResult =
-    confirmationResult;
-
-  alert("OTP sent to your mobile number.");
-
-  setProfileExists(true);
-  setIsEditing(false);
-
-  router.push("/verify-phone");
+setProfileExists(true);
+setIsEditing(false);
 
 } catch (err: any) {
 
@@ -754,12 +715,19 @@ setSaving(false);
       onChange={(v)=>setProfile({...profile,phoneNumber:v})}
     />
 
-    <button
+       <button
       onClick={saveProfile}
       disabled={saving}
       className="w-full bg-green-500 hover:bg-green-400 text-black font-semibold py-3 rounded-xl"
     >
       {saving ? "Saving..." : "Save Profile"}
+    </button>
+
+    <button
+      onClick={() => router.push("/verify-phone")}
+      className="w-full border border-green-500 text-green-400 hover:bg-green-500 hover:text-black font-semibold py-3 rounded-xl"
+    >
+      Verify Phone Number
     </button>
 
   </div>

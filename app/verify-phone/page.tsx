@@ -21,7 +21,8 @@ export default function VerifyPhonePage() {
   const router = useRouter();
 
   const [otp, setOtp] = useState("");
-  const [loading, setLoading] = useState(false);
+ const [loading, setLoading] = useState(false);
+const [otpSent, setOtpSent] = useState(false);
 
   async function verifyOTP() {
 

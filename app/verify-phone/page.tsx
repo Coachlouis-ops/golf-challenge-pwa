@@ -10,12 +10,12 @@ import {
   serverTimestamp,
 } from "firebase/firestore";
 
+import { auth, db } from "@/src/lib/firebase";
+
 import {
-  auth,
-  db,
   RecaptchaVerifier,
   signInWithPhoneNumber,
-} from "@/src/lib/firebase";
+} from "firebase/auth";
 
 export default function VerifyPhonePage() {
 
@@ -35,7 +35,7 @@ export default function VerifyPhonePage() {
 
     async function loadProfile() {
 
-           let uid =
+      let uid =
         localStorage.getItem("phoneVerificationUid");
 
       // fallback to logged in user
@@ -82,23 +82,37 @@ export default function VerifyPhonePage() {
 
       if (!phoneNumber) {
         alert("Phone number missing.");
+        setLoading(false);
         return;
       }
 
-    if (!(window as any).recaptchaVerifier) {
+      // -------------------------------------------------
+      // RESET OLD CAPTCHA
+      // -------------------------------------------------
 
-  (window as any).recaptchaVerifier =
-    new RecaptchaVerifier(
-      auth,
-      "recaptcha-container",
-      {
-        size: "invisible",
+      if ((window as any).recaptchaVerifier) {
+        (window as any).recaptchaVerifier.clear();
       }
-    );
-}
 
-const recaptcha =
-  (window as any).recaptchaVerifier;
+      // -------------------------------------------------
+      // CREATE CAPTCHA
+      // -------------------------------------------------
+
+      (window as any).recaptchaVerifier =
+        new RecaptchaVerifier(
+          auth,
+          "recaptcha-container",
+          {
+            size: "invisible",
+          }
+        );
+
+      const recaptcha =
+        (window as any).recaptchaVerifier;
+
+      // -------------------------------------------------
+      // SEND OTP
+      // -------------------------------------------------
 
       const confirmationResult =
         await signInWithPhoneNumber(
@@ -142,6 +156,7 @@ const recaptcha =
 
       if (!confirmationResult) {
         alert("OTP session expired.");
+        setLoading(false);
         return;
       }
 
@@ -152,6 +167,7 @@ const recaptcha =
 
       if (!uid) {
         alert("Verification session missing.");
+        setLoading(false);
         return;
       }
 

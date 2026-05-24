@@ -160,23 +160,24 @@ export default function VerifyPhonePage() {
         return;
       }
 
-      await confirmationResult.confirm(otp);
+     const originalUid =
+  localStorage.getItem("phoneVerificationUid");
 
-      const uid =
-        localStorage.getItem("phoneVerificationUid");
+if (!originalUid) {
+  alert("Verification session missing.");
+  setLoading(false);
+  return;
+}
 
-      if (!uid) {
-        alert("Verification session missing.");
-        setLoading(false);
-        return;
-      }
+// VERIFY OTP
+await confirmationResult.confirm(otp);
 
       // -------------------------------------------------
       // UPDATE PROFILE
       // -------------------------------------------------
 
       await setDoc(
-        doc(db, "profiles", uid),
+        doc(db, "profiles", originalUid),
         {
           phoneVerified: true,
           phoneVerifiedAt: serverTimestamp(),
@@ -186,7 +187,7 @@ export default function VerifyPhonePage() {
 
       alert("Phone verified successfully.");
 
-      router.push("/payment");
+      window.location.href = "/payment";
 
     } catch (err: any) {
 

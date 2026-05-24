@@ -35,8 +35,13 @@ export default function VerifyPhonePage() {
 
     async function loadProfile() {
 
-      const uid =
+           let uid =
         localStorage.getItem("phoneVerificationUid");
+
+      // fallback to logged in user
+      if (!uid && auth.currentUser) {
+        uid = auth.currentUser.uid;
+      }
 
       if (!uid) {
         alert("Verification session missing.");

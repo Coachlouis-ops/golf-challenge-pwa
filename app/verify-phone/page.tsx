@@ -37,12 +37,13 @@ export default function VerifyPhonePage() {
       // -------------------------------------------------
       await confirmationResult.confirm(otp);
 
-      const user = auth.currentUser;
+   const uid =
+  localStorage.getItem("phoneVerificationUid");
 
-      if (!user) {
-        alert("User session missing.");
-        return;
-      }
+if (!uid) {
+  alert("Verification session missing.");
+  return;
+}
 
 // -------------------------------------------------
 // UPDATE PROFILE
@@ -50,7 +51,7 @@ export default function VerifyPhonePage() {
 
 
 await setDoc(
-  doc(db, "profiles", user.uid),
+ doc(db, "profiles", uid),
   {
     phoneVerified: true,
     phoneVerifiedAt: serverTimestamp(),

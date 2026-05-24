@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 
 import {
   doc,
-  updateDoc,
+  setDoc,
   serverTimestamp,
 } from "firebase/firestore";
 
@@ -44,16 +44,19 @@ export default function VerifyPhonePage() {
         return;
       }
 
-      // -------------------------------------------------
-      // UPDATE PROFILE
-      // -------------------------------------------------
-      await updateDoc(
-        doc(db, "profiles", user.uid),
-        {
-          phoneVerified: true,
-          phoneVerifiedAt: serverTimestamp(),
-        }
-      );
+// -------------------------------------------------
+// UPDATE PROFILE
+// -------------------------------------------------
+
+
+await setDoc(
+  doc(db, "profiles", user.uid),
+  {
+    phoneVerified: true,
+    phoneVerifiedAt: serverTimestamp(),
+  },
+  { merge: true }
+);
 
       alert("Phone number verified successfully.");
 

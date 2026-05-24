@@ -385,10 +385,17 @@ try {
     { merge: true }
   );
 
-  alert("Profile saved successfully.");
+ alert("Profile saved successfully.");
 
 setProfileExists(true);
 setIsEditing(false);
+
+localStorage.setItem(
+  "phoneVerificationUid",
+  uid
+);
+
+router.push("/verify-phone");
 
 } catch (err: any) {
 

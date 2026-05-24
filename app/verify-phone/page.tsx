@@ -80,14 +80,20 @@ export default function VerifyPhonePage() {
         return;
       }
 
-      const recaptcha =
-        new RecaptchaVerifier(
-          auth,
-          "recaptcha-container",
-          {
-            size: "invisible",
-          }
-        );
+    if (!(window as any).recaptchaVerifier) {
+
+  (window as any).recaptchaVerifier =
+    new RecaptchaVerifier(
+      auth,
+      "recaptcha-container",
+      {
+        size: "invisible",
+      }
+    );
+}
+
+const recaptcha =
+  (window as any).recaptchaVerifier;
 
       const confirmationResult =
         await signInWithPhoneNumber(

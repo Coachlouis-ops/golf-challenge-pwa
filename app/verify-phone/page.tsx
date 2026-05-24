@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 import {
   doc,
+  getDoc,
   setDoc,
   serverTimestamp,
 } from "firebase/firestore";
@@ -21,8 +22,103 @@ export default function VerifyPhonePage() {
   const router = useRouter();
 
   const [otp, setOtp] = useState("");
- const [loading, setLoading] = useState(false);
-const [otpSent, setOtpSent] = useState(false);
+  const [phoneNumber, setPhoneNumber] = useState("");
+
+  const [loading, setLoading] = useState(false);
+  const [otpSent, setOtpSent] = useState(false);
+
+  // -------------------------------------------------
+  // LOAD PHONE NUMBER
+  // -------------------------------------------------
+
+  useEffect(() => {
+
+    async function loadProfile() {
+
+      const uid =
+        localStorage.getItem("phoneVerificationUid");
+
+      if (!uid) {
+        alert("Verification session missing.");
+        router.push("/profile");
+        return;
+      }
+
+      const snap = await getDoc(
+        doc(db, "profiles", uid)
+      );
+
+      if (!snap.exists()) {
+        alert("Profile not found.");
+        router.push("/profile");
+        return;
+      }
+
+      const data = snap.data();
+
+      setPhoneNumber(
+        data.phoneNumber || ""
+      );
+    }
+
+    loadProfile();
+
+  }, [router]);
+
+  // -------------------------------------------------
+  // SEND OTP
+  // -------------------------------------------------
+
+  async function sendOTP() {
+
+    try {
+
+      setLoading(true);
+
+      if (!phoneNumber) {
+        alert("Phone number missing.");
+        return;
+      }
+
+      const recaptcha =
+        new RecaptchaVerifier(
+          auth,
+          "recaptcha-container",
+          {
+            size: "invisible",
+          }
+        );
+
+      const confirmationResult =
+        await signInWithPhoneNumber(
+          auth,
+          phoneNumber,
+          recaptcha
+        );
+
+      (window as any).confirmationResult =
+        confirmationResult;
+
+      setOtpSent(true);
+
+      alert("OTP sent successfully.");
+
+    } catch (err: any) {
+
+      console.error(err);
+
+      alert(
+        err.message || "Failed to send OTP"
+      );
+
+    }
+
+    setLoading(false);
+  }
+
+  // -------------------------------------------------
+  // VERIFY OTP
+  // -------------------------------------------------
 
   async function verifyOTP() {
 
@@ -34,38 +130,34 @@ const [otpSent, setOtpSent] = useState(false);
         (window as any).confirmationResult;
 
       if (!confirmationResult) {
-        alert("OTP session expired. Please retry.");
+        alert("OTP session expired.");
+        return;
+      }
+
+      await confirmationResult.confirm(otp);
+
+      const uid =
+        localStorage.getItem("phoneVerificationUid");
+
+      if (!uid) {
+        alert("Verification session missing.");
         return;
       }
 
       // -------------------------------------------------
-      // VERIFY CODE
+      // UPDATE PROFILE
       // -------------------------------------------------
-      await confirmationResult.confirm(otp);
 
-   const uid =
-  localStorage.getItem("phoneVerificationUid");
+      await setDoc(
+        doc(db, "profiles", uid),
+        {
+          phoneVerified: true,
+          phoneVerifiedAt: serverTimestamp(),
+        },
+        { merge: true }
+      );
 
-if (!uid) {
-  alert("Verification session missing.");
-  return;
-}
-
-// -------------------------------------------------
-// UPDATE PROFILE
-// -------------------------------------------------
-
-
-await setDoc(
- doc(db, "profiles", uid),
-  {
-    phoneVerified: true,
-    phoneVerifiedAt: serverTimestamp(),
-  },
-  { merge: true }
-);
-
-      alert("Phone number verified successfully.");
+      alert("Phone verified successfully.");
 
       router.push("/payment");
 
@@ -94,43 +186,81 @@ await setDoc(
           </h1>
 
           <p className="text-sm text-gray-400">
-            Enter the OTP sent to your mobile number
+            Verify your mobile number before payment
           </p>
+
+        </div>
+
+        {/* PHONE */}
+
+        <div className="space-y-2">
+
+          <p className="text-xs text-gray-400">
+            Mobile Number
+          </p>
+
+          <div className="w-full bg-[#1f1f1f] border border-gray-500 text-white px-4 py-3 rounded-xl">
+            {phoneNumber || "Loading..."}
+          </div>
 
         </div>
 
         {/* OTP INPUT */}
 
-        <div className="space-y-2">
+        {otpSent && (
 
-          <p className="text-xs text-gray-400">
-            One Time PIN
-          </p>
+          <div className="space-y-2">
 
-          <input
-            value={otp}
-            onChange={(e) =>
-              setOtp(e.target.value)
-            }
-            placeholder="Enter OTP"
-            className="w-full bg-[#1f1f1f] border border-gray-500 text-white px-4 py-3 rounded-xl focus:border-green-400 focus:outline-none"
-          />
+            <p className="text-xs text-gray-400">
+              One Time PIN
+            </p>
 
-        </div>
+            <input
+              value={otp}
+              onChange={(e) =>
+                setOtp(e.target.value)
+              }
+              placeholder="Enter OTP"
+              className="w-full bg-[#1f1f1f] border border-gray-500 text-white px-4 py-3 rounded-xl focus:border-green-400 focus:outline-none"
+            />
 
-        {/* VERIFY BUTTON */}
+          </div>
 
-        <button
-          onClick={verifyOTP}
-          disabled={loading}
-          className="w-full bg-green-500 hover:bg-green-400 text-black font-semibold py-3 rounded-xl"
-        >
-          {loading
-            ? "Verifying..."
-            : "Verify Phone"}
-        </button>
+        )}
+
+        {/* BUTTONS */}
+
+        {!otpSent ? (
+
+          <button
+            onClick={sendOTP}
+            disabled={loading}
+            className="w-full bg-green-500 hover:bg-green-400 text-black font-semibold py-3 rounded-xl"
+          >
+            {loading
+              ? "Sending OTP..."
+              : "Send OTP"}
+          </button>
+
+        ) : (
+
+          <button
+            onClick={verifyOTP}
+            disabled={loading}
+            className="w-full bg-green-500 hover:bg-green-400 text-black font-semibold py-3 rounded-xl"
+          >
+            {loading
+              ? "Verifying..."
+              : "Verify Phone"}
+          </button>
+
+        )}
 
       </div>
+
+      {/* RECAPTCHA */}
+
+      <div id="recaptcha-container"></div>
 
     </main>
   );

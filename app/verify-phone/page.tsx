@@ -9,7 +9,12 @@ import {
   serverTimestamp,
 } from "firebase/firestore";
 
-import { auth, db } from "@/src/lib/firebase";
+import {
+  auth,
+  db,
+  RecaptchaVerifier,
+  signInWithPhoneNumber,
+} from "@/src/lib/firebase";
 
 export default function VerifyPhonePage() {
 

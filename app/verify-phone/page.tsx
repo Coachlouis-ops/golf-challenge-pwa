@@ -169,8 +169,18 @@ if (!originalUid) {
   return;
 }
 
-// VERIFY OTP
+// -------------------------------------------------
+// VERIFY OTP WITHOUT REPLACING EMAIL SESSION
+// -------------------------------------------------
+
+const currentUser = auth.currentUser;
+
 await confirmationResult.confirm(otp);
+
+// RESTORE ORIGINAL EMAIL USER
+if (currentUser) {
+  await auth.updateCurrentUser(currentUser);
+}
 
       // -------------------------------------------------
       // UPDATE PROFILE

@@ -144,6 +144,11 @@ uid: profile.uid,
     );
   }
 
+  console.log("USER:", user);
+console.log("PROFILE:", profile);
+console.log("LOADING:", loading);
+console.log("CHECKING:", checkingVerification);
+
   return (
     <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center gap-10 px-6">
 

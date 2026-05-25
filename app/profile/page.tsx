@@ -371,11 +371,18 @@ try {
 
       phoneNumber: formattedPhone,
 
-      // -------------------------------------------------
-      // PHONE VERIFICATION
-      // -------------------------------------------------
-      phoneVerified: false,
-      phoneVerifiedAt: null,
+    // -------------------------------------------------
+// RESET VERIFICATION ONLY IF PHONE CHANGED
+// -------------------------------------------------
+phoneVerified:
+  profile.phoneNumber === formattedPhone
+    ? (profile as any).phoneVerified ?? false
+    : false,
+
+phoneVerifiedAt:
+  profile.phoneNumber === formattedPhone
+    ? (profile as any).phoneVerifiedAt ?? null
+    : null,
 
       searchIndex,
 

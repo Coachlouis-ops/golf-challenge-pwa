@@ -550,9 +550,18 @@ return (
   </h1>
 
     <div className="flex items-center gap-3">
-      <span className="text-xs px-2 py-1 rounded bg-gray-200">
-        {challenge.status}
-      </span>
+      <span
+  className={`
+    text-xs px-3 py-1 rounded-full font-bold tracking-wide
+    ${
+      challenge.status === "completed"
+        ? "bg-red-600 text-white shadow-[0_0_15px_rgba(255,0,0,0.7)]"
+        : "bg-green-500 text-black shadow-[0_0_15px_rgba(57,255,20,0.5)]"
+    }
+  `}
+>
+  {challenge.status.toUpperCase()}
+</span>
       {challenge.joinCode && (
         <span className="text-xs px-2 py-1 rounded bg-gray-100">
           Join Code: <strong>{challenge.joinCode}</strong>

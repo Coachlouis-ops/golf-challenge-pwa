@@ -170,7 +170,7 @@ if (!category || !supplier || !amount) {
 
   {/* ================= CASH WARNING ================= */}
 
-  <div className="border border-red-500/30 bg-black/30 rounded-2xl p-4">
+  <div className="border border-cyan-400/30 bg-[#071521]/80 rounded-2xl p-4 shadow-[0_0_25px_rgba(0,255,255,0.18)] backdrop-blur-md">
 
     <div className="text-lg font-bold text-cyan-300 mb-3">
       CASH REDEMPTION WARNING
@@ -196,7 +196,7 @@ if (!category || !supplier || !amount) {
 
   {/* ================= VOUCHERS ================= */}
 
-  <div className="border border-red-500/30 bg-black/30 rounded-2xl p-4">
+ <div className="border border-cyan-400/30 bg-[#071521]/80 rounded-2xl p-4 shadow-[0_0_25px_rgba(0,255,255,0.18)] backdrop-blur-md">
 
     <div className="text-lg font-bold text-cyan-300 mb-3">
       VOUCHER & NON-CASH REDEMPTIONS
@@ -222,13 +222,13 @@ if (!category || !supplier || !amount) {
 
   {/* ================= FRAUD ================= */}
 
-  <div className="border border-red-500/30 bg-black/30 rounded-2xl p-4">
+  <div className="border border-cyan-400/30 bg-[#071521]/80 rounded-2xl p-4 shadow-[0_0_25px_rgba(0,255,255,0.18)] backdrop-blur-md">
 
     <div className="text-lg font-bold text-cyan-300 mb-3">
       IDENTITY VERIFICATION & FRAUD PREVENTION
     </div>
 
-    <div className="text-sm text-red-100 leading-relaxed space-y-3">
+    <div className="text-sm text-cyan-100 leading-relaxed space-y-3">
 
       <p>
         Teez Golf Challenges reserves the right to request identity verification, division verification, competition verification or supporting documentation before processing redemption requests.
@@ -295,7 +295,7 @@ if (!category || !supplier || !amount) {
 
   {/* ================= FINAL ================= */}
 
-  <div className="text-xs text-cyan-300 border border-red-500/20 rounded-2xl bg-black/30 p-4">
+<div className="text-xs text-cyan-200 border border-cyan-400/20 rounded-2xl bg-[#071521]/80 p-4 shadow-[0_0_20px_rgba(0,255,255,0.15)]">
 
     By proceeding with a redemption request through Teez Golf Challenges, I acknowledge that I have read, understood and accepted the redemption rules, prize conditions and amateur status responsibilities applicable to my participation within the platform.
 

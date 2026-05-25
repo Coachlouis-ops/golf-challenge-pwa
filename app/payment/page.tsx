@@ -18,7 +18,10 @@ export default function PaymentPage() {
   // LOAD PROFILE
   // -----------------------------------
   useEffect(() => {
-    if (!user) return;
+   if (!user) {
+  setCheckingVerification(false);
+  return;
+}
 
     (async () => {
       try {

@@ -392,17 +392,32 @@ phoneVerifiedAt:
     { merge: true }
   );
 
- alert("Profile saved successfully.");
+alert("Profile saved successfully.");
 
 setProfileExists(true);
 setIsEditing(false);
 
-localStorage.setItem(
-  "phoneVerificationUid",
-  uid
-);
+// -------------------------------------------------
+// ONLY VERIFY DURING FIRST SETUP
+// -------------------------------------------------
 
-router.push("/verify-phone");
+if (!(profile as any).phoneVerified) {
+
+  localStorage.setItem(
+    "phoneVerificationUid",
+    uid
+  );
+
+  router.push("/verify-phone");
+
+  return;
+}
+
+// -------------------------------------------------
+// NORMAL PROFILE UPDATE
+// -------------------------------------------------
+
+router.push("/dashboard");
 
 } catch (err: any) {
 

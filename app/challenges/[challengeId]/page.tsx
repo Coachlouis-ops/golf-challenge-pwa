@@ -352,6 +352,10 @@ async function handleInvite(targetUid: string) {
 });
 
     setInvitedUids((prev) => [...prev, targetUid]);
+
+// AUTO CLEAR SEARCH AFTER INVITE
+setSearchTerm("");
+setSearchResults([]);
   } catch (e: any) {
     alert(e.message || "Invite failed");
   } finally {
@@ -420,6 +424,127 @@ return (
     Back to Dashboard
   </button>
 
+
+{/* ================= CHALLENGE GUIDE ================= */}
+
+{(() => {
+
+  const acceptedPlayers = players.length;
+
+  const pendingInvites =
+    invitedUids.filter(
+      (uid) =>
+        !players.some(
+          (player) => String(player.uid) === String(uid)
+        )
+    ).length;
+
+  let title = "INVITE PLAYERS";
+
+  let message =
+    "Invite players by searching their names in the Invite Players tab.";
+
+  let notes: string[] = [
+    "Players who accepted your challenge will appear in the Participants section below.",
+    "The creator of the challenge must also invite and accept themselves to enter the challenge.",
+  ];
+
+  // ================= WAITING =================
+
+  if (
+    invitedUids.length > 0 &&
+    acceptedPlayers === 0
+  ) {
+    title = "WAITING FOR ACCEPTANCE";
+
+    message =
+      "Search and invite next player.";
+
+    notes = [
+      "Waiting for invited players to accept the challenge.",
+    ];
+  }
+
+  // ================= RESULTS =================
+
+  if (
+    acceptedPlayers > 0 &&
+    challenge.status !== "completed"
+  ) {
+    title = "ENTER RESULTS";
+
+    message =
+      "After completion of challenge enter the scores/results - update scoreboard, scoreboard can be updated as scores are being added, once finalized the challenge cannot be reopened.";
+
+    notes = [
+      "Accepted players are listed in the Participants section below.",
+    ];
+  }
+
+  // ================= FINALIZED =================
+
+  if (challenge.status === "completed") {
+
+    title = "CHALLENGE COMPLETED";
+
+    message =
+      "See My Challenges for results and My Profile for rankings and tokens won.";
+
+    notes = [
+      "This challenge has been finalized successfully.",
+    ];
+  }
+
+  return (
+    <div className="border border-red-500/40 bg-red-950/30 backdrop-blur-md rounded-2xl p-5 shadow-[0_0_35px_rgba(255,0,0,0.35)]">
+
+      <div className="flex items-center justify-between mb-4">
+
+        <div>
+          <div className="text-xs tracking-[0.3em] text-red-400 font-bold">
+            CHALLENGE GUIDE
+          </div>
+
+          <div className="text-2xl font-extrabold text-red-300 mt-1">
+            {title}
+          </div>
+        </div>
+
+        <div className="text-right text-xs text-red-200 space-y-1">
+          <div>
+            Players Joined: {acceptedPlayers}
+          </div>
+
+          <div>
+            Pending Invites: {pendingInvites}
+          </div>
+
+          <div>
+            Status: {challenge.status}
+          </div>
+        </div>
+      </div>
+
+      <div className="text-sm text-red-100 leading-relaxed">
+        {message}
+      </div>
+
+      <div className="mt-4 flex flex-col gap-2">
+        {notes.map((note, i) => (
+          <div
+            key={i}
+            className="text-xs text-red-200 bg-black/30 border border-red-500/20 rounded-lg px-3 py-2"
+          >
+            • {note}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+
+})()}
+
+
   <h1 className="text-2xl font-semibold">
     {challenge.challengeTitle}
   </h1>
@@ -448,13 +573,21 @@ return (
     <div className="border rounded p-4 flex flex-col gap-3">
       <h2 className="font-semibold">Invite Players</h2>
 
-      <input
-        type="text"
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        placeholder="Search name, surname, club, battle name"
-        className="border rounded p-2"
-      />
+     <div className="flex flex-col gap-2">
+
+  <input
+    type="text"
+    value={searchTerm}
+    onChange={(e) => setSearchTerm(e.target.value)}
+    placeholder="Search player name, surname, club or battle name"
+    className="border border-red-500/30 bg-black/40 text-white rounded-xl p-3 focus:outline-none focus:border-red-400 focus:shadow-[0_0_15px_rgba(255,0,0,0.4)] transition"
+  />
+
+  <div className="text-xs text-red-300">
+    Search and invite players one-by-one. Accepted players will automatically appear in Participants below.
+  </div>
+
+</div>
 
      {searchResults.map((p) => {
   const isYou = user.uid === p.uid;
@@ -497,18 +630,32 @@ return (
                 </span>
               )}
 
-              <button
-                disabled={
-                  !isCreator ||
-                  alreadyInvited ||
-                  alreadyPlayer ||
-                  invitingUid === p.uid
-                }
-                onClick={() => handleInvite(p.uid)}
-                className="bg-blue-600 text-white px-3 py-1 rounded disabled:opacity-40"
-              >
-                Invite
-              </button>
+             <button
+  disabled={
+    !isCreator ||
+    alreadyInvited ||
+    alreadyPlayer ||
+    invitingUid === p.uid
+  }
+  onClick={() => handleInvite(p.uid)}
+  className="
+    px-4 py-2 rounded-xl font-semibold transition-all
+    bg-red-600 text-white
+    hover:bg-red-500
+    hover:shadow-[0_0_20px_rgba(255,0,0,0.6)]
+    hover:scale-[1.03]
+    disabled:opacity-30
+    disabled:hover:scale-100
+  "
+>
+  {invitingUid === p.uid
+    ? "Sending..."
+    : alreadyPlayer
+    ? "Joined"
+    : alreadyInvited
+    ? "Invited"
+    : "Invite"}
+</button>
             </div>
           </div>
         );
@@ -516,58 +663,110 @@ return (
     </div>
 
 {/* ================= ENTER RESULTS ================= */}
+
 {isCreator && (
-  <div className="border rounded p-4 flex flex-col gap-3">
-    <h2 className="font-semibold">Enter Results</h2>
+  <div className="border border-red-500/30 bg-black/30 rounded-2xl p-5 flex flex-col gap-5 shadow-[0_0_30px_rgba(255,0,0,0.2)]">
+
+    <div>
+
+      <div className="text-red-400 text-xs tracking-[0.25em] font-bold">
+        LIVE MATCH CONTROL
+      </div>
+
+      <div className="text-2xl font-extrabold text-white mt-1">
+        ENTER RESULTS
+      </div>
+
+    </div>
+
+    <div className="text-sm text-red-100 leading-relaxed">
+      After completion of challenge enter the scores/results and update scoreboard. Scoreboard can be updated as scores are being added.
+    </div>
+
+    <div className="text-xs text-red-300 bg-black/30 border border-red-500/20 rounded-xl p-3">
+      Once finalized the challenge cannot be reopened.
+    </div>
 
     {players.length === 0 && (
-      <p className="text-sm text-gray-500">
-        No players available for scoring.
+      <p className="text-sm text-red-300">
+        No players available for scoring yet.
       </p>
     )}
 
     {players.map((player) => (
-      <div key={player.uid} className="flex flex-col gap-1">
-        <label className="text-sm font-medium">
+
+      <div
+        key={player.uid}
+        className="border border-red-500/20 rounded-2xl p-4 bg-black/40 flex flex-col gap-3"
+      >
+
+        <label className="text-sm font-semibold text-red-100">
           Score for {player.displayName}
         </label>
-       {challenge?.typeOfGame?.toLowerCase().includes("match") ? (
-  <select
-    value={scoreInputs[player.uid] || ""}
-    onChange={(e) =>
-      setScoreInputs((prev) => ({
-        ...prev,
-        [player.uid]: e.target.value,
-      }))
-    }
-    disabled={challenge?.status === "completed"}
-    className="border rounded p-2 disabled:opacity-50"
-  >
-    <option value="">Select result</option>
-    <option value="win">Win</option>
-    <option value="lost">Lost</option>
-    <option value="draw">Draw</option>
-  </select>
-) : (
- <input
-  type="text"
-  value={scoreInputs[player.uid] || ""}
-  onChange={(e) =>
-    setScoreInputs((prev) => ({
-      ...prev,
-      [player.uid]: e.target.value,
-    }))
-  }
-  placeholder={
-    challenge?.typeOfGame?.toLowerCase().includes("match")
-      ? "win / lost / draw"
-      : "score / points / win / lost / draw"
-  }
-  disabled={challenge?.status === "completed"}
-  className="border rounded p-2 disabled:opacity-50"
-/>
-)}
+
+        {challenge?.typeOfGame?.toLowerCase().includes("match") ? (
+
+          <select
+            value={scoreInputs[player.uid] || ""}
+            onChange={(e) =>
+              setScoreInputs((prev) => ({
+                ...prev,
+                [player.uid]: e.target.value,
+              }))
+            }
+            disabled={challenge?.status === "completed"}
+            className="
+              border border-red-500/30
+              bg-black/50
+              text-white
+              rounded-xl
+              p-3
+              disabled:opacity-50
+              focus:outline-none
+              focus:border-red-400
+              focus:shadow-[0_0_15px_rgba(255,0,0,0.4)]
+            "
+          >
+            <option value="">Select result</option>
+            <option value="win">Win</option>
+            <option value="lost">Lost</option>
+            <option value="draw">Draw</option>
+          </select>
+
+        ) : (
+
+          <input
+            type="text"
+            value={scoreInputs[player.uid] || ""}
+            onChange={(e) =>
+              setScoreInputs((prev) => ({
+                ...prev,
+                [player.uid]: e.target.value,
+              }))
+            }
+            placeholder={
+              challenge?.typeOfGame?.toLowerCase().includes("match")
+                ? "win / lost / draw"
+                : "score / points / win / lost / draw"
+            }
+            disabled={challenge?.status === "completed"}
+            className="
+              border border-red-500/30
+              bg-black/50
+              text-white
+              rounded-xl
+              p-3
+              disabled:opacity-50
+              focus:outline-none
+              focus:border-red-400
+              focus:shadow-[0_0_15px_rgba(255,0,0,0.4)]
+            "
+          />
+
+        )}
+
       </div>
+
     ))}
 
     <button
@@ -577,36 +776,141 @@ return (
         challenge?.status === "completed" ||
         players.length === 0
       }
-      className="bg-green-600 text-white px-4 py-2 rounded disabled:opacity-40"
+      className="
+        bg-red-600 text-white px-5 py-3 rounded-2xl
+        font-bold tracking-wide
+        hover:bg-red-500
+        hover:shadow-[0_0_25px_rgba(255,0,0,0.7)]
+        hover:scale-[1.02]
+        transition-all
+        disabled:opacity-30
+      "
     >
-      {updating ? "Updating..." : "Update Scoreboard"}
+      {updating
+        ? "UPDATING SCOREBOARD..."
+        : "UPDATE SCOREBOARD"}
     </button>
+
   </div>
 )}
 
 
 {/* ================= FINALIZE ================= */}
+
 {isCreator && challenge?.status !== "completed" && players.length > 0 && (
-  <div className="border rounded p-4 flex flex-col gap-3">
+
+  <div className="border border-red-500/30 bg-red-950/20 rounded-2xl p-5 flex flex-col gap-4 shadow-[0_0_30px_rgba(255,0,0,0.25)]">
+
+    <div>
+
+      <div className="text-red-400 text-xs tracking-[0.25em] font-bold">
+        FINAL STEP
+      </div>
+
+      <div className="text-2xl font-extrabold text-red-200 mt-1">
+        FINALIZE CHALLENGE
+      </div>
+
+    </div>
+
+    <div className="text-sm text-red-100 leading-relaxed">
+      Once finalized the challenge cannot be reopened. Rankings, results and winnings will lock permanently.
+    </div>
+
+    <div className="text-xs text-red-300 bg-black/30 border border-red-500/20 rounded-xl p-3">
+      Make sure all player scores/results have been entered correctly before finalizing.
+    </div>
+
     <button
       onClick={handleFinalizeChallenge}
-      className="bg-red-600 text-white px-4 py-2 rounded"
+      disabled={finalizing}
+      className="
+        bg-red-600 text-white px-5 py-3 rounded-2xl
+        font-bold tracking-wide
+        hover:bg-red-500
+        hover:shadow-[0_0_25px_rgba(255,0,0,0.7)]
+        hover:scale-[1.02]
+        transition-all
+        disabled:opacity-40
+      "
     >
-      Finalize Challenge
+      {finalizing
+        ? "FINALIZING..."
+        : "FINALIZE CHALLENGE"}
     </button>
+
   </div>
+
 )}
 
 
-{/* ================= REOPEN ================= */}
+{/* ================= PARTICIPANTS ================= */}
 
-<ParticipantsList challengeId={challengeId as string} />
-<PlayerSummaryList challengeId={challengeId as string} />
+<div className="border border-red-500/20 bg-black/30 rounded-2xl p-4 shadow-[0_0_25px_rgba(255,0,0,0.15)]">
 
-    {/* ================= RESULTS ================= */}
-    {showResults && (
-      <ResultsList challengeId={challengeId as string} />
-    )}
+  <div className="flex items-center justify-between mb-4">
+
+    <div>
+      <div className="text-red-400 text-xs tracking-[0.25em] font-bold">
+        CHALLENGE STAGE
+      </div>
+
+      <div className="text-xl font-bold text-white mt-1">
+        PARTICIPANTS
+      </div>
+    </div>
+
+    <div className="text-right text-xs text-red-300">
+      {players.length} Joined
+    </div>
+
+  </div>
+
+  <div className="text-xs text-red-200 mb-4">
+    Players who accepted your challenge are listed below.
+  </div>
+
+  <ParticipantsList challengeId={challengeId as string} />
+
+</div>
+
+{/* ================= PLAYER SUMMARY ================= */}
+
+<div className="border border-red-500/20 bg-black/30 rounded-2xl p-4 shadow-[0_0_25px_rgba(255,0,0,0.15)]">
+
+  <div className="mb-4">
+    <div className="text-red-400 text-xs tracking-[0.25em] font-bold">
+      LIVE SCOREBOARD
+    </div>
+
+    <div className="text-xl font-bold text-white mt-1">
+      PLAYER SUMMARY
+    </div>
+  </div>
+
+  <PlayerSummaryList challengeId={challengeId as string} />
+
+</div>
+
+{/* ================= RESULTS ================= */}
+
+{showResults && (
+  <div className="border border-red-500/20 bg-black/30 rounded-2xl p-4 shadow-[0_0_25px_rgba(255,0,0,0.15)]">
+
+    <div className="mb-4">
+      <div className="text-red-400 text-xs tracking-[0.25em] font-bold">
+        FINAL RESULTS
+      </div>
+
+      <div className="text-xl font-bold text-white mt-1">
+        RESULTS
+      </div>
+    </div>
+
+    <ResultsList challengeId={challengeId as string} />
+
+  </div>
+)}
   </div>
 </main>
 );

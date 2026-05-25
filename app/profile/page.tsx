@@ -83,10 +83,17 @@ type Profile = {
 };
 
 type RankingPosition = {
+  // GLOBAL
   clubPosition: number;
   provincePosition: number;
   nationalPosition: number;
   internationalPosition: number;
+
+  // DIVISION
+  divisionClubPosition: number;
+  divisionProvincePosition: number;
+  divisionNationalPosition: number;
+  divisionInternationalPosition: number;
 };
 
 export default function ProfilePage() {
@@ -103,11 +110,19 @@ export default function ProfilePage() {
   lockedTokens: 0,
 });
 
-  const [rankingPosition, setRankingPosition] = useState<RankingPosition>({
+ const [rankingPosition, setRankingPosition] = useState<RankingPosition>({
+
+  // GLOBAL
   clubPosition: 0,
   provincePosition: 0,
   nationalPosition: 0,
   internationalPosition: 0,
+
+  // DIVISION
+  divisionClubPosition: 0,
+  divisionProvincePosition: 0,
+  divisionNationalPosition: 0,
+  divisionInternationalPosition: 0,
 });
 
 const clubInputRef = useRef<HTMLInputElement | null>(null);
@@ -198,11 +213,26 @@ if (rankingSnap.exists()) {
   const data = rankingSnap.data();
 
   setRankingPosition({
-    clubPosition: data.clubPosition || 0,
-    provincePosition: data.provincePosition || 0,
-    nationalPosition: data.nationalPosition || 0,
-    internationalPosition: data.internationalPosition || 0,
-  });
+
+  // GLOBAL
+  clubPosition: data.clubPosition || 0,
+  provincePosition: data.provincePosition || 0,
+  nationalPosition: data.nationalPosition || 0,
+  internationalPosition: data.internationalPosition || 0,
+
+  // DIVISION
+  divisionClubPosition:
+    data.divisionClubPosition || 0,
+
+  divisionProvincePosition:
+    data.divisionProvincePosition || 0,
+
+  divisionNationalPosition:
+    data.divisionNationalPosition || 0,
+
+  divisionInternationalPosition:
+    data.divisionInternationalPosition || 0,
+});
 }
 
     setLoading(false);
@@ -498,40 +528,88 @@ setSaving(false);
       </div>
     </div>
 
-    {/* RANKINGS + LAST CHANGE */}
+    {/* DIVISION RANKINGS */}
+
+<div className="space-y-2">
+
+  <p className="text-xs text-green-400 font-semibold tracking-wider">
+    {profile.division?.toUpperCase()} DIVISION
+  </p>
 
   <div className="grid grid-cols-2 gap-3">
 
-  <RankCardAdvanced
-    title="Club Rank"
-    value={rankingPosition.clubPosition}
-    before={profile.lastChallenge?.ranking?.before?.club ?? 0}
-    after={profile.lastChallenge?.ranking?.after?.club ?? 0}
-  />
+    <RankCardAdvanced
+      title="Division Club"
+      value={rankingPosition.divisionClubPosition}
+      before={0}
+      after={0}
+    />
 
-  <RankCardAdvanced
-    title="Province Rank"
-    value={rankingPosition.provincePosition}
-    before={profile.lastChallenge?.ranking?.before?.province ?? 0}
-    after={profile.lastChallenge?.ranking?.after?.province ?? 0}
-  />
+    <RankCardAdvanced
+      title="Division Province"
+      value={rankingPosition.divisionProvincePosition}
+      before={0}
+      after={0}
+    />
 
-  <RankCardAdvanced
-    title="National Rank"
-    value={rankingPosition.nationalPosition}
-    before={profile.lastChallenge?.ranking?.before?.national ?? 0}
-    after={profile.lastChallenge?.ranking?.after?.national ?? 0}
-  />
+    <RankCardAdvanced
+      title="Division National"
+      value={rankingPosition.divisionNationalPosition}
+      before={0}
+      after={0}
+    />
 
-  <RankCardAdvanced
-    title="Global Rank"
-    value={rankingPosition.internationalPosition}
-    before={profile.lastChallenge?.ranking?.before?.international ?? 0}
-    after={profile.lastChallenge?.ranking?.after?.international ?? 0}
-  />
+    <RankCardAdvanced
+      title="Division Global"
+      value={rankingPosition.divisionInternationalPosition}
+      before={0}
+      after={0}
+    />
 
+  </div>
 </div>
 
+{/* GLOBAL RANKINGS */}
+
+<div className="space-y-2">
+
+  <p className="text-xs text-gray-400 font-semibold tracking-wider">
+    GLOBAL RANKINGS
+  </p>
+
+  <div className="grid grid-cols-2 gap-3">
+
+    <RankCardAdvanced
+      title="Club Rank"
+      value={rankingPosition.clubPosition}
+      before={profile.lastChallenge?.ranking?.before?.club ?? 0}
+      after={profile.lastChallenge?.ranking?.after?.club ?? 0}
+    />
+
+    <RankCardAdvanced
+      title="Province Rank"
+      value={rankingPosition.provincePosition}
+      before={profile.lastChallenge?.ranking?.before?.province ?? 0}
+      after={profile.lastChallenge?.ranking?.after?.province ?? 0}
+    />
+
+    <RankCardAdvanced
+      title="National Rank"
+      value={rankingPosition.nationalPosition}
+      before={profile.lastChallenge?.ranking?.before?.national ?? 0}
+      after={profile.lastChallenge?.ranking?.after?.national ?? 0}
+    />
+
+    <RankCardAdvanced
+      title="Global Rank"
+      value={rankingPosition.internationalPosition}
+      before={profile.lastChallenge?.ranking?.before?.international ?? 0}
+      after={profile.lastChallenge?.ranking?.after?.international ?? 0}
+    />
+
+  </div>
+
+</div>
   {/* TOKEN STATS + LAST CHANGE */}
 
 <div className="grid grid-cols-3 gap-3">

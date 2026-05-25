@@ -758,6 +758,7 @@ setSaving(false);
     <option value="amateur">Amateur Division</option>
     <option value="open">Open Division</option>
     <option value="senior">Senior Division</option>
+    <option value="ladies">Ladies Division</option>
     <option value="professional">Professional Division</option>
   </select>
 

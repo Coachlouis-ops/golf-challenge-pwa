@@ -22,12 +22,13 @@ type Profile = {
   // -------------------------------------------------
   // DIVISION SYSTEM
   // -------------------------------------------------
-  division:
-    | "junior"
-    | "amateur"
-    | "open"
-    | "senior"
-    | "professional";
+ division:
+  | "junior"
+  | "amateur"
+  | "open"
+  | "senior"
+  | "ladies"
+  | "professional";
 
   country: string;
   stateProvince: string;
@@ -662,17 +663,18 @@ setSaving(false);
   <select
     className="w-full bg-[#1f1f1f] border border-gray-500 text-white px-3 py-2 rounded-md focus:border-green-400 focus:outline-none"
     value={profile.division}
-    onChange={(e) =>
-      setProfile({
-        ...profile,
-        division: e.target.value as
-          | "junior"
-          | "amateur"
-          | "open"
-          | "senior"
-          | "professional",
-      })
-    }
+   onChange={(e) =>
+  setProfile({
+    ...profile,
+    division: e.target.value as
+      | "junior"
+      | "amateur"
+      | "open"
+      | "senior"
+      | "ladies"
+      | "professional",
+  })
+}
   >
     <option value="junior">Junior Division</option>
     <option value="amateur">Amateur Division</option>

@@ -135,21 +135,20 @@ if (!category || !supplier || !amount) {
 
 {/* ================= CONSENT ================= */}
 
-<div className="w-full max-w-3xl border border-red-500/30 bg-red-950/20 rounded-3xl p-6 shadow-[0_0_35px_rgba(255,0,0,0.25)] flex flex-col gap-6">
-
+<div className="w-full max-w-3xl border border-cyan-400/30 bg-[#04111f]/90 rounded-3xl p-6 shadow-[0_0_40px_rgba(0,200,255,0.35)] flex flex-col gap-6 backdrop-blur-md">
   <div>
 
-    <div className="text-red-400 text-xs tracking-[0.3em] font-bold">
+    <div className="text-cyan-300 text-xs tracking-[0.3em] font-bold drop-shadow-[0_0_8px_rgba(0,255,255,0.9)] animate-pulse">
       REDEMPTION CONSENT
     </div>
 
-    <div className="text-2xl font-extrabold text-red-200 mt-2">
+   <div className="text-2xl font-extrabold text-cyan-100 mt-2 drop-shadow-[0_0_12px_rgba(0,255,255,0.8)]">
       REDEMPTION & PRIZE COMPLIANCE
     </div>
 
   </div>
 
-  <div className="text-sm text-red-100 leading-relaxed space-y-4">
+  <div className="text-sm text-cyan-100 leading-relaxed space-y-4">
 
     <p>
       Teez Golf Challenges operates competitive golf challenge systems across multiple player divisions including juniors, amateurs, seniors, ladies, open division and professional players.
@@ -173,11 +172,11 @@ if (!category || !supplier || !amount) {
 
   <div className="border border-red-500/30 bg-black/30 rounded-2xl p-4">
 
-    <div className="text-lg font-bold text-red-300 mb-3">
+    <div className="text-lg font-bold text-cyan-300 mb-3">
       CASH REDEMPTION WARNING
     </div>
 
-    <div className="text-sm text-red-100 leading-relaxed space-y-3">
+    <div className="text-sm text-cyan-100 leading-relaxed space-y-3">
 
       <p>
         Cash prize redemptions may not be permitted within certain amateur divisions, handicap competitions or governing jurisdictions.
@@ -199,11 +198,11 @@ if (!category || !supplier || !amount) {
 
   <div className="border border-red-500/30 bg-black/30 rounded-2xl p-4">
 
-    <div className="text-lg font-bold text-red-300 mb-3">
+    <div className="text-lg font-bold text-cyan-300 mb-3">
       VOUCHER & NON-CASH REDEMPTIONS
     </div>
 
-    <div className="text-sm text-red-100 leading-relaxed space-y-3">
+    <div className="text-sm text-cyan-100 leading-relaxed space-y-3">
 
       <p>
         Voucher, merchandise and retail redemption options are intended to align with permitted non-cash prize structures commonly recognized within amateur golf regulations.
@@ -225,7 +224,7 @@ if (!category || !supplier || !amount) {
 
   <div className="border border-red-500/30 bg-black/30 rounded-2xl p-4">
 
-    <div className="text-lg font-bold text-red-300 mb-3">
+    <div className="text-lg font-bold text-cyan-300 mb-3">
       IDENTITY VERIFICATION & FRAUD PREVENTION
     </div>
 
@@ -247,7 +246,7 @@ if (!category || !supplier || !amount) {
 
   <div className="flex flex-col gap-4">
 
-    <label className="flex gap-3 items-start text-sm text-red-100">
+    <label className="flex gap-3 items-start text-sm text-cyan-100">
       <input
         type="checkbox"
         checked={agreedStatusRules}
@@ -262,7 +261,7 @@ if (!category || !supplier || !amount) {
       </span>
     </label>
 
-    <label className="flex gap-3 items-start text-sm text-red-100">
+    <label className="flex gap-3 items-start text-sm text-cyan-100">
       <input
         type="checkbox"
         checked={agreedResponsibility}
@@ -277,7 +276,7 @@ if (!category || !supplier || !amount) {
       </span>
     </label>
 
-    <label className="flex gap-3 items-start text-sm text-red-100">
+    <label className="flex gap-3 items-start text-sm text-cyan-100">
       <input
         type="checkbox"
         checked={agreedTruth}
@@ -296,7 +295,7 @@ if (!category || !supplier || !amount) {
 
   {/* ================= FINAL ================= */}
 
-  <div className="text-xs text-red-300 border border-red-500/20 rounded-2xl bg-black/30 p-4">
+  <div className="text-xs text-cyan-300 border border-red-500/20 rounded-2xl bg-black/30 p-4">
 
     By proceeding with a redemption request through Teez Golf Challenges, I acknowledge that I have read, understood and accepted the redemption rules, prize conditions and amateur status responsibilities applicable to my participation within the platform.
 
@@ -327,7 +326,7 @@ if (!category || !supplier || !amount) {
     >
 
       {!consentAccepted && (
-        <div className="text-sm text-red-300 border border-red-500/30 bg-red-950/20 rounded-2xl px-5 py-3 text-center max-w-xl">
+       <div className="text-sm text-cyan-200 border border-cyan-400/30 bg-[#04111f]/90 rounded-2xl px-5 py-3 text-center max-w-xl shadow-[0_0_20px_rgba(0,255,255,0.25)]">
           Accept all redemption consent acknowledgements above to unlock redemption options.
         </div>
       )}
@@ -340,11 +339,14 @@ if (!category || !supplier || !amount) {
           setSupplier("");
         }}
         className="
-          px-4 py-3 rounded-2xl w-72
-          bg-red-500 text-white font-bold
-          shadow-[0_0_25px_rgba(255,0,0,0.5)]
-          focus:outline-none
-        "
+  px-4 py-3 rounded-2xl w-72
+  bg-cyan-500 text-black font-extrabold
+  shadow-[0_0_30px_rgba(0,255,255,0.6)]
+  border border-cyan-300/40
+  focus:outline-none
+  focus:shadow-[0_0_40px_rgba(0,255,255,0.9)]
+  transition-all
+"
       >
         <option value="">Select Category</option>
 
@@ -360,13 +362,16 @@ if (!category || !supplier || !amount) {
         placeholder="Amount (tokens)"
         value={amount}
         onChange={(e) => setAmount(e.target.value)}
-        className="
-          px-4 py-3 rounded-2xl w-72
-          bg-red-500 text-white font-bold
-          shadow-[0_0_25px_rgba(255,0,0,0.5)]
-          placeholder:text-white/70
-          focus:outline-none
-        "
+       className="
+  px-4 py-3 rounded-2xl w-72
+  bg-cyan-500 text-black font-extrabold
+  shadow-[0_0_30px_rgba(0,255,255,0.6)]
+  border border-cyan-300/40
+  placeholder:text-black/60
+  focus:outline-none
+  focus:shadow-[0_0_40px_rgba(0,255,255,0.9)]
+  transition-all
+"
       />
 
       {/* SUPPLIER */}
@@ -377,11 +382,14 @@ if (!category || !supplier || !amount) {
             value={supplier}
             onChange={(e) => setSupplier(e.target.value)}
             className="
-              px-4 py-3 rounded-2xl w-72
-              bg-red-500 text-white font-bold
-              shadow-[0_0_25px_rgba(255,0,0,0.5)]
-              focus:outline-none
-            "
+  px-4 py-3 rounded-2xl w-72
+  bg-cyan-500 text-black font-extrabold
+  shadow-[0_0_30px_rgba(0,255,255,0.6)]
+  border border-cyan-300/40
+  focus:outline-none
+  focus:shadow-[0_0_40px_rgba(0,255,255,0.9)]
+  transition-all
+"
           >
 
             <option value="">Select Supplier</option>
@@ -399,7 +407,7 @@ if (!category || !supplier || !amount) {
               href={selectedSupplier.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-red-300 underline"
+             className="text-cyan-300 underline drop-shadow-[0_0_10px_rgba(0,255,255,0.8)] hover:text-cyan-200 transition-all"
             >
               Visit Website
             </a>
@@ -410,14 +418,17 @@ if (!category || !supplier || !amount) {
 
       <button
         onClick={submit}
-        className="
-          bg-red-600 text-white px-8 py-4 rounded-2xl
-          font-extrabold tracking-wide
-          shadow-[0_0_30px_rgba(255,0,0,0.6)]
-          hover:bg-red-500
-          hover:scale-[1.03]
-          transition-all
-        "
+       className="
+  bg-cyan-400 text-black px-8 py-4 rounded-2xl
+  font-extrabold tracking-[0.15em]
+  shadow-[0_0_35px_rgba(0,255,255,0.7)]
+  border border-cyan-200/50
+  hover:bg-cyan-300
+  hover:scale-[1.05]
+  hover:shadow-[0_0_50px_rgba(0,255,255,1)]
+  transition-all
+  animate-pulse
+"
            >
         SUBMIT REDEMPTION
       </button>

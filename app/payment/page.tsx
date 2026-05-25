@@ -79,10 +79,10 @@ export default function PaymentPage() {
     // -----------------------------------
     // USER CHECK
     // -----------------------------------
-    if (!user || !profile) {
-      alert("User profile not loaded");
-      return;
-    }
+  if (!profile) {
+  alert("User profile not loaded");
+  return;
+}
 
     // -----------------------------------
     // PHONE VERIFICATION CHECK
@@ -103,8 +103,8 @@ export default function PaymentPage() {
         item_name: "Teez Golf Membership",
         name_first: profile.name || "",
         name_last: profile.surname || "",
-        email_address: user.email,
-        uid: user.uid,
+        email_address: profile.email || "",
+uid: profile.uid,
         type: "membership",
         tokens: 0,
       }),

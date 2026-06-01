@@ -28,7 +28,7 @@ export default function TeezGolfSystemsPage() {
 
         {/* CHALLENGES */}
         <button
-          onClick={() => router.push("/teez-challenges")}
+          onClick={() => router.push("/teez-scoring/login")}
           className="
             bg-neutral-900
             border border-green-400/30

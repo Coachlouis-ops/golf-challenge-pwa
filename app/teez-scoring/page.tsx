@@ -1,8 +1,12 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+
 import RequireScoringAuth from "@/src/lib/RequireScoringAuth";
 
 export default function TeezScoringPage() {
+
+  const router = useRouter();
 
   return (
 
@@ -25,6 +29,11 @@ export default function TeezScoringPage() {
           <div className="grid md:grid-cols-3 gap-6">
 
             <button
+              onClick={() =>
+                router.push(
+                  "/teez-scoring/create-competition"
+                )
+              }
               className="
                 bg-neutral-900
                 border border-cyan-400/20
@@ -47,6 +56,11 @@ export default function TeezScoringPage() {
             </button>
 
             <button
+              onClick={() =>
+                router.push(
+                  "/teez-scoring/leaderboards"
+                )
+              }
               className="
                 bg-neutral-900
                 border border-green-400/20
@@ -68,6 +82,11 @@ export default function TeezScoringPage() {
             </button>
 
             <button
+              onClick={() =>
+                router.push(
+                  "/teez-scoring/tv"
+                )
+              }
               className="
                 bg-neutral-900
                 border border-yellow-400/20

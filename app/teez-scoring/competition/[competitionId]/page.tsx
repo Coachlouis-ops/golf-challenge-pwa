@@ -589,219 +589,209 @@ if (!competition) {
 
 </div>
 
-        {/* PLAYER ROWS */}
+     {/* TEE SHEET */}
 
-        <div className="bg-neutral-900 rounded-3xl p-6">
+<div className="bg-neutral-900 rounded-3xl p-6">
 
-          <div className="flex items-center justify-between mb-6">
+  <div className="flex items-center justify-between mb-8">
 
-            <div>
+    <div>
 
-              <h2 className="text-2xl font-bold">
-                Competition Rows
-              </h2>
+      <h2 className="text-2xl font-bold">
+        Tee Sheet
+      </h2>
 
-              <p className="text-gray-400 text-sm mt-1">
-                Add players, pairs,
-                foursomes and scores
-              </p>
+      <p className="text-gray-400 text-sm mt-1">
+        Auto generated competition groups
+      </p>
 
-            </div>
+    </div>
 
-           <button
-  onClick={generateTeeSheet}
-  className="
-    bg-cyan-400
-    text-black
-    px-5
-    py-3
-    rounded-2xl
-    font-bold
-    shadow-[0_0_25px_rgba(34,211,238,0.7)]
-  "
->
-  GENERATE TEE SHEET
-</button>
+    <button
+      onClick={generateTeeSheet}
+      className="
+        bg-cyan-400
+        text-black
+        px-5
+        py-3
+        rounded-2xl
+        font-bold
+        shadow-[0_0_25px_rgba(34,211,238,0.7)]
+      "
+    >
+      GENERATE TEE SHEET
+    </button>
 
+  </div>
+
+  <div className="grid grid-cols-1 xl:grid-cols-2 gap-10">
+
+    {["1", "10"].map((tee) => {
+
+      const teeRows =
+        rows.filter(
+          (r) => r.startingHole === tee
+        );
+
+      const groupedTimes = [
+        ...new Set(
+          teeRows.map((r) => r.teeTime)
+        ),
+      ];
+
+      return (
+
+        <div key={tee}>
+
+          <div className="text-3xl font-black mb-6 text-center">
+            TEE {tee}
           </div>
 
-          <div className="overflow-auto">
+          <div className="flex flex-col gap-8">
 
-            <table className="w-full">
+            {groupedTimes.map((time) => {
 
-              <thead>
+              const group =
+                teeRows.filter(
+                  (r) => r.teeTime === time
+                );
 
-                <tr className="text-left border-b border-white/10">
+              return (
 
-                  <th className="p-3">
-                    Display Name
-                  </th>
+                <div
+                  key={time}
+                  className="
+                    bg-black/40
+                    border border-white/10
+                    rounded-3xl
+                    p-5
+                  "
+                >
 
-                  <th className="p-3">
-                    Division
-                  </th>
+                  <div className="text-center text-2xl font-bold mb-5">
+                    {time}
+                  </div>
 
-                  <th className="p-3">
-                    Tee Time
-                  </th>
+                  <div className="grid grid-cols-12 gap-3 mb-3 text-sm text-gray-400 font-bold">
 
-                  <th className="p-3">
-                    Starting Hole
-                  </th>
+                    <div className="col-span-6">
+                      Names
+                    </div>
 
-                  <th className="p-3">
-                    Score
-                  </th>
+                    <div className="col-span-2">
+                      Div
+                    </div>
 
-                </tr>
+                    <div className="col-span-4">
+                      Score
+                    </div>
 
-              </thead>
+                  </div>
 
-              <tbody>
+                  <div className="flex flex-col gap-3">
 
-                {rows.map((row) => (
+                    {group.map((row, index) => (
 
-                  <tr
-                    key={row.id}
-                    className="border-b border-white/5"
-                  >
+                      <div
+                        key={row.id}
+                        className="grid grid-cols-12 gap-3"
+                      >
 
-                    {/* NAME */}
+                        <div className="col-span-6">
 
-                    <td className="p-3">
+                          <input
+                            value={row.displayName}
+                            onChange={(e) =>
+                              updateRow(
+                                row.id,
+                                "displayName",
+                                e.target.value
+                              )
+                            }
+                            className="
+                              w-full
+                              bg-black
+                              border border-white/10
+                              rounded-xl
+                              px-3
+                              py-3
+                            "
+                          />
 
-                      <input
-                        value={row.displayName}
-                        onChange={(e) =>
-                          updateRow(
-                            row.id,
-                            "displayName",
-                            e.target.value
-                          )
-                        }
-                        className="
-                          w-full
-                          bg-black
-                          border border-white/10
-                          rounded-xl
-                          px-3
-                          py-3
-                        "
-                      />
+                        </div>
 
-                    </td>
+                        <div className="col-span-2">
 
-                    {/* DIVISION */}
+                          <input
+                            value={row.division}
+                            onChange={(e) =>
+                              updateRow(
+                                row.id,
+                                "division",
+                                e.target.value
+                              )
+                            }
+                            className="
+                              w-full
+                              bg-black
+                              border border-white/10
+                              rounded-xl
+                              px-3
+                              py-3
+                            "
+                          />
 
-                    <td className="p-3">
+                        </div>
 
-                      <input
-                        value={row.division}
-                        onChange={(e) =>
-                          updateRow(
-                            row.id,
-                            "division",
-                            e.target.value
-                          )
-                        }
-                        className="
-                          w-full
-                          bg-black
-                          border border-white/10
-                          rounded-xl
-                          px-3
-                          py-3
-                        "
-                      />
+                        <div className="col-span-4">
 
-                    </td>
+                          {(competition.playerConfiguration === "Singles" ||
+                            index % 2 === 0) && (
 
-                    {/* TEE */}
+                            <input
+                              value={row.score}
+                              onChange={(e) =>
+                                updateRow(
+                                  row.id,
+                                  "score",
+                                  e.target.value
+                                )
+                              }
+                              className="
+                                w-full
+                                bg-black
+                                border border-white/10
+                                rounded-xl
+                                px-3
+                                py-3
+                              "
+                            />
 
-                    <td className="p-3">
+                          )}
 
-                      <input
-                        value={row.teeTime}
-                        onChange={(e) =>
-                          updateRow(
-                            row.id,
-                            "teeTime",
-                            e.target.value
-                          )
-                        }
-                        className="
-                          w-full
-                          bg-black
-                          border border-white/10
-                          rounded-xl
-                          px-3
-                          py-3
-                        "
-                      />
+                        </div>
 
-                    </td>
+                      </div>
 
-                    {/* HOLE */}
+                    ))}
 
-                    <td className="p-3">
+                  </div>
 
-                      <input
-                        value={row.startingHole}
-                        onChange={(e) =>
-                          updateRow(
-                            row.id,
-                            "startingHole",
-                            e.target.value
-                          )
-                        }
-                        className="
-                          w-full
-                          bg-black
-                          border border-white/10
-                          rounded-xl
-                          px-3
-                          py-3
-                        "
-                      />
+                </div>
 
-                    </td>
-
-                    {/* SCORE */}
-
-                    <td className="p-3">
-
-                      <input
-                        value={row.score}
-                        onChange={(e) =>
-                          updateRow(
-                            row.id,
-                            "score",
-                            e.target.value
-                          )
-                        }
-                        className="
-                          w-full
-                          bg-black
-                          border border-white/10
-                          rounded-xl
-                          px-3
-                          py-3
-                        "
-                      />
-
-                    </td>
-
-                  </tr>
-
-                ))}
-
-              </tbody>
-
-            </table>
+              );
+            })}
 
           </div>
 
         </div>
+
+      );
+    })}
+
+  </div>
+
+</div>
 
       </div>
 

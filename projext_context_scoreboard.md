@@ -1,4 +1,4 @@
-# Golf Competition & Live GPS Leaderboard System
+# Golf Competition & Live Leaderboard System
 
 ## Project Context Document
 
@@ -11,9 +11,9 @@ The system must support:
 * club competitions
 * live scoring
 * smart TV leaderboard broadcasting
-* longest drive tracking
-* nearest-to-pin tracking
-* future GPS-assisted challenge tracking
+* realtime leaderboard updates
+* tournament management
+* historical results tracking
 
 ---
 
@@ -24,6 +24,7 @@ The system must support:
 ### Features
 
 * Create competition/challenge
+
 * Competition types:
 
   * Stroke Play
@@ -33,6 +34,7 @@ The system must support:
   * Scramble
   * Betterball
   * Fourball Alliance
+
 * Set:
 
   * handicap rules
@@ -62,12 +64,13 @@ The system must support:
 * Edit players
 * Substitute players
 * Confirm player check-in at POS
-* Mark:
 
-  * paid
-  * checked-in
-  * withdrawn
-  * substituted
+### Player States
+
+* paid
+* checked-in
+* withdrawn
+* substituted
 
 ### Optional Future
 
@@ -119,14 +122,10 @@ Recommended:
 
 ### Dedicated Public Display Page
 
-### Layout
-
-Sections:
+### Layout Sections
 
 * Live leaderboard
 * Hole progress
-* Longest drive
-* Nearest to pin
 * Sponsor banners
 * Club branding
 
@@ -145,89 +144,9 @@ Sections:
 
 ---
 
-# PHASE 5 — LONGEST DRIVE SYSTEM
+# PHASE 5 — FINALIZATION ENGINE
 
-## 5. Longest Drive Tracking
-
-### Initial Version (MVP)
-
-Manual input:
-
-* player name
-* hole number
-* drive distance
-
-Updates instantly to leaderboard.
-
----
-
-## 6. GPS Marker System (Advanced)
-
-### Concept
-
-A GPS-linked marker device is placed on the fairway.
-
-When a player hits a longer drive:
-
-* official moves device to ball position
-* enters player name
-* device sends GPS location to ERP
-
-### System Flow
-
-1. Tee GPS location stored
-2. Marker GPS position received
-3. ERP calculates distance
-4. Live leaderboard updates instantly
-
-### Data Sent
-
-* competition ID
-* hole number
-* player ID
-* GPS coordinates
-* timestamp
-* calculated distance
-
-### Recommended MVP Hardware
-
-Option 1:
-
-* Android phone/tablet
-* GPS enabled
-* PWA/web app
-
-Option 2:
-
-* Dedicated rugged Android device
-
-Future Option:
-
-* ESP32 GPS IoT module
-
----
-
-# PHASE 6 — NEAREST TO PIN
-
-## 7. Nearest Pin Tracking
-
-### MVP
-
-Official manually enters:
-
-* player
-* hole
-* distance from pin
-
-### Future
-
-Bluetooth laser measurement integration.
-
----
-
-# PHASE 7 — FINALIZATION ENGINE
-
-## 8. Final Results
+## 5. Final Results
 
 ### Features
 
@@ -247,18 +166,16 @@ Bluetooth laser measurement integration.
 
 ---
 
-# PHASE 8 — PLAYER HISTORY & RANKINGS
+# PHASE 6 — PLAYER HISTORY & RANKINGS
 
-## 9. Historical Data
+## 6. Historical Data
 
-### Save:
+### Save
 
 * rounds played
 * wins
 * top 10 finishes
 * average scores
-* longest drive records
-* nearest pin wins
 
 ### Rankings
 
@@ -269,7 +186,7 @@ Bluetooth laser measurement integration.
 
 ---
 
-# PHASE 9 — FUTURE EXPANSIONS
+# PHASE 7 — FUTURE EXPANSIONS
 
 ## Future Ideas
 
@@ -291,7 +208,6 @@ Players can:
 ### Sponsorship System
 
 * sponsor ads on TV leaderboard
-* sponsored longest drive holes
 * digital competition branding
 
 ### Live Streaming
@@ -329,14 +245,6 @@ TV display
 
 ### Stage 6
 
-Longest drive & nearest pin
-
-### Stage 7
-
-GPS marker integration
-
-### Stage 8
-
 Historical analytics
 
 ---
@@ -350,8 +258,8 @@ First complete:
 
 Before:
 
-* GPS hardware
-* advanced tracking
+* advanced GPS systems
+* hardware integrations
 * AI systems
 
 That becomes the operational core of the system.

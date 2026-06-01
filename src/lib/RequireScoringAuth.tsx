@@ -35,7 +35,7 @@ export default function RequireScoringAuth({
         const ref = doc(
           db,
           "scoringClubs",
-          user.uid
+         user!.uid
         );
 
         const snap = await getDoc(ref);

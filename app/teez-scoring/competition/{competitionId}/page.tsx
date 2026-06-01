@@ -266,23 +266,61 @@ export default function CompetitionDashboardPage() {
 
           </div>
 
-          <button
-            onClick={saveCompetition}
-            disabled={saving}
-            className="
-              bg-green-400
-              text-black
-              px-6
-              py-4
-              rounded-2xl
-              font-bold
-              shadow-[0_0_25px_rgba(34,197,94,0.7)]
-            "
-          >
-            {saving
-              ? "SAVING..."
-              : "SAVE COMPETITION"}
-          </button>
+       <div className="flex items-center gap-4">
+
+  <button
+    onClick={() =>
+      window.open(
+        `/teez-scoring/leaderboard/${competitionId}`,
+        "_blank"
+      )
+    }
+    className="
+      bg-cyan-400
+      text-black
+      px-6
+      py-4
+      rounded-2xl
+      font-bold
+      shadow-[0_0_25px_rgba(34,211,238,0.7)]
+    "
+  >
+    VIEW LEADERBOARD
+  </button>
+
+  <button
+    className="
+      bg-yellow-400
+      text-black
+      px-6
+      py-4
+      rounded-2xl
+      font-bold
+      shadow-[0_0_25px_rgba(250,204,21,0.7)]
+    "
+  >
+    UPDATE LEADERBOARD
+  </button>
+
+  <button
+    onClick={saveCompetition}
+    disabled={saving}
+    className="
+      bg-green-400
+      text-black
+      px-6
+      py-4
+      rounded-2xl
+      font-bold
+      shadow-[0_0_25px_rgba(34,197,94,0.7)]
+    "
+  >
+    {saving
+      ? "SAVING..."
+      : "SAVE COMPETITION"}
+  </button>
+
+</div>
 
         </div>
 

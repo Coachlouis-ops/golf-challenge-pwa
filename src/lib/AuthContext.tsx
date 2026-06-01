@@ -60,6 +60,30 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
           const uid = firebaseUser.uid;
 
+
+// -------------------------------------------------
+// SCORING CLUB CHECK
+// -------------------------------------------------
+
+const scoringClubRef = doc(
+  db,
+  "scoringClubs",
+  uid
+);
+
+const scoringClubSnap =
+  await getDoc(scoringClubRef);
+
+if (scoringClubSnap.exists()) {
+
+  setUser(firebaseUser);
+
+  setLoading(false);
+
+  return;
+}
+
+
           // -------------------------------------------------
           // PROFILE CHECK / CREATE
           // -------------------------------------------------

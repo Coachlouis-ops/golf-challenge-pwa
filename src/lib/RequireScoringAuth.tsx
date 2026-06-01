@@ -1,11 +1,17 @@
 "use client";
 
 import { useAuth } from "./AuthContext";
+
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+
+import { useEffect } from "react";
 
 import { db } from "./firebase";
-import { doc, getDoc } from "firebase/firestore";
+
+import {
+  doc,
+  getDoc,
+} from "firebase/firestore";
 
 export default function RequireScoringAuth({
   children,
@@ -17,42 +23,48 @@ export default function RequireScoringAuth({
 
   const router = useRouter();
 
-  const [checking, setChecking] = useState(true);
-
   useEffect(() => {
 
     if (loading) return;
 
-  if (!user) {
+    async function check() {
 
-  router.replace("/teez-scoring/login");
+      // NOT LOGGED IN
+      if (!user) {
 
-setChecking(false);
+        router.replace(
+          "/teez-scoring/login"
+        );
 
-  return;
-}
-
-    async function checkScoringAccess() {
+        return;
+      }
 
       try {
 
         const ref = doc(
           db,
           "scoringClubs",
-         user!.uid
+          user.uid
         );
 
-        const snap = await getDoc(ref);
+        const snap =
+          await getDoc(ref);
 
+        // NOT SCORING CLUB
         if (!snap.exists()) {
+
           router.replace("/");
+
           return;
         }
 
         const data = snap.data();
 
+        // DISABLED
         if (!data.active) {
+
           router.replace("/");
+
           return;
         }
 
@@ -65,18 +77,19 @@ setChecking(false);
 
         router.replace("/");
 
-      } finally {
-
-        setChecking(false);
-
       }
     }
 
-    checkScoringAccess();
+    check();
 
   }, [user, loading, router]);
 
-  if (loading || checking) return null;
+  // IMPORTANT
+  // only block while firebase auth loads
+
+  if (loading) {
+    return null;
+  }
 
   return <>{children}</>;
 }

@@ -28,10 +28,10 @@ export default function ScoringClubsDashboard() {
 
   useEffect(() => {
 
-    const q = query(
-      collection(db, "scoringClubs"),
-      orderBy("clubName")
-    );
+   const q = collection(
+  db,
+  "scoringClubs"
+);
 
     const unsub = onSnapshot(q, (snap) => {
 

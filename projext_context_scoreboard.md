@@ -1,29 +1,16 @@
 # Golf Competition & Live Leaderboard System
 
-## Project Context Document
+## Project Update — Current Progress
 
-### Objective
+### Completed
 
-Integrate a full golf competition management and live leaderboard system into the ERP and Golf Challenge platform.
+# System Architecture Established
 
-The system must support:
-
-* club competitions
-* live scoring
-* smart TV leaderboard broadcasting
-* realtime leaderboard updates
-* tournament management
-* historical results tracking
-
----
-
-# SYSTEM ARCHITECTURE
-
-## Main System Split
+The platform has now been successfully split into:
 
 ### 1. Teez Golf Challenges
 
-Consumer/player platform:
+Consumer/player system:
 
 * player-vs-player challenges
 * rankings
@@ -33,56 +20,35 @@ Consumer/player platform:
 
 ### 2. Teez Golf Scoring
 
-Club/tournament platform:
+Club/tournament competition system:
 
 * club competitions
 * live scoring
-* TV leaderboard systems
+* realtime leaderboards
+* TV leaderboard broadcasting
 * tournament management
-* historical competition records
 
 Both systems operate inside the SAME Firebase project.
 
 ---
 
-# AUTHENTICATION STRUCTURE
+# Scoring Club Authentication System — Completed
 
-## Scoring Club Authentication
+## Admin Controlled Club Registration
 
-### Admin Controlled Registration
+Scoring club accounts are now structured as:
 
-Scoring clubs are NOT public registrations.
+### Firebase Authentication
 
-Only admins can create scoring club accounts.
+Created through admin-controlled creation flow.
 
-### Flow
+### Firestore Collection
 
-Admin Dashboard →
+```text
+scoringClubs/{uid}
+```
 
-Teez Scoring Clubs →
-
-Add New Club →
-
-Create Club Account
-
-### Cloud Function Creates
-
-#### Firebase Authentication User
-
-* email
-* password
-
-#### Firestore Document
-
-Collection:
-
-* scoringClubs
-
-Document ID:
-
-* Firebase Auth UID
-
-### scoringClubs Structure
+### Firestore Structure
 
 ```json
 {
@@ -96,86 +62,113 @@ Document ID:
 
 ---
 
-# CLUB LOGIN FLOW
+# Scoring Login System — Completed
 
-## Login Process
+## Login Route
 
-### Public Access
+```text
+/teez-scoring/login
+```
 
-Page:
-
-* /teez-scoring/login
-
-### Authentication
+## Authentication
 
 Uses:
 
 * Firebase Email/Password Authentication
 
-### Validation
+## Validation
 
 After login:
 
-Check Firestore:
-
-* scoringClubs/{uid}
-
-Validate:
-
-* active = true
-* role = scoringClub
-
-### Access Result
-
-Success:
-
-* Navigate to scoring dashboard
-
-Failure:
-
-* redirect out of scoring system
+* validates scoringClubs/{uid}
+* validates active = true
+* validates role = scoringClub
 
 ---
 
-# SCORING DASHBOARD
+# Navigation System — Fixed
 
-## Main Dashboard Sections
+## Issue Resolved
 
-### Create Competition
+The Teez Golf Scoring button on the main systems page was incorrectly routing directly to:
 
-Create:
+```text
+/teez-scoring
+```
 
-* competition
+instead of:
+
+```text
+/teez-scoring/login
+```
+
+This has now been corrected.
+
+---
+
+# Scoring Dashboard — Operational
+
+Dashboard route:
+
+```text
+/teez-scoring
+```
+
+Dashboard sections now active:
+
+* Create Competition
+* Live Leaderboards
+* TV Display
+
+---
+
+# Current Operational Flow
+
+## Working Flow
+
+Main Systems Page →
+
+Teez Golf Scoring →
+
+Scoring Login →
+
+Authentication →
+
+Scoring Dashboard
+
+---
+
+# Competition Engine Architecture — Defined
+
+## Competition Structure
+
+The scoring system will operate using a flexible scorer-controlled architecture.
+
+The system is intentionally designed to behave like a real-world golf club scoring desk rather than a rigid tournament engine.
+
+---
+
+# Competition Creation Flow
+
+## Competition Setup
+
+Scorers/staff create the competition shell first.
+
+### Competition Setup Includes
+
+* competition name
+* competition format
 * scoring format
+* player configuration
 * divisions
-* rules
-
-### Live Leaderboards
-
-Manage:
-
-* live scoring
-* realtime leaderboard updates
-* competition monitoring
-
-### TV Display
-
-Launch:
-
-* fullscreen leaderboard broadcasting
-* clubhouse smart TV display
+* tee times
+* starting holes
 
 ---
 
-# PHASE 1 — FOUNDATION SYSTEM
+# Competition Formats
 
-## 1. Competition Engine
-
-### Features
-
-* Create competition/challenge
-
-### Competition Types
+Supported formats:
 
 * Stroke Play
 * Stableford
@@ -185,17 +178,154 @@ Launch:
 * Betterball
 * Fourball Alliance
 
-### Competition Settings
+---
 
-* handicap rules
-* divisions
-* count-out rules
-* tee format
-* shotgun/start times
-* maximum players
-* prize breakdown
+# Player Configuration Types
 
-### Database Collections
+Supported player configurations:
+
+* Singles
+* Doubles
+* Foursomes
+
+---
+
+# Division System
+
+Competition can support:
+
+* no divisions
+* A Division
+* B Division
+* C Division
+* D Division
+
+Leaderboard system must support:
+
+* global leaderboard
+* division-specific leaderboards
+
+---
+
+# Group & Tee Time Architecture
+
+## Group Structure
+
+Groups are operational only.
+
+Example:
+
+```text
+GROUP 1 — 07:10
+
+Louis / Andries
+John / Peter
+```
+
+Each scoring row represents a scoring entity/team.
+
+The leaderboard itself remains global.
+
+---
+
+# Flexible Scoring Architecture
+
+## Important Design Principle
+
+The system must allow:
+
+* incomplete groups
+* editable pairings
+* editable names
+* editable scoring rows
+* moving players between groups
+* late pair confirmations
+* partial score entry
+
+This mirrors real golf club operations.
+
+---
+
+# Player Entry Structure
+
+Players are manually entered by scorers.
+
+Each player/scoring row contains:
+
+* editable display name
+* assigned division
+* tee time
+* starting hole
+* score
+
+No rigid player account linking required.
+
+---
+
+# Scoring Logic
+
+## Final Totals Entry
+
+Initial MVP scoring uses:
+
+* final totals only
+
+No hole-by-hole scoring initially.
+
+---
+
+# Score Entry Structure
+
+Scorers manually enter:
+
+* final score
+* final points
+* final result
+
+based on the competition scoring format selected during competition creation.
+
+The scoring engine does NOT enforce pairing validation.
+
+The scorer controls the final scoring interpretation.
+
+---
+
+# Leaderboard Architecture
+
+## Manual Recalculation System
+
+Leaderboard updates occur only when:
+
+```text
+UPDATE LEADERBOARD
+```
+
+is pressed.
+
+The system then:
+
+* recalculates the full leaderboard
+* recalculates all positions
+* recalculates movement
+* rebuilds division leaderboards
+
+---
+
+# Leaderboard Display
+
+Leaderboard rows display:
+
+* position
+* display name
+* division
+* score/result
+* movement
+
+---
+
+# Current Firebase Collections
+
+Planned collections:
 
 * scoringClubs
 * competitions
@@ -206,212 +336,33 @@ Launch:
 
 ---
 
-# PHASE 2 — PLAYER REGISTRATION FLOW
+# NEXT BUILD STAGE
 
-## 2. Registration & POS Integration
+# Competition Creation Engine
 
-### Features
+## Immediate Next Objective
 
-* Import player lists
-* Edit players
-* Substitute players
-* Confirm player check-in at POS
+Build:
 
-### Player States
-
-* paid
-* checked-in
-* withdrawn
-* substituted
-
-### Optional Future
-
-* QR player check-in
-* Member card scanning
-* Handicap sync
+```text
+/teez-scoring/create-competition
+```
 
 ---
 
-# PHASE 3 — LIVE SCORING SYSTEM
+# MVP Priority
 
-## 3. Score Capture
-
-### Features
-
-* Hole-by-hole entry
-  OR
-* Final totals entry
-
-### Score Entry UI
-
-* Search player
-* Enter scores
-* Save scorecard
-* Update leaderboard button
-
-### Real-Time Updating
-
-Leaderboard updates instantly:
-
-* website
-* mobile devices
-* smart TVs
-* clubhouse displays
-
-### Technologies
-
-Recommended:
-
-* Firebase realtime listeners
-  OR
-* websocket server
-
----
-
-# PHASE 4 — LIVE TV LEADERBOARD
-
-## 4. Smart TV Broadcast System
-
-### Dedicated Public Display Page
-
-### Layout Sections
-
-* Live leaderboard
-* Hole progress
-* Sponsor banners
-* Club branding
-
-### Real-Time Features
-
-* auto refresh
-* movement indicators
-* player score animations
-* flashing leader changes
-
-### Display Modes
-
-* dark mode
-* fullscreen TV mode
-* sponsor rotation mode
-
----
-
-# PHASE 5 — FINALIZATION ENGINE
-
-## 5. Final Results
-
-### Features
-
-* Finalize competition
-* Lock scores
-* Apply count-out rules
-* Generate final standings
-* Save history permanently
-
-### Outputs
-
-* PDF results
-* payout sheets
-* prize sheets
-* historical archive
-* player ranking points
-
----
-
-# PHASE 6 — PLAYER HISTORY & RANKINGS
-
-## 6. Historical Data
-
-### Save
-
-* rounds played
-* wins
-* top 10 finishes
-* average scores
-
-### Rankings
-
-* club rankings
-* provincial rankings
-* national rankings
-* division rankings
-
----
-
-# PHASE 7 — FUTURE EXPANSIONS
-
-## Future Ideas
-
-### Mobile Player App
-
-Players can:
-
-* track leaderboard live
-* receive notifications
-* submit scores
-* view hole maps
-
-### AI Features
-
-* predicted winners
-* handicap anomaly detection
-* pace-of-play monitoring
-
-### Sponsorship System
-
-* sponsor ads on TV leaderboard
-* digital competition branding
-
-### Live Streaming
-
-Overlay leaderboard on:
-
-* YouTube streams
-* clubhouse broadcasts
-
----
-
-# RECOMMENDED BUILD ORDER
-
-## BUILD PRIORITY
-
-### Stage 1
-
-Competition creation
-
-### Stage 2
-
-Player registration
-
-### Stage 3
-
-Score entry
-
-### Stage 4
-
-Realtime leaderboard
-
-### Stage 5
-
-TV display
-
-### Stage 6
-
-Historical analytics
-
----
-
-# MOST IMPORTANT MVP GOAL
-
-First complete:
+The current focus remains:
 
 * realtime competition scoring
-* realtime TV leaderboard
+* realtime leaderboard updating
+* realtime TV leaderboard broadcasting
 
 Before:
 
-* advanced GPS systems
-* hardware integrations
 * AI systems
+* GPS systems
+* streaming integrations
+* advanced hardware integrations
 
-That becomes the operational core of the system.
+This remains the operational core of the platform.

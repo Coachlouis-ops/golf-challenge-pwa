@@ -75,7 +75,9 @@ export default function ScoringLoginPage() {
         return;
       }
 
-      router.push("/teez-scoring");
+   console.log("LOGIN SUCCESS");
+
+window.location.href = "/teez-scoring";
 
     } catch (err: any) {
 

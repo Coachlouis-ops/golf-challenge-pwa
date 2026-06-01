@@ -25,9 +25,9 @@ export default function RequireScoringAuth({
 
   if (!user) {
 
-  setChecking(false);
-
   router.replace("/teez-scoring/login");
+
+setChecking(false);
 
   return;
 }

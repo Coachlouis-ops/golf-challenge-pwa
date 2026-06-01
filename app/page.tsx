@@ -28,7 +28,7 @@ export default function TeezGolfSystemsPage() {
 
         {/* CHALLENGES */}
         <button
-          onClick={() => router.push("/teez-scoring/login")}
+         onClick={() => router.push("/teez-challenges")}
           className="
             bg-neutral-900
             border border-green-400/30
@@ -53,7 +53,7 @@ export default function TeezGolfSystemsPage() {
 
         {/* SCORING */}
         <button
-          onClick={() => router.push("/teez-scoring")}
+          onClick={() => router.push("/teez-scoring/login")}
           className="
             bg-neutral-900
             border border-cyan-400/30

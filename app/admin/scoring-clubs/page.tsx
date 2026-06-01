@@ -2,11 +2,61 @@
 
 import { useState } from "react";
 
+import { httpsCallable } from "firebase/functions";
+
+import {
+  functions,
+} from "@/src/lib/firebase";
+
 export default function ScoringClubsPage() {
 
   const [clubName, setClubName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const [loading, setLoading] = useState(false);
+
+  async function createClub() {
+
+    if (!clubName || !email || !password) {
+      alert("Complete all fields");
+      return;
+    }
+
+    try {
+
+      setLoading(true);
+
+      const createScoringClub =
+        httpsCallable(
+          functions,
+          "createScoringClub"
+        );
+
+      await createScoringClub({
+        clubName,
+        email,
+        password,
+      });
+
+      alert("Scoring club created successfully");
+
+      setClubName("");
+      setEmail("");
+      setPassword("");
+
+    } catch (err: any) {
+
+      console.error(err);
+
+      alert(err.message);
+
+    } finally {
+
+      setLoading(false);
+
+    }
+  }
 
   return (
     <main className="min-h-screen bg-black text-white p-10">
@@ -57,6 +107,8 @@ export default function ScoringClubsPage() {
           </div>
 
           <button
+            onClick={createClub}
+            disabled={loading}
             className="
               w-full
               bg-green-400
@@ -69,7 +121,9 @@ export default function ScoringClubsPage() {
               transition-all
             "
           >
-            CREATE SCORING CLUB
+            {loading
+              ? "CREATING..."
+              : "CREATE SCORING CLUB"}
           </button>
 
         </div>

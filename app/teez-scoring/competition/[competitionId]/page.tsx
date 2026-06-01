@@ -200,70 +200,113 @@ export default function CompetitionDashboardPage() {
   }
 
   // =========================
-  // ADD ROW
-  // =========================
+// GENERATE TEE SHEET
+// =========================
 
-  function addRow() {
+function generateTeeSheet() {
 
-    setRows((prev) => [
+  if (!competition) return;
 
-      ...prev,
+  const generatedRows: PlayerRow[] = [];
 
-      {
-        id: crypto.randomUUID(),
+  const start = new Date(
+    `2026-01-01T${competition.startTime}`
+  );
 
-        displayName: "",
+  const end = new Date(
+    `2026-01-01T${competition.endTime}`
+  );
 
-        division: "",
+  const interval =
+    Number(competition.teeIntervals) || 10;
 
-        teeTime: "",
+  const teeModes =
+    competition.teeMode === "Tee 1 & 10"
+      ? ["1", "10"]
+      : competition.teeMode === "Shotgun"
+      ? ["ALL"]
+      : [competition.teeMode.replace("Tee ", "")];
 
-        startingHole: "",
+  while (start <= end) {
 
-        score: "",
-      },
-    ]);
-  }
+    const hours =
+      start.getHours().toString().padStart(2, "0");
 
-  // =========================
-  // UPDATE ROW
-  // =========================
+    const minutes =
+      start.getMinutes().toString().padStart(2, "0");
 
-  function updateRow(
-    id: string,
-    field: keyof PlayerRow,
-    value: string
-  ) {
+    const teeTime = `${hours}:${minutes}`;
 
-    setRows((prev) =>
-      prev.map((r) =>
-        r.id === id
-          ? {
-              ...r,
-              [field]: value,
-            }
-          : r
-      )
+    teeModes.forEach((tee) => {
+
+      for (let i = 1; i <= 4; i++) {
+
+        generatedRows.push({
+
+          id: crypto.randomUUID(),
+
+          displayName: "",
+
+          division: "",
+
+          teeTime,
+
+          startingHole: tee,
+
+          score: "",
+        });
+
+      }
+
+    });
+
+    start.setMinutes(
+      start.getMinutes() + interval
     );
   }
 
-  if (loading) {
+  setRows(generatedRows);
+}
 
-    return (
-      <main className="min-h-screen bg-black text-white flex items-center justify-center">
-        Loading competition...
-      </main>
-    );
-  }
+// =========================
+// UPDATE ROW
+// =========================
 
-  if (!competition) {
+function updateRow(
+  id: string,
+  field: keyof PlayerRow,
+  value: string
+) {
 
-    return (
-      <main className="min-h-screen bg-black text-white flex items-center justify-center">
-        Competition not found
-      </main>
-    );
-  }
+  setRows((prev) =>
+    prev.map((r) =>
+      r.id === id
+        ? {
+            ...r,
+            [field]: value,
+          }
+        : r
+    )
+  );
+}
+
+if (loading) {
+
+  return (
+    <main className="min-h-screen bg-black text-white flex items-center justify-center">
+      Loading competition...
+    </main>
+  );
+}
+
+if (!competition) {
+
+  return (
+    <main className="min-h-screen bg-black text-white flex items-center justify-center">
+      Competition not found
+    </main>
+  );
+}
 
   return (
 
@@ -565,19 +608,20 @@ export default function CompetitionDashboardPage() {
 
             </div>
 
-            <button
-              onClick={addRow}
-              className="
-                bg-cyan-400
-                text-black
-                px-5
-                py-3
-                rounded-2xl
-                font-bold
-              "
-            >
-              ADD ROW
-            </button>
+           <button
+  onClick={generateTeeSheet}
+  className="
+    bg-cyan-400
+    text-black
+    px-5
+    py-3
+    rounded-2xl
+    font-bold
+    shadow-[0_0_25px_rgba(34,211,238,0.7)]
+  "
+>
+  GENERATE TEE SHEET
+</button>
 
           </div>
 

@@ -24,6 +24,14 @@ type Competition = {
 
   divisionStructure: string;
 
+  startTime: string;
+
+  endTime: string;
+
+  teeMode: string;
+
+  intervalMinutes: number;
+
   status: string;
 };
 
@@ -94,25 +102,37 @@ export default function CompetitionDashboardPage() {
 
       const data = snap.data() as any;
 
-      setCompetition({
-        competitionName:
-          data.competitionName || "",
+ setCompetition({
+  competitionName:
+    data.competitionName || "",
 
-        competitionDate:
-          data.competitionDate || "",
+  competitionDate:
+    data.competitionDate || "",
 
-        format:
-          data.format || "",
+  format:
+    data.format || "",
 
-        playerConfiguration:
-          data.playerConfiguration || "",
+  playerConfiguration:
+    data.playerConfiguration || "",
 
-        divisionStructure:
-          data.divisionStructure || "",
+  divisionStructure:
+    data.divisionStructure || "",
 
-        status:
-          data.status || "active",
-      });
+  startTime:
+    data.startTime || "07:00",
+
+  endTime:
+    data.endTime || "12:00",
+
+  teeMode:
+    data.teeMode || "Tee 1",
+
+  intervalMinutes:
+    data.intervalMinutes || 10,
+
+  status:
+    data.status || "active",
+});
 
       setRows(
         data.rows || []

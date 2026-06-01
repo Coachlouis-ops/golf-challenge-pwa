@@ -478,11 +478,11 @@ export default function CompetitionDashboardPage() {
 
       <input
         type="number"
-        value={competition.teeInterval}
+        value={competition.teeIntervals}
         onChange={(e) =>
           setCompetition({
             ...competition,
-            teeInterval: Number(e.target.value),
+            teeIntervals: Number(e.target.value),
           })
         }
         className="

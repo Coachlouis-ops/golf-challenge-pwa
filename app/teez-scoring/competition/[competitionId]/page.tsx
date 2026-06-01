@@ -16,6 +16,7 @@ import {
 
 type Competition = {
   competitionName: string;
+
   competitionDate: string;
 
   format: string;
@@ -30,7 +31,7 @@ type Competition = {
 
   teeMode: string;
 
-  intervalMinutes: number;
+  teeIntervals: number;
 
   status: string;
 };
@@ -127,8 +128,8 @@ export default function CompetitionDashboardPage() {
   teeMode:
     data.teeMode || "Tee 1",
 
-  intervalMinutes:
-    data.intervalMinutes || 10,
+ teeIntervals:
+  data.teeIntervals || 10,
 
   status:
     data.status || "active",
@@ -389,6 +390,161 @@ export default function CompetitionDashboardPage() {
           </div>
 
         </div>
+
+
+{/* TEE SHEET SETTINGS */}
+
+<div className="bg-neutral-900 rounded-3xl p-6 mb-10">
+
+  <div className="mb-6">
+
+    <h2 className="text-2xl font-bold">
+      Tee Sheet Settings
+    </h2>
+
+    <p className="text-gray-400 text-sm mt-1">
+      Configure automatic tee sheet generation
+    </p>
+
+  </div>
+
+  <div className="grid md:grid-cols-4 gap-4">
+
+    {/* START TIME */}
+
+    <div>
+
+      <div className="text-xs text-gray-400 mb-2">
+        FIRST TEE TIME
+      </div>
+
+      <input
+        type="time"
+        value={competition.startTime}
+        onChange={(e) =>
+          setCompetition({
+            ...competition,
+            startTime: e.target.value,
+          })
+        }
+        className="
+          w-full
+          bg-black
+          border border-white/10
+          rounded-xl
+          px-3
+          py-3
+        "
+      />
+
+    </div>
+
+    {/* END TIME */}
+
+    <div>
+
+      <div className="text-xs text-gray-400 mb-2">
+        LAST TEE TIME
+      </div>
+
+      <input
+        type="time"
+        value={competition.endTime}
+        onChange={(e) =>
+          setCompetition({
+            ...competition,
+            endTime: e.target.value,
+          })
+        }
+        className="
+          w-full
+          bg-black
+          border border-white/10
+          rounded-xl
+          px-3
+          py-3
+        "
+      />
+
+    </div>
+
+    {/* INTERVAL */}
+
+    <div>
+
+      <div className="text-xs text-gray-400 mb-2">
+        TEE INTERVAL
+      </div>
+
+      <input
+        type="number"
+        value={competition.teeInterval}
+        onChange={(e) =>
+          setCompetition({
+            ...competition,
+            teeInterval: Number(e.target.value),
+          })
+        }
+        className="
+          w-full
+          bg-black
+          border border-white/10
+          rounded-xl
+          px-3
+          py-3
+        "
+      />
+
+    </div>
+
+    {/* MODE */}
+
+    <div>
+
+      <div className="text-xs text-gray-400 mb-2">
+        TEE MODE
+      </div>
+
+      <select
+        value={competition.teeMode}
+        onChange={(e) =>
+          setCompetition({
+            ...competition,
+            teeMode: e.target.value,
+          })
+        }
+        className="
+          w-full
+          bg-black
+          border border-white/10
+          rounded-xl
+          px-3
+          py-3
+        "
+      >
+        <option value="tee1">
+          Tee 1
+        </option>
+
+        <option value="tee10">
+          Tee 10
+        </option>
+
+        <option value="tee1and10">
+          Tee 1 & 10
+        </option>
+
+        <option value="shotgun">
+          Shotgun Start
+        </option>
+
+      </select>
+
+    </div>
+
+  </div>
+
+</div>
 
         {/* PLAYER ROWS */}
 

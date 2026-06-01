@@ -220,12 +220,14 @@ function generateTeeSheet() {
   const interval =
     Number(competition.teeIntervals) || 10;
 
-  const teeModes =
-    competition.teeMode === "Tee 1 & 10"
-      ? ["1", "10"]
-      : competition.teeMode === "Shotgun"
-      ? ["ALL"]
-      : [competition.teeMode.replace("Tee ", "")];
+ const teeModes =
+  competition.teeMode === "tee1and10"
+    ? ["1", "10"]
+    : competition.teeMode === "shotgun"
+    ? ["1", "10"]
+    : competition.teeMode === "tee10"
+    ? ["10"]
+    : ["1"];
 
   while (start <= end) {
 

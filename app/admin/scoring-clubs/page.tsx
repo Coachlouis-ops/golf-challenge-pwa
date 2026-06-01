@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-
+import { useRouter } from "next/navigation";
 import { httpsCallable } from "firebase/functions";
 
 import {
@@ -13,6 +13,7 @@ export default function ScoringClubsPage() {
   const [clubName, setClubName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const router = useRouter();
 
   const [loading, setLoading] = useState(false);
 
@@ -40,6 +41,7 @@ export default function ScoringClubsPage() {
       });
 
       alert("Scoring club created successfully");
+router.push("/admin");
 
       setClubName("");
       setEmail("");

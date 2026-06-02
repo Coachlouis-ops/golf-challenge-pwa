@@ -1318,26 +1318,27 @@ return (
                     {time}
                   </div>
 
-                 <div className="grid grid-cols-14 gap-3 mb-3 text-sm text-gray-400 font-bold">
+<div className="grid grid-cols-14 gap-3 mb-3 text-sm text-gray-400 font-bold">
 
-                    <div className="col-span-6">
-                      Names
-                    </div>
+  <div className="col-span-6">
+    Names
+  </div>
 
-                   <div className="col-span-2 flex items-center justify-center">
-  Div
+  <div className="col-span-2 flex items-center justify-end pr-8">
+    Div
+  </div>
+
+  <div className="col-span-5 flex items-center pl-14">
+    Score
+  </div>
+
 </div>
-                 <div className="col-span-5 flex items-center pl-8">
-  Score
-</div>
 
-                  </div>
+<div className="flex flex-col gap-3">
 
-                  <div className="flex flex-col gap-3">
+  {group.map((row, index) => (
 
-                    {group.map((row, index) => (
-
-                      <div
+    <div
   key={row.id}
   className="grid grid-cols-14 gap-3"
 >

@@ -30,6 +30,11 @@ type LeaderboardRow = {
   startingHole: string;
 };
 
+type Slide = {
+  type: string;
+  title: string;
+};
+
 type Scene = {
   type: string;
   title: string;
@@ -64,8 +69,11 @@ export default function TvBroadcastPage() {
     Record<string, LeaderboardRow[]>
   >({});
 
+  const [slides, setSlides] =
+    useState<Slide[]>([]);
+
   // -----------------------------------
-  // LOAD REALTIME COMPETITION DATA
+  // LOAD COMPETITION
   // -----------------------------------
 
   useEffect(() => {
@@ -100,6 +108,46 @@ export default function TvBroadcastPage() {
             data.divisionLeaderboards ||
               {}
           );
+
+        }
+      );
+
+    return () => unsubscribe();
+
+  }, [competitionId]);
+
+  // -----------------------------------
+  // LOAD BROADCAST SLIDES
+  // -----------------------------------
+
+  useEffect(() => {
+
+    if (!competitionId) return;
+
+    const ref = doc(
+      db,
+      "tvBroadcasts",
+      competitionId
+    );
+
+    const unsubscribe =
+      onSnapshot(
+        ref,
+        (snap) => {
+
+          if (!snap.exists()) return;
+
+          const data =
+            snap.data();
+
+          setSlides(
+            Array.isArray(
+              data.slides
+            )
+              ? data.slides
+              : []
+          );
+
         }
       );
 
@@ -113,61 +161,85 @@ export default function TvBroadcastPage() {
 
   const scenes: Scene[] = [];
 
-  // OVERALL LEADERBOARD PAGES
+  slides.forEach((slide) => {
 
-  for (
-    let i = 0;
-    i < leaderboard.length;
-    i += ROWS_PER_SCENE
-  ) {
+    // -----------------------------------
+    // OVERALL LEADERBOARD
+    // -----------------------------------
 
-    scenes.push({
+    if (
+      slide.type ===
+      "leaderboard"
+    ) {
 
-      type: "overall",
+      for (
+        let i = 0;
+        i < leaderboard.length;
+        i += ROWS_PER_SCENE
+      ) {
 
-      title:
-        i === 0
-          ? "OVERALL LEADERBOARD"
-          : `OVERALL POSITIONS ${i + 1}-${Math.min(
-              i + ROWS_PER_SCENE,
-              leaderboard.length
-            )}`,
+        scenes.push({
 
-      rows:
-        leaderboard.slice(
-          i,
-          i + ROWS_PER_SCENE
-        ),
-    });
+          type: "leaderboard",
 
-  }
+          title:
+            i === 0
+              ? slide.title
+              : `${slide.title} ${i + 1}-${Math.min(
+                  i + ROWS_PER_SCENE,
+                  leaderboard.length
+                )}`,
 
-  // DIVISION SCENES
+          rows:
+            leaderboard.slice(
+              i,
+              i + ROWS_PER_SCENE
+            ),
 
-  Object.entries(
-    divisionLeaderboards
-  ).forEach(
-    ([division, rows]) => {
+        });
 
-      scenes.push({
-
-        type: "division",
-
-        title:
-          `${division.toUpperCase()} DIVISION`,
-
-        rows:
-          rows.slice(
-            0,
-            ROWS_PER_SCENE
-          ),
-      });
+      }
 
     }
-  );
+
+    // -----------------------------------
+    // DIVISION LEADERBOARDS
+    // -----------------------------------
+
+    if (
+      slide.type ===
+      "divisions"
+    ) {
+
+      Object.entries(
+        divisionLeaderboards
+      ).forEach(
+        ([division, rows]) => {
+
+          scenes.push({
+
+            type: "division",
+
+            title:
+              `${division.toUpperCase()} DIVISION`,
+
+            rows:
+              rows.slice(
+                0,
+                ROWS_PER_SCENE
+              ),
+
+          });
+
+        }
+      );
+
+    }
+
+  });
 
   // -----------------------------------
-  // AUTO ROTATE SCENES
+  // AUTO ROTATION
   // -----------------------------------
 
   useEffect(() => {
@@ -189,6 +261,7 @@ export default function TvBroadcastPage() {
             }
 
             return prev + 1;
+
           }
         );
 
@@ -224,7 +297,7 @@ export default function TvBroadcastPage() {
 
           <h1 className="text-6xl font-black text-green-400 mt-4">
             {activeScene?.title ||
-              "LIVE LEADERBOARD"}
+              "TV BROADCAST"}
           </h1>
 
         </div>

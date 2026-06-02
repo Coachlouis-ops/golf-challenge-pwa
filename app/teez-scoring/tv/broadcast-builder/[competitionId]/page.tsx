@@ -1,12 +1,23 @@
 "use client";
 
 import {
+  useEffect,
   useState,
 } from "react";
 
 import {
   useParams,
 } from "next/navigation";
+
+import {
+  doc,
+  onSnapshot,
+  setDoc,
+} from "firebase/firestore";
+
+import {
+  db,
+} from "@/src/lib/firebase";
 
 export default function BroadcastBuilderPage() {
 
@@ -16,14 +27,65 @@ export default function BroadcastBuilderPage() {
     params.competitionId as string;
 
   const [slides, setSlides] =
-    useState<string[]>([]);
+    useState<any[]>([]);
 
-  function addLeaderboardSlide() {
+  useEffect(() => {
 
-    setSlides((prev) => [
-      ...prev,
-      "LIVE LEADERBOARD",
-    ]);
+    const ref = doc(
+      db,
+      "tvBroadcasts",
+      competitionId
+    );
+
+    const unsubscribe =
+      onSnapshot(ref, (snap) => {
+
+        if (!snap.exists()) return;
+
+        const data = snap.data();
+
+        setSlides(
+          data.slides || []
+        );
+
+      });
+
+    return () => unsubscribe();
+
+  }, [competitionId]);
+
+  async function addLeaderboardSlide() {
+
+    const updatedSlides = [
+
+      ...slides,
+
+      {
+        type: "leaderboard",
+        title: "LIVE LEADERBOARD",
+      },
+
+    ];
+
+    setSlides(updatedSlides);
+
+    await setDoc(
+
+      doc(
+        db,
+        "tvBroadcasts",
+        competitionId
+      ),
+
+      {
+        slides: updatedSlides,
+      },
+
+      {
+        merge: true,
+      }
+
+    );
 
   }
 
@@ -78,7 +140,7 @@ export default function BroadcastBuilderPage() {
           {slides.map((slide, index) => (
 
             <div
-              key={`${slide}-${index}`}
+              key={`${slide.title}-${index}`}
               className="
                 bg-neutral-900
                 border border-cyan-400/20
@@ -96,7 +158,7 @@ export default function BroadcastBuilderPage() {
                   </p>
 
                   <h2 className="text-3xl font-black text-white">
-                    {slide}
+                    {slide.title}
                   </h2>
 
                 </div>

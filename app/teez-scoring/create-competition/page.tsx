@@ -9,6 +9,12 @@ import {
   serverTimestamp,
 } from "firebase/firestore";
 
+
+import {
+  useAuth,
+} from "@/src/lib/AuthContext";
+
+
 import {
   db,
 } from "@/src/lib/firebase";
@@ -16,6 +22,8 @@ import {
 export default function CreateCompetitionPage() {
 
   const router = useRouter();
+
+  const { user } = useAuth();
 
   const [loading, setLoading] = useState(false);
 
@@ -65,10 +73,13 @@ export default function CreateCompetitionPage() {
 
           divisionStructure,
 
-          status: "active",
+status: "active",
 
-          createdAt:
-            serverTimestamp(),
+clubId:
+  user?.uid || "",
+
+createdAt:
+  serverTimestamp(),
         }
       );
 

@@ -397,6 +397,188 @@ async function updateLeaderboard() {
       leaderboard.push(...singles);
     }
 
+// ====================================
+// DOUBLES
+// ====================================
+
+if (
+  competition?.playerConfiguration ===
+  "Doubles"
+) {
+
+  for (
+    let i = 0;
+    i < rows.length;
+    i += 2
+  ) {
+
+    const p1 = rows[i];
+    const p2 = rows[i + 1];
+
+    if (
+      !p1 ||
+      !p2 ||
+      !p1.displayName ||
+      !p2.displayName ||
+      p1.score === ""
+    ) continue;
+
+    leaderboard.push({
+
+      displayName:
+        `${p1.displayName} / ${p2.displayName}`,
+
+      division:
+        p1.division || "Open",
+
+      total:
+        Number(p1.score) || 0,
+
+      teeTime:
+        p1.teeTime,
+
+      startingHole:
+        p1.startingHole,
+    });
+  }
+
+  if (
+    competition?.scoringType ===
+    "points"
+  ) {
+
+    leaderboard.sort(
+      (a, b) =>
+        b.total - a.total
+    );
+
+  } else {
+
+    leaderboard.sort(
+      (a, b) =>
+        a.total - b.total
+    );
+  }
+
+  let currentPosition = 1;
+
+  let lastScore:
+    number | null = null;
+
+  leaderboard.forEach(
+    (r, index) => {
+
+      const isTie =
+        lastScore !== null &&
+        r.total === lastScore;
+
+      if (!isTie) {
+        currentPosition =
+          index + 1;
+      }
+
+      lastScore = r.total;
+
+      r.position =
+        currentPosition;
+    }
+  );
+}
+
+// ====================================
+// FOURSOMES
+// ====================================
+
+if (
+  competition?.playerConfiguration ===
+  "Foursomes"
+) {
+
+  for (
+    let i = 0;
+    i < rows.length;
+    i += 4
+  ) {
+
+    const group =
+      rows.slice(i, i + 4);
+
+    if (
+      group.length < 4 ||
+      !group[0].displayName ||
+      group[0].score === ""
+    ) continue;
+
+    leaderboard.push({
+
+      displayName:
+        group
+          .map(
+            (g) =>
+              g.displayName
+          )
+          .join(" / "),
+
+      division:
+        group[0].division || "Open",
+
+      total:
+        Number(
+          group[0].score
+        ) || 0,
+
+      teeTime:
+        group[0].teeTime,
+
+      startingHole:
+        group[0].startingHole,
+    });
+  }
+
+  if (
+    competition?.scoringType ===
+    "points"
+  ) {
+
+    leaderboard.sort(
+      (a, b) =>
+        b.total - a.total
+    );
+
+  } else {
+
+    leaderboard.sort(
+      (a, b) =>
+        a.total - b.total
+    );
+  }
+
+  let currentPosition = 1;
+
+  let lastScore:
+    number | null = null;
+
+  leaderboard.forEach(
+    (r, index) => {
+
+      const isTie =
+        lastScore !== null &&
+        r.total === lastScore;
+
+      if (!isTie) {
+        currentPosition =
+          index + 1;
+      }
+
+      lastScore = r.total;
+
+      r.position =
+        currentPosition;
+    }
+  );
+}
+
+
     // ====================================
     // DIVISION LEADERBOARDS
     // ====================================

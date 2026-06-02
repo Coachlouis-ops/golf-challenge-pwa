@@ -164,50 +164,50 @@ export default function CompetitionDashboardPage() {
   }
 
   // =========================
-  // SAVE
-  // =========================
+// SAVE
+// =========================
 
-  async function saveCompetition() {
+async function saveCompetition() {
 
-    if (!competitionId || !competition)
-      return;
+  if (!competitionId || !competition)
+    return;
 
-    try {
+  try {
 
-      setSaving(true);
+    setSaving(true);
 
-      await updateDoc(
-        doc(
-          db,
-          "competitions",
-          competitionId
-        ),
-        {
-          ...competition,
+    await updateDoc(
+      doc(
+        db,
+        "competitions",
+        competitionId
+      ),
+      {
+        ...competition,
 
-          rows,
-        }
-      );
+        rows,
+      }
+    );
 
-      alert("Competition saved");
+    alert("Competition saved");
 
-    } catch (e: any) {
+  } catch (e: any) {
 
-      console.error(e);
+    console.error(e);
 
-      alert(
-        e.message ||
-        "Failed to save"
-      );
+    alert(
+      e.message ||
+      "Failed to save"
+    );
 
-    } finally {
+  } finally {
 
-      setSaving(false);
+    setSaving(false);
 
-    }
   }
+}
 
-  // =========================
+// =========================
 // GENERATE TEE SHEET
 // =========================
 
@@ -228,14 +228,14 @@ function generateTeeSheet() {
   const interval =
     Number(competition.teeIntervals) || 10;
 
- const teeModes =
-  competition.teeMode === "tee1and10"
-    ? ["1", "10"]
-    : competition.teeMode === "shotgun"
-    ? ["1", "10"]
-    : competition.teeMode === "tee10"
-    ? ["10"]
-    : ["1"];
+  const teeModes =
+    competition.teeMode === "tee1and10"
+      ? ["1", "10"]
+      : competition.teeMode === "shotgun"
+      ? ["1", "10"]
+      : competition.teeMode === "tee10"
+      ? ["10"]
+      : ["1"];
 
   while (start <= end) {
 
@@ -288,131 +288,22 @@ async function updateLeaderboard() {
 
   try {
 
-  const leaderboard: {
-  position?: number;
+    const leaderboard: {
+      position?: number;
 
-  displayName: string;
+      displayName: string;
 
-  division: string;
+      division: string;
 
-  total: number;
+      total: number;
 
-  teeTime: string;
+      teeTime: string;
 
-  startingHole: string;
-}[] = [];
+      startingHole: string;
+    }[] = [];
 
-
-// =========================
-// FINALIZE COMPETITION
-// =========================
-
-async function finalizeCompetition() {
-
-  if (!competitionId || !competition)
-    return;
-
-  try {
-
-    const clubId =
-      auth.currentUser?.uid;
-
-    if (!clubId) {
-      alert("Club not authenticated");
-      return;
-    }
-
-    // --------------------------------
-    // BUILD FINAL LEADERBOARD
-    // --------------------------------
-
-    const leaderboard =
-      (
-        await getDoc(
-          doc(
-            db,
-            "competitions",
-            competitionId
-          )
-        )
-      ).data()?.leaderboard || [];
-
-    // --------------------------------
-    // SAVE HISTORY SNAPSHOT
-    // --------------------------------
-
-    await setDoc(
-
-      doc(
-        db,
-        "scoringClubs",
-        clubId,
-        "competitionHistory",
-        competitionId
-      ),
-
-      {
-        competitionId,
-
-        competitionName:
-          competition.competitionName,
-
-        competitionDate:
-          competition.competitionDate,
-
-        finalized: true,
-
-        finalizedAt:
-          serverTimestamp(),
-
-        format:
-          competition.format,
-
-        playerConfiguration:
-          competition.playerConfiguration,
-
-        divisionStructure:
-          competition.divisionStructure,
-
-        teeMode:
-          competition.teeMode,
-
-        rows,
-
-        leaderboard,
-      }
-    );
-
-    // --------------------------------
-    // MARK COMPETITION FINALIZED
-    // --------------------------------
-
-    await updateDoc(
-      doc(
-        db,
-        "competitions",
-        competitionId
-      ),
-      {
-        status: "finalized",
-        finalized: true,
-      }
-    );
-
-    alert(
-      "Competition finalized"
-    );
-
-  } catch (e: any) {
-
-    console.error(e);
-
-    alert(
-      e.message ||
-      "Failed to finalize competition"
-    );
-  }
-}
+    const divisionLeaderboards:
+      Record<string, any[]> = {};
 
     // ====================================
     // SINGLES
@@ -423,265 +314,149 @@ async function finalizeCompetition() {
       "Singles"
     ) {
 
-    const singles: {
-  position?: number;
+      const singles: {
+        position?: number;
 
-  displayName: string;
+        displayName: string;
 
-  division: string;
+        division: string;
 
-  total: number;
+        total: number;
 
-  teeTime: string;
+        teeTime: string;
 
-  startingHole: string;
-}[] =
-  rows
-    .filter((r) => r.displayName)
+        startingHole: string;
+      }[] =
+        rows
+          .filter((r) => r.displayName)
 
-    .map((r) => ({
+          .map((r) => ({
 
-      displayName:
-        r.displayName,
+            displayName:
+              r.displayName,
 
-      division:
-        r.division,
+            division:
+              r.division,
 
-      total:
-        Number(r.score) || 0,
+            total:
+              Number(r.score) || 0,
 
-      teeTime:
-        r.teeTime,
+            teeTime:
+              r.teeTime,
 
-      startingHole:
-        r.startingHole,
-    }));
+            startingHole:
+              r.startingHole,
+          }));
 
-// -----------------------------------
-// SORTING
-// -----------------------------------
+      if (
+        competition?.scoringType ===
+        "points"
+      ) {
 
-if (
-  competition?.scoringType ===
-  "points"
-) {
+        singles.sort(
+          (a, b) =>
+            b.total - a.total
+        );
 
-  singles.sort(
-    (a, b) =>
-      b.total - a.total
-  );
+      } else {
 
-} else {
-
-  singles.sort(
-    (a, b) =>
-      a.total - b.total
-  );
-}
-
-// -----------------------------------
-// TIES
-// -----------------------------------
-
-let currentPosition = 1;
-
-let lastScore: number | null =
-  null;
-
-singles.forEach(
-  (r, index) => {
-
-    const isTie =
-      lastScore !== null &&
-      r.total === lastScore;
-
-    if (!isTie) {
-      currentPosition =
-        index + 1;
-    }
-
-    lastScore = r.total;
-
-    r.position =
-      currentPosition;
-  }
-);
-
-leaderboard.push(...singles);
-    }
-
-    // ====================================
-    // DOUBLES
-    // ====================================
-
-    if (
-  competition?.playerConfiguration ===
-  "Doubles"
-) {
-
-  for (
-    let i = 0;
-    i < rows.length;
-    i += 2
-  ) {
-
-    const p1 = rows[i];
-    const p2 = rows[i + 1];
-
-    if (!p1 || !p2) continue;
-
-    leaderboard.push({
-
-      displayName:
-        `${p1.displayName} / ${p2.displayName}`,
-
-      division:
-        p1.division,
-
-      total:
-        Number(p1.score) || 0,
-
-      teeTime:
-        p1.teeTime,
-
-      startingHole:
-        p1.startingHole,
-    });
-  }
-
-  if (
-    competition?.scoringType ===
-    "points"
-  ) {
-
-    leaderboard.sort(
-      (a, b) =>
-        b.total - a.total
-    );
-
-  } else {
-
-    leaderboard.sort(
-      (a, b) =>
-        a.total - b.total
-    );
-  }
-
-  let currentPosition = 1;
-
-  let lastScore: number | null =
-    null;
-
-  leaderboard.forEach(
-    (r, index) => {
-
-      const isTie =
-        lastScore !== null &&
-        r.total === lastScore;
-
-      if (!isTie) {
-        currentPosition =
-          index + 1;
+        singles.sort(
+          (a, b) =>
+            a.total - b.total
+        );
       }
 
-      lastScore = r.total;
+      let currentPosition = 1;
 
-      r.position =
-        currentPosition;
+      let lastScore:
+        number | null = null;
+
+      singles.forEach(
+        (r, index) => {
+
+          const isTie =
+            lastScore !== null &&
+            r.total === lastScore;
+
+          if (!isTie) {
+            currentPosition =
+              index + 1;
+          }
+
+          lastScore = r.total;
+
+          r.position =
+            currentPosition;
+        }
+      );
+
+      leaderboard.push(...singles);
     }
-  );
-}
 
     // ====================================
-    // FOURSOMES
+    // DIVISION LEADERBOARDS
     // ====================================
 
-    if (
-  competition?.playerConfiguration ===
-  "Foursomes"
-) {
+    const divisions = [
+      ...new Set(
+        leaderboard.map(
+          (r) => r.division
+        )
+      ),
+    ];
 
-  for (
-    let i = 0;
-    i < rows.length;
-    i += 4
-  ) {
+    divisions.forEach(
+      (division) => {
 
-    const group =
-      rows.slice(i, i + 4);
+        const filtered =
+          leaderboard
+            .filter(
+              (r) =>
+                r.division === division
+            )
 
-    if (
-      group.length < 4
-    ) continue;
+            .sort((a, b) => {
 
-    leaderboard.push({
+              if (
+                competition?.scoringType ===
+                "points"
+              ) {
+                return b.total - a.total;
+              }
 
-      displayName:
-        group
-          .map(
-            (g) =>
-              g.displayName
-          )
-          .join(" / "),
+              return a.total - b.total;
+            });
 
-      division:
-        group[0].division,
+        let currentPosition = 1;
 
-      total:
-        Number(
-          group[0].score
-        ) || 0,
+        let lastScore:
+          number | null = null;
 
-      teeTime:
-        group[0].teeTime,
+        filtered.forEach(
+          (r, index) => {
 
-      startingHole:
-        group[0].startingHole,
-    });
-  }
+            const isTie =
+              lastScore !== null &&
+              r.total === lastScore;
 
-  if (
-    competition?.scoringType ===
-    "points"
-  ) {
+            if (!isTie) {
+              currentPosition =
+                index + 1;
+            }
 
-    leaderboard.sort(
-      (a, b) =>
-        b.total - a.total
-    );
+            lastScore = r.total;
 
-  } else {
+            r.position =
+              currentPosition;
+          }
+        );
 
-    leaderboard.sort(
-      (a, b) =>
-        a.total - b.total
-    );
-  }
-
-  let currentPosition = 1;
-
-  let lastScore: number | null =
-    null;
-
-  leaderboard.forEach(
-    (r, index) => {
-
-      const isTie =
-        lastScore !== null &&
-        r.total === lastScore;
-
-      if (!isTie) {
-        currentPosition =
-          index + 1;
+        divisionLeaderboards[
+          division
+        ] = filtered;
       }
+    );
 
-      lastScore = r.total;
-
-      r.position =
-        currentPosition;
-    }
-  );
-}
     await updateDoc(
       doc(
         db,
@@ -690,6 +465,7 @@ leaderboard.push(...singles);
       ),
       {
         leaderboard,
+        divisionLeaderboards,
       }
     );
 
@@ -714,15 +490,15 @@ leaderboard.push(...singles);
 
 async function finalizeCompetition() {
 
-
-  const confirmed = window.confirm(
-  "Are you sure you want to finalize this competition? This cannot be undone."
-);
-
-if (!confirmed) return;
-
   if (!competitionId || !competition)
     return;
+
+  const confirmFinalize =
+    window.confirm(
+      "Are you sure you want to finalize this competition? This cannot be undone."
+    );
+
+  if (!confirmFinalize) return;
 
   try {
 
@@ -730,20 +506,28 @@ if (!confirmed) return;
       auth.currentUser?.uid;
 
     if (!clubId) {
-      alert("Club not authenticated");
+
+      alert(
+        "Club not authenticated"
+      );
+
       return;
     }
 
-    const leaderboard =
-      (
-        await getDoc(
-          doc(
-            db,
-            "competitions",
-            competitionId
-          )
+    const snap =
+      await getDoc(
+        doc(
+          db,
+          "competitions",
+          competitionId
         )
-      ).data()?.leaderboard || [];
+      );
+
+    const leaderboard =
+      snap.data()?.leaderboard || [];
+
+    const divisionLeaderboards =
+      snap.data()?.divisionLeaderboards || {};
 
     await setDoc(
 
@@ -772,6 +556,9 @@ if (!confirmed) return;
         format:
           competition.format,
 
+        scoringType:
+          competition.scoringType,
+
         playerConfiguration:
           competition.playerConfiguration,
 
@@ -784,6 +571,8 @@ if (!confirmed) return;
         rows,
 
         leaderboard,
+
+        divisionLeaderboards,
       }
     );
 
@@ -813,7 +602,6 @@ if (!confirmed) return;
     );
   }
 }
-
 
 // =========================
 // UPDATE ROW
@@ -855,118 +643,118 @@ if (!competition) {
   );
 }
 
-  return (
+return (
 
-    <main className="min-h-screen bg-black text-white p-8">
+  <main className="min-h-screen bg-black text-white p-8">
 
-      <div className="max-w-7xl mx-auto">
+    <div className="max-w-7xl mx-auto">
 
-        {/* HEADER */}
+      {/* HEADER */}
 
-       <div className="flex items-center justify-between mb-10 gap-6">
+      <div className="flex items-center justify-between mb-10 gap-6">
 
-          <div className="flex items-center gap-5">
+        <div className="flex items-center gap-5">
 
-  <button
-    onClick={() =>
-      window.history.back()
-    }
-    className="
-      bg-neutral-900
-      border border-white/10
-      px-5
-      py-3
-      rounded-2xl
-      hover:border-white/30
-      transition
-    "
-  >
-    ← BACK
-  </button>
+          <button
+            onClick={() =>
+              window.history.back()
+            }
+            className="
+              bg-neutral-900
+              border border-white/10
+              px-5
+              py-3
+              rounded-2xl
+              hover:border-white/30
+              transition
+            "
+          >
+            ← BACK
+          </button>
 
-  <div>
+          <div>
 
-    <h1 className="text-4xl font-bold">
-      {competition.competitionName}
-    </h1>
+            <h1 className="text-4xl font-bold">
+              {competition.competitionName}
+            </h1>
 
-    <p className="text-gray-400 mt-2">
-      Competition Dashboard
-    </p>
+            <p className="text-gray-400 mt-2">
+              Competition Dashboard
+            </p>
 
-  </div>
+          </div>
 
-</div>
+        </div>
 
-       <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4">
 
-  <button
-    onClick={() =>
-      window.open(
-        `/teez-scoring/leaderboard/${competitionId}`,
-        "_blank"
-      )
-    }
-    className="
-      bg-cyan-400
-      text-black
-      px-6
-      py-4
-      rounded-2xl
-      font-bold
-      shadow-[0_0_25px_rgba(34,211,238,0.7)]
-    "
-  >
-    VIEW LEADERBOARD
-  </button>
+          <button
+            onClick={() =>
+              window.open(
+                `/teez-scoring/leaderboard/${competitionId}`,
+                "_blank"
+              )
+            }
+            className="
+              bg-cyan-400
+              text-black
+              px-6
+              py-4
+              rounded-2xl
+              font-bold
+              shadow-[0_0_25px_rgba(34,211,238,0.7)]
+            "
+          >
+            VIEW LEADERBOARD
+          </button>
 
- <button
-  onClick={updateLeaderboard}
-  className="
-    bg-yellow-400
-    text-black
-    px-6
-    py-4
-    rounded-2xl
-    font-bold
-    shadow-[0_0_25px_rgba(250,204,21,0.7)]
-  "
->
-  UPDATE LEADERBOARD
-</button>
+          <button
+            onClick={updateLeaderboard}
+            className="
+              bg-yellow-400
+              text-black
+              px-6
+              py-4
+              rounded-2xl
+              font-bold
+              shadow-[0_0_25px_rgba(250,204,21,0.7)]
+            "
+          >
+            UPDATE LEADERBOARD
+          </button>
 
-  <button
-    onClick={saveCompetition}
-    disabled={saving}
-    className="
-      bg-green-400
-      text-black
-      px-6
-      py-4
-      rounded-2xl
-      font-bold
-      shadow-[0_0_25px_rgba(34,197,94,0.7)]
-    "
-  >
-    {saving
-      ? "SAVING..."
-      : "SAVE COMPETITION"}
-  </button>
+          <button
+            onClick={finalizeCompetition}
+            className="
+              bg-red-500
+              text-white
+              px-6
+              py-4
+              rounded-2xl
+              font-bold
+              shadow-[0_0_25px_rgba(239,68,68,0.7)]
+            "
+          >
+            FINALIZE COMPETITION
+          </button>
 
-  <button
-  onClick={finalizeCompetition}
-  className="
-    bg-red-500
-    text-white
-    px-6
-    py-4
-    rounded-2xl
-    font-bold
-    shadow-[0_0_25px_rgba(239,68,68,0.7)]
-  "
->
-  FINALIZE COMPETITION
-</button>
+          <button
+            onClick={saveCompetition}
+            disabled={saving}
+            className="
+              bg-green-400
+              text-black
+              px-6
+              py-4
+              rounded-2xl
+              font-bold
+              shadow-[0_0_25px_rgba(34,197,94,0.7)]
+            "
+          >
+            {saving
+              ? "SAVING..."
+              : "SAVE COMPETITION"}
+          </button>
 
 </div>
 

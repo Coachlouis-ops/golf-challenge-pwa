@@ -83,9 +83,16 @@ export default function LeaderboardPage() {
         data.competitionName || ""
       );
 
-      setLeaderboard(
-        data.leaderboard || []
-      );
+    setLeaderboard(
+  Array.isArray(data.leaderboard)
+    ? data.leaderboard
+    : []
+);
+
+console.log(
+  "LEADERBOARD DATA:",
+  data.leaderboard
+);
 
       setDivisionLeaderboards(
         data.divisionLeaderboards || {}

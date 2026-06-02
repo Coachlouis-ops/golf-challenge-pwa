@@ -1328,7 +1328,7 @@ return (
                       Div
                     </div>
 
-                  <div className="col-span-5 flex gap-2">
+                  <div className="col-span-5 flex gap-1">
                       Score
                     </div>
 
@@ -1406,14 +1406,15 @@ return (
           )
         }
         placeholder="Score"
-        className="
-          flex-1
-          bg-black
-          border border-white/10
-          rounded-xl
-          px-3
-          py-3
-        "
+      className="
+  w-full
+  max-w-[140px]
+  bg-black
+  border border-white/10
+  rounded-xl
+  px-3
+  py-3
+"
       />
 
       <input
@@ -1429,7 +1430,7 @@ return (
         }
         placeholder="CO"
         className="
-          w-20
+          w-14
           bg-yellow-500/10
           border border-yellow-400/30
           text-center

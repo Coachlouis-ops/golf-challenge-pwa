@@ -271,6 +271,219 @@ function generateTeeSheet() {
 }
 
 // =========================
+// UPDATE LEADERBOARD
+// =========================
+
+async function updateLeaderboard() {
+
+  if (!competitionId) return;
+
+  try {
+
+  const leaderboard: {
+  position?: number;
+
+  displayName: string;
+
+  division: string;
+
+  total: number;
+
+  teeTime: string;
+
+  startingHole: string;
+}[] = [];
+
+    // ====================================
+    // SINGLES
+    // ====================================
+
+    if (
+      competition?.playerConfiguration ===
+      "Singles"
+    ) {
+
+      const singles =
+        rows
+          .filter((r) => r.displayName)
+
+          .map((r) => ({
+
+            displayName:
+              r.displayName,
+
+            division:
+              r.division,
+
+            total:
+              Number(r.score) || 0,
+
+            teeTime:
+              r.teeTime,
+
+            startingHole:
+              r.startingHole,
+          }))
+
+          .sort(
+            (a, b) =>
+              b.total - a.total
+          )
+
+          .map((r, index) => ({
+
+            ...r,
+
+            position:
+              index + 1,
+          }));
+
+      leaderboard.push(...singles);
+    }
+
+    // ====================================
+    // DOUBLES
+    // ====================================
+
+    if (
+      competition?.playerConfiguration ===
+      "Doubles"
+    ) {
+
+      for (
+        let i = 0;
+        i < rows.length;
+        i += 2
+      ) {
+
+        const p1 = rows[i];
+        const p2 = rows[i + 1];
+
+        if (!p1 || !p2) continue;
+
+        leaderboard.push({
+
+          displayName:
+            `${p1.displayName} / ${p2.displayName}`,
+
+          division:
+            p1.division,
+
+          total:
+            Number(p1.score) || 0,
+
+          teeTime:
+            p1.teeTime,
+
+          startingHole:
+            p1.startingHole,
+        });
+      }
+
+      leaderboard.sort(
+        (a, b) =>
+          b.total - a.total
+      );
+
+      leaderboard.forEach(
+        (r, index) => {
+
+          r.position =
+            index + 1;
+        }
+      );
+    }
+
+    // ====================================
+    // FOURSOMES
+    // ====================================
+
+    if (
+      competition?.playerConfiguration ===
+      "Foursomes"
+    ) {
+
+      for (
+        let i = 0;
+        i < rows.length;
+        i += 4
+      ) {
+
+        const group =
+          rows.slice(i, i + 4);
+
+        if (
+          group.length < 4
+        ) continue;
+
+        leaderboard.push({
+
+          displayName:
+            group
+              .map(
+                (g) =>
+                  g.displayName
+              )
+              .join(" / "),
+
+          division:
+            group[0].division,
+
+          total:
+            Number(
+              group[0].score
+            ) || 0,
+
+          teeTime:
+            group[0].teeTime,
+
+          startingHole:
+            group[0].startingHole,
+        });
+      }
+
+      leaderboard.sort(
+        (a, b) =>
+          b.total - a.total
+      );
+
+      leaderboard.forEach(
+        (r, index) => {
+
+          r.position =
+            index + 1;
+        }
+      );
+    }
+
+    await updateDoc(
+      doc(
+        db,
+        "competitions",
+        competitionId
+      ),
+      {
+        leaderboard,
+      }
+    );
+
+    alert(
+      "Leaderboard updated"
+    );
+
+  } catch (e: any) {
+
+    console.error(e);
+
+    alert(
+      e.message ||
+      "Failed to update leaderboard"
+    );
+  }
+}
+
+
+// =========================
 // UPDATE ROW
 // =========================
 
@@ -354,19 +567,20 @@ if (!competition) {
     VIEW LEADERBOARD
   </button>
 
-  <button
-    className="
-      bg-yellow-400
-      text-black
-      px-6
-      py-4
-      rounded-2xl
-      font-bold
-      shadow-[0_0_25px_rgba(250,204,21,0.7)]
-    "
-  >
-    UPDATE LEADERBOARD
-  </button>
+ <button
+  onClick={updateLeaderboard}
+  className="
+    bg-yellow-400
+    text-black
+    px-6
+    py-4
+    rounded-2xl
+    font-bold
+    shadow-[0_0_25px_rgba(250,204,21,0.7)]
+  "
+>
+  UPDATE LEADERBOARD
+</button>
 
   <button
     onClick={saveCompetition}

@@ -1,10 +1,14 @@
 "use client";
 
-
 import {
   useEffect,
   useState,
 } from "react";
+
+import {
+  useParams,
+  useSearchParams,
+} from "next/navigation";
 
 import {
   doc,
@@ -14,11 +18,6 @@ import {
 import {
   db,
 } from "@/src/lib/firebase";
-
-import {
-  useParams,
-  useSearchParams,
-} from "next/navigation";
 
 const ROWS_PER_SCENE = 12;
 
@@ -31,57 +30,90 @@ type LeaderboardRow = {
   startingHole: string;
 };
 
+type Scene = {
+  type: string;
+  title: string;
+  rows?: LeaderboardRow[];
+};
+
 export default function TvBroadcastPage() {
 
   const params = useParams();
 
-  const searchParams = useSearchParams();
+  const searchParams =
+    useSearchParams();
 
   const screenId =
     params.screenId as string;
 
   const competitionId =
-    searchParams.get("competitionId");
+    searchParams.get(
+      "competitionId"
+    );
 
   const [currentScene, setCurrentScene] =
     useState(0);
 
- const [leaderboard, setLeaderboard] =
-  useState<LeaderboardRow[]>([]);
+  const [leaderboard, setLeaderboard] =
+    useState<LeaderboardRow[]>([]);
 
+  const [
+    divisionLeaderboards,
+    setDivisionLeaderboards,
+  ] = useState<
+    Record<string, LeaderboardRow[]>
+  >({});
+
+  // -----------------------------------
+  // LOAD REALTIME COMPETITION DATA
+  // -----------------------------------
 
   useEffect(() => {
 
-  if (!competitionId) return;
+    if (!competitionId) return;
 
-  const ref = doc(
-    db,
-    "competitions",
-    competitionId
-  );
+    const ref = doc(
+      db,
+      "competitions",
+      competitionId
+    );
 
-  const unsubscribe = onSnapshot(
-    ref,
-    (snap) => {
+    const unsubscribe =
+      onSnapshot(
+        ref,
+        (snap) => {
 
-      if (!snap.exists()) return;
+          if (!snap.exists()) return;
 
-      const data = snap.data();
+          const data =
+            snap.data();
 
-      setLeaderboard(
-        Array.isArray(data.leaderboard)
-          ? data.leaderboard
-          : []
+          setLeaderboard(
+            Array.isArray(
+              data.leaderboard
+            )
+              ? data.leaderboard
+              : []
+          );
+
+          setDivisionLeaderboards(
+            data.divisionLeaderboards ||
+              {}
+          );
+        }
       );
 
-    }
-  );
+    return () => unsubscribe();
 
-  return () => unsubscribe();
+  }, [competitionId]);
 
-}, [competitionId]);
+  // -----------------------------------
+  // BUILD SCENES
+  // -----------------------------------
 
-  const pagedScenes = [];
+  const scenes: Scene[] = [];
+
+  // OVERALL LEADERBOARD PAGES
 
   for (
     let i = 0;
@@ -89,37 +121,86 @@ export default function TvBroadcastPage() {
     i += ROWS_PER_SCENE
   ) {
 
-    pagedScenes.push(
-      leaderboard.slice(
-        i,
-        i + ROWS_PER_SCENE
-      )
-    );
+    scenes.push({
+
+      type: "overall",
+
+      title:
+        i === 0
+          ? "OVERALL LEADERBOARD"
+          : `OVERALL POSITIONS ${i + 1}-${Math.min(
+              i + ROWS_PER_SCENE,
+              leaderboard.length
+            )}`,
+
+      rows:
+        leaderboard.slice(
+          i,
+          i + ROWS_PER_SCENE
+        ),
+    });
 
   }
 
-  useEffect(() => {
+  // DIVISION SCENES
 
-    const interval = setInterval(() => {
+  Object.entries(
+    divisionLeaderboards
+  ).forEach(
+    ([division, rows]) => {
 
-      setCurrentScene((prev) => {
+      scenes.push({
 
-        if (
-          prev >= pagedScenes.length - 1
-        ) {
-          return 0;
-        }
+        type: "division",
 
-        return prev + 1;
+        title:
+          `${division.toUpperCase()} DIVISION`,
 
+        rows:
+          rows.slice(
+            0,
+            ROWS_PER_SCENE
+          ),
       });
 
-    }, 8000);
+    }
+  );
+
+  // -----------------------------------
+  // AUTO ROTATE SCENES
+  // -----------------------------------
+
+  useEffect(() => {
+
+    if (scenes.length <= 1)
+      return;
+
+    const interval =
+      setInterval(() => {
+
+        setCurrentScene(
+          (prev) => {
+
+            if (
+              prev >=
+              scenes.length - 1
+            ) {
+              return 0;
+            }
+
+            return prev + 1;
+          }
+        );
+
+      }, 8000);
 
     return () =>
       clearInterval(interval);
 
-  }, [pagedScenes.length]);
+  }, [scenes.length]);
+
+  const activeScene =
+    scenes[currentScene];
 
   return (
 
@@ -136,11 +217,14 @@ export default function TvBroadcastPage() {
           </p>
 
           <p className="text-gray-500 text-xl">
-            COMPETITION: {competitionId}
+            COMPETITION:
+            {" "}
+            {competitionId}
           </p>
 
           <h1 className="text-6xl font-black text-green-400 mt-4">
-            LIVE LEADERBOARD
+            {activeScene?.title ||
+              "LIVE LEADERBOARD"}
           </h1>
 
         </div>
@@ -177,7 +261,7 @@ export default function TvBroadcastPage() {
 
             <tbody>
 
-              {pagedScenes[currentScene]?.map(
+              {activeScene?.rows?.map(
                 (row) => (
 
                   <tr
@@ -218,6 +302,8 @@ export default function TvBroadcastPage() {
 
           <p>
             Scene {currentScene + 1}
+            {" / "}
+            {scenes.length}
           </p>
 
           <p>

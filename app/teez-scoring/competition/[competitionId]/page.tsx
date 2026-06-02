@@ -53,6 +53,8 @@ type PlayerRow = {
   startingHole: string;
 
   score: string;
+
+  countOutPosition?: number;
 };
 
 export default function CompetitionDashboardPage() {
@@ -288,33 +290,7 @@ async function updateLeaderboard() {
 
   try {
 
-    const leaderboard: {
-      position?: number;
-
-      displayName: string;
-
-      division: string;
-
-      total: number;
-
-      teeTime: string;
-
-      startingHole: string;
-    }[] = [];
-
-    const divisionLeaderboards:
-      Record<string, any[]> = {};
-
-    // ====================================
-    // SINGLES
-    // ====================================
-
-    if (
-      competition?.playerConfiguration ===
-      "Singles"
-    ) {
-
-     const singles: {
+   const leaderboard: {
   position?: number;
 
   displayName: string;
@@ -323,79 +299,132 @@ async function updateLeaderboard() {
 
   total: number;
 
+  countOutPosition?: number;
+
   teeTime: string;
 
   startingHole: string;
-}[] =
-  rows
-    .filter(
-      (r) =>
-        r.displayName &&
-        r.score !== ""
-    )
+}[] = [];
 
-    .map((r) => ({
+    const divisionLeaderboards:
+      Record<string, any[]> = {};
 
-      displayName:
-        r.displayName,
+    // ====================================
+// SINGLES
+// ====================================
 
-      division:
-        r.division || "Open",
+if (
+  competition?.playerConfiguration ===
+  "Singles"
+) {
 
-      total:
-        Number(r.score) || 0,
+  const singles: {
+    position?: number;
 
-      teeTime:
-        r.teeTime,
+    displayName: string;
 
-      startingHole:
-        r.startingHole,
-    }));
+    division: string;
 
-      if (
-        competition?.scoringType ===
-        "points"
-      ) {
+    total: number;
 
-        singles.sort(
-          (a, b) =>
-            b.total - a.total
-        );
+    countOutPosition?: number;
 
-      } else {
+    teeTime: string;
 
-        singles.sort(
-          (a, b) =>
-            a.total - b.total
-        );
+    startingHole: string;
+  }[] =
+    rows
+      .filter(
+        (r) =>
+          r.displayName &&
+          r.score !== ""
+      )
+
+      .map((r) => ({
+
+        displayName:
+          r.displayName,
+
+        division:
+          r.division || "Open",
+
+        total:
+          Number(r.score) || 0,
+
+        countOutPosition:
+          r.countOutPosition || 999,
+
+        teeTime:
+          r.teeTime,
+
+        startingHole:
+          r.startingHole,
+      }));
+
+  if (
+    competition?.scoringType ===
+    "points"
+  ) {
+
+    singles.sort((a: any, b: any) => {
+
+      if (a.total !== b.total) {
+        return b.total - a.total;
       }
 
-      let currentPosition = 1;
+      const aCount =
+        a.countOutPosition || 999;
 
-      let lastScore:
-        number | null = null;
+      const bCount =
+        b.countOutPosition || 999;
 
-      singles.forEach(
-        (r, index) => {
+      return aCount - bCount;
+    });
 
-          const isTie =
-            lastScore !== null &&
-            r.total === lastScore;
+  } else {
 
-          if (!isTie) {
-            currentPosition =
-              index + 1;
-          }
+    singles.sort((a: any, b: any) => {
 
-          lastScore = r.total;
+      if (a.total !== b.total) {
+        return a.total - b.total;
+      }
 
-          r.position =
-            currentPosition;
-        }
-      );
+      const aCount =
+        a.countOutPosition || 999;
 
-      leaderboard.push(...singles);
+      const bCount =
+        b.countOutPosition || 999;
+
+      return aCount - bCount;
+    });
+  }
+
+  let currentPosition = 1;
+
+  let lastScore:
+    number | null = null;
+
+  singles.forEach(
+    (r, index) => {
+
+      const isTie =
+        lastScore !== null &&
+        r.total === lastScore;
+
+      if (!isTie) {
+        currentPosition =
+          index + 1;
+      }
+
+      lastScore = r.total;
+
+      r.position =
+        currentPosition;
     }
+  );
+
+  leaderboard.push(...singles);
+}
 
 // ====================================
 // DOUBLES
@@ -434,6 +463,9 @@ if (
       total:
         Number(p1.score) || 0,
 
+      countOutPosition:
+        p1.countOutPosition || 999,
+
       teeTime:
         p1.teeTime,
 
@@ -447,17 +479,37 @@ if (
     "points"
   ) {
 
-    leaderboard.sort(
-      (a, b) =>
-        b.total - a.total
-    );
+    leaderboard.sort((a: any, b: any) => {
+
+      if (a.total !== b.total) {
+        return b.total - a.total;
+      }
+
+      const aCount =
+        a.countOutPosition || 999;
+
+      const bCount =
+        b.countOutPosition || 999;
+
+      return aCount - bCount;
+    });
 
   } else {
 
-    leaderboard.sort(
-      (a, b) =>
-        a.total - b.total
-    );
+    leaderboard.sort((a: any, b: any) => {
+
+      if (a.total !== b.total) {
+        return a.total - b.total;
+      }
+
+      const aCount =
+        a.countOutPosition || 999;
+
+      const bCount =
+        b.countOutPosition || 999;
+
+      return aCount - bCount;
+    });
   }
 
   let currentPosition = 1;
@@ -527,6 +579,9 @@ if (
           group[0].score
         ) || 0,
 
+      countOutPosition:
+        group[0].countOutPosition || 999,
+
       teeTime:
         group[0].teeTime,
 
@@ -540,17 +595,37 @@ if (
     "points"
   ) {
 
-    leaderboard.sort(
-      (a, b) =>
-        b.total - a.total
-    );
+    leaderboard.sort((a: any, b: any) => {
+
+      if (a.total !== b.total) {
+        return b.total - a.total;
+      }
+
+      const aCount =
+        a.countOutPosition || 999;
+
+      const bCount =
+        b.countOutPosition || 999;
+
+      return aCount - bCount;
+    });
 
   } else {
 
-    leaderboard.sort(
-      (a, b) =>
-        a.total - b.total
-    );
+    leaderboard.sort((a: any, b: any) => {
+
+      if (a.total !== b.total) {
+        return a.total - b.total;
+      }
+
+      const aCount =
+        a.countOutPosition || 999;
+
+      const bCount =
+        b.countOutPosition || 999;
+
+      return aCount - bCount;
+    });
   }
 
   let currentPosition = 1;
@@ -810,7 +885,7 @@ async function finalizeCompetition() {
 function updateRow(
   id: string,
   field: keyof PlayerRow,
-  value: string
+  value: string | number
 ) {
 
   setRows((prev) =>
@@ -1314,31 +1389,59 @@ return (
 
                         </div>
 
-                        <div className="col-span-4">
+                       <div className="col-span-4 flex gap-2">
 
-                          {(competition.playerConfiguration === "Singles" ||
-                            index % 2 === 0) && (
+  {(competition.playerConfiguration === "Singles" ||
+    index % 2 === 0) && (
 
-                            <input
-                              value={row.score}
-                              onChange={(e) =>
-                                updateRow(
-                                  row.id,
-                                  "score",
-                                  e.target.value
-                                )
-                              }
-                              className="
-                                w-full
-                                bg-black
-                                border border-white/10
-                                rounded-xl
-                                px-3
-                                py-3
-                              "
-                            />
+    <>
 
-                          )}
+      <input
+        value={row.score}
+        onChange={(e) =>
+          updateRow(
+            row.id,
+            "score",
+            e.target.value
+          )
+        }
+        placeholder="Score"
+        className="
+          flex-1
+          bg-black
+          border border-white/10
+          rounded-xl
+          px-3
+          py-3
+        "
+      />
+
+      <input
+        value={
+          row.countOutPosition || ""
+        }
+        onChange={(e) =>
+          updateRow(
+            row.id,
+            "countOutPosition",
+            e.target.value
+          )
+        }
+        placeholder="CO"
+        className="
+          w-20
+          bg-yellow-500/10
+          border border-yellow-400/30
+          text-center
+          rounded-xl
+          px-2
+          py-3
+        "
+      />
+
+    </>
+
+  )}
 
                         </div>
 

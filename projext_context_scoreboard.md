@@ -325,10 +325,14 @@ Leaderboard rows display:
 
 # Current Firebase Collections
 
-Planned collections:
+Current operational collections:
 
 * scoringClubs
 * competitions
+* competitionHistory
+
+Planned expanded collections:
+
 * competitionPlayers
 * competitionScores
 * competitionLeaderboard
@@ -336,134 +340,295 @@ Planned collections:
 
 ---
 
-Competition Creation Engine — Current Build Status
-Completed
-Competition Creation Route
+# Competition Creation Engine — Current Build Status
+
+## Completed
+
+### Competition Creation Route
+
+```text
 /teez-scoring/create-competition
+```
 
 Operational and saving to Firebase.
 
-Competition Dashboard — Completed
-Competition Management Route
+---
+
+# Competition Dashboard — Completed
+
+### Competition Management Route
+
+```text
 /teez-scoring/competition/[competitionId]
+```
 
 Dashboard now operational.
 
-Competition Configuration — Completed
+---
+
+# Competition Configuration — Completed
 
 Supports:
 
-competition name
-competition date
-scoring format
-player configuration
-division structure
-tee modes
-tee intervals
-first tee time
-last tee time
-Tee Sheet Engine — Completed
-Automatic Tee Sheet Generation
+* competition name
+* competition date
+* scoring format
+* scoring type
+* player configuration
+* division structure
+* tee modes
+* tee intervals
+* first tee time
+* last tee time
+
+---
+
+# Scoring Types — Completed
+
+Supported scoring structures:
+
+* Gross
+* Nett
+* Points
+
+Scoring type controls leaderboard sorting logic.
+
+### Gross
+
+Lowest score wins.
+
+### Nett
+
+Lowest score wins.
+
+### Points
+
+Highest points win.
+
+---
+
+# Tee Sheet Engine — Completed
+
+## Automatic Tee Sheet Generation
 
 Supports:
 
-Tee 1
-Tee 10
-Tee 1 & 10
-Shotgun mode
+* Tee 1
+* Tee 10
+* Tee 1 & 10
+* Shotgun mode
 
 Automatically generates:
 
-grouped tee times
-4-ball group structures
-editable player slots
-Dynamic Scoring Structure — Completed
+* grouped tee times
+* 4-ball group structures
+* editable player slots
+
+---
+
+# Dynamic Scoring Structure — Completed
 
 Scoring inputs now adapt according to:
 
-Singles
-every player has own score input
-Doubles
-pair shares score logic
-Foursomes
-grouped foursome scoring logic
-Competition Editing — Completed
+## Singles
+
+Every player has own score input.
+
+## Doubles
+
+Pair shares score logic.
+
+## Foursomes
+
+Grouped foursome scoring logic.
+
+---
+
+# Competition Editing — Completed
 
 Competition dashboard now supports:
 
-live editing
-updating player names
-updating divisions
-updating scores
-updating tee sheet structures
+* live editing
+* updating player names
+* updating divisions
+* updating scores
+* updating tee sheet structures
 
 All updates persist to Firebase.
 
-Leaderboard Engine — Completed
-UPDATE LEADERBOARD Button
+---
+
+# Leaderboard Engine — Completed
+
+## UPDATE LEADERBOARD Button
 
 Now compiles leaderboard from competition rows.
 
 Supports:
 
-Singles leaderboard compilation
-Doubles leaderboard compilation
-Foursomes leaderboard compilation
+* Singles leaderboard compilation
+* Doubles leaderboard compilation
+* Foursomes leaderboard compilation
 
 Leaderboard engine now:
 
-sorts positions
-assigns rankings
-saves leaderboard into Firestore
-Live Leaderboard Page — Completed
-Route
+* sorts positions
+* assigns rankings
+* handles tied positions
+* saves leaderboard into Firestore
+* rebuilds division leaderboards
+
+---
+
+# Tied Position Logic — Completed
+
+Players or teams sharing identical totals now share the same leaderboard position.
+
+Example:
+
+```text
+6th  - 75
+      - 75
+8th  - 76
+```
+
+Position numbering automatically skips tied placements.
+
+---
+
+# Division Leaderboards — Completed
+
+Leaderboard engine now generates:
+
+* overall leaderboard
+* division-specific leaderboards
+
+Division leaderboards are:
+
+* recalculated during leaderboard updates
+* saved into Firestore
+* saved into finalized competition history
+
+---
+
+# Competition Finalization — Completed
+
+Competitions can now be finalized.
+
+Finalization process:
+
+* saves immutable competition snapshot
+* stores leaderboard results
+* stores division leaderboards
+* stores player rows
+* marks competition as finalized
+
+Finalized competitions are stored under:
+
+```text
+scoringClubs/{clubId}/competitionHistory/{competitionId}
+```
+
+---
+
+# Competition History System — Completed
+
+Competition history now supports:
+
+* finalized competition archive
+* club-specific competition storage
+* historical leaderboard viewing
+* chronological competition records
+
+History cards display:
+
+* competition name
+* competition date
+* finalized event data
+
+---
+
+# Live Leaderboard Page — Completed
+
+## Route
+
+```text
 /teez-scoring/leaderboard/[competitionId]
+```
 
 Now reads live leaderboard data from Firestore.
 
 Displays:
 
-positions
-player/team names
-divisions
-scores
-tee times
-starting holes
-Current MVP Status
-Operational Core Now Working
+* positions
+* player/team names
+* divisions
+* scores
+* tee times
+* starting holes
+
+---
+
+# Navigation System — Completed
+
+All major scoring dashboards now support:
+
+* back navigation
+* dashboard routing
+* leaderboard routing
+* history navigation
+
+---
+
+# Current MVP Status
+
+## Operational Core Now Working
 
 Completed operational systems:
 
-competition creation
-competition dashboard
-tee sheet generation
-live score entry
-realtime leaderboard compilation
-live leaderboard viewing
-NEXT BUILD STAGE
-Realtime Leaderboard Enhancements
+* competition creation
+* competition dashboard
+* tee sheet generation
+* live score entry
+* realtime leaderboard compilation
+* division leaderboard compilation
+* tied position logic
+* competition finalization
+* competition history storage
+* live leaderboard viewing
+
+---
+
+# NEXT BUILD STAGE
+
+# Realtime Leaderboard Enhancements
 
 Next focus:
 
-movement delta
-division leaderboards
-tied positions
-count-out handling
-leaderboard animations
-TV display mode
-MVP PRIORITY STATUS
+* movement delta
+* count-out handling
+* leaderboard animations
+* TV display mode
+* fullscreen leaderboard broadcasting
+* leaderboard auto-refresh
+* division leaderboard rendering UI
+* competition history dashboard UI
+
+---
+
+# MVP PRIORITY STATUS
 
 Core realtime scoring engine is now established.
 
 Focus remains:
 
-realtime scoring
-realtime leaderboard updating
-TV leaderboard broadcasting
+* realtime scoring
+* realtime leaderboard updating
+* TV leaderboard broadcasting
 
 Before:
 
-AI systems
-GPS integrations
-streaming overlays
-advanced hardware systems
+* AI systems
+* GPS integrations
+* streaming overlays
+* advanced hardware systems

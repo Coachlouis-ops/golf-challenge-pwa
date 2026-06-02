@@ -262,10 +262,11 @@ export default function CreateCompetitionPage() {
               <option>No Divisions</option>
               <option>A Division</option>
               <option>A + B Division</option>
-              <option>A + B + C Division</option>
+              
               <option>
-                A + B + C + D Division
+                A + B + C + Ladies
               </option>
+<option>Ladies</option>
 
             </select>
 

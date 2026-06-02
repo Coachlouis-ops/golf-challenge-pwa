@@ -1324,11 +1324,10 @@ return (
                       Names
                     </div>
 
-                    <div className="col-span-2">
-                      Div
-                    </div>
-
-                 <div className="col-span-5 pl-3">
+                   <div className="col-span-2 flex items-center justify-center">
+  Div
+</div>
+                 <div className="col-span-5 flex items-center pl-5">
   Score
 </div>
 

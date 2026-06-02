@@ -461,17 +461,31 @@ async function updateLeaderboard() {
       }
     );
 
-    await updateDoc(
-      doc(
-        db,
-        "competitions",
-        competitionId
+    console.log(
+  "LEADERBOARD GENERATED:",
+  leaderboard
+);
+
+await updateDoc(
+  doc(
+    db,
+    "competitions",
+    competitionId
+  ),
+  {
+    leaderboard:
+      JSON.parse(
+        JSON.stringify(leaderboard)
       ),
-      {
-        leaderboard,
-        divisionLeaderboards,
-      }
-    );
+
+    divisionLeaderboards:
+      JSON.parse(
+        JSON.stringify(
+          divisionLeaderboards
+        )
+      ),
+  }
+);
 
     alert(
       "Leaderboard updated"

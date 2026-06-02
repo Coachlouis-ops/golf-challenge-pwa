@@ -52,8 +52,6 @@ export default function RegisterTvPage() {
 
       password,
 
-      clubId: "defaultClub",
-
     });
 
     alert(

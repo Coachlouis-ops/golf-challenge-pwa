@@ -20,7 +20,7 @@ export default function TeezScoringPage() {
           Club Competition Management System
         </p>
 
-        <div className="grid md:grid-cols-3 gap-6">
+      <div className="grid md:grid-cols-4 gap-6">
 
           <button
             onClick={() =>
@@ -100,6 +100,32 @@ export default function TeezScoringPage() {
               leaderboard broadcasting mode.
             </p>
           </button>
+
+          <button
+  onClick={() =>
+    router.push(
+      "/teez-scoring/history"
+    )
+  }
+  className="
+    bg-neutral-900
+    border border-purple-400/20
+    rounded-3xl
+    p-8
+    text-left
+    hover:border-purple-400
+    transition
+  "
+>
+  <h2 className="text-2xl font-bold mb-3 text-purple-400">
+    Competition History
+  </h2>
+
+  <p className="text-gray-400 text-sm">
+    View finalized competition
+    archives and results history.
+  </p>
+</button>
 
         </div>
 

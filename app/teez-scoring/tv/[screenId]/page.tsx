@@ -30,15 +30,18 @@ type LeaderboardRow = {
   startingHole: string;
 };
 
+
 type Slide = {
   type: string;
   title: string;
+  image?: string;
 };
 
 type Scene = {
   type: string;
   title: string;
   rows?: LeaderboardRow[];
+  image?: string;
 };
 
 export default function TvBroadcastPage() {

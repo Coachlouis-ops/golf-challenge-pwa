@@ -163,6 +163,46 @@ export default function TvBroadcastPage() {
 
   slides.forEach((slide) => {
 
+
+// -----------------------------------
+// TEE SHEET
+// -----------------------------------
+
+if (
+  slide.type ===
+  "teeSheet"
+) {
+
+  for (
+    let i = 0;
+    i < leaderboard.length;
+    i += ROWS_PER_SCENE
+  ) {
+
+    scenes.push({
+
+      type: "teeSheet",
+
+      title:
+        i === 0
+          ? slide.title
+          : `${slide.title} ${i + 1}-${Math.min(
+              i + ROWS_PER_SCENE,
+              leaderboard.length
+            )}`,
+
+      rows:
+        leaderboard.slice(
+          i,
+          i + ROWS_PER_SCENE
+        ),
+
+    });
+
+  }
+
+}
+
     // -----------------------------------
     // OVERALL LEADERBOARD
     // -----------------------------------

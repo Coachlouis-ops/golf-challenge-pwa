@@ -159,6 +159,48 @@ async function addPairingsSlide() {
 
 }
 
+async function addSponsorSlide() {
+
+  const image =
+    prompt("Sponsor image URL");
+
+  if (!image) return;
+
+  const updatedSlides = [
+
+    ...slides,
+
+    {
+      type: "sponsor",
+      title: "SPONSOR",
+      image,
+    },
+
+  ];
+
+  setSlides(updatedSlides);
+
+  await setDoc(
+
+    doc(
+      db,
+      "tvBroadcasts",
+      competitionId
+    ),
+
+    {
+      slides: updatedSlides,
+    },
+
+    {
+      merge: true,
+    }
+
+  );
+
+}
+
+
   return (
 
     <main className="min-h-screen bg-black text-white p-10">
@@ -234,7 +276,21 @@ async function addPairingsSlide() {
   ADD PAIRINGS SLIDE
 </button>
 
-
+<button
+  onClick={addSponsorSlide}
+  className="
+    bg-purple-400
+    text-black
+    px-8
+    py-5
+    rounded-2xl
+    font-black
+    hover:scale-105
+    transition
+  "
+>
+  ADD SPONSOR SLIDE
+</button>
 
 
         </div>

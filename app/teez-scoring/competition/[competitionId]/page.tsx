@@ -686,25 +686,28 @@ if (
 
     divisions.forEach(
       (division) => {
+const filtered =
+  leaderboard
+    .filter(
+      (r) =>
+        r.division === division
+    )
 
-        const filtered =
-          leaderboard
-            .filter(
-              (r) =>
-                r.division === division
-            )
+    .map((r) => ({
+      ...r
+    }))
 
-            .sort((a, b) => {
+    .sort((a, b) => {
 
-              if (
-                competition?.scoringType ===
-                "points"
-              ) {
-                return b.total - a.total;
-              }
+      if (
+        competition?.scoringType ===
+        "points"
+      ) {
+        return b.total - a.total;
+      }
 
-              return a.total - b.total;
-            });
+      return a.total - b.total;
+    });
 
         let currentPosition = 1;
 

@@ -401,36 +401,66 @@ if (
 
             <tbody>
 
-              {activeScene?.rows?.map(
-                (row) => (
+  {activeScene?.type === "sponsor" && (
 
-                  <tr
-                    key={`${row.position}-${row.displayName}`}
-                    className="border-b border-white/10"
-                  >
+    <tr>
 
-                    <td className="p-6 text-4xl font-black">
-                      {row.position}
-                    </td>
+      <td
+        colSpan={4}
+        className="h-[700px]"
+      >
 
-                    <td className="p-6 text-4xl font-bold">
-                      {row.displayName}
-                    </td>
+        <div className="w-full h-full flex items-center justify-center p-10">
 
-                    <td className="p-6 text-3xl">
-                      {row.division}
-                    </td>
+          <img
+            src={activeScene.image}
+            alt="Sponsor"
+            className="
+              max-h-full
+              max-w-full
+              object-contain
+              rounded-3xl
+            "
+          />
 
-                    <td className="p-6 text-4xl font-black text-green-400">
-                      {row.total}
-                    </td>
+        </div>
 
-                  </tr>
+      </td>
 
-                )
-              )}
+    </tr>
 
-            </tbody>
+  )}
+
+  {activeScene?.rows?.map(
+    (row) => (
+
+      <tr
+        key={`${row.position}-${row.displayName}`}
+        className="border-b border-white/10"
+      >
+
+        <td className="p-6 text-4xl font-black">
+          {row.position}
+        </td>
+
+        <td className="p-6 text-4xl font-bold">
+          {row.displayName}
+        </td>
+
+        <td className="p-6 text-3xl">
+          {row.division}
+        </td>
+
+        <td className="p-6 text-4xl font-black text-green-400">
+          {row.total}
+        </td>
+
+      </tr>
+
+    )
+  )}
+
+</tbody>
 
           </table>
 

@@ -203,6 +203,30 @@ if (
 
 }
 
+// -----------------------------------
+// SPONSOR
+// -----------------------------------
+
+if (
+  slide.type ===
+  "sponsor"
+) {
+
+  scenes.push({
+
+    type: "sponsor",
+
+    title:
+      slide.title,
+
+    image:
+      slide.image,
+
+  });
+
+}
+
+
     // -----------------------------------
     // OVERALL LEADERBOARD
     // -----------------------------------

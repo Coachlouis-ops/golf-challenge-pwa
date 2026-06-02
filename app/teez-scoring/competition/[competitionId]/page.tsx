@@ -1324,7 +1324,7 @@ return (
     Names
   </div>
 
-  <div className="col-span-2 flex items-center justify-end pr-2">
+  <div className="col-span-2 flex items-center justify-end pr-0">
     Div
   </div>
 

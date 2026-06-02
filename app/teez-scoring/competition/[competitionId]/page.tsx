@@ -314,39 +314,43 @@ async function updateLeaderboard() {
       "Singles"
     ) {
 
-      const singles: {
-        position?: number;
+     const singles: {
+  position?: number;
 
-        displayName: string;
+  displayName: string;
 
-        division: string;
+  division: string;
 
-        total: number;
+  total: number;
 
-        teeTime: string;
+  teeTime: string;
 
-        startingHole: string;
-      }[] =
-        rows
-          .filter((r) => r.displayName)
+  startingHole: string;
+}[] =
+  rows
+    .filter(
+      (r) =>
+        r.displayName &&
+        r.score !== ""
+    )
 
-          .map((r) => ({
+    .map((r) => ({
 
-            displayName:
-              r.displayName,
+      displayName:
+        r.displayName,
 
-            division:
-              r.division,
+      division:
+        r.division || "Open",
 
-            total:
-              Number(r.score) || 0,
+      total:
+        Number(r.score) || 0,
 
-            teeTime:
-              r.teeTime,
+      teeTime:
+        r.teeTime,
 
-            startingHole:
-              r.startingHole,
-          }));
+      startingHole:
+        r.startingHole,
+    }));
 
       if (
         competition?.scoringType ===
@@ -723,22 +727,7 @@ return (
             UPDATE LEADERBOARD
           </button>
 
-          <button
-            onClick={finalizeCompetition}
-            className="
-              bg-red-500
-              text-white
-              px-6
-              py-4
-              rounded-2xl
-              font-bold
-              shadow-[0_0_25px_rgba(239,68,68,0.7)]
-            "
-          >
-            FINALIZE COMPETITION
-          </button>
-
-          <button
+                   <button
             onClick={saveCompetition}
             disabled={saving}
             className="
@@ -756,6 +745,20 @@ return (
               : "SAVE COMPETITION"}
           </button>
 
+          <button
+            onClick={finalizeCompetition}
+            className="
+              bg-red-500
+              text-white
+              px-6
+              py-4
+              rounded-2xl
+              font-bold
+              shadow-[0_0_25px_rgba(239,68,68,0.7)]
+            "
+          >
+            FINALIZE COMPETITION
+          </button>
 </div>
 
         </div>

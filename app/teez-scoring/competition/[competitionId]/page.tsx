@@ -8,10 +8,13 @@ import {
   doc,
   getDoc,
   updateDoc,
+  setDoc,
+  serverTimestamp,
 } from "firebase/firestore";
 
 import {
   db,
+  auth,
 } from "@/src/lib/firebase";
 
 type Competition = {
@@ -293,6 +296,118 @@ async function updateLeaderboard() {
 
   startingHole: string;
 }[] = [];
+
+
+// =========================
+// FINALIZE COMPETITION
+// =========================
+
+async function finalizeCompetition() {
+
+  if (!competitionId || !competition)
+    return;
+
+  try {
+
+    const clubId =
+      auth.currentUser?.uid;
+
+    if (!clubId) {
+      alert("Club not authenticated");
+      return;
+    }
+
+    // --------------------------------
+    // BUILD FINAL LEADERBOARD
+    // --------------------------------
+
+    const leaderboard =
+      (
+        await getDoc(
+          doc(
+            db,
+            "competitions",
+            competitionId
+          )
+        )
+      ).data()?.leaderboard || [];
+
+    // --------------------------------
+    // SAVE HISTORY SNAPSHOT
+    // --------------------------------
+
+    await setDoc(
+
+      doc(
+        db,
+        "scoringClubs",
+        clubId,
+        "competitionHistory",
+        competitionId
+      ),
+
+      {
+        competitionId,
+
+        competitionName:
+          competition.competitionName,
+
+        competitionDate:
+          competition.competitionDate,
+
+        finalized: true,
+
+        finalizedAt:
+          serverTimestamp(),
+
+        format:
+          competition.format,
+
+        playerConfiguration:
+          competition.playerConfiguration,
+
+        divisionStructure:
+          competition.divisionStructure,
+
+        teeMode:
+          competition.teeMode,
+
+        rows,
+
+        leaderboard,
+      }
+    );
+
+    // --------------------------------
+    // MARK COMPETITION FINALIZED
+    // --------------------------------
+
+    await updateDoc(
+      doc(
+        db,
+        "competitions",
+        competitionId
+      ),
+      {
+        status: "finalized",
+        finalized: true,
+      }
+    );
+
+    alert(
+      "Competition finalized"
+    );
+
+  } catch (e: any) {
+
+    console.error(e);
+
+    alert(
+      e.message ||
+      "Failed to finalize competition"
+    );
+  }
+}
 
     // ====================================
     // SINGLES

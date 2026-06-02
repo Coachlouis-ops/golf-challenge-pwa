@@ -336,33 +336,134 @@ Planned collections:
 
 ---
 
-# NEXT BUILD STAGE
-
-# Competition Creation Engine
-
-## Immediate Next Objective
-
-Build:
-
-```text
+Competition Creation Engine — Current Build Status
+Completed
+Competition Creation Route
 /teez-scoring/create-competition
-```
 
----
+Operational and saving to Firebase.
 
-# MVP Priority
+Competition Dashboard — Completed
+Competition Management Route
+/teez-scoring/competition/[competitionId]
 
-The current focus remains:
+Dashboard now operational.
 
-* realtime competition scoring
-* realtime leaderboard updating
-* realtime TV leaderboard broadcasting
+Competition Configuration — Completed
+
+Supports:
+
+competition name
+competition date
+scoring format
+player configuration
+division structure
+tee modes
+tee intervals
+first tee time
+last tee time
+Tee Sheet Engine — Completed
+Automatic Tee Sheet Generation
+
+Supports:
+
+Tee 1
+Tee 10
+Tee 1 & 10
+Shotgun mode
+
+Automatically generates:
+
+grouped tee times
+4-ball group structures
+editable player slots
+Dynamic Scoring Structure — Completed
+
+Scoring inputs now adapt according to:
+
+Singles
+every player has own score input
+Doubles
+pair shares score logic
+Foursomes
+grouped foursome scoring logic
+Competition Editing — Completed
+
+Competition dashboard now supports:
+
+live editing
+updating player names
+updating divisions
+updating scores
+updating tee sheet structures
+
+All updates persist to Firebase.
+
+Leaderboard Engine — Completed
+UPDATE LEADERBOARD Button
+
+Now compiles leaderboard from competition rows.
+
+Supports:
+
+Singles leaderboard compilation
+Doubles leaderboard compilation
+Foursomes leaderboard compilation
+
+Leaderboard engine now:
+
+sorts positions
+assigns rankings
+saves leaderboard into Firestore
+Live Leaderboard Page — Completed
+Route
+/teez-scoring/leaderboard/[competitionId]
+
+Now reads live leaderboard data from Firestore.
+
+Displays:
+
+positions
+player/team names
+divisions
+scores
+tee times
+starting holes
+Current MVP Status
+Operational Core Now Working
+
+Completed operational systems:
+
+competition creation
+competition dashboard
+tee sheet generation
+live score entry
+realtime leaderboard compilation
+live leaderboard viewing
+NEXT BUILD STAGE
+Realtime Leaderboard Enhancements
+
+Next focus:
+
+movement delta
+division leaderboards
+tied positions
+count-out handling
+leaderboard animations
+TV display mode
+MVP PRIORITY STATUS
+
+Core realtime scoring engine is now established.
+
+Focus remains:
+
+realtime scoring
+realtime leaderboard updating
+TV leaderboard broadcasting
 
 Before:
 
-* AI systems
-* GPS systems
-* streaming integrations
-* advanced hardware integrations
-
-This remains the operational core of the platform.
+AI systems
+GPS integrations
+streaming overlays
+advanced hardware systems

@@ -1318,7 +1318,7 @@ return (
                     {time}
                   </div>
 
-                  <div className="grid grid-cols-12 gap-3 mb-3 text-sm text-gray-400 font-bold">
+                 <div className="grid grid-cols-14 gap-3 mb-3 text-sm text-gray-400 font-bold">
 
                     <div className="col-span-6">
                       Names
@@ -1328,7 +1328,7 @@ return (
                       Div
                     </div>
 
-                    <div className="col-span-4">
+                  <div className="col-span-5 flex gap-2">
                       Score
                     </div>
 
@@ -1339,11 +1339,11 @@ return (
                     {group.map((row, index) => (
 
                       <div
-                        key={row.id}
-                        className="grid grid-cols-12 gap-3"
-                      >
+  key={row.id}
+  className="grid grid-cols-14 gap-3"
+>
 
-                        <div className="col-span-6">
+                        <div className="col-span-7">
 
                           <input
                             value={row.displayName}
@@ -1389,7 +1389,7 @@ return (
 
                         </div>
 
-                       <div className="col-span-4 flex gap-2">
+                     <div className="col-span-5 flex gap-2">
 
   {(competition.playerConfiguration === "Singles" ||
     index % 2 === 0) && (

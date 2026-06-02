@@ -14,6 +14,12 @@ import {
   onSnapshot,
 } from "firebase/firestore";
 
+
+import {
+  useAuth,
+} from "@/src/lib/AuthContext";
+
+
 import {
   db,
 } from "@/src/lib/firebase";
@@ -27,6 +33,8 @@ type Competition = {
 export default function TvDashboardPage() {
 
   const router = useRouter();
+
+  const { user } = useAuth();
 
   const [competitions, setCompetitions] =
     useState<Competition[]>([]);
@@ -43,20 +51,24 @@ export default function TvDashboardPage() {
 
         const rows: Competition[] = [];
 
-        snap.forEach((doc) => {
+     snap.forEach((doc) => {
 
-const data = doc.data() as any;
+  const data =
+    doc.data() as any;
 
-if (data.finalized) {
+  if (
+    data.finalized &&
+    data.clubId === user?.uid
+  ) {
 
-  rows.push({
-    id: doc.id,
-    ...data,
-  });
+    rows.push({
+      id: doc.id,
+      ...data,
+    });
 
-}
-        });
+  }
 
+});
         setCompetitions(rows);
 
       });

@@ -119,7 +119,7 @@ export default function TvDashboardPage() {
                 {competition.id}
               </p>
 
-              <div className="flex gap-4">
+              <div className="grid gap-4">
 
                 <button
                   onClick={() =>
@@ -167,6 +167,27 @@ export default function TvDashboardPage() {
                 >
                   COPY LINK
                 </button>
+
+<button
+  onClick={() =>
+    router.push(
+      `/teez-scoring/tv/broadcast-builder/${competition.id}`
+    )
+  }
+  className="
+    bg-cyan-400
+    text-black
+    px-6
+    py-4
+    rounded-2xl
+    font-black
+    hover:scale-105
+    transition
+  "
+>
+  BUILD SLIDES
+</button>
+
 
               </div>
 

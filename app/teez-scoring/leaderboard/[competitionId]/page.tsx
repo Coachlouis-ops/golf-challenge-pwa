@@ -111,17 +111,40 @@ export default function LeaderboardPage() {
 
       <div className="max-w-6xl mx-auto">
 
-        <div className="mb-10 text-center">
+     <div className="mb-10 flex items-center justify-between">
 
-          <h1 className="text-5xl font-black text-green-400 mb-4">
-            LIVE LEADERBOARD
-          </h1>
+  <button
+    onClick={() =>
+      window.history.back()
+    }
+    className="
+      bg-neutral-900
+      border border-white/10
+      px-5
+      py-3
+      rounded-2xl
+      hover:border-white/30
+      transition
+    "
+  >
+    ← BACK
+  </button>
 
-          <p className="text-gray-400 text-lg">
-            {competitionName}
-          </p>
+  <div className="text-center flex-1">
 
-        </div>
+    <h1 className="text-5xl font-black text-green-400 mb-4">
+      LIVE LEADERBOARD
+    </h1>
+
+    <p className="text-gray-400 text-lg">
+      {competitionName}
+    </p>
+
+  </div>
+
+  <div className="w-[120px]" />
+
+</div>
 
         <div className="bg-neutral-900 rounded-3xl overflow-hidden">
 

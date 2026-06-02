@@ -24,6 +24,8 @@ type Competition = {
 
   format: string;
 
+  scoringType: string;
+
   playerConfiguration: string;
 
   divisionStructure: string;
@@ -115,6 +117,9 @@ export default function CompetitionDashboardPage() {
 
   format:
     data.format || "",
+
+    scoringType:
+  data.scoringType || "gross",
 
   playerConfiguration:
     data.playerConfiguration || "",
@@ -418,42 +423,91 @@ async function finalizeCompetition() {
       "Singles"
     ) {
 
-      const singles =
-        rows
-          .filter((r) => r.displayName)
+    const singles: {
+  position?: number;
 
-          .map((r) => ({
+  displayName: string;
 
-            displayName:
-              r.displayName,
+  division: string;
 
-            division:
-              r.division,
+  total: number;
 
-            total:
-              Number(r.score) || 0,
+  teeTime: string;
 
-            teeTime:
-              r.teeTime,
+  startingHole: string;
+}[] =
+  rows
+    .filter((r) => r.displayName)
 
-            startingHole:
-              r.startingHole,
-          }))
+    .map((r) => ({
 
-          .sort(
-            (a, b) =>
-              b.total - a.total
-          )
+      displayName:
+        r.displayName,
 
-          .map((r, index) => ({
+      division:
+        r.division,
 
-            ...r,
+      total:
+        Number(r.score) || 0,
 
-            position:
-              index + 1,
-          }));
+      teeTime:
+        r.teeTime,
 
-      leaderboard.push(...singles);
+      startingHole:
+        r.startingHole,
+    }));
+
+// -----------------------------------
+// SORTING
+// -----------------------------------
+
+if (
+  competition?.scoringType ===
+  "points"
+) {
+
+  singles.sort(
+    (a, b) =>
+      b.total - a.total
+  );
+
+} else {
+
+  singles.sort(
+    (a, b) =>
+      a.total - b.total
+  );
+}
+
+// -----------------------------------
+// TIES
+// -----------------------------------
+
+let currentPosition = 1;
+
+let lastScore: number | null =
+  null;
+
+singles.forEach(
+  (r, index) => {
+
+    const isTie =
+      lastScore !== null &&
+      r.total === lastScore;
+
+    if (!isTie) {
+      currentPosition =
+        index + 1;
+    }
+
+    lastScore = r.total;
+
+    r.position =
+      currentPosition;
+  }
+);
+
+leaderboard.push(...singles);
     }
 
     // ====================================
@@ -461,116 +515,173 @@ async function finalizeCompetition() {
     // ====================================
 
     if (
-      competition?.playerConfiguration ===
-      "Doubles"
-    ) {
+  competition?.playerConfiguration ===
+  "Doubles"
+) {
 
-      for (
-        let i = 0;
-        i < rows.length;
-        i += 2
-      ) {
+  for (
+    let i = 0;
+    i < rows.length;
+    i += 2
+  ) {
 
-        const p1 = rows[i];
-        const p2 = rows[i + 1];
+    const p1 = rows[i];
+    const p2 = rows[i + 1];
 
-        if (!p1 || !p2) continue;
+    if (!p1 || !p2) continue;
 
-        leaderboard.push({
+    leaderboard.push({
 
-          displayName:
-            `${p1.displayName} / ${p2.displayName}`,
+      displayName:
+        `${p1.displayName} / ${p2.displayName}`,
 
-          division:
-            p1.division,
+      division:
+        p1.division,
 
-          total:
-            Number(p1.score) || 0,
+      total:
+        Number(p1.score) || 0,
 
-          teeTime:
-            p1.teeTime,
+      teeTime:
+        p1.teeTime,
 
-          startingHole:
-            p1.startingHole,
-        });
+      startingHole:
+        p1.startingHole,
+    });
+  }
+
+  if (
+    competition?.scoringType ===
+    "points"
+  ) {
+
+    leaderboard.sort(
+      (a, b) =>
+        b.total - a.total
+    );
+
+  } else {
+
+    leaderboard.sort(
+      (a, b) =>
+        a.total - b.total
+    );
+  }
+
+  let currentPosition = 1;
+
+  let lastScore: number | null =
+    null;
+
+  leaderboard.forEach(
+    (r, index) => {
+
+      const isTie =
+        lastScore !== null &&
+        r.total === lastScore;
+
+      if (!isTie) {
+        currentPosition =
+          index + 1;
       }
 
-      leaderboard.sort(
-        (a, b) =>
-          b.total - a.total
-      );
+      lastScore = r.total;
 
-      leaderboard.forEach(
-        (r, index) => {
-
-          r.position =
-            index + 1;
-        }
-      );
+      r.position =
+        currentPosition;
     }
+  );
+}
 
     // ====================================
     // FOURSOMES
     // ====================================
 
     if (
-      competition?.playerConfiguration ===
-      "Foursomes"
-    ) {
+  competition?.playerConfiguration ===
+  "Foursomes"
+) {
 
-      for (
-        let i = 0;
-        i < rows.length;
-        i += 4
-      ) {
+  for (
+    let i = 0;
+    i < rows.length;
+    i += 4
+  ) {
 
-        const group =
-          rows.slice(i, i + 4);
+    const group =
+      rows.slice(i, i + 4);
 
-        if (
-          group.length < 4
-        ) continue;
+    if (
+      group.length < 4
+    ) continue;
 
-        leaderboard.push({
+    leaderboard.push({
 
-          displayName:
-            group
-              .map(
-                (g) =>
-                  g.displayName
-              )
-              .join(" / "),
+      displayName:
+        group
+          .map(
+            (g) =>
+              g.displayName
+          )
+          .join(" / "),
 
-          division:
-            group[0].division,
+      division:
+        group[0].division,
 
-          total:
-            Number(
-              group[0].score
-            ) || 0,
+      total:
+        Number(
+          group[0].score
+        ) || 0,
 
-          teeTime:
-            group[0].teeTime,
+      teeTime:
+        group[0].teeTime,
 
-          startingHole:
-            group[0].startingHole,
-        });
+      startingHole:
+        group[0].startingHole,
+    });
+  }
+
+  if (
+    competition?.scoringType ===
+    "points"
+  ) {
+
+    leaderboard.sort(
+      (a, b) =>
+        b.total - a.total
+    );
+
+  } else {
+
+    leaderboard.sort(
+      (a, b) =>
+        a.total - b.total
+    );
+  }
+
+  let currentPosition = 1;
+
+  let lastScore: number | null =
+    null;
+
+  leaderboard.forEach(
+    (r, index) => {
+
+      const isTie =
+        lastScore !== null &&
+        r.total === lastScore;
+
+      if (!isTie) {
+        currentPosition =
+          index + 1;
       }
 
-      leaderboard.sort(
-        (a, b) =>
-          b.total - a.total
-      );
+      lastScore = r.total;
 
-      leaderboard.forEach(
-        (r, index) => {
-
-          r.position =
-            index + 1;
-        }
-      );
+      r.position =
+        currentPosition;
     }
-
+  );
+}
     await updateDoc(
       doc(
         db,
@@ -602,6 +713,13 @@ async function finalizeCompetition() {
 // =========================
 
 async function finalizeCompetition() {
+
+
+  const confirmed = window.confirm(
+  "Are you sure you want to finalize this competition? This cannot be undone."
+);
+
+if (!confirmed) return;
 
   if (!competitionId || !competition)
     return;
@@ -745,19 +863,40 @@ if (!competition) {
 
         {/* HEADER */}
 
-        <div className="flex items-center justify-between mb-10">
+       <div className="flex items-center justify-between mb-10 gap-6">
 
-          <div>
+          <div className="flex items-center gap-5">
 
-            <h1 className="text-4xl font-bold">
-              {competition.competitionName}
-            </h1>
+  <button
+    onClick={() =>
+      window.history.back()
+    }
+    className="
+      bg-neutral-900
+      border border-white/10
+      px-5
+      py-3
+      rounded-2xl
+      hover:border-white/30
+      transition
+    "
+  >
+    ← BACK
+  </button>
 
-            <p className="text-gray-400 mt-2">
-              Competition Dashboard
-            </p>
+  <div>
 
-          </div>
+    <h1 className="text-4xl font-bold">
+      {competition.competitionName}
+    </h1>
+
+    <p className="text-gray-400 mt-2">
+      Competition Dashboard
+    </p>
+
+  </div>
+
+</div>
 
        <div className="flex items-center gap-4">
 
@@ -796,21 +935,6 @@ if (!competition) {
   UPDATE LEADERBOARD
 </button>
 
-<button
-  onClick={finalizeCompetition}
-  className="
-    bg-red-500
-    text-white
-    px-6
-    py-4
-    rounded-2xl
-    font-bold
-    shadow-[0_0_25px_rgba(239,68,68,0.7)]
-  "
->
-  FINALIZE COMPETITION
-</button>
-
   <button
     onClick={saveCompetition}
     disabled={saving}
@@ -828,6 +952,21 @@ if (!competition) {
       ? "SAVING..."
       : "SAVE COMPETITION"}
   </button>
+
+  <button
+  onClick={finalizeCompetition}
+  className="
+    bg-red-500
+    text-white
+    px-6
+    py-4
+    rounded-2xl
+    font-bold
+    shadow-[0_0_25px_rgba(239,68,68,0.7)]
+  "
+>
+  FINALIZE COMPETITION
+</button>
 
 </div>
 

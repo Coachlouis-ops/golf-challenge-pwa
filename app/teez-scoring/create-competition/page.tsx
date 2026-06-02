@@ -31,6 +31,9 @@ export default function CreateCompetitionPage() {
   const [playerConfig, setPlayerConfig] =
     useState("Singles");
 
+    const [scoringType, setScoringType] =
+  useState("gross");
+
   const [divisionStructure, setDivisionStructure] =
     useState("No Divisions");
 
@@ -58,6 +61,7 @@ export default function CreateCompetitionPage() {
 
           playerConfiguration:
             playerConfig,
+            scoringType,
 
           divisionStructure,
 
@@ -94,17 +98,38 @@ export default function CreateCompetitionPage() {
 
       <div className="max-w-4xl mx-auto">
 
-        <div className="mb-10">
+       <div className="mb-10 flex items-center justify-between">
 
-          <h1 className="text-4xl font-bold mb-3">
-            CREATE COMPETITION
-          </h1>
+  <div>
 
-          <p className="text-gray-400">
-            Setup new golf competition
-          </p>
+    <h1 className="text-4xl font-bold mb-3">
+      CREATE COMPETITION
+    </h1>
 
-        </div>
+    <p className="text-gray-400">
+      Setup new golf competition
+    </p>
+
+  </div>
+
+  <button
+    onClick={() =>
+      router.push("/teez-scoring")
+    }
+    className="
+      bg-neutral-900
+      border border-white/10
+      px-5
+      py-3
+      rounded-2xl
+      hover:border-white/30
+      transition
+    "
+  >
+    ← BACK
+  </button>
+
+</div>
 
         <div className="grid gap-6">
 
@@ -233,6 +258,49 @@ export default function CreateCompetitionPage() {
             </select>
 
           </div>
+
+
+{/* SCORING TYPE */}
+
+<div>
+
+  <label className="block mb-2 text-sm text-gray-400">
+    Scoring Type
+  </label>
+
+  <select
+    value={scoringType}
+    onChange={(e) =>
+      setScoringType(
+        e.target.value
+      )
+    }
+    className="
+      w-full
+      bg-neutral-900
+      border border-white/10
+      rounded-2xl
+      px-4
+      py-4
+    "
+  >
+
+    <option value="gross">
+      Gross
+    </option>
+
+    <option value="nett">
+      Nett
+    </option>
+
+    <option value="points">
+      Points
+    </option>
+
+  </select>
+
+</div>
+
 
           {/* DIVISIONS */}
 

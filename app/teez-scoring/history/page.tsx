@@ -98,17 +98,40 @@ export default function HistoryPage() {
 
       <div className="max-w-6xl mx-auto">
 
-        <div className="mb-10">
+      <div className="mb-10 flex items-center justify-between">
 
-          <h1 className="text-5xl font-black text-green-400 mb-3">
-            COMPETITION HISTORY
-          </h1>
+  <button
+    onClick={() =>
+      window.history.back()
+    }
+    className="
+      bg-neutral-900
+      border border-white/10
+      px-5
+      py-3
+      rounded-2xl
+      hover:border-white/30
+      transition
+    "
+  >
+    ← BACK
+  </button>
 
-          <p className="text-gray-400">
-            Finalized competitions archive
-          </p>
+  <div className="text-center flex-1">
 
-        </div>
+    <h1 className="text-5xl font-black text-green-400 mb-3">
+      COMPETITION HISTORY
+    </h1>
+
+    <p className="text-gray-400">
+      Finalized competitions archive
+    </p>
+
+  </div>
+
+  <div className="w-[120px]" />
+
+</div>
 
         <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
 

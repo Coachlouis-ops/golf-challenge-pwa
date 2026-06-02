@@ -1327,7 +1327,7 @@ return (
                    <div className="col-span-2 flex items-center justify-center">
   Div
 </div>
-                 <div className="col-span-5 flex items-center pl-5">
+                 <div className="col-span-5 flex items-center pl-8">
   Score
 </div>
 

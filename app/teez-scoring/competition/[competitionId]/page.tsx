@@ -1328,9 +1328,9 @@ return (
                       Div
                     </div>
 
-                  <div className="col-span-5 flex gap-1">
-                      Score
-                    </div>
+                 <div className="col-span-5 pl-3">
+  Score
+</div>
 
                   </div>
 
@@ -1366,7 +1366,7 @@ return (
 
                         </div>
 
-                        <div className="col-span-2">
+                        <div className="col-span-2 pl-2">
 
                           <input
                             value={row.division}

@@ -1,9 +1,19 @@
 "use client";
 
+
 import {
   useEffect,
   useState,
 } from "react";
+
+import {
+  doc,
+  onSnapshot,
+} from "firebase/firestore";
+
+import {
+  db,
+} from "@/src/lib/firebase";
 
 import {
   useParams,
@@ -36,45 +46,40 @@ export default function TvBroadcastPage() {
   const [currentScene, setCurrentScene] =
     useState(0);
 
-  const leaderboard: LeaderboardRow[] = [
+ const [leaderboard, setLeaderboard] =
+  useState<LeaderboardRow[]>([]);
 
-    {
-      position: 1,
-      displayName: "Louis Coetzee",
-      division: "A",
-      total: 68,
-      teeTime: "07:10",
-      startingHole: "1",
-    },
 
-    {
-      position: 2,
-      displayName: "Andries Coetzee",
-      division: "A",
-      total: 69,
-      teeTime: "07:10",
-      startingHole: "1",
-    },
+  useEffect(() => {
 
-    {
-      position: 3,
-      displayName: "John Smith",
-      division: "B",
-      total: 70,
-      teeTime: "07:20",
-      startingHole: "1",
-    },
+  if (!competitionId) return;
 
-    {
-      position: 4,
-      displayName: "Peter Johnson",
-      division: "B",
-      total: 71,
-      teeTime: "07:20",
-      startingHole: "1",
-    },
+  const ref = doc(
+    db,
+    "competitions",
+    competitionId
+  );
 
-  ];
+  const unsubscribe = onSnapshot(
+    ref,
+    (snap) => {
+
+      if (!snap.exists()) return;
+
+      const data = snap.data();
+
+      setLeaderboard(
+        Array.isArray(data.leaderboard)
+          ? data.leaderboard
+          : []
+      );
+
+    }
+  );
+
+  return () => unsubscribe();
+
+}, [competitionId]);
 
   const pagedScenes = [];
 

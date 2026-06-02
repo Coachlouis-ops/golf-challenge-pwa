@@ -88,6 +88,42 @@ export default function BroadcastBuilderPage() {
     );
   }
 
+
+  async function addTeeSheetSlide() {
+
+  const updatedSlides = [
+
+    ...slides,
+
+    {
+      type: "teeSheet",
+      title: "TEE SHEET",
+    },
+
+  ];
+
+  setSlides(updatedSlides);
+
+  await setDoc(
+
+    doc(
+      db,
+      "tvBroadcasts",
+      competitionId
+    ),
+
+    {
+      slides: updatedSlides,
+    },
+
+    {
+      merge: true,
+    }
+
+  );
+
+}
+
 async function addPairingsSlide() {
 
   const updatedSlides = [
@@ -164,6 +200,23 @@ async function addPairingsSlide() {
           >
             ADD LEADERBOARD SLIDE
           </button>
+
+<button
+  onClick={addTeeSheetSlide}
+  className="
+    bg-yellow-400
+    text-black
+    px-8
+    py-5
+    rounded-2xl
+    font-black
+    hover:scale-105
+    transition
+  "
+>
+  ADD TEE SHEET SLIDE
+</button>
+
 
 <button
   onClick={addPairingsSlide}

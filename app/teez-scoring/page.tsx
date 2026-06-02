@@ -48,6 +48,36 @@ export default function TeezScoringPage() {
               divisions and rules.
             </p>
           </button>
+          
+
+<button
+  onClick={() =>
+    router.push(
+      "/teez-scoring/competitions"
+    )
+  }
+  className="
+    bg-neutral-900
+    border border-orange-400/20
+    rounded-3xl
+    p-8
+    text-left
+    hover:border-orange-400
+    transition
+  "
+>
+  <h2 className="text-2xl font-bold mb-3 text-orange-400">
+    Competitions
+  </h2>
+
+  <p className="text-gray-400 text-sm">
+    Manage active competitions,
+    reopen scoring,
+    launch leaderboards
+    and TV broadcasts.
+  </p>
+</button>
+
 
           <button
             onClick={() =>

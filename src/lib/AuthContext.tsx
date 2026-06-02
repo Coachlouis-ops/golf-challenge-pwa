@@ -1,203 +1,269 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState } from "react";
-import { onAuthStateChanged, User } from "firebase/auth";
-import { auth, db } from "./firebase";
-import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+
+import {
+  onAuthStateChanged,
+  User,
+} from "firebase/auth";
+
+import {
+  auth,
+  db,
+} from "./firebase";
+
+import {
+  doc,
+  getDoc,
+  setDoc,
+  serverTimestamp,
+} from "firebase/firestore";
 
 type AuthContextType = {
   user: User | null;
   loading: boolean;
 };
 
-const AuthContext = createContext<AuthContextType>({
-  user: null,
-  loading: true,
-});
+const AuthContext =
+  createContext<AuthContextType>({
+    user: null,
+    loading: true,
+  });
 
-export function AuthProvider({ children }: { children: React.ReactNode }) {
+export function AuthProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
 
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [user, setUser] =
+    useState<User | null>(null);
+
+  const [loading, setLoading] =
+    useState(true);
 
   useEffect(() => {
 
-    const unsub = onAuthStateChanged(
-      auth,
-      async (firebaseUser) => {
+    const unsub =
+      onAuthStateChanged(
+        auth,
+        async (firebaseUser) => {
 
-        // -------------------------------------------------
-        // LOGGED OUT
-        // -------------------------------------------------
+          // LOGGED OUT
 
-        if (!firebaseUser) {
-          setUser(null);
-          setLoading(false);
-          return;
-        }
+          if (!firebaseUser) {
 
-        try {
-
-          // -------------------------------------------------
-          // IMPORTANT FIX
-          // -------------------------------------------------
-          // Ignore temporary phone auth users
-          // created during OTP verification
-          // -------------------------------------------------
-
-          const isPhoneOnlyUser =
-            firebaseUser.providerData.length === 1 &&
-            firebaseUser.providerData[0]?.providerId === "phone";
-
-          if (isPhoneOnlyUser) {
-            console.log(
-              "Skipping bootstrap for temporary phone auth user"
-            );
+            setUser(null);
 
             setLoading(false);
+
             return;
           }
 
-          const uid = firebaseUser.uid;
+          try {
 
+            // IGNORE TEMP PHONE USERS
 
-// -------------------------------------------------
-// SCORING CLUB CHECK
-// -------------------------------------------------
+            const isPhoneOnlyUser =
+              firebaseUser.providerData.length === 1 &&
+              firebaseUser.providerData[0]?.providerId === "phone";
 
-const scoringClubRef = doc(
-  db,
-  "scoringClubs",
-  uid
-);
+            if (isPhoneOnlyUser) {
 
-try {
+              console.log(
+                "Skipping bootstrap for temporary phone auth user"
+              );
 
-  const scoringClubSnap =
-    await getDoc(scoringClubRef);
+              setLoading(false);
 
-  if (scoringClubSnap.exists()) {
+              return;
+            }
 
-    setUser(firebaseUser);
+            const uid =
+              firebaseUser.uid;
 
-    setLoading(false);
+            // -----------------------------------
+            // SCORING CLUB CHECK
+            // -----------------------------------
 
-    return;
-  }
+            const scoringClubRef =
+              doc(
+                db,
+                "scoringClubs",
+                uid
+              );
 
-} catch (err) {
+            const scoringClubSnap =
+              await getDoc(
+                scoringClubRef
+              );
 
-  console.log(
-    "Scoring club lookup skipped"
-  );
+            if (
+              scoringClubSnap.exists()
+            ) {
 
-}
+              setUser(firebaseUser);
 
+              setLoading(false);
 
-          // -------------------------------------------------
-          // PROFILE CHECK / CREATE
-          // -------------------------------------------------
+              return;
+            }
 
-          const profileRef = doc(db, "profiles", uid);
-          const profileSnap = await getDoc(profileRef);
+            // -----------------------------------
+            // PROFILE CHECK / CREATE
+            // -----------------------------------
 
-          if (!profileSnap.exists()) {
+            const profileRef =
+              doc(
+                db,
+                "profiles",
+                uid
+              );
 
-            await setDoc(profileRef, {
-              uid,
-              email: firebaseUser.email ?? "",
+            const profileSnap =
+              await getDoc(profileRef);
 
-              name: "",
-              surname: "",
-              battleName: "",
+            if (
+              !profileSnap.exists()
+            ) {
 
-              ranking: {
-                club: 0,
-                province: 0,
-                national: 0,
-                international: 0,
-              },
+              await setDoc(
+                profileRef,
+                {
+                  uid,
 
-              tokensPlayed: 0,
-              tokensWon: 0,
+                  email:
+                    firebaseUser.email ?? "",
 
-              createdAt: serverTimestamp(),
-            });
+                  name: "",
+                  surname: "",
+                  battleName: "",
 
+                  ranking: {
+                    club: 0,
+                    province: 0,
+                    national: 0,
+                    international: 0,
+                  },
+
+                  tokensPlayed: 0,
+                  tokensWon: 0,
+
+                  createdAt:
+                    serverTimestamp(),
+                }
+              );
+            }
+
+            // -----------------------------------
+            // WALLET CHECK / CREATE
+            // -----------------------------------
+
+            const walletRef =
+              doc(
+                db,
+                "wallets",
+                uid
+              );
+
+            const walletSnap =
+              await getDoc(walletRef);
+
+            if (
+              !walletSnap.exists()
+            ) {
+
+              await setDoc(
+                walletRef,
+                {
+                  purchasedTokens: 0,
+                  winningTokens: 0,
+                  lockedTokens: 0,
+
+                  createdAt:
+                    serverTimestamp(),
+
+                  updatedAt:
+                    serverTimestamp(),
+                }
+              );
+            }
+
+            // -----------------------------------
+            // PLAYER RANKING CHECK / CREATE
+            // -----------------------------------
+
+            const rankingRef =
+              doc(
+                db,
+                "playerRankings",
+                uid
+              );
+
+            const rankingSnap =
+              await getDoc(
+                rankingRef
+              );
+
+            if (
+              !rankingSnap.exists()
+            ) {
+
+              await setDoc(
+                rankingRef,
+                {
+                  club: 0,
+                  province: 0,
+                  national: 0,
+                  international: 0,
+
+                  updatedAt:
+                    serverTimestamp(),
+                }
+              );
+            }
+
+            setUser(firebaseUser);
+
+          } catch (err) {
+
+            console.error(
+              "Auth bootstrap error:",
+              err
+            );
           }
 
-          // -------------------------------------------------
-          // WALLET CHECK / CREATE
-          // -------------------------------------------------
-
-          const walletRef = doc(db, "wallets", uid);
-          const walletSnap = await getDoc(walletRef);
-
-          if (!walletSnap.exists()) {
-
-            await setDoc(walletRef, {
-              purchasedTokens: 0,
-              winningTokens: 0,
-              lockedTokens: 0,
-
-              createdAt: serverTimestamp(),
-              updatedAt: serverTimestamp(),
-            });
-
-          }
-
-          // -------------------------------------------------
-          // PLAYER RANKING CHECK / CREATE
-          // -------------------------------------------------
-
-          const rankingRef = doc(db, "playerRankings", uid);
-          const rankingSnap = await getDoc(rankingRef);
-
-          if (!rankingSnap.exists()) {
-
-            await setDoc(rankingRef, {
-              club: 0,
-              province: 0,
-              national: 0,
-              international: 0,
-
-              updatedAt: serverTimestamp(),
-            });
-
-          }
-
-          setUser(firebaseUser);
-
-        } catch (err) {
-
-          console.error(
-            "Auth bootstrap error:",
-            err
-          );
-
+          setLoading(false);
         }
-
-        setLoading(false);
-
-      }
-    );
+      );
 
     return () => unsub();
 
   }, []);
 
   return (
+
     <AuthContext.Provider
       value={{
         user,
         loading,
       }}
     >
+
       {children}
+
     </AuthContext.Provider>
+
   );
 }
 
 export function useAuth() {
+
   return useContext(AuthContext);
+
 }

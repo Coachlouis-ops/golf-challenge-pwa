@@ -9,19 +9,12 @@ import {
 } from "next/navigation";
 
 import {
-  createUserWithEmailAndPassword,
-} from "firebase/auth";
+  httpsCallable,
+} from "firebase/functions";
 
 import {
-  auth,
-  db,
+  functions,
 } from "@/src/lib/firebase";
-
-import {
-  doc,
-  serverTimestamp,
-  setDoc,
-} from "firebase/firestore";
 
 export default function RegisterTvPage() {
 
@@ -39,66 +32,53 @@ export default function RegisterTvPage() {
   const [loading, setLoading] =
     useState(false);
 
-  async function registerTv() {
+ async function registerTv() {
 
-    try {
+  try {
 
-      setLoading(true);
+    setLoading(true);
 
-      const cred =
-        await createUserWithEmailAndPassword(
-          auth,
-          email,
-          password
-        );
-
-      const uid =
-        cred.user.uid;
-
-      await setDoc(
-        doc(
-          db,
-          "tvDevices",
-          uid
-        ),
-        {
-          uid,
-
-          deviceName,
-
-          role: "tvDevice",
-
-          active: true,
-
-          createdAt:
-            serverTimestamp(),
-        }
+    const createTvDevice =
+      httpsCallable(
+        functions,
+        "createTvDevice"
       );
 
-      alert(
-        "TV device registered"
-      );
+    await createTvDevice({
 
-      router.push(
-        "/teez-scoring"
-      );
+      deviceName,
 
-    } catch (e: any) {
+      email,
 
-      console.error(e);
+      password,
 
-      alert(
-        e.message ||
-        "Failed to register TV"
-      );
+      clubId: "defaultClub",
 
-    } finally {
+    });
 
-      setLoading(false);
+    alert(
+      "TV device registered"
+    );
 
-    }
+    router.push(
+      "/teez-scoring"
+    );
+
+  } catch (e: any) {
+
+    console.error(e);
+
+    alert(
+      e.message ||
+      "Failed to register TV"
+    );
+
+  } finally {
+
+    setLoading(false);
+
   }
-
+}
   return (
 
     <main className="min-h-screen bg-black text-white p-10">

@@ -86,8 +86,42 @@ export default function BroadcastBuilderPage() {
       }
 
     );
-
   }
+
+async function addPairingsSlide() {
+
+  const updatedSlides = [
+
+    ...slides,
+
+    {
+      type: "pairings",
+      title: "PLAYER PAIRINGS",
+    },
+
+  ];
+
+  setSlides(updatedSlides);
+
+  await setDoc(
+
+    doc(
+      db,
+      "tvBroadcasts",
+      competitionId
+    ),
+
+    {
+      slides: updatedSlides,
+    },
+
+    {
+      merge: true,
+    }
+
+  );
+
+}
 
   return (
 
@@ -130,6 +164,25 @@ export default function BroadcastBuilderPage() {
           >
             ADD LEADERBOARD SLIDE
           </button>
+
+<button
+  onClick={addPairingsSlide}
+  className="
+    bg-yellow-400
+    text-black
+    px-8
+    py-5
+    rounded-2xl
+    font-black
+    hover:scale-105
+    transition
+  "
+>
+  ADD PAIRINGS SLIDE
+</button>
+
+
+
 
         </div>
 

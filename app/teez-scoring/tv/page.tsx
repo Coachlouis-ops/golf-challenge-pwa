@@ -45,11 +45,16 @@ export default function TvDashboardPage() {
 
         snap.forEach((doc) => {
 
-          rows.push({
-            id: doc.id,
-            ...(doc.data() as any),
-          });
+const data = doc.data() as any;
 
+if (data.finalized) {
+
+  rows.push({
+    id: doc.id,
+    ...data,
+  });
+
+}
         });
 
         setCompetitions(rows);

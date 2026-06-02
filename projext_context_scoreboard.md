@@ -580,55 +580,116 @@ All major scoring dashboards now support:
 
 ---
 
-# Current MVP Status
-
-## Operational Core Now Working
+Current MVP Status
+Operational Core Now Working
 
 Completed operational systems:
 
-* competition creation
-* competition dashboard
-* tee sheet generation
-* live score entry
-* realtime leaderboard compilation
-* division leaderboard compilation
-* tied position logic
-* competition finalization
-* competition history storage
-* live leaderboard viewing
+competition creation
+competition dashboard
+tee sheet generation
+automatic tee sheet architecture
+live score entry
+editable scoring rows
+editable divisions
+editable tee structures
+realtime leaderboard compilation
+global leaderboard compilation
+division leaderboard compilation
+tied position logic
+count-out scoring system
+manual count-out override inputs
+count-out leaderboard sorting
+global vs division position separation
+competition finalization
+finalized competition snapshots
+competition history storage
+live leaderboard viewing
+competition routing/navigation
+realtime leaderboard updating
+Leaderboard Engine — Current Status
+Operational Features
 
----
+Leaderboard engine now supports:
 
-# NEXT BUILD STAGE
+gross sorting
+nett sorting
+points sorting
+tied positions
+skipped tie positioning
+manual count-out ranking
+global leaderboard ranking
+independent division rankings
+count-out tie breaking
+sequential leaderboard rebuilding
+Count-Out System — Completed
+Manual Count-Out Architecture
 
-# Realtime Leaderboard Enhancements
+Scorers can now manually assign:
+
+1
+2
+3
+4
+
+to tied players/teams.
+
+Leaderboard engine then:
+
+sorts tied scores using count-out values
+awards sequential positions
+preserves proper leaderboard skips
+
+Example:
+
+1
+1
+1
+4
+5
+6
+6
+8
+
+Global leaderboard remains fully independent from division leaderboards.
+
+Tee Sheet Engine — Enhanced
+Tee Sheet UI Improvements
+
+Completed:
+
+responsive score/count-out inputs
+improved tee sheet alignment
+score/count-out compact layout
+leaderboard scoring optimization
+NEXT BUILD STAGE
+Realtime Leaderboard Enhancements
 
 Next focus:
 
-* movement delta
-* count-out handling
-* leaderboard animations
-* TV display mode
-* fullscreen leaderboard broadcasting
-* leaderboard auto-refresh
-* division leaderboard rendering UI
-* competition history dashboard UI
+movement delta
+leaderboard animations
+TV display mode
+fullscreen leaderboard broadcasting
+leaderboard auto-refresh
+division leaderboard rendering UI
+competition history dashboard UI
+live leaderboard visual enhancements
+MVP PRIORITY STATUS
 
----
+Core realtime scoring engine is now operational.
 
-# MVP PRIORITY STATUS
+Current operational focus:
 
-Core realtime scoring engine is now established.
-
-Focus remains:
-
-* realtime scoring
-* realtime leaderboard updating
-* TV leaderboard broadcasting
+realtime scoring
+realtime leaderboard rebuilding
+live leaderboard broadcasting
+TV leaderboard systems
+realtime competition visibility
 
 Before:
 
-* AI systems
-* GPS integrations
-* streaming overlays
-* advanced hardware systems
+AI systems
+GPS integrations
+streaming overlays
+advanced hardware systems

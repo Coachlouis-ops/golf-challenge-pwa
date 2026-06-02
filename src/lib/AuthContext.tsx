@@ -71,16 +71,26 @@ const scoringClubRef = doc(
   uid
 );
 
-const scoringClubSnap =
-  await getDoc(scoringClubRef);
+try {
 
-if (scoringClubSnap.exists()) {
+  const scoringClubSnap =
+    await getDoc(scoringClubRef);
 
-  setUser(firebaseUser);
+  if (scoringClubSnap.exists()) {
 
-  setLoading(false);
+    setUser(firebaseUser);
 
-  return;
+    setLoading(false);
+
+    return;
+  }
+
+} catch (err) {
+
+  console.log(
+    "Scoring club lookup skipped"
+  );
+
 }
 
 

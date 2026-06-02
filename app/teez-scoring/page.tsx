@@ -8,7 +8,7 @@ export default function TeezScoringPage() {
 
   return (
 
-    <main className="min-h-screen bg-black text-white p-10 overflow-y-auto">
+  <main className="h-screen overflow-y-scroll bg-black text-white p-10">
 
       <div className="max-w-7xl mx-auto">
 

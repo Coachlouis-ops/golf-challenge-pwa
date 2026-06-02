@@ -309,7 +309,7 @@ async function updateLeaderboard() {
     const divisionLeaderboards:
       Record<string, any[]> = {};
 
-    // ====================================
+   // ====================================
 // SINGLES
 // ====================================
 
@@ -411,15 +411,21 @@ if (
         lastScore !== null &&
         r.total === lastScore;
 
-      if (!isTie) {
+      if (isTie) {
+
+        r.position =
+          currentPosition;
+
+      } else {
+
         currentPosition =
           index + 1;
+
+        r.position =
+          currentPosition;
       }
 
       lastScore = r.total;
-
-      r.position =
-        currentPosition;
     }
   );
 
@@ -524,15 +530,21 @@ if (
         lastScore !== null &&
         r.total === lastScore;
 
-      if (!isTie) {
+      if (isTie) {
+
+        r.position =
+          currentPosition;
+
+      } else {
+
         currentPosition =
           index + 1;
+
+        r.position =
+          currentPosition;
       }
 
       lastScore = r.total;
-
-      r.position =
-        currentPosition;
     }
   );
 }
@@ -640,15 +652,21 @@ if (
         lastScore !== null &&
         r.total === lastScore;
 
-      if (!isTie) {
+      if (isTie) {
+
+        r.position =
+          currentPosition;
+
+      } else {
+
         currentPosition =
           index + 1;
+
+        r.position =
+          currentPosition;
       }
 
       lastScore = r.total;
-
-      r.position =
-        currentPosition;
     }
   );
 }

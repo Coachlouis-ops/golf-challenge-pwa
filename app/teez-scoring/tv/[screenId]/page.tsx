@@ -427,182 +427,181 @@ if (
 
         {/* TABLE */}
 
-        <div className="flex-1 bg-neutral-900 rounded-3xl overflow-hidden">
+<div className="flex-1">
 
-          <table className="w-full h-full">
+  {activeScene?.type === "teeSheet" ? (
 
-            <thead className="bg-green-400 text-black">
+    <div className="h-full bg-neutral-900 rounded-3xl p-10">
 
-              <tr>
+      <div className="grid grid-cols-2 gap-8">
 
-                <th className="p-6 text-left text-3xl">
-                  POS
-                </th>
+        {(activeScene.rows as any[])?.map(
+          (group: any, index: number) => {
 
-                <th className="p-6 text-left text-3xl">
-                  PLAYER
-                </th>
+            const players = [
+              ...(group.players || []),
+            ];
 
-                <th className="p-6 text-left text-3xl">
-                  DIV
-                </th>
+            while (
+              players.length < 4
+            ) {
+              players.push("-");
+            }
 
-                <th className="p-6 text-left text-3xl">
-                  SCORE
-                </th>
+            return (
 
-              </tr>
+              <div
+                key={index}
+                className="
+                  bg-black/40
+                  border border-white/10
+                  rounded-3xl
+                  p-6
+                "
+              >
 
-            </thead>
+                <div className="text-3xl font-black text-cyan-400 mb-4">
 
-   <tbody>
-
-  {activeScene?.type === "teeSheet" && (
-
-    <tr>
-
-      <td
-        colSpan={4}
-        className="p-10"
-      >
-
-        <div className="grid grid-cols-2 gap-8">
-
-          {(activeScene.rows as any[])?.map(
-            (group: any, index: number) => {
-
-              const players = [
-                ...(group.players || []),
-              ];
-
-              while (
-                players.length < 4
-              ) {
-                players.push("-");
-              }
-
-              return (
-
-                <div
-                  key={index}
-                  className="
-                    bg-black/40
-                    border border-white/10
-                    rounded-3xl
-                    p-6
-                  "
-                >
-
-                  <div className="text-3xl font-black text-cyan-400 mb-4">
-
-                    {group.teeTime}
-                    {" | "}
-                    HOLE {group.startingHole}
-
-                  </div>
-
-                  <div className="flex flex-col gap-3">
-
-                    {players.map(
-                      (
-                        player: string,
-                        idx: number
-                      ) => (
-
-                        <div
-                          key={idx}
-                          className="
-                            text-2xl
-                            font-bold
-                          "
-                        >
-                          {player || "-"}
-                        </div>
-
-                      )
-                    )}
-
-                  </div>
+                  {group.teeTime}
+                  {" | "}
+                  HOLE {group.startingHole}
 
                 </div>
 
-              );
+                <div className="flex flex-col gap-3">
 
-            }
+                  {players.map(
+                    (
+                      player: string,
+                      idx: number
+                    ) => (
+
+                      <div
+                        key={idx}
+                        className="
+                          text-2xl
+                          font-bold
+                        "
+                      >
+                        {player || "-"}
+                      </div>
+
+                    )
+                  )}
+
+                </div>
+
+              </div>
+
+            );
+
+          }
+        )}
+
+      </div>
+
+    </div>
+
+  ) : (
+
+    <div className="bg-neutral-900 rounded-3xl overflow-hidden">
+
+      <table className="w-full h-full">
+
+        <thead className="bg-green-400 text-black">
+
+          <tr>
+
+            <th className="p-6 text-left text-3xl">
+              POS
+            </th>
+
+            <th className="p-6 text-left text-3xl">
+              PLAYER
+            </th>
+
+            <th className="p-6 text-left text-3xl">
+              DIV
+            </th>
+
+            <th className="p-6 text-left text-3xl">
+              SCORE
+            </th>
+
+          </tr>
+
+        </thead>
+
+        <tbody>
+
+          {activeScene?.type === "sponsor" && (
+
+            <tr>
+
+              <td
+                colSpan={4}
+                className="h-[700px]"
+              >
+
+                <div className="w-full h-full flex items-center justify-center p-10">
+
+                  <img
+                    src={activeScene.image}
+                    alt="Sponsor"
+                    className="
+                      max-h-full
+                      max-w-full
+                      object-contain
+                      rounded-3xl
+                    "
+                  />
+
+                </div>
+
+              </td>
+
+            </tr>
+
           )}
 
-        </div>
+          {activeScene?.rows?.map(
+            (row) => (
 
-      </td>
+              <tr
+                key={`${row.position}-${row.displayName}`}
+                className="border-b border-white/10"
+              >
 
-    </tr>
+                <td className="p-6 text-4xl font-black">
+                  {row.position}
+                </td>
+
+                <td className="p-6 text-4xl font-bold">
+                  {row.displayName}
+                </td>
+
+                <td className="p-6 text-3xl">
+                  {row.division}
+                </td>
+
+                <td className="p-6 text-4xl font-black text-green-400">
+                  {row.total}
+                </td>
+
+              </tr>
+
+            )
+          )}
+
+        </tbody>
+
+      </table>
+
+    </div>
 
   )}
 
-  {activeScene?.type === "sponsor" && (
-
-    <tr>
-
-      <td
-        colSpan={4}
-        className="h-[700px]"
-      >
-
-        <div className="w-full h-full flex items-center justify-center p-10">
-
-          <img
-            src={activeScene.image}
-            alt="Sponsor"
-            className="
-              max-h-full
-              max-w-full
-              object-contain
-              rounded-3xl
-            "
-          />
-
-        </div>
-
-      </td>
-
-    </tr>
-
-  )}
-
-  {activeScene?.rows?.map(
-    (row) => (
-
-      <tr
-        key={`${row.position}-${row.displayName}`}
-        className="border-b border-white/10"
-      >
-
-        <td className="p-6 text-4xl font-black">
-          {row.position}
-        </td>
-
-        <td className="p-6 text-4xl font-bold">
-          {row.displayName}
-        </td>
-
-        <td className="p-6 text-3xl">
-          {row.division}
-        </td>
-
-        <td className="p-6 text-4xl font-black text-green-400">
-          {row.total}
-        </td>
-
-      </tr>
-
-    )
-  )}
-
-</tbody>
-
-          </table>
-
-        </div>
+</div>
 
         {/* FOOTER */}
 

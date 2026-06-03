@@ -284,12 +284,12 @@ return (
           </button>
 
           <button
-            onClick={() =>
-              window.open(
-                `/teez-scoring/tv/main-screen/default?competitionId=${competitionId}`,
-                "_blank"
-              )
-            }
+  onClick={() =>
+    window.open(
+      `/teez-scoring/tv/default?competitionId=${competitionId}`,
+      "_blank"
+    )
+  }
             className="
               bg-green-400
               text-black
@@ -378,7 +378,7 @@ return (
 <button
   onClick={() =>
     window.open(
-      `/teez-scoring/tv/main-screen/default?competitionId=${competitionId}`,
+      `/teez-scoring/tv/default?competitionId=${competitionId}`,
       "_blank"
     )
   }

@@ -62,20 +62,23 @@ export default function TvBroadcastPage() {
   const [currentScene, setCurrentScene] =
     useState(0);
 
-  const [leaderboard, setLeaderboard] =
-    useState<LeaderboardRow[]>([]);
+const [leaderboard, setLeaderboard] =
+  useState<LeaderboardRow[]>([]);
 
-  const [
-    divisionLeaderboards,
-    setDivisionLeaderboards,
-  ] = useState<
-    Record<string, LeaderboardRow[]>
-  >({});
+const [
+  divisionLeaderboards,
+  setDivisionLeaderboards,
+] = useState<
+  Record<string, LeaderboardRow[]>
+>({});
 
-  const [slides, setSlides] =
-    useState<Slide[]>([]);
+const [slides, setSlides] =
+  useState<Slide[]>([]);
 
-    useEffect(() => {
+const [teeSheetRows, setTeeSheetRows] =
+  useState<any[]>([]);
+
+useEffect(() => {
   console.log("SLIDES", slides);
 }, [slides]);
 
@@ -104,17 +107,23 @@ export default function TvBroadcastPage() {
             snap.data();
 
           setLeaderboard(
-            Array.isArray(
-              data.leaderboard
-            )
-              ? data.leaderboard
-              : []
-          );
+  Array.isArray(
+    data.leaderboard
+  )
+    ? data.leaderboard
+    : []
+);
 
-          setDivisionLeaderboards(
-            data.divisionLeaderboards ||
-              {}
-          );
+setDivisionLeaderboards(
+  data.divisionLeaderboards ||
+    {}
+);
+
+setTeeSheetRows(
+  Array.isArray(data.rows)
+    ? data.rows
+    : []
+);
 
         }
       );
@@ -166,7 +175,37 @@ export default function TvBroadcastPage() {
   // BUILD SCENES
   // -----------------------------------
 
-  const scenes: Scene[] = [];
+  const teeGroups = Object.values(
+
+  teeSheetRows.reduce(
+    (acc: any, row: any) => {
+
+      const key =
+        `${row.teeTime}-${row.startingHole}`;
+
+      if (!acc[key]) {
+
+        acc[key] = {
+          teeTime: row.teeTime,
+          startingHole: row.startingHole,
+          players: [],
+        };
+
+      }
+
+      acc[key].players.push(
+        row.displayName || "-"
+      );
+
+      return acc;
+
+    },
+    {}
+  )
+
+);
+
+const scenes: Scene[] = [];
 
   slides.forEach((slide) => {
 
@@ -182,8 +221,8 @@ if (
 
   for (
     let i = 0;
-    i < leaderboard.length;
-    i += ROWS_PER_SCENE
+    i < teeGroups.length;
+    i += 8
   ) {
 
     scenes.push({
@@ -191,18 +230,13 @@ if (
       type: "teeSheet",
 
       title:
-        i === 0
-          ? slide.title
-          : `${slide.title} ${i + 1}-${Math.min(
-              i + ROWS_PER_SCENE,
-              leaderboard.length
-            )}`,
+        slide.title,
 
       rows:
-        leaderboard.slice(
+        teeGroups.slice(
           i,
-          i + ROWS_PER_SCENE
-        ),
+          i + 8
+        ) as any,
 
     });
 
@@ -421,7 +455,89 @@ if (
 
             </thead>
 
-            <tbody>
+   <tbody>
+
+  {activeScene?.type === "teeSheet" && (
+
+    <tr>
+
+      <td
+        colSpan={4}
+        className="p-10"
+      >
+
+        <div className="grid grid-cols-2 gap-8">
+
+          {(activeScene.rows as any[])?.map(
+            (group: any, index: number) => {
+
+              const players = [
+                ...(group.players || []),
+              ];
+
+              while (
+                players.length < 4
+              ) {
+                players.push("-");
+              }
+
+              return (
+
+                <div
+                  key={index}
+                  className="
+                    bg-black/40
+                    border border-white/10
+                    rounded-3xl
+                    p-6
+                  "
+                >
+
+                  <div className="text-3xl font-black text-cyan-400 mb-4">
+
+                    {group.teeTime}
+                    {" | "}
+                    HOLE {group.startingHole}
+
+                  </div>
+
+                  <div className="flex flex-col gap-3">
+
+                    {players.map(
+                      (
+                        player: string,
+                        idx: number
+                      ) => (
+
+                        <div
+                          key={idx}
+                          className="
+                            text-2xl
+                            font-bold
+                          "
+                        >
+                          {player || "-"}
+                        </div>
+
+                      )
+                    )}
+
+                  </div>
+
+                </div>
+
+              );
+
+            }
+          )}
+
+        </div>
+
+      </td>
+
+    </tr>
+
+  )}
 
   {activeScene?.type === "sponsor" && (
 

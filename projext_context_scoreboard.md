@@ -569,17 +569,16 @@ Displays:
 
 ---
 
-# Navigation System — Completed
+Navigation System — Completed
 
 All major scoring dashboards now support:
 
-* back navigation
-* dashboard routing
-* leaderboard routing
-* history navigation
-
----
-
+back navigation
+dashboard routing
+leaderboard routing
+history navigation
+broadcast builder navigation
+TV broadcast routing
 Current MVP Status
 Operational Core Now Working
 
@@ -607,6 +606,11 @@ competition history storage
 live leaderboard viewing
 competition routing/navigation
 realtime leaderboard updating
+TV broadcast builder
+TV slide management
+TV broadcast routing
+TV slide rotation engine
+TV broadcast storage
 Leaderboard Engine — Current Status
 Operational Features
 
@@ -662,30 +666,47 @@ responsive score/count-out inputs
 improved tee sheet alignment
 score/count-out compact layout
 leaderboard scoring optimization
+TV Broadcast System — Current Status
+Operational Features
+
+Completed:
+
+broadcast builder
+leaderboard slide creation
+tee sheet slide creation
+pairings slide creation
+sponsor slide creation
+TV broadcast storage
+TV broadcast retrieval
+slide rotation engine
+fullscreen TV broadcast mode
+realtime leaderboard broadcast rendering
 NEXT BUILD STAGE
-Realtime Leaderboard Enhancements
+TV Broadcast Enhancements
 
 Next focus:
 
-movement delta
+division leaderboard TV slide
+movement delta display
+leaderboard movement arrows
 leaderboard animations
-TV display mode
-fullscreen leaderboard broadcasting
-leaderboard auto-refresh
-division leaderboard rendering UI
-competition history dashboard UI
-live leaderboard visual enhancements
+sponsor image uploader
+TV device assignment
+TV playlist management
+broadcast scheduling
+club branding slides
 MVP PRIORITY STATUS
 
-Core realtime scoring engine is now operational.
+Core realtime scoring and broadcasting engine is now operational.
 
 Current operational focus:
 
 realtime scoring
 realtime leaderboard rebuilding
 live leaderboard broadcasting
-TV leaderboard systems
-realtime competition visibility
+TV broadcast systems
+fullscreen leaderboard visibility
+division leaderboard broadcasting
 
 Before:
 
@@ -693,3 +714,11 @@ AI systems
 GPS integrations
 streaming overlays
 advanced hardware systems
+IMMEDIATE NEXT BUILD
+Division Leaderboard TV Slide
+
+Add:
+
+ADD DIVISION LEADERBOARD SLIDE
+
+to Broadcast Builder.

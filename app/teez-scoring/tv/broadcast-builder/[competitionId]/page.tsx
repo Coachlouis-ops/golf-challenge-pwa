@@ -221,6 +221,45 @@ async function addSponsorSlide() {
             {competitionId}
           </p>
 
+<div className="mt-6 flex gap-4">
+
+  <button
+    onClick={() =>
+      window.history.back()
+    }
+    className="
+      bg-neutral-800
+      px-5
+      py-3
+      rounded-2xl
+      font-bold
+    "
+  >
+    ← BACK
+  </button>
+
+  <button
+    onClick={() =>
+      window.open(
+        `/teez-scoring/tv/main-screen/default?competitionId=${competitionId}`,
+        "_blank"
+      )
+    }
+    className="
+      bg-green-400
+      text-black
+      px-5
+      py-3
+      rounded-2xl
+      font-bold
+    "
+  >
+    OPEN BROADCAST
+  </button>
+
+</div>
+
+
         </div>
 
         {/* ACTIONS */}

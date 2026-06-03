@@ -292,6 +292,27 @@ async function addSponsorSlide() {
   ADD SPONSOR SLIDE
 </button>
 
+<button
+  onClick={() =>
+    window.open(
+      `/teez-scoring/tv/main-screen/default?competitionId=${competitionId}`,
+      "_blank"
+    )
+  }
+  className="
+    bg-green-500
+    text-black
+    px-8
+    py-5
+    rounded-2xl
+    font-black
+    hover:scale-105
+    transition
+  "
+>
+  OPEN BROADCAST
+</button>
+
 
         </div>
 

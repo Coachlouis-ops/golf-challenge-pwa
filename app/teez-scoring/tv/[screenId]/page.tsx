@@ -425,7 +425,7 @@ if (
 
         </div>
 
-        {/* TABLE */}
+   {/* TABLE */}
 
 <div className="flex-1">
 
@@ -504,7 +504,7 @@ if (
 
   ) : activeScene?.type === "sponsor" ? (
 
-    <div className="h-full bg-neutral-900 rounded-3xl overflow-hidden">
+    <div className="h-full rounded-3xl overflow-hidden">
 
       <img
         src={activeScene.image}
@@ -550,8 +550,6 @@ if (
 
         <tbody>
 
-      
-
           {activeScene?.rows?.map(
             (row) => (
 
@@ -591,21 +589,21 @@ if (
 
 </div>
 
-        {/* FOOTER */}
+{/* FOOTER */}
 
-        <div className="mt-6 flex justify-between text-2xl text-gray-500">
+<div className="mt-6 flex justify-between text-2xl text-gray-500">
 
-          <p>
-            Scene {currentScene + 1}
-            {" / "}
-            {scenes.length}
-          </p>
+  <p>
+    Scene {currentScene + 1}
+    {" / "}
+    {scenes.length}
+  </p>
 
-          <p>
-            Auto Rotating Broadcast
-          </p>
+  <p>
+    Auto Rotating Broadcast
+  </p>
 
-        </div>
+</div>
 
       </div>
 

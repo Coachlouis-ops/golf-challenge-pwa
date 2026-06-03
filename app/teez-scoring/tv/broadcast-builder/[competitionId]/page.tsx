@@ -209,6 +209,72 @@ await saveTvBroadcast({
 
 }
 
+async function deleteSlide(index: number) {
+
+  const updatedSlides =
+    slides.filter(
+      (_, i) => i !== index
+    );
+
+  setSlides(updatedSlides);
+
+  await saveTvBroadcast({
+    competitionId,
+    slides: updatedSlides,
+  });
+
+}
+
+async function moveSlideUp(index: number) {
+
+  if (index === 0) return;
+
+  const updatedSlides = [...slides];
+
+  [
+    updatedSlides[index - 1],
+    updatedSlides[index],
+  ] = [
+    updatedSlides[index],
+    updatedSlides[index - 1],
+  ];
+
+  setSlides(updatedSlides);
+
+  await saveTvBroadcast({
+    competitionId,
+    slides: updatedSlides,
+  });
+
+}
+
+async function moveSlideDown(index: number) {
+
+  if (
+    index ===
+    slides.length - 1
+  ) return;
+
+  const updatedSlides = [...slides];
+
+  [
+    updatedSlides[index + 1],
+    updatedSlides[index],
+  ] = [
+    updatedSlides[index],
+    updatedSlides[index + 1],
+  ];
+
+  setSlides(updatedSlides);
+
+  await saveTvBroadcast({
+    competitionId,
+    slides: updatedSlides,
+  });
+
+}
+
+
 
 return (
 
@@ -401,18 +467,57 @@ return (
 
                 </div>
 
-                <div
-                  className="
-                    bg-green-400
-                    text-black
-                    px-6
-                    py-3
-                    rounded-2xl
-                    font-black
-                  "
-                >
-                  ACTIVE
-                </div>
+          <div className="flex gap-2">
+
+  <button
+    onClick={() =>
+      moveSlideUp(index)
+    }
+    className="
+      bg-cyan-400
+      text-black
+      px-4
+      py-3
+      rounded-2xl
+      font-black
+    "
+  >
+    ↑
+  </button>
+
+  <button
+    onClick={() =>
+      moveSlideDown(index)
+    }
+    className="
+      bg-yellow-400
+      text-black
+      px-4
+      py-3
+      rounded-2xl
+      font-black
+    "
+  >
+    ↓
+  </button>
+
+  <button
+    onClick={() =>
+      deleteSlide(index)
+    }
+    className="
+      bg-red-500
+      text-white
+      px-4
+      py-3
+      rounded-2xl
+      font-black
+    "
+  >
+    X
+  </button>
+
+</div>
 
               </div>
 

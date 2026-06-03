@@ -18,7 +18,12 @@ import {
 
 import {
   db,
+  functions,
 } from "@/src/lib/firebase";
+
+import {
+  httpsCallable,
+} from "firebase/functions";
 
 export default function BroadcastBuilderPage() {
 
@@ -90,6 +95,13 @@ export default function BroadcastBuilderPage() {
 
   }, [competitionId]);
 
+
+  const saveTvBroadcast =
+  httpsCallable(
+    functions,
+    "saveTvBroadcast"
+  );
+
   async function addLeaderboardSlide() {
 
     const updatedSlides = [
@@ -105,23 +117,13 @@ export default function BroadcastBuilderPage() {
 
     setSlides(updatedSlides);
 
-    await setDoc(
+ await saveTvBroadcast({
 
-      doc(
-        db,
-        "tvBroadcasts",
-        competitionId
-      ),
+  competitionId,
 
-      {
-        slides: updatedSlides,
-      },
+  slides: updatedSlides,
 
-      {
-        merge: true,
-      }
-
-    );
+});
 
   }
 
@@ -141,23 +143,13 @@ export default function BroadcastBuilderPage() {
 
   setSlides(updatedSlides);
 
-  await setDoc(
+ await saveTvBroadcast({
 
-    doc(
-      db,
-      "tvBroadcasts",
-      competitionId
-    ),
+  competitionId,
 
-    {
-      slides: updatedSlides,
-    },
+  slides: updatedSlides,
 
-    {
-      merge: true,
-    }
-
-  );
+});
 
 }
 
@@ -176,23 +168,13 @@ async function addPairingsSlide() {
 
   setSlides(updatedSlides);
 
-  await setDoc(
+await saveTvBroadcast({
 
-    doc(
-      db,
-      "tvBroadcasts",
-      competitionId
-    ),
+  competitionId,
 
-    {
-      slides: updatedSlides,
-    },
+  slides: updatedSlides,
 
-    {
-      merge: true,
-    }
-
-  );
+});
 
 }
 
@@ -217,23 +199,13 @@ async function addSponsorSlide() {
 
   setSlides(updatedSlides);
 
-  await setDoc(
+await saveTvBroadcast({
 
-    doc(
-      db,
-      "tvBroadcasts",
-      competitionId
-    ),
+  competitionId,
 
-    {
-      slides: updatedSlides,
-    },
+  slides: updatedSlides,
 
-    {
-      merge: true,
-    }
-
-  );
+});
 
 }
 

@@ -502,6 +502,22 @@ if (
 
     </div>
 
+  ) : activeScene?.type === "sponsor" ? (
+
+    <div className="h-full bg-neutral-900 rounded-3xl overflow-hidden">
+
+      <img
+        src={activeScene.image}
+        alt="Sponsor"
+        className="
+          w-full
+          h-full
+          object-cover
+        "
+      />
+
+    </div>
+
   ) : (
 
     <div className="bg-neutral-900 rounded-3xl overflow-hidden">
@@ -534,34 +550,7 @@ if (
 
         <tbody>
 
-          {activeScene?.type === "sponsor" && (
-
-            <tr>
-
-              <td
-                colSpan={4}
-                className="h-[700px]"
-              >
-
-                <div className="w-full h-full flex items-center justify-center p-10">
-
-                 <img
-  src={activeScene.image}
-  alt="Sponsor"
-  className="
-    w-full
-    h-full
-    object-cover
-  "
-/>
-
-                </div>
-
-              </td>
-
-            </tr>
-
-          )}
+      
 
           {activeScene?.rows?.map(
             (row) => (

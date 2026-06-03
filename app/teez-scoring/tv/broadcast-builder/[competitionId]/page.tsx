@@ -15,6 +15,7 @@ import {
   setDoc,
 } from "firebase/firestore";
 
+
 import {
   db,
 } from "@/src/lib/firebase";
@@ -28,6 +29,9 @@ export default function BroadcastBuilderPage() {
 
   const [slides, setSlides] =
     useState<any[]>([]);
+
+  const [competitionName, setCompetitionName] =
+    useState("");
 
   useEffect(() => {
 
@@ -49,6 +53,38 @@ export default function BroadcastBuilderPage() {
         );
 
       });
+
+    return () => unsubscribe();
+
+  }, [competitionId]);
+
+  useEffect(() => {
+
+    if (!competitionId) return;
+
+    const unsubscribe =
+      onSnapshot(
+
+        doc(
+          db,
+          "competitions",
+          competitionId
+        ),
+
+        (snap) => {
+
+          if (!snap.exists()) return;
+
+          const data =
+            snap.data();
+
+          setCompetitionName(
+            data.competitionName || ""
+          );
+
+        }
+
+      );
 
     return () => unsubscribe();
 
@@ -86,6 +122,7 @@ export default function BroadcastBuilderPage() {
       }
 
     );
+
   }
 
 
@@ -201,66 +238,73 @@ async function addSponsorSlide() {
 }
 
 
-  return (
+return (
 
-    <main className="min-h-screen bg-black text-white p-10">
+  <main className="min-h-screen bg-black text-white p-10">
 
-      <div className="max-w-7xl mx-auto">
+    <div className="max-w-7xl mx-auto">
 
-        {/* HEADER */}
+      {/* HEADER */}
 
-        <div className="mb-12">
+      <div className="mb-12">
 
-          <h1 className="text-5xl font-black text-cyan-400 mb-4">
-            BROADCAST BUILDER
-          </h1>
+        <h1 className="text-5xl font-black text-cyan-400 mb-4">
+          BROADCAST BUILDER
+        </h1>
 
-          <p className="text-gray-400 text-xl">
+        <div className="text-gray-400 text-xl">
+
+          <p>
             Competition:
             <br />
+            {competitionName}
+          </p>
+
+          <p className="text-sm text-gray-500 mt-2">
             {competitionId}
           </p>
 
-<div className="mt-6 flex gap-4">
+        </div>
 
-  <button
-    onClick={() =>
-      window.history.back()
-    }
-    className="
-      bg-neutral-800
-      px-5
-      py-3
-      rounded-2xl
-      font-bold
-    "
-  >
-    ← BACK
-  </button>
+        <div className="mt-6 flex gap-4">
 
-  <button
-    onClick={() =>
-      window.open(
-        `/teez-scoring/tv/main-screen/default?competitionId=${competitionId}`,
-        "_blank"
-      )
-    }
-    className="
-      bg-green-400
-      text-black
-      px-5
-      py-3
-      rounded-2xl
-      font-bold
-    "
-  >
-    OPEN BROADCAST
-  </button>
+          <button
+            onClick={() =>
+              window.history.back()
+            }
+            className="
+              bg-neutral-800
+              px-5
+              py-3
+              rounded-2xl
+              font-bold
+            "
+          >
+            ← BACK
+          </button>
 
-</div>
-
+          <button
+            onClick={() =>
+              window.open(
+                `/teez-scoring/tv/main-screen/default?competitionId=${competitionId}`,
+                "_blank"
+              )
+            }
+            className="
+              bg-green-400
+              text-black
+              px-5
+              py-3
+              rounded-2xl
+              font-bold
+            "
+          >
+            OPEN BROADCAST
+          </button>
 
         </div>
+
+      </div>
 
         {/* ACTIONS */}
 

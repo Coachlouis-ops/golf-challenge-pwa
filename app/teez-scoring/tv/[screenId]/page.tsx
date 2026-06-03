@@ -75,6 +75,10 @@ export default function TvBroadcastPage() {
   const [slides, setSlides] =
     useState<Slide[]>([]);
 
+    useEffect(() => {
+  console.log("SLIDES", slides);
+}, [slides]);
+
   // -----------------------------------
   // LOAD COMPETITION
   // -----------------------------------

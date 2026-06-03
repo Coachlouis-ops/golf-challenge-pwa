@@ -234,41 +234,59 @@ if (
     // OVERALL LEADERBOARD
     // -----------------------------------
 
-    if (
-      slide.type ===
-      "leaderboard"
+if (
+  slide.type ===
+  "leaderboard"
+) {
+
+  if (
+    leaderboard.length === 0
+  ) {
+
+    scenes.push({
+
+      type: "leaderboard",
+
+      title:
+        slide.title,
+
+      rows: [],
+
+    });
+
+  } else {
+
+    for (
+      let i = 0;
+      i < leaderboard.length;
+      i += ROWS_PER_SCENE
     ) {
 
-      for (
-        let i = 0;
-        i < leaderboard.length;
-        i += ROWS_PER_SCENE
-      ) {
+      scenes.push({
 
-        scenes.push({
+        type: "leaderboard",
 
-          type: "leaderboard",
+        title:
+          i === 0
+            ? slide.title
+            : `${slide.title} ${i + 1}-${Math.min(
+                i + ROWS_PER_SCENE,
+                leaderboard.length
+              )}`,
 
-          title:
-            i === 0
-              ? slide.title
-              : `${slide.title} ${i + 1}-${Math.min(
-                  i + ROWS_PER_SCENE,
-                  leaderboard.length
-                )}`,
+        rows:
+          leaderboard.slice(
+            i,
+            i + ROWS_PER_SCENE
+          ),
 
-          rows:
-            leaderboard.slice(
-              i,
-              i + ROWS_PER_SCENE
-            ),
-
-        });
-
-      }
+      });
 
     }
 
+  }
+
+}
     // -----------------------------------
     // DIVISION LEADERBOARDS
     // -----------------------------------

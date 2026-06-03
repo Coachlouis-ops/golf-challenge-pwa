@@ -545,16 +545,15 @@ if (
 
                 <div className="w-full h-full flex items-center justify-center p-10">
 
-                  <img
-                    src={activeScene.image}
-                    alt="Sponsor"
-                    className="
-                      max-h-full
-                      max-w-full
-                      object-contain
-                      rounded-3xl
-                    "
-                  />
+                 <img
+  src={activeScene.image}
+  alt="Sponsor"
+  className="
+    w-full
+    h-full
+    object-cover
+  "
+/>
 
                 </div>
 

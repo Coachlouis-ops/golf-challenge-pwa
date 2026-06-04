@@ -35,7 +35,7 @@ How Teez Golf Challenges Works
               1. Create Your Account
             </h2>
             <p>
-              Join the global golf challenge platform by creating your account.
+              Join the global golf competition platform by creating your account.
               Members can create and join challenges, earn ranking points and
               compete with golfers around the world.
             </p>
@@ -43,11 +43,11 @@ How Teez Golf Challenges Works
 
           <section>
             <h2 className="text-2xl font-semibold text-white mb-2">
-              2. Buy Tokens
+              2. Enter Tournaments
             </h2>
             <p>
-              Tokens are used to enter challenges. Purchase tokens securely
-              through your wallet and use them to compete against other golfers.
+              Accepting an invite gets you into the tournament challenges. Enter securely
+              through using your credits in your wallet.
             </p>
           </section>
 
@@ -79,32 +79,26 @@ How Teez Golf Challenges Works
 
          <section>
   <h2 className="text-2xl font-semibold text-white mb-2">
-    5. Token Payouts
+    5. Prizes
   </h2>
   <p>
-    All players contribute tokens to a shared prize pool when entering a challenge.
-    There is no house cut — 100% of tokens are redistributed to players.
+    Entry fee's contribute to a shared prize pool when entering a challenge.
     <br /><br />
 
     <strong>Matchplay Challenges:</strong><br />
-    Players earn results based on matches (Win = 1, Draw = 0.5, Loss = 0).<br />
-    Drawn players receive their entry tokens back.<br />
-    The remaining pool is then split equally between winning players.<br />
-    Losing players do not receive tokens.
+    Players results are based on matchplay outcomes (Win = 1, Draw = 0.5, Loss = 0).<br />
     <br /><br />
 
     <strong>Stroke / Points Challenges:</strong><br />
-    • 2–7 Players: Winner takes 100% of the pool<br />
-    • 8+ Players: Top 25% of players are paid<br /><br />
+    • 2–8 Players: Only 8 positions for prizes<br />
+    • 8+ Players: Top 25% of players receive prizes<br /><br />
 
-    The winner receives <strong>65% of the total pool</strong>.
-    The remaining 35% is distributed across the other winning positions,
-    decreasing by 10% per position.
+    The winner receives <strong>65% of the entry fee's. </strong>.
+    Distribution of prizes are mainly 65% to winner, 35% across the remaining winning positions,
+    decreasing by increments of +/- 10% per position.
     <br /><br />
 
-    If players tie, their combined winnings are split evenly.
-    All payouts are rounded to whole tokens, and any leftover tokens are
-    awarded to the winner.
+    If players tie, their combined prizes are split evenly.
   </p>
 </section>
 
@@ -151,11 +145,10 @@ How Teez Golf Challenges Works
 
           <section>
             <h2 className="text-2xl font-semibold text-white mb-2">
-              8. Redeem Rewards
+              8. Redeem Prizes
             </h2>
             <p>
-              Winning players earn tokens that can be redeemed for prizes,
-              equipment, vouchers or cash withdrawals depending on eligibility.
+              Winning players can redeemed prizes via online redeen function. 
             </p>
           </section>
 

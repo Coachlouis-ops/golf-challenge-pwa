@@ -569,83 +569,245 @@ Displays:
 
 ---
 
-Navigation System — Completed
+# Navigation System — Completed
 
 All major scoring dashboards now support:
 
-back navigation
-dashboard routing
-leaderboard routing
-history navigation
-broadcast builder navigation
-TV broadcast routing
-Current MVP Status
-Operational Core Now Working
+* back navigation
+* dashboard routing
+* leaderboard routing
+* history navigation
+* broadcast builder navigation
+* TV broadcast routing
+
+---
+
+# Current MVP Status
+
+## Operational Core Now Working
 
 Completed operational systems:
 
-competition creation
-competition dashboard
-tee sheet generation
-automatic tee sheet architecture
-live score entry
-editable scoring rows
-editable divisions
-editable tee structures
-realtime leaderboard compilation
-global leaderboard compilation
-division leaderboard compilation
-tied position logic
-count-out scoring system
-manual count-out override inputs
-count-out leaderboard sorting
-global vs division position separation
-competition finalization
-finalized competition snapshots
-competition history storage
-live leaderboard viewing
-competition routing/navigation
-realtime leaderboard updating
-TV broadcast builder
-TV slide management
-TV broadcast routing
-TV slide rotation engine
-TV broadcast storage
-Leaderboard Engine — Current Status
-Operational Features
+* competition creation
+* competition dashboard
+* tee sheet generation
+* automatic tee sheet architecture
+* live score entry
+* editable scoring rows
+* editable divisions
+* editable tee structures
+* realtime leaderboard compilation
+* global leaderboard compilation
+* division leaderboard compilation
+* tied position logic
+* count-out scoring system
+* manual count-out override inputs
+* count-out leaderboard sorting
+* global vs division position separation
+* competition finalization
+* finalized competition snapshots
+* competition history storage
+* live leaderboard viewing
+* competition routing/navigation
+* realtime leaderboard updating
+* TV broadcast builder
+* TV slide management
+* TV broadcast routing
+* TV slide rotation engine
+* TV broadcast storage
+* sponsor image integration
+* tee sheet TV rendering
+* fullscreen sponsor slide rendering
+
+---
+
+# Core File Architecture
+
+## Competition Dashboard
+
+Route:
+
+```text
+/teez-scoring/competition/[competitionId]
+```
+
+Primary responsibilities:
+
+* competition management
+* tee sheet generation
+* score entry
+* division entry
+* leaderboard rebuilding
+* competition finalization
+* competition history snapshots
+
+Stores:
+
+```text
+competitions/{competitionId}
+```
+
+Contains:
+
+* rows
+* leaderboard
+* divisionLeaderboards
+* tee sheet configuration
+* competition settings
+
+---
+
+## Leaderboard Screen
+
+Route:
+
+```text
+/teez-scoring/leaderboard/[competitionId]
+```
+
+Responsibilities:
+
+* overall leaderboard rendering
+* division leaderboard rendering
+* live leaderboard viewing
+
+Reads:
+
+```text
+competitions/{competitionId}
+```
+
+Fields:
+
+```text
+leaderboard
+divisionLeaderboards
+```
+
+---
+
+## Competition History
+
+Route:
+
+```text
+/teez-scoring/history
+```
+
+Responsibilities:
+
+* finalized competition archive
+* historical leaderboard access
+
+Reads:
+
+```text
+scoringClubs/{clubId}/competitionHistory
+```
+
+---
+
+## Broadcast Builder
+
+Route:
+
+```text
+/teez-scoring/tv-builder/[competitionId]
+```
+
+Responsibilities:
+
+* create playlist
+* add/remove slides
+* broadcast ordering
+* sponsor management
+
+Stores:
+
+```text
+tvBroadcasts/{competitionId}
+```
+
+Slide types currently supported:
+
+```text
+leaderboard
+teeSheet
+pairings
+sponsor
+```
+
+---
+
+## TV Broadcast Engine
+
+Route:
+
+```text
+/teez-scoring/tv/main-screen/[screenId]
+```
+
+Responsibilities:
+
+* render broadcast playlist
+* scene rotation
+* fullscreen broadcast mode
+* sponsor rendering
+* leaderboard rendering
+* tee sheet rendering
+
+Reads:
+
+```text
+tvBroadcasts/{competitionId}
+competitions/{competitionId}
+```
+
+---
+
+# Leaderboard Engine — Current Status
+
+## Operational Features
 
 Leaderboard engine now supports:
 
-gross sorting
-nett sorting
-points sorting
-tied positions
-skipped tie positioning
-manual count-out ranking
-global leaderboard ranking
-independent division rankings
-count-out tie breaking
-sequential leaderboard rebuilding
-Count-Out System — Completed
-Manual Count-Out Architecture
+* gross sorting
+* nett sorting
+* points sorting
+* tied positions
+* skipped tie positioning
+* manual count-out ranking
+* global leaderboard ranking
+* independent division rankings
+* count-out tie breaking
+* sequential leaderboard rebuilding
 
-Scorers can now manually assign:
+---
 
+# Count-Out System — Completed
+
+## Manual Count-Out Architecture
+
+Scorers can manually assign:
+
+```text
 1
 2
 3
 4
+```
 
 to tied players/teams.
 
 Leaderboard engine then:
 
-sorts tied scores using count-out values
-awards sequential positions
-preserves proper leaderboard skips
+* sorts tied scores using count-out values
+* awards sequential positions
+* preserves proper leaderboard skips
 
 Example:
 
+```text
 1
 1
 1
@@ -654,71 +816,138 @@ Example:
 6
 6
 8
+```
 
 Global leaderboard remains fully independent from division leaderboards.
 
-Tee Sheet Engine — Enhanced
-Tee Sheet UI Improvements
+---
+
+# Tee Sheet Engine — Enhanced
+
+## Tee Sheet UI Improvements
 
 Completed:
 
-responsive score/count-out inputs
-improved tee sheet alignment
-score/count-out compact layout
-leaderboard scoring optimization
-TV Broadcast System — Current Status
-Operational Features
+* responsive score/count-out inputs
+* improved tee sheet alignment
+* score/count-out compact layout
+* leaderboard scoring optimization
+* automatic tee generation
+* Tee 1 support
+* Tee 10 support
+* Tee 1 & 10 support
+* shotgun architecture
+* TV tee sheet slide rendering
+
+---
+
+# Sponsor Slide System — Completed
+
+## Sponsor Architecture
 
 Completed:
 
-broadcast builder
-leaderboard slide creation
-tee sheet slide creation
-pairings slide creation
-sponsor slide creation
-TV broadcast storage
-TV broadcast retrieval
-slide rotation engine
-fullscreen TV broadcast mode
-realtime leaderboard broadcast rendering
-NEXT BUILD STAGE
-TV Broadcast Enhancements
+* sponsor slide creation
+* sponsor image URL support
+* public folder image hosting
+* fullscreen sponsor rendering
+* object-cover scaling
+* playlist integration
+* scene rotation support
+
+Example sponsor URLs:
+
+```text
+/sponsors/honeybadgertech.png
+/sponsors/teez_logo1.png
+/sponsors/vector.png
+```
+
+---
+
+# TV Broadcast System — Current Status
+
+## Operational Features
+
+Completed:
+
+* broadcast builder
+* leaderboard slide creation
+* tee sheet slide creation
+* pairings slide creation
+* sponsor slide creation
+* TV broadcast storage
+* TV broadcast retrieval
+* slide rotation engine
+* fullscreen TV broadcast mode
+* realtime leaderboard broadcast rendering
+* realtime tee sheet broadcast rendering
+* fullscreen sponsor rendering
+
+---
+
+# NEXT BUILD STAGE
+
+# TV Broadcast Enhancements
 
 Next focus:
 
-division leaderboard TV slide
-movement delta display
-leaderboard movement arrows
-leaderboard animations
-sponsor image uploader
-TV device assignment
-TV playlist management
-broadcast scheduling
-club branding slides
-MVP PRIORITY STATUS
+* division leaderboard TV slide
+* movement delta display
+* leaderboard movement arrows
+* leaderboard animations
+* sponsor image uploader
+* TV device assignment
+* TV playlist management
+* slide reordering
+* slide deletion controls
+* broadcast scheduling
+* club branding slides
+
+---
+
+# MVP PRIORITY STATUS
 
 Core realtime scoring and broadcasting engine is now operational.
 
 Current operational focus:
 
-realtime scoring
-realtime leaderboard rebuilding
-live leaderboard broadcasting
-TV broadcast systems
-fullscreen leaderboard visibility
-division leaderboard broadcasting
+* realtime scoring
+* realtime leaderboard rebuilding
+* live leaderboard broadcasting
+* TV broadcast systems
+* fullscreen leaderboard visibility
+* division leaderboard broadcasting
 
 Before:
 
-AI systems
-GPS integrations
-streaming overlays
-advanced hardware systems
-IMMEDIATE NEXT BUILD
-Division Leaderboard TV Slide
+* AI systems
+* GPS integrations
+* streaming overlays
+* advanced hardware systems
+
+---
+
+# IMMEDIATE NEXT BUILD
+
+## Division Leaderboard TV Slide
 
 Add:
 
+```text
 ADD DIVISION LEADERBOARD SLIDE
+```
 
 to Broadcast Builder.
+
+Broadcast flow will then support:
+
+```text
+Leaderboard
+Division Leaderboard
+Tee Sheet
+Pairings
+Sponsor
+```
+
+inside a single rotating TV playlist.

@@ -1,61 +1,23 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/src/lib/AuthContext";
 import { useEffect, useState } from "react";
-import { db } from "@/src/lib/firebase";
-import { doc, getDoc } from "firebase/firestore";
 
 export default function PaymentPage() {
   const router = useRouter();
-  const { user, loading } = useAuth();
+  const loading = false;
 
   const [profile, setProfile] = useState<any>(null);
   const [accepted, setAccepted] = useState(false);
   const [checkingVerification, setCheckingVerification] = useState(true);
+// -----------------------------------
+// PUBLIC PAYMENT PAGE
+// -----------------------------------
+useEffect(() => {
 
-  // -----------------------------------
-  // LOAD PROFILE
-  // -----------------------------------
-  useEffect(() => {
-   if (!user) {
   setCheckingVerification(false);
-  return;
-}
 
-    (async () => {
-      try {
-        const ref = doc(db, "profiles", user.uid);
-        const snap = await getDoc(ref);
-
-        if (!snap.exists()) {
-          alert("Profile not found");
-          router.push("/profile");
-          return;
-        }
-
-        const data = snap.data();
-
-        setProfile(data);
-
-        // -----------------------------------
-        // BLOCK UNVERIFIED USERS
-        // -----------------------------------
-        if (!data.phoneVerified) {
-          router.push("/verify-phone");
-          return;
-        }
-
-        setCheckingVerification(false);
-
-      } catch (err) {
-        console.error(err);
-        alert("Failed to load profile");
-        router.push("/verify-phone");
-      }
-    })();
-  }, [user, router]);
-
+}, []);
   // -----------------------------------
   // STRIPE (DISABLED)
   // -----------------------------------
@@ -136,17 +98,15 @@ uid: profile.uid,
   // -----------------------------------
   // LOADING
   // -----------------------------------
-  if (loading || checkingVerification) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-black text-white">
-        Loading...
-      </div>
-    );
-  }
+ if (checkingVerification) {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-black text-white">
+      Loading...
+    </div>
+  );
+}
 
-  console.log("USER:", user);
 console.log("PROFILE:", profile);
-console.log("LOADING:", loading);
 console.log("CHECKING:", checkingVerification);
 
   return (

@@ -112,17 +112,10 @@ const handleExit = () => {
   </div>
 
   {/* SHOP BUTTON */}
-  <div className="flex justify-center">
-    <button
-      onClick={() => router.push("/honeybadgergolfshop")}
-      className="px-6 py-2 rounded-xl text-sm font-semibold 
-      bg-cyan-400 text-black 
-      shadow-[0_0_20px_rgba(34,211,238,1)] 
-      animate-pulse hover:scale-110 transition"
-    >
-      Honey Badger Golf Shop
-    </button>
-  </div>
+  
+
+
+
 
   {/* CONTACT */}
   <div className="flex justify-center">
@@ -172,14 +165,7 @@ const handleExit = () => {
   onClick={() => router.push("/app")}
   className="bg-green-400 text-black px-8 py-3 rounded-full font-semibold animate-pulse shadow-[0_0_20px_rgba(34,197,94,0.8)] hover:scale-105 transition"
 >
-  REGISTER
-</button>
-
-<button
-  onClick={() => router.push("/app")}
-  className="bg-green-400 text-black px-8 py-3 rounded-full font-semibold animate-pulse shadow-[0_0_20px_rgba(34,197,94,0.8)] hover:scale-105 transition"
->
-  LOGIN
+  PAY REGISTRATION FEE
 </button>
 
             </div>

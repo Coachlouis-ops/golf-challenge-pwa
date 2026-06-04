@@ -35,15 +35,14 @@ export default function TermsPage() {
     You must be at least 18 years old or have verified parental consent to use the Platform.
   </p>
 
-  <p className="font-semibold">3. Digital Tokens</p>
+  <p className="font-semibold">3. Competition Entries</p>
   <p>
-    The Platform uses digital tokens for participation in challenges. Tokens are not currency, have no monetary value,
-    are non-refundable, non-transferable, and cannot be withdrawn or exchanged for cash.
+    The Platform uses entry fee's for participation in challenges. Entry fee's are non-refundable & non-transferable.
   </p>
 
   <p className="font-semibold">4. Payments</p>
   <p>
-    All payments are processed through secure third-party providers including Stripe and PayFast.
+    All payments are processed through secure third-party provider PayFast.
     Payments are final and non-reversible once completed.
   </p>
 
@@ -55,20 +54,19 @@ export default function TermsPage() {
 
   <p className="font-semibold">6. Rewards</p>
   <p>
-    Rewards may include vouchers, goods, or other non-cash equivalents depending on user category and applicable regulations.
-    Rewards are final once issued.
+    Prizes are awarded on merit of applicable regulations and are final once issued.
   </p>
 
   <p className="font-semibold">7. Risk Disclaimer</p>
   <p>
-    Participation involves risk. Users may lose tokens through unsuccessful challenge outcomes.
-    The Platform does not guarantee any winnings or returns.
+    Participation enter and compete at own risk and Honey Badger Technologies PTY. LTD and/or Teez Golf Challenges are 
+    not responsible for any losses that may occur due to entering a competition.  
   </p>
 
   <p className="font-semibold">8. Fraud & Misuse</p>
   <p>
     Any attempt to manipulate results, exploit the system, or engage in fraudulent activity may result in account suspension,
-    forfeiture of tokens, and permanent banning.
+    and permanent banning.
   </p>
 
   <p className="font-semibold">9. Data & Privacy</p>

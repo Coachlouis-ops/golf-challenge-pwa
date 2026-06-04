@@ -203,12 +203,6 @@ const handleExit = () => {
             Golf dates back to at least 1457 in Scotland, where it was played as a direct contest between players.
           </p>
 
-          <button
-            onClick={() => router.push("/app")}
-            className="bg-green-400 text-black px-8 py-3 rounded-full font-semibold animate-pulse shadow-[0_0_20px_rgba(34,197,94,0.8)] hover:scale-105 transition"
-          >
-            Join Now
-          </button>
 
         </div>
       </section>
@@ -267,14 +261,7 @@ const handleExit = () => {
           </div>
 
           <div className="flex justify-center mt-14">
-            <button
-              onClick={() => router.push("/app")}
-              className="bg-green-400 text-black px-10 py-4 rounded-full font-bold 
-              shadow-[0_0_25px_rgba(34,197,94,0.8)] 
-              hover:scale-105 transition"
-            >
-              START COMPETING
-            </button>
+           
           </div>
 
         </div>

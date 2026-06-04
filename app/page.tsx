@@ -150,18 +150,18 @@ const handleExit = () => {
         <div className="max-w-3xl mx-auto">
 
           <h2 className="text-2xl md:text-3xl font-semibold mb-4">
-            The Worlds Only Mobile Golf Wallet
+            The Worlds Only On-Line Golf Competition Platform
           </h2>
 
           <p className="text-gray-600 mb-8">
-            Join the Teez Golf Challenge for exciting matchups.<br />
+            Join the Teez Golf Challenge for exciting competitions.<br />
             Compete. Win. Elevate your game.
           </p>
 
           <p className="text-xs text-gray-500 mb-6 max-w-xl mx-auto">
             Teez Golf Challenges is operated by Honey Badger Technologies PTY LTD. 
-            All payments are made to Honey Badger Technologies PTY LTD for digital tokens and membership access to participate in skill-based challenges. 
-            Tokens are non-refundable, non-transferable, and cannot be exchanged for cash.
+            All payments are made to Honey Badger Technologies PTY LTD registration and competition participation access to challenges. 
+            Payments are non-refundable & non-transferable.
           </p>
 
          <div className="flex flex-col items-center gap-4">
@@ -255,11 +255,11 @@ const handleExit = () => {
 
             <p>
               Teez Golf Challenges brings that format back into focus by creating structured 
-              challenges where golfers compete directly against one another.
+              challenges for players to compete. 
             </p>
 
             <p>
-              Players enter matches using tokens as entry credits and compete over real rounds of golf. 
+              Players enter matches and compete over real rounds of golf. 
               Whether it’s stroke play, matchplay, or challenge-based formats, each competition is designed 
               to produce a clear result — a winner and a loser — just as the game was always intended.
             </p>
@@ -270,14 +270,12 @@ const handleExit = () => {
             </p>
 
             <p>
-              Tokens are won through competition and can be redeemed for vouchers, products, 
-              and approved rewards, giving real value to strong performance on the course.
+              Competitions are won and there are lost of prizes up for grabs.
             </p>
 
             <p className="font-semibold text-black">
               Teez Golf Challenges is not a betting platform. 
-              It is a structured, skill-based competitive system that restores the competitive edge of golf — 
-              where players don’t just play rounds, they play to win.
+              It is a structured, skills-based competition system that invites and creates a platform for competing. 
             </p>
 
           </div>
@@ -308,25 +306,25 @@ const handleExit = () => {
 
             <div className="text-center">
               <img src="/hero-teez.jpg" className="w-full mb-4" />
-              <h3 className="font-semibold mb-2">Play a Match against an Opponent</h3>
+              <h3 className="font-semibold mb-2">A competition is created</h3>
               <p className="text-gray-400 text-sm">
-                Create any type of challenge - Matchplay, Strokeplay. Choose from over 30 type of Challenges.
+                The challenge format is set - Matchplay, Strokeplay. Choose from over 30 type of Challenges.
               </p>
             </div>
 
             <div className="text-center">
               <img src="/wallet.png" className="w-full mb-4" />
-              <h3 className="font-semibold mb-2">Your Golf Wallet</h3>
+              <h3 className="font-semibold mb-2">Enter the Competition</h3>
               <p className="text-gray-400 text-sm">
-                Buy tokens to fund your wallet. Enter a challenge by tokens. Win tokens, redeem tokens. See your wallet grow!
+                Enter a challenge by adding funds to your wallet. 
               </p>
             </div>
 
             <div className="text-center">
               <img src="/voucher_badger.png" className="w-full mb-4" />
-              <h3 className="font-semibold mb-2">Redeem your Vouchers</h3>
+              <h3 className="font-semibold mb-2">Redeem your Prizes</h3>
               <p className="text-gray-400 text-sm">
-                Tokens can be redeemed for prizes, equipment, vouchers.
+                At conclusion - prizes can be redeemed.
               </p>
             </div>
 

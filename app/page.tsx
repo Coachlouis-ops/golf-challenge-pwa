@@ -165,7 +165,7 @@ const handleExit = () => {
  onClick={() => router.push("/payment")}
   className="bg-green-400 text-black px-8 py-3 rounded-full font-semibold animate-pulse shadow-[0_0_20px_rgba(34,197,94,0.8)] hover:scale-105 transition"
 >
-  PAY REGISTRATION FEE
+  PAY COMPETITION FEE
 </button>
 
             </div>

@@ -13,28 +13,41 @@ function DashboardContent() {
   // ------------------------------
   // FIX: HANDLE PAYFAST RETURN STATE
   // ------------------------------
-  useEffect(() => {
+useEffect(() => {
   const params = new URLSearchParams(window.location.search);
   const paymentUid = params.get("uid");
 
   if (!paymentUid) return;
+
+  // Guest checkout payment return
+  if (paymentUid.startsWith("guest_")) {
+
+    console.log("Guest payment return detected");
+
+    window.history.replaceState({}, "", "/dashboard");
+
+    return;
+  }
+
+  // Registered user payment return
   if (!user) return;
 
   console.log("RETURN UID:", paymentUid);
   console.log("AUTH UID:", user.uid);
 
-  // 🚨 CRITICAL: enforce correct user
   if (user.uid !== paymentUid) {
-    console.log("UID mismatch → forcing correct session");
 
-    // hard reset to login so correct user is restored
-    window.location.href = "/login";
+    console.log("UID mismatch");
+
+    window.history.replaceState({}, "", "/dashboard");
+
     return;
   }
 
-  // ✅ correct user → clean URL (no reload loop)
   window.history.replaceState({}, "", "/dashboard");
+
 }, [user]);
+
 
   if (loading) {
     return (

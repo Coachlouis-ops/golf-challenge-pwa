@@ -7,7 +7,11 @@ export default function PaymentPage() {
   const router = useRouter();
   const loading = false;
 
-  const [profile, setProfile] = useState<any>(null);
+
+  const [selectedProduct, setSelectedProduct] = useState("membership");
+  const [competitionAmount, setCompetitionAmount] = useState(50);
+
+
   const [accepted, setAccepted] = useState(false);
   const [checkingVerification, setCheckingVerification] = useState(true);
 // -----------------------------------
@@ -41,36 +45,43 @@ useEffect(() => {
     // -----------------------------------
     // USER CHECK
     // -----------------------------------
-  if (!profile) {
-  alert("User profile not loaded");
-  return;
-}
+
 
     // -----------------------------------
     // PHONE VERIFICATION CHECK
     // -----------------------------------
-    if (!profile.phoneVerified) {
-      alert("Phone number not verified");
-      router.push("/verify-phone");
-      return;
-    }
+    
 
-    const res = await fetch("/api/payfast-initiate", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        amount: 10.99,
-        item_name: "Teez Golf Membership",
-        name_first: profile.name || "",
-        name_last: profile.surname || "",
-        email_address: profile.email || "",
-uid: profile.uid,
-        type: "membership",
-        tokens: 0,
-      }),
-    });
+const res = await fetch("/api/payfast-initiate", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({
+    amount:
+      selectedProduct === "membership"
+        ? 189.99
+        : competitionAmount,
+
+    item_name:
+      selectedProduct === "membership"
+        ? "Teez Golf Membership"
+        : `Competition Entry Fee R${competitionAmount}`,
+
+    name_first: "Guest",
+    name_last: "User",
+    email_address: "guest@teezgolf.com",
+
+    uid: `guest_${Date.now()}`,
+
+    type:
+      selectedProduct === "membership"
+        ? "membership"
+        : "competition",
+
+    tokens: 0,
+  }),
+});
 
     const response = await res.json();
 
@@ -106,7 +117,6 @@ uid: profile.uid,
   );
 }
 
-console.log("PROFILE:", profile);
 console.log("CHECKING:", checkingVerification);
 
   return (
@@ -130,14 +140,60 @@ console.log("CHECKING:", checkingVerification);
       {/* CARD */}
       <div className="bg-zinc-800 border border-zinc-600 p-8 rounded-xl shadow-xl flex flex-col gap-6 text-center max-w-md">
 
-        <h3 className="text-xl font-bold text-green-400">
-          Teez Golf Membership
-        </h3>
+       <h3 className="text-xl font-bold text-green-400">
+  Payment Checkout
+</h3>
 
-        <p className="text-4xl font-bold">
-          R189.99
-          <span className="text-sm text-gray-400"> / year</span>
-        </p>
+<p className="text-lg text-gray-300">
+  Select the item you would like to pay for.
+</p>
+
+
+
+<div className="space-y-4">
+
+  <button
+    onClick={() => setSelectedProduct("membership")}
+    className={`w-full p-4 rounded-lg border ${
+      selectedProduct === "membership"
+        ? "border-green-400 bg-green-400 text-black"
+        : "border-gray-500"
+    }`}
+  >
+    Membership Registration - R189.99
+  </button>
+
+  <button
+    onClick={() => setSelectedProduct("competition")}
+    className={`w-full p-4 rounded-lg border ${
+      selectedProduct === "competition"
+        ? "border-green-400 bg-green-400 text-black"
+        : "border-gray-500"
+    }`}
+  >
+    Competition Entry Fee
+  </button>
+
+  {selectedProduct === "competition" && (
+    <select
+      value={competitionAmount}
+      onChange={(e) =>
+        setCompetitionAmount(Number(e.target.value))
+      }
+      className="w-full bg-black border border-gray-500 p-3 rounded"
+    >
+      <option value={50}>R50</option>
+      <option value={100}>R100</option>
+      <option value={250}>R250</option>
+      <option value={500}>R500</option>
+      <option value={750}>R750</option>
+      <option value={1000}>R1000</option>
+      <option value={1500}>R1500</option>
+      <option value={2000}>R2000</option>
+    </select>
+  )}
+
+</div>
 
         {/* LEGAL BLOCK */}
         <div className="text-xs text-gray-400 space-y-2 text-left">
@@ -192,7 +248,7 @@ console.log("CHECKING:", checkingVerification);
 
       {/* BACK */}
       <button
-        onClick={() => router.push("/dashboard")}
+        onClick={() => router.push("/")}
         className="text-sm text-gray-400 underline"
       >
         Back to Dashboard

@@ -23,7 +23,7 @@ type InviteItem = {
 };
 
 export default function MyInvitesPage() {
-  const { user } = useAuth();
+
   const router = useRouter();
 
   const [invites, setInvites] = useState<InviteItem[]>([]);
@@ -35,7 +35,6 @@ export default function MyInvitesPage() {
       setLoading(true);
 
       const results: InviteItem[] = [];
-
       const invitesRef = collection(db, "userInvites", uid, "invites");
       const snap = await getDocs(invitesRef);
 
@@ -91,59 +90,13 @@ export default function MyInvitesPage() {
   }
 
   useEffect(() => {
-    if (!user) return;
-    loadInvites(user.uid);
-  }, [user]);
 
-  async function handleAccept(challengeId: string) {
-    if (!user) return;
+  setInvites([]);
 
-    try {
-      setProcessingId(challengeId);
+  setLoading(false);
 
-      const acceptSecure = httpsCallable(
-        functions,
-        "acceptInviteSecure"
-      );
+}, []);
 
-      await acceptSecure({ challengeId });
-
-      await loadInvites(user.uid);
-    } catch (e: any) {
-      alert(e.message || "Failed to accept invite");
-    } finally {
-      setProcessingId(null);
-    }
-  }
-
-  async function handleDecline(challengeId: string) {
-    if (!user) return;
-
-    try {
-      setProcessingId(challengeId);
-
-      const declineSecure = httpsCallable(
-        functions,
-        "declineInviteSecure"
-      );
-
-      await declineSecure({ challengeId });
-
-      await loadInvites(user.uid);
-    } catch (e: any) {
-      alert(e.message || "Failed to decline invite");
-    } finally {
-      setProcessingId(null);
-    }
-  }
-
-  if (!user) {
-    return (
-      <main className="min-h-screen flex items-center justify-center text-white bg-black">
-        Please log in to view invites
-      </main>
-    );
-  }
 
   if (loading) {
     return (
@@ -197,26 +150,9 @@ export default function MyInvitesPage() {
 
             {invite.status === "pending" && (
               <div className="flex gap-3">
-                <button
-                  onClick={() =>
-                    handleAccept(invite.challengeId)
-                  }
-                  disabled={
-                    processingId === invite.challengeId
-                  }
-                  className="bg-green-500 text-black px-4 py-2 rounded"
-                >
-                  Accept
-                </button>
+               
 
-                <button
-                  onClick={() =>
-                    handleDecline(invite.challengeId)
-                  }
-                  className="bg-gray-700 px-4 py-2 rounded"
-                >
-                  Decline
-                </button>
+              
               </div>
             )}
 

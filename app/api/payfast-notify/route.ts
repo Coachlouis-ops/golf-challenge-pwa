@@ -161,22 +161,49 @@ export async function POST(req: Request) {
       }
     }
 
-    if (type === "tokens") {
-      const expectedAmount = TOKEN_MAP[tokenAmount];
+if (type === "competition") {
 
-      if (!expectedAmount || Number(expectedAmount) !== Number(amount)) {
-        console.error("Invalid token amount:", {
-          tokenAmount,
-          expectedAmount,
-          received: amount,
-        });
+  const validCompetitionFees = [
+    50,
+    100,
+    250,
+    500,
+    750,
+    1000,
+    1500,
+    2000,
+  ];
 
-        return NextResponse.json(
-          { error: "Invalid token amount" },
-          { status: 400 }
-        );
-      }
-    }
+  if (!validCompetitionFees.includes(Number(amount))) {
+
+    console.error(
+      "Invalid competition fee:",
+      amount
+    );
+
+    return NextResponse.json(
+      { error: "Invalid competition amount" },
+      { status: 400 }
+    );
+  }
+}
+
+if (type === "tokens") {
+  const expectedAmount = TOKEN_MAP[tokenAmount];
+
+  if (!expectedAmount || Number(expectedAmount) !== Number(amount)) {
+    console.error("Invalid token amount:", {
+      tokenAmount,
+      expectedAmount,
+      received: amount,
+    });
+
+    return NextResponse.json(
+      { error: "Invalid token amount" },
+      { status: 400 }
+    );
+  }
+}
 
     // ------------------------------
     // MEMBERSHIP
@@ -263,11 +290,18 @@ export async function POST(req: Request) {
       status: "paid",
 
       description:
-        type === "membership"
-          ? "Membership"
-          : "Token Purchase",
+  type === "membership"
+    ? "Membership Registration"
+    : type === "competition"
+    ? "Competition Entry Fee"
+    : "Token Purchase",
 
-      quantity: type === "membership" ? 1 : tokenAmount,
+quantity:
+  type === "membership"
+    ? 1
+    : type === "competition"
+    ? 1
+    : tokenAmount,
 
       unitPrice:
         type === "membership"
@@ -308,9 +342,11 @@ export async function POST(req: Request) {
           <hr/>
 
           <p><strong>Description:</strong> ${
-            type === "membership"
-              ? "Membership"
-              : "Token Purchase"
+           type === "membership"
+  ? "Membership Registration"
+  : type === "competition"
+  ? "Competition Entry Fee"
+  : "Token Purchase"
           }</p>
 
           <p><strong>Total Paid:</strong> R${amount}</p>

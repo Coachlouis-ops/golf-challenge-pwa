@@ -122,51 +122,49 @@ useEffect(() => {
             }
           `}</style>
 
-          {user && (
-            <>
-              <button
-                onClick={() => router.push("/challenges/create")}
-                className="arena-btn"
-              >
-                CREATE CHALLENGE
-              </button>
+         <>
+  <button
+    onClick={() => router.push("/challenges/create")}
+    className="arena-btn"
+  >
+    CREATE CHALLENGE
+  </button>
 
-              <button
-                onClick={() => router.push("/my-challenges")}
-                className="arena-btn"
-              >
-                MY CHALLENGES
-              </button>
+  <button
+    onClick={() => router.push("/my-challenges")}
+    className="arena-btn"
+  >
+    MY CHALLENGES
+  </button>
 
-              <button
-                onClick={() => router.push("/my-invites")}
-                className="arena-btn"
-              >
-                MY INVITES
-              </button>
+  <button
+    onClick={() => router.push("/my-invites")}
+    className="arena-btn"
+  >
+    MY INVITES
+  </button>
 
-              <button
-                onClick={() => router.push("/profile")}
-                className="arena-btn"
-              >
-                MY PROFILE
-              </button>
+  <button
+    onClick={() => router.push("/profile")}
+    className="arena-btn"
+  >
+    MY PROFILE
+  </button>
 
-              <button
-                onClick={() => router.push("/wallet")}
-                className="arena-btn"
-              >
-                WALLET
-              </button>
+  <button
+    onClick={() => router.push("/wallet")}
+    className="arena-btn"
+  >
+    WALLET
+  </button>
 
-              <button
-                onClick={() => router.push("/vouchers")}
-                className="arena-btn"
-              >
-                MY VOUCHERS
-              </button>
-            </>
-          )}
+  <button
+    onClick={() => router.push("/vouchers")}
+    className="arena-btn"
+  >
+    MY VOUCHERS
+  </button>
+</>
 
           <button
             onClick={() => router.push("/")}

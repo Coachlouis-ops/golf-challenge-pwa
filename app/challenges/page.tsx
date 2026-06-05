@@ -23,24 +23,7 @@ export default function ChallengesPage() {
 
   useEffect(() => {
 
-  setChallenges([
-    {
-      challengeId: "demo1",
-      challengeTitle: "Saturday Club Challenge",
-      courseName: "Serengeti Golf Club",
-      gameFormat: "Match Play",
-      entryTokens: 10,
-      status: "Open",
-    },
-    {
-      challengeId: "demo2",
-      challengeTitle: "Monthly Major",
-      courseName: "Leopard Creek",
-      gameFormat: "Stroke Play",
-      entryTokens: 25,
-      status: "Completed",
-    },
-  ]);
+  setChallenges([]);
 
   setLoading(false);
 
@@ -77,11 +60,23 @@ export default function ChallengesPage() {
           CHALLENGES
         </h1>
 
-        {challenges.length === 0 && (
-          <p className="text-gray-400 text-center">
-            No challenges found.
-          </p>
-        )}
+     {challenges.length === 0 && (
+  <div className="bg-neutral-900/80 border border-neutral-700 rounded-xl p-6 text-center">
+
+    <h2 className="text-xl font-bold text-green-400 mb-2">
+      Demo Account
+    </h2>
+
+    <p className="text-gray-300">
+      No active challenges.
+    </p>
+
+    <p className="text-gray-500 text-sm mt-3">
+      Challenge invitations and competition requests will appear here.
+    </p>
+
+  </div>
+)}
 
         <div className="flex flex-col gap-4">
 

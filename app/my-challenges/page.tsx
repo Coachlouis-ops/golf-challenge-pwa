@@ -11,7 +11,6 @@ import {
   getDoc,
 } from "firebase/firestore";
 import { db } from "@/src/lib/firebase";
-import { useAuth } from "@/src/lib/AuthContext";
 import RequireAuth from "@/src/lib/RequireAuth";
 
 type ChallengeItem = {
@@ -23,91 +22,19 @@ type ChallengeItem = {
 };
 
 export default function MyChallengesPage() {
-  const { user } = useAuth();
+ 
   const router = useRouter();
 
   const [challenges, setChallenges] = useState<ChallengeItem[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!user) return;
 
-    async function fetchChallenges() {
-      const uid = user!.uid;
+  setChallenges([]);
 
-      // 🔹 1. CREATOR CHALLENGES
-      const creatorQuery = query(
-        collection(db, "challenges"),
-        where("creatorUid", "==", uid)
-      );
+  setLoading(false);
 
-      const creatorSnap = await getDocs(creatorQuery);
-
-      const creatorList: ChallengeItem[] = creatorSnap.docs.map((docSnap) => {
-        const data = docSnap.data();
-
-        return {
-          id: docSnap.id,
-          challengeTitle: data.challengeTitle,
-          createdAt: data.createdAt,
-          finalizedAt: data.finalizedAt,
-          isCompleted:
-            data.status === "completed" || !!data.finalizedAt,
-        };
-      });
-
-      // 🔹 2. PLAYER CHALLENGES (SCAN)
-      const allSnap = await getDocs(collection(db, "challenges"));
-
-      const playerList: ChallengeItem[] = [];
-
-      for (const docSnap of allSnap.docs) {
-        const playerRef = doc(
-          db,
-          "challenges",
-          docSnap.id,
-          "players",
-          uid
-        );
-
-        const playerDoc = await getDoc(playerRef);
-
-        if (playerDoc.exists()) {
-          const data = docSnap.data();
-
-          playerList.push({
-            id: docSnap.id,
-            challengeTitle: data.challengeTitle,
-            createdAt: data.createdAt,
-            finalizedAt: data.finalizedAt,
-            isCompleted:
-              data.status === "completed" || !!data.finalizedAt,
-          });
-        }
-      }
-
-      // 🔹 3. MERGE + REMOVE DUPLICATES
-      const map = new Map<string, ChallengeItem>();
-
-      [...creatorList, ...playerList].forEach((c) => {
-        map.set(c.id, c);
-      });
-
-      const finalList = Array.from(map.values());
-
-      // 🔹 4. SORT
-      finalList.sort((a, b) => {
-        const aTime = a.createdAt?.seconds || 0;
-        const bTime = b.createdAt?.seconds || 0;
-        return bTime - aTime;
-      });
-
-      setChallenges(finalList);
-      setLoading(false);
-    }
-
-    fetchChallenges();
-  }, [user]);
+}, []);
 
   if (loading) {
     return (
@@ -118,7 +45,6 @@ export default function MyChallengesPage() {
   }
 
   return (
-    <RequireAuth>
       <main className="relative min-h-screen bg-black text-white overflow-hidden">
 
         {/* BACKGROUND */}
@@ -206,6 +132,5 @@ export default function MyChallengesPage() {
         </div>
 
       </main>
-    </RequireAuth>
   );
 }

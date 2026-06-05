@@ -1,4 +1,3 @@
-import { initializeApp } from "firebase/app";
 import {
   getAuth,
   setPersistence,
@@ -11,14 +10,7 @@ import {
   signInWithPhoneNumber,
 } from "firebase/auth";
 
-  // -----------------------------------
-  // PHONE OTP
-  // -----------------------------------
-  RecaptchaVerifier,
-  signInWithPhoneNumber,
-} from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
-import { getFunctions } from "firebase/functions";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCnSwLt32Mnln_UfQKwtEvpSm6TLdqhlYg",

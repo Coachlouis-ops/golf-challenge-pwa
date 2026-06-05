@@ -60,6 +60,10 @@ export default function ChallengesPage() {
           CHALLENGES
         </h1>
 
+        <p className="text-red-500 text-center">
+  MY CHALLENGES DEMO V1
+</p>
+
      {challenges.length === 0 && (
   <div className="bg-neutral-900/80 border border-neutral-700 rounded-xl p-6 text-center">
 

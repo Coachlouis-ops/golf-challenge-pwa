@@ -22,43 +22,30 @@ export default function ChallengesPage() {
   const [challenges, setChallenges] = useState<Challenge[]>([]);
 
   useEffect(() => {
-    if (!user) return;
 
-    (async () => {
-     const q = query(
-  collection(db, "challenges"),
-  where("participants", "array-contains", user.uid),
-  orderBy("createdAt", "desc")
-);
+  setChallenges([
+    {
+      challengeId: "demo1",
+      challengeTitle: "Saturday Club Challenge",
+      courseName: "Serengeti Golf Club",
+      gameFormat: "Match Play",
+      entryTokens: 10,
+      status: "Open",
+    },
+    {
+      challengeId: "demo2",
+      challengeTitle: "Monthly Major",
+      courseName: "Leopard Creek",
+      gameFormat: "Stroke Play",
+      entryTokens: 25,
+      status: "Completed",
+    },
+  ]);
 
-      const snap = await getDocs(q);
+  setLoading(false);
 
-      const rows: Challenge[] = snap.docs.map((d) => {
-        const data = d.data() as any;
-
-        return {
-          challengeId: data.challengeId || d.id,
-          challengeTitle: data.challengeTitle || "—",
-          courseName: data.courseName || "—",
-          gameFormat: data.gameFormat || "—",
-          entryTokens: data.entryTokens || 0,
-          status: data.status || "—",
-          createdAt: data.createdAt,
-        };
-      });
-
-      setChallenges(rows);
-      setLoading(false);
-    })();
-  }, [user]);
-
-  if (!user) {
-    return (
-      <main className="min-h-screen flex items-center justify-center text-white bg-black">
-        <p>No user loaded</p>
-      </main>
-    );
-  }
+}, []);
+  
 
   if (loading) {
     return (

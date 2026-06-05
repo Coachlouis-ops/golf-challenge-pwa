@@ -29,23 +29,27 @@ export async function POST(req: Request) {
     // -----------------------------------
     // SERVER SIDE SOURCE OF TRUTH
     // -----------------------------------
-    let finalAmount = "0.00";
+ let finalAmount = "0.00";
 
-    if (type === "membership") {
-      finalAmount = "189.99";
-    }
+if (type === "membership") {
+  finalAmount = "189.99";
+}
 
-    if (type === "tokens") {
-      const tokenMap: Record<number, number> = {
-        100: 109,
-        500: 525,
-        1000: 1020,
-      };
+if (type === "competition") {
+  finalAmount = Number(amount || 0).toFixed(2);
+}
 
-      finalAmount = Number(
-        tokenMap[Number(tokens)] || amount || 0
-      ).toFixed(2);
-    }
+if (type === "tokens") {
+  const tokenMap: Record<number, number> = {
+    100: 109,
+    500: 525,
+    1000: 1020,
+  };
+
+  finalAmount = Number(
+    tokenMap[Number(tokens)] || amount || 0
+  ).toFixed(2);
+}
 
     // -----------------------------------
     // BUILD PARAM OBJECT

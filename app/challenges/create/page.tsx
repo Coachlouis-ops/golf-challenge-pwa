@@ -450,40 +450,20 @@ if (
     scoringMethod &&
     courseName.trim().length > 0;
 
-  async function handleCreate() {
-    if (!isValid) {
-      alert("Please complete all fields correctly.");
-      return;
-    }
+async function handleCreate() {
 
-    try {
-      setLoading(true);
-
-      const createChallenge =
-        httpsCallable(functions, "createChallenge");
-
-      const result: any = await createChallenge({
-        challengeTitle: challengeTitle.trim(),
-        entryTokens: Number(entryTokens),
-        teamFormat,
-        gameFormat,
-        typeOfGame,
-        scoringMethod,
-        courseName: courseName.trim(),
-      });
-
-      const challengeId =
-        result.data.challengeId;
-
-      router.push(`/challenges/${challengeId}`);
-    } catch (err: any) {
-      alert(
-        err.message || "Failed to create challenge"
-      );
-    } finally {
-      setLoading(false);
-    }
+  if (!isValid) {
+    alert("Please complete all fields correctly.");
+    return;
   }
+
+  alert(
+    "Demo Mode: Challenge creation is disabled for demonstration purposes."
+  );
+
+  return;
+
+}
 
   return (
     <RequireAuth>

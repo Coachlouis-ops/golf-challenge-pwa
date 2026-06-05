@@ -466,7 +466,7 @@ async function handleCreate() {
 }
 
   return (
-    <RequireAuth>
+
       <main className="min-h-screen flex justify-center items-center px-4 py-16 text-white relative overflow-hidden bg-black">
 
         <div className="absolute inset-0 opacity-20 animate-pulse pointer-events-none bg-[radial-gradient(circle,#39FF14_1px,transparent_1px)] bg-[size:40px_40px]" />
@@ -870,9 +870,7 @@ async function handleCreate() {
           >
             ← Back to Dashboard
           </button>
-
         </div>
       </main>
-    </RequireAuth>
-  );
+    );
 }

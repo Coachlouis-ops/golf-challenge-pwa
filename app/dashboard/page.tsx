@@ -183,9 +183,5 @@ useEffect(() => {
 }
 
 export default function Dashboard() {
-  return (
-    <MembershipGuard>
-      <DashboardContent />
-    </MembershipGuard>
-  );
+  return <DashboardContent />;
 }

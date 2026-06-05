@@ -1,10 +1,15 @@
 import { initializeApp } from "firebase/app";
 import {
   getAuth,
+  setPersistence,
+  browserLocalPersistence,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   signOut,
   sendEmailVerification,
+  RecaptchaVerifier,
+  signInWithPhoneNumber,
+} from "firebase/auth";
 
   // -----------------------------------
   // PHONE OTP
@@ -28,6 +33,14 @@ const app = initializeApp(firebaseConfig);
 
 /* ===== AUTH ===== */
 export const auth = getAuth(app);
+
+setPersistence(auth, browserLocalPersistence)
+  .then(() => {
+    console.log("Firebase persistence enabled");
+  })
+  .catch((err) => {
+    console.error("Persistence error:", err);
+  });
 
 // -------------------------------------------------
 // PHONE OTP EXPORTS

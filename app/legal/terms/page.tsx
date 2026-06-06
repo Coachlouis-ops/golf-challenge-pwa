@@ -17,7 +17,7 @@ export default function LegalTermsPage() {
         <p>
           Honey Badger Technologies (PTY) LTD is a business in the digital services industry that offers
           access to online platforms, including Teez Golf Challenges, which provide skill-based competitions,
-          memberships, and digital token-based participation systems.
+          memberships, and digital participation systems.
         </p>
 
         {/* 2 */}

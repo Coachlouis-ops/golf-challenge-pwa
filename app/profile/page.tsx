@@ -98,8 +98,6 @@ type RankingPosition = {
 
 export default function ProfilePage() {
   const router = useRouter();
-  const { user } = useAuth();
-
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -170,75 +168,14 @@ const clubInputRef = useRef<HTMLInputElement | null>(null);
 /* LOAD PROFILE */
 
 useEffect(() => {
-  if (!user) return;
 
-  (async () => {
+  setProfileExists(false);
 
-const profileRef = doc(db, "profiles", user.uid);
-const rankingRef = doc(db, "playerRankings", user.uid);
-const walletRef = doc(db, "wallets", user.uid);
+  setIsEditing(true);
 
-const [
-  profileSnap,
-  rankingSnap,
-  walletSnap,
-] = await Promise.all([
-  getDoc(profileRef),
-  getDoc(rankingRef),
-  getDoc(walletRef),
-]);
+  setLoading(false);
 
-    // ---------------- PROFILE ----------------
-    if (profileSnap.exists()) {
-      setProfile(profileSnap.data() as Profile);
-      setProfileExists(true);
-      setIsEditing(false);
-    } else {
-      setProfileExists(false);
-      setIsEditing(true);
-    }
-
-    // ---------------- WALLET ----------------
-    if (walletSnap.exists()) {
-      const data = walletSnap.data();
-
-      setProfileWallet({
-        winningTokens: data.winningTokens || 0,
-        lockedTokens: data.lockedTokens || 0,
-      });
-    }
-
-   // ---------------- RANKING (REAL ONLY — NO OFFSET) ----------------
-if (rankingSnap.exists()) {
-  const data = rankingSnap.data();
-
-  setRankingPosition({
-
-  // GLOBAL
-  clubPosition: data.clubPosition || 0,
-  provincePosition: data.provincePosition || 0,
-  nationalPosition: data.nationalPosition || 0,
-  internationalPosition: data.internationalPosition || 0,
-
-  // DIVISION
-  divisionClubPosition:
-    data.divisionClubPosition || 0,
-
-  divisionProvincePosition:
-    data.divisionProvincePosition || 0,
-
-  divisionNationalPosition:
-    data.divisionNationalPosition || 0,
-
-  divisionInternationalPosition:
-    data.divisionInternationalPosition || 0,
-});
-}
-
-    setLoading(false);
-
-  })();
-}, [user]);
+}, []);
 
 /* GOOGLE CLUB SEARCH */
 
@@ -326,149 +263,15 @@ useEffect(() => {
 
   /* SAVE PROFILE */
 
-  async function saveProfile() {
-    if (!user) return;
-
-    const uid = user.uid;
-
-   // DOB VALIDATION (YYYY/MM/DD)
-const dobRegex = /^\d{4}\/\d{2}\/\d{2}$/;
-
-if (!dobRegex.test(profile.dateOfBirth)) {
-  alert("Date of Birth must be in format YYYY/MM/DD (e.g. 1977/12/30)");
-  return;
-}
-
-setSaving(true);
-
-try {
-
-  // -------------------------------------------------
-  // FORMAT PHONE NUMBER
-  // -------------------------------------------------
-    let formattedPhone = profile.phoneNumber
-    .replace(/\s/g, "")
-    .replace(/-/g, "");
-
-  // -------------------------------------------------
-  // SOUTH AFRICA PHONE NORMALIZATION
-  // ACCEPTS:
-  // 0828370266
-  // +27828370266
-  // 27828370266
-  // -------------------------------------------------
-
-  if (formattedPhone.startsWith("0")) {
-
-    formattedPhone =
-      "+27" + formattedPhone.substring(1);
-
-  } else if (
-    formattedPhone.startsWith("27")
-  ) {
-
-    formattedPhone =
-      "+" + formattedPhone;
-
-  } else if (
-    !formattedPhone.startsWith("+27")
-  ) {
-
-    alert(
-      "Phone number must be South African format"
-    );
-
-    setSaving(false);
-
-    return;
-  }
-
-  // -------------------------------------------------
-  // SEARCH INDEX
-  // -------------------------------------------------
-  const searchIndex =
-    `${profile.name} ${profile.surname} ${profile.battleName} ${profile.club} ${profile.country} ${profile.stateProvince}`
-      .toLowerCase();
-
-  // -------------------------------------------------
-  // SAVE PROFILE
-  // -------------------------------------------------
-  await setDoc(
-    doc(db, "profiles", uid),
-    {
-      ...profile,
-
-      uid,
-
-      phoneNumber: formattedPhone,
-
-    // -------------------------------------------------
-// RESET VERIFICATION ONLY IF PHONE CHANGED
-// -------------------------------------------------
-phoneVerified:
-  profile.phoneNumber === formattedPhone
-    ? (profile as any).phoneVerified ?? false
-    : false,
-
-phoneVerifiedAt:
-  profile.phoneNumber === formattedPhone
-    ? (profile as any).phoneVerifiedAt ?? null
-    : null,
-
-      searchIndex,
-
-      updatedAt: serverTimestamp(),
-      createdAt: serverTimestamp(),
-    },
-    { merge: true }
-  );
-
-alert("Profile saved successfully.");
-
-setProfileExists(true);
-setIsEditing(false);
-
-// -------------------------------------------------
-// ONLY VERIFY DURING FIRST SETUP
-// -------------------------------------------------
-
-if (!(profile as any).phoneVerified) {
-
-  localStorage.setItem(
-    "phoneVerificationUid",
-    uid
-  );
-
-  router.push("/verify-phone");
-
-  return;
-}
-
-// -------------------------------------------------
-// NORMAL PROFILE UPDATE
-// -------------------------------------------------
-
-router.push("/dashboard");
-
-} catch (err: any) {
-
-  console.error(err);
+async function saveProfile() {
 
   alert(
-    err.message || "Failed to send OTP"
+    "Demo Mode: Profile saving disabled."
   );
 
+  return;
+
 }
-
-setSaving(false);
-  }
-
-  if (!user)
-    return (
-      <main className="min-h-screen flex items-center justify-center text-white">
-        No user loaded
-      </main>
-    );
 
   if (loading)
     return (
@@ -497,7 +300,9 @@ setSaving(false);
     TEEZ PROFILE
   </h1>
 
-  <p className="text-gray-400 text-sm">{user.email}</p>
+<p className="text-gray-400 text-sm">
+  Demo Account
+</p>
 
 </div>
 

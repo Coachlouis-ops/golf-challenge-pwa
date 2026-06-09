@@ -1,27 +1,60 @@
+
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/src/lib/AuthContext";
 import { useEffect, useState } from "react";
+import { db } from "@/src/lib/firebase";
+import { doc, getDoc } from "firebase/firestore";
 
 export default function PaymentPage() {
   const router = useRouter();
-  const loading = false;
+  const { user, loading } = useAuth();
 
-
-  const [selectedProduct, setSelectedProduct] = useState("membership");
-  const [competitionAmount, setCompetitionAmount] = useState(50);
-
-
+  const [profile, setProfile] = useState<any>(null);
   const [accepted, setAccepted] = useState(false);
   const [checkingVerification, setCheckingVerification] = useState(true);
-// -----------------------------------
-// PUBLIC PAYMENT PAGE
-// -----------------------------------
-useEffect(() => {
 
-  setCheckingVerification(false);
+  // -----------------------------------
+  // LOAD PROFILE
+  // -----------------------------------
+  useEffect(() => {
+    if (!user) {
+      setCheckingVerification(false);
+      return;
+    }
 
-}, []);
+    (async () => {
+      try {
+        const ref = doc(db, "profiles", user.uid);
+        const snap = await getDoc(ref);
+
+        if (!snap.exists()) {
+          alert("Profile not found");
+          router.push("/profile");
+          return;
+        }
+
+        const data = snap.data();
+        setProfile(data);
+
+        // -----------------------------------
+        // BLOCK UNVERIFIED USERS
+        // -----------------------------------
+        if (!data.phoneVerified) {
+          router.push("/verify-phone");
+          return;
+        }
+
+        setCheckingVerification(false);
+      } catch (err) {
+        console.error(err);
+        alert("Failed to load profile");
+        router.push("/verify-phone");
+      }
+    })();
+  }, [user, router]);
+
   // -----------------------------------
   // STRIPE (DISABLED)
   // -----------------------------------
@@ -33,7 +66,6 @@ useEffect(() => {
   // PAYFAST
   // -----------------------------------
   async function startPayFast() {
-
     // -----------------------------------
     // TERMS
     // -----------------------------------
@@ -45,43 +77,36 @@ useEffect(() => {
     // -----------------------------------
     // USER CHECK
     // -----------------------------------
-
+    if (!profile) {
+      alert("User profile not loaded");
+      return;
+    }
 
     // -----------------------------------
     // PHONE VERIFICATION CHECK
     // -----------------------------------
-    
+    if (!profile.phoneVerified) {
+      alert("Phone number not verified");
+      router.push("/verify-phone");
+      return;
+    }
 
-const res = await fetch("/api/payfast-initiate", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-  },
-  body: JSON.stringify({
-    amount:
-      selectedProduct === "membership"
-        ? 189.99
-        : competitionAmount,
-
-    item_name:
-      selectedProduct === "membership"
-        ? "Teez Golf Membership"
-        : `Competition Entry Fee R${competitionAmount}`,
-
-    name_first: "Guest",
-    name_last: "User",
-    email_address: "guest@teezgolf.com",
-
-    uid: `guest_${Date.now()}`,
-
-    type:
-      selectedProduct === "membership"
-        ? "membership"
-        : "competition",
-
-    tokens: 0,
-  }),
-});
+    const res = await fetch("/api/payfast-initiate", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        amount: 10.99,
+        item_name: "Teez Golf Membership",
+        name_first: profile.name || "",
+        name_last: profile.surname || "",
+        email_address: profile.email || "",
+        uid: profile.uid,
+        type: "membership",
+        tokens: 0,
+      }),
+    });
 
     const response = await res.json();
 
@@ -109,29 +134,25 @@ const res = await fetch("/api/payfast-initiate", {
   // -----------------------------------
   // LOADING
   // -----------------------------------
- if (checkingVerification) {
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-black text-white">
-      Loading...
-    </div>
-  );
-}
+  if (loading || checkingVerification) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-black text-white">
+        Loading...
+      </div>
+    );
+  }
 
-console.log("CHECKING:", checkingVerification);
+  console.log("USER:", user);
+  console.log("PROFILE:", profile);
+  console.log("LOADING:", loading);
+  console.log("CHECKING:", checkingVerification);
 
   return (
     <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center gap-10 px-6">
-
       {/* HERO */}
       <div className="text-center flex flex-col gap-3">
-        <h1 className="text-5xl font-bold text-green-400">
-          WELCOME
-        </h1>
-
-        <h2 className="text-3xl font-semibold">
-          Start Your Journey
-        </h2>
-
+        <h1 className="text-5xl font-bold text-green-400">WELCOME</h1>
+        <h2 className="text-3xl font-semibold">Start Your Journey</h2>
         <p className="text-gray-400 max-w-xl">
           Enter the world of competitive golf challenges.
         </p>
@@ -139,67 +160,19 @@ console.log("CHECKING:", checkingVerification);
 
       {/* CARD */}
       <div className="bg-zinc-800 border border-zinc-600 p-8 rounded-xl shadow-xl flex flex-col gap-6 text-center max-w-md">
+        <h3 className="text-xl font-bold text-green-400">
+          Teez Golf Membership
+        </h3>
 
-       <h3 className="text-xl font-bold text-green-400">
-  Payment Checkout
-</h3>
-
-<p className="text-lg text-gray-300">
-  Select the item you would like to pay for.
-</p>
-
-
-
-<div className="space-y-4">
-
-  <button
-    onClick={() => setSelectedProduct("membership")}
-    className={`w-full p-4 rounded-lg border ${
-      selectedProduct === "membership"
-        ? "border-green-400 bg-green-400 text-black"
-        : "border-gray-500"
-    }`}
-  >
-    Membership Registration - R189.99
-  </button>
-
-  <button
-    onClick={() => setSelectedProduct("competition")}
-    className={`w-full p-4 rounded-lg border ${
-      selectedProduct === "competition"
-        ? "border-green-400 bg-green-400 text-black"
-        : "border-gray-500"
-    }`}
-  >
-    Competition Entry Fee
-  </button>
-
-  {selectedProduct === "competition" && (
-    <select
-      value={competitionAmount}
-      onChange={(e) =>
-        setCompetitionAmount(Number(e.target.value))
-      }
-      className="w-full bg-black border border-gray-500 p-3 rounded"
-    >
-      <option value={50}>R50</option>
-      <option value={100}>R100</option>
-      <option value={250}>R250</option>
-      <option value={500}>R500</option>
-      <option value={750}>R750</option>
-      <option value={1000}>R1000</option>
-      <option value={1500}>R1500</option>
-      <option value={2000}>R2000</option>
-    </select>
-  )}
-
-</div>
+        <p className="text-4xl font-bold">
+          R189.99 <span className="text-sm text-gray-400">/ year</span>
+        </p>
 
         {/* LEGAL BLOCK */}
         <div className="text-xs text-gray-400 space-y-2 text-left">
-
           <p>
-            Payments are processed by <strong>Honey Badger Technologies (PTY) LTD</strong> via PayFast.
+            Payments are processed by{" "}
+            <strong>Honey Badger Technologies (PTY) LTD</strong> via PayFast.
           </p>
 
           <p>
@@ -209,7 +182,8 @@ console.log("CHECKING:", checkingVerification);
               className="underline cursor-pointer text-green-400"
             >
               Terms & Conditions
-            </span>.
+            </span>
+            .
           </p>
 
           <label className="flex items-center gap-2 mt-2">
@@ -220,7 +194,6 @@ console.log("CHECKING:", checkingVerification);
             />
             <span>I agree to the Terms & Conditions</span>
           </label>
-
         </div>
 
         {/* PAYFAST */}
@@ -243,17 +216,15 @@ console.log("CHECKING:", checkingVerification);
         >
           Pay with Stripe (Coming Soon)
         </button>
-
       </div>
 
       {/* BACK */}
       <button
-        onClick={() => router.push("/")}
+        onClick={() => router.push("/dashboard")}
         className="text-sm text-gray-400 underline"
       >
         Back to Dashboard
       </button>
-
     </div>
   );
 }

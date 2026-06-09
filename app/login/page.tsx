@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -7,76 +8,69 @@ import { doc, getDoc } from "firebase/firestore";
 
 export default function LoginPage() {
   const router = useRouter();
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-async function handleSubmit(e: React.FormEvent) {
-  e.preventDefault();
-  setError(null);
-  setLoading(true);
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setError(null);
+    setLoading(true);
 
-  try {
-    const userCred = await login(email, password);
+    try {
+      const userCred = await login(email, password);
 
-    // 🔥 FORCE HARD REFRESH FROM FIREBASE
-    await userCred.user.reload();
+      // 🔥 FORCE HARD REFRESH FROM FIREBASE
+      await userCred.user.reload();
 
-    // 🔥 GET FRESH USER FROM AUTH (NOT STALE OBJECT)
-    const freshUser = userCred.user;
+      // 🔥 GET FRESH USER FROM AUTH (NOT STALE OBJECT)
+      const freshUser = userCred.user;
 
-    // 🔥 EXTRA SAFETY: CHECK AGAIN FROM AUTH INSTANCE
-    const isVerified = freshUser.emailVerified;
+      // 🔥 EXTRA SAFETY: CHECK AGAIN FROM AUTH INSTANCE
+      const isVerified = freshUser.emailVerified;
 
-    if (!isVerified) {
-      router.push("/verify-email");
-      return;
+      if (!isVerified) {
+        router.push("/verify-email");
+        return;
+      }
+
+      await handleRouting(freshUser.uid);
+    } catch (err: any) {
+      console.log("LOGIN ERROR:", err);
+      setError(err.code || err.message);
+    } finally {
+      setLoading(false);
     }
-
-    await handleRouting(freshUser.uid);
-
-  } catch (err: any) {
-    console.log("LOGIN ERROR:", err);
-    setError(err.code || err.message);
-  } finally {
-    setLoading(false);
   }
-}
 
   // -------------------------------
   // CENTRAL ROUTING LOGIC
   // -------------------------------
- async function handleRouting(uid: string) {
+  async function handleRouting(uid: string) {
+    const profileRef = doc(db, "profiles", uid);
+    const profileSnap = await getDoc(profileRef);
 
-  const profileRef = doc(db, "profiles", uid);
-  const profileSnap = await getDoc(profileRef);
+    if (!profileSnap.exists()) {
+      router.push("/create-profile");
+      return;
+    }
 
+    // ✅ READ ROLE FROM USERS COLLECTION (CORRECT)
+    const userRef = doc(db, "users", uid);
+    const userSnap = await getDoc(userRef);
+    const role = userSnap.exists() ? userSnap.get("role") || "player" : "player";
 
-  if (!profileSnap.exists()) {
-    router.push("/create-profile");
-    return;
+    // 🔴 ADMIN
+    if (role === "admin") {
+      router.push("/admin");
+      return;
+    }
+
+    // 🔴 PLAYER
+    router.push("/dashboard");
   }
-
-  // ✅ READ ROLE FROM USERS COLLECTION (CORRECT)
-  const userRef = doc(db, "users", uid);
-  const userSnap = await getDoc(userRef);
-
-  const role = userSnap.exists()
-    ? userSnap.get("role") || "player"
-    : "player";
-
-  // 🔴 ADMIN
-  if (role === "admin") {
-    router.push("/admin");
-    return;
-  }
-
-  // 🔴 PLAYER
-  router.push("/dashboard");
-}
 
   return (
     <main className="min-h-screen flex items-center justify-center">
@@ -85,37 +79,35 @@ async function handleSubmit(e: React.FormEvent) {
           Sign In or Register
         </h1>
 
-   <input
-  type="email"
-  placeholder="Email"
-  value={email}
-  onChange={(e) => setEmail(e.target.value)}
-  className="w-full border p-2"
-  required
-/>
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="w-full border p-2"
+          required
+        />
 
-<div className="relative">
-  <input
-    type={showPassword ? "text" : "password"}
-    placeholder="Password"
-    value={password}
-    onChange={(e) => setPassword(e.target.value)}
-    className="w-full border p-2 pr-10"
-    required
-  />
+        <div className="relative">
+          <input
+            type={showPassword ? "text" : "password"}
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full border p-2 pr-10"
+            required
+          />
 
-  <button
-    type="button"
-    onClick={() => setShowPassword((prev) => !prev)}
-    className="absolute right-2 top-1/2 -translate-y-1/2 text-sm text-gray-500"
-  >
-    {showPassword ? "🙈" : "👁"}
-  </button>
-</div>
+          <button
+            type="button"
+            onClick={() => setShowPassword((prev) => !prev)}
+            className="absolute right-2 top-1/2 -translate-y-1/2 text-sm text-gray-500"
+          >
+            {showPassword ? "🙈" : "👁"}
+          </button>
+        </div>
 
-        {error && (
-          <p className="text-red-600 text-sm">{error}</p>
-        )}
+        {error && <p className="text-red-600 text-sm">{error}</p>}
 
         <button
           type="submit"

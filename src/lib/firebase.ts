@@ -1,17 +1,18 @@
-import { initializeApp } from "firebase/app";
 
+import { initializeApp } from "firebase/app";
 import {
   getAuth,
-  setPersistence,
-  browserLocalPersistence,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   signOut,
   sendEmailVerification,
+
+  // -----------------------------------
+  // PHONE OTP
+  // -----------------------------------
   RecaptchaVerifier,
   signInWithPhoneNumber,
 } from "firebase/auth";
-
 import { getFirestore } from "firebase/firestore";
 import { getFunctions } from "firebase/functions";
 
@@ -29,18 +30,9 @@ const app = initializeApp(firebaseConfig);
 /* ===== AUTH ===== */
 export const auth = getAuth(app);
 
-setPersistence(auth, browserLocalPersistence)
-  .then(() => {
-    console.log("Firebase persistence enabled");
-  })
-  .catch((err) => {
-    console.error("Persistence error:", err);
-  });
-
 // -------------------------------------------------
 // PHONE OTP EXPORTS
 // -------------------------------------------------
-
 export { RecaptchaVerifier, signInWithPhoneNumber };
 
 /* ===== FIRESTORE ===== */
@@ -50,7 +42,6 @@ export const db = getFirestore(app);
 export const functions = getFunctions(app, "europe-west1");
 
 /* ===== AUTH HELPERS ===== */
-
 export async function login(email: string, password: string) {
   return signInWithEmailAndPassword(auth, email, password);
 }
@@ -59,8 +50,8 @@ export async function register(email: string, password: string) {
   const userCred = await createUserWithEmailAndPassword(auth, email, password);
 
   await sendEmailVerification(userCred.user, {
-  url: "https://www.teezgolfchallenges.com/verify-success",
-});
+    url: "https://www.teezgolfchallenges.com/verify-success",
+  });
 
   return userCred;
 }

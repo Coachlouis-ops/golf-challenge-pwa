@@ -450,23 +450,43 @@ if (
     scoringMethod &&
     courseName.trim().length > 0;
 
-async function handleCreate() {
+  async function handleCreate() {
+    if (!isValid) {
+      alert("Please complete all fields correctly.");
+      return;
+    }
 
-  if (!isValid) {
-    alert("Please complete all fields correctly.");
-    return;
+    try {
+      setLoading(true);
+
+      const createChallenge =
+        httpsCallable(functions, "createChallenge");
+
+      const result: any = await createChallenge({
+        challengeTitle: challengeTitle.trim(),
+        entryTokens: Number(entryTokens),
+        teamFormat,
+        gameFormat,
+        typeOfGame,
+        scoringMethod,
+        courseName: courseName.trim(),
+      });
+
+      const challengeId =
+        result.data.challengeId;
+
+      router.push(`/challenges/${challengeId}`);
+    } catch (err: any) {
+      alert(
+        err.message || "Failed to create challenge"
+      );
+    } finally {
+      setLoading(false);
+    }
   }
 
-  alert(
-    "Demo Mode: Challenge creation is disabled for demonstration purposes."
-  );
-
-  return;
-
-}
-
   return (
-
+    <RequireAuth>
       <main className="min-h-screen flex justify-center items-center px-4 py-16 text-white relative overflow-hidden bg-black">
 
         <div className="absolute inset-0 opacity-20 animate-pulse pointer-events-none bg-[radial-gradient(circle,#39FF14_1px,transparent_1px)] bg-[size:40px_40px]" />
@@ -870,7 +890,9 @@ async function handleCreate() {
           >
             ← Back to Dashboard
           </button>
+
         </div>
       </main>
-    );
+    </RequireAuth>
+  );
 }

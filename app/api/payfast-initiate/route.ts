@@ -1,3 +1,4 @@
+
 import { NextResponse } from "next/server";
 import crypto from "crypto";
 
@@ -29,27 +30,21 @@ export async function POST(req: Request) {
     // -----------------------------------
     // SERVER SIDE SOURCE OF TRUTH
     // -----------------------------------
- let finalAmount = "0.00";
+    let finalAmount = "0.00";
 
-if (type === "membership") {
-  finalAmount = "189.99";
-}
+    if (type === "membership") {
+      finalAmount = "189.99";
+    }
 
-if (type === "competition") {
-  finalAmount = Number(amount || 0).toFixed(2);
-}
+    if (type === "tokens") {
+      const tokenMap: Record<number, number> = {
+        100: 109,
+        500: 525,
+        1000: 1020,
+      };
 
-if (type === "tokens") {
-  const tokenMap: Record<number, number> = {
-    100: 109,
-    500: 525,
-    1000: 1020,
-  };
-
-  finalAmount = Number(
-    tokenMap[Number(tokens)] || amount || 0
-  ).toFixed(2);
-}
+      finalAmount = Number(tokenMap[Number(tokens)] || amount || 0).toFixed(2);
+    }
 
     // -----------------------------------
     // BUILD PARAM OBJECT
@@ -61,14 +56,11 @@ if (type === "tokens") {
       cancel_url,
       notify_url,
       m_payment_id,
-
       amount: finalAmount,
-
       item_name,
       name_first: name_first || "",
       name_last: name_last || "",
       email_address,
-
       custom_str1: uid,
       custom_str2: type,
       custom_str3: tokens ? tokens.toString() : "0",
@@ -116,7 +108,6 @@ if (type === "tokens") {
         ...data,
       },
     });
-
   } catch (error: any) {
     console.error("PayFast error:", error);
 

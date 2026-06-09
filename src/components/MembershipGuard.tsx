@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect, useState } from "react";
@@ -18,31 +19,14 @@ export default function MembershipGuard({
   useEffect(() => {
     if (loading) return;
 
-   if (!user) {
-
-  const params =
-    typeof window !== "undefined"
-      ? new URLSearchParams(window.location.search)
-      : null;
-
-  const paymentUid = params?.get("uid");
-
-  if (paymentUid?.startsWith("guest_")) {
-
-    setAllowed(true);
-
-    return;
-  }
-
-  router.replace("/dashboard");
-
-  return;
-}
+    if (!user) {
+      router.replace("/login");
+      return;
+    }
 
     (async () => {
       // 🔥 ALWAYS REFRESH USER FIRST
       await user.reload();
-
       const freshUser = user;
 
       // 🔴 EMAIL NOT VERIFIED
@@ -119,3 +103,4 @@ export default function MembershipGuard({
 
   return <>{children}</>;
 }
+

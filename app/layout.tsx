@@ -1,3 +1,4 @@
+
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/src/lib/AuthContext";
@@ -14,23 +15,18 @@ const geistMono = Geist_Mono({
 
 export const metadata = {
   metadataBase: new URL("https://www.teezgolfchallenges.com"),
-
   title: {
     default: "Teez Golf Challenges",
     template: "%s | Teez Golf Challenges",
   },
-
   description:
     "Compete in global golf challenges, climb rankings, and win real rewards. Play with purpose.",
-
   manifest: "https://golf-challenge-pwa.vercel.app/manifest.json",
-
   icons: {
     icon: "/icons/icon-192.png",
     shortcut: "/icons/icon-192.png",
     apple: "/icons/icon-192.png",
   },
-
   openGraph: {
     title: "Teez Golf Challenges",
     description:
@@ -47,12 +43,10 @@ export const metadata = {
     ],
     type: "website",
   },
-
   twitter: {
     card: "summary_large_image",
     title: "Teez Golf Challenges",
-    description:
-      "Compete in global golf challenges and win rewards.",
+    description: "Compete in global golf challenges and win rewards.",
     images: ["/teezman_1.png"],
   },
 };

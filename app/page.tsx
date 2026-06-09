@@ -147,7 +147,7 @@ export default function HomePage() {
       <section className="bg-gray-100 text-black text-center py-20 px-6">
         <div className="max-w-3xl mx-auto">
           <h2 className="text-2xl md:text-3xl font-semibold mb-4">
-            The Worlds Only Mobile Golf Wallet
+            Be part of the Future of Competitive Golf 
           </h2>
           <p className="text-gray-600 mb-8">
             Join the Teez Golf Challenge for exciting matchups.
@@ -156,9 +156,8 @@ export default function HomePage() {
           </p>
           <p className="text-xs text-gray-500 mb-6 max-w-xl mx-auto">
             Teez Golf Challenges is operated by Honey Badger Technologies PTY LTD.
-            All payments are made to Honey Badger Technologies PTY LTD for digital
-            tokens and membership access to participate in skill-based challenges.
-            Tokens are non-refundable, non-transferable, and cannot be exchanged
+            All payments are made to Honey Badger Technologies PTY LTD for membership access and participation in challenges.
+            Entries are non-refundable, non-transferable, and cannot be exchanged
             for cash.
           </p>
 
@@ -208,12 +207,6 @@ export default function HomePage() {
             Golf dates back to at least 1457 in Scotland, where it was played as a
             direct contest between players.
           </p>
-          <button
-            onClick={() => router.push("/app")}
-            className="bg-green-400 text-black px-8 py-3 rounded-full font-semibold animate-pulse shadow-[0_0_20px_rgba(34,197,94,0.8)] hover:scale-105 transition"
-          >
-            Join Now
-          </button>
         </div>
       </section>
 
@@ -230,22 +223,21 @@ export default function HomePage() {
           <div className="space-y-8 text-gray-700 text-base md:text-lg leading-8">
             <p>
               Teez Golf Challenges is built around the original essence of golf —
-              competition between players, where every round matters and every
-              match has a winner.
+              competition between players, where every hole matters and every
+              shot a possibility.
             </p>
             <p>
-              Golf was never meant to be played only against the course. At its
+              Golf was never meant to be played against the course. At its
               core, it is a game of matchplay — player versus player,
               strategizing, out thinking, where the combinations of decisions
               backed by skill determines the outcome.
             </p>
             <p>
               Teez Golf Challenges brings that format back into focus by creating
-              structured challenges where golfers compete directly against one
-              another.
+              structured challenges where players compete directly.
             </p>
             <p>
-              Players enter matches using tokens as entry credits and compete over
+              Players enter matches using the Teez Golf Challenges platform and compete over
               real rounds of golf. Whether it’s stroke play, matchplay, or
               challenge-based formats, each competition is designed to produce a
               clear result — a winner and a loser — just as the game was always
@@ -257,24 +249,17 @@ export default function HomePage() {
               and how you back it by play.
             </p>
             <p>
-              Tokens are won through competition and can be redeemed for vouchers,
-              products, and approved rewards, giving real value to strong
-              performance on the course.
+              Games are won through competition and prizes can be redeemed,
+              giving real value to strong performance on the course.
             </p>
             <p className="font-semibold text-black">
-              Teez Golf Challenges is not a betting platform. It is a structured,
-              skill-based competitive system that restores the competitive edge of
+              Teez Golf Challenges is a structured, skill-based competitive system 
+              that restores the competitive edge of
               golf — where players don’t just play rounds, they play to win.
             </p>
           </div>
 
           <div className="flex justify-center mt-14">
-            <button
-              onClick={() => router.push("/app")}
-              className="bg-green-400 text-black px-10 py-4 rounded-full font-bold shadow-[0_0_25px_rgba(34,197,94,0.8)] hover:scale-105 transition"
-            >
-              START COMPETING
-            </button>
           </div>
         </div>
       </section>
@@ -302,8 +287,8 @@ export default function HomePage() {
               <img src="/wallet.png" className="w-full mb-4" />
               <h3 className="font-semibold mb-2">Your Golf Wallet</h3>
               <p className="text-gray-400 text-sm">
-                Buy tokens to fund your wallet. Enter a challenge by tokens. Win
-                tokens, redeem tokens. See your wallet grow!
+                Fund your wallet. Enter a challenge. Win
+                matches, redeem prizes. 
               </p>
             </div>
 
@@ -311,7 +296,8 @@ export default function HomePage() {
               <img src="/voucher_badger.png" className="w-full mb-4" />
               <h3 className="font-semibold mb-2">Redeem your Vouchers</h3>
               <p className="text-gray-400 text-sm">
-                Tokens can be redeemed for prizes, equipment, vouchers.
+                Prizes can be redeemed by players at any time. A guided step by step, redeem process 
+                is available to all players. 
               </p>
             </div>
 

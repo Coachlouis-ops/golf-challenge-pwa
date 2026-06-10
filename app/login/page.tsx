@@ -68,8 +68,8 @@ export default function LoginPage() {
       return;
     }
 
-    // 🔴 PLAYER
-    router.push("/dashboard");
+  // 🔴 PLAYER
+router.push("/wallet/eft-payment");
   }
 
   return (

@@ -1,102 +1,96 @@
-
 "use client";
 
-import { useEffect, useState } from "react";
 import { useAuth } from "@/src/lib/AuthContext";
-import { db } from "@/src/lib/firebase";
-import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
-type Challenge = {
-  challengeId: string;
-  challengeTitle: string;
-  courseName: string;
-  gameFormat: string;
-  entryTokens: number;
-  status: string;
-  createdAt?: any;
-};
-
-export default function ChallengesPage() {
+export default function VerifyEmailPage() {
   const { user } = useAuth();
-  const [loading, setLoading] = useState(true);
-  const [challenges, setChallenges] = useState<Challenge[]>([]);
+  const router = useRouter();
 
-  useEffect(() => {
-    setChallenges([]);
-    setLoading(false);
-  }, []);
+  const [sending, setSending] = useState(false);
+  const [checking, setChecking] = useState(false);
 
-  if (loading) {
-    return (
-      <main className="min-h-screen flex items-center justify-center text-white bg-black">
-        <p>Loading challenges…</p>
-      </main>
-    );
+  async function resendEmail() {
+    if (!user) return;
+
+    try {
+      setSending(true);
+
+      await fetch("/api/send-verification", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          uid: user.uid,
+          email: user.email,
+        }),
+      });
+
+      alert("Verification email sent");
+    } catch (e: any) {
+      console.log("RESEND ERROR FULL:", e);
+      alert(e.message);
+    } finally {
+      setSending(false);
+    }
+  }
+
+  async function checkVerification() {
+    if (!user) return;
+
+    try {
+      setChecking(true);
+
+      await user.reload();
+
+      if (user.emailVerified) {
+        router.push("/wallet/eft-payment");
+        return;
+      }
+
+      alert("Email is not verified yet. Please click the verification link in your email first.");
+    } catch (e: any) {
+      console.log("VERIFY CHECK ERROR:", e);
+      alert(e.message);
+    } finally {
+      setChecking(false);
+    }
   }
 
   return (
-    <main className="relative min-h-screen flex justify-center px-4 py-12 bg-black text-white overflow-hidden">
-      {/* STADIUM LIGHT */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[400px] bg-green-400 opacity-10 blur-[120px] pointer-events-none" />
+    <div className="min-h-screen flex flex-col items-center justify-center bg-black text-white px-6 text-center">
+      <h1 className="text-2xl font-bold mb-4">
+        Verify Your Email
+      </h1>
 
-      {/* PARTICLE GRID */}
-      <div className="absolute inset-0 opacity-20 pointer-events-none bg-[radial-gradient(circle,#39FF14_1px,transparent_1px)] bg-[size:40px_40px]" />
+      <p className="text-gray-400 mb-6 max-w-md">
+        We sent you a verification email. Please verify your email before continuing to EFT payment.
+      </p>
 
-      {/* KNEELING BADGER */}
-      <img
-        src="/badger-kneeling-yellow.png"
-        className="absolute bottom-0 left-0 h-[95%] opacity-80 drop-shadow-[0_0_40px_rgba(255,220,0,0.7)] pointer-events-none"
-        alt="Badger illustration"
-      />
+      <button
+        onClick={checkVerification}
+        disabled={checking}
+        className="w-full max-w-md px-6 py-3 rounded-xl bg-[#00ff88] text-black font-semibold mb-4"
+      >
+        {checking ? "Checking..." : "I Have Verified My Email"}
+      </button>
 
-      {/* MAIN PANEL */}
-      <div className="relative z-10 w-full max-w-4xl flex flex-col gap-6">
-        <h1 className="text-4xl font-bold text-center text-green-400 tracking-widest drop-shadow-[0_0_10px_#39FF14]">
-          CHALLENGES
-        </h1>
+      <button
+        onClick={resendEmail}
+        disabled={sending}
+        className="w-full max-w-md px-6 py-3 rounded-xl bg-white text-black font-semibold mb-4"
+      >
+        {sending ? "Sending..." : "Resend Email"}
+      </button>
 
-        {challenges.length === 0 && (
-          <div className="bg-neutral-900/80 border border-neutral-700 rounded-xl p-6 text-center">
-            <h2 className="text-xl font-bold text-green-400 mb-2">
-              Demo Account
-            </h2>
-            <p className="text-gray-300">No active challenges.</p>
-            <p className="text-gray-500 text-sm mt-3">
-              Challenge invitations and competition requests will appear here.
-            </p>
-          </div>
-        )}
-
-        <div className="flex flex-col gap-4">
-          {challenges.map((c) => (
-            <div
-              key={c.challengeId}
-              className="bg-neutral-900/80 backdrop-blur-xl border border-neutral-700 rounded-xl p-5 shadow-[0_0_20px_rgba(0,255,120,0.15)] hover:shadow-[0_0_35px_rgba(0,255,120,0.35)] transition-all flex flex-col gap-3"
-            >
-              <div className="flex justify-between items-center">
-                <h2 className="text-lg font-semibold text-green-400">
-                  {c.challengeTitle}
-                </h2>
-
-                <span className="text-xs px-3 py-1 rounded-full bg-neutral-800 border border-neutral-600">
-                  {c.status}
-                </span>
-              </div>
-
-              <p className="text-sm text-gray-400">{c.courseName}</p>
-
-              <div className="flex gap-6 text-sm">
-                <span>
-                  <strong>Format:</strong> {c.gameFormat}
-                </span>
-                <span>
-                  <strong>Tokens:</strong> {c.entryTokens}
-                </span>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </main>
+      <button
+        onClick={() => router.push("/")}
+        className="text-sm underline text-gray-400"
+      >
+        Back to Home
+      </button>
+    </div>
   );
 }

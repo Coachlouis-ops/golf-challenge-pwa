@@ -171,76 +171,76 @@ return (
           Select Your Bank
         </p>
 
-        <div className="grid grid-cols-2 gap-3">
-          {bankLinks.map((bank) => (
-            <div
-              key={bank.name}
-              className="rounded-xl bg-black border border-zinc-700 p-3 space-y-3"
-            >
-              <button
-                onClick={() => window.open(bank.url, "_blank")}
-                className="w-full rounded-xl bg-black border border-zinc-800 hover:border-green-400 p-4 flex items-center justify-center transition"
-              >
-                <img
-                  src={bank.logo}
-                  alt={bank.name}
-                  className="h-14 max-w-full object-contain"
-                />
-              </button>
+       <div className="flex flex-col gap-4">
+  {bankLinks.map((bank) => (
+    <div
+      key={bank.name}
+      className="rounded-xl bg-black border border-zinc-700 p-4 space-y-4"
+    >
+      <button
+        onClick={() => window.open(bank.url, "_blank")}
+        className="w-full rounded-xl bg-black border border-zinc-800 hover:border-green-400 p-4 flex items-center justify-center transition"
+      >
+        <img
+          src={bank.logo}
+          alt={bank.name}
+          className="h-16 max-w-full object-contain"
+        />
+      </button>
 
-              <div className="space-y-2 text-xs">
-                <div>
-                  <p className="text-gray-400">Bank</p>
-                  <p className="font-semibold">{bank.bankName}</p>
-                </div>
-
-                <div>
-                  <p className="text-gray-400">Account Name</p>
-                  <p className="font-semibold">{bank.accountName}</p>
-                </div>
-
-                <div>
-                  <p className="text-gray-400">Account Number</p>
-                  <div className="flex items-center justify-between gap-2">
-                    <p className="font-semibold break-all">
-                      {bank.accountNumber}
-                    </p>
-
-                    {bank.accountNumber !== "Coming Soon" && (
-                      <button
-                        onClick={() => copyText(bank.accountNumber)}
-                        className="px-2 py-1 rounded bg-green-500 text-black text-[10px] font-semibold"
-                      >
-                        Copy
-                      </button>
-                    )}
-                  </div>
-                </div>
-
-                <div>
-                  <p className="text-gray-400">Branch Code</p>
-                  <div className="flex items-center justify-between gap-2">
-                    <p className="font-semibold">{bank.branchCode}</p>
-
-                    {bank.branchCode !== "Coming Soon" && (
-                      <button
-                        onClick={() => copyText(bank.branchCode)}
-                        className="px-2 py-1 rounded bg-green-500 text-black text-[10px] font-semibold"
-                      >
-                        Copy
-                      </button>
-                    )}
-                  </div>
-                </div>
-
-                <div>
-                  <p className="text-gray-400">Account Type</p>
-                  <p className="font-semibold">{bank.accountType}</p>
-                </div>
-              </div>
-            </div>
-          ))}
+      <div className="space-y-4 text-sm">
+        <div>
+          <p className="text-gray-400">Bank</p>
+          <p className="font-semibold">{bank.bankName}</p>
         </div>
+
+        <div>
+          <p className="text-gray-400">Account Name</p>
+          <p className="font-semibold leading-6">{bank.accountName}</p>
+        </div>
+
+        <div>
+          <p className="text-gray-400">Account Number</p>
+          <div className="flex items-center justify-between gap-3">
+            <p className="font-semibold tracking-wide">
+              {bank.accountNumber}
+            </p>
+
+            {bank.accountNumber !== "Coming Soon" && (
+              <button
+                onClick={() => copyText(bank.accountNumber)}
+                className="shrink-0 px-3 py-1 rounded-lg bg-green-500 text-black text-xs font-semibold"
+              >
+                Copy
+              </button>
+            )}
+          </div>
+        </div>
+
+        <div>
+          <p className="text-gray-400">Branch Code</p>
+          <div className="flex items-center justify-between gap-3">
+            <p className="font-semibold">{bank.branchCode}</p>
+
+            {bank.branchCode !== "Coming Soon" && (
+              <button
+                onClick={() => copyText(bank.branchCode)}
+                className="shrink-0 px-3 py-1 rounded-lg bg-green-500 text-black text-xs font-semibold"
+              >
+                Copy
+              </button>
+            )}
+          </div>
+        </div>
+
+        <div>
+          <p className="text-gray-400">Account Type</p>
+          <p className="font-semibold">{bank.accountType}</p>
+        </div>
+      </div>
+    </div>
+  ))}
+</div>
 
         <p className="text-xs text-gray-400">
           On mobile, use your own banking app if the website does not open the app automatically.

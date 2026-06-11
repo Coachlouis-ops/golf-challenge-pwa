@@ -76,7 +76,7 @@ router.push("/payment");
     <main className="min-h-screen flex items-center justify-center">
       <form onSubmit={handleSubmit} className="w-80 space-y-4">
         <h1 className="text-2xl font-semibold text-center">
-          Sign In or Register
+          Sign In
         </h1>
 
         <input

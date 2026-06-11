@@ -14,25 +14,30 @@ export default function PaymentPage() {
     ? `TEEZZ-${user.uid.slice(0, 6).toUpperCase()}`
     : "TEEZZ-USER";
 
-  const bankLinks = [
+    const bankLinks = [
     {
       name: "ABSA",
+      logo: "/absa-logo.png",
       url: "https://www.absa.co.za/personal/",
     },
     {
       name: "FNB",
+      logo: "/fnb-logo.png",
       url: "https://www.fnb.co.za/ways-to-bank/online-banking.html",
     },
     {
       name: "CAPITEC",
+      logo: "/capitec-logo.png",
       url: "https://www.capitecbank.co.za/personal/transact/online-banking/",
     },
     {
       name: "STANDARD BANK",
+      logo: "/standard-bank-logo.png",
       url: "https://experience.standardbank.co.za/",
     },
     {
       name: "NEDBANK",
+      logo: "/nedbank-logo.png",
       url: "https://www.nedbank.co.za/",
     },
   ];
@@ -136,14 +141,18 @@ export default function PaymentPage() {
             Open Online Banking
           </p>
 
-          <div className="grid grid-cols-1 gap-2">
+                  <div className="grid grid-cols-2 gap-3">
             {bankLinks.map((bank) => (
               <button
                 key={bank.name}
                 onClick={() => window.open(bank.url, "_blank")}
-                className="w-full rounded-lg bg-zinc-700 hover:bg-zinc-600 px-4 py-3 text-left font-semibold"
+                className="w-full rounded-xl bg-white hover:bg-gray-200 p-3 flex items-center justify-center transition"
               >
-                {bank.name}
+                <img
+                  src={bank.logo}
+                  alt={bank.name}
+                  className="h-10 max-w-full object-contain"
+                />
               </button>
             ))}
           </div>
@@ -205,3 +214,5 @@ export default function PaymentPage() {
     </div>
   );
 }
+
+

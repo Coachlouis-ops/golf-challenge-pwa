@@ -2,19 +2,34 @@
 
 import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { doc, serverTimestamp, setDoc } from "firebase/firestore";
+import { db } from "@/src/lib/firebase";
+import { useAuth } from "@/src/lib/AuthContext";
 
 function PaymentConsentContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { user } = useAuth();
 
   const bankName = searchParams.get("bank") || "Selected Bank";
   const bankUrl = searchParams.get("url") || "";
 
   const [accepted, setAccepted] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  function continueToBank() {
+  const paymentReference = user
+    ? `TEEZZ-${user.uid.slice(0, 6).toUpperCase()}`
+    : "TEEZZ-USER";
+
+  async function continueToBank() {
     if (!accepted) {
       alert("You must accept the Terms & Conditions");
+      return;
+    }
+
+    if (!user) {
+      alert("User not logged in");
+      router.push("/login");
       return;
     }
 
@@ -24,7 +39,36 @@ function PaymentConsentContent() {
       return;
     }
 
-    window.open(bankUrl, "_blank");
+    try {
+      setLoading(true);
+
+      await setDoc(
+        doc(db, "membershipPayments", user.uid),
+        {
+          userId: user.uid,
+          email: user.email,
+          amount: 189.99,
+          reference: paymentReference,
+          selectedBank: bankName,
+          status: "pending",
+          paymentType: "membership",
+          createdAt: serverTimestamp(),
+          updatedAt: serverTimestamp(),
+          approvedAt: null,
+          approvedBy: null,
+        },
+        { merge: true }
+      );
+
+      window.open(bankUrl, "_blank");
+
+      router.push("/dashboard");
+    } catch (e: any) {
+      console.log("PAYMENT APPLICATION ERROR:", e);
+      alert(e.message || "Could not create payment application");
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -49,6 +93,10 @@ function PaymentConsentContent() {
           <p>
             EFT payments are verified manually by an administrator. Your membership
             will only be activated once the payment reflects in the business bank account.
+          </p>
+
+          <p>
+            Your payment application will be sent to admin when you continue.
           </p>
 
           <p>
@@ -79,14 +127,14 @@ function PaymentConsentContent() {
 
         <button
           onClick={continueToBank}
-          disabled={!accepted}
+          disabled={!accepted || loading}
           className={`w-full py-3 rounded-xl font-semibold ${
-            accepted
+            accepted && !loading
               ? "bg-green-500 hover:bg-green-400 text-black"
               : "bg-gray-700 text-gray-400"
           }`}
         >
-          Continue to {bankName}
+          {loading ? "Submitting..." : `Continue to ${bankName}`}
         </button>
 
         <button

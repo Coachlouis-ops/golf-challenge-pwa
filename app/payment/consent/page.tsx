@@ -2,8 +2,7 @@
 
 import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { doc, serverTimestamp, setDoc } from "firebase/firestore";
-import { db } from "@/src/lib/firebase";
+import { getFunctions, httpsCallable } from "firebase/functions";
 import { useAuth } from "@/src/lib/AuthContext";
 
 function PaymentConsentContent() {
@@ -42,24 +41,18 @@ function PaymentConsentContent() {
     try {
       setLoading(true);
 
-      await setDoc(
-        doc(db, "membershipPayments", user.uid),
-        {
-          userId: user.uid,
-          email: user.email,
-          amount: 189.99,
-          reference: paymentReference,
-          selectedBank: bankName,
-          status: "pending",
-          paymentType: "membership",
-          createdAt: serverTimestamp(),
-          updatedAt: serverTimestamp(),
-          approvedAt: null,
-          approvedBy: null,
-        },
-        { merge: true }
-      );
+     const functions = getFunctions(undefined, "europe-west1");
 
+const createMembershipPaymentApplication = httpsCallable(
+  functions,
+  "createMembershipPaymentApplication"
+);
+
+await createMembershipPaymentApplication({
+  selectedBank: bankName,
+  bankUrl,
+  reference: paymentReference,
+});
       window.open(bankUrl, "_blank");
 
       router.push("/dashboard");

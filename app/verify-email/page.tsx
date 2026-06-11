@@ -9,7 +9,6 @@ export default function VerifyEmailPage() {
   const router = useRouter();
 
   const [sending, setSending] = useState(false);
-  const [checking, setChecking] = useState(false);
 
   async function resendEmail() {
     if (!user) return;
@@ -37,28 +36,6 @@ export default function VerifyEmailPage() {
     }
   }
 
-  async function checkVerification() {
-    if (!user) return;
-
-    try {
-      setChecking(true);
-
-      await user.reload();
-
-      if (user.emailVerified) {
-        router.push("/wallet/eft-payment");
-        return;
-      }
-
-      alert("Email is not verified yet. Please click the verification link in your email first.");
-    } catch (e: any) {
-      console.log("VERIFY CHECK ERROR:", e);
-      alert(e.message);
-    } finally {
-      setChecking(false);
-    }
-  }
-
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-black text-white px-6 text-center">
       <h1 className="text-2xl font-bold mb-4">
@@ -66,30 +43,23 @@ export default function VerifyEmailPage() {
       </h1>
 
       <p className="text-gray-400 mb-6 max-w-md">
-        We sent you a verification email. Please verify your email before continuing to EFT payment.
+        We sent you a verification email. Open your email, click Verify Email,
+        and then continue to login from the verification screen.
       </p>
-
-      <button
-        onClick={checkVerification}
-        disabled={checking}
-        className="w-full max-w-md px-6 py-3 rounded-xl bg-[#00ff88] text-black font-semibold mb-4"
-      >
-        {checking ? "Checking..." : "I Have Verified My Email"}
-      </button>
 
       <button
         onClick={resendEmail}
         disabled={sending}
-        className="w-full max-w-md px-6 py-3 rounded-xl bg-white text-black font-semibold mb-4"
+        className="w-full max-w-md px-6 py-3 rounded-xl bg-[#00ff88] text-black font-semibold mb-4"
       >
         {sending ? "Sending..." : "Resend Email"}
       </button>
 
       <button
-        onClick={() => router.push("/")}
+        onClick={() => router.push("/login")}
         className="text-sm underline text-gray-400"
       >
-        Back to Home
+        Go to Login
       </button>
     </div>
   );

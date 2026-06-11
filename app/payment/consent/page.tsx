@@ -1,9 +1,9 @@
 "use client";
 
+import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
 
-export default function PaymentConsentPage() {
+function PaymentConsentContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -97,5 +97,19 @@ export default function PaymentConsentPage() {
         </button>
       </div>
     </main>
+  );
+}
+
+export default function PaymentConsentPage() {
+  return (
+    <Suspense
+      fallback={
+        <main className="min-h-screen bg-black text-white flex items-center justify-center">
+          Loading...
+        </main>
+      }
+    >
+      <PaymentConsentContent />
+    </Suspense>
   );
 }

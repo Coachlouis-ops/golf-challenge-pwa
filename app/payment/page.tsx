@@ -10,6 +10,41 @@ export default function PaymentPage() {
 
   const [accepted, setAccepted] = useState(false);
 
+  const paymentReference = user
+    ? `TEEZZ-${user.uid.slice(0, 6).toUpperCase()}`
+    : "TEEZZ-USER";
+
+  const bankLinks = [
+    {
+      name: "ABSA",
+      url: "https://www.absa.co.za/personal/",
+    },
+    {
+      name: "FNB",
+      url: "https://www.fnb.co.za/ways-to-bank/online-banking.html",
+    },
+    {
+      name: "CAPITEC",
+      url: "https://www.capitecbank.co.za/personal/transact/online-banking/",
+    },
+    {
+      name: "STANDARD BANK",
+      url: "https://experience.standardbank.co.za/",
+    },
+    {
+      name: "NEDBANK",
+      url: "https://www.nedbank.co.za/",
+    },
+  ];
+
+  // -----------------------------------
+  // COPY REFERENCE
+  // -----------------------------------
+  async function copyReference() {
+    await navigator.clipboard.writeText(paymentReference);
+    alert("Reference copied");
+  }
+
   // -----------------------------------
   // EFT TEMP PAYMENT FLOW
   // -----------------------------------
@@ -76,13 +111,45 @@ export default function PaymentPage() {
 
           <div>
             <p className="text-gray-400">Reference</p>
-            <p className="font-semibold break-all">
-              TEEZZ-{user?.uid || "USER"}
-            </p>
+            <div className="flex items-center justify-between gap-3">
+              <p className="font-semibold break-all">
+                {paymentReference}
+              </p>
+
+              <button
+                onClick={copyReference}
+                className="shrink-0 px-3 py-1 rounded-lg bg-green-500 text-black text-xs font-semibold"
+              >
+                Copy
+              </button>
+            </div>
           </div>
 
           <p className="text-xs text-gray-400">
             Use the reference exactly when making payment. EFT verification will be handled manually.
+          </p>
+        </div>
+
+        {/* BANK LINKS */}
+        <div className="text-left bg-black/40 border border-zinc-700 rounded-xl p-4 space-y-3 text-sm">
+          <p className="text-green-400 font-semibold">
+            Open Online Banking
+          </p>
+
+          <div className="grid grid-cols-1 gap-2">
+            {bankLinks.map((bank) => (
+              <button
+                key={bank.name}
+                onClick={() => window.open(bank.url, "_blank")}
+                className="w-full rounded-lg bg-zinc-700 hover:bg-zinc-600 px-4 py-3 text-left font-semibold"
+              >
+                {bank.name}
+              </button>
+            ))}
+          </div>
+
+          <p className="text-xs text-gray-400">
+            On mobile, use your own banking app if the website does not open the app automatically.
           </p>
         </div>
 

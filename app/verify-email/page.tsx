@@ -55,12 +55,12 @@ export default function VerifyEmailPage() {
         {sending ? "Sending..." : "Resend Email"}
       </button>
 
-      <button
-        onClick={() => router.push("/login")}
-        className="text-sm underline text-gray-400"
-      >
-        Go to Login
-      </button>
+     <button
+  onClick={() => router.push("/login")}
+  className="w-full max-w-md px-6 py-3 rounded-xl bg-[#00ff88] text-black font-semibold"
+>
+  Go to Login
+</button>
     </div>
   );
 }

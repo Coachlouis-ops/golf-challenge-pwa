@@ -7,8 +7,8 @@ export default function LegalTermsPage() {
 
       <div className="space-y-6 text-sm text-gray-300 max-w-4xl">
 
-        <p>
-          This website is operated by <strong>Honey Badger Technologies (PTY) LTD</strong>
+               <p>
+          This website is operated by <strong>Honey Badger Technologies (PTY) LTD</strong>{" "}
           (Registration Number: 2026/102722/07), a private company based in South Africa.
         </p>
 
@@ -17,20 +17,26 @@ export default function LegalTermsPage() {
         <p>
           Honey Badger Technologies (PTY) LTD is a business in the digital services industry that offers
           access to online platforms, including Teez Golf Challenges, which provide skill-based competitions,
-          memberships, and digital participation systems.
+          memberships, digital participation systems, player profiles, wallet systems, and token-based
+          participation features.
         </p>
 
         {/* 2 */}
         <h2 className="text-white font-semibold">2. Delivery Policy</h2>
         <p>
-          Subject to availability and receipt of payment, services will be processed immediately and
-          activated within 1 business day. Delivery is confirmed via system access and/or email notification.
+          Access to services is subject to receipt and manual verification of payment. Once payment has been
+          verified by an administrator, membership access, profile creation, wallet access, token allocation,
+          or other digital services will be activated within 1 business day where possible.
+        </p>
+        <p>
+          Delivery is confirmed through system access, account activation, wallet updates, profile access,
+          and/or email notification.
         </p>
 
         {/* 3 */}
         <h2 className="text-white font-semibold">3. Export Restriction</h2>
         <p>
-          The offering on this website is available to South African clients only.
+          The offering on this website is currently available to South African clients only.
         </p>
 
         {/* 4 */}
@@ -41,47 +47,55 @@ export default function LegalTermsPage() {
         </p>
         <p>
           Cancellation of services by the client may attract a 10% administration fee where applicable.
-          Digital products and tokens are non-refundable once delivered, except in cases of system error
-          or duplicate transactions.
+          Membership payments, digital products, and tokens are non-refundable once activated, delivered,
+          allocated, or used, except in cases of system error, duplicate payment, or incorrect manual allocation.
         </p>
 
         {/* 5 */}
         <h2 className="text-white font-semibold">5. Customer Privacy Policy</h2>
         <p>
           Honey Badger Technologies (PTY) LTD shall take all reasonable steps to protect the personal information
-          of users. Personal information is defined in accordance with the Protection of Personal Information Act (POPIA).
+          of users. Personal information is processed in accordance with the Protection of Personal Information Act
+          (POPIA).
         </p>
         <p>
-          The PayFast privacy policy may be accessed at https://payfast.io/privacy-policy/
+          User information may be used for account creation, membership verification, payment matching,
+          wallet administration, token allocation, customer support, and platform access control.
         </p>
 
         {/* 6 */}
         <h2 className="text-white font-semibold">6. Payment Options Accepted</h2>
         <p>
-          Payment may be made via Visa, MasterCard, Diners Club or American Express cards,
-          or by bank transfer into the Honey Badger Technologies (PTY) LTD account,
-          the details of which will be provided on request.
+          Payments are currently accepted by electronic funds transfer (EFT) or bank transfer into the
+          Honey Badger Technologies (PTY) LTD business bank accounts displayed on the payment page.
+        </p>
+        <p>
+          Users must use the payment reference displayed on the payment page when making payment.
+          This reference is used to manually match payments to user accounts.
         </p>
 
         {/* 7 */}
-        <h2 className="text-white font-semibold">7. Payment Processing & Security</h2>
+        <h2 className="text-white font-semibold">7. Payment Processing and Verification</h2>
         <p>
-          Card transactions will be acquired for Honey Badger Technologies (PTY) LTD via PayFast,
-          the approved payment gateway for all South African acquiring banks.
+          EFT payments are not processed automatically by this website. Payments are made outside the platform
+          through the user’s own banking application or online banking service.
         </p>
         <p>
-          PayFast uses Secure Socket Layer 3 (SSL3) encryption and no card details are stored on this website.
-          Users may visit https://payfast.io/ to view their security certificate and security policy.
+          Honey Badger Technologies (PTY) LTD manually verifies received payments against the business bank
+          account, payment amount, and payment reference. Memberships, profile access, wallet updates, and token
+          allocations will only be activated after payment has been confirmed by an administrator.
         </p>
 
         {/* 8 */}
-        <h2 className="text-white font-semibold">8. Customer Details Separate from Card Details</h2>
+        <h2 className="text-white font-semibold">8. Customer Details and Banking Details</h2>
         <p>
-          Customer details will be stored by Honey Badger Technologies (PTY) LTD separately from card details,
-          which are entered by the client on PayFast’s secure site.
+          Customer details are stored by Honey Badger Technologies (PTY) LTD for account administration,
+          payment matching, compliance, and customer support purposes.
         </p>
         <p>
-          For more details, refer to www.payfast.io.
+          This website does not collect or store customer banking passwords, card numbers, CVV numbers,
+          banking login details, banking PINs, or OTPs. Users must never submit private banking credentials
+          to Honey Badger Technologies (PTY) LTD.
         </p>
 
         {/* 9 */}
@@ -95,7 +109,8 @@ export default function LegalTermsPage() {
         <h2 className="text-white font-semibold">10. Responsibility</h2>
         <p>
           Honey Badger Technologies (PTY) LTD takes responsibility for all aspects relating to the transaction,
-          including the sale of services, customer service and support, dispute resolution, and delivery of services.
+          including the sale of services, customer service and support, dispute resolution, manual payment
+          verification, and delivery of digital services.
         </p>
 
         {/* 11 */}
@@ -128,7 +143,7 @@ export default function LegalTermsPage() {
         {/* 14 */}
         <h2 className="text-white font-semibold">14. Contact Details</h2>
         <p>
-          Email: info@honeybadgertech.co.za<br />
+          Email: info@honeybadgertech.com<br />
           Telephone: +27 082 837 0266
         </p>
 

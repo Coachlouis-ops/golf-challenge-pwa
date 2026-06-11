@@ -141,7 +141,7 @@ export default function PaymentPage() {
             Open Online Banking
           </p>
 
-                  <div className="grid grid-cols-2 gap-3">
+                       <div className="grid grid-cols-2 gap-3">
             {bankLinks.map((bank) => (
               <button
                 key={bank.name}

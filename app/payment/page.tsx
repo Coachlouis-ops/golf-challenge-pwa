@@ -141,21 +141,21 @@ export default function PaymentPage() {
             Open Online Banking
           </p>
 
-                       <div className="grid grid-cols-2 gap-3">
-            {bankLinks.map((bank) => (
-              <button
-                key={bank.name}
-                onClick={() => window.open(bank.url, "_blank")}
-                className="w-full rounded-xl bg-white hover:bg-gray-200 p-3 flex items-center justify-center transition"
-              >
-                <img
-                  src={bank.logo}
-                  alt={bank.name}
-                  className="h-10 max-w-full object-contain"
-                />
-              </button>
-            ))}
-          </div>
+       <div className="grid grid-cols-2 gap-3">
+  {bankLinks.map((bank) => (
+    <button
+      key={bank.name}
+      onClick={() => window.open(bank.url, "_blank")}
+      className="w-full rounded-xl bg-black border border-zinc-700 hover:border-green-400 p-4 flex items-center justify-center transition"
+    >
+      <img
+        src={bank.logo}
+        alt={bank.name}
+        className="h-14 max-w-full object-contain"
+      />
+    </button>
+  ))}
+</div>
 
           <p className="text-xs text-gray-400">
             On mobile, use your own banking app if the website does not open the app automatically.

@@ -115,47 +115,41 @@ export default function HomePage() {
 
         {/* SHOP BUTTON */}
         <div className="flex justify-center">
-          <button
-            onClick={() => router.push("/honeybadgergolfshop")}
-            className="px-6 py-2 rounded-xl text-sm font-semibold bg-cyan-400 text-black shadow-[0_0_20px_rgba(34,211,238,1)] animate-pulse hover:scale-110 transition"
-          >
-            Honey Badger Golf Shop
-          </button>
         </div>
 
-        {/* TOP NAVIGATION BUTTONS */}
+    {/* TOP NAVIGATION BUTTONS */}
 <div className="flex justify-center gap-2 flex-wrap">
   <button
     onClick={() => router.push("/legal/terms")}
-    className="bg-white text-black px-4 py-2 text-xs rounded-lg font-semibold hover:bg-gray-200 transition"
+    className="bg-gradient-to-br from-zinc-100 via-zinc-400 to-zinc-900 text-black px-4 py-2 text-xs rounded-lg font-bold border border-zinc-300 shadow-[0_0_18px_rgba(255,255,255,0.75)] hover:shadow-[0_0_35px_rgba(255,255,255,1)] hover:scale-105 animate-pulse transition"
   >
     Terms & Conditions
   </button>
 
   <button
     onClick={() => router.push("/legal/refund-policy")}
-    className="bg-white text-black px-4 py-2 text-xs rounded-lg font-semibold hover:bg-gray-200 transition"
+    className="bg-gradient-to-br from-zinc-100 via-zinc-400 to-zinc-900 text-black px-4 py-2 text-xs rounded-lg font-bold border border-zinc-300 shadow-[0_0_18px_rgba(255,255,255,0.75)] hover:shadow-[0_0_35px_rgba(255,255,255,1)] hover:scale-105 animate-pulse transition"
   >
     Refund Policy
   </button>
 
   <button
     onClick={() => router.push("/payment")}
-    className="bg-green-400 text-black px-4 py-2 text-xs rounded-lg font-semibold shadow-[0_0_15px_rgba(34,197,94,0.9)] hover:scale-105 transition"
+    className="bg-gradient-to-br from-zinc-100 via-zinc-400 to-zinc-900 text-black px-4 py-2 text-xs rounded-lg font-bold border border-zinc-300 shadow-[0_0_18px_rgba(255,255,255,0.75)] hover:shadow-[0_0_35px_rgba(255,255,255,1)] hover:scale-105 animate-pulse transition"
   >
     Pay Registration
   </button>
 
   <button
     onClick={() => router.push("/wallet")}
-    className="bg-cyan-400 text-black px-4 py-2 text-xs rounded-lg font-semibold shadow-[0_0_15px_rgba(34,211,238,0.9)] hover:scale-105 transition"
+    className="bg-gradient-to-br from-zinc-100 via-zinc-400 to-zinc-900 text-black px-4 py-2 text-xs rounded-lg font-bold border border-zinc-300 shadow-[0_0_18px_rgba(255,255,255,0.75)] hover:shadow-[0_0_35px_rgba(255,255,255,1)] hover:scale-105 animate-pulse transition"
   >
     Enter Competition
   </button>
 
   <button
     onClick={() => router.push("/contact")}
-    className="bg-zinc-800 text-white px-4 py-2 text-xs rounded-lg font-semibold border border-zinc-600 hover:bg-zinc-700 transition"
+    className="bg-gradient-to-br from-zinc-100 via-zinc-400 to-zinc-900 text-black px-4 py-2 text-xs rounded-lg font-bold border border-zinc-300 shadow-[0_0_18px_rgba(255,255,255,0.75)] hover:shadow-[0_0_35px_rgba(255,255,255,1)] hover:scale-105 animate-pulse transition"
   >
     Contact
   </button>

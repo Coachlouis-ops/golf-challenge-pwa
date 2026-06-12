@@ -29,7 +29,7 @@ export default function PaymentPage() {
         </h2>
 
         <p className="text-gray-400 max-w-xl">
-          Complete your Teez Golf membership payment through our payment partner.
+          Complete your Teez Golf membership payment through our trusted PayGenius payment partner.
         </p>
       </div>
 
@@ -49,13 +49,13 @@ export default function PaymentPage() {
             Secure Payment Portal
           </p>
 
-          <div className="w-full bg-white rounded-xl p-5 flex items-center justify-center">
-            <img
-              src="/paygenius-logo.png"
-              alt="PayGenius"
-              className="max-h-20 max-w-full object-contain"
-            />
-          </div>
+          <div className="w-full bg-black rounded-xl p-5 flex items-center justify-center border border-zinc-700">
+  <img
+    src="/paygenius-logo.png"
+    alt="PayGenius"
+    className="max-h-20 max-w-full object-contain"
+  />
+</div>
 
           <p className="text-sm text-gray-400">
             Payments will be processed through PayGenius Smart Payments.
@@ -72,21 +72,10 @@ export default function PaymentPage() {
             Payments are made to{" "}
             <strong>Honey Badger Technologies (PTY) LTD</strong>.
           </p>
-
-          <p>
-            Your Teez Golf membership gives you access to the Teez Golf Challenges
-            player system, subject to successful payment and account approval.
-          </p>
-
+          
           <p>
             Payments are processed through PayGenius Smart Payments. Membership
             access will only be activated once payment has been confirmed.
-          </p>
-
-          <p>
-            Membership payments, digital services, and tokens are non-refundable
-            once activated, delivered, allocated, or used, except in cases of
-            duplicate payment, system error, or incorrect allocation.
           </p>
 
           <p>

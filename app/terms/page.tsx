@@ -30,20 +30,100 @@ export default function TermsPage() {
     Teez Golf Challenges is a skill-based competition platform. It does not facilitate gambling, betting, or wagering between users.
   </p>
 
-  <p className="font-semibold">2. Eligibility</p>
-  <p>
-    You must be at least 18 years old or have verified parental consent to use the Platform.
-  </p>
-
   <p className="font-semibold">3. Competition Entries</p>
   <p>
-    The Platform uses entry fee's for participation in challenges. Entry fee's are non-refundable & non-transferable.
+    The Platform uses entry fee's for participation in challenges. Entry fee's are non-refundable but is subject to the refund policy. 
   </p>
+
+  <p className="font-semibold">3.1 Refund Eligibility</p>
+
+<p>
+  A refund may be approved where Honey Badger Technologies (PTY) LTD determines
+  that one or more of the following occurred:
+</p>
+
+<ul className="list-disc pl-6 space-y-1">
+  <li>A technical failure on the Teez Golf Challenges platform prevented the user from accessing paid services.</li>
+  <li>A duplicate payment was made.</li>
+  <li>The wrong amount was charged.</li>
+  <li>An administrative or human error caused incorrect account allocation, incorrect membership activation, or incorrect transaction processing.</li>
+  <li>Payment was received but the user’s account was not activated within a reasonable time due to a platform or administrative error.</li>
+  <li>Any other issue where Honey Badger Technologies (PTY) LTD reasonably determines that a refund is fair and appropriate.</li>
+</ul>
+
+<p className="font-semibold">3.5 Membership Refunds</p>
+
+<p>
+  Membership fees may be refunded where payment was made but membership access
+  was not activated due to a technical error, administrative error, duplicate
+  payment, or incorrect account allocation.
+</p>
+
+<p>
+  Once membership access has been activated and used, the membership fee is
+  generally non-refundable unless Honey Badger Technologies (PTY) LTD determines
+  that a platform error or administrative error justifies a refund.
+</p>
+
+<p className="font-semibold">3.6 Refund Review Process</p>
+
+<p>
+  All refund requests must be reviewed by Honey Badger Technologies (PTY) LTD
+  before approval.
+</p>
+
+<p>
+  The company may request additional information from the user, including proof
+  of payment, payment reference, email address, user ID, transaction date, bank
+  confirmation, or screenshots showing the issue.
+</p>
+
+<p>
+  The company may refuse a refund request if the information provided is incomplete,
+  false, misleading, or cannot be verified.
+</p>
+
+<p className="font-semibold">3.7 Refund Processing Time</p>
+
+<p>
+  Approved refunds will be processed within 7 business days where possible.
+</p>
+
+<p>
+  Actual payment reflection times may depend on the bank, payment provider, card
+  issuer, or payment method used.
+</p>
+
+<p className="font-semibold">3.8 Fraud, Abuse, and Misuse</p>
+
+<p>
+  Honey Badger Technologies (PTY) LTD reserves the right to refuse a refund where
+  there is evidence of fraud, abuse, platform manipulation, false claims, chargeback
+  misuse, or breach of the Platform Terms and Conditions.
+</p>
+
+<p>
+  Where necessary, the company may suspend or restrict the user’s account while
+  the matter is investigated.
+</p>
+
+<p className="font-semibold">3.9 Final Decision</p>
+
+<p>
+  Honey Badger Technologies (PTY) LTD will make the final decision on all refund
+  requests after reviewing the transaction, user account, payment records, challenge records, 
+  and any other relevant information.
+</p>
+
+<p>
+  Refunds will be granted where the company determines that the refund is valid,
+  fair, and supported by the platform records or available evidence.
+</p>
 
   <p className="font-semibold">4. Payments</p>
   <p>
-    All payments are processed through secure third-party provider PayFast.
-    Payments are final and non-reversible once completed.
+    All payments are processed through secure third-party provider PayGenius.
+    Payments are final, but can be subject to refund policy.  
   </p>
 
   <p className="font-semibold">5. Competitions</p>
@@ -54,7 +134,7 @@ export default function TermsPage() {
 
   <p className="font-semibold">6. Rewards</p>
   <p>
-    Prizes are awarded on merit of applicable regulations and are final once issued.
+    Prizes for the competitions are awarded on merit of applicable regulations and are final once issued.
   </p>
 
   <p className="font-semibold">7. Risk Disclaimer</p>

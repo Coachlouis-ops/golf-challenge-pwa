@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect } from "react";
@@ -8,22 +7,21 @@ import { db, functions } from "@/src/lib/firebase";
 import { httpsCallable } from "firebase/functions";
 import { useRouter } from "next/navigation";
 
-// ✅ FIXED TOKEN PACKS WITH MARGIN
-const TOKEN_PACKS = [
+const ENTRY_PACKS = [
   {
     tokens: 100,
     price: 109,
-    label: "100 Tokens – R109",
+    label: "100 Entry Credits – R109",
   },
   {
     tokens: 500,
     price: 525,
-    label: "500 Tokens – R525",
+    label: "500 Entry Credits – R525",
   },
   {
     tokens: 1000,
     price: 1020,
-    label: "1000 Tokens – R1020",
+    label: "1000 Entry Credits – R1020",
   },
 ];
 
@@ -34,8 +32,6 @@ export default function WalletPage() {
   const [selected, setSelected] = useState<number | null>(null);
   const [available, setAvailable] = useState(0);
   const [profile, setProfile] = useState<any>(null);
-
-  // ✅ NEW
   const [accepted, setAccepted] = useState(false);
 
   // -------------------------------
@@ -49,6 +45,7 @@ export default function WalletPage() {
     const unsub = onSnapshot(ref, (snap) => {
       if (snap.exists()) {
         const data = snap.data();
+
         const purchased = data.purchasedTokens || 0;
         const winning = data.winningTokens || 0;
         const locked = data.lockedTokens || 0;
@@ -60,84 +57,69 @@ export default function WalletPage() {
     return () => unsub();
   }, [user]);
 
-  // -------------------------------
-  // LOAD PROFILE
-  // -------------------------------
-  useEffect(() => {
-    if (!user) return;
+// -------------------------------
+// LOAD PROFILE
+// -------------------------------
+useEffect(() => {
+  if (!user?.uid) return;
 
-    (async () => {
+  async function loadProfile() {
+    try {
       const ref = doc(db, "profiles", user.uid);
       const snap = await getDoc(ref);
 
       if (snap.exists()) {
         setProfile(snap.data());
       }
-    })();
-  }, [user]);
+    } catch (err) {
+      console.log("LOAD PROFILE ERROR:", err);
+    }
+  }
+
+  loadProfile();
+}, [user]);
 
   // -------------------------------
-  // PAYFAST CHECKOUT
+  // PAYGENIUS CHECKOUT PLACEHOLDER
   // -------------------------------
   async function checkout() {
     if (!accepted) {
-      alert("You must accept the Terms & Conditions");
+      alert("You must accept the Terms & Conditions and Refund Policy");
       return;
     }
 
-    if (!user || !profile) {
+    if (!user) {
+      alert("User not loaded");
+      router.push("/login");
+      return;
+    }
+
+    if (!profile) {
       alert("Profile not loaded");
       return;
     }
 
-    if (selected === null) return;
-
-    const pack = TOKEN_PACKS[selected];
-    const tokens = pack.tokens;
-    const amount = pack.price;
-
-    const res = await fetch("/api/payfast-initiate", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        amount,
-        item_name: `${tokens} Tokens`,
-        name_first: profile.name || "",
-        name_last: profile.surname || "",
-        email_address: user.email,
-        uid: user.uid,
-        type: "tokens",
-        tokens,
-      }),
-    });
-
-    const response = await res.json();
-
-    if (!response.url || !response.data) {
-      alert("PayFast error");
+    if (selected === null) {
+      alert("Select an entry fee package");
       return;
     }
 
-    const form = document.createElement("form");
-    form.method = "POST";
-    form.action = response.url;
+    const pack = ENTRY_PACKS[selected];
 
-    Object.entries(response.data).forEach(([key, value]) => {
-      const input = document.createElement("input");
-      input.type = "hidden";
-      input.name = key;
-      input.value = value as string;
-      form.appendChild(input);
+    console.log("PAYGENIUS PAYMENT START:", {
+      uid: user.uid,
+      email: user.email,
+      name: profile.name || "",
+      surname: profile.surname || "",
+      amount: pack.price,
+      entryCredits: pack.tokens,
     });
 
-    document.body.appendChild(form);
-    form.submit();
+    router.push("/dashboard");
   }
 
   // -------------------------------
-  // REDEEM TOKENS
+  // REDEEM
   // -------------------------------
   async function redeem() {
     try {
@@ -157,20 +139,24 @@ export default function WalletPage() {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center gap-10">
-      <h1 className="text-4xl font-bold tracking-wide">Wallet</h1>
+    <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center gap-10 px-6 py-10">
+      <h1 className="text-4xl font-bold tracking-wide text-center">
+        Your Competition Dashboard
+      </h1>
 
       <div className="animate-spin-slow text-6xl">🪙</div>
 
       <div className="text-center">
-        <p className="text-gray-400 text-sm">Token Balance</p>
+        <p className="text-gray-400 text-sm">Entry Fees Paid</p>
+
         <p className="text-5xl font-bold text-green-400 drop-shadow-[0_0_10px_#00ff88]">
           {available}
         </p>
-        <p className="text-gray-400">Tokens</p>
+
+        <p className="text-gray-400">Available Entry Credits</p>
       </div>
 
-      <div className="bg-gradient-to-br from-zinc-700 via-zinc-800 to-zinc-900 p-8 rounded-xl shadow-[0_0_30px_rgba(0,255,136,0.15)] flex flex-col gap-5 border border-zinc-600">
+      <div className="w-full max-w-md bg-gradient-to-br from-zinc-700 via-zinc-800 to-zinc-900 p-8 rounded-xl shadow-[0_0_30px_rgba(0,255,136,0.15)] flex flex-col gap-5 border border-zinc-600">
         <select
           className="px-4 py-3 rounded bg-zinc-200 text-black font-semibold shadow-inner"
           value={selected ?? ""}
@@ -178,19 +164,21 @@ export default function WalletPage() {
             setSelected(e.target.value === "" ? null : Number(e.target.value))
           }
         >
-          <option value="">Select Tokens</option>
-          {TOKEN_PACKS.map((pack, i) => (
+          <option value="">Select Entry Fee</option>
+
+          {ENTRY_PACKS.map((pack, i) => (
             <option key={i} value={i}>
               {pack.label}
             </option>
           ))}
         </select>
 
-        {/* ✅ LEGAL BLOCK */}
+        {/* LEGAL BLOCK */}
         <div className="text-xs text-gray-400 text-left space-y-2">
           <p>
             Payments are processed by{" "}
-            <strong>Honey Badger Technologies (PTY) LTD</strong> via PayFast.
+            <strong>Honey Badger Technologies (PTY) LTD</strong> through{" "}
+            <strong>PayGenius Smart Payments</strong>.
           </p>
 
           <p>
@@ -200,33 +188,43 @@ export default function WalletPage() {
               className="underline cursor-pointer text-green-400"
             >
               Terms & Conditions
+            </span>{" "}
+            and the{" "}
+            <span
+              onClick={() => router.push("/legal/refund-policy")}
+              className="underline cursor-pointer text-green-400"
+            >
+              Refund Policy
             </span>
             .
           </p>
 
-          <label className="flex items-center gap-2">
+          <label className="flex items-start gap-2">
             <input
               type="checkbox"
               checked={accepted}
               onChange={(e) => setAccepted(e.target.checked)}
+              className="mt-1"
             />
-            <span>I agree to the Terms & Conditions</span>
+
+            <span>
+              I agree to the Terms & Conditions and Refund Policy.
+            </span>
           </label>
         </div>
 
         {/* PAYMENT METHODS */}
         <div className="flex flex-col items-center gap-2 mt-2">
           <p className="text-[10px] text-gray-500 uppercase tracking-wide">
-            Secure Payments via PayFast
+            Secure Payments via PayGenius
           </p>
 
-          <div className="flex items-center gap-3 flex-wrap justify-center bg-white px-4 py-2 rounded-lg border border-gray-200">
-            <img src="/Payfast logo.svg" className="h-6 object-contain opacity-90" />
-            <img src="/Visa.png" className="h-5 object-contain opacity-90" />
-            <img src="/Master Card.png" className="h-5 object-contain opacity-90" />
-            <img src="/American Express Logo.png" className="h-5 object-contain opacity-90" />
-            <img src="/Diners Club Logo.png" className="h-5 object-contain opacity-90" />
-            <img src="/instantEFT_hi-Res_logo.png" className="h-5 object-contain opacity-90" />
+          <div className="flex items-center gap-3 flex-wrap justify-center bg-black px-4 py-3 rounded-lg border border-zinc-700 w-full">
+            <img
+              src="/paygenius-logo.png"
+              alt="PayGenius"
+              className="h-8 object-contain opacity-90"
+            />
           </div>
         </div>
 
@@ -236,17 +234,17 @@ export default function WalletPage() {
           className={`px-6 py-3 rounded-lg font-semibold ${
             selected !== null && accepted
               ? "bg-green-500 hover:bg-green-400 text-black"
-              : "bg-gray-600 text-gray-300"
+              : "bg-gray-600 text-gray-300 cursor-not-allowed"
           }`}
         >
-          Buy Tokens (PayFast)
+          Continue to PayGenius
         </button>
 
         <button
           onClick={() => router.push("/wallet/redeem")}
           className="bg-yellow-500 hover:bg-yellow-400 text-black px-6 py-3 rounded-lg font-semibold shadow-[0_0_12px_#ffaa00]"
         >
-          Redeem Tokens
+          Redeem Rewards
         </button>
       </div>
 

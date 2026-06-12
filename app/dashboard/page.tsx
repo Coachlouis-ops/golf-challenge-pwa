@@ -3,61 +3,12 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/src/lib/AuthContext";
-import { useEffect, useState } from "react";
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "@/src/lib/firebase";
 
 function DashboardContent() {
   const router = useRouter();
   const { user, loading } = useAuth();
 
-  const [checkingAccess, setCheckingAccess] = useState(true);
-  const [membershipStatus, setMembershipStatus] = useState("unpaid");
-  const [canCreateProfile, setCanCreateProfile] = useState(false);
-  const [profileExists, setProfileExists] = useState(false);
-
-  useEffect(() => {
-    if (loading) return;
-
-    if (!user) {
-      router.push("/login");
-      return;
-    }
-
-    checkUserAccess();
-  }, [user, loading]);
-
-  async function checkUserAccess() {
-    if (!user) return;
-
-    try {
-      setCheckingAccess(true);
-
-      const userRef = doc(db, "users", user.uid);
-      const userSnap = await getDoc(userRef);
-
-      const status = userSnap.exists()
-        ? userSnap.get("membershipStatus") || "unpaid"
-        : "unpaid";
-
-      const profileAllowed = userSnap.exists()
-        ? userSnap.get("canCreateProfile") === true
-        : false;
-
-      const profileRef = doc(db, "profiles", user.uid);
-      const profileSnap = await getDoc(profileRef);
-
-      setMembershipStatus(status);
-      setCanCreateProfile(profileAllowed);
-      setProfileExists(profileSnap.exists());
-    } catch (e) {
-      console.log("DASHBOARD ACCESS CHECK ERROR:", e);
-    } finally {
-      setCheckingAccess(false);
-    }
-  }
-
-  if (loading || checkingAccess) {
+  if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center text-white bg-black">
         Loading...
@@ -66,82 +17,10 @@ function DashboardContent() {
   }
 
   if (!user) {
+    router.push("/login");
     return null;
   }
 
-  // -----------------------------------
-  // PAYMENT PENDING SCREEN
-  // -----------------------------------
-  if (membershipStatus !== "approved") {
-    return (
-      <div className="min-h-screen bg-black text-white flex items-center justify-center px-6">
-        <div className="w-full max-w-md bg-zinc-900 border border-yellow-500/40 rounded-2xl p-6 space-y-6 text-center">
-          <h1 className="text-3xl font-bold text-yellow-400">
-            Payment Pending
-          </h1>
-
-          <p className="text-gray-300">
-            Your membership is waiting for admin approval.
-          </p>
-
-          <div className="bg-black/40 border border-zinc-700 rounded-xl p-4 text-left text-sm space-y-3">
-            <p>
-              After you make your EFT payment, admin will verify the payment in
-              the Honey Badger Technologies bank account.
-            </p>
-
-            <p>
-              Once approved, your profile creation will be unlocked.
-            </p>
-          </div>
-
-          <button
-            onClick={() => router.push("/payment")}
-            className="w-full py-3 rounded-xl bg-green-500 text-black font-semibold"
-          >
-            View Payment Details
-          </button>
-
-          <button
-            onClick={() => router.push("/")}
-            className="w-full text-sm text-gray-400 underline"
-          >
-            Back to Home
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  // -----------------------------------
-  // APPROVED BUT NO PROFILE YET
-  // -----------------------------------
-  if (canCreateProfile && !profileExists) {
-    return (
-      <div className="min-h-screen bg-black text-white flex items-center justify-center px-6">
-        <div className="w-full max-w-md bg-zinc-900 border border-green-500/40 rounded-2xl p-6 space-y-6 text-center">
-          <h1 className="text-3xl font-bold text-green-400">
-            Membership Approved
-          </h1>
-
-          <p className="text-gray-300">
-            Your payment has been approved. You can now create your player profile.
-          </p>
-
-          <button
-            onClick={() => router.push("/create-profile")}
-            className="w-full py-3 rounded-xl bg-green-500 text-black font-semibold"
-          >
-            Create Profile
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  // -----------------------------------
-  // NORMAL PLAYER DASHBOARD
-  // -----------------------------------
   return (
     <div className="relative min-h-screen text-white overflow-hidden bg-black">
       <Image

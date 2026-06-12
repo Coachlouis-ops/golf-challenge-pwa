@@ -325,7 +325,7 @@ if (!category || !supplier || !amount) {
       {/* AMOUNT */}
       <input
         type="number"
-        placeholder="Amount (tokens)"
+        placeholder="Amount"
         value={amount}
         onChange={(e) => setAmount(e.target.value)}
        className="

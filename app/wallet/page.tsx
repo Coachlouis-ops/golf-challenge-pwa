@@ -63,9 +63,11 @@ export default function WalletPage() {
 useEffect(() => {
   if (!user?.uid) return;
 
+  const uid = user.uid;
+
   async function loadProfile() {
     try {
-      const ref = doc(db, "profiles", user.uid);
+      const ref = doc(db, "profiles", uid);
       const snap = await getDoc(ref);
 
       if (snap.exists()) {

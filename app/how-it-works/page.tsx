@@ -46,8 +46,7 @@ How Teez Golf Challenges Works
               2. Enter Tournaments
             </h2>
             <p>
-              Accepting an invite gets you into the tournament challenges. Enter securely
-              through using your credits in your wallet.
+              Accepting an invite gets you into the tournament challenges. 
             </p>
           </section>
 
@@ -156,12 +155,6 @@ How Teez Golf Challenges Works
 
         {/* CTA */}
         <div className="flex justify-center mt-16">
-          <button
-            onClick={() => router.push("/register")}
-            className="px-10 py-4 rounded-xl bg-[#00ff88] text-black font-semibold text-lg"
-          >
-            Create Your Account
-          </button>
         </div>
 
       </main>

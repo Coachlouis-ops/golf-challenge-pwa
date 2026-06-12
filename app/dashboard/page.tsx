@@ -1,43 +1,63 @@
-
 "use client";
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/src/lib/AuthContext";
-import MembershipGuard from "@/src/components/MembershipGuard";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "@/src/lib/firebase";
 
 function DashboardContent() {
   const router = useRouter();
   const { user, loading } = useAuth();
 
-  // ------------------------------
-  // FIX: HANDLE PAYFAST RETURN STATE
-  // ------------------------------
+  const [checkingAccess, setCheckingAccess] = useState(true);
+  const [membershipStatus, setMembershipStatus] = useState("unpaid");
+  const [canCreateProfile, setCanCreateProfile] = useState(false);
+  const [profileExists, setProfileExists] = useState(false);
+
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const paymentUid = params.get("uid");
+    if (loading) return;
 
-    if (!paymentUid) return;
-    if (!user) return;
-
-    console.log("RETURN UID:", paymentUid);
-    console.log("AUTH UID:", user.uid);
-
-    // 🚨 CRITICAL: enforce correct user
-    if (user.uid !== paymentUid) {
-      console.log("UID mismatch → forcing correct session");
-
-      // hard reset to login so correct user is restored
-      window.location.href = "/login";
+    if (!user) {
+      router.push("/login");
       return;
     }
 
-    // ✅ correct user → clean URL (no reload loop)
-    window.history.replaceState({}, "", "/dashboard");
-  }, [user]);
+    checkUserAccess();
+  }, [user, loading]);
 
-  if (loading) {
+  async function checkUserAccess() {
+    if (!user) return;
+
+    try {
+      setCheckingAccess(true);
+
+      const userRef = doc(db, "users", user.uid);
+      const userSnap = await getDoc(userRef);
+
+      const status = userSnap.exists()
+        ? userSnap.get("membershipStatus") || "unpaid"
+        : "unpaid";
+
+      const profileAllowed = userSnap.exists()
+        ? userSnap.get("canCreateProfile") === true
+        : false;
+
+      const profileRef = doc(db, "profiles", user.uid);
+      const profileSnap = await getDoc(profileRef);
+
+      setMembershipStatus(status);
+      setCanCreateProfile(profileAllowed);
+      setProfileExists(profileSnap.exists());
+    } catch (e) {
+      console.log("DASHBOARD ACCESS CHECK ERROR:", e);
+    } finally {
+      setCheckingAccess(false);
+    }
+  }
+
+  if (loading || checkingAccess) {
     return (
       <div className="min-h-screen flex items-center justify-center text-white bg-black">
         Loading...
@@ -45,9 +65,85 @@ function DashboardContent() {
     );
   }
 
+  if (!user) {
+    return null;
+  }
+
+  // -----------------------------------
+  // PAYMENT PENDING SCREEN
+  // -----------------------------------
+  if (membershipStatus !== "approved") {
+    return (
+      <div className="min-h-screen bg-black text-white flex items-center justify-center px-6">
+        <div className="w-full max-w-md bg-zinc-900 border border-yellow-500/40 rounded-2xl p-6 space-y-6 text-center">
+          <h1 className="text-3xl font-bold text-yellow-400">
+            Payment Pending
+          </h1>
+
+          <p className="text-gray-300">
+            Your membership is waiting for admin approval.
+          </p>
+
+          <div className="bg-black/40 border border-zinc-700 rounded-xl p-4 text-left text-sm space-y-3">
+            <p>
+              After you make your EFT payment, admin will verify the payment in
+              the Honey Badger Technologies bank account.
+            </p>
+
+            <p>
+              Once approved, your profile creation will be unlocked.
+            </p>
+          </div>
+
+          <button
+            onClick={() => router.push("/payment")}
+            className="w-full py-3 rounded-xl bg-green-500 text-black font-semibold"
+          >
+            View Payment Details
+          </button>
+
+          <button
+            onClick={() => router.push("/")}
+            className="w-full text-sm text-gray-400 underline"
+          >
+            Back to Home
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // -----------------------------------
+  // APPROVED BUT NO PROFILE YET
+  // -----------------------------------
+  if (canCreateProfile && !profileExists) {
+    return (
+      <div className="min-h-screen bg-black text-white flex items-center justify-center px-6">
+        <div className="w-full max-w-md bg-zinc-900 border border-green-500/40 rounded-2xl p-6 space-y-6 text-center">
+          <h1 className="text-3xl font-bold text-green-400">
+            Membership Approved
+          </h1>
+
+          <p className="text-gray-300">
+            Your payment has been approved. You can now create your player profile.
+          </p>
+
+          <button
+            onClick={() => router.push("/create-profile")}
+            className="w-full py-3 rounded-xl bg-green-500 text-black font-semibold"
+          >
+            Create Profile
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // -----------------------------------
+  // NORMAL PLAYER DASHBOARD
+  // -----------------------------------
   return (
     <div className="relative min-h-screen text-white overflow-hidden bg-black">
-      {/* NEW BACKGROUND */}
       <Image
         src="/vs_energy1.png"
         alt="Background"
@@ -56,11 +152,9 @@ function DashboardContent() {
         className="object-cover opacity-50 animate-pulse"
       />
 
-      {/* DARK OVERLAY */}
       <div className="absolute inset-0 bg-black/60" />
 
       <main className="relative z-10 w-full max-w-md mx-auto px-6 pb-10">
-        {/* FULL TOP HERO */}
         <div className="w-full h-[260px] relative mb-6">
           <Image
             src="/vs_energy.png"
@@ -72,12 +166,10 @@ function DashboardContent() {
         </div>
 
         <div className="flex flex-col items-center gap-6">
-          {/* HEADLINE */}
           <p className="text-center text-[15px] tracking-[2px] font-semibold text-transparent bg-clip-text bg-gradient-to-r from-gray-300 via-white to-gray-400 drop-shadow-[0_0_12px_rgba(200,200,200,0.9)]">
             SETTLE THE SCORE. PLAY WITH PURPOSE
           </p>
 
-          {/* BUTTON STYLE */}
           <style jsx>{`
             .arena-btn {
               width: 100%;
@@ -107,54 +199,49 @@ function DashboardContent() {
             }
           `}</style>
 
-          {user && (
-            <>
-              <button
-                onClick={() => router.push("/challenges/create")}
-                className="arena-btn"
-              >
-                CREATE CHALLENGE
-              </button>
+          <button
+            onClick={() => router.push("/challenges/create")}
+            className="arena-btn"
+          >
+            CREATE CHALLENGE
+          </button>
 
-              <button
-                onClick={() => router.push("/my-challenges")}
-                className="arena-btn"
-              >
-                MY CHALLENGES
-              </button>
+          <button
+            onClick={() => router.push("/my-challenges")}
+            className="arena-btn"
+          >
+            MY CHALLENGES
+          </button>
 
-              <button
-                onClick={() => router.push("/my-invites")}
-                className="arena-btn"
-              >
-                MY INVITES
-              </button>
+          <button
+            onClick={() => router.push("/my-invites")}
+            className="arena-btn"
+          >
+            MY INVITES
+          </button>
 
-              <button
-                onClick={() => router.push("/profile")}
-                className="arena-btn"
-              >
-                MY PROFILE
-              </button>
+          <button
+            onClick={() => router.push("/profile")}
+            className="arena-btn"
+          >
+            MY PROFILE
+          </button>
 
-              <button
-                onClick={() => router.push("/wallet")}
-                className="arena-btn"
-              >
-                WALLET
-              </button>
+          <button
+            onClick={() => router.push("/wallet")}
+            className="arena-btn"
+          >
+            WALLET
+          </button>
 
-              <button
-                onClick={() => router.push("/vouchers")}
-                className="arena-btn"
-              >
-                MY VOUCHERS
-              </button>
-            </>
-          )}
+          <button
+            onClick={() => router.push("/vouchers")}
+            className="arena-btn"
+          >
+            MY VOUCHERS
+          </button>
 
-        
-  <button
+          <button
             onClick={() => router.push("/")}
             className="text-xs tracking-widest text-gray-400 underline mt-2 hover:text-white"
           >
@@ -167,9 +254,5 @@ function DashboardContent() {
 }
 
 export default function Dashboard() {
-  return (
-    <MembershipGuard>
-      <DashboardContent />
-    </MembershipGuard>
-  );
+  return <DashboardContent />;
 }

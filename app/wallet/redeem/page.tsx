@@ -12,7 +12,6 @@ const CATEGORIES = [
   "FOOD",
   "GOLF",
   "DIGITAL",
-"CASH",
 ];
 
 const SUPPLIERS_BY_CATEGORY: Record<
@@ -51,9 +50,6 @@ const SUPPLIERS_BY_CATEGORY: Record<
     { name: "Cell C Airtime / Data", url: "https://www.cellc.co.za" },
     { name: "Telkom Airtime / Data", url: "https://www.telkom.co.za" },
     { name: "Electricity", url: "" },
-  ],
-    CASH: [
-    { name: "Cash Redemption", url: "" },
   ],
 };
 
@@ -155,42 +151,12 @@ if (!category || !supplier || !amount) {
     </p>
 
     <p>
-      Prize redemptions, including vouchers, merchandise and cash rewards, may be subject to the Rules of Amateur Status governed by organizations including the R&A, GolfRSA, USPGA and other affiliated governing bodies.
+      Prize redemptions, including vouchers, and merchandise is subject to the Rules of Amateur Golf Status governed by organizations including the R&A, GolfRSA, USPGA as well as local governing bodies.
     </p>
 
     <p>
-      Players are individually responsible for understanding the rules applicable to their playing division, competition format and amateur status before selecting or accepting any redemption option.
+      Players are individually responsible for understanding the rules applicable to their playing division and competition format.
     </p>
-
-    <p>
-      Certain cash prizes, high-value prizes or prize redemptions may affect a player’s amateur status depending on the rules applicable within their governing region and competition category.
-    </p>
-
-  </div>
-
-  {/* ================= CASH WARNING ================= */}
-
-  <div className="border border-cyan-400/30 bg-[#071521]/80 rounded-2xl p-4 shadow-[0_0_25px_rgba(0,255,255,0.18)] backdrop-blur-md">
-
-    <div className="text-lg font-bold text-cyan-300 mb-3">
-      CASH REDEMPTION WARNING
-    </div>
-
-    <div className="text-sm text-cyan-100 leading-relaxed space-y-3">
-
-      <p>
-        Cash prize redemptions may not be permitted within certain amateur divisions, handicap competitions or governing jurisdictions.
-      </p>
-
-      <p>
-        Accepting cash prizes or prize values exceeding permitted limits may result in the forfeiture of amateur golf status under applicable governing body rules.
-      </p>
-
-      <p>
-        Before selecting CASH redemption options, players should ensure they fully understand the rules applicable to their division, competition type and governing body regulations.
-      </p>
-
-    </div>
 
   </div>
 
@@ -257,7 +223,7 @@ if (!category || !supplier || !amount) {
       />
 
       <span>
-        I understand that certain prize redemptions, including cash prizes, may affect my amateur golf status under applicable governing body rules including the R&A, GolfRSA, USPGA and other affiliated organizations.
+        I understand that prizes are managed within the rules and regulations as set by the governing bodies, R&A, GolfRSA, USPGA and affiliated organizations.
       </span>
     </label>
 
@@ -287,7 +253,7 @@ if (!category || !supplier || !amount) {
       />
 
       <span>
-        I confirm that all redemption requests submitted through Teez Golf Challenges are made voluntarily and that all information provided by me is accurate and truthful.
+        I confirm that all prize givings are submitted through Teez Golf Challenges and is voluntarily and that all information provided by me is accurate and truthful.
       </span>
     </label>
 
@@ -297,7 +263,7 @@ if (!category || !supplier || !amount) {
 
 <div className="text-xs text-cyan-200 border border-cyan-400/20 rounded-2xl bg-[#071521]/80 p-4 shadow-[0_0_20px_rgba(0,255,255,0.15)]">
 
-    By proceeding with a redemption request through Teez Golf Challenges, I acknowledge that I have read, understood and accepted the redemption rules, prize conditions and amateur status responsibilities applicable to my participation within the platform.
+    By entering a prize giving event through Teez Golf Challenges, I acknowledge that I have read, understood and accepted the rules, prize conditions and truthfull participation within the platform.
 
   </div>
 

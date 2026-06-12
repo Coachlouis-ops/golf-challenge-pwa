@@ -80,13 +80,20 @@ export default function PaymentPage() {
 
           <p>
             By proceeding, you agree to the full{" "}
-            <span
-              onClick={() => router.push("/legal/terms")}
-              className="text-green-400 underline cursor-pointer"
-            >
-              Terms & Conditions
-            </span>
-            .
+<span
+  onClick={() => router.push("/legal/terms")}
+  className="text-green-400 underline cursor-pointer"
+>
+  Terms & Conditions
+</span>{" "}
+and the{" "}
+<span
+  onClick={() => router.push("/legal/refund-policy")}
+  className="text-green-400 underline cursor-pointer"
+>
+  Refund Policy
+</span>
+.
           </p>
 
           <label className="flex items-start gap-3 pt-2">

@@ -123,16 +123,56 @@ export default function HomePage() {
           </button>
         </div>
 
-        {/* CONTACT */}
-        <div className="flex justify-center">
-          <button
-            onClick={() => router.push("/contact")}
-            className="bg-white text-black px-4 py-1 text-xs rounded"
-          >
-            Contact
-          </button>
-        </div>
+        {/* TOP NAVIGATION BUTTONS */}
+<div className="flex justify-center gap-2 flex-wrap">
+  <button
+    onClick={() => router.push("/legal/terms")}
+    className="bg-white text-black px-4 py-2 text-xs rounded-lg font-semibold hover:bg-gray-200 transition"
+  >
+    Terms & Conditions
+  </button>
+
+  <button
+    onClick={() => router.push("/legal/refund-policy")}
+    className="bg-white text-black px-4 py-2 text-xs rounded-lg font-semibold hover:bg-gray-200 transition"
+  >
+    Refund Policy
+  </button>
+
+  <button
+    onClick={() => router.push("/payment")}
+    className="bg-green-400 text-black px-4 py-2 text-xs rounded-lg font-semibold shadow-[0_0_15px_rgba(34,197,94,0.9)] hover:scale-105 transition"
+  >
+    Pay Registration
+  </button>
+
+  <button
+    onClick={() => router.push("/wallet")}
+    className="bg-cyan-400 text-black px-4 py-2 text-xs rounded-lg font-semibold shadow-[0_0_15px_rgba(34,211,238,0.9)] hover:scale-105 transition"
+  >
+    Enter Competition
+  </button>
+
+  <button
+    onClick={() => router.push("/contact")}
+    className="bg-zinc-800 text-white px-4 py-2 text-xs rounded-lg font-semibold border border-zinc-600 hover:bg-zinc-700 transition"
+  >
+    Contact
+  </button>
+</div>
       </header>
+
+      {/* SLOGAN SECTION */}
+<section className="w-full max-w-4xl mx-auto text-center px-6 py-10">
+  <h2 className="text-3xl md:text-5xl font-bold text-green-400 drop-shadow-[0_0_18px_rgba(0,255,136,0.8)]">
+    New trends are changing how we play and pay.
+  </h2>
+
+  <p className="mt-5 text-gray-300 text-base md:text-lg leading-8">
+    Teez Golf Challenges brings skill-based golf competitions into a modern digital platform —
+    with secure payment access, player profiles, competition entries, and controlled digital participation.
+  </p>
+</section>
 
       {/* ================= HERO ================= */}
       <section className="w-full">
@@ -156,9 +196,7 @@ export default function HomePage() {
           </p>
           <p className="text-xs text-gray-500 mb-6 max-w-xl mx-auto">
             Teez Golf Challenges is operated by Honey Badger Technologies PTY LTD.
-            All payments are made to Honey Badger Technologies PTY LTD for membership access and participation in challenges.
-            Entries are non-refundable, non-transferable, and cannot be exchanged
-            for cash.
+            All payments are made via secure payment partner PayGenius to Honey Badger Technologies PTY LTD for membership access and participation in challenges.
           </p>
 <div className="flex flex-col items-center gap-4">
   <div className="flex justify-center gap-4 flex-wrap">
@@ -207,12 +245,10 @@ export default function HomePage() {
       <section className="bg-gray-100 text-black text-center py-20 px-6">
         <div className="max-w-3xl mx-auto">
           <h2 className="text-xl md:text-2xl font-semibold mb-4">
-            The original game of golf was never a scorecard — it was a challenge
-            between players.
+            Bringing you the future of competition 
           </h2>
           <p className="text-gray-600 mb-8">
-            Golf dates back to at least 1457 in Scotland, where it was played as a
-            direct contest between players.
+            Golf dates back to at least 1457 in Scotland, today 500 years later, it’s still remains the most beautiful game ever played!
           </p>
         </div>
       </section>
@@ -230,39 +266,26 @@ export default function HomePage() {
           <div className="space-y-8 text-gray-700 text-base md:text-lg leading-8">
             <p>
               Teez Golf Challenges is built around the original essence of golf —
-              competition between players, where every hole matters and every
-              shot a possibility.
+              where the most important shot, is the next shot. 
             </p>
             <p>
               Golf was never meant to be played against the course. At its
-              core, it is a game of matchplay — player versus player,
-              strategizing, out thinking, where the combinations of decisions
-              backed by skill determines the outcome.
+              core, it is a game of personal turmoil and finding inner piece and acceptance.
+              To strategizing, out think, and apply your skill. 
             </p>
             <p>
               Teez Golf Challenges brings that format back into focus by creating
-              structured challenges where players compete directly.
+              structured challenges.
             </p>
             <p>
-              Players enter matches using the Teez Golf Challenges platform and compete over
+              Players enter competitions using the Teez Golf Challenges platform and compete over
               real rounds of golf. Whether it’s stroke play, matchplay, or
-              challenge-based formats, each competition is designed to produce a
-              clear result — a winner and a loser — just as the game was always
-              intended.
+              any of the challenge-based formats.
             </p>
             <p>
               Performance drives everything. There are no shortcuts, no luck, and
               no randomness. The outcome is determined entirely by how you think
               and how you back it by play.
-            </p>
-            <p>
-              Games are won through competition and prizes can be redeemed,
-              giving real value to strong performance on the course.
-            </p>
-            <p className="font-semibold text-black">
-              Teez Golf Challenges is a structured, skill-based competitive system 
-              that restores the competitive edge of
-              golf — where players don’t just play rounds, they play to win.
             </p>
           </div>
 
@@ -282,26 +305,25 @@ export default function HomePage() {
             <div className="text-center">
               <img src="/hero-teez.jpg" className="w-full mb-4" />
               <h3 className="font-semibold mb-2">
-                Play a Match against an Opponent
+                Enter a Competition
               </h3>
               <p className="text-gray-400 text-sm">
-                Create any type of challenge - Matchplay, Strokeplay. Choose from
+                Choose a Format - Matchplay, Strokeplay. Choose from
                 over 30 type of Challenges.
               </p>
             </div>
 
             <div className="text-center">
               <img src="/wallet.png" className="w-full mb-4" />
-              <h3 className="font-semibold mb-2">Your Golf Wallet</h3>
+              <h3 className="font-semibold mb-2">Your Competition Dashboard</h3>
               <p className="text-gray-400 text-sm">
-                Fund your wallet. Enter a challenge. Win
-                matches, redeem prizes. 
+                Manage your Entries and Results.
               </p>
             </div>
 
             <div className="text-center">
               <img src="/voucher_badger.png" className="w-full mb-4" />
-              <h3 className="font-semibold mb-2">Redeem your Vouchers</h3>
+              <h3 className="font-semibold mb-2">View yor Prizes</h3>
               <p className="text-gray-400 text-sm">
                 Prizes can be redeemed by players at any time. A guided step by step, redeem process 
                 is available to all players. 
@@ -337,24 +359,14 @@ export default function HomePage() {
                 Terms & Conditions
               </span>
 
-              {/* PAYMENT LOGOS */}
-              <div className="flex items-center gap-3 flex-wrap justify-center md:justify-start">
-                <img src="/Payfast logo.svg" className="h-6 object-contain" />
-                <img src="/Visa.png" className="h-5 object-contain" />
-                <img src="/Master Card.png" className="h-5 object-contain" />
-                <img
-                  src="/American Express Logo.png"
-                  className="h-5 object-contain"
-                />
-                <img
-                  src="/Diners Club Logo.png"
-                  className="h-5 object-contain"
-                />
-                <img
-                  src="/instantEFT_hi-Res_logo.png"
-                  className="h-5 object-contain"
-                />
-              </div>
+              {/* PAYMENT LOGO */}
+<div className="flex items-center gap-3 flex-wrap justify-center md:justify-start">
+  <img
+    src="/paygenius-logo.png"
+    className="h-8 object-contain"
+    alt="PayGenius"
+  />
+</div>
             </div>
           </div>
 

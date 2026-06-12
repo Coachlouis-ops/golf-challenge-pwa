@@ -1,11 +1,14 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/src/lib/AuthContext";
 
 export default function PaymentPage() {
   const router = useRouter();
   const { loading } = useAuth();
+
+  const [accepted, setAccepted] = useState(false);
 
   if (loading) {
     return (
@@ -16,7 +19,7 @@ export default function PaymentPage() {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center gap-10 px-6">
+    <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center gap-10 px-6 py-10">
       {/* HERO */}
       <div className="text-center flex flex-col gap-3">
         <h1 className="text-5xl font-bold text-green-400">WELCOME</h1>
@@ -59,16 +62,74 @@ export default function PaymentPage() {
           </p>
         </div>
 
+        {/* TERMS */}
+        <div className="text-left bg-black/40 border border-zinc-700 rounded-xl p-4 space-y-4 text-sm text-gray-300">
+          <p className="text-green-400 font-semibold">
+            Terms & Conditions
+          </p>
+
+          <p>
+            Payments are made to{" "}
+            <strong>Honey Badger Technologies (PTY) LTD</strong>.
+          </p>
+
+          <p>
+            Your Teez Golf membership gives you access to the Teez Golf Challenges
+            player system, subject to successful payment and account approval.
+          </p>
+
+          <p>
+            Payments are processed through PayGenius Smart Payments. Membership
+            access will only be activated once payment has been confirmed.
+          </p>
+
+          <p>
+            Membership payments, digital services, and tokens are non-refundable
+            once activated, delivered, allocated, or used, except in cases of
+            duplicate payment, system error, or incorrect allocation.
+          </p>
+
+          <p>
+            By proceeding, you agree to the full{" "}
+            <span
+              onClick={() => router.push("/legal/terms")}
+              className="text-green-400 underline cursor-pointer"
+            >
+              Terms & Conditions
+            </span>
+            .
+          </p>
+
+          <label className="flex items-start gap-3 pt-2">
+            <input
+              type="checkbox"
+              checked={accepted}
+              onChange={(e) => setAccepted(e.target.checked)}
+              className="mt-1"
+            />
+
+            <span>
+              I agree to the Terms & Conditions and understand that payment must
+              be confirmed before membership access is activated.
+            </span>
+          </label>
+        </div>
+
         {/* PAYMENT COMPLETE */}
         <button
           onClick={() => router.push("/dashboard")}
-          className="w-full py-4 rounded-xl bg-green-500 hover:bg-green-400 text-black font-bold transition"
+          disabled={!accepted}
+          className={`w-full py-4 rounded-xl font-bold transition ${
+            accepted
+              ? "bg-green-500 hover:bg-green-400 text-black"
+              : "bg-gray-700 text-gray-400 cursor-not-allowed"
+          }`}
         >
           PAYMENT COMPLETE
         </button>
 
         <p className="text-xs text-gray-400">
-          After payment, your membership access will be checked and activated according to your payment status.
+          Tick the Terms & Conditions box to activate the payment button.
         </p>
       </div>
 

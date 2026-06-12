@@ -77,14 +77,6 @@ export default function PaymentPage() {
     alert("Copied");
   }
 
-  function openConsent(bankName: string, bankUrl: string) {
-    router.push(
-      `/payment/consent?bank=${encodeURIComponent(
-        bankName
-      )}&url=${encodeURIComponent(bankUrl)}`
-    );
-  }
-
   // -----------------------------------
   // LOADING
   // -----------------------------------
@@ -165,9 +157,9 @@ export default function PaymentPage() {
                 className="rounded-xl bg-black border border-zinc-700 p-4 space-y-4"
               >
                 <button
-                  onClick={() => openConsent(bank.name, bank.url)}
-                  className="w-full rounded-xl bg-black border border-zinc-800 hover:border-green-400 p-4 flex items-center justify-center transition"
-                >
+  onClick={() => router.push("/dashboard")}
+  className="w-full rounded-xl bg-black border border-zinc-800 hover:border-green-400 p-4 flex items-center justify-center transition"
+>
                   <img
                     src={bank.logo}
                     alt={bank.name}

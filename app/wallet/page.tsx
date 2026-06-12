@@ -246,7 +246,7 @@ useEffect(() => {
           onClick={() => router.push("/wallet/redeem")}
           className="bg-yellow-500 hover:bg-yellow-400 text-black px-6 py-3 rounded-lg font-semibold shadow-[0_0_12px_#ffaa00]"
         >
-          Redeem Rewards
+          Prize Giving Function
         </button>
       </div>
 

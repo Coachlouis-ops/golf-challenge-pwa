@@ -21,13 +21,13 @@ export default function RefundPolicyPage() {
       {/* CONTENT */}
       <div className="flex-1 overflow-y-auto px-6 mt-6 text-sm leading-relaxed space-y-4 max-w-3xl mx-auto pb-10">
         <p className="font-semibold">
-          Refund Policy — Honey Badger Technologies (PTY) LTD
+          Refund Policy - Honey Badger Technologies (PTY) LTD
         </p>
 
         <p>
           This Refund Policy applies to payments, membership fees, platform access,
-          competition entries, and other digital services provided
-          through the Teez Golf Challenges platform.
+          competition entries, and other digital services provided through the Teez
+          Golf Challenges platform.
         </p>
 
         <p>
@@ -53,42 +53,37 @@ export default function RefundPolicyPage() {
             A technical failure prevented the user from participating in a paid
             challenge or competition.
           </li>
+          <li>A duplicate payment was made.</li>
+          <li>The wrong amount was charged.</li>
           <li>
-            A duplicate payment was made.
-          </li>
-          <li>
-            The wrong amount was charged.
-          </li>
-         <li>
             An administrative or human error caused incorrect account allocation,
-            incorrect membership activation, or incorrect
-            transaction processing.
+            incorrect membership activation, or incorrect transaction processing.
           </li>
           <li>
-            Payment was received but the user’s account was not activated within a
+            Payment was received but the user account was not activated within a
             reasonable time due to a platform or administrative error.
           </li>
           <li>
-            A challenge, competition, or result,  was affected by
-            a verified platform error, scoring error, setup error, or system failure.
+            A challenge, competition, or result was affected by a verified platform
+            error, scoring error, setup error, or system failure.
           </li>
           <li>
             Any other issue where Honey Badger Technologies (PTY) LTD reasonably
             determines that a refund is fair and appropriate.
           </li>
           <li>
-            The refund request cannot be made more than 30 days after the transaction date,
-            unless approved at the company’s discretion.
+            The refund request cannot be made more than 30 days after the transaction
+            date, unless approved at the company discretion.
           </li>
+        </ul>
 
-        <p className="font-semibold">3. Challenge and Competition Refunds</p>
+        <p className="font-semibold">2. Challenge and Competition Refunds</p>
 
         <p>
           Where a challenge or competition cannot proceed because of a technical
           failure, system error, incorrect setup, or platform-related issue, Honey
-          Badger Technologies (PTY) LTD may refund, reverse the
-          transaction, restore the user’s balance, or make another fair account
-          correction.
+          Badger Technologies (PTY) LTD may refund, reverse the transaction, restore
+          the user balance, or make another fair account correction.
         </p>
 
         <p>
@@ -98,7 +93,7 @@ export default function RefundPolicyPage() {
           incorrect deduction, or administrative mistake.
         </p>
 
-        <p className="font-semibold">5. Membership Refunds</p>
+        <p className="font-semibold">3. Membership Refunds</p>
 
         <p>
           Membership fees may be refunded where payment was made but membership
@@ -112,7 +107,7 @@ export default function RefundPolicyPage() {
           determines that a platform error or administrative error justifies a refund.
         </p>
 
-        <p className="font-semibold">6. Refund Review Process</p>
+        <p className="font-semibold">4. Refund Review Process</p>
 
         <p>
           All refund requests must be reviewed by Honey Badger Technologies (PTY) LTD
@@ -131,7 +126,7 @@ export default function RefundPolicyPage() {
           incomplete, false, misleading, fraudulent, abusive, or cannot be verified.
         </p>
 
-        <p className="font-semibold">7. Refund Processing Time</p>
+        <p className="font-semibold">5. Refund Processing Time</p>
 
         <p>
           Approved refunds will be processed within 7 business days where possible.
@@ -142,7 +137,7 @@ export default function RefundPolicyPage() {
           card issuer, payment method, or payment processing system used.
         </p>
 
-        <p className="font-semibold">8. South African Law and User Rights</p>
+        <p className="font-semibold">6. South African Law and User Rights</p>
 
         <p>
           This Refund Policy must be read together with the Platform Terms and
@@ -152,34 +147,34 @@ export default function RefundPolicyPage() {
 
         <p>
           Nothing in this Refund Policy is intended to remove, reduce, or limit any
-          legal rights that a user may have under applicable South African law.
-          Honey Badger Technologies (PTY) LTD will handle refund requests fairly,
-          reasonably, and in line with applicable legal obligations.
+          legal rights that a user may have under applicable South African law. Honey
+          Badger Technologies (PTY) LTD will handle refund requests fairly, reasonably,
+          and in line with applicable legal obligations.
         </p>
 
-        <p className="font-semibold">9. Complaints and Ombudsman Assistance</p>
+        <p className="font-semibold">7. Complaints and Ombudsman Assistance</p>
 
         <p>
-          Users are encouraged to contact Honey Badger Technologies (PTY) LTD first
-          so that the company can investigate and attempt to resolve the refund
-          request or payment dispute directly.
+          Users are encouraged to contact Honey Badger Technologies (PTY) LTD first so
+          that the company can investigate and attempt to resolve the refund request or
+          payment dispute directly.
         </p>
 
         <p>
           If a user is not satisfied with the outcome, the user may seek assistance
           from an applicable South African consumer protection body, payment provider,
           bank, card issuer, or recognised ombudsman structure where the matter falls
-          within that body’s jurisdiction.
+          within that body jurisdiction.
         </p>
 
         <p>
           This may include consumer protection assistance through the National Consumer
           Commission or financial dispute assistance through the relevant banking,
-          payment, or financial services ombudsman process, depending on the nature
-          of the complaint.
+          payment, or financial services ombudsman process, depending on the nature of
+          the complaint.
         </p>
 
-        <p className="font-semibold">10. Fraud, Abuse, and Misuse</p>
+        <p className="font-semibold">8. Fraud, Abuse, and Misuse</p>
 
         <p>
           Honey Badger Technologies (PTY) LTD reserves the right to refuse a refund
@@ -188,22 +183,21 @@ export default function RefundPolicyPage() {
         </p>
 
         <p>
-          Where necessary, the company may suspend or restrict the user’s account while
+          Where necessary, the company may suspend or restrict the user account while
           the matter is investigated.
         </p>
 
-        <p className="font-semibold">11. Final Decision</p>
+        <p className="font-semibold">9. Final Decision</p>
 
         <p>
-          Honey Badger Technologies (PTY) LTD will make the final decision on all
-          refund requests after reviewing the transaction, user account, payment
-          records,challenge records, platform logs, and any other
-          relevant information.
+          Honey Badger Technologies (PTY) LTD will make the final decision on all refund
+          requests after reviewing the transaction, user account, payment records,
+          challenge records, platform logs, and any other relevant information.
         </p>
 
         <p>
-          Refunds will be granted where the company determines that the refund is
-          valid, fair, and supported by the platform records or available evidence.
+          Refunds will be granted where the company determines that the refund is valid,
+          fair, and supported by the platform records or available evidence.
         </p>
 
         <button

@@ -110,7 +110,7 @@ function DashboardContent() {
             onClick={() => router.push("/wallet")}
             className="arena-btn"
           >
-            WALLET
+            Competition Dashboard
           </button>
 
           <button

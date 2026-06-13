@@ -8,181 +8,177 @@ export default function TeezScoringPage() {
 
   return (
 
-  <main className="h-screen overflow-y-scroll bg-black text-white p-10">
+    <main className="h-screen overflow-y-scroll bg-black text-white p-10">
 
       <div className="max-w-7xl mx-auto">
 
-        <h1 className="text-4xl font-bold mb-3">
+        <h1 className="text-5xl font-black mb-3 text-green-400">
           TEEZ GOLF SCORING
         </h1>
 
-        <p className="text-gray-400 mb-12">
-          Club Competition Management System
+        <p className="text-gray-400 mb-12 text-xl">
+          Golf Club Competition Management Platform
         </p>
 
-    <div className="grid md:grid-cols-5 gap-6">
+        {/* ACTIVE BUTTONS */}
+
+        <div className="grid md:grid-cols-2 gap-6 mb-12">
+
+          <button
+            onClick={() =>
+              window.location.href =
+                "mailto:admin@teezgolfchallenges.com"
+            }
+            className="
+              bg-green-400
+              text-black
+              rounded-3xl
+              p-10
+              text-left
+              font-bold
+              hover:scale-[1.02]
+              transition
+            "
+          >
+            <h2 className="text-3xl font-black mb-4">
+              APPLY FOR SCORING SYSTEM
+            </h2>
+
+            <p>
+              Apply for your golf club to use the
+              Teez Competition Scoring System.
+            </p>
+
+          </button>
 
           <button
             onClick={() =>
               router.push(
-                "/teez-scoring/create-competition"
+                "/teez-scoring/login"
               )
             }
             className="
-              bg-neutral-900
-              border border-cyan-400/20
+              bg-cyan-400
+              text-black
               rounded-3xl
-              p-8
+              p-10
               text-left
-              hover:border-cyan-400
+              font-bold
+              hover:scale-[1.02]
               transition
             "
           >
+            <h2 className="text-3xl font-black mb-4">
+              REGISTER / LOGIN
+            </h2>
+
+            <p>
+              Existing approved clubs login here.
+            </p>
+
+          </button>
+
+        </div>
+
+        {/* FEATURE CARDS */}
+
+        <div className="grid md:grid-cols-3 gap-6">
+
+          <div className="
+            bg-neutral-900
+            border border-cyan-400/20
+            rounded-3xl
+            p-8
+          ">
             <h2 className="text-2xl font-bold mb-3 text-cyan-400">
               Create Competition
             </h2>
 
             <p className="text-gray-400 text-sm">
-              Create new competitions,
-              configure scoring formats,
-              divisions and rules.
+              Create competitions, generate tee sheets,
+              enter scores, manage divisions and finalize events.
             </p>
-          </button>
-          
+          </div>
 
-<button
-  onClick={() =>
-    router.push(
-      "/teez-scoring/competitions"
-    )
-  }
-  className="
-    bg-neutral-900
-    border border-orange-400/20
-    rounded-3xl
-    p-8
-    text-left
-    hover:border-orange-400
-    transition
-  "
->
-  <h2 className="text-2xl font-bold mb-3 text-orange-400">
-    Competitions
-  </h2>
+          <div className="
+            bg-neutral-900
+            border border-orange-400/20
+            rounded-3xl
+            p-8
+          ">
+            <h2 className="text-2xl font-bold mb-3 text-orange-400">
+              Add Device
+            </h2>
 
-  <p className="text-gray-400 text-sm">
-    Manage active competitions,
-    reopen scoring,
-    launch leaderboards
-    and TV broadcasts.
-  </p>
-</button>
+            <p className="text-gray-400 text-sm">
+              Connect Smart TVs and display screens
+              for clubhouse broadcasting.
+            </p>
+          </div>
 
+          <div className="
+            bg-neutral-900
+            border border-purple-400/20
+            rounded-3xl
+            p-8
+          ">
+            <h2 className="text-2xl font-bold mb-3 text-purple-400">
+              Competition History
+            </h2>
 
-          <button
-            onClick={() =>
-              router.push(
-                "/teez-scoring/leaderboards"
-              )
-            }
-            className="
-              bg-neutral-900
-              border border-green-400/20
-              rounded-3xl
-              p-8
-              text-left
-              hover:border-green-400
-              transition
-            "
-          >
+            <p className="text-gray-400 text-sm">
+              Store historical competitions,
+              final results and export reports.
+            </p>
+          </div>
+
+          <div className="
+            bg-neutral-900
+            border border-green-400/20
+            rounded-3xl
+            p-8
+          ">
             <h2 className="text-2xl font-bold mb-3 text-green-400">
               Live Leaderboards
             </h2>
 
             <p className="text-gray-400 text-sm">
-              Monitor and manage live
-              competition scoring and rankings.
+              Realtime overall and division
+              leaderboard management.
             </p>
-          </button>
+          </div>
 
-          <button
-            onClick={() =>
-              router.push(
-                "/teez-scoring/tv"
-              )
-            }
-            className="
-              bg-neutral-900
-              border border-yellow-400/20
-              rounded-3xl
-              p-8
-              text-left
-              hover:border-yellow-400
-              transition
-            "
-          >
+          <div className="
+            bg-neutral-900
+            border border-yellow-400/20
+            rounded-3xl
+            p-8
+          ">
             <h2 className="text-2xl font-bold mb-3 text-yellow-400">
-              TV Display
+              TV Broadcasting
             </h2>
 
             <p className="text-gray-400 text-sm">
-              Launch fullscreen live
-              leaderboard broadcasting mode.
+              Broadcast leaderboards,
+              tee sheets and sponsor content.
             </p>
-          </button>
+          </div>
 
-          <button
-  onClick={() =>
-    router.push(
-      "/teez-scoring/history"
-    )
-  }
-  className="
-    bg-neutral-900
-    border border-purple-400/20
-    rounded-3xl
-    p-8
-    text-left
-    hover:border-purple-400
-    transition
-  "
->
-  <h2 className="text-2xl font-bold mb-3 text-purple-400">
-    Competition History
-  </h2>
+          <div className="
+            bg-neutral-900
+            border border-red-400/20
+            rounded-3xl
+            p-8
+          ">
+            <h2 className="text-2xl font-bold mb-3 text-red-400">
+              Sponsor Advertising
+            </h2>
 
-  <p className="text-gray-400 text-sm">
-    View finalized competition
-    archives and results history.
-  </p>
-</button>
-
-
-<button
-  onClick={() =>
-    router.push(
-      "/teez-scoring/register-tv"
-    )
-  }
-  className="
-    bg-neutral-900
-    border border-orange-400/20
-    rounded-3xl
-    p-8
-    text-left
-    hover:border-orange-400
-    transition
-  "
->
-  <h2 className="text-2xl font-bold mb-3 text-orange-400">
-    Register TV
-  </h2>
-
-  <p className="text-gray-400 text-sm">
-    Register external TV devices
-    for leaderboard broadcasting.
-  </p>
-</button>
+            <p className="text-gray-400 text-sm">
+              Display sponsor campaigns
+              during and after competitions.
+            </p>
+          </div>
 
         </div>
 

@@ -1,14 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
 import { useRouter } from "next/navigation";
 
 import {
   collection,
   onSnapshot,
-  orderBy,
-  query,
 } from "firebase/firestore";
 
 import { db } from "@/src/lib/firebase";
@@ -16,7 +13,10 @@ import { db } from "@/src/lib/firebase";
 type Club = {
   uid: string;
   clubName: string;
+  contactPerson?: string;
   email: string;
+  phone?: string;
+  logoUrl?: string;
   active: boolean;
 };
 
@@ -28,10 +28,10 @@ export default function ScoringClubsDashboard() {
 
   useEffect(() => {
 
-   const q = collection(
-  db,
-  "scoringClubs"
-);
+    const q = collection(
+      db,
+      "scoringClubs"
+    );
 
     const unsub = onSnapshot(q, (snap) => {
 
@@ -39,10 +39,10 @@ export default function ScoringClubsDashboard() {
 
       snap.forEach((doc) => {
 
-       arr.push({
-  ...(doc.data() as Club),
-  uid: doc.id,
-});
+        arr.push({
+          ...(doc.data() as Club),
+          uid: doc.id,
+        });
 
       });
 
@@ -55,9 +55,10 @@ export default function ScoringClubsDashboard() {
   }, []);
 
   return (
+
     <main className="min-h-screen bg-black text-white p-10">
 
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-7xl mx-auto">
 
         {/* HEADER */}
 
@@ -89,8 +90,6 @@ export default function ScoringClubsDashboard() {
               py-4
               rounded-2xl
               shadow-[0_0_25px_rgba(34,197,94,0.7)]
-              hover:scale-[1.02]
-              transition-all
             "
           >
             ADD NEW CLUB
@@ -108,39 +107,128 @@ export default function ScoringClubsDashboard() {
               key={club.uid}
               className="
                 bg-neutral-900
-                border
-                border-green-400/20
+                border border-green-400/20
                 rounded-3xl
                 p-6
               "
             >
 
-              <div className="flex items-center justify-between mb-4">
+              <div className="flex gap-5">
 
-                <h2 className="text-2xl font-bold text-green-400">
-                  {club.clubName}
-                </h2>
+                <div>
 
-                <div
-                  className={`
-                    px-3 py-1 rounded-full text-xs font-bold
-                    ${
-                      club.active
-                        ? "bg-green-400 text-black"
-                        : "bg-red-500 text-white"
-                    }
-                  `}
-                >
-                  {club.active
-                    ? "ACTIVE"
-                    : "DISABLED"}
+                  {club.logoUrl ? (
+
+                    <img
+                      src={club.logoUrl}
+                      alt={club.clubName}
+                      className="
+                        w-24
+                        h-24
+                        rounded-2xl
+                        object-cover
+                        border
+                        border-white/10
+                      "
+                    />
+
+                  ) : (
+
+                    <div
+                      className="
+                        w-24
+                        h-24
+                        rounded-2xl
+                        bg-black
+                        border
+                        border-white/10
+                      "
+                    />
+
+                  )}
+
+                </div>
+
+                <div className="flex-1">
+
+                  <div className="flex items-center justify-between mb-3">
+
+                    <h2 className="text-2xl font-bold text-green-400">
+                      {club.clubName}
+                    </h2>
+
+                    <div
+                      className={`
+                        px-3 py-1 rounded-full text-xs font-bold
+                        ${
+                          club.active
+                            ? "bg-green-400 text-black"
+                            : "bg-red-500 text-white"
+                        }
+                      `}
+                    >
+                      {club.active
+                        ? "ACTIVE"
+                        : "DISABLED"}
+                    </div>
+
+                  </div>
+
+                  <p className="text-gray-300 text-sm">
+                    {club.contactPerson || "-"}
+                  </p>
+
+                  <p className="text-gray-400 text-sm break-all">
+                    {club.email}
+                  </p>
+
+                  <p className="text-gray-500 text-sm">
+                    {club.phone || "-"}
+                  </p>
+
                 </div>
 
               </div>
 
-              <p className="text-gray-400 text-sm break-all">
-                {club.email}
-              </p>
+              <div className="grid grid-cols-3 gap-3 mt-6">
+
+                <button
+                  className="
+                    bg-cyan-400
+                    text-black
+                    font-bold
+                    py-3
+                    rounded-xl
+                  "
+                >
+                  VIEW
+                </button>
+
+                <button
+                  className="
+                    bg-yellow-400
+                    text-black
+                    font-bold
+                    py-3
+                    rounded-xl
+                  "
+                >
+                  EDIT
+                </button>
+
+                <button
+                  className="
+                    bg-red-500
+                    text-white
+                    font-bold
+                    py-3
+                    rounded-xl
+                  "
+                >
+                  DISABLE
+                </button>
+
+              </div>
 
             </div>
 
@@ -151,5 +239,6 @@ export default function ScoringClubsDashboard() {
       </div>
 
     </main>
+
   );
 }

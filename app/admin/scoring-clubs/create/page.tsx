@@ -19,8 +19,9 @@ export default function ScoringClubsPage() {
   const [address, setAddress] = useState("");
   const [province, setProvince] = useState("");
   const [country, setCountry] = useState("South Africa");
-  const [logoUrl, setLogoUrl] = useState("");
-  const [password, setPassword] = useState("");
+const [logoUrl, setLogoUrl] = useState("");
+const [status, setStatus] = useState("active");
+const [password, setPassword] = useState("");
 
   const [loading, setLoading] = useState(false);
 
@@ -41,17 +42,18 @@ export default function ScoringClubsPage() {
           "createScoringClub"
         );
 
-      await createScoringClub({
-        clubName,
-        contactPerson,
-        email,
-        phone,
-        address,
-        province,
-        country,
-        logoUrl,
-        password,
-      });
+await createScoringClub({
+  clubName,
+  contactPerson,
+  email,
+  phone,
+  address,
+  province,
+  country,
+  logoUrl,
+  status,
+  password,
+});
 
       alert("Scoring club created successfully");
 
@@ -196,6 +198,35 @@ export default function ScoringClubsPage() {
               className="w-full bg-black border border-white/10 rounded-xl px-4 py-3"
             />
           </div>
+
+<div>
+  <label className="block text-sm text-gray-400 mb-2">
+    Status
+  </label>
+
+  <select
+    value={status}
+    onChange={(e) =>
+      setStatus(e.target.value)
+    }
+    className="
+      w-full
+      bg-black
+      border border-white/10
+      rounded-xl
+      px-4
+      py-3
+    "
+  >
+    <option value="active">
+      Active
+    </option>
+
+    <option value="inactive">
+      Inactive
+    </option>
+  </select>
+</div>
 
           <div>
             <label className="block text-sm text-gray-400 mb-2">

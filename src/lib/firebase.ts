@@ -15,6 +15,7 @@ import {
 } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getFunctions } from "firebase/functions";
+import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCnSwLt32Mnln_UfQKwtEvpSm6TLdqhlYg",
@@ -38,9 +39,11 @@ export { RecaptchaVerifier, signInWithPhoneNumber };
 /* ===== FIRESTORE ===== */
 export const db = getFirestore(app);
 
+/* ===== STORAGE ===== */
+export const storage = getStorage(app);
+
 /* ===== FUNCTIONS ===== */
 export const functions = getFunctions(app, "europe-west1");
-
 /* ===== AUTH HELPERS ===== */
 export async function login(email: string, password: string) {
   return signInWithEmailAndPassword(auth, email, password);

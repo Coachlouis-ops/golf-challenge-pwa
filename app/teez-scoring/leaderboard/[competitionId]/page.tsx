@@ -1,19 +1,33 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 import {
   doc,
   getDoc,
+  updateDoc,
+  serverTimestamp,
 } from "firebase/firestore";
 
 import {
   db,
 } from "@/src/lib/firebase";
 
+type PlayerRow = {
+  id: string;
+  displayName: string;
+  division: string;
+  score: string;
+  total?: number;
+  teeTime: string;
+  startingHole: string;
+  countOutPosition?: string;
+};
+
 type LeaderboardRow = {
+  id: string;
+
   position: number;
 
   displayName: string;
@@ -25,11 +39,14 @@ type LeaderboardRow = {
   teeTime: string;
 
   startingHole: string;
+
+  countOutPosition?: string;
 };
 
 export default function LeaderboardPage() {
 
   const params = useParams();
+  const router = useRouter();
 
   const competitionId =
     Array.isArray(params?.competitionId)
@@ -39,8 +56,17 @@ export default function LeaderboardPage() {
   const [loading, setLoading] =
     useState(true);
 
+  const [saving, setSaving] =
+    useState(false);
+
   const [competitionName, setCompetitionName] =
     useState("");
+
+  const [scoringType, setScoringType] =
+    useState("gross");
+
+  const [rows, setRows] =
+    useState<PlayerRow[]>([]);
 
   const [leaderboard, setLeaderboard] =
     useState<LeaderboardRow[]>([]);
@@ -77,25 +103,33 @@ export default function LeaderboardPage() {
 
       const data = snap.data() as any;
 
-      console.log("LEADERBOARD DATA:", data);
-
       setCompetitionName(
         data.competitionName || ""
       );
 
-    setLeaderboard(
-  Array.isArray(data.leaderboard)
-    ? data.leaderboard
-    : []
-);
+      setScoringType(
+        data.scoringType || "gross"
+      );
 
-console.log(
-  "LEADERBOARD DATA:",
-  data.leaderboard
-);
+      const loadedRows =
+        Array.isArray(data.rows)
+          ? data.rows
+          : [];
+
+      setRows(loadedRows);
+
+      const rebuilt =
+        buildLeaderboards(
+          loadedRows,
+          data.scoringType || "gross"
+        );
+
+      setLeaderboard(
+        rebuilt.overall
+      );
 
       setDivisionLeaderboards(
-        data.divisionLeaderboards || {}
+        rebuilt.divisions
       );
 
     } catch (e: any) {
@@ -114,6 +148,302 @@ console.log(
     }
   }
 
+  function buildLeaderboards(
+    sourceRows: PlayerRow[],
+    type: string
+  ) {
+
+    const validRows =
+      sourceRows
+        .filter((row) =>
+          row.displayName &&
+          row.displayName.trim() !== ""
+        )
+        .filter((row) => {
+          const score =
+            Number(
+              row.score ?? row.total ?? ""
+            );
+
+          return !Number.isNaN(score);
+        })
+        .map((row) => ({
+          id: row.id,
+
+          position: 0,
+
+          displayName:
+            row.displayName,
+
+          division:
+            row.division || "",
+
+          total:
+            Number(
+              row.score ?? row.total ?? 0
+            ),
+
+          teeTime:
+            row.teeTime || "",
+
+          startingHole:
+            row.startingHole || "",
+
+          countOutPosition:
+            row.countOutPosition || "",
+        }));
+
+    const sortedOverall =
+      sortLeaderboard(
+        validRows,
+        type
+      );
+
+    const positionedOverall =
+      applyPositions(
+        sortedOverall
+      );
+
+    const divisions:
+      Record<string, LeaderboardRow[]> = {};
+
+    positionedOverall.forEach((row) => {
+
+      const division =
+        row.division || "No Division";
+
+      if (!divisions[division]) {
+        divisions[division] = [];
+      }
+
+      divisions[division].push(row);
+
+    });
+
+    Object.keys(divisions).forEach((division) => {
+
+      divisions[division] =
+        applyPositions(
+          sortLeaderboard(
+            divisions[division],
+            type
+          )
+        );
+
+    });
+
+    return {
+      overall: positionedOverall,
+      divisions,
+    };
+  }
+
+  function sortLeaderboard(
+    sourceRows: LeaderboardRow[],
+    type: string
+  ) {
+
+    return [...sourceRows].sort((a, b) => {
+
+      if (a.total !== b.total) {
+
+        if (type === "points") {
+          return b.total - a.total;
+        }
+
+        return a.total - b.total;
+      }
+
+      const aCountOut =
+        Number(a.countOutPosition);
+
+      const bCountOut =
+        Number(b.countOutPosition);
+
+      const aHasCountOut =
+        !Number.isNaN(aCountOut) &&
+        a.countOutPosition !== "";
+
+      const bHasCountOut =
+        !Number.isNaN(bCountOut) &&
+        b.countOutPosition !== "";
+
+      if (
+        aHasCountOut &&
+        bHasCountOut &&
+        aCountOut !== bCountOut
+      ) {
+        return aCountOut - bCountOut;
+      }
+
+      if (aHasCountOut && !bHasCountOut) {
+        return -1;
+      }
+
+      if (!aHasCountOut && bHasCountOut) {
+        return 1;
+      }
+
+      return a.displayName.localeCompare(
+        b.displayName
+      );
+
+    });
+  }
+
+  function applyPositions(
+    sourceRows: LeaderboardRow[]
+  ) {
+
+    let lastScore: number | null =
+      null;
+
+    let lastCountOut = "";
+
+    let lastPosition = 0;
+
+    return sourceRows.map((row, index) => {
+
+      const hasManualCountOut =
+        row.countOutPosition &&
+        row.countOutPosition.trim() !== "";
+
+      const sameScore =
+        lastScore === row.total;
+
+      const sameCountOut =
+        lastCountOut ===
+        (row.countOutPosition || "");
+
+      let position =
+        index + 1;
+
+      if (
+        sameScore &&
+        !hasManualCountOut &&
+        !lastCountOut
+      ) {
+        position =
+          lastPosition;
+      }
+
+      if (
+        sameScore &&
+        hasManualCountOut &&
+        sameCountOut
+      ) {
+        position =
+          lastPosition;
+      }
+
+      lastScore =
+        row.total;
+
+      lastCountOut =
+        row.countOutPosition || "";
+
+      lastPosition =
+        position;
+
+      return {
+        ...row,
+        position,
+      };
+
+    });
+  }
+
+  function updateCountOut(
+    rowId: string,
+    value: string
+  ) {
+
+    const updatedRows =
+      rows.map((row) =>
+        row.id === rowId
+          ? {
+              ...row,
+              countOutPosition: value,
+            }
+          : row
+      );
+
+    setRows(updatedRows);
+
+    const rebuilt =
+      buildLeaderboards(
+        updatedRows,
+        scoringType
+      );
+
+    setLeaderboard(
+      rebuilt.overall
+    );
+
+    setDivisionLeaderboards(
+      rebuilt.divisions
+    );
+  }
+
+  async function updateLeaderboard() {
+
+    if (!competitionId) return;
+
+    try {
+
+      setSaving(true);
+
+      const rebuilt =
+        buildLeaderboards(
+          rows,
+          scoringType
+        );
+
+      await updateDoc(
+        doc(
+          db,
+          "competitions",
+          competitionId as string
+        ),
+        {
+          rows,
+          leaderboard:
+            rebuilt.overall,
+          divisionLeaderboards:
+            rebuilt.divisions,
+          updatedAt:
+            serverTimestamp(),
+        }
+      );
+
+      setLeaderboard(
+        rebuilt.overall
+      );
+
+      setDivisionLeaderboards(
+        rebuilt.divisions
+      );
+
+      alert(
+        "Leaderboard updated"
+      );
+
+    } catch (e: any) {
+
+      console.error(e);
+
+      alert(
+        e.message ||
+        "Failed to update leaderboard"
+      );
+
+    } finally {
+
+      setSaving(false);
+
+    }
+  }
+
   if (loading) {
 
     return (
@@ -127,15 +457,15 @@ console.log(
 
     <main className="min-h-screen bg-black text-white p-8">
 
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-7xl mx-auto">
 
-        {/* HEADER */}
-
-        <div className="mb-10 flex items-center justify-between">
+        <div className="mb-10 flex items-center justify-between gap-4">
 
           <button
             onClick={() =>
-              window.history.back()
+              router.push(
+                "/teez-scoring/dashboard"
+              )
             }
             className="
               bg-neutral-900
@@ -147,7 +477,7 @@ console.log(
               transition
             "
           >
-            ← BACK
+            ← DASHBOARD
           </button>
 
           <div className="text-center flex-1">
@@ -162,11 +492,27 @@ console.log(
 
           </div>
 
-          <div className="w-[120px]" />
+          <button
+            onClick={updateLeaderboard}
+            disabled={saving}
+            className="
+              bg-green-400
+              text-black
+              font-black
+              px-6
+              py-3
+              rounded-2xl
+              hover:scale-105
+              transition
+              disabled:opacity-50
+            "
+          >
+            {saving
+              ? "UPDATING..."
+              : "UPDATE LEADERBOARD"}
+          </button>
 
         </div>
-
-        {/* GLOBAL LEADERBOARD */}
 
         <div className="mb-12">
 
@@ -174,9 +520,9 @@ console.log(
             OVERALL LEADERBOARD
           </h2>
 
-          <div className="bg-neutral-900 rounded-3xl overflow-hidden">
+          <div className="bg-neutral-900 rounded-3xl overflow-x-auto">
 
-            <table className="w-full">
+            <table className="w-full min-w-[1000px]">
 
               <thead className="bg-green-400 text-black">
 
@@ -199,6 +545,10 @@ console.log(
                   </th>
 
                   <th className="p-5 text-left">
+                    COUNT OUT
+                  </th>
+
+                  <th className="p-5 text-left">
                     TEE
                   </th>
 
@@ -215,7 +565,7 @@ console.log(
                 {leaderboard.map((row) => (
 
                   <tr
-                    key={`${row.position}-${row.displayName}`}
+                    key={row.id}
                     className="border-b border-white/10"
                   >
 
@@ -233,6 +583,34 @@ console.log(
 
                     <td className="p-5 text-green-400 font-black text-2xl">
                       {row.total}
+                    </td>
+
+                    <td className="p-5">
+
+                      <input
+                        value={
+                          row.countOutPosition || ""
+                        }
+                        onChange={(e) =>
+                          updateCountOut(
+                            row.id,
+                            e.target.value
+                          )
+                        }
+                        placeholder="CO"
+                        className="
+                          w-20
+                          bg-yellow-500/10
+                          border border-yellow-400/30
+                          text-yellow-400
+                          text-center
+                          rounded-xl
+                          px-3
+                          py-3
+                          font-bold
+                        "
+                      />
+
                     </td>
 
                     <td className="p-5">
@@ -255,8 +633,6 @@ console.log(
 
         </div>
 
-        {/* DIVISION LEADERBOARDS */}
-
         {Object.entries(
           divisionLeaderboards
         ).map(([division, rows]) => (
@@ -270,9 +646,9 @@ console.log(
               {division.toUpperCase()} DIVISION
             </h2>
 
-            <div className="bg-neutral-900 rounded-3xl overflow-hidden">
+            <div className="bg-neutral-900 rounded-3xl overflow-x-auto">
 
-              <table className="w-full">
+              <table className="w-full min-w-[900px]">
 
                 <thead className="bg-yellow-400 text-black">
 
@@ -288,6 +664,10 @@ console.log(
 
                     <th className="p-5 text-left">
                       SCORE
+                    </th>
+
+                    <th className="p-5 text-left">
+                      COUNT OUT
                     </th>
 
                     <th className="p-5 text-left">
@@ -307,7 +687,7 @@ console.log(
                   {rows.map((row) => (
 
                     <tr
-                      key={`${division}-${row.position}-${row.displayName}`}
+                      key={`${division}-${row.id}`}
                       className="border-b border-white/10"
                     >
 
@@ -321,6 +701,10 @@ console.log(
 
                       <td className="p-5 text-yellow-400 font-black text-2xl">
                         {row.total}
+                      </td>
+
+                      <td className="p-5 text-yellow-400 font-bold">
+                        {row.countOutPosition || "-"}
                       </td>
 
                       <td className="p-5">

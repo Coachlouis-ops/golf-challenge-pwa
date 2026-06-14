@@ -16,7 +16,16 @@ import {
   updateDoc,
 } from "firebase/firestore";
 
-import { db } from "@/src/lib/firebase";
+import {
+  ref,
+  uploadBytes,
+  getDownloadURL,
+} from "firebase/storage";
+
+import {
+  db,
+  storage,
+} from "@/src/lib/firebase";
 
 export default function EditClubPage() {
 
@@ -46,6 +55,13 @@ export default function EditClubPage() {
 
   const [country, setCountry] =
     useState("");
+
+const [logoUrl, setLogoUrl] =
+  useState("");
+
+const [logoFile, setLogoFile] =
+  useState<File | null>(null);
+
 
   const [loading, setLoading] =
     useState(false);
@@ -95,6 +111,11 @@ export default function EditClubPage() {
         setCountry(
           club.country || ""
         );
+
+setLogoUrl(
+  club.logoUrl || ""
+);
+
       }
     }
 
@@ -108,22 +129,46 @@ export default function EditClubPage() {
 
       setLoading(true);
 
-      await updateDoc(
-        doc(
-          db,
-          "scoringClubs",
-          uid as string
-        ),
-        {
-          clubName,
-          contactPerson,
-          email,
-          phone,
-          address,
-          province,
-          country,
-        }
-      );
+ let uploadedLogoUrl =
+  logoUrl;
+
+if (logoFile) {
+
+  const storageRef =
+    ref(
+      storage,
+      `club-logos/${Date.now()}-${logoFile.name}`
+    );
+
+  await uploadBytes(
+    storageRef,
+    logoFile
+  );
+
+  uploadedLogoUrl =
+    await getDownloadURL(
+      storageRef
+    );
+}
+
+await updateDoc(
+  doc(
+    db,
+    "scoringClubs",
+    uid as string
+  ),
+  {
+    clubName,
+    contactPerson,
+    email,
+    phone,
+    address,
+    province,
+    country,
+    logoUrl:
+      uploadedLogoUrl,
+  }
+);
 
       alert(
         "Club updated"
@@ -173,6 +218,36 @@ export default function EditClubPage() {
           <input value={province} onChange={(e)=>setProvince(e.target.value)} className="w-full bg-neutral-900 p-4 rounded-xl" />
 
           <input value={country} onChange={(e)=>setCountry(e.target.value)} className="w-full bg-neutral-900 p-4 rounded-xl" />
+
+          <div className="bg-neutral-900 p-4 rounded-xl">
+
+  {logoUrl && (
+
+    <img
+      src={logoUrl}
+      alt="Club Logo"
+      className="
+        w-32
+        h-32
+        object-cover
+        rounded-2xl
+        mb-4
+      "
+    />
+
+  )}
+
+  <input
+    type="file"
+    accept="image/*"
+    onChange={(e) =>
+      setLogoFile(
+        e.target.files?.[0] || null
+      )
+    }
+  />
+
+</div>
 
           <button
             onClick={saveClub}

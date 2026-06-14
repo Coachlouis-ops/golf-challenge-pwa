@@ -5,7 +5,14 @@ import { useRouter } from "next/navigation";
 import { httpsCallable } from "firebase/functions";
 
 import {
+  ref,
+  uploadBytes,
+  getDownloadURL,
+} from "firebase/storage";
+
+import {
   functions,
+  storage,
 } from "@/src/lib/firebase";
 
 export default function ScoringClubsPage() {
@@ -20,6 +27,7 @@ export default function ScoringClubsPage() {
   const [province, setProvince] = useState("");
   const [country, setCountry] = useState("South Africa");
 const [logoUrl, setLogoUrl] = useState("");
+const [logoFile, setLogoFile] = useState<File | null>(null);
 const [status, setStatus] = useState("active");
 const [password, setPassword] = useState("");
 
@@ -36,6 +44,26 @@ const [password, setPassword] = useState("");
 
       setLoading(true);
 
+      let uploadedLogoUrl = logoUrl;
+
+if (logoFile) {
+
+  const storageRef = ref(
+    storage,
+    `club-logos/${Date.now()}-${logoFile.name}`
+  );
+
+  await uploadBytes(
+    storageRef,
+    logoFile
+  );
+
+  uploadedLogoUrl =
+    await getDownloadURL(
+      storageRef
+    );
+}
+
       const createScoringClub =
         httpsCallable(
           functions,
@@ -50,10 +78,26 @@ await createScoringClub({
   address,
   province,
   country,
-  logoUrl,
+ logoUrl: uploadedLogoUrl,
   status,
   password,
 });
+
+await fetch(
+  "/api/send-club-credentials",
+  {
+    method: "POST",
+    headers: {
+      "Content-Type":
+        "application/json",
+    },
+    body: JSON.stringify({
+      clubName,
+      email,
+      password,
+    }),
+  }
+);
 
       alert("Scoring club created successfully");
 
@@ -184,20 +228,31 @@ await createScoringClub({
             />
           </div>
 
-          <div>
-            <label className="block text-sm text-gray-400 mb-2">
-              Club Logo URL
-            </label>
+         <div>
 
-            <input
-              value={logoUrl}
-              onChange={(e) =>
-                setLogoUrl(e.target.value)
-              }
-              placeholder="/clubs/silverlakes.png"
-              className="w-full bg-black border border-white/10 rounded-xl px-4 py-3"
-            />
-          </div>
+  <label className="block text-sm text-gray-400 mb-2">
+    Club Logo
+  </label>
+
+  <input
+    type="file"
+    accept="image/*"
+    onChange={(e) =>
+      setLogoFile(
+        e.target.files?.[0] || null
+      )
+    }
+    className="
+      w-full
+      bg-black
+      border border-white/10
+      rounded-xl
+      px-4
+      py-3
+    "
+  />
+
+</div>
 
 <div>
   <label className="block text-sm text-gray-400 mb-2">

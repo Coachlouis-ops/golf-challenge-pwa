@@ -10,12 +10,17 @@ import {
   getDoc,
 } from "firebase/firestore";
 
+import {
+  onAuthStateChanged,
+} from "firebase/auth";
+
 type Club = {
   clubName: string;
   contactPerson?: string;
   email?: string;
   phone?: string;
   logoUrl?: string;
+  active?: boolean;
 };
 
 export default function ClubDashboard() {
@@ -30,38 +35,64 @@ export default function ClubDashboard() {
 
   useEffect(() => {
 
-    async function loadClub() {
+    const unsub =
+      onAuthStateChanged(
+        auth,
+        async (user) => {
 
-      const user =
-        auth.currentUser;
+          if (!user) {
+            router.push(
+              "/teez-scoring/login"
+            );
+            return;
+          }
 
-      if (!user) {
-        window.location.href =
-          "/teez-scoring/login";
-        return;
-      }
+          const snap =
+            await getDoc(
+              doc(
+                db,
+                "scoringClubs",
+                user.uid
+              )
+            );
 
-      const snap =
-        await getDoc(
-          doc(
-            db,
-            "scoringClubs",
-            user.uid
-          )
-        );
+          if (!snap.exists()) {
+            router.push(
+              "/teez-scoring/login"
+            );
+            return;
+          }
 
-      if (snap.exists()) {
-        setClub(
-          snap.data() as Club
-        );
-      }
+          const clubData =
+            snap.data() as Club;
 
-      setLoading(false);
-    }
+          if (clubData.active === false) {
+            alert("This club account is disabled.");
+            router.push(
+              "/teez-scoring/login"
+            );
+            return;
+          }
 
-    loadClub();
+          setClub(clubData);
+          setLoading(false);
 
-  }, []);
+        }
+      );
+
+    return () => unsub();
+
+  }, [router]);
+
+  if (loading) {
+    return (
+      <main className="min-h-screen bg-black text-white flex items-center justify-center">
+        <p className="text-green-400 font-bold">
+          Loading club dashboard...
+        </p>
+      </main>
+    );
+  }
 
   return (
 
@@ -94,9 +125,7 @@ export default function ClubDashboard() {
               </p>
 
               <h1 className="text-4xl md:text-5xl font-black text-white">
-                {loading
-                  ? "Loading Club"
-                  : club?.clubName || "Club Dashboard"}
+                {club?.clubName || "Club Dashboard"}
               </h1>
 
               <p className="text-gray-400 mt-2">

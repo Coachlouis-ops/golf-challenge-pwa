@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 import {
   doc,
@@ -59,7 +59,9 @@ type PlayerRow = {
 
 export default function CompetitionDashboardPage() {
 
-  const params = useParams();
+const params = useParams();
+
+const router = useRouter();
 
   const competitionId =
     Array.isArray(params?.competitionId)
@@ -242,10 +244,16 @@ function generateTeeSheet() {
   while (start <= end) {
 
     const hours =
-      start.getHours().toString().padStart(2, "0");
+      start
+        .getHours()
+        .toString()
+        .padStart(2, "0");
 
     const minutes =
-      start.getMinutes().toString().padStart(2, "0");
+      start
+        .getMinutes()
+        .toString()
+        .padStart(2, "0");
 
     const teeTime = `${hours}:${minutes}`;
 
@@ -253,19 +261,41 @@ function generateTeeSheet() {
 
       for (let i = 1; i <= 4; i++) {
 
+        const existingRow =
+          rows.find(
+            (r, index) =>
+              r.teeTime === teeTime &&
+              r.startingHole === tee &&
+              rows
+                .filter(
+                  (x) =>
+                    x.teeTime === teeTime &&
+                    x.startingHole === tee
+                )
+                .indexOf(r) ===
+                i - 1
+          );
+
         generatedRows.push({
+          id:
+            existingRow?.id ||
+            crypto.randomUUID(),
 
-          id: crypto.randomUUID(),
+          displayName:
+            existingRow?.displayName || "",
 
-          displayName: "",
-
-          division: "",
+          division:
+            existingRow?.division || "",
 
           teeTime,
 
           startingHole: tee,
 
-          score: "",
+          score:
+            existingRow?.score || "",
+
+          countOutPosition:
+            existingRow?.countOutPosition,
         });
 
       }
@@ -952,9 +982,9 @@ return (
         <div className="flex items-center gap-5">
 
           <button
-            onClick={() =>
-              window.history.back()
-            }
+           onClick={() =>
+  router.push("/teez-scoring/dashboard")
+}
             className="
               bg-neutral-900
               border border-white/10
@@ -985,12 +1015,11 @@ return (
         <div className="flex items-center gap-4">
 
           <button
-            onClick={() =>
-              window.open(
-                `/teez-scoring/leaderboard/${competitionId}`,
-                "_blank"
-              )
-            }
+          onClick={() =>
+  router.push(
+    `/teez-scoring/leaderboard/${competitionId}`
+  )
+}
             className="
               bg-cyan-400
               text-black
@@ -1437,30 +1466,6 @@ return (
   py-3
 "
       />
-
-      <input
-        value={
-          row.countOutPosition || ""
-        }
-        onChange={(e) =>
-          updateRow(
-            row.id,
-            "countOutPosition",
-            e.target.value
-          )
-        }
-        placeholder="CO"
-        className="
-          w-14
-          bg-yellow-500/10
-          border border-yellow-400/30
-          text-center
-          rounded-xl
-          px-2
-          py-3
-        "
-      />
-
     </>
 
   )}

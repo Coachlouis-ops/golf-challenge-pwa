@@ -77,7 +77,8 @@ export default function ScoringLoginPage() {
 
    console.log("LOGIN SUCCESS");
 
-window.location.href = "/teez-scoring";
+window.location.href =
+  "/teez-scoring/dashboard";
 
     } catch (err: any) {
 

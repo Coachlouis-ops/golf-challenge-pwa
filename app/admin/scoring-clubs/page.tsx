@@ -8,8 +8,14 @@ import {
   onSnapshot,
 } from "firebase/firestore";
 
-import { db } from "@/src/lib/firebase";
+import {
+  db,
+  functions,
+} from "@/src/lib/firebase";
 
+import {
+  httpsCallable,
+} from "firebase/functions";
 type Club = {
   uid: string;
   clubName: string;
@@ -25,6 +31,33 @@ export default function ScoringClubsDashboard() {
   const router = useRouter();
 
   const [clubs, setClubs] = useState<Club[]>([]);
+
+  const toggleScoringClubStatus =
+  httpsCallable(
+    functions,
+    "toggleScoringClubStatus"
+  );
+
+async function toggleClub(
+  uid: string
+) {
+
+  try {
+
+    await toggleScoringClubStatus({
+      uid,
+    });
+
+  } catch (err) {
+
+    console.error(err);
+
+    alert(
+      "Failed to update club"
+    );
+
+  }
+}
 
   useEffect(() => {
 
@@ -216,17 +249,25 @@ export default function ScoringClubsDashboard() {
                   EDIT
                 </button>
 
-                <button
-                  className="
-                    bg-red-500
-                    text-white
-                    font-bold
-                    py-3
-                    rounded-xl
-                  "
-                >
-                  DISABLE
-                </button>
+               <button
+  onClick={() =>
+    toggleClub(club.uid)
+  }
+  className={`
+    ${
+      club.active
+        ? "bg-red-500 text-white"
+        : "bg-green-400 text-black"
+    }
+    font-bold
+    py-3
+    rounded-xl
+  `}
+>
+  {club.active
+    ? "DISABLE"
+    : "ENABLE"}
+</button>
 
               </div>
 

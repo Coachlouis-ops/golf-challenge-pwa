@@ -54,7 +54,7 @@ type PlayerRow = {
 
   score: string;
 
-  countOutPosition?: number;
+  countOutPosition?: string;
 };
 
 export default function CompetitionDashboardPage() {
@@ -180,6 +180,17 @@ async function saveCompetition() {
 
     setSaving(true);
 
+    const cleanRows =
+      rows.map((row) => ({
+        id: row.id || crypto.randomUUID(),
+        displayName: row.displayName || "",
+        division: row.division || "",
+        teeTime: row.teeTime || "",
+        startingHole: row.startingHole || "",
+        score: row.score || "",
+        countOutPosition: row.countOutPosition || "",
+      }));
+
     await updateDoc(
       doc(
         db,
@@ -189,9 +200,14 @@ async function saveCompetition() {
       {
         ...competition,
 
-        rows,
+        rows: cleanRows,
+
+        updatedAt:
+          serverTimestamp(),
       }
     );
+
+    setRows(cleanRows);
 
     alert("Competition saved");
 
@@ -259,22 +275,17 @@ function generateTeeSheet() {
 
     teeModes.forEach((tee) => {
 
-      for (let i = 1; i <= 4; i++) {
+      const existingSlotRows =
+        rows.filter(
+          (row) =>
+            row.teeTime === teeTime &&
+            row.startingHole === tee
+        );
+
+      for (let i = 0; i < 4; i++) {
 
         const existingRow =
-          rows.find(
-            (r, index) =>
-              r.teeTime === teeTime &&
-              r.startingHole === tee &&
-              rows
-                .filter(
-                  (x) =>
-                    x.teeTime === teeTime &&
-                    x.startingHole === tee
-                )
-                .indexOf(r) ===
-                i - 1
-          );
+          existingSlotRows[i];
 
         generatedRows.push({
           id:
@@ -295,7 +306,7 @@ function generateTeeSheet() {
             existingRow?.score || "",
 
           countOutPosition:
-            existingRow?.countOutPosition,
+            existingRow?.countOutPosition || "",
         });
 
       }

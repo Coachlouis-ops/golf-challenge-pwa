@@ -288,14 +288,14 @@ await fetch(
               Temporary Password
             </label>
 
-            <input
-              type="password"
-              value={password}
-              onChange={(e) =>
-                setPassword(e.target.value)
-              }
-              className="w-full bg-black border border-white/10 rounded-xl px-4 py-3"
-            />
+          <input
+  type="text"
+  value={password}
+  onChange={(e) =>
+    setPassword(e.target.value)
+  }
+  className="w-full bg-black border border-white/10 rounded-xl px-4 py-3"
+/>
           </div>
 
           <button

@@ -76,7 +76,7 @@ export default function ContactPage() {
 
       <p className="text-gray-400 text-sm">
         South Africa<br />
-        Email: info@honeybadgertech.com
+        Email: info@honeybadgertech.com / admin@teezgolfchallenges.com
       </p>
 
     </div>

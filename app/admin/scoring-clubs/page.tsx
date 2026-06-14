@@ -225,17 +225,22 @@ async function toggleClub(
 
               <div className="grid grid-cols-3 gap-3 mt-6">
 
-                <button
-                  className="
-                    bg-cyan-400
-                    text-black
-                    font-bold
-                    py-3
-                    rounded-xl
-                  "
-                >
-                  VIEW
-                </button>
+          <button
+  onClick={() =>
+    router.push(
+      `/admin/scoring-clubs/${club.uid}`
+    )
+  }
+  className="
+    bg-cyan-400
+    text-black
+    font-bold
+    py-3
+    rounded-xl
+  "
+>
+  VIEW
+</button>
 
                 <button
                   className="

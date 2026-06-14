@@ -125,7 +125,7 @@ createdAt:
 
   <button
     onClick={() =>
-      router.push("/teez-scoring")
+    router.push("/teez-scoring/dashboard")
     }
     className="
       bg-neutral-900

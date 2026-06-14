@@ -25,9 +25,8 @@ export default function TeezScoringPage() {
         <div className="grid md:grid-cols-2 gap-6 mb-12">
 
           <button
-         onClick={() =>
-  window.location.href =
-    "mailto:admin@teezgolfchallenges.com?subject=Application%20For%20Teez%20Golf%20Scoring%20System&body=Club%20Name%3A%0AContact%20Person%3A%0AEmail%3A%0APhone%3A%0AProvince%3A%0ACountry%3A%0A%0APlease%20contact%20us%20regarding%20the%20Teez%20Golf%20Scoring%20System."
+    onClick={() =>
+  router.push("/contact")
 }
             className="
               bg-green-400

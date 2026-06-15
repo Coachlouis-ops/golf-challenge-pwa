@@ -1,7 +1,6 @@
 export const runtime = "nodejs";
 
 import { NextResponse } from "next/server";
-import PDFDocument from "pdfkit";
 
 import {
   initializeApp,
@@ -12,6 +11,12 @@ import {
 import {
   getFirestore,
 } from "firebase-admin/firestore";
+
+import {
+  PDFDocument,
+  StandardFonts,
+  rgb,
+} from "pdf-lib";
 
 type LeaderboardRow = {
   position?: number;
@@ -69,257 +74,15 @@ function getAdminDb() {
   return getFirestore();
 }
 
-async function streamToBuffer(
-  doc: PDFKit.PDFDocument
-): Promise<Buffer> {
-
-  return new Promise((resolve, reject) => {
-
-    const chunks: Buffer[] = [];
-
-    doc.on("data", (chunk) =>
-      chunks.push(chunk)
-    );
-
-    doc.on("end", () =>
-      resolve(Buffer.concat(chunks))
-    );
-
-    doc.on("error", reject);
-
-  });
+function safeText(value: any) {
+  return String(value ?? "");
 }
 
-function drawFooter(
-  doc: PDFKit.PDFDocument
-) {
-
-  const bottom =
-    doc.page.height - 45;
-
-  doc
-    .fontSize(8)
-    .fillColor("#777777")
-    .text(
-      "Scoring systems by Teez Golf Challenges - Driven by Honey Badger Technologies PTY. LTD",
-      50,
-      bottom,
-      {
-        align: "center",
-        width: doc.page.width - 100,
-      }
-    );
-}
-
-function checkPageSpace(
-  doc: PDFKit.PDFDocument,
-  requiredHeight = 60
-) {
-
-  if (
-    doc.y + requiredHeight >
-    doc.page.height - 70
-  ) {
-    drawFooter(doc);
-    doc.addPage();
-  }
-}
-
-function addSectionTitle(
-  doc: PDFKit.PDFDocument,
-  title: string
-) {
-
-  checkPageSpace(doc, 70);
-
-  doc
-    .moveDown(1)
-    .fontSize(18)
-    .fillColor("#111111")
-    .text(title);
-
-  doc
-    .moveDown(0.4)
-    .strokeColor("#22c55e")
-    .lineWidth(1)
-    .moveTo(50, doc.y)
-    .lineTo(doc.page.width - 50, doc.y)
-    .stroke();
-
-  doc.moveDown(1);
-}
-
-function drawLeaderboardTable(
-  doc: PDFKit.PDFDocument,
-  title: string,
-  rows: LeaderboardRow[]
-) {
-
-  addSectionTitle(doc, title);
-
-  if (!rows.length) {
-    doc
-      .fontSize(10)
-      .fillColor("#555555")
-      .text("No leaderboard data available.");
-
-    return;
-  }
-
-  const startX = 50;
-
-  function drawHeader() {
-
-    checkPageSpace(doc, 40);
-
-    const y =
-      doc.y;
-
-    doc
-      .rect(startX, y, 512, 24)
-      .fill("#111111");
-
-    doc
-      .fillColor("#ffffff")
-      .fontSize(8)
-      .text("POS", startX + 8, y + 8, {
-        width: 35,
-      })
-      .text("PLAYER / TEAM", startX + 50, y + 8, {
-        width: 220,
-      })
-      .text("DIV", startX + 285, y + 8, {
-        width: 65,
-      })
-      .text("SCORE", startX + 355, y + 8, {
-        width: 50,
-      })
-      .text("CO", startX + 415, y + 8, {
-        width: 40,
-      })
-      .text("TEE", startX + 465, y + 8, {
-        width: 40,
-      })
-      .text("TIME", startX + 510, y + 8, {
-        width: 50,
-      });
-
-    doc.y =
-      y + 32;
-  }
-
-  drawHeader();
-
-  rows.forEach((row, index) => {
-
-    checkPageSpace(doc, 32);
-
-    const y =
-      doc.y;
-
-    if (index % 2 === 0) {
-      doc
-        .rect(startX, y - 4, 512, 24)
-        .fill("#f5f5f5");
-    }
-
-    doc
-      .fillColor("#111111")
-      .fontSize(8)
-      .text(String(row.position || ""), startX + 8, y, {
-        width: 35,
-      })
-      .text(row.displayName || "", startX + 50, y, {
-        width: 220,
-        ellipsis: true,
-      })
-      .text(row.division || "", startX + 285, y, {
-        width: 65,
-      })
-      .text(String(row.total ?? ""), startX + 355, y, {
-        width: 50,
-      })
-      .text(row.countOutPosition || "", startX + 415, y, {
-        width: 40,
-      })
-      .text(row.startingHole || "", startX + 465, y, {
-        width: 40,
-      })
-      .text(row.teeTime || "", startX + 510, y, {
-        width: 50,
-      });
-
-    doc.y =
-      y + 24;
-  });
-}
-
-function drawTeeSheetTable(
-  doc: PDFKit.PDFDocument,
-  rows: TeeSheetRow[]
-) {
-
-  addSectionTitle(doc, "Tee Sheet");
-
-  if (!rows.length) {
-    doc
-      .fontSize(10)
-      .fillColor("#555555")
-      .text("No tee sheet data available.");
-
-    return;
-  }
-
-  const grouped =
-    rows.reduce<Record<string, TeeSheetRow[]>>(
-      (acc, row) => {
-
-        const key =
-          `Tee ${row.startingHole || ""} - ${row.teeTime || ""}`;
-
-        if (!acc[key]) {
-          acc[key] = [];
-        }
-
-        acc[key].push(row);
-
-        return acc;
-      },
-      {}
-    );
-
-  Object.entries(grouped).forEach(
-    ([groupName, groupRows]) => {
-
-      checkPageSpace(doc, 100);
-
-      doc
-        .fontSize(11)
-        .fillColor("#22c55e")
-        .text(groupName);
-
-      doc.moveDown(0.4);
-
-      groupRows.forEach((row) => {
-
-        checkPageSpace(doc, 24);
-
-        doc
-          .fontSize(9)
-          .fillColor("#111111")
-          .text(
-            `${row.displayName || "-"}     ${row.division || ""}     Score: ${row.score || ""}`,
-            {
-              width: 500,
-            }
-          );
-
-      });
-
-      doc.moveDown(0.8);
-
-    }
-  );
+function sanitizeFileName(value: string) {
+  return value
+    .replace(/[^a-z0-9]/gi, "-")
+    .replace(/-+/g, "-")
+    .toLowerCase();
 }
 
 export async function GET(req: Request) {
@@ -368,17 +131,14 @@ export async function GET(req: Request) {
     const competition =
       competitionSnap.data() as any;
 
-    const clubId =
-      competition.clubId;
-
     let club: any = {};
 
-    if (clubId) {
+    if (competition.clubId) {
 
       const clubSnap =
         await adminDb
           .collection("scoringClubs")
-          .doc(clubId)
+          .doc(competition.clubId)
           .get();
 
       if (clubSnap.exists) {
@@ -387,127 +147,471 @@ export async function GET(req: Request) {
       }
     }
 
-    const pdf =
-  new PDFDocument({
-    size: "A4",
-    margin: 50,
-    font:
-      "Helvetica",
-    info: {
-      Title:
-        `${competition.competitionName || "Competition"} Results`,
-      Author:
-        "Teez Golf Challenges",
-      Subject:
-        "Competition Results",
-    },
-  });
+    const pdfDoc =
+      await PDFDocument.create();
 
-pdf.font("Helvetica");
+    const font =
+      await pdfDoc.embedFont(
+        StandardFonts.Helvetica
+      );
 
-    const pdfPromise =
-      streamToBuffer(pdf);
+    const boldFont =
+      await pdfDoc.embedFont(
+        StandardFonts.HelveticaBold
+      );
 
-    pdf
-      .rect(0, 0, pdf.page.width, 120)
-      .fill("#050505");
+    const pageWidth = 595.28;
+    const pageHeight = 841.89;
 
-    pdf
-      .fillColor("#22c55e")
-      .fontSize(10)
-      .text(
+    let page =
+      pdfDoc.addPage([
+        pageWidth,
+        pageHeight,
+      ]);
+
+    let y = pageHeight - 50;
+
+    function newPage() {
+      page =
+        pdfDoc.addPage([
+          pageWidth,
+          pageHeight,
+        ]);
+
+      y =
+        pageHeight - 50;
+
+      drawFooter();
+    }
+
+    function checkSpace(height: number) {
+      if (y - height < 70) {
+        newPage();
+      }
+    }
+
+    function drawText(
+      text: string,
+      x: number,
+      yPos: number,
+      size = 10,
+      isBold = false,
+      color = rgb(0.08, 0.08, 0.08)
+    ) {
+
+      page.drawText(
+        safeText(text).slice(0, 120),
+        {
+          x,
+          y: yPos,
+          size,
+          font:
+            isBold
+              ? boldFont
+              : font,
+          color,
+        }
+      );
+    }
+
+    function drawFooter() {
+
+      page.drawText(
+        "Scoring systems by Teez Golf Challenges - Driven by Honey Badger Technologies PTY. LTD",
+        {
+          x: 70,
+          y: 28,
+          size: 8,
+          font,
+          color:
+            rgb(0.45, 0.45, 0.45),
+        }
+      );
+    }
+
+    function sectionTitle(title: string) {
+
+      checkSpace(45);
+
+      y -= 24;
+
+      drawText(
+        title,
+        50,
+        y,
+        16,
+        true,
+        rgb(0.05, 0.05, 0.05)
+      );
+
+      y -= 10;
+
+      page.drawLine({
+        start: {
+          x: 50,
+          y,
+        },
+        end: {
+          x: pageWidth - 50,
+          y,
+        },
+        thickness: 1,
+        color:
+          rgb(0.13, 0.77, 0.37),
+      });
+
+      y -= 24;
+    }
+
+    function drawHeader() {
+
+      page.drawRectangle({
+        x: 0,
+        y: pageHeight - 120,
+        width: pageWidth,
+        height: 120,
+        color:
+          rgb(0.02, 0.02, 0.02),
+      });
+
+      drawText(
         "TEEZSCORE OFFICIAL RESULTS",
         50,
-        30,
-        {
-          characterSpacing: 1.5,
-        }
+        pageHeight - 42,
+        9,
+        true,
+        rgb(0.13, 0.77, 0.37)
       );
 
-    pdf
-      .fillColor("#ffffff")
-      .fontSize(24)
-      .text(
-        club.clubName || "Club Competition",
+      drawText(
+        club.clubName ||
+          "Club Competition",
         50,
-        48,
-        {
-          width: 360,
-        }
+        pageHeight - 70,
+        22,
+        true,
+        rgb(1, 1, 1)
       );
 
-    pdf
-      .fillColor("#d4d4d4")
-      .fontSize(10)
-      .text(
-        competition.competitionName || "",
+      drawText(
+        competition.competitionName ||
+          "",
         50,
-        84
+        pageHeight - 93,
+        10,
+        false,
+        rgb(0.82, 0.82, 0.82)
       );
+    }
 
-    if (club.logoUrl) {
+    async function drawLogo() {
+
+      if (!club.logoUrl) return;
 
       try {
 
-        const logoResponse =
+        const response =
           await fetch(club.logoUrl);
 
-        if (logoResponse.ok) {
+        if (!response.ok) return;
 
-          const logoBuffer =
-            Buffer.from(
-              await logoResponse.arrayBuffer()
-            );
-
-          pdf.image(
-            logoBuffer,
-            pdf.page.width - 135,
-            25,
-            {
-              fit: [80, 80],
-            }
+        const bytes =
+          new Uint8Array(
+            await response.arrayBuffer()
           );
+
+        let image;
+
+        if (
+          club.logoUrl
+            .toLowerCase()
+            .includes(".png")
+        ) {
+          image =
+            await pdfDoc.embedPng(bytes);
+        } else {
+          image =
+            await pdfDoc.embedJpg(bytes);
         }
+
+        page.drawImage(image, {
+          x: pageWidth - 130,
+          y: pageHeight - 105,
+          width: 75,
+          height: 75,
+        });
 
       } catch {
         // Continue without logo.
       }
     }
 
-    pdf.y = 145;
+    function drawCompetitionDetails() {
 
-    pdf
-      .fillColor("#111111")
-      .fontSize(16)
-      .text("Competition Details");
+      sectionTitle(
+        "Competition Details"
+      );
 
-    pdf.moveDown(0.8);
+      const details = [
+        [
+          "Competition",
+          competition.competitionName,
+        ],
+        [
+          "Date",
+          competition.competitionDate,
+        ],
+        [
+          "Format",
+          competition.format,
+        ],
+        [
+          "Scoring Type",
+          competition.scoringType,
+        ],
+        [
+          "Player Configuration",
+          competition.playerConfiguration,
+        ],
+        [
+          "Division Structure",
+          competition.divisionStructure,
+        ],
+        [
+          "Status",
+          competition.status,
+        ],
+      ];
 
-    const detailRows = [
-      ["Competition", competition.competitionName || ""],
-      ["Date", competition.competitionDate || ""],
-      ["Format", competition.format || ""],
-      ["Scoring Type", competition.scoringType || ""],
-      ["Player Configuration", competition.playerConfiguration || ""],
-      ["Division Structure", competition.divisionStructure || ""],
-      ["Status", competition.status || ""],
-    ];
+      details.forEach(
+        ([label, value]) => {
 
-    detailRows.forEach(([label, value]) => {
+          checkSpace(20);
 
-      pdf
-        .fontSize(9)
-        .fillColor("#666666")
-        .text(`${label}: `, {
-          continued: true,
-        })
-        .fillColor("#111111")
-        .text(value);
+          drawText(
+            `${label}:`,
+            50,
+            y,
+            9,
+            true,
+            rgb(0.35, 0.35, 0.35)
+          );
 
-    });
+          drawText(
+            safeText(value),
+            180,
+            y,
+            9,
+            false,
+            rgb(0.08, 0.08, 0.08)
+          );
 
-    drawLeaderboardTable(
-      pdf,
+          y -= 18;
+
+        }
+      );
+    }
+
+    function drawLeaderboard(
+      title: string,
+      rows: LeaderboardRow[]
+    ) {
+
+      sectionTitle(title);
+
+      if (!rows.length) {
+
+        drawText(
+          "No leaderboard data available.",
+          50,
+          y,
+          10,
+          false,
+          rgb(0.35, 0.35, 0.35)
+        );
+
+        y -= 20;
+
+        return;
+      }
+
+      checkSpace(35);
+
+      page.drawRectangle({
+        x: 50,
+        y: y - 6,
+        width: 495,
+        height: 22,
+        color:
+          rgb(0.05, 0.05, 0.05),
+      });
+
+      drawText("POS", 58, y, 8, true, rgb(1, 1, 1));
+      drawText("PLAYER / TEAM", 100, y, 8, true, rgb(1, 1, 1));
+      drawText("DIV", 315, y, 8, true, rgb(1, 1, 1));
+      drawText("SCORE", 370, y, 8, true, rgb(1, 1, 1));
+      drawText("CO", 425, y, 8, true, rgb(1, 1, 1));
+      drawText("TEE", 465, y, 8, true, rgb(1, 1, 1));
+      drawText("TIME", 505, y, 8, true, rgb(1, 1, 1));
+
+      y -= 24;
+
+      rows.forEach((row, index) => {
+
+        checkSpace(28);
+
+        if (index % 2 === 0) {
+          page.drawRectangle({
+            x: 50,
+            y: y - 6,
+            width: 495,
+            height: 20,
+            color:
+              rgb(0.96, 0.96, 0.96),
+          });
+        }
+
+        drawText(
+          safeText(row.position),
+          58,
+          y,
+          8
+        );
+
+        drawText(
+          safeText(row.displayName).slice(0, 38),
+          100,
+          y,
+          8
+        );
+
+        drawText(
+          safeText(row.division).slice(0, 10),
+          315,
+          y,
+          8
+        );
+
+        drawText(
+          safeText(row.total),
+          370,
+          y,
+          8,
+          true
+        );
+
+        drawText(
+          safeText(row.countOutPosition),
+          425,
+          y,
+          8
+        );
+
+        drawText(
+          safeText(row.startingHole),
+          465,
+          y,
+          8
+        );
+
+        drawText(
+          safeText(row.teeTime),
+          505,
+          y,
+          8
+        );
+
+        y -= 20;
+
+      });
+    }
+
+    function drawTeeSheet(
+      rows: TeeSheetRow[]
+    ) {
+
+      sectionTitle("Tee Sheet");
+
+      if (!rows.length) {
+
+        drawText(
+          "No tee sheet data available.",
+          50,
+          y,
+          10,
+          false,
+          rgb(0.35, 0.35, 0.35)
+        );
+
+        y -= 20;
+
+        return;
+      }
+
+      const grouped =
+        rows.reduce<Record<string, TeeSheetRow[]>>(
+          (acc, row) => {
+
+            const key =
+              `Tee ${row.startingHole || ""} - ${row.teeTime || ""}`;
+
+            if (!acc[key]) {
+              acc[key] = [];
+            }
+
+            acc[key].push(row);
+
+            return acc;
+          },
+          {}
+        );
+
+      Object.entries(grouped).forEach(
+        ([groupName, groupRows]) => {
+
+          checkSpace(90);
+
+          drawText(
+            groupName,
+            50,
+            y,
+            11,
+            true,
+            rgb(0.13, 0.77, 0.37)
+          );
+
+          y -= 18;
+
+          groupRows.forEach((row) => {
+
+            checkSpace(20);
+
+            drawText(
+              `${row.displayName || "-"}   ${row.division || ""}   Score: ${row.score || ""}`,
+              70,
+              y,
+              8
+            );
+
+            y -= 15;
+
+          });
+
+          y -= 10;
+
+        }
+      );
+    }
+
+    drawHeader();
+    await drawLogo();
+
+    y =
+      pageHeight - 155;
+
+    drawCompetitionDetails();
+
+    drawLeaderboard(
       "Overall Leaderboard",
       Array.isArray(competition.leaderboard)
         ? competition.leaderboard
@@ -517,41 +621,37 @@ pdf.font("Helvetica");
     const divisionLeaderboards =
       competition.divisionLeaderboards || {};
 
-    Object.entries(divisionLeaderboards).forEach(
-      ([division, rows]) => {
+    Object.entries(
+      divisionLeaderboards
+    ).forEach(([division, rows]) => {
 
-        drawLeaderboardTable(
-          pdf,
-          `${division} Division Leaderboard`,
-          Array.isArray(rows)
-            ? rows as LeaderboardRow[]
-            : []
-        );
+      drawLeaderboard(
+        `${division} Division Leaderboard`,
+        Array.isArray(rows)
+          ? rows as LeaderboardRow[]
+          : []
+      );
 
-      }
-    );
+    });
 
-    drawTeeSheetTable(
-      pdf,
+    drawTeeSheet(
       Array.isArray(competition.rows)
         ? competition.rows
         : []
     );
 
-    drawFooter(pdf);
+    drawFooter();
 
-    pdf.end();
-
-    const pdfBuffer =
-      await pdfPromise;
+    const pdfBytes =
+      await pdfDoc.save();
 
     const fileName =
-      `${competition.competitionName || "competition"}-results`
-        .replace(/[^a-z0-9]/gi, "-")
-        .toLowerCase();
+      sanitizeFileName(
+        `${competition.competitionName || "competition"}-results`
+      );
 
     return new NextResponse(
-      new Uint8Array(pdfBuffer),
+      pdfBytes,
       {
         status: 200,
         headers: {

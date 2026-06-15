@@ -62,8 +62,11 @@ export default function LeaderboardPage() {
   const [competitionName, setCompetitionName] =
     useState("");
 
-  const [scoringType, setScoringType] =
-    useState("gross");
+const [scoringType, setScoringType] =
+  useState("gross");
+
+const [playerConfiguration, setPlayerConfiguration] =
+  useState("Singles");
 
   const [rows, setRows] =
     useState<PlayerRow[]>([]);
@@ -84,104 +87,109 @@ export default function LeaderboardPage() {
 
   async function loadLeaderboard() {
 
-    try {
+  try {
 
-      const ref = doc(
-        db,
-        "competitions",
-        competitionId as string
-      );
+    const ref = doc(
+      db,
+      "competitions",
+      competitionId as string
+    );
 
-      const snap = await getDoc(ref);
+    const snap = await getDoc(ref);
 
-      if (!snap.exists()) {
+    if (!snap.exists()) {
 
-        alert("Competition not found");
+      alert("Competition not found");
 
-        return;
-      }
-
-      const data = snap.data() as any;
-
-      setCompetitionName(
-        data.competitionName || ""
-      );
-
-      setScoringType(
-        data.scoringType || "gross"
-      );
-
-      const loadedRows =
-        Array.isArray(data.rows)
-          ? data.rows
-          : [];
-
-      setRows(loadedRows);
-
-      const rebuilt =
-        buildLeaderboards(
-          loadedRows,
-          data.scoringType || "gross"
-        );
-
-      setLeaderboard(
-        rebuilt.overall
-      );
-
-      setDivisionLeaderboards(
-        rebuilt.divisions
-      );
-
-    } catch (e: any) {
-
-      console.error(e);
-
-      alert(
-        e.message ||
-        "Failed to load leaderboard"
-      );
-
-    } finally {
-
-      setLoading(false);
-
+      return;
     }
+
+    const data = snap.data() as any;
+
+    setCompetitionName(
+      data.competitionName || ""
+    );
+
+    setScoringType(
+      data.scoringType || "gross"
+    );
+
+    setPlayerConfiguration(
+      data.playerConfiguration || "Singles"
+    );
+
+    const loadedRows =
+      Array.isArray(data.rows)
+        ? data.rows
+        : [];
+
+    setRows(loadedRows);
+
+    const rebuilt =
+      buildLeaderboards(
+        loadedRows,
+        data.scoringType || "gross",
+        data.playerConfiguration || "Singles"
+      );
+
+    setLeaderboard(
+      rebuilt.overall
+    );
+
+    setDivisionLeaderboards(
+      rebuilt.divisions
+    );
+
+  } catch (e: any) {
+
+    console.error(e);
+
+    alert(
+      e.message ||
+      "Failed to load leaderboard"
+    );
+
+  } finally {
+
+    setLoading(false);
+
   }
+}
 
-  function buildLeaderboards(
-    sourceRows: PlayerRow[],
-    type: string
-  ) {
+function buildLeaderboards(
+  sourceRows: PlayerRow[],
+  type: string,
+  config: string
+) {
 
-    const validRows =
-      sourceRows
-        .filter((row) =>
+  const leaderboardRows: LeaderboardRow[] = [];
+
+  if (config === "Singles") {
+
+    sourceRows
+      .filter(
+        (row) =>
           row.displayName &&
-          row.displayName.trim() !== ""
-        )
-        .filter((row) => {
-          const score =
-            Number(
-              row.score ?? row.total ?? ""
-            );
+          row.displayName.trim() !== "" &&
+          row.score !== ""
+      )
+      .forEach((row) => {
 
-          return !Number.isNaN(score);
-        })
-        .map((row) => ({
-          id: row.id,
+        leaderboardRows.push({
+          id:
+            row.id || crypto.randomUUID(),
 
-          position: 0,
+          position:
+            0,
 
           displayName:
-            row.displayName,
+            row.displayName || "",
 
           division:
-            row.division || "",
+            row.division || "Open",
 
           total:
-            Number(
-              row.score ?? row.total ?? 0
-            ),
+            Number(row.score) || 0,
 
           teeTime:
             row.teeTime || "",
@@ -191,105 +199,206 @@ export default function LeaderboardPage() {
 
           countOutPosition:
             row.countOutPosition || "",
-        }));
+        });
 
-    const sortedOverall =
-      sortLeaderboard(
-        validRows,
-        type
-      );
-
-    const positionedOverall =
-      applyPositions(
-        sortedOverall
-      );
-
-    const divisions:
-      Record<string, LeaderboardRow[]> = {};
-
-    positionedOverall.forEach((row) => {
-
-      const division =
-        row.division || "No Division";
-
-      if (!divisions[division]) {
-        divisions[division] = [];
-      }
-
-      divisions[division].push(row);
-
-    });
-
-    Object.keys(divisions).forEach((division) => {
-
-      divisions[division] =
-        applyPositions(
-          sortLeaderboard(
-            divisions[division],
-            type
-          )
-        );
-
-    });
-
-    return {
-      overall: positionedOverall,
-      divisions,
-    };
+      });
   }
 
-  function sortLeaderboard(
-    sourceRows: LeaderboardRow[],
-    type: string
-  ) {
+  if (config === "Doubles") {
 
-    return [...sourceRows].sort((a, b) => {
+    for (
+      let i = 0;
+      i < sourceRows.length;
+      i += 2
+    ) {
 
-      if (a.total !== b.total) {
+      const p1 =
+        sourceRows[i];
 
-        if (type === "points") {
-          return b.total - a.total;
-        }
-
-        return a.total - b.total;
-      }
-
-      const aCountOut =
-        Number(a.countOutPosition);
-
-      const bCountOut =
-        Number(b.countOutPosition);
-
-      const aHasCountOut =
-        !Number.isNaN(aCountOut) &&
-        a.countOutPosition !== "";
-
-      const bHasCountOut =
-        !Number.isNaN(bCountOut) &&
-        b.countOutPosition !== "";
+      const p2 =
+        sourceRows[i + 1];
 
       if (
-        aHasCountOut &&
-        bHasCountOut &&
-        aCountOut !== bCountOut
-      ) {
-        return aCountOut - bCountOut;
-      }
+        !p1 ||
+        !p2 ||
+        !p1.displayName ||
+        !p2.displayName ||
+        p1.score === ""
+      ) continue;
 
-      if (aHasCountOut && !bHasCountOut) {
-        return -1;
-      }
+      leaderboardRows.push({
+        id:
+          p1.id || crypto.randomUUID(),
 
-      if (!aHasCountOut && bHasCountOut) {
-        return 1;
-      }
+        position:
+          0,
 
-      return a.displayName.localeCompare(
-        b.displayName
+        displayName:
+          `${p1.displayName} / ${p2.displayName}`,
+
+        division:
+          p1.division || "Open",
+
+        total:
+          Number(p1.score) || 0,
+
+        teeTime:
+          p1.teeTime || "",
+
+        startingHole:
+          p1.startingHole || "",
+
+        countOutPosition:
+          p1.countOutPosition || "",
+      });
+    }
+  }
+
+  if (config === "Foursomes") {
+
+    for (
+      let i = 0;
+      i < sourceRows.length;
+      i += 4
+    ) {
+
+      const group =
+        sourceRows.slice(i, i + 4);
+
+      if (
+        group.length < 4 ||
+        !group[0].displayName ||
+        group[0].score === ""
+      ) continue;
+
+      leaderboardRows.push({
+        id:
+          group[0].id || crypto.randomUUID(),
+
+        position:
+          0,
+
+        displayName:
+          group
+            .map((row) => row.displayName)
+            .filter(Boolean)
+            .join(" / "),
+
+        division:
+          group[0].division || "Open",
+
+        total:
+          Number(group[0].score) || 0,
+
+        teeTime:
+          group[0].teeTime || "",
+
+        startingHole:
+          group[0].startingHole || "",
+
+        countOutPosition:
+          group[0].countOutPosition || "",
+      });
+    }
+  }
+
+  const sortedOverall =
+    sortLeaderboard(
+      leaderboardRows,
+      type
+    );
+
+  const positionedOverall =
+    applyPositions(
+      sortedOverall
+    );
+
+  const divisions:
+    Record<string, LeaderboardRow[]> = {};
+
+  positionedOverall.forEach((row) => {
+
+    const division =
+      row.division || "Open";
+
+    if (!divisions[division]) {
+      divisions[division] = [];
+    }
+
+    divisions[division].push(row);
+
+  });
+
+  Object.keys(divisions).forEach((division) => {
+
+    divisions[division] =
+      applyPositions(
+        sortLeaderboard(
+          divisions[division],
+          type
+        )
       );
 
-    });
-  }
+  });
+
+  return {
+    overall: positionedOverall,
+    divisions,
+  };
+}
+
+function sortLeaderboard(
+  sourceRows: LeaderboardRow[],
+  type: string
+) {
+
+  return [...sourceRows].sort((a, b) => {
+
+    if (a.total !== b.total) {
+
+      if (type === "points") {
+        return b.total - a.total;
+      }
+
+      return a.total - b.total;
+    }
+
+    const aCountOut =
+      Number(a.countOutPosition);
+
+    const bCountOut =
+      Number(b.countOutPosition);
+
+    const aHasCountOut =
+      !Number.isNaN(aCountOut) &&
+      a.countOutPosition !== "";
+
+    const bHasCountOut =
+      !Number.isNaN(bCountOut) &&
+      b.countOutPosition !== "";
+
+    if (
+      aHasCountOut &&
+      bHasCountOut &&
+      aCountOut !== bCountOut
+    ) {
+      return aCountOut - bCountOut;
+    }
+
+    if (aHasCountOut && !bHasCountOut) {
+      return -1;
+    }
+
+    if (!aHasCountOut && bHasCountOut) {
+      return 1;
+    }
+
+    return a.displayName.localeCompare(
+      b.displayName
+    );
+
+  });
+}
 
   function applyPositions(
     sourceRows: LeaderboardRow[]
@@ -353,51 +462,53 @@ export default function LeaderboardPage() {
     });
   }
 
-  function updateCountOut(
-    rowId: string,
-    value: string
-  ) {
+function updateCountOut(
+  rowId: string,
+  value: string
+) {
 
-    const updatedRows =
-      rows.map((row) =>
-        row.id === rowId
-          ? {
-              ...row,
-              countOutPosition: value,
-            }
-          : row
-      );
+  const updatedRows =
+    rows.map((row) =>
+      row.id === rowId
+        ? {
+            ...row,
+            countOutPosition: value,
+          }
+        : row
+    );
 
-    setRows(updatedRows);
+  setRows(updatedRows);
+
+  const rebuilt =
+    buildLeaderboards(
+      updatedRows,
+      scoringType,
+      playerConfiguration
+    );
+
+  setLeaderboard(
+    rebuilt.overall
+  );
+
+  setDivisionLeaderboards(
+    rebuilt.divisions
+  );
+}
+
+async function updateLeaderboard() {
+
+  if (!competitionId) return;
+
+  try {
+
+    setSaving(true);
 
     const rebuilt =
       buildLeaderboards(
-        updatedRows,
-        scoringType
+        rows,
+        scoringType,
+        playerConfiguration
       );
-
-    setLeaderboard(
-      rebuilt.overall
-    );
-
-    setDivisionLeaderboards(
-      rebuilt.divisions
-    );
-  }
-
-  async function updateLeaderboard() {
-
-    if (!competitionId) return;
-
-    try {
-
-      setSaving(true);
-
-      const rebuilt =
-        buildLeaderboards(
-          rows,
-          scoringType
-        );
 
      const cleanRows =
   rows.map((row) => ({

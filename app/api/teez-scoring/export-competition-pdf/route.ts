@@ -650,18 +650,18 @@ export async function GET(req: Request) {
         `${competition.competitionName || "competition"}-results`
       );
 
-    return new NextResponse(
-      pdfBytes,
-      {
-        status: 200,
-        headers: {
-          "Content-Type":
-            "application/pdf",
-          "Content-Disposition":
-            `attachment; filename="${fileName}.pdf"`,
-        },
-      }
-    );
+   return new NextResponse(
+  Buffer.from(pdfBytes),
+  {
+    status: 200,
+    headers: {
+      "Content-Type":
+        "application/pdf",
+      "Content-Disposition":
+        `attachment; filename="${fileName}.pdf"`,
+    },
+  }
+);
 
   } catch (e: any) {
 

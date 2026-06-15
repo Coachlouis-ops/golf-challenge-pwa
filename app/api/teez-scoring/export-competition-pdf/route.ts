@@ -388,18 +388,22 @@ export async function GET(req: Request) {
     }
 
     const pdf =
-      new PDFDocument({
-        size: "A4",
-        margin: 50,
-        info: {
-          Title:
-            `${competition.competitionName || "Competition"} Results`,
-          Author:
-            "Teez Golf Challenges",
-          Subject:
-            "Competition Results",
-        },
-      });
+  new PDFDocument({
+    size: "A4",
+    margin: 50,
+    font:
+      "Helvetica",
+    info: {
+      Title:
+        `${competition.competitionName || "Competition"} Results`,
+      Author:
+        "Teez Golf Challenges",
+      Subject:
+        "Competition Results",
+    },
+  });
+
+pdf.font("Helvetica");
 
     const pdfPromise =
       streamToBuffer(pdf);

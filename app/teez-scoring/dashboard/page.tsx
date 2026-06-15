@@ -486,23 +486,24 @@ export default function ClubDashboard() {
                           OPEN / EDIT
                         </button>
 
-                        <button
-                          onClick={() =>
-                            alert(
-                              "PDF export is the next update."
-                            )
-                          }
-                          className="
-                            bg-white
-                            text-black
-                            px-5
-                            py-3
-                            rounded-2xl
-                            font-black
-                          "
-                        >
-                          EXPORT PDF
-                        </button>
+                      <button
+  onClick={() =>
+    window.open(
+      `/api/teez-scoring/export-competition-pdf?competitionId=${competition.id}`,
+      "_blank"
+    )
+  }
+  className="
+    bg-white
+    text-black
+    px-5
+    py-3
+    rounded-2xl
+    font-black
+  "
+>
+  EXPORT PDF
+</button>
 
                       </div>
 

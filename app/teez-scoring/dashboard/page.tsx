@@ -6,8 +6,12 @@ import { useRouter } from "next/navigation";
 import { auth, db } from "@/src/lib/firebase";
 
 import {
+  collection,
   doc,
   getDoc,
+  getDocs,
+  query,
+  where,
 } from "firebase/firestore";
 
 import {
@@ -23,12 +27,27 @@ type Club = {
   active?: boolean;
 };
 
+type CompetitionItem = {
+  id: string;
+  competitionName: string;
+  competitionDate: string;
+  format?: string;
+  scoringType?: string;
+  playerConfiguration?: string;
+  status?: string;
+  finalized?: boolean;
+  createdAt?: any;
+};
+
 export default function ClubDashboard() {
 
   const router = useRouter();
 
   const [club, setClub] =
     useState<Club | null>(null);
+
+  const [competitions, setCompetitions] =
+    useState<CompetitionItem[]>([]);
 
   const [loading, setLoading] =
     useState(true);
@@ -75,6 +94,71 @@ export default function ClubDashboard() {
           }
 
           setClub(clubData);
+
+          const competitionsSnap =
+            await getDocs(
+              query(
+                collection(
+                  db,
+                  "competitions"
+                ),
+                where(
+                  "clubId",
+                  "==",
+                  user.uid
+                )
+              )
+            );
+
+          const clubCompetitions =
+            competitionsSnap.docs
+              .map((docSnap) => {
+                const data =
+                  docSnap.data() as any;
+
+                return {
+                  id:
+                    docSnap.id,
+
+                  competitionName:
+                    data.competitionName || "Unnamed Competition",
+
+                  competitionDate:
+                    data.competitionDate || "",
+
+                  format:
+                    data.format || "",
+
+                  scoringType:
+                    data.scoringType || "",
+
+                  playerConfiguration:
+                    data.playerConfiguration || "",
+
+                  status:
+                    data.status || "active",
+
+                  finalized:
+                    data.finalized === true,
+
+                  createdAt:
+                    data.createdAt || null,
+                };
+              })
+              .sort((a, b) =>
+                String(
+                  b.competitionDate || ""
+                ).localeCompare(
+                  String(
+                    a.competitionDate || ""
+                  )
+                )
+              );
+
+          setCompetitions(
+            clubCompetitions
+          );
+
           setLoading(false);
 
         }
@@ -83,6 +167,20 @@ export default function ClubDashboard() {
     return () => unsub();
 
   }, [router]);
+
+  const activeCompetitions =
+    competitions.filter(
+      (competition) =>
+        competition.status !== "finalized" &&
+        competition.finalized !== true
+    );
+
+  const finalizedCompetitions =
+    competitions.filter(
+      (competition) =>
+        competition.status === "finalized" ||
+        competition.finalized === true
+    );
 
   if (loading) {
     return (
@@ -160,7 +258,7 @@ export default function ClubDashboard() {
 
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-10">
 
           <button
             onClick={() =>
@@ -197,6 +295,228 @@ export default function ClubDashboard() {
             </div>
 
           </button>
+
+        </div>
+
+        <div className="bg-neutral-900 border border-white/10 rounded-3xl p-6 mb-10">
+
+          <div className="flex items-center justify-between mb-6">
+
+            <div>
+
+              <h2 className="text-3xl font-black text-white">
+                All Competitions
+              </h2>
+
+              <p className="text-gray-400 text-sm mt-2">
+                Open, edit, finalize, or export club competitions
+              </p>
+
+            </div>
+
+            <button
+              onClick={() =>
+                router.push(
+                  "/teez-scoring/create-competition"
+                )
+              }
+              className="
+                bg-green-400
+                text-black
+                px-5
+                py-3
+                rounded-2xl
+                font-black
+                hover:scale-105
+                transition
+              "
+            >
+              NEW COMPETITION
+            </button>
+
+          </div>
+
+          <div className="grid gap-4">
+
+            {competitions.length === 0 && (
+
+              <div className="bg-black/40 border border-white/10 rounded-2xl p-6 text-gray-400">
+                No competitions created yet.
+              </div>
+
+            )}
+
+            {activeCompetitions.length > 0 && (
+
+              <div className="mb-4">
+
+                <h3 className="text-xl font-black text-green-400 mb-4">
+                  Active Competitions
+                </h3>
+
+                <div className="grid gap-4">
+
+                  {activeCompetitions.map((competition) => (
+
+                    <div
+                      key={competition.id}
+                      className="
+                        bg-black/40
+                        border border-green-400/20
+                        rounded-2xl
+                        p-5
+                        flex
+                        flex-col
+                        md:flex-row
+                        md:items-center
+                        md:justify-between
+                        gap-4
+                      "
+                    >
+
+                      <div>
+
+                        <h4 className="text-xl font-black">
+                          {competition.competitionName}
+                        </h4>
+
+                        <p className="text-gray-400 text-sm mt-1">
+                          {competition.competitionDate} • {competition.format} • {competition.playerConfiguration}
+                        </p>
+
+                        <span className="inline-block mt-3 text-xs font-black bg-green-400 text-black px-3 py-1 rounded-full">
+                          ACTIVE
+                        </span>
+
+                      </div>
+
+                      <div className="flex flex-wrap gap-3">
+
+                        <button
+                          onClick={() =>
+                            router.push(
+                              `/teez-scoring/competition/${competition.id}`
+                            )
+                          }
+                          className="
+                            bg-green-400
+                            text-black
+                            px-5
+                            py-3
+                            rounded-2xl
+                            font-black
+                          "
+                        >
+                          OPEN / EDIT
+                        </button>
+
+                      </div>
+
+                    </div>
+
+                  ))}
+
+                </div>
+
+              </div>
+
+            )}
+
+            {finalizedCompetitions.length > 0 && (
+
+              <div>
+
+                <h3 className="text-xl font-black text-yellow-400 mb-4">
+                  Finalized Competitions
+                </h3>
+
+                <div className="grid gap-4">
+
+                  {finalizedCompetitions.map((competition) => (
+
+                    <div
+                      key={competition.id}
+                      className="
+                        bg-black/40
+                        border border-yellow-400/20
+                        rounded-2xl
+                        p-5
+                        flex
+                        flex-col
+                        md:flex-row
+                        md:items-center
+                        md:justify-between
+                        gap-4
+                      "
+                    >
+
+                      <div>
+
+                        <h4 className="text-xl font-black">
+                          {competition.competitionName}
+                        </h4>
+
+                        <p className="text-gray-400 text-sm mt-1">
+                          {competition.competitionDate} • {competition.format} • {competition.playerConfiguration}
+                        </p>
+
+                        <span className="inline-block mt-3 text-xs font-black bg-yellow-400 text-black px-3 py-1 rounded-full">
+                          FINALIZED
+                        </span>
+
+                      </div>
+
+                      <div className="flex flex-wrap gap-3">
+
+                        <button
+                          onClick={() =>
+                            router.push(
+                              `/teez-scoring/competition/${competition.id}`
+                            )
+                          }
+                          className="
+                            bg-yellow-400
+                            text-black
+                            px-5
+                            py-3
+                            rounded-2xl
+                            font-black
+                          "
+                        >
+                          OPEN / EDIT
+                        </button>
+
+                        <button
+                          onClick={() =>
+                            alert(
+                              "PDF export is the next update."
+                            )
+                          }
+                          className="
+                            bg-white
+                            text-black
+                            px-5
+                            py-3
+                            rounded-2xl
+                            font-black
+                          "
+                        >
+                          EXPORT PDF
+                        </button>
+
+                      </div>
+
+                    </div>
+
+                  ))}
+
+                </div>
+
+              </div>
+
+            )}
+
+          </div>
 
         </div>
 

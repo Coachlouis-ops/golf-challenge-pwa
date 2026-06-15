@@ -528,15 +528,18 @@ export async function GET(req: Request) {
         .replace(/[^a-z0-9]/gi, "-")
         .toLowerCase();
 
-    return new NextResponse(pdfBuffer, {
-      status: 200,
-      headers: {
-        "Content-Type":
-          "application/pdf",
-        "Content-Disposition":
-          `attachment; filename="${fileName}.pdf"`,
-      },
-    });
+   return new NextResponse(
+  new Uint8Array(pdfBuffer),
+  {
+    status: 200,
+    headers: {
+      "Content-Type":
+        "application/pdf",
+      "Content-Disposition":
+        `attachment; filename="${fileName}.pdf"`,
+    },
+  }
+);
 
   } catch (e: any) {
 

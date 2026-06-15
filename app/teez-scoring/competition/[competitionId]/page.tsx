@@ -82,92 +82,118 @@ const router = useRouter();
   >([]);
 
   // =========================
-  // LOAD
-  // =========================
+// LOAD
+// =========================
 
-  useEffect(() => {
+useEffect(() => {
 
-    if (!competitionId) return;
+  if (!competitionId) return;
 
-    loadCompetition();
+  loadCompetition();
 
-  }, [competitionId]);
+}, [competitionId]);
 
-  async function loadCompetition() {
+async function loadCompetition() {
 
-    try {
+  try {
 
-      const ref = doc(
-        db,
-        "competitions",
-        competitionId as string
-      );
+    const ref = doc(
+      db,
+      "competitions",
+      competitionId as string
+    );
 
-      const snap = await getDoc(ref);
+    const snap = await getDoc(ref);
 
-      if (!snap.exists()) {
-        alert("Competition not found");
-        return;
-      }
-
-      const data = snap.data() as any;
-
- setCompetition({
-  competitionName:
-    data.competitionName || "",
-
-  competitionDate:
-    data.competitionDate || "",
-
-  format:
-    data.format || "",
-
-    scoringType:
-  data.scoringType || "gross",
-
-  playerConfiguration:
-    data.playerConfiguration || "",
-
-  divisionStructure:
-    data.divisionStructure || "",
-
-  startTime:
-    data.startTime || "07:00",
-
-  endTime:
-    data.endTime || "12:00",
-
-  teeMode:
-    data.teeMode || "Tee 1",
-
- teeIntervals:
-  data.teeIntervals || 10,
-
-  status:
-    data.status || "active",
-});
-
-      setRows(
-        data.rows || []
-      );
-
-    } catch (e: any) {
-
-      console.error(e);
-
-      alert(
-        e.message ||
-        "Failed to load competition"
-      );
-
-    } finally {
-
-      setLoading(false);
-
+    if (!snap.exists()) {
+      alert("Competition not found");
+      return;
     }
-  }
 
-  // =========================
+    const data = snap.data() as any;
+
+    setCompetition({
+      competitionName:
+        data.competitionName || "",
+
+      competitionDate:
+        data.competitionDate || "",
+
+      format:
+        data.format || "",
+
+      scoringType:
+        data.scoringType || "gross",
+
+      playerConfiguration:
+        data.playerConfiguration || "",
+
+      divisionStructure:
+        data.divisionStructure || "",
+
+      startTime:
+        data.startTime || "07:00",
+
+      endTime:
+        data.endTime || "12:00",
+
+      teeMode:
+        data.teeMode || "tee1",
+
+      teeIntervals:
+        Number(data.teeIntervals) || 10,
+
+      status:
+        data.status || "active",
+    });
+
+    const cleanRows: PlayerRow[] =
+      Array.isArray(data.rows)
+        ? data.rows.map((row: any) => ({
+            id:
+              row.id || crypto.randomUUID(),
+
+            displayName:
+              row.displayName || "",
+
+            division:
+              row.division || "",
+
+            teeTime:
+              row.teeTime || "",
+
+            startingHole:
+              row.startingHole || "",
+
+            score:
+              row.score || "",
+
+            countOutPosition:
+              row.countOutPosition !== undefined
+                ? String(row.countOutPosition)
+                : "",
+          }))
+        : [];
+
+    setRows(cleanRows);
+
+  } catch (e: any) {
+
+    console.error(e);
+
+    alert(
+      e.message ||
+      "Failed to load competition"
+    );
+
+  } finally {
+
+    setLoading(false);
+
+  }
+}
+
+// =========================
 // SAVE
 // =========================
 
@@ -180,15 +206,30 @@ async function saveCompetition() {
 
     setSaving(true);
 
-    const cleanRows =
+    const cleanRows: PlayerRow[] =
       rows.map((row) => ({
-        id: row.id || crypto.randomUUID(),
-        displayName: row.displayName || "",
-        division: row.division || "",
-        teeTime: row.teeTime || "",
-        startingHole: row.startingHole || "",
-        score: row.score || "",
-        countOutPosition: row.countOutPosition || "",
+        id:
+          row.id || crypto.randomUUID(),
+
+        displayName:
+          row.displayName || "",
+
+        division:
+          row.division || "",
+
+        teeTime:
+          row.teeTime || "",
+
+        startingHole:
+          row.startingHole || "",
+
+        score:
+          row.score || "",
+
+        countOutPosition:
+          row.countOutPosition !== undefined
+            ? String(row.countOutPosition)
+            : "",
       }));
 
     await updateDoc(
@@ -200,7 +241,11 @@ async function saveCompetition() {
       {
         ...competition,
 
-        rows: cleanRows,
+        teeIntervals:
+          Number(competition.teeIntervals) || 10,
+
+        rows:
+          cleanRows,
 
         updatedAt:
           serverTimestamp(),
@@ -226,7 +271,6 @@ async function saveCompetition() {
 
   }
 }
-
 // =========================
 // GENERATE TEE SHEET
 // =========================
@@ -327,158 +371,184 @@ function generateTeeSheet() {
 
 async function updateLeaderboard() {
 
-  if (!competitionId) return;
+  if (!competitionId || !competition) return;
 
   try {
 
-   const leaderboard: {
-  position?: number;
+    const getCountOutValue = (
+      value?: string
+    ) => {
 
-  displayName: string;
+      if (
+        value === undefined ||
+        value === ""
+      ) {
+        return 999;
+      }
 
-  division: string;
+      const numberValue =
+        Number(value);
 
-  total: number;
+      return Number.isNaN(numberValue)
+        ? 999
+        : numberValue;
+    };
 
-  countOutPosition?: number;
+    const leaderboard: {
+      position?: number;
 
-  teeTime: string;
+      displayName: string;
 
-  startingHole: string;
-}[] = [];
+      division: string;
+
+      total: number;
+
+      countOutPosition?: string;
+
+      teeTime: string;
+
+      startingHole: string;
+    }[] = [];
 
     const divisionLeaderboards:
       Record<string, any[]> = {};
 
-   // ====================================
-// SINGLES
-// ====================================
+    // ====================================
+    // SINGLES
+    // ====================================
 
-if (
-  competition?.playerConfiguration ===
-  "Singles"
-) {
+    if (
+      competition.playerConfiguration ===
+      "Singles"
+    ) {
 
-  const singles: {
-    position?: number;
+      const singles: {
+        position?: number;
 
-    displayName: string;
+        displayName: string;
 
-    division: string;
+        division: string;
 
-    total: number;
+        total: number;
 
-    countOutPosition?: number;
+        countOutPosition?: string;
 
-    teeTime: string;
+        teeTime: string;
 
-    startingHole: string;
-  }[] =
-    rows
-      .filter(
-        (r) =>
-          r.displayName &&
-          r.score !== ""
-      )
+        startingHole: string;
+      }[] =
+        rows
+          .filter(
+            (r) =>
+              r.displayName &&
+              r.score !== ""
+          )
 
-      .map((r) => ({
+          .map((r) => ({
 
-        displayName:
-          r.displayName,
+            displayName:
+              r.displayName || "",
 
-        division:
-          r.division || "Open",
+            division:
+              r.division || "Open",
 
-        total:
-          Number(r.score) || 0,
+            total:
+              Number(r.score) || 0,
 
-        countOutPosition:
-          r.countOutPosition || 999,
+            countOutPosition:
+              r.countOutPosition !== undefined
+                ? String(r.countOutPosition)
+                : "",
 
-        teeTime:
-          r.teeTime,
+            teeTime:
+              r.teeTime || "",
 
-        startingHole:
-          r.startingHole,
-      }));
+            startingHole:
+              r.startingHole || "",
+          }));
 
-  if (
-    competition?.scoringType ===
-    "points"
-  ) {
+      if (
+        competition.scoringType ===
+        "points"
+      ) {
 
-    singles.sort((a: any, b: any) => {
+        singles.sort((a, b) => {
 
-      if (a.total !== b.total) {
-        return b.total - a.total;
-      }
+          if (a.total !== b.total) {
+            return b.total - a.total;
+          }
 
-      const aCount =
-        a.countOutPosition || 999;
-
-      const bCount =
-        b.countOutPosition || 999;
-
-      return aCount - bCount;
-    });
-
-  } else {
-
-    singles.sort((a: any, b: any) => {
-
-      if (a.total !== b.total) {
-        return a.total - b.total;
-      }
-
-      const aCount =
-        a.countOutPosition || 999;
-
-      const bCount =
-        b.countOutPosition || 999;
-
-      return aCount - bCount;
-    });
-  }
-
-  let currentPosition = 1;
-
-  let lastScore:
-    number | null = null;
-
-  singles.forEach(
-    (r, index) => {
-
-      const isTie =
-        lastScore !== null &&
-        r.total === lastScore;
-
-      if (isTie) {
-
-        r.position =
-          currentPosition;
+          return (
+            getCountOutValue(
+              a.countOutPosition
+            ) -
+            getCountOutValue(
+              b.countOutPosition
+            )
+          );
+        });
 
       } else {
 
-        currentPosition =
-          index + 1;
+        singles.sort((a, b) => {
 
-        r.position =
-          currentPosition;
+          if (a.total !== b.total) {
+            return a.total - b.total;
+          }
+
+          return (
+            getCountOutValue(
+              a.countOutPosition
+            ) -
+            getCountOutValue(
+              b.countOutPosition
+            )
+          );
+        });
       }
 
-      lastScore = r.total;
-    }
-  );
+      let currentPosition = 1;
 
-  leaderboard.push(...singles);
-}
+      let lastScore:
+        number | null = null;
+
+      singles.forEach(
+        (r, index) => {
+
+          const isTie =
+            lastScore !== null &&
+            r.total === lastScore &&
+            getCountOutValue(
+              r.countOutPosition
+            ) === 999;
+
+          if (isTie) {
+
+            r.position =
+              currentPosition;
+
+          } else {
+
+            currentPosition =
+              index + 1;
+
+            r.position =
+              currentPosition;
+          }
+
+          lastScore = r.total;
+        }
+      );
+
+      leaderboard.push(...singles);
+    }
 
 // ====================================
 // DOUBLES
 // ====================================
 
 if (
-  competition?.playerConfiguration ===
+  competition.playerConfiguration ===
   "Doubles"
 ) {
 
@@ -511,51 +581,55 @@ if (
         Number(p1.score) || 0,
 
       countOutPosition:
-        p1.countOutPosition || 999,
+        p1.countOutPosition !== undefined
+          ? String(p1.countOutPosition)
+          : "",
 
       teeTime:
-        p1.teeTime,
+        p1.teeTime || "",
 
       startingHole:
-        p1.startingHole,
+        p1.startingHole || "",
     });
   }
 
   if (
-    competition?.scoringType ===
+    competition.scoringType ===
     "points"
   ) {
 
-    leaderboard.sort((a: any, b: any) => {
+    leaderboard.sort((a, b) => {
 
       if (a.total !== b.total) {
         return b.total - a.total;
       }
 
-      const aCount =
-        a.countOutPosition || 999;
-
-      const bCount =
-        b.countOutPosition || 999;
-
-      return aCount - bCount;
+      return (
+        getCountOutValue(
+          a.countOutPosition
+        ) -
+        getCountOutValue(
+          b.countOutPosition
+        )
+      );
     });
 
   } else {
 
-    leaderboard.sort((a: any, b: any) => {
+    leaderboard.sort((a, b) => {
 
       if (a.total !== b.total) {
         return a.total - b.total;
       }
 
-      const aCount =
-        a.countOutPosition || 999;
-
-      const bCount =
-        b.countOutPosition || 999;
-
-      return aCount - bCount;
+      return (
+        getCountOutValue(
+          a.countOutPosition
+        ) -
+        getCountOutValue(
+          b.countOutPosition
+        )
+      );
     });
   }
 
@@ -569,7 +643,10 @@ if (
 
       const isTie =
         lastScore !== null &&
-        r.total === lastScore;
+        r.total === lastScore &&
+        getCountOutValue(
+          r.countOutPosition
+        ) === 999;
 
       if (isTie) {
 
@@ -595,7 +672,7 @@ if (
 // ====================================
 
 if (
-  competition?.playerConfiguration ===
+  competition.playerConfiguration ===
   "Foursomes"
 ) {
 
@@ -633,51 +710,55 @@ if (
         ) || 0,
 
       countOutPosition:
-        group[0].countOutPosition || 999,
+        group[0].countOutPosition !== undefined
+          ? String(group[0].countOutPosition)
+          : "",
 
       teeTime:
-        group[0].teeTime,
+        group[0].teeTime || "",
 
       startingHole:
-        group[0].startingHole,
+        group[0].startingHole || "",
     });
   }
 
   if (
-    competition?.scoringType ===
+    competition.scoringType ===
     "points"
   ) {
 
-    leaderboard.sort((a: any, b: any) => {
+    leaderboard.sort((a, b) => {
 
       if (a.total !== b.total) {
         return b.total - a.total;
       }
 
-      const aCount =
-        a.countOutPosition || 999;
-
-      const bCount =
-        b.countOutPosition || 999;
-
-      return aCount - bCount;
+      return (
+        getCountOutValue(
+          a.countOutPosition
+        ) -
+        getCountOutValue(
+          b.countOutPosition
+        )
+      );
     });
 
   } else {
 
-    leaderboard.sort((a: any, b: any) => {
+    leaderboard.sort((a, b) => {
 
       if (a.total !== b.total) {
         return a.total - b.total;
       }
 
-      const aCount =
-        a.countOutPosition || 999;
-
-      const bCount =
-        b.countOutPosition || 999;
-
-      return aCount - bCount;
+      return (
+        getCountOutValue(
+          a.countOutPosition
+        ) -
+        getCountOutValue(
+          b.countOutPosition
+        )
+      );
     });
   }
 
@@ -691,7 +772,10 @@ if (
 
       const isTie =
         lastScore !== null &&
-        r.total === lastScore;
+        r.total === lastScore &&
+        getCountOutValue(
+          r.countOutPosition
+        ) === 999;
 
       if (isTie) {
 
@@ -714,75 +798,168 @@ if (
 
 
     // ====================================
-    // DIVISION LEADERBOARDS
-    // ====================================
+// DIVISION LEADERBOARDS
+// ====================================
 
-    const divisions = [
-      ...new Set(
-        leaderboard.map(
-          (r) => r.division
-        )
-      ),
-    ];
-
-    divisions.forEach(
-      (division) => {
-const filtered =
-  leaderboard
-    .filter(
-      (r) =>
-        r.division === division
+const divisions = [
+  ...new Set(
+    leaderboard.map(
+      (r) => r.division || "Open"
     )
+  ),
+];
 
-    .map((r) => ({
-      ...r
-    }))
+divisions.forEach(
+  (division) => {
 
-    .sort((a, b) => {
+    const filtered =
+      leaderboard
+        .filter(
+          (r) =>
+            (r.division || "Open") === division
+        )
 
-      if (
-        competition?.scoringType ===
-        "points"
-      ) {
-        return b.total - a.total;
-      }
+        .map((r) => ({
+          ...r,
+          countOutPosition:
+            r.countOutPosition !== undefined
+              ? String(r.countOutPosition)
+              : "",
+        }))
 
-      return a.total - b.total;
-    });
+        .sort((a, b) => {
 
-        let currentPosition = 1;
+          if (
+            competition.scoringType ===
+            "points"
+          ) {
 
-        let lastScore:
-          number | null = null;
-
-        filtered.forEach(
-          (r, index) => {
-
-            const isTie =
-              lastScore !== null &&
-              r.total === lastScore;
-
-            if (!isTie) {
-              currentPosition =
-                index + 1;
+            if (a.total !== b.total) {
+              return b.total - a.total;
             }
 
-            lastScore = r.total;
-
-            r.position =
-              currentPosition;
+            return (
+              getCountOutValue(
+                a.countOutPosition
+              ) -
+              getCountOutValue(
+                b.countOutPosition
+              )
+            );
           }
-        );
 
-        divisionLeaderboards[
-          division
-        ] = filtered;
+          if (a.total !== b.total) {
+            return a.total - b.total;
+          }
+
+          return (
+            getCountOutValue(
+              a.countOutPosition
+            ) -
+            getCountOutValue(
+              b.countOutPosition
+            )
+          );
+        });
+
+    let currentPosition = 1;
+
+    let lastScore:
+      number | null = null;
+
+    filtered.forEach(
+      (r, index) => {
+
+        const isTie =
+          lastScore !== null &&
+          r.total === lastScore &&
+          getCountOutValue(
+            r.countOutPosition
+          ) === 999;
+
+        if (!isTie) {
+          currentPosition =
+            index + 1;
+        }
+
+        lastScore =
+          r.total;
+
+        r.position =
+          currentPosition;
       }
     );
 
-    console.log(
+    divisionLeaderboards[
+      division
+    ] = filtered;
+  }
+);
+
+const cleanLeaderboard =
+  leaderboard.map((row) => ({
+    position:
+      row.position || 0,
+
+    displayName:
+      row.displayName || "",
+
+    division:
+      row.division || "Open",
+
+    total:
+      Number(row.total) || 0,
+
+    countOutPosition:
+      row.countOutPosition !== undefined
+        ? String(row.countOutPosition)
+        : "",
+
+    teeTime:
+      row.teeTime || "",
+
+    startingHole:
+      row.startingHole || "",
+  }));
+
+const cleanDivisionLeaderboards =
+  Object.fromEntries(
+    Object.entries(
+      divisionLeaderboards
+    ).map(
+      ([division, divisionRows]) => [
+        division,
+        divisionRows.map((row) => ({
+          position:
+            row.position || 0,
+
+          displayName:
+            row.displayName || "",
+
+          division:
+            row.division || "Open",
+
+          total:
+            Number(row.total) || 0,
+
+          countOutPosition:
+            row.countOutPosition !== undefined
+              ? String(row.countOutPosition)
+              : "",
+
+          teeTime:
+            row.teeTime || "",
+
+          startingHole:
+            row.startingHole || "",
+        })),
+      ]
+    )
+  );
+
+console.log(
   "LEADERBOARD GENERATED:",
-  leaderboard
+  cleanLeaderboard
 );
 
 await updateDoc(
@@ -793,32 +970,29 @@ await updateDoc(
   ),
   {
     leaderboard:
-      JSON.parse(
-        JSON.stringify(leaderboard)
-      ),
+      cleanLeaderboard,
 
     divisionLeaderboards:
-      JSON.parse(
-        JSON.stringify(
-          divisionLeaderboards
-        )
-      ),
+      cleanDivisionLeaderboards,
+
+    updatedAt:
+      serverTimestamp(),
   }
 );
 
-    alert(
-      "Leaderboard updated"
-    );
+alert(
+  "Leaderboard updated"
+);
 
-  } catch (e: any) {
+} catch (e: any) {
 
-    console.error(e);
+  console.error(e);
 
-    alert(
-      e.message ||
-      "Failed to update leaderboard"
-    );
-  }
+  alert(
+    e.message ||
+    "Failed to update leaderboard"
+  );
+}
 }
 
 // =========================
@@ -860,11 +1034,42 @@ async function finalizeCompetition() {
         )
       );
 
+    const data =
+      snap.data() || {};
+
     const leaderboard =
-      snap.data()?.leaderboard || [];
+      Array.isArray(data.leaderboard)
+        ? data.leaderboard
+        : [];
 
     const divisionLeaderboards =
-      snap.data()?.divisionLeaderboards || {};
+      data.divisionLeaderboards || {};
+
+    const cleanRows =
+      rows.map((row) => ({
+        id:
+          row.id || crypto.randomUUID(),
+
+        displayName:
+          row.displayName || "",
+
+        division:
+          row.division || "",
+
+        teeTime:
+          row.teeTime || "",
+
+        startingHole:
+          row.startingHole || "",
+
+        score:
+          row.score || "",
+
+        countOutPosition:
+          row.countOutPosition !== undefined
+            ? String(row.countOutPosition)
+            : "",
+      }));
 
     await setDoc(
 
@@ -905,7 +1110,8 @@ async function finalizeCompetition() {
         teeMode:
           competition.teeMode,
 
-        rows,
+        rows:
+          cleanRows,
 
         leaderboard,
 
@@ -922,6 +1128,8 @@ async function finalizeCompetition() {
       {
         status: "finalized",
         finalized: true,
+        updatedAt:
+          serverTimestamp(),
       }
     );
 
@@ -939,7 +1147,6 @@ async function finalizeCompetition() {
     );
   }
 }
-
 // =========================
 // UPDATE ROW
 // =========================
@@ -947,7 +1154,7 @@ async function finalizeCompetition() {
 function updateRow(
   id: string,
   field: keyof PlayerRow,
-  value: string | number
+  value: string
 ) {
 
   setRows((prev) =>
@@ -993,9 +1200,11 @@ return (
         <div className="flex items-center gap-5">
 
           <button
-           onClick={() =>
-  router.push("/teez-scoring/dashboard")
-}
+            onClick={() =>
+              router.push(
+                "/teez-scoring/dashboard"
+              )
+            }
             className="
               bg-neutral-900
               border border-white/10
@@ -1026,11 +1235,11 @@ return (
         <div className="flex items-center gap-4">
 
           <button
-          onClick={() =>
-  router.push(
-    `/teez-scoring/leaderboard/${competitionId}`
-  )
-}
+            onClick={() =>
+              router.push(
+                `/teez-scoring/leaderboard/${competitionId}`
+              )
+            }
             className="
               bg-cyan-400
               text-black
@@ -1059,7 +1268,7 @@ return (
             UPDATE LEADERBOARD
           </button>
 
-                   <button
+          <button
             onClick={saveCompetition}
             disabled={saving}
             className="
@@ -1070,6 +1279,7 @@ return (
               rounded-2xl
               font-bold
               shadow-[0_0_25px_rgba(34,197,94,0.7)]
+              disabled:opacity-50
             "
           >
             {saving
@@ -1091,55 +1301,56 @@ return (
           >
             FINALIZE COMPETITION
           </button>
-</div>
 
         </div>
 
-        {/* SETTINGS */}
+      </div>
 
-        <div className="grid md:grid-cols-4 gap-4 mb-10">
+      {/* SETTINGS */}
 
-          <div className="bg-neutral-900 rounded-2xl p-5">
-            <div className="text-xs text-gray-400 mb-2">
-              FORMAT
-            </div>
+      <div className="grid md:grid-cols-4 gap-4 mb-10">
 
-            <div className="font-bold">
-              {competition.format}
-            </div>
+        <div className="bg-neutral-900 rounded-2xl p-5">
+          <div className="text-xs text-gray-400 mb-2">
+            FORMAT
           </div>
 
-          <div className="bg-neutral-900 rounded-2xl p-5">
-            <div className="text-xs text-gray-400 mb-2">
-              PLAYER CONFIG
-            </div>
-
-            <div className="font-bold">
-              {competition.playerConfiguration}
-            </div>
+          <div className="font-bold">
+            {competition.format}
           </div>
-
-          <div className="bg-neutral-900 rounded-2xl p-5">
-            <div className="text-xs text-gray-400 mb-2">
-              DIVISIONS
-            </div>
-
-            <div className="font-bold">
-              {competition.divisionStructure}
-            </div>
-          </div>
-
-          <div className="bg-neutral-900 rounded-2xl p-5">
-            <div className="text-xs text-gray-400 mb-2">
-              DATE
-            </div>
-
-            <div className="font-bold">
-              {competition.competitionDate}
-            </div>
-          </div>
-
         </div>
+
+        <div className="bg-neutral-900 rounded-2xl p-5">
+          <div className="text-xs text-gray-400 mb-2">
+            PLAYER CONFIG
+          </div>
+
+          <div className="font-bold">
+            {competition.playerConfiguration}
+          </div>
+        </div>
+
+        <div className="bg-neutral-900 rounded-2xl p-5">
+          <div className="text-xs text-gray-400 mb-2">
+            DIVISIONS
+          </div>
+
+          <div className="font-bold">
+            {competition.divisionStructure}
+          </div>
+        </div>
+
+        <div className="bg-neutral-900 rounded-2xl p-5">
+          <div className="text-xs text-gray-400 mb-2">
+            DATE
+          </div>
+
+          <div className="font-bold">
+            {competition.competitionDate}
+          </div>
+        </div>
+
+      </div>
 
 
 {/* TEE SHEET SETTINGS */}
@@ -1232,7 +1443,8 @@ return (
         onChange={(e) =>
           setCompetition({
             ...competition,
-            teeIntervals: Number(e.target.value),
+            teeIntervals:
+              Number(e.target.value) || 10,
           })
         }
         className="
@@ -1296,7 +1508,7 @@ return (
 
 </div>
 
-     {/* TEE SHEET */}
+{/* TEE SHEET */}
 
 <div className="bg-neutral-900 rounded-3xl p-6">
 
@@ -1330,6 +1542,8 @@ return (
     </button>
 
   </div>
+
+   </div>
 
   <div className="grid grid-cols-1 xl:grid-cols-2 gap-10">
 
@@ -1379,30 +1593,30 @@ return (
                     {time}
                   </div>
 
-<div className="grid grid-cols-14 gap-3 mb-3 text-sm text-gray-400 font-bold">
+                  <div className="grid grid-cols-14 gap-3 mb-3 text-sm text-gray-400 font-bold">
 
-  <div className="col-span-6">
-    Names
-  </div>
+                    <div className="col-span-7">
+                      Names
+                    </div>
 
-  <div className="col-span-2 flex items-center justify-end pr-0">
-    Div
-  </div>
+                    <div className="col-span-2">
+                      Div
+                    </div>
 
-  <div className="col-span-5 flex items-center pl-14">
-    Score
-  </div>
+                    <div className="col-span-5">
+                      Score
+                    </div>
 
-</div>
+                  </div>
 
-<div className="flex flex-col gap-3">
+                  <div className="flex flex-col gap-3">
 
-  {group.map((row, index) => (
+                                      {group.map((row, index) => (
 
-    <div
-  key={row.id}
-  className="grid grid-cols-14 gap-3"
->
+                      <div
+                        key={row.id}
+                        className="grid grid-cols-14 gap-3"
+                      >
 
                         <div className="col-span-7">
 
@@ -1427,7 +1641,7 @@ return (
 
                         </div>
 
-                        <div className="col-span-2 pl-2">
+                        <div className="col-span-2">
 
                           <input
                             value={row.division}
@@ -1450,36 +1664,33 @@ return (
 
                         </div>
 
-                     <div className="col-span-5 flex gap-2">
+                        <div className="col-span-5">
 
-  {(competition.playerConfiguration === "Singles" ||
-    index % 2 === 0) && (
+                          {(competition.playerConfiguration === "Singles" ||
+                            index % 2 === 0) && (
 
-    <>
+                            <input
+                              value={row.score}
+                              onChange={(e) =>
+                                updateRow(
+                                  row.id,
+                                  "score",
+                                  e.target.value
+                                )
+                              }
+                              placeholder="Score"
+                              className="
+                                w-full
+                                max-w-[140px]
+                                bg-black
+                                border border-white/10
+                                rounded-xl
+                                px-3
+                                py-3
+                              "
+                            />
 
-      <input
-        value={row.score}
-        onChange={(e) =>
-          updateRow(
-            row.id,
-            "score",
-            e.target.value
-          )
-        }
-        placeholder="Score"
-      className="
-  w-full
-  max-w-[140px]
-  bg-black
-  border border-white/10
-  rounded-xl
-  px-3
-  py-3
-"
-      />
-    </>
-
-  )}
+                          )}
 
                         </div>
 
@@ -1504,10 +1715,7 @@ return (
   </div>
 
 </div>
+  </main>
 
-      </div>
-
-    </main>
-
-  );
+);
 }

@@ -399,22 +399,63 @@ export default function LeaderboardPage() {
           scoringType
         );
 
-      await updateDoc(
-        doc(
-          db,
-          "competitions",
-          competitionId as string
-        ),
-        {
-          rows,
-          leaderboard:
-            rebuilt.overall,
-          divisionLeaderboards:
-            rebuilt.divisions,
-          updatedAt:
-            serverTimestamp(),
-        }
-      );
+     const cleanRows =
+  rows.map((row) => ({
+    id: row.id || crypto.randomUUID(),
+    displayName: row.displayName || "",
+    division: row.division || "",
+    score: row.score || "",
+    total: row.total ?? "",
+    teeTime: row.teeTime || "",
+    startingHole: row.startingHole || "",
+    countOutPosition: row.countOutPosition || "",
+  }));
+
+const cleanOverall =
+  rebuilt.overall.map((row) => ({
+    id: row.id || crypto.randomUUID(),
+    position: row.position || 0,
+    displayName: row.displayName || "",
+    division: row.division || "",
+    total: row.total ?? 0,
+    teeTime: row.teeTime || "",
+    startingHole: row.startingHole || "",
+    countOutPosition: row.countOutPosition || "",
+  }));
+
+const cleanDivisions =
+  Object.fromEntries(
+    Object.entries(rebuilt.divisions).map(
+      ([division, divisionRows]) => [
+        division,
+        divisionRows.map((row) => ({
+          id: row.id || crypto.randomUUID(),
+          position: row.position || 0,
+          displayName: row.displayName || "",
+          division: row.division || "",
+          total: row.total ?? 0,
+          teeTime: row.teeTime || "",
+          startingHole: row.startingHole || "",
+          countOutPosition: row.countOutPosition || "",
+        })),
+      ]
+    )
+  );
+
+await updateDoc(
+  doc(
+    db,
+    "competitions",
+    competitionId as string
+  ),
+  {
+    rows: cleanRows,
+    leaderboard: cleanOverall,
+    divisionLeaderboards: cleanDivisions,
+    updatedAt:
+      serverTimestamp(),
+  }
+);
 
       setLeaderboard(
         rebuilt.overall
@@ -461,12 +502,12 @@ export default function LeaderboardPage() {
 
         <div className="mb-10 flex items-center justify-between gap-4">
 
-          <button
-            onClick={() =>
-              router.push(
-                "/teez-scoring/dashboard"
-              )
-            }
+<button
+  onClick={() =>
+    router.push(
+      `/teez-scoring/competition/${competitionId}`
+    )
+  }
             className="
               bg-neutral-900
               border border-white/10
@@ -477,7 +518,7 @@ export default function LeaderboardPage() {
               transition
             "
           >
-            ← DASHBOARD
+         ← COMPETITION
           </button>
 
           <div className="text-center flex-1">

@@ -13,45 +13,6 @@ import {
   getFirestore,
 } from "firebase-admin/firestore";
 
-const projectId =
-  process.env.FIREBASE_ADMIN_PROJECT_ID ||
-  process.env.FIREBASE_PROJECT_ID;
-
-const clientEmail =
-  process.env.FIREBASE_ADMIN_CLIENT_EMAIL ||
-  process.env.FIREBASE_CLIENT_EMAIL;
-
-const privateKey =
-  process.env.FIREBASE_ADMIN_PRIVATE_KEY ||
-  process.env.FIREBASE_PRIVATE_KEY;
-
-if (
-  !projectId ||
-  !clientEmail ||
-  !privateKey
-) {
-  throw new Error(
-    "Missing Firebase Admin environment variables"
-  );
-}
-
-if (!getApps().length) {
-  initializeApp({
-    credential: cert({
-      projectId,
-      clientEmail,
-      privateKey:
-        privateKey.replace(
-          /\\n/g,
-          "\n"
-        ),
-    }),
-  });
-}
-
-const adminDb =
-  getFirestore();
-
 type LeaderboardRow = {
   position?: number;
   displayName?: string;
@@ -69,6 +30,44 @@ type TeeSheetRow = {
   startingHole?: string;
   score?: string;
 };
+
+function getAdminDb() {
+
+  const projectId =
+    process.env.FIREBASE_ADMIN_PROJECT_ID;
+
+  const clientEmail =
+    process.env.FIREBASE_ADMIN_CLIENT_EMAIL;
+
+  const privateKey =
+    process.env.FIREBASE_ADMIN_PRIVATE_KEY;
+
+  if (
+    !projectId ||
+    !clientEmail ||
+    !privateKey
+  ) {
+    throw new Error(
+      "Missing Firebase Admin environment variables"
+    );
+  }
+
+  if (!getApps().length) {
+    initializeApp({
+      credential: cert({
+        projectId,
+        clientEmail,
+        privateKey:
+          privateKey.replace(
+            /\\n/g,
+            "\n"
+          ),
+      }),
+    });
+  }
+
+  return getFirestore();
+}
 
 async function streamToBuffer(
   doc: PDFKit.PDFDocument
@@ -112,30 +111,6 @@ function drawFooter(
     );
 }
 
-function addPageTitle(
-  doc: PDFKit.PDFDocument,
-  title: string
-) {
-
-  doc
-    .moveDown(1)
-    .fontSize(18)
-    .fillColor("#111111")
-    .text(title, {
-      underline: false,
-    });
-
-  doc
-    .moveDown(0.4)
-    .strokeColor("#22c55e")
-    .lineWidth(1)
-    .moveTo(50, doc.y)
-    .lineTo(doc.page.width - 50, doc.y)
-    .stroke();
-
-  doc.moveDown(1);
-}
-
 function checkPageSpace(
   doc: PDFKit.PDFDocument,
   requiredHeight = 60
@@ -150,13 +125,37 @@ function checkPageSpace(
   }
 }
 
+function addSectionTitle(
+  doc: PDFKit.PDFDocument,
+  title: string
+) {
+
+  checkPageSpace(doc, 70);
+
+  doc
+    .moveDown(1)
+    .fontSize(18)
+    .fillColor("#111111")
+    .text(title);
+
+  doc
+    .moveDown(0.4)
+    .strokeColor("#22c55e")
+    .lineWidth(1)
+    .moveTo(50, doc.y)
+    .lineTo(doc.page.width - 50, doc.y)
+    .stroke();
+
+  doc.moveDown(1);
+}
+
 function drawLeaderboardTable(
   doc: PDFKit.PDFDocument,
   title: string,
   rows: LeaderboardRow[]
 ) {
 
-  addPageTitle(doc, title);
+  addSectionTitle(doc, title);
 
   if (!rows.length) {
     doc
@@ -169,56 +168,51 @@ function drawLeaderboardTable(
 
   const startX = 50;
 
-  const widths = {
-    pos: 45,
-    name: 230,
-    div: 80,
-    score: 65,
-    co: 55,
-    tee: 45,
-    time: 65,
-  };
+  function drawHeader() {
 
-  function header() {
     checkPageSpace(doc, 40);
 
+    const y =
+      doc.y;
+
     doc
-      .rect(startX, doc.y, 512, 24)
+      .rect(startX, y, 512, 24)
       .fill("#111111");
 
     doc
       .fillColor("#ffffff")
       .fontSize(8)
-      .text("POS", startX + 8, doc.y - 18, {
-        width: widths.pos,
+      .text("POS", startX + 8, y + 8, {
+        width: 35,
       })
-      .text("PLAYER / TEAM", startX + 50, doc.y - 18, {
-        width: widths.name,
+      .text("PLAYER / TEAM", startX + 50, y + 8, {
+        width: 220,
       })
-      .text("DIV", startX + 285, doc.y - 18, {
-        width: widths.div,
+      .text("DIV", startX + 285, y + 8, {
+        width: 65,
       })
-      .text("SCORE", startX + 365, doc.y - 18, {
-        width: widths.score,
+      .text("SCORE", startX + 355, y + 8, {
+        width: 50,
       })
-      .text("CO", startX + 430, doc.y - 18, {
-        width: widths.co,
+      .text("CO", startX + 415, y + 8, {
+        width: 40,
       })
-      .text("TEE", startX + 475, doc.y - 18, {
-        width: widths.tee,
+      .text("TEE", startX + 465, y + 8, {
+        width: 40,
       })
-      .text("TIME", startX + 515, doc.y - 18, {
-        width: widths.time,
+      .text("TIME", startX + 510, y + 8, {
+        width: 50,
       });
 
-    doc.y += 10;
+    doc.y =
+      y + 32;
   }
 
-  header();
+  drawHeader();
 
   rows.forEach((row, index) => {
 
-    checkPageSpace(doc, 30);
+    checkPageSpace(doc, 32);
 
     const y =
       doc.y;
@@ -233,26 +227,26 @@ function drawLeaderboardTable(
       .fillColor("#111111")
       .fontSize(8)
       .text(String(row.position || ""), startX + 8, y, {
-        width: widths.pos,
+        width: 35,
       })
       .text(row.displayName || "", startX + 50, y, {
-        width: widths.name,
+        width: 220,
         ellipsis: true,
       })
       .text(row.division || "", startX + 285, y, {
-        width: widths.div,
+        width: 65,
       })
-      .text(String(row.total ?? ""), startX + 365, y, {
-        width: widths.score,
+      .text(String(row.total ?? ""), startX + 355, y, {
+        width: 50,
       })
-      .text(row.countOutPosition || "", startX + 430, y, {
-        width: widths.co,
+      .text(row.countOutPosition || "", startX + 415, y, {
+        width: 40,
       })
-      .text(row.startingHole || "", startX + 475, y, {
-        width: widths.tee,
+      .text(row.startingHole || "", startX + 465, y, {
+        width: 40,
       })
-      .text(row.teeTime || "", startX + 515, y, {
-        width: widths.time,
+      .text(row.teeTime || "", startX + 510, y, {
+        width: 50,
       });
 
     doc.y =
@@ -265,7 +259,7 @@ function drawTeeSheetTable(
   rows: TeeSheetRow[]
 ) {
 
-  addPageTitle(doc, "Tee Sheet");
+  addSectionTitle(doc, "Tee Sheet");
 
   if (!rows.length) {
     doc
@@ -297,7 +291,7 @@ function drawTeeSheetTable(
   Object.entries(grouped).forEach(
     ([groupName, groupRows]) => {
 
-      checkPageSpace(doc, 90);
+      checkPageSpace(doc, 100);
 
       doc
         .fontSize(11)
@@ -331,6 +325,9 @@ function drawTeeSheetTable(
 export async function GET(req: Request) {
 
   try {
+
+    const adminDb =
+      getAdminDb();
 
     const url =
       new URL(req.url);
@@ -377,6 +374,7 @@ export async function GET(req: Request) {
     let club: any = {};
 
     if (clubId) {
+
       const clubSnap =
         await adminDb
           .collection("scoringClubs")
@@ -389,7 +387,7 @@ export async function GET(req: Request) {
       }
     }
 
-    const doc =
+    const pdf =
       new PDFDocument({
         size: "A4",
         margin: 50,
@@ -404,13 +402,13 @@ export async function GET(req: Request) {
       });
 
     const pdfPromise =
-      streamToBuffer(doc);
+      streamToBuffer(pdf);
 
-    doc
-      .rect(0, 0, doc.page.width, 115)
+    pdf
+      .rect(0, 0, pdf.page.width, 120)
       .fill("#050505");
 
-    doc
+    pdf
       .fillColor("#22c55e")
       .fontSize(10)
       .text(
@@ -422,7 +420,7 @@ export async function GET(req: Request) {
         }
       );
 
-    doc
+    pdf
       .fillColor("#ffffff")
       .fontSize(24)
       .text(
@@ -434,13 +432,13 @@ export async function GET(req: Request) {
         }
       );
 
-    doc
+    pdf
       .fillColor("#d4d4d4")
       .fontSize(10)
       .text(
         competition.competitionName || "",
         50,
-        82
+        84
       );
 
     if (club.logoUrl) {
@@ -451,14 +449,15 @@ export async function GET(req: Request) {
           await fetch(club.logoUrl);
 
         if (logoResponse.ok) {
+
           const logoBuffer =
             Buffer.from(
               await logoResponse.arrayBuffer()
             );
 
-          doc.image(
+          pdf.image(
             logoBuffer,
-            doc.page.width - 135,
+            pdf.page.width - 135,
             25,
             {
               fit: [80, 80],
@@ -469,17 +468,16 @@ export async function GET(req: Request) {
       } catch {
         // Continue without logo.
       }
-
     }
 
-    doc.y = 145;
+    pdf.y = 145;
 
-    doc
+    pdf
       .fillColor("#111111")
       .fontSize(16)
       .text("Competition Details");
 
-    doc.moveDown(0.8);
+    pdf.moveDown(0.8);
 
     const detailRows = [
       ["Competition", competition.competitionName || ""],
@@ -493,19 +491,19 @@ export async function GET(req: Request) {
 
     detailRows.forEach(([label, value]) => {
 
-      doc
+      pdf
         .fontSize(9)
         .fillColor("#666666")
-        .text(label, {
+        .text(`${label}: `, {
           continued: true,
         })
         .fillColor("#111111")
-        .text(`   ${value}`);
+        .text(value);
 
     });
 
     drawLeaderboardTable(
-      doc,
+      pdf,
       "Overall Leaderboard",
       Array.isArray(competition.leaderboard)
         ? competition.leaderboard
@@ -519,7 +517,7 @@ export async function GET(req: Request) {
       ([division, rows]) => {
 
         drawLeaderboardTable(
-          doc,
+          pdf,
           `${division} Division Leaderboard`,
           Array.isArray(rows)
             ? rows as LeaderboardRow[]
@@ -530,15 +528,15 @@ export async function GET(req: Request) {
     );
 
     drawTeeSheetTable(
-      doc,
+      pdf,
       Array.isArray(competition.rows)
         ? competition.rows
         : []
     );
 
-    drawFooter(doc);
+    drawFooter(pdf);
 
-    doc.end();
+    pdf.end();
 
     const pdfBuffer =
       await pdfPromise;
@@ -548,18 +546,18 @@ export async function GET(req: Request) {
         .replace(/[^a-z0-9]/gi, "-")
         .toLowerCase();
 
-   return new NextResponse(
-  new Uint8Array(pdfBuffer),
-  {
-    status: 200,
-    headers: {
-      "Content-Type":
-        "application/pdf",
-      "Content-Disposition":
-        `attachment; filename="${fileName}.pdf"`,
-    },
-  }
-);
+    return new NextResponse(
+      new Uint8Array(pdfBuffer),
+      {
+        status: 200,
+        headers: {
+          "Content-Type":
+            "application/pdf",
+          "Content-Disposition":
+            `attachment; filename="${fileName}.pdf"`,
+        },
+      }
+    );
 
   } catch (e: any) {
 

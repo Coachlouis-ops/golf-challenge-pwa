@@ -14,7 +14,7 @@ export default function RefundPolicyPage() {
         </h1>
 
         <p className="text-gray-400 text-sm mt-2">
-          Teez Golf Challenges refund terms and user protection policy
+          Teez Golf Challenges refund, cancellation, and user protection policy
         </p>
       </div>
 
@@ -107,7 +107,40 @@ export default function RefundPolicyPage() {
           determines that a platform error or administrative error justifies a refund.
         </p>
 
-        <p className="font-semibold">4. Refund Review Process</p>
+        <p className="font-semibold">4. Cancellation of Services</p>
+
+        <p>
+          Customers may cancel any recurring subscription or membership at any time.
+        </p>
+
+        <p>
+          To request cancellation, users may visit the cancellation page available on
+          the website and submit a cancellation request through the provided contact
+          form or cancellation link.
+        </p>
+
+<button
+  onClick={() => router.push("/contact")}
+  className="w-full py-4 rounded-2xl font-bold text-lg bg-[#39ff14] text-black shadow-[0_0_25px_#39ff14] mt-4 border border-[#b6ff00]"
+>
+  Cancellation Link
+</button>
+
+        <p>
+          Upon receipt of a cancellation request, Honey Badger Technologies (PTY) LTD
+          will process the cancellation within 7 working days and confirm the
+          cancellation via email where applicable.
+        </p>
+
+        <p>
+          Cancellation will take effect immediately, and be subject to all competitions entered finalized.
+        </p>
+
+        <p>
+          Refunds are only applicable for unused competitions fees.
+        </p>
+
+        <p className="font-semibold">5. Refund Review Process</p>
 
         <p>
           All refund requests must be reviewed by Honey Badger Technologies (PTY) LTD
@@ -126,7 +159,7 @@ export default function RefundPolicyPage() {
           incomplete, false, misleading, fraudulent, abusive, or cannot be verified.
         </p>
 
-        <p className="font-semibold">5. Refund Processing Time</p>
+        <p className="font-semibold">6. Refund Processing Time</p>
 
         <p>
           Approved refunds will be processed within 7 business days where possible.
@@ -137,7 +170,7 @@ export default function RefundPolicyPage() {
           card issuer, payment method, or payment processing system used.
         </p>
 
-        <p className="font-semibold">6. South African Law and User Rights</p>
+        <p className="font-semibold">7. South African Law and User Rights</p>
 
         <p>
           This Refund Policy must be read together with the Platform Terms and
@@ -152,7 +185,7 @@ export default function RefundPolicyPage() {
           and in line with applicable legal obligations.
         </p>
 
-        <p className="font-semibold">7. Complaints and Ombudsman Assistance</p>
+        <p className="font-semibold">8. Complaints and Ombudsman Assistance</p>
 
         <p>
           Users are encouraged to contact Honey Badger Technologies (PTY) LTD first so
@@ -174,7 +207,7 @@ export default function RefundPolicyPage() {
           the complaint.
         </p>
 
-        <p className="font-semibold">8. Fraud, Abuse, and Misuse</p>
+        <p className="font-semibold">9. Fraud, Abuse, and Misuse</p>
 
         <p>
           Honey Badger Technologies (PTY) LTD reserves the right to refuse a refund
@@ -187,7 +220,7 @@ export default function RefundPolicyPage() {
           the matter is investigated.
         </p>
 
-        <p className="font-semibold">9. Final Decision</p>
+        <p className="font-semibold">10. Final Decision</p>
 
         <p>
           Honey Badger Technologies (PTY) LTD will make the final decision on all refund

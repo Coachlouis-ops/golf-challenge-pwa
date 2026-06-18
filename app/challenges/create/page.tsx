@@ -522,7 +522,7 @@ if (
 
           <input
             type="number"
-            placeholder="Entry Tokens"
+            placeholder="Entry Fee"
             value={entryTokens}
             onChange={(e) =>
               setEntryTokens(e.target.value)

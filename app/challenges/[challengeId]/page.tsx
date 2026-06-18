@@ -431,7 +431,7 @@ export default function ChallengeDetailPage() {
           if (challenge.status === "completed") {
             title = "CHALLENGE COMPLETED";
             message =
-              "See My Challenges for results and My Profile for rankings and tokens won.";
+              "See My Challenges for results and My Profile for rankings and prizes.";
             notes = ["This challenge has been finalized successfully."];
           }
 

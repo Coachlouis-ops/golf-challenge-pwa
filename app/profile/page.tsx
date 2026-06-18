@@ -493,7 +493,7 @@ export default function ProfilePage() {
             <div className="grid grid-cols-3 gap-3">
               <TokenCard title="Total Games" value={(profile as any)?.totalGames ?? 0} />
               <TokenCard title="Matches Won" value={(profile as any)?.matchesWon ?? 0} />
-              <TokenCard title="Tokens Available to Redeem" value={profileWallet?.winningTokens ?? 0} />
+              <TokenCard title="Your Prizes Available" value={profileWallet?.winningTokens ?? 0} />
             </div>
 
             <div className="space-y-3 mt-4">
@@ -547,15 +547,6 @@ export default function ProfilePage() {
                     &nbsp;&nbsp;(+ means improved position, − means dropped)
                   </p>
 
-                  <p>
-                    <strong>Token Stats:</strong><br />
-                    • Top number = total accumulated<br />
-                    • Bottom (+X) = change from your last challenge
-                  </p>
-
-                  <p>
-                    Your latest challenge impact is always reflected in both ranking movement and token changes.
-                  </p>
                 </div>
               </details>
             </div>

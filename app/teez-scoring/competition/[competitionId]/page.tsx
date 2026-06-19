@@ -1234,24 +1234,44 @@ return (
 
         <div className="flex items-center gap-4">
 
-          <button
-            onClick={() =>
-              router.push(
-                `/teez-scoring/leaderboard/${competitionId}`
-              )
-            }
-            className="
-              bg-cyan-400
-              text-black
-              px-6
-              py-4
-              rounded-2xl
-              font-bold
-              shadow-[0_0_25px_rgba(34,211,238,0.7)]
-            "
-          >
-            VIEW LEADERBOARD
-          </button>
+        <button
+  onClick={() =>
+    router.push(
+      `/teez-scoring/leaderboard/${competitionId}`
+    )
+  }
+  className="
+    bg-cyan-400
+    text-black
+    px-6
+    py-4
+    rounded-2xl
+    font-bold
+    shadow-[0_0_25px_rgba(34,211,238,0.7)]
+  "
+>
+  VIEW LEADERBOARD
+</button>
+
+<button
+  onClick={() =>
+    window.open(
+      `/teez-scoring/live-scoreboard/${competitionId}`,
+      "_blank"
+    )
+  }
+  className="
+    bg-purple-500
+    text-white
+    px-6
+    py-4
+    rounded-2xl
+    font-bold
+    shadow-[0_0_25px_rgba(168,85,247,0.7)]
+  "
+>
+  LIVE SCOREBOARD
+</button>
 
           <button
             onClick={updateLeaderboard}

@@ -1,4 +1,3 @@
-
 "use client";
 
 import {
@@ -7,14 +6,23 @@ import {
   useEffect,
   useState,
 } from "react";
-import { onAuthStateChanged, User } from "firebase/auth";
-import { auth, db } from "./firebase";
+
+import {
+  onAuthStateChanged,
+  User,
+} from "firebase/auth";
+
 import {
   doc,
   getDoc,
   setDoc,
   serverTimestamp,
 } from "firebase/firestore";
+
+import {
+  auth,
+  db,
+} from "./firebase";
 
 type AuthContextType = {
   user: User | null;
@@ -36,7 +44,6 @@ export function AuthProvider({
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (firebaseUser) => {
-      // LOGGED OUT
       if (!firebaseUser) {
         setUser(null);
         setLoading(false);
@@ -44,7 +51,6 @@ export function AuthProvider({
       }
 
       try {
-        // IGNORE TEMP PHONE USERS
         const isPhoneOnlyUser =
           firebaseUser.providerData.length === 1 &&
           firebaseUser.providerData[0]?.providerId === "phone";
@@ -79,18 +85,40 @@ export function AuthProvider({
           await setDoc(profileRef, {
             uid,
             email: firebaseUser.email ?? "",
+
             name: "",
             surname: "",
             battleName: "",
+            club: "",
+            division: "",
+
+            phoneNumber: "",
+            phoneVerified: false,
+
+            stats: {
+              matchesPlayed: 0,
+              wins: 0,
+              losses: 0,
+              winPercentage: 0,
+              currentStreak: 0,
+              bestStreak: 0,
+            },
+
             ranking: {
               club: 0,
-              province: 0,
+              division: 0,
               national: 0,
-              international: 0,
             },
+
+            achievements: [],
+
             tokensPlayed: 0,
             tokensWon: 0,
+
+            profileComplete: false,
+
             createdAt: serverTimestamp(),
+            updatedAt: serverTimestamp(),
           });
         }
 
@@ -102,9 +130,35 @@ export function AuthProvider({
 
         if (!walletSnap.exists()) {
           await setDoc(walletRef, {
-            purchasedTokens: 0,
-            winningTokens: 0,
-            lockedTokens: 0,
+            balance: 0,
+            lifetimeWon: 0,
+            lifetimeSpent: 0,
+
+            subscriptionTokensIssued: 0,
+            topUpTokensPurchased: 0,
+
+            createdAt: serverTimestamp(),
+            updatedAt: serverTimestamp(),
+          });
+        }
+
+        // -----------------------------------
+        // USER SUBSCRIPTION CHECK / CREATE
+        // -----------------------------------
+        const userRef = doc(db, "users", uid);
+        const userSnap = await getDoc(userRef);
+
+        if (!userSnap.exists()) {
+          await setDoc(userRef, {
+            uid,
+            email: firebaseUser.email ?? "",
+            role: "player",
+
+            subscriptionStatus: "inactive",
+            subscriptionPlan: "",
+            subscriptionStartedAt: null,
+            subscriptionExpires: null,
+
             createdAt: serverTimestamp(),
             updatedAt: serverTimestamp(),
           });
@@ -119,9 +173,8 @@ export function AuthProvider({
         if (!rankingSnap.exists()) {
           await setDoc(rankingRef, {
             club: 0,
-            province: 0,
+            division: 0,
             national: 0,
-            international: 0,
             updatedAt: serverTimestamp(),
           });
         }

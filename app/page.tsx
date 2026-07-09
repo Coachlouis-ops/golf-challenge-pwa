@@ -159,12 +159,12 @@ export default function HomePage() {
       {/* SLOGAN SECTION */}
 <section className="w-full max-w-4xl mx-auto text-center px-6 py-10">
   <h2 className="text-3xl md:text-5xl font-bold text-green-400 drop-shadow-[0_0_18px_rgba(0,255,136,0.8)]">
-    New trends are changing how we play and pay.
+    For those with a competitive spirit.
   </h2>
 
   <p className="mt-5 text-gray-300 text-base md:text-lg leading-8">
     Teez Golf Challenges brings skill-based golf competitions into a modern digital platform —
-    with secure payment access, player profiles, competition entries, and controlled digital participation.
+    with secure payment access, player profiles, matchups and rankings.
   </p>
 </section>
 
@@ -181,7 +181,7 @@ export default function HomePage() {
       <section className="bg-gray-100 text-black text-center py-20 px-6">
         <div className="max-w-3xl mx-auto">
           <h2 className="text-2xl md:text-3xl font-semibold mb-4">
-            Be part of the Future of Competitive Golf 
+            Bring back the spirit.
           </h2>
           <p className="text-gray-600 mb-8">
             Join the Teez Golf Challenge for exciting matchups.
@@ -190,7 +190,7 @@ export default function HomePage() {
           </p>
           <p className="text-xs text-gray-500 mb-6 max-w-xl mx-auto">
             Teez Golf Challenges is operated by Honey Badger Technologies PTY LTD.
-            All payments are made via secure payment partner PayGenius to Honey Badger Technologies PTY LTD for membership access and participation in challenges.
+            All payments are made via secure payment partner to Honey Badger Technologies PTY LTD for membership access and participation in challenges.
           </p>
 <div className="flex flex-col items-center gap-4">
   <div className="flex justify-center gap-4 flex-wrap">
@@ -242,7 +242,8 @@ export default function HomePage() {
             Bringing you the future of competition 
           </h2>
           <p className="text-gray-600 mb-8">
-            Golf dates back to at least 1457 in Scotland, today 500 years later, it’s still remains the most beautiful game ever played!
+            Golf dates back to at least 1457 in Scotland. It was never intended to be a game played on a scorecard. It was always a battle 
+            of skill between opponents. Today 500 years later, it’s still remains the most beautiful game ever played!
           </p>
         </div>
       </section>
@@ -265,7 +266,7 @@ export default function HomePage() {
             <p>
               Golf was never meant to be played against the course. At its
               core, it is a game of personal turmoil and finding inner piece and acceptance.
-              To strategizing, out think, and apply your skill. 
+              To strategize, out-think, and apply your skill. 
             </p>
             <p>
               Teez Golf Challenges brings that format back into focus by creating
@@ -299,7 +300,7 @@ export default function HomePage() {
             <div className="text-center">
               <img src="/hero-teez.jpg" className="w-full mb-4" />
               <h3 className="font-semibold mb-2">
-                Enter a Competition
+                Create your Challenge
               </h3>
               <p className="text-gray-400 text-sm">
                 Choose a Format - Matchplay, Strokeplay. Choose from
@@ -311,16 +312,7 @@ export default function HomePage() {
               <img src="/wallet.png" className="w-full mb-4" />
               <h3 className="font-semibold mb-2">Your Competition Dashboard</h3>
               <p className="text-gray-400 text-sm">
-                Manage your Entries and Results.
-              </p>
-            </div>
-
-            <div className="text-center">
-              <img src="/voucher_badger.png" className="w-full mb-4" />
-              <h3 className="font-semibold mb-2">View yor Prizes</h3>
-              <p className="text-gray-400 text-sm">
-                Prizes can be redeemed by players at any time. A guided step by step, redeem process 
-                is available to all players. 
+                Invite your Opponents.
               </p>
             </div>
 
@@ -328,8 +320,7 @@ export default function HomePage() {
               <img src="/main_ranking.png" className="w-full mb-4" />
               <h3 className="font-semibold mb-2">Rankings</h3>
               <p className="text-gray-400 text-sm">
-                Real-time rankings at Club, State/Province, National,
-                International Level.
+                See all your stats. Streaks, Rankings, Best format, and many more.
               </p>
             </div>
           </div>
@@ -353,14 +344,6 @@ export default function HomePage() {
                 Terms & Conditions
               </span>
 
-              {/* PAYMENT LOGO */}
-<div className="flex items-center gap-3 flex-wrap justify-center md:justify-start">
-  <img
-    src="/paygenius-logo.png"
-    className="h-8 object-contain"
-    alt="PayGenius"
-  />
-</div>
             </div>
           </div>
 

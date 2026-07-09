@@ -44,7 +44,7 @@ export default function VerifyEmailPage() {
 
       <p className="text-gray-400 mb-6 max-w-md">
         We sent you a verification email. Open your email, click Verify Email,
-        and then continue to login from the verification screen.
+        then log in to continue your profile setup.
       </p>
 
       <button
@@ -59,7 +59,7 @@ export default function VerifyEmailPage() {
   onClick={() => router.push("/login")}
   className="w-full max-w-md px-6 py-3 rounded-xl bg-[#00ff88] text-black font-semibold"
 >
-  Go to Login
+   Continue to Login
 </button>
     </div>
   );

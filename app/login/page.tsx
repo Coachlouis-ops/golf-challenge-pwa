@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -8,30 +7,28 @@ import { doc, getDoc } from "firebase/firestore";
 
 export default function LoginPage() {
   const router = useRouter();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+
     setError(null);
     setLoading(true);
 
     try {
       const userCred = await login(email, password);
 
-      // 🔥 FORCE HARD REFRESH FROM FIREBASE
       await userCred.user.reload();
 
-      // 🔥 GET FRESH USER FROM AUTH (NOT STALE OBJECT)
       const freshUser = userCred.user;
 
-      // 🔥 EXTRA SAFETY: CHECK AGAIN FROM AUTH INSTANCE
-      const isVerified = freshUser.emailVerified;
-
-      if (!isVerified) {
+      if (!freshUser.emailVerified) {
         router.push("/verify-email");
         return;
       }
@@ -46,35 +43,82 @@ export default function LoginPage() {
   }
 
   // -------------------------------
-  // CENTRAL ROUTING LOGIC
+  // CENTRAL SETUP ROUTING LOGIC
   // -------------------------------
+
   async function handleRouting(uid: string) {
-    const profileRef = doc(db, "profiles", uid);
-    const profileSnap = await getDoc(profileRef);
-
-    if (!profileSnap.exists()) {
-      router.push("/create-profile");
-      return;
-    }
-
-    // ✅ READ ROLE FROM USERS COLLECTION (CORRECT)
+    // ---------------- ADMIN CHECK ----------------
     const userRef = doc(db, "users", uid);
     const userSnap = await getDoc(userRef);
-    const role = userSnap.exists() ? userSnap.get("role") || "player" : "player";
 
-    // 🔴 ADMIN
+    const userData = userSnap.exists() ? userSnap.data() : null;
+    const role = userData?.role || "player";
+
     if (role === "admin") {
       router.push("/admin");
       return;
     }
 
-// 🔴 PLAYER
-router.push("/payment");
+    // ---------------- PROFILE CHECK ----------------
+    const profileRef = doc(db, "profiles", uid);
+    const profileSnap = await getDoc(profileRef);
+
+    if (!profileSnap.exists()) {
+      router.push("/profile");
+      return;
+    }
+
+    const profile = profileSnap.data();
+
+    if (
+      !profile.name ||
+      !profile.surname ||
+      !profile.battleName ||
+      !profile.club ||
+      !profile.division
+    ) {
+      router.push("/profile");
+      return;
+    }
+
+    // ---------------- PHONE CHECK ----------------
+    if (!profile.phoneVerified) {
+      router.push("/verify-phone");
+      return;
+    }
+
+    // ---------------- SUBSCRIPTION CHECK ----------------
+    if (!userSnap.exists()) {
+      router.push("/payment");
+      return;
+    }
+
+    if (userData?.subscriptionStatus !== "active") {
+      router.push("/payment");
+      return;
+    }
+
+    if (userData?.subscriptionExpires) {
+      const expires =
+        typeof userData.subscriptionExpires.toDate === "function"
+          ? userData.subscriptionExpires.toDate()
+          : new Date(userData.subscriptionExpires);
+
+      if (new Date().getTime() > expires.getTime()) {
+        router.push("/payment");
+        return;
+      }
+    }
+
+    router.push("/dashboard");
   }
 
   return (
-    <main className="min-h-screen flex items-center justify-center">
-      <form onSubmit={handleSubmit} className="w-80 space-y-4">
+    <main className="min-h-screen flex items-center justify-center bg-black text-white px-6">
+      <form
+        onSubmit={handleSubmit}
+        className="w-full max-w-sm space-y-4 bg-neutral-900 border border-neutral-700 rounded-2xl p-6"
+      >
         <h1 className="text-2xl font-semibold text-center">
           Sign In
         </h1>
@@ -84,7 +128,7 @@ router.push("/payment");
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="w-full border p-2"
+          className="w-full bg-black border border-neutral-600 rounded-xl p-3 text-white"
           required
         />
 
@@ -94,25 +138,29 @@ router.push("/payment");
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full border p-2 pr-10"
+            className="w-full bg-black border border-neutral-600 rounded-xl p-3 pr-12 text-white"
             required
           />
 
           <button
             type="button"
             onClick={() => setShowPassword((prev) => !prev)}
-            className="absolute right-2 top-1/2 -translate-y-1/2 text-sm text-gray-500"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-gray-400"
           >
             {showPassword ? "🙈" : "👁"}
           </button>
         </div>
 
-        {error && <p className="text-red-600 text-sm">{error}</p>}
+        {error && (
+          <p className="text-red-500 text-sm">
+            {error}
+          </p>
+        )}
 
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-black text-white py-2"
+          className="w-full bg-green-500 hover:bg-green-400 text-black font-semibold py-3 rounded-xl"
         >
           {loading ? "Loading..." : "Continue"}
         </button>

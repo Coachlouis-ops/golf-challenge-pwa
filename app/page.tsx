@@ -159,7 +159,7 @@ export default function HomePage() {
       {/* SLOGAN SECTION */}
 <section className="w-full max-w-4xl mx-auto text-center px-6 py-10">
   <h2 className="text-3xl md:text-5xl font-bold text-green-400 drop-shadow-[0_0_18px_rgba(0,255,136,0.8)]">
-    For those with a competitive spirit.
+    For Those with a Competitive Spirit
   </h2>
 
   <p className="mt-5 text-gray-300 text-base md:text-lg leading-8">
@@ -181,7 +181,7 @@ export default function HomePage() {
       <section className="bg-gray-100 text-black text-center py-20 px-6">
         <div className="max-w-3xl mx-auto">
           <h2 className="text-2xl md:text-3xl font-semibold mb-4">
-            Bring back the spirit.
+           "You wanne Play for Someting?""
           </h2>
           <p className="text-gray-600 mb-8">
             Join the Teez Golf Challenge for exciting matchups.
@@ -190,8 +190,7 @@ export default function HomePage() {
           </p>
           <p className="text-xs text-gray-500 mb-6 max-w-xl mx-auto">
             Teez Golf Challenges is operated by Honey Badger Technologies PTY LTD.
-            All payments are made via secure payment partner to Honey Badger Technologies PTY LTD for membership access and participation in challenges.
-          </p>
+            Subscriptions are paid via legaly secury payment portals. </p>
 <div className="flex flex-col items-center gap-4">
   <div className="flex justify-center gap-4 flex-wrap">
     <button

@@ -190,7 +190,7 @@ export default function HomePage() {
           </p>
           <p className="text-xs text-gray-500 mb-6 max-w-xl mx-auto">
             Teez Golf Challenges is operated by Honey Badger Technologies PTY LTD.
-            Subscriptions are paid via legaly secury payment portals. </p>
+            Subscriptions are paid via legaly secure payment portals. </p>
 <div className="flex flex-col items-center gap-4">
   <div className="flex justify-center gap-4 flex-wrap">
     <button
@@ -288,14 +288,14 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ================= HOW IT WORKS ================= */}
+          {/* ================= HOW IT WORKS ================= */}
       <section className="bg-black text-white py-20 px-6">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-center text-xl md:text-2xl font-semibold mb-12">
             HOW IT WORKS
           </h2>
 
-          <div className="grid md:grid-cols-2 gap-12">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12">
             <div className="text-center">
               <img src="/hero-teez.jpg" className="w-full mb-4" />
               <h3 className="font-semibold mb-2">
@@ -309,7 +309,9 @@ export default function HomePage() {
 
             <div className="text-center">
               <img src="/wallet.png" className="w-full mb-4" />
-              <h3 className="font-semibold mb-2">Your Competition Dashboard</h3>
+              <h3 className="font-semibold mb-2">
+                Your Competition Dashboard
+              </h3>
               <p className="text-gray-400 text-sm">
                 Invite your Opponents.
               </p>
@@ -317,9 +319,22 @@ export default function HomePage() {
 
             <div className="text-center">
               <img src="/main_ranking.png" className="w-full mb-4" />
-              <h3 className="font-semibold mb-2">Rankings</h3>
+              <h3 className="font-semibold mb-2">
+                Rankings
+              </h3>
               <p className="text-gray-400 text-sm">
                 See all your stats. Streaks, Rankings, Best format, and many more.
+              </p>
+            </div>
+
+            <div className="text-center">
+              <img src="/profile_image_1.png" className="w-full mb-4" />
+              <h3 className="font-semibold mb-2">
+                Player Profile
+              </h3>
+              <p className="text-gray-400 text-sm">
+                Build your competitive golf identity with rankings, stats, streaks,
+                match history, and achievements.
               </p>
             </div>
           </div>

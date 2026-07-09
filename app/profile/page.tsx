@@ -372,9 +372,9 @@ export default function ProfilePage() {
       }
 
       // -------------------------------------------------
-      // NORMAL PROFILE UPDATE
+      // NEXT SETUP STEP: SUBSCRIPTION PAYMENT
       // -------------------------------------------------
-      router.push("/dashboard");
+      router.push("/payment");
     } catch (err: any) {
       console.error(err);
       alert(err.message || "Failed to send OTP");
@@ -602,9 +602,9 @@ export default function ProfilePage() {
               {(profile.division === "open" || profile.division === "professional") && (
                 <div className="bg-yellow-900/30 border border-yellow-600 rounded-lg p-3">
                   <p className="text-xs text-yellow-300 leading-relaxed">
-                    By selecting this division, you acknowledge that participation
-                    in cash prize competitions may affect your amateur status under
-                    applicable golf regulations.
+                    By selecting this division, you acknowledge that Teez tokens
+                    are digital play credits only and cannot be withdrawn,
+                    redeemed, or converted to cash.
                   </p>
                 </div>
               )}

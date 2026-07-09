@@ -47,7 +47,7 @@ router.push("/verify-email");
     <main className="min-h-screen flex flex-col items-center justify-center gap-6 bg-black text-white font-sans px-6">
 
       <h1 className="text-3xl font-semibold">
-        Create Your Account
+        Create Your Player Account
       </h1>
 
       <input
@@ -81,7 +81,7 @@ router.push("/verify-email");
         disabled={loading}
         className="w-full max-w-md py-4 rounded-2xl bg-[#00ff88] text-black font-semibold text-lg shadow-[0_0_15px_#00ff88]"
       >
-        {loading ? "Creating..." : "Create Account"}
+        {loading ? "Creating..." : "Start Setup"}
       </button>
 
       <button

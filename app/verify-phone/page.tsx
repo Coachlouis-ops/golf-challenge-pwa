@@ -160,14 +160,15 @@ export default function VerifyPhonePage() {
         return;
       }
 
-     const originalUid =
-  localStorage.getItem("phoneVerificationUid");
+      const originalUid =
+        localStorage.getItem("phoneVerificationUid") ||
+        auth.currentUser?.uid;
 
-if (!originalUid) {
-  alert("Verification session missing.");
-  setLoading(false);
-  return;
-}
+      if (!originalUid) {
+        alert("Verification session missing.");
+        setLoading(false);
+        return;
+      }
 
 // -------------------------------------------------
 // VERIFY OTP WITHOUT REPLACING EMAIL SESSION
@@ -224,7 +225,7 @@ if (currentUser) {
           </h1>
 
           <p className="text-sm text-gray-400">
-            Verify your mobile number before payment
+            Verify your mobile number
           </p>
 
         </div>

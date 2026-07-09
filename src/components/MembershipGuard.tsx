@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useState } from "react";
@@ -25,23 +24,12 @@ export default function MembershipGuard({
     }
 
     (async () => {
-      // 🔥 ALWAYS REFRESH USER FIRST
       await user.reload();
       const freshUser = user;
 
-      // 🔴 EMAIL NOT VERIFIED
+      // ---------------- EMAIL CHECK ----------------
       if (!freshUser.emailVerified) {
         router.replace("/verify-email");
-        return;
-      }
-
-      // ✅ Stripe return bypass
-      const isStripeReturn =
-        typeof window !== "undefined" &&
-        document.referrer.includes("stripe.com");
-
-      if (isStripeReturn) {
-        setAllowed(true);
         return;
       }
 
@@ -56,32 +44,44 @@ export default function MembershipGuard({
 
       const profile = profileSnap.data();
 
-      if (!profile.name || !profile.surname || !profile.battleName) {
+      if (
+        !profile.name ||
+        !profile.surname ||
+        !profile.battleName ||
+        !profile.club ||
+        !profile.division
+      ) {
         router.replace("/profile");
         return;
       }
 
-      // ---------------- MEMBERSHIP CHECK ----------------
-      const membershipRef = doc(db, "users", freshUser.uid);
-      const membershipSnap = await getDoc(membershipRef);
+      // ---------------- PHONE CHECK ----------------
+      if (!profile.phoneVerified) {
+        router.replace("/verify-phone");
+        return;
+      }
 
-      if (!membershipSnap.exists()) {
+      // ---------------- SUBSCRIPTION CHECK ----------------
+      const userRef = doc(db, "users", freshUser.uid);
+      const userSnap = await getDoc(userRef);
+
+      if (!userSnap.exists()) {
         router.replace("/payment");
         return;
       }
 
-      const membership = membershipSnap.data();
+      const userData = userSnap.data();
 
-      if (membership.membershipStatus !== "active") {
+      if (userData.subscriptionStatus !== "active") {
         router.replace("/payment");
         return;
       }
 
-      if (membership.membershipExpires) {
+      if (userData.subscriptionExpires) {
         const expires =
-          typeof membership.membershipExpires.toDate === "function"
-            ? membership.membershipExpires.toDate()
-            : new Date(membership.membershipExpires);
+          typeof userData.subscriptionExpires.toDate === "function"
+            ? userData.subscriptionExpires.toDate()
+            : new Date(userData.subscriptionExpires);
 
         if (new Date().getTime() > expires.getTime()) {
           router.replace("/payment");
@@ -95,7 +95,7 @@ export default function MembershipGuard({
 
   if (!allowed) {
     return (
-      <div className="min-h-screen flex items-center justify-center text-white">
+      <div className="min-h-screen flex items-center justify-center bg-black text-white">
         Checking account...
       </div>
     );
@@ -103,4 +103,3 @@ export default function MembershipGuard({
 
   return <>{children}</>;
 }
-

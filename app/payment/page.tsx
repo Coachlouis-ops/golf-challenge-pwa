@@ -2,13 +2,56 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { httpsCallable } from "firebase/functions";
+import { functions } from "@/src/lib/firebase";
 import { useAuth } from "@/src/lib/AuthContext";
 
 export default function PaymentPage() {
   const router = useRouter();
-  const { loading } = useAuth();
+  const { user, loading } = useAuth();
 
   const [accepted, setAccepted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+
+  async function activateSubscription() {
+    if (!user) {
+      router.push("/login");
+      return;
+    }
+
+    if (!accepted) {
+      alert("Accept the subscription terms first.");
+      return;
+    }
+
+    try {
+      setSubmitting(true);
+
+      const reference = `TEEZ-SUB-${user.uid.slice(0, 6).toUpperCase()}`;
+
+      const createSubscriptionPayment = httpsCallable(
+        functions,
+        "createMembershipPaymentApplication"
+      );
+
+      await createSubscriptionPayment({
+        selectedBank: "PayGenius",
+        bankUrl: "paygenius",
+        reference,
+      });
+
+      alert(
+        "Subscription request submitted. Your game access will activate once payment is confirmed."
+      );
+
+      router.push("/payment-pending");
+    } catch (err: any) {
+      console.error(err);
+      alert(err.message || "Failed to create subscription request.");
+    } finally {
+      setSubmitting(false);
+    }
+  }
 
   if (loading) {
     return (
@@ -20,7 +63,6 @@ export default function PaymentPage() {
 
   return (
     <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center gap-10 px-6 py-10">
-      {/* HERO */}
       <div className="text-center flex flex-col gap-3">
         <h1 className="text-5xl font-bold text-green-400">
           ACTIVATE YOUR GAME
@@ -32,11 +74,10 @@ export default function PaymentPage() {
 
         <p className="text-gray-400 max-w-xl">
           Subscribe to unlock competitive golf challenges, rankings, player stats,
-          and monthly digital play credits.
+          and 100 monthly Teez tokens.
         </p>
       </div>
 
-      {/* CARD */}
       <div className="bg-zinc-800 border border-zinc-600 p-8 rounded-xl shadow-xl flex flex-col gap-6 text-center max-w-md w-full">
         <h3 className="text-xl font-bold text-green-400">
           Monthly Game Access
@@ -50,7 +91,6 @@ export default function PaymentPage() {
           Includes 100 Teez tokens every month.
         </p>
 
-        {/* PAYGENIUS */}
         <div className="bg-black/40 border border-zinc-700 rounded-xl p-6 flex flex-col items-center gap-5">
           <p className="text-green-400 font-semibold">
             Secure Subscription Payment
@@ -65,11 +105,11 @@ export default function PaymentPage() {
           </div>
 
           <p className="text-sm text-gray-400">
-            Subscription payments will be processed through PayGenius Smart Payments.
+            Payment is submitted as a subscription activation request and will be
+            confirmed before game access is unlocked.
           </p>
         </div>
 
-        {/* TERMS */}
         <div className="text-left bg-black/40 border border-zinc-700 rounded-xl p-4 space-y-4 text-sm text-gray-300">
           <p className="text-green-400 font-semibold">
             Subscription Terms
@@ -87,8 +127,8 @@ export default function PaymentPage() {
           </p>
 
           <p>
-            Subscription access will only be activated once payment has been
-            confirmed.
+            Once payment is confirmed, your subscription becomes active and your
+            wallet receives 100 Teez tokens.
           </p>
 
           <p>
@@ -124,25 +164,23 @@ export default function PaymentPage() {
           </label>
         </div>
 
-        {/* PAYMENT */}
         <button
-          onClick={() => router.push("/dashboard")}
-          disabled={!accepted}
+          onClick={activateSubscription}
+          disabled={!accepted || submitting}
           className={`w-full py-4 rounded-xl font-bold transition ${
-            accepted
+            accepted && !submitting
               ? "bg-green-500 hover:bg-green-400 text-black"
               : "bg-gray-700 text-gray-400 cursor-not-allowed"
           }`}
         >
-          ACTIVATE SUBSCRIPTION
+          {submitting ? "SUBMITTING..." : "ACTIVATE SUBSCRIPTION"}
         </button>
 
         <p className="text-xs text-gray-400">
-          Tick the Terms & Conditions box to activate the subscription button.
+          Your dashboard unlocks once your subscription is confirmed.
         </p>
       </div>
 
-      {/* BACK */}
       <button
         onClick={() => router.push("/login")}
         className="text-sm text-gray-400 underline"

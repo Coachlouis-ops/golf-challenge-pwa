@@ -13,7 +13,6 @@ export default function LegalTermsPage() {
           South Africa.
         </p>
 
-        {/* 1 */}
         <h2 className="text-white font-semibold">
           1. Detailed Description of Goods and/or Services
         </h2>
@@ -25,67 +24,115 @@ export default function LegalTermsPage() {
         </p>
 
         <p>
-          Teez Golf Challenges provides a skill-based golf competition platform,
-          membership access, digital participation systems, player profiles,
-          competition entry systems, competition management features, and related
-          digital services.
+          Teez Golf Challenges is a subscription-based competitive golf platform.
+          Users pay a monthly subscription for access to the platform and receive
+          digital play tokens.
+        </p>
+
+        <p>
+          Tokens are used only inside the platform to create, enter, and compete
+          in golf challenges. The platform focuses on golf competition, rankings,
+          player profiles, match history, statistics, score tracking, and digital
+          gameplay progression.
+        </p>
+
+        <p>
+          Teez tokens are digital play credits only. Tokens have no cash value,
+          cannot be redeemed, cannot be withdrawn, cannot be transferred for
+          cash, and cannot be converted into money, vouchers, goods, services, or
+          external rewards.
         </p>
 
         <p>
           Teez Golf Challenges does not facilitate gambling, betting, wagering,
-          casino-style games, or games of chance. Competitions on the platform
-          are based on golf participation, player performance, scoring, and
-          skill-based competition results.
+          casino-style games, games of chance, prize payouts, cash rewards, or
+          token redemption. Competitions on the platform are based on golf
+          participation, player performance, scoring, rankings, and
+          skill-based results.
         </p>
 
-        {/* 2 */}
-        <h2 className="text-white font-semibold">2. Delivery Policy</h2>
+        <h2 className="text-white font-semibold">
+          2. Subscription Model and Pricing
+        </h2>
 
         <p>
-          Access to services is subject to successful payment confirmation and
-          account activation. Once payment has been confirmed, membership access,
-          profile creation, competition access, and other applicable digital
-          services will be activated within 1 business day where possible.
+          Teez Golf Challenges operates on a monthly subscription model. The
+          current subscription fee is <strong>R99 per month</strong>.
         </p>
 
         <p>
-          Delivery is confirmed through system access, account activation,
-          profile access, platform access, and/or email notification.
+          Each active monthly subscription includes{" "}
+          <strong>100 Teez tokens</strong>. These tokens are credited digitally
+          to the user’s in-app wallet after successful subscription activation.
         </p>
 
-        {/* 3 */}
-        <h2 className="text-white font-semibold">3. Export Restriction</h2>
+        <p>
+          Subscription pricing, token allocation, and available plans may be
+          updated from time to time. Any applicable pricing will be displayed to
+          the user before payment is completed.
+        </p>
+
+        <h2 className="text-white font-semibold">3. Delivery Policy</h2>
+
+        <p>
+          No physical goods are delivered. 100% of payments relate to digital
+          platform access and subscription services.
+        </p>
+
+        <p>
+          Subject to successful payment confirmation, digital subscription access
+          will be made available immediately to 24 hours after payment
+          confirmation.
+        </p>
+
+        <p>
+          Delivery is confirmed through account activation, dashboard access,
+          wallet token allocation, profile access, platform access, and/or email
+          notification.
+        </p>
+
+        <h2 className="text-white font-semibold">4. Export Restriction</h2>
 
         <p>
           The offering on this website is currently available to South African
           clients only.
         </p>
 
-        {/* 4 */}
         <h2 className="text-white font-semibold">
-          4. Returns and Refunds Policy
+          5. Returns, Refunds and Cancellation Policy
         </h2>
 
         <p>
           The provision of services by Honey Badger Technologies (PTY) LTD is
           subject to availability, successful payment confirmation, platform
-          availability, and the Terms and Conditions of the Teez Golf Challenges
-          platform.
+          availability, and these Terms and Conditions.
         </p>
 
         <p>
           Refunds may be considered where a technical failure, duplicate payment,
           incorrect payment amount, administrative error, incorrect account
-          allocation, incorrect membership activation, challenge setup error,
-          scoring error, or other platform-related error occurred.
+          allocation, incorrect subscription activation, or other
+          platform-related error occurred.
         </p>
 
         <p>
-          Membership fees and competition entries are generally non-refundable
-          once access has been activated or the service has been used, except
-          where Honey Badger Technologies (PTY) LTD determines that a refund is
-          valid, fair, and supported by the platform records or available
-          evidence.
+          Subscription fees are generally non-refundable once digital access has
+          been activated or the subscription service has been used, except where
+          required by applicable South African law or where Honey Badger
+          Technologies (PTY) LTD determines that a refund is valid and fair.
+        </p>
+
+        <p>
+          Tokens that have been used to enter or participate in challenges are
+          not refundable, reversible, or convertible into money or external
+          value.
+        </p>
+
+        <p>
+          Users may cancel their subscription by contacting Honey Badger
+          Technologies (PTY) LTD through the contact details provided on the
+          website. Cancellation stops future subscription access according to the
+          applicable billing and processing timing.
         </p>
 
         <p>
@@ -94,29 +141,23 @@ export default function LegalTermsPage() {
           payment provider, card issuer, or payment method used.
         </p>
 
-        <p>
-          Refund requests are subject to the full Refund Policy, Platform Terms
-          and Conditions, applicable South African law, consumer protection
-          principles, and fair business practice.
-        </p>
-
-        {/* 5 */}
         <h2 className="text-white font-semibold">
-          5. Customer Privacy Policy
+          6. Customer Privacy Policy
         </h2>
 
         <p>
           Honey Badger Technologies (PTY) LTD shall take all reasonable steps to
           protect the personal information of users. Personal information is
           processed in accordance with the Protection of Personal Information Act
-          (POPIA).
+          4 of 2013.
         </p>
 
         <p>
-          User information may be used for account creation, membership
-          verification, payment confirmation, competition participation, customer
-          support, dispute resolution, platform access control, and compliance
-          purposes.
+          User information may be used for account creation, email verification,
+          phone verification, subscription management, payment confirmation,
+          profile creation, rankings, challenge participation, customer support,
+          dispute resolution, platform access control, fraud prevention, and
+          compliance purposes.
         </p>
 
         <p>
@@ -124,20 +165,19 @@ export default function LegalTermsPage() {
           to third parties.
         </p>
 
-        {/* 6 */}
         <h2 className="text-white font-semibold">
-          6. Payment Options Accepted
+          7. Payment Options Accepted
         </h2>
 
         <p>
-          Payments are processed through a secure third-party payment provider,
-          PayGenius Smart Payments.
+          Payments will be processed through an approved third-party payment
+          gateway once the final payment provider has been approved and
+          connected.
         </p>
 
         <p>
-          Available payment methods may depend on the payment options supported
-          by PayGenius at the time of payment, including card payments or other
-          supported payment methods.
+          Available payment methods may include card payments or other supported
+          payment methods offered by the approved payment gateway.
         </p>
 
         <p>
@@ -146,52 +186,53 @@ export default function LegalTermsPage() {
           account details are used before confirming payment.
         </p>
 
-        {/* 7 */}
         <h2 className="text-white font-semibold">
-          7. Payment Processing and Security
+          8. Payment Processing and Security
         </h2>
 
         <p>
-          Payments are processed through PayGenius Smart Payments, a third-party
-          payment portal. Honey Badger Technologies (PTY) LTD does not directly
-          process card payments on this website.
+          Honey Badger Technologies (PTY) LTD does not directly process or store
+          customer card details on this website.
         </p>
 
         <p>
-          Users may be redirected to or interact with PayGenius payment systems
-          to complete payment. Payment confirmation may be subject to successful
-          processing by PayGenius, the user’s bank, card issuer, or relevant
-          payment method provider.
+          Card details, where applicable, will be entered and processed through
+          the secure systems of the approved third-party payment gateway.
         </p>
 
         <p>
           Honey Badger Technologies (PTY) LTD does not store customer card
-          numbers, CVV numbers, banking passwords, banking PINs, or banking login
-          credentials on this website.
+          numbers, CVV numbers, banking passwords, banking PINs, one-time PINs,
+          or confidential banking login credentials on this website.
         </p>
 
-        {/* 8 */}
+        <p>
+          The website uses HTTPS/SSL where applicable to support secure
+          transmission of information. The approved payment gateway will be
+          responsible for card payment processing security and related payment
+          compliance controls.
+        </p>
+
         <h2 className="text-white font-semibold">
-          8. Customer Details and Payment Details
+          9. Customer Details and Payment Details
         </h2>
 
         <p>
           Customer details are stored by Honey Badger Technologies (PTY) LTD for
-          account administration, membership activation, payment confirmation,
-          customer support, dispute resolution, compliance, and platform access
-          purposes.
+          account administration, subscription activation, payment confirmation,
+          customer support, dispute resolution, compliance, fraud prevention, and
+          platform access purposes.
         </p>
 
         <p>
-          Payment details are handled by PayGenius Smart Payments and/or the
-          applicable payment provider. Users must never submit private banking
-          passwords, card PINs, one-time passwords, or confidential banking
-          credentials directly to Honey Badger Technologies (PTY) LTD.
+          Payment details are handled by the approved third-party payment gateway
+          and/or the applicable payment provider. Users must never submit private
+          banking passwords, card PINs, one-time passwords, or confidential
+          banking credentials directly to Honey Badger Technologies (PTY) LTD.
         </p>
 
-        {/* 9 */}
         <h2 className="text-white font-semibold">
-          9. Merchant Outlet Country and Transaction Currency
+          10. Merchant Outlet Country and Transaction Currency
         </h2>
 
         <p>
@@ -200,26 +241,24 @@ export default function LegalTermsPage() {
           Rand (ZAR).
         </p>
 
-        {/* 10 */}
-        <h2 className="text-white font-semibold">10. Responsibility</h2>
+        <h2 className="text-white font-semibold">11. Responsibility</h2>
 
         <p>
           Honey Badger Technologies (PTY) LTD takes responsibility for all
-          aspects relating to the sale of services, customer service and support,
-          dispute resolution, account activation, platform access, and delivery
-          of digital services.
+          aspects relating to the sale of digital services, customer service and
+          support, dispute resolution, account activation, platform access,
+          subscription delivery, and delivery of digital services.
         </p>
 
         <p>
-          PayGenius Smart Payments is responsible for payment processing services
-          performed through its payment portal, subject to its own applicable
-          payment processing terms, security systems, and supported payment
-          methods.
+          The approved third-party payment gateway will be responsible for
+          payment processing services performed through its payment portal,
+          subject to its own applicable payment processing terms, security
+          systems, and supported payment methods.
         </p>
 
-        {/* 11 */}
         <h2 className="text-white font-semibold">
-          11. Skill-Based Competitions
+          12. Skill-Based Competitions and Rankings
         </h2>
 
         <p>
@@ -229,20 +268,25 @@ export default function LegalTermsPage() {
         </p>
 
         <p>
-          The platform reserves the right to verify, review, modify, cancel, or
-          correct competition entries, results, scores, or outcomes where there
-          is suspected fraud, technical error, scoring error, rule breach,
-          incorrect setup, or misuse of the platform.
+          Platform rankings, statistics, achievements, streaks, and profile
+          records are digital performance records only and do not represent
+          money, cash value, financial value, vouchers, or external rewards.
         </p>
 
-        {/* 12 */}
-        <h2 className="text-white font-semibold">12. Risk Disclaimer</h2>
+        <p>
+          The platform reserves the right to verify, review, modify, cancel, or
+          correct competition entries, results, scores, rankings, or outcomes
+          where there is suspected fraud, technical error, scoring error, rule
+          breach, incorrect setup, or misuse of the platform.
+        </p>
+
+        <h2 className="text-white font-semibold">13. Risk Disclaimer</h2>
 
         <p>
-          Users participate in competitions at their own risk. Honey Badger
+          Users participate in golf challenges at their own risk. Honey Badger
           Technologies (PTY) LTD and Teez Golf Challenges are not responsible for
-          user losses, incorrect user decisions, failed participation caused by
-          user error, or failure to comply with competition rules.
+          incorrect user decisions, failed participation caused by user error, or
+          failure to comply with competition rules.
         </p>
 
         <p>
@@ -250,9 +294,8 @@ export default function LegalTermsPage() {
           a user may have under applicable South African law.
         </p>
 
-        {/* 13 */}
         <h2 className="text-white font-semibold">
-          13. South African Law and User Rights
+          14. South African Law and User Rights
         </h2>
 
         <p>
@@ -264,25 +307,17 @@ export default function LegalTermsPage() {
         <p>
           Users are encouraged to contact Honey Badger Technologies (PTY) LTD
           first regarding any complaint, refund request, payment dispute,
-          technical issue, or account issue so that the company can investigate
-          and attempt to resolve the matter directly.
+          technical issue, subscription issue, or account issue so that the
+          company can investigate and attempt to resolve the matter directly.
         </p>
 
-        <p>
-          If a user is not satisfied with the outcome, the user may seek
-          assistance from an applicable South African consumer protection body,
-          payment provider, bank, card issuer, or recognised ombudsman structure
-          where the matter falls within that body’s jurisdiction.
-        </p>
-
-        {/* 14 */}
-        <h2 className="text-white font-semibold">14. Fraud and Misuse</h2>
+        <h2 className="text-white font-semibold">15. Fraud and Misuse</h2>
 
         <p>
           Any attempt to manipulate competition results, exploit the system,
-          submit false information, misuse payments, abuse refund processes, or
-          engage in fraudulent activity may result in account suspension,
-          restriction, cancellation, or permanent banning.
+          submit false information, misuse payments, abuse refund processes,
+          manipulate tokens, or engage in fraudulent activity may result in
+          account suspension, restriction, cancellation, or permanent banning.
         </p>
 
         <p>
@@ -291,8 +326,7 @@ export default function LegalTermsPage() {
           platform, users, and competition integrity.
         </p>
 
-        {/* 15 */}
-        <h2 className="text-white font-semibold">15. Platform Availability</h2>
+        <h2 className="text-white font-semibold">16. Platform Availability</h2>
 
         <p>
           The platform is provided on an “as is” and “as available” basis. Honey
@@ -301,9 +335,8 @@ export default function LegalTermsPage() {
           error-free operation, or continuous availability.
         </p>
 
-        {/* 16 */}
         <h2 className="text-white font-semibold">
-          16. Limitation of Liability
+          17. Limitation of Liability
         </h2>
 
         <p>
@@ -314,9 +347,8 @@ export default function LegalTermsPage() {
           South African law.
         </p>
 
-        {/* 17 */}
         <h2 className="text-white font-semibold">
-          17. Intellectual Property
+          18. Intellectual Property
         </h2>
 
         <p>
@@ -325,8 +357,7 @@ export default function LegalTermsPage() {
           of Honey Badger Technologies (PTY) LTD or its authorised licensors.
         </p>
 
-        {/* 18 */}
-        <h2 className="text-white font-semibold">18. Country of Domicile</h2>
+        <h2 className="text-white font-semibold">19. Country of Domicile</h2>
 
         <p>
           This website is governed by the laws of South Africa and Honey Badger
@@ -335,11 +366,11 @@ export default function LegalTermsPage() {
         </p>
 
         <p>
-          71 Duke Close, Silver Stream Estate, Pretoria, Gauteng, 0081
+          71 Duke Close, Silver Stream Estate, Pretoria, Gauteng, 0081,
+          South Africa.
         </p>
 
-        {/* 19 */}
-        <h2 className="text-white font-semibold">19. Variation</h2>
+        <h2 className="text-white font-semibold">20. Variation</h2>
 
         <p>
           Honey Badger Technologies (PTY) LTD may, in its sole discretion, change
@@ -347,8 +378,7 @@ export default function LegalTermsPage() {
           platform constitutes acceptance of the updated Terms.
         </p>
 
-        {/* 20 */}
-        <h2 className="text-white font-semibold">20. Company Information</h2>
+        <h2 className="text-white font-semibold">21. Company Information</h2>
 
         <p>
           This website is run by a Private Company based in South Africa trading
@@ -357,10 +387,16 @@ export default function LegalTermsPage() {
 
         <p>Registration Number: 2026/102722/07</p>
 
-        {/* 21 */}
-        <h2 className="text-white font-semibold">21. Contact Details</h2>
+        <p>
+          Physical Address: 71 Duke Close, Silver Stream Estate, Pretoria,
+          Gauteng, 0081, South Africa.
+        </p>
+
+        <h2 className="text-white font-semibold">22. Contact Details</h2>
 
         <p>
+          Contact Person: Louis Coetzee
+          <br />
           Email: info@honeybadgertech.com
           <br />
           Telephone: +27 082 837 0266

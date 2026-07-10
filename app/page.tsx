@@ -208,19 +208,7 @@ export default function HomePage() {
     </button>
   </div>
 
-  <button
-    onClick={() => router.push("/teez-scoring")}
-    className="bg-cyan-400 text-black px-8 py-3 rounded-full font-semibold animate-pulse shadow-[0_0_20px_rgba(34,211,238,0.9)] hover:scale-105 transition"
-  >
-    TEEZ GOLF SCORING SYSTEMS
-  </button>
 
-  <button
-    onClick={() => router.push("/how-it-works")}
-    className="bg-black text-white px-8 py-3 rounded-full font-semibold hover:bg-gray-800 transition"
-  >
-    HOW IT WORKS
-  </button>
 </div>
         </div>
       </section>

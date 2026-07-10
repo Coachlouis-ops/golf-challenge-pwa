@@ -27,27 +27,21 @@ export default function PaymentPage() {
     try {
       setSubmitting(true);
 
-      const reference = `TEEZ-SUB-${user.uid.slice(0, 6).toUpperCase()}`;
-
-      const createSubscriptionPayment = httpsCallable(
+      const activateTestSubscription = httpsCallable(
         functions,
-        "createMembershipPaymentApplication"
+        "activateTestSubscription"
       );
 
-      await createSubscriptionPayment({
-        selectedBank: "PayGenius",
-        bankUrl: "paygenius",
-        reference,
-      });
+      await activateTestSubscription({});
 
       alert(
-        "Subscription request submitted. Your game access will activate once payment is confirmed."
+        "Subscription activated. Your wallet has been credited with 100 Teez tokens."
       );
 
-      router.push("/payment-pending");
+      router.push("/dashboard");
     } catch (err: any) {
       console.error(err);
-      alert(err.message || "Failed to create subscription request.");
+      alert(err.message || "Failed to activate subscription.");
     } finally {
       setSubmitting(false);
     }
@@ -91,22 +85,19 @@ export default function PaymentPage() {
           Includes 100 Teez tokens every month.
         </p>
 
-        <div className="bg-black/40 border border-zinc-700 rounded-xl p-6 flex flex-col items-center gap-5">
+        <div className="bg-black/40 border border-zinc-700 rounded-xl p-6 flex flex-col gap-4">
           <p className="text-green-400 font-semibold">
-            Secure Subscription Payment
+            Temporary Payment Placeholder
           </p>
 
-          <div className="w-full bg-black rounded-xl p-5 flex items-center justify-center border border-zinc-700">
-            <img
-              src="/paygenius-logo.png"
-              alt="PayGenius"
-              className="max-h-20 max-w-full object-contain"
-            />
-          </div>
+          <p className="text-sm text-gray-400">
+            This placeholder activates the subscription flow while the final
+            bank-approved payment portal is being connected.
+          </p>
 
           <p className="text-sm text-gray-400">
-            Payment is submitted as a subscription activation request and will be
-            confirmed before game access is unlocked.
+            Once the payment portal is live, this button will be replaced with
+            the official subscription payment checkout.
           </p>
         </div>
 
@@ -127,8 +118,8 @@ export default function PaymentPage() {
           </p>
 
           <p>
-            Once payment is confirmed, your subscription becomes active and your
-            wallet receives 100 Teez tokens.
+            On activation, your subscription becomes active and your wallet
+            receives 100 Teez tokens.
           </p>
 
           <p>
@@ -159,7 +150,8 @@ export default function PaymentPage() {
 
             <span>
               I agree that Teez tokens are digital play credits only and that
-              subscription payment must be confirmed before game access is activated.
+              this temporary activation is for app-flow testing until the final
+              payment portal is connected.
             </span>
           </label>
         </div>
@@ -173,11 +165,11 @@ export default function PaymentPage() {
               : "bg-gray-700 text-gray-400 cursor-not-allowed"
           }`}
         >
-          {submitting ? "SUBMITTING..." : "ACTIVATE SUBSCRIPTION"}
+          {submitting ? "ACTIVATING..." : "ACTIVATE SUBSCRIPTION"}
         </button>
 
         <p className="text-xs text-gray-400">
-          Your dashboard unlocks once your subscription is confirmed.
+          Your dashboard unlocks after subscription activation.
         </p>
       </div>
 

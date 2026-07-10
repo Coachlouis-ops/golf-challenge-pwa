@@ -1,10 +1,15 @@
-
 "use client";
 
 import { useEffect, useState } from "react";
 import { useAuth } from "@/src/lib/AuthContext";
 import { db } from "@/src/lib/firebase";
-import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  orderBy,
+  query,
+  where,
+} from "firebase/firestore";
 
 type Challenge = {
   challengeId: string;
@@ -18,16 +23,19 @@ type Challenge = {
 
 export default function ChallengesPage() {
   const { user } = useAuth();
+
   const [loading, setLoading] = useState(true);
   const [challenges, setChallenges] = useState<Challenge[]>([]);
 
-  useEffect(() => {
+   useEffect(() => {
     if (!user) return;
 
-    (async () => {
+    const uid = user.uid;
+
+    async function loadMatches() {
       const q = query(
         collection(db, "challenges"),
-        where("participants", "array-contains", user.uid),
+        where("participants", "array-contains", uid),
         orderBy("createdAt", "desc")
       );
 
@@ -49,7 +57,9 @@ export default function ChallengesPage() {
 
       setChallenges(rows);
       setLoading(false);
-    })();
+    }
+
+    loadMatches();
   }, [user]);
 
   if (!user) {
@@ -63,7 +73,7 @@ export default function ChallengesPage() {
   if (loading) {
     return (
       <main className="min-h-screen flex items-center justify-center text-white bg-black">
-        <p>Loading challenges…</p>
+        <p>Loading matches…</p>
       </main>
     );
   }
@@ -85,11 +95,13 @@ export default function ChallengesPage() {
       {/* MAIN PANEL */}
       <div className="relative z-10 w-full max-w-4xl flex flex-col gap-6">
         <h1 className="text-4xl font-bold text-center text-green-400 tracking-widest drop-shadow-[0_0_10px_#39FF14]">
-          CHALLENGES
+          MY MATCHES
         </h1>
 
         {challenges.length === 0 && (
-          <p className="text-gray-400 text-center">No challenges found.</p>
+          <p className="text-gray-400 text-center">
+            No matches found.
+          </p>
         )}
 
         <div className="flex flex-col gap-4">
@@ -108,14 +120,17 @@ export default function ChallengesPage() {
                 </span>
               </div>
 
-              <p className="text-sm text-gray-400">{c.courseName}</p>
+              <p className="text-sm text-gray-400">
+                {c.courseName}
+              </p>
 
               <div className="flex gap-6 text-sm">
                 <span>
                   <strong>Format:</strong> {c.gameFormat}
                 </span>
+
                 <span>
-                  <strong>Tokens:</strong> {c.entryTokens}
+                  <strong>Entry Tokens:</strong> {c.entryTokens}
                 </span>
               </div>
             </div>

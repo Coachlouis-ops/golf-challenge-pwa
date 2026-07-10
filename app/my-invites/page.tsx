@@ -1,9 +1,13 @@
-
 "use client";
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { collection, doc, getDoc, getDocs } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+} from "firebase/firestore";
 import { httpsCallable } from "firebase/functions";
 import { db, functions } from "@/src/lib/firebase";
 import { useAuth } from "@/src/lib/AuthContext";
@@ -36,8 +40,6 @@ export default function MyInvitesPage() {
 
       for (const docSnap of snap.docs) {
         const data = docSnap.data();
-
-        console.log("INVITE DATA", data);
 
         let challengeTitle = "";
         let gameFormat = "";
@@ -78,11 +80,20 @@ export default function MyInvitesPage() {
 
   useEffect(() => {
     if (!user) return;
-    loadInvites(user.uid);
+
+    const uid = user.uid;
+
+    loadInvites(uid);
   }, [user]);
 
   async function handleAccept(challengeId: string) {
     if (!user) return;
+
+    const confirmed = window.confirm(
+      "Accepting this match will spend the listed entry tokens from your wallet."
+    );
+
+    if (!confirmed) return;
 
     try {
       setProcessingId(challengeId);
@@ -126,7 +137,7 @@ export default function MyInvitesPage() {
   if (loading) {
     return (
       <main className="min-h-screen flex items-center justify-center text-white bg-black">
-        Loading invites…
+        Loading match invites…
       </main>
     );
   }
@@ -141,10 +152,14 @@ export default function MyInvitesPage() {
           ← Back to Dashboard
         </button>
 
-        <h1 className="text-3xl font-semibold">My Invites</h1>
+        <h1 className="text-3xl font-semibold">
+          My Match Invites
+        </h1>
 
         {invites.length === 0 && (
-          <p className="text-gray-400">No invites yet</p>
+          <p className="text-gray-400">
+            No match invites yet.
+          </p>
         )}
 
         {invites.map((invite) => (
@@ -153,7 +168,10 @@ export default function MyInvitesPage() {
             className="bg-black/60 border border-gray-700 rounded-xl p-5 flex flex-col gap-4"
           >
             <div className="flex justify-between items-center">
-              <h2 className="font-semibold text-lg">{invite.challengeTitle}</h2>
+              <h2 className="font-semibold text-lg">
+                {invite.challengeTitle}
+              </h2>
+
               <span className="text-xs uppercase text-gray-400">
                 {invite.status}
               </span>
@@ -163,14 +181,17 @@ export default function MyInvitesPage() {
               <p>
                 <strong>Format:</strong> {invite.gameFormat}
               </p>
+
               <p>
                 <strong>Scoring:</strong> {invite.scoringMethod}
               </p>
+
               <p>
-                <strong>Tokens:</strong> {invite.entryTokens}
+                <strong>Entry Tokens:</strong> {invite.entryTokens}
               </p>
+
               <p>
-                <strong>Creator:</strong> {invite.creatorName}
+                <strong>Created By:</strong> {invite.creatorName}
               </p>
             </div>
 
@@ -181,11 +202,14 @@ export default function MyInvitesPage() {
                   disabled={processingId === invite.challengeId}
                   className="bg-green-500 text-black px-4 py-2 rounded"
                 >
-                  Accept
+                  {processingId === invite.challengeId
+                    ? "Accepting..."
+                    : "Accept Match"}
                 </button>
 
                 <button
                   onClick={() => handleDecline(invite.challengeId)}
+                  disabled={processingId === invite.challengeId}
                   className="bg-gray-700 px-4 py-2 rounded"
                 >
                   Decline
@@ -198,7 +222,7 @@ export default function MyInvitesPage() {
                 onClick={() => router.push(`/challenges/${invite.challengeId}`)}
                 className="bg-green-500 text-black px-4 py-2 rounded"
               >
-                Open Challenge
+                Open Match
               </button>
             )}
           </div>

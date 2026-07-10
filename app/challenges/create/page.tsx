@@ -61,7 +61,7 @@ const GAME_PRESETS = [
   },
 
   {
-    name: "HIGH STAKES VEGAS",
+    name: "VEGAS SHOWDOWN",
     teamFormat: "PAIR",
     gameFormat: "POINTS_GAME",
     typeOfGame: "VEGAS",

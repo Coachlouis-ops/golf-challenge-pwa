@@ -106,18 +106,18 @@ function DashboardContent() {
             MY PROFILE
           </button>
 
-          <button
+                   <button
             onClick={() => router.push("/wallet")}
             className="arena-btn"
           >
-            COMPETITION DASHBOARD
+            TOKEN WALLET
           </button>
 
           <button
-            onClick={() => router.push("/vouchers")}
+            onClick={() => router.push("/rankings")}
             className="arena-btn"
           >
-            MY VOUCHERS
+            VIEW RANKINGS
           </button>
 
           <button

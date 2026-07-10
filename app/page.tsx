@@ -181,7 +181,7 @@ export default function HomePage() {
       <section className="bg-gray-100 text-black text-center py-20 px-6">
         <div className="max-w-3xl mx-auto">
           <h2 className="text-2xl md:text-3xl font-semibold mb-4">
-           "You wanne Play for Someting?""
+           Ready to Compete?
           </h2>
           <p className="text-gray-600 mb-8">
             Join the Teez Golf Challenge for exciting matchups.
@@ -190,7 +190,7 @@ export default function HomePage() {
           </p>
           <p className="text-xs text-gray-500 mb-6 max-w-xl mx-auto">
             Teez Golf Challenges is operated by Honey Badger Technologies PTY LTD.
-            Subscriptions are paid via legaly secure payment portals. </p>
+            Subscriptions are processed through secure approved payment systems. </p>
 <div className="flex flex-col items-center gap-4">
   <div className="flex justify-center gap-4 flex-wrap">
     <button
@@ -326,15 +326,42 @@ export default function HomePage() {
               Developed and Managed by Honey Badger Technologies (PTY) LTD
             </p>
 
-            <div className="flex flex-col gap-3 justify-center md:justify-start text-xs">
-              <span
-                onClick={() => router.push("/legal/terms")}
-                className="underline cursor-pointer hover:text-gray-800"
-              >
-                Terms & Conditions
-              </span>
+        <div className="flex flex-col gap-3 justify-center md:justify-start text-xs">
+  <span
+    onClick={() => router.push("/legal/terms")}
+    className="underline cursor-pointer hover:text-gray-800"
+  >
+    Terms & Conditions
+  </span>
 
-            </div>
+  <span
+    onClick={() => router.push("/legal/refund-policy")}
+    className="underline cursor-pointer hover:text-gray-800"
+  >
+    Refund & Cancellation Policy
+  </span>
+
+  <span
+    onClick={() => router.push("/privacy")}
+    className="underline cursor-pointer hover:text-gray-800"
+  >
+    Privacy Policy
+  </span>
+
+  <span
+    onClick={() => router.push("/cancel-subscription")}
+    className="underline cursor-pointer hover:text-gray-800"
+  >
+    Cancel Subscription
+  </span>
+
+  <span
+    onClick={() => router.push("/contact")}
+    className="underline cursor-pointer hover:text-gray-800"
+  >
+    Contact
+  </span>
+</div>
           </div>
 
           <div className="flex items-center gap-4">

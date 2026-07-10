@@ -128,18 +128,15 @@ export default function LegalTermsPage() {
           value.
         </p>
 
-        <p>
-          Users may cancel their subscription by contacting Honey Badger
-          Technologies (PTY) LTD through the contact details provided on the
-          website. Cancellation stops future subscription access according to the
-          applicable billing and processing timing.
-        </p>
+       <p>
+  Users may cancel their subscription at any time through the Cancel
+  Subscription link available on the website.
+</p>
 
-        <p>
-          Approved refunds will be processed within 7 business days where
-          possible. Actual payment reflection times may depend on the bank,
-          payment provider, card issuer, or payment method used.
-        </p>
+<p>
+  Cancellation takes effect immediately once the cancellation request has
+  been submitted through the cancellation link.
+</p>
 
         <h2 className="text-white font-semibold">
           6. Customer Privacy Policy

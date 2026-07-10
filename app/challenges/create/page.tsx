@@ -165,16 +165,16 @@ const GAME_ENGINE: Record<
     recommendedTeam: ["SINGLES", "PAIR"],
     recommendedScoring: ["POINTS"],
     players: "2-4 Players",
-    atmosphere: "Classic Betting Match",
+    atmosphere: "Classic Match Format",
   },
 
   SKINS: {
-    description:
-      "Each hole becomes its own individual prize challenge.",
+   description:
+  "Each hole becomes its own individual scoring challenge.",
     gameplay:
       "Winning a hole outright earns the skin. Ties carry over.",
-    outcome:
-      "Player/team with most skins wins.",
+  outcome:
+  "Player/team with the most skins wins the match.",
     recommendedTeam: ["SINGLES", "PAIR"],
     recommendedScoring: ["POINTS"],
     players: "2+ Players",
@@ -271,7 +271,7 @@ const GAME_ENGINE: Record<
     recommendedTeam: ["PAIR"],
     recommendedScoring: ["POINTS"],
     players: "4 Players",
-    atmosphere: "High Stakes / Strategic",
+    atmosphere: "High Pressure / Strategic",
     warning:
       "VEGAS scoring can create extremely large score swings.",
   },
@@ -522,7 +522,7 @@ if (
 
           <input
             type="number"
-            placeholder="Entry Fee"
+            placeholder="Entry Tokens"
             value={entryTokens}
             onChange={(e) =>
               setEntryTokens(e.target.value)
@@ -875,9 +875,9 @@ if (
             disabled={!isValid || loading}
             className="mt-6 py-4 rounded-xl font-bold text-black text-lg bg-green-400 hover:bg-green-300 transition-all duration-300 shadow-[0_0_25px_#39FF14] hover:shadow-[0_0_50px_#39FF14] disabled:opacity-50"
           >
-            {loading
-              ? "Creating Challenge..."
-              : "CREATE CHALLENGE"}
+           {loading
+  ? "Creating Match..."
+  : "CREATE MATCH"}
           </button>
 
           <div className="w-full h-[3px] bg-neutral-800 overflow-hidden rounded-full">

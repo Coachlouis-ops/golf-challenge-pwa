@@ -21,7 +21,7 @@ export default function CancelSubscriptionPage() {
     if (!user || cancelling) return;
 
     const confirmed = window.confirm(
-      "Are you sure you want to cancel your Teez Golf Challenges subscription?\n\nFuture subscription renewal will be stopped."
+      "Are you sure you want to cancel your Teez Golf Challenges subscription?\n\nCancellation takes effect immediately and access to subscription-only features will end."
     );
 
     if (!confirmed) return;
@@ -64,15 +64,28 @@ export default function CancelSubscriptionPage() {
 
           <p className="text-gray-300 leading-relaxed">
             Your Teez Golf Challenges subscription has been cancelled
-            successfully. Future subscription renewal has been stopped.
+            successfully.
+          </p>
+
+          <p className="text-gray-300 leading-relaxed mt-4">
+            Cancellation is effective immediately. Future subscription renewal
+            has been stopped and access to subscription-only playing features
+            has ended.
           </p>
 
           <p className="text-gray-400 text-sm leading-relaxed mt-4">
-            Your profile, rankings, statistics, challenge history, and remaining
-            digital tokens remain stored on the platform.
+            Any retained account, payment, competition, or security records will
+            be handled in accordance with the Privacy Policy and applicable
+            South African law.
+          </p>
+
+          <p className="text-gray-400 text-sm leading-relaxed mt-4">
+            You may subscribe again at any time by completing the normal
+            self-service subscription process.
           </p>
 
           <button
+            type="button"
             onClick={() => router.push("/")}
             className="w-full mt-8 py-4 rounded-2xl font-bold text-lg bg-[#39ff14] text-black shadow-[0_0_25px_#39ff14] border border-[#b6ff00]"
           >
@@ -91,8 +104,8 @@ export default function CancelSubscriptionPage() {
         </h1>
 
         <p className="text-gray-300 text-sm leading-relaxed mb-6">
-          You may cancel your Teez Golf Challenges subscription at any time.
-          Cancellation takes effect immediately once successfully processed.
+          You may cancel your Teez Golf Challenges subscription at any time
+          through this self-service cancellation page.
         </p>
 
         <div className="border border-green-400/30 bg-green-950/20 rounded-2xl p-5 space-y-4">
@@ -101,19 +114,42 @@ export default function CancelSubscriptionPage() {
           </h2>
 
           <p className="text-sm text-gray-300 leading-relaxed">
-            Cancelling your subscription stops future subscription renewal.
+            No email request, telephone request, support ticket, written notice,
+            administrator request, or manual approval is required.
           </p>
 
           <p className="text-sm text-gray-300 leading-relaxed">
-            Teez tokens are digital play credits only. Tokens have no cash
-            value, cannot be redeemed, cannot be withdrawn, and cannot be
-            converted into money, vouchers, goods, services, or external
+            Cancellation takes effect immediately once the Platform confirms
+            that the cancellation has been successfully completed.
+          </p>
+
+          <p className="text-sm text-gray-300 leading-relaxed">
+            Once cancelled, future subscription renewal will stop and access to
+            subscription-only playing features will end immediately.
+          </p>
+
+          <p className="text-sm text-gray-300 leading-relaxed">
+            Teez Tokens are digital play credits only. They have no cash value,
+            cannot be redeemed, cannot be withdrawn, and cannot be converted
+            into money, cryptocurrency, vouchers, goods, services, or external
             rewards.
           </p>
 
           <p className="text-sm text-gray-300 leading-relaxed">
-            Your profile, completed challenges, finalized results, rankings,
-            statistics, match history, and remaining tokens will not be deleted.
+            Cancellation does not convert unused or remaining Teez Tokens into
+            cash, credit, vouchers, goods, services, or any other form of
+            external value.
+          </p>
+
+          <p className="text-sm text-gray-300 leading-relaxed">
+            Account and Platform records may be retained where reasonably
+            required for security, fraud prevention, legal compliance, dispute
+            resolution, record keeping, or as described in the Privacy Policy.
+          </p>
+
+          <p className="text-sm text-gray-300 leading-relaxed">
+            You may subscribe again at any time through the normal self-service
+            subscription process.
           </p>
         </div>
 
@@ -124,6 +160,7 @@ export default function CancelSubscriptionPage() {
             </p>
 
             <button
+              type="button"
               onClick={() => router.push("/login")}
               className="w-full py-4 rounded-2xl font-bold text-lg bg-[#39ff14] text-black shadow-[0_0_25px_#39ff14]"
             >
@@ -166,6 +203,7 @@ export default function CancelSubscriptionPage() {
             )}
 
             <button
+              type="button"
               onClick={handleCancelSubscription}
               disabled={cancelling}
               className="w-full py-4 rounded-2xl font-bold text-lg bg-red-600 text-white hover:bg-red-500 transition disabled:opacity-40"
@@ -179,13 +217,23 @@ export default function CancelSubscriptionPage() {
 
         <div className="mt-8 flex flex-col gap-3">
           <button
+            type="button"
             onClick={() => router.push("/legal/refund-policy")}
             className="w-full py-3 rounded-xl font-semibold bg-white text-black hover:bg-gray-200 transition"
           >
-            View Refund & Cancellation Policy
+            View Refund, Cancellation & Delivery Policy
           </button>
 
           <button
+            type="button"
+            onClick={() => router.push("/terms")}
+            className="w-full py-3 rounded-xl font-semibold border border-white/30 hover:bg-white hover:text-black transition"
+          >
+            View Platform Terms & Conditions
+          </button>
+
+          <button
+            type="button"
             onClick={() => router.back()}
             className="w-full py-3 rounded-xl font-semibold border border-white/30 hover:bg-white hover:text-black transition"
           >

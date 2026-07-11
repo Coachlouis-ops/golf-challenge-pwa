@@ -26,18 +26,19 @@ export default function RefundPolicyPage() {
         </p>
 
         <p>
-          This policy applies to subscription payments, digital Platform access,
-          subscription cancellation, payment errors, refunds, and related
-          digital services provided through Teez Golf Challenges.
+          This Policy applies to subscription payments, digital Platform access,
+          subscription cancellation, payment errors, refunds, Teez Token
+          corrections, and related digital services provided through Teez Golf
+          Challenges.
         </p>
 
         <p>
-          Teez Golf Challenges is operated by Honey Badger Technologies (PTY)
-          LTD.
+          Teez Golf Challenges is owned and operated by Honey Badger
+          Technologies (PTY) LTD.
         </p>
 
         <p>
-          This policy must be read together with the Platform Terms and
+          This Policy must be read together with the Platform Terms &
           Conditions and Privacy Policy.
         </p>
 
@@ -47,28 +48,28 @@ export default function RefundPolicyPage() {
         </h2>
 
         <p>
-          Teez Golf Challenges is a subscription-based competitive golf
-          Platform.
+          Teez Golf Challenges is a subscription-based, skill-based competitive
+          golf Platform.
         </p>
 
         <p>
-          Access to the main features of Teez Golf Challenges requires an active
-          monthly subscription.
+          Access to the Platform&apos;s subscription-only gameplay features
+          requires an active monthly subscription.
         </p>
 
-        <p>The current subscription plan is:</p>
+        <p>The current subscription plan includes:</p>
 
         <ul className="list-disc pl-6 space-y-1">
           <li>Subscription fee: R99 per month.</li>
           <li>Billing frequency: Monthly.</li>
-          <li>Included allocation: 100 Teez tokens per active month.</li>
+          <li>Included allocation: 100 Teez Tokens per active month.</li>
           <li>Service type: Digital Platform access.</li>
         </ul>
 
         <p>
-          The applicable subscription price, billing frequency, token
-          allocation, and payment terms will be displayed before payment is
-          completed.
+          The applicable subscription amount, billing frequency, included Teez
+          Token allocation, and payment terms will be displayed before payment
+          is completed.
         </p>
 
         {/* 2 */}
@@ -77,34 +78,58 @@ export default function RefundPolicyPage() {
         </h2>
 
         <p>
-          No physical goods are delivered. Payments relate to digital Platform
-          access and related digital subscription services.
+          No physical goods are delivered. Subscription payments relate entirely
+          to digital Platform access and related digital subscription services.
         </p>
 
         <p>
-          Digital delivery takes place through activation of the user’s
+          Digital delivery takes place through activation of the user&apos;s
           subscription and access to the applicable Platform features.
         </p>
 
+        <p>Digital delivery may be confirmed through:</p>
+
+        <ul className="list-disc pl-6 space-y-1">
+          <li>Subscription activation.</li>
+          <li>Player dashboard access.</li>
+          <li>Player profile access.</li>
+          <li>Access to subscription-only gameplay features.</li>
+          <li>Allocation of 100 Teez Tokens to the in-app wallet.</li>
+          <li>An account or payment confirmation displayed by the Platform.</li>
+        </ul>
+
         {/* 3 */}
         <h2 className="font-semibold text-white">
-          3. Subscription Activation
+          3. Automatic Subscription Activation
         </h2>
 
         <p>
-          Subscription is activated immediately after registration and
-          successful completion of the required subscription process.
+          Subscription activation is completed automatically through the
+          Platform after the required registration, verification, and payment
+          steps have been successfully completed.
         </p>
 
         <p>
-          Users will approve the payment amount, subscription activation, and
-          payment information in the provided payment portal.
+          Users approve the applicable subscription amount and payment
+          information through the approved payment portal.
         </p>
 
         <p>
-          Once the subscription has been successfully activated, the user
-          receives access to the applicable Platform playing features and the
-          monthly allocation of 100 Teez tokens.
+          Once successful payment and subscription activation have been
+          confirmed, the Platform automatically grants the applicable access and
+          allocates 100 Teez Tokens to the user&apos;s in-app wallet.
+        </p>
+
+        <p>
+          No email request, telephone request, support ticket, administrator
+          request, or manual approval is required for normal subscription
+          activation.
+        </p>
+
+        <p>
+          A user should contact Honey Badger Technologies (PTY) LTD only where a
+          genuine technical, payment, or system error prevents automatic
+          activation from being completed correctly.
         </p>
 
         {/* 4 */}
@@ -113,36 +138,37 @@ export default function RefundPolicyPage() {
         </h2>
 
         <p>
-          Teez tokens are digital play credits used only within the Teez Golf
+          Teez Tokens are digital play credits used only within the Teez Golf
           Challenges Platform.
         </p>
 
         <p>
-          Tokens may be used to create, enter, and participate in golf
-          challenges or access other approved gameplay features.
+          Teez Tokens may be used to create, enter, and participate in approved
+          golf challenges or access other approved gameplay features.
         </p>
 
-        <p>Teez tokens:</p>
+        <p>Teez Tokens:</p>
 
         <ul className="list-disc pl-6 space-y-1">
+          <li>Are digital play credits only.</li>
           <li>Have no cash or monetary value.</li>
           <li>Are not legal tender or electronic money.</li>
           <li>Cannot be withdrawn.</li>
           <li>Cannot be redeemed for cash.</li>
           <li>Cannot be converted into money or cryptocurrency.</li>
-          <li>Cannot be exchanged for vouchers, goods, or external services.</li>
+          <li>Cannot be exchanged for vouchers, goods, or services.</li>
           <li>Cannot be sold or transferred between users for payment.</li>
           <li>May only be used for approved Platform gameplay.</li>
         </ul>
 
         <p>
-          A user does not acquire ownership of any financial asset by receiving
-          or holding Teez tokens.
+          A user does not acquire ownership of a financial asset by receiving or
+          holding Teez Tokens.
         </p>
 
         <p>
-          Tokens that have already been validly used to enter or participate in
-          a challenge are not refundable or reversible.
+          Teez Tokens that have already been validly used for Platform gameplay
+          are not refundable, reversible, or convertible into external value.
         </p>
 
         {/* 5 */}
@@ -152,7 +178,14 @@ export default function RefundPolicyPage() {
 
         <p>
           A user may cancel their Teez Golf Challenges subscription at any time
-          through the Cancel Subscription link provided on the Platform.
+          through the self-service Cancel Subscription functionality provided on
+          the Platform.
+        </p>
+
+        <p>
+          No email request, telephone request, support ticket, administrator
+          request, written notice, or manual approval is required to cancel a
+          subscription during normal Platform operation.
         </p>
 
         <p>
@@ -170,22 +203,29 @@ export default function RefundPolicyPage() {
 
         {/* 6 */}
         <h2 className="font-semibold text-white">
-          6. Self-Service Cancellation
+          6. Immediate Effect of Cancellation
         </h2>
 
         <p>
-          Subscription cancellation is completed through the self-service
-          cancellation process available on the Platform.
+          Cancellation becomes effective immediately once the Platform confirms
+          that the self-service cancellation process has been successfully
+          completed.
         </p>
 
         <p>
-          A cancellation request is only complete once the Platform confirms
-          that the subscription has been cancelled.
+          From that point, the user immediately loses access to
+          subscription-only playing and gameplay features.
         </p>
 
         <p>
-          Users should retain any cancellation confirmation made available by
-          the Platform.
+          A cancellation is not completed merely because a user stops using the
+          Platform, deletes a shortcut, closes a browser, removes an application,
+          or sends an informal message.
+        </p>
+
+        <p>
+          The user must complete the self-service cancellation process and
+          receive confirmation from the Platform.
         </p>
 
         {/* 7 */}
@@ -194,20 +234,40 @@ export default function RefundPolicyPage() {
         </h2>
 
         <p>
-          Once unsubscribed, the user will no longer have access to the playing
-          features but may re-subscribe at any time.
+          Once unsubscribed, the user will no longer have access to
+          subscription-only playing features.
         </p>
 
         <p>
-          Cancellation will remove the user’s player profile, challenge history,
-          finalized results, ranking records, achievements, statistics, and
-          remaining digital token records.
+          Access may be removed or deactivated for features including:
+        </p>
+
+        <ul className="list-disc pl-6 space-y-1">
+          <li>Creating or entering challenges.</li>
+          <li>Player dashboard functionality.</li>
+          <li>Subscription-only player profile functionality.</li>
+          <li>Rankings and statistics functionality.</li>
+          <li>Achievements and competition history functionality.</li>
+          <li>Live gameplay and scoring functionality.</li>
+          <li>Remaining Teez Token access.</li>
+          <li>Other subscription-only Platform features.</li>
+        </ul>
+
+        <p>
+          Cancellation does not convert unused or remaining Teez Tokens into
+          cash, money, credit, goods, services, vouchers, or any other form of
+          external value.
         </p>
 
         <p>
-          Cancellation does not convert any unused or remaining Teez tokens into
-          cash, money, goods, services, vouchers, credit, or any other form of
-          value.
+          Account and Platform records may be retained where reasonably required
+          for security, fraud prevention, legal compliance, dispute resolution,
+          record keeping, or as described in the Privacy Policy.
+        </p>
+
+        <p>
+          A user may subscribe again at any time by completing the normal
+          self-service subscription process through the Platform.
         </p>
 
         {/* 8 */}
@@ -223,26 +283,26 @@ export default function RefundPolicyPage() {
         <ul className="list-disc pl-6 space-y-1">
           <li>A duplicate subscription payment was processed.</li>
 
-          <li>An incorrect payment amount was charged.</li>
+          <li>An incorrect subscription amount was charged.</li>
 
           <li>
-            Payment was completed but subscription access was not activated due
-            to a verified technical issue.
+            Payment was successfully completed but subscription access was not
+            activated because of a verified technical or system error.
           </li>
 
           <li>
-            An administrative error caused an incorrect account or subscription
-            allocation.
+            A verified administrative error caused an incorrect account,
+            payment, or subscription allocation.
           </li>
 
           <li>
             A verified technical failure prevented delivery of the paid digital
-            service.
+            subscription service.
           </li>
 
           <li>
             The user was charged after a valid cancellation had already been
-            successfully processed before the applicable renewal date.
+            successfully completed before the applicable renewal transaction.
           </li>
 
           <li>
@@ -261,10 +321,10 @@ export default function RefundPolicyPage() {
         </h2>
 
         <p>
-          Once subscription access has been activated and used, subscription
-          payments are generally non-refundable, except where applicable law or
-          a verified Platform, payment, technical, or administrative error
-          requires otherwise.
+          Once subscription access has been successfully activated and used,
+          subscription payments are generally non-refundable, except where
+          applicable law or a verified payment, technical, Platform, or
+          administrative error requires otherwise.
         </p>
 
         <p>A refund will generally not be granted solely because:</p>
@@ -278,28 +338,35 @@ export default function RefundPolicyPage() {
           </li>
 
           <li>
-            The user did not use all remaining Teez tokens before cancelling.
+            The user did not use all available or remaining Teez Tokens before
+            cancelling.
           </li>
 
           <li>
-            The user entered a challenge and was dissatisfied with their result,
-            ranking, score, or performance.
+            The user was dissatisfied with a challenge result, ranking, score,
+            statistic, achievement, or personal performance.
           </li>
 
           <li>
-            The user failed to cancel before a valid subscription payment was
-            processed.
+            The user stopped using the Platform without completing the
+            self-service cancellation process.
           </li>
 
           <li>
-            The user’s account or access was restricted because of a breach of
-            the Platform Terms and Conditions.
+            The user failed to cancel before a valid recurring subscription
+            payment was processed.
+          </li>
+
+          <li>
+            The user&apos;s Account or access was restricted because of fraud,
+            cheating, payment abuse, misuse, or a material breach of the
+            Platform Terms & Conditions.
           </li>
         </ul>
 
         <p>
-          Nothing in this section removes any rights that cannot lawfully be
-          excluded under applicable South African law.
+          Nothing in this section removes or limits any right that cannot
+          lawfully be excluded under applicable South African law.
         </p>
 
         {/* 10 */}
@@ -314,9 +381,9 @@ export default function RefundPolicyPage() {
         </p>
 
         <p>
-          Honey Badger Technologies (PTY) LTD may work with the relevant payment
-          gateway, bank, or card issuer to investigate and resolve the reported
-          payment issue.
+          Honey Badger Technologies (PTY) LTD may work with the applicable
+          payment gateway, acquiring bank, payment provider, bank, or card issuer
+          to investigate and resolve the reported payment issue.
         </p>
 
         <p>
@@ -341,6 +408,13 @@ export default function RefundPolicyPage() {
           circumstances exist.
         </p>
 
+        <p>
+          This refund request process applies to genuine payment, delivery, or
+          technical issues. It is not required for routine subscription
+          cancellation, which must be completed through the Platform&apos;s
+          self-service cancellation functionality.
+        </p>
+
         {/* 12 */}
         <h2 className="font-semibold text-white">
           12. Refund Review Process
@@ -350,7 +424,7 @@ export default function RefundPolicyPage() {
           Refund requests must be reviewed and verified before approval.
         </p>
 
-        <p>The company may request supporting information including:</p>
+        <p>The Company may request supporting information including:</p>
 
         <ul className="list-disc pl-6 space-y-1">
           <li>Proof of payment.</li>
@@ -376,14 +450,14 @@ export default function RefundPolicyPage() {
         </h2>
 
         <p>
-          Approved refunds will normally be processed within 7 business days
-          where possible.
+          Approved refunds will normally be submitted for processing within
+          7 business days where reasonably possible.
         </p>
 
         <p>
-          The time required for funds to reflect may depend on the bank, card
-          issuer, payment gateway, payment method, or payment processing system
-          used.
+          The time required for the funds to reflect may depend on the bank,
+          card issuer, payment gateway, payment provider, payment method, or
+          payment processing system used.
         </p>
 
         <p>
@@ -393,25 +467,26 @@ export default function RefundPolicyPage() {
 
         {/* 14 */}
         <h2 className="font-semibold text-white">
-          14. Token Balance Corrections
+          14. Teez Token Balance Corrections
         </h2>
 
         <p>
-          Where a verified technical, duplicate-processing, or administrative
-          error caused an incorrect Teez token deduction or allocation, Honey
-          Badger Technologies (PTY) LTD may:
+          Where a verified technical, duplicate-processing, payment, or
+          administrative error caused an incorrect Teez Token deduction or
+          allocation, Honey Badger Technologies (PTY) LTD may:
         </p>
 
         <ul className="list-disc pl-6 space-y-1">
-          <li>Restore incorrectly deducted tokens.</li>
-          <li>Reverse a duplicate token deduction.</li>
-          <li>Correct the user’s in-app token balance.</li>
+          <li>Restore incorrectly deducted Teez Tokens.</li>
+          <li>Reverse a duplicate Teez Token deduction.</li>
+          <li>Correct the user&apos;s in-app Teez Token balance.</li>
           <li>Make another fair in-app account correction.</li>
         </ul>
 
         <p>
-          Token balance corrections are digital Platform corrections only. They
-          do not represent a cash refund or payment to the user.
+          Teez Token balance corrections are digital Platform corrections only.
+          They do not represent a cash refund, payment, voucher, or transfer of
+          financial value to the user.
         </p>
 
         {/* 15 */}
@@ -423,19 +498,24 @@ export default function RefundPolicyPage() {
           Honey Badger Technologies (PTY) LTD may refuse a refund where there is
           evidence of fraud, false claims, Platform manipulation, duplicate
           refund claims, chargeback misuse, payment abuse, or a material breach
-          of the Platform Terms and Conditions.
+          of the Platform Terms & Conditions.
         </p>
 
         <p>
-          The company may temporarily suspend or restrict an account while a
+          The Company may temporarily suspend or restrict an Account while a
           suspected payment, refund, security, fraud, or chargeback issue is
           investigated.
         </p>
 
         <p>
-          Users should first contact Honey Badger Technologies (PTY) LTD
-          regarding a disputed payment so that the company has a reasonable
-          opportunity to investigate and resolve the matter.
+          Users should first report a disputed payment to Honey Badger
+          Technologies (PTY) LTD so that the Company has a reasonable
+          opportunity to investigate and attempt to resolve the matter.
+        </p>
+
+        <p>
+          Nothing in this section prevents a user from exercising any right that
+          cannot lawfully be excluded under applicable South African law.
         </p>
 
         {/* 16 */}
@@ -444,17 +524,23 @@ export default function RefundPolicyPage() {
         </h2>
 
         <p>
-          Users should first contact Honey Badger Technologies (PTY) LTD so that
-          the company can investigate and attempt to resolve the refund,
-          cancellation, payment, subscription, or digital delivery dispute
-          directly.
+          Users may contact Honey Badger Technologies (PTY) LTD regarding
+          genuine refund, payment, subscription activation, cancellation
+          confirmation, or digital delivery disputes.
         </p>
 
         <p>
-          If the matter cannot be resolved, the user may approach an applicable
-          South African consumer protection body, bank, card issuer, payment
-          provider, regulator, court, or recognised ombudsman where the matter
-          falls within that body’s jurisdiction.
+          Routine registration, subscription activation, subscription
+          cancellation, and re-subscription must be completed through the
+          Platform&apos;s automated self-service functionality and do not
+          require administrator intervention.
+        </p>
+
+        <p>
+          If a genuine dispute cannot be resolved directly, the user may
+          approach an applicable South African consumer protection body, bank,
+          card issuer, payment provider, regulator, court, or recognised
+          ombudsman where the matter falls within that body&apos;s jurisdiction.
         </p>
 
         {/* 17 */}
@@ -463,17 +549,18 @@ export default function RefundPolicyPage() {
         </h2>
 
         <p>
-          This policy is governed by the laws of the Republic of South Africa.
+          This Policy is governed by the laws of the Republic of South Africa.
         </p>
 
         <p>
-          Nothing in this policy is intended to remove, reduce, or limit any
+          Nothing in this Policy is intended to remove, reduce, or limit any
           legal right that a user may have under applicable South African law.
         </p>
 
         <p>
-          Refund and cancellation requests will be handled fairly, reasonably,
-          and in accordance with applicable legal obligations.
+          Refund, payment-error, and digital delivery disputes will be handled
+          fairly, reasonably, and in accordance with applicable legal
+          obligations.
         </p>
 
         {/* 18 */}
@@ -482,9 +569,8 @@ export default function RefundPolicyPage() {
         </h2>
 
         <p>
-          Refund requests, payment-error reports, cancellation disputes, and
-          digital delivery complaints may be submitted using the following
-          contact details:
+          Contact details for genuine refund requests, payment-error reports,
+          cancellation confirmation disputes, and digital delivery complaints:
         </p>
 
         <p>

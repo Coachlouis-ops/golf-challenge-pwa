@@ -33,9 +33,7 @@ export default function TermsPage() {
 
         <p>
           By registering an account, accepting these Terms, subscribing to the
-          Platform, or using any Platform service, you agree to be bound by these
-          Terms, the Privacy Policy, and the Refund, Cancellation and Delivery
-          Policy.
+          Platform, or using any Platform service, you agree to these terms and conditions.
         </p>
 
         {/* 1 */}
@@ -44,8 +42,7 @@ export default function TermsPage() {
         </h2>
 
         <p>
-          The Platform is operated by Honey Badger Technologies (PTY) LTD, a
-          private company registered in South Africa.
+          The Platform is operated by Honey Badger Technologies (PTY) LTD.
         </p>
 
         <p>
@@ -93,8 +90,7 @@ export default function TermsPage() {
         </h2>
 
         <p>
-          A user must complete the required Platform setup process before
-          receiving full access. The current setup process may include:
+          After registration the user will have full access to:
         </p>
 
         <ol className="list-decimal pl-6 space-y-1">
@@ -140,11 +136,6 @@ export default function TermsPage() {
           completed.
         </p>
 
-        <p>
-          Honey Badger Technologies (PTY) LTD may introduce additional
-          subscription plans or update its pricing in future. Updated pricing
-          will be disclosed before the user confirms a new payment or renewal.
-        </p>
 
         {/* 5 */}
         <h2 className="font-semibold text-white">
@@ -157,21 +148,7 @@ export default function TermsPage() {
         </p>
 
         <p>
-          Subject to successful payment confirmation, subscription access will
-          normally be activated immediately and no later than 24 hours after
-          payment confirmation.
-        </p>
-
-        <p>
-          Digital delivery may be confirmed through account activation,
-          dashboard access, subscription status, wallet token allocation, email
-          notification, or access to Platform features.
-        </p>
-
-        <p>
-          The 100 monthly subscription tokens are credited digitally to the
-          user’s in-app wallet following successful subscription activation or
-          confirmed renewal.
+          Subscription is active immediately after registration. 
         </p>
 
         {/* 6 */}
@@ -185,26 +162,14 @@ export default function TermsPage() {
         </p>
 
         <p>
-          Once the self-service cancellation has been successfully submitted,
-          the user’s Platform subscription status is changed to cancelled and
-          automatic renewal is disabled within the Platform.
+          Once unsubscribed, the user will no longer have access to the playing features, but can 
+          re-subscribe at any time.
         </p>
 
         <p>
-          Where a third-party recurring payment gateway is connected,
-          cancellation of future billing may also be subject to successful
-          confirmation by that payment gateway or payment provider.
-        </p>
-
-        <p>
-          Cancellation does not delete the user’s player profile, challenge
+          Cancellation will remove the user’s player profile, challenge
           history, finalized results, ranking records, achievements, statistics,
           or remaining digital token records.
-        </p>
-
-        <p>
-          Cancellation does not convert remaining tokens into cash, refunds,
-          vouchers, goods, services, or any other form of external value.
         </p>
 
         <button
@@ -249,61 +214,7 @@ export default function TermsPage() {
           A user does not acquire ownership of any financial asset by receiving
           or holding Teez tokens.
         </p>
-
-        {/* 8 */}
-        <h2 className="font-semibold text-white">
-          8. Token Wallet
-        </h2>
-
-        <p>
-          Each eligible user may have an in-app token wallet. The wallet may
-          display:
-        </p>
-
-        <ul className="list-disc pl-6 space-y-1">
-          <li>Current token balance.</li>
-          <li>Subscription tokens issued.</li>
-          <li>Tokens spent on challenges.</li>
-          <li>Tokens earned through skill-based Platform results.</li>
-          <li>Additional token allocations or purchases, where available.</li>
-        </ul>
-
-        <p>
-          Wallet balances are Platform records and do not represent money held
-          on behalf of the user.
-        </p>
-
-        <p>
-          Honey Badger Technologies (PTY) LTD may correct a wallet balance where
-          there is a verified technical error, duplicate allocation, incorrect
-          deduction, fraudulent manipulation, or administrative mistake.
-        </p>
-
-        {/* 9 */}
-        <h2 className="font-semibold text-white">
-          9. Challenge Entries
-        </h2>
-
-        <p>
-          Challenges are entered using Teez tokens rather than money or a cash
-          entry fee.
-        </p>
-
-        <p>
-          The number of entry tokens required for a challenge will be displayed
-          before the user accepts an invitation or enters the challenge.
-        </p>
-
-        <p>
-          By accepting a challenge, the user authorises the Platform to deduct
-          the displayed number of entry tokens from the user’s in-app wallet.
-        </p>
-
-        <p>
-          Tokens used for a challenge are generally not reversible after valid
-          entry, except where a verified Platform error, duplicate deduction,
-          incorrect setup, or administrative error occurred.
-        </p>
+        
 
         {/* 10 */}
         <h2 className="font-semibold text-white">
@@ -317,8 +228,7 @@ export default function TermsPage() {
 
         <p>
           The challenge creator is responsible for selecting the correct
-          challenge format, scoring method, course, participants, and entry
-          token requirement.
+          challenge format, scoring method, course, participants.
         </p>
 
         <p>
@@ -330,21 +240,6 @@ export default function TermsPage() {
           Once a challenge has been finalized, the challenge may be locked and
           may not be reopened through the normal user interface.
         </p>
-
-        <p>
-          Honey Badger Technologies (PTY) LTD may review, correct, suspend, or
-          cancel a challenge or result where there is evidence of:
-        </p>
-
-        <ul className="list-disc pl-6 space-y-1">
-          <li>Fraud or collusion.</li>
-          <li>False or manipulated scores.</li>
-          <li>Technical or scoring errors.</li>
-          <li>Incorrect challenge setup.</li>
-          <li>Duplicate processing.</li>
-          <li>Breach of Platform rules.</li>
-          <li>Misuse of the Platform.</li>
-        </ul>
 
         {/* 11 */}
         <h2 className="font-semibold text-white">
@@ -379,45 +274,33 @@ export default function TermsPage() {
         </h2>
 
         <p>
-          The current test version of the Platform may use a temporary
-          subscription activation button until the approved payment gateway has
-          been selected and connected.
+          An approved payment gateway is provided, which gives the user save and easy access to the game. 
         </p>
 
         <p>
-          Once connected, payments will be processed through an approved
-          third-party payment gateway. The name of the approved provider and
-          applicable payment options will be displayed before live card payments
-          are accepted.
-        </p>
-
-        <p>
-          Honey Badger Technologies (PTY) LTD does not store full payment card
+          Honey Badger Technologies (PTY) LTD does not store payment card
           numbers, CVV numbers, card PINs, banking passwords, one-time PINs, or
           confidential banking login credentials on the Platform.
         </p>
 
         <p>
-          Users must ensure that the payment amount, account, subscription plan,
-          and payment information are correct before confirming payment.
+          Users will approve the payment amount, subscription activation
+          and payment information in the provided payment portal. 
         </p>
 
         {/* 13 */}
         <h2 className="font-semibold text-white">
-          13. Refund Eligibility
+          13. Refunds
         </h2>
 
         <p>
-          A refund may be considered where one or more of the following has been
-          verified:
+          A refund will immediately be done in the unlikely situation where: 
         </p>
 
         <ul className="list-disc pl-6 space-y-1">
-          <li>A duplicate subscription payment was processed.</li>
-          <li>An incorrect amount was charged.</li>
+          
           <li>
-            Payment was received but subscription access was not activated
-            within the stated delivery period due to a Platform error.
+            Payment was done but subscription access was not activated, due to, e.g. technical issue.
           </li>
           <li>
             An administrative error caused an incorrect account or subscription
@@ -427,45 +310,13 @@ export default function TermsPage() {
             A verified technical failure prevented delivery of the paid digital
             service.
           </li>
-          <li>
-            Any other circumstance where a refund is required by applicable law
-            or reasonably approved by Honey Badger Technologies (PTY) LTD.
-          </li>
         </ul>
 
         <p>
           Once subscription access has been activated and used, subscription
-          payments are generally non-refundable, except where applicable law or
-          a verified Platform or administrative error requires otherwise.
+          payments are generally non-refundable.
         </p>
 
-        <p>
-          Tokens that have already been validly used in challenges are not
-          refundable or convertible into money.
-        </p>
-
-        {/* 14 */}
-        <h2 className="font-semibold text-white">
-          14. Refund Review and Processing
-        </h2>
-
-        <p>
-          Refund requests may require supporting information such as proof of
-          payment, the registered email address, payment reference, transaction
-          date, bank confirmation, or screenshots showing the reported issue.
-        </p>
-
-        <p>
-          Honey Badger Technologies (PTY) LTD may refuse claims that are false,
-          misleading, fraudulent, abusive, incomplete, or incapable of
-          verification.
-        </p>
-
-        <p>
-          Approved refunds will normally be processed within 7 business days
-          where possible. The time required for funds to reflect may depend on
-          the bank, payment gateway, payment method, or card issuer.
-        </p>
 
         <button
           type="button"
@@ -507,47 +358,7 @@ export default function TermsPage() {
         >
           View Privacy Policy
         </button>
-
-        {/* 16 */}
-        <h2 className="font-semibold text-white">
-          16. Acceptable Use
-        </h2>
-
-        <p>
-          Users may not:
-        </p>
-
-        <ul className="list-disc pl-6 space-y-1">
-          <li>Submit false account or profile information.</li>
-          <li>Manipulate challenge scores, results, rankings, or statistics.</li>
-          <li>Exploit software errors or security weaknesses.</li>
-          <li>Attempt to alter token balances without authorisation.</li>
-          <li>Create duplicate or fraudulent accounts.</li>
-          <li>Harass, threaten, impersonate, or abuse another user.</li>
-          <li>Access another user’s account without permission.</li>
-          <li>Use automated tools to interfere with Platform operation.</li>
-          <li>Attempt to convert Platform tokens into monetary value.</li>
-          <li>Use the Platform for unlawful activity.</li>
-        </ul>
-
-        {/* 17 */}
-        <h2 className="font-semibold text-white">
-          17. Suspension and Termination
-        </h2>
-
-        <p>
-          Honey Badger Technologies (PTY) LTD may suspend, restrict, or terminate
-          an account where there is suspected fraud, security abuse, payment
-          misuse, manipulation of scores or tokens, repeated rule violations,
-          unlawful conduct, or material breach of these Terms.
-        </p>
-
-        <p>
-          The Platform may preserve relevant account, payment, challenge,
-          security, and transaction records after suspension, cancellation, or
-          termination where reasonably necessary for legal compliance, dispute
-          resolution, fraud prevention, and Platform integrity.
-        </p>
+     
 
         {/* 18 */}
         <h2 className="font-semibold text-white">

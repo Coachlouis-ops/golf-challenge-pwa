@@ -33,7 +33,8 @@ export default function TermsPage() {
 
         <p>
           By registering an account, accepting these Terms, subscribing to the
-          Platform, or using any Platform service, you agree to these terms and conditions.
+          Platform, or using any Platform service, you agree to these terms and
+          conditions.
         </p>
 
         {/* 1 */}
@@ -136,7 +137,6 @@ export default function TermsPage() {
           completed.
         </p>
 
-
         {/* 5 */}
         <h2 className="font-semibold text-white">
           5. Subscription Activation and Digital Delivery
@@ -148,7 +148,8 @@ export default function TermsPage() {
         </p>
 
         <p>
-          Subscription is active immediately after registration. 
+          Subscription is activated immediately after registration and
+          successful completion of the required subscription process.
         </p>
 
         {/* 6 */}
@@ -162,23 +163,15 @@ export default function TermsPage() {
         </p>
 
         <p>
-          Once unsubscribed, the user will no longer have access to the playing features, but can 
-          re-subscribe at any time.
+          Once unsubscribed, the user will no longer have access to the playing
+          features but may re-subscribe at any time.
         </p>
 
         <p>
-          Cancellation will remove the user’s player profile, challenge
-          history, finalized results, ranking records, achievements, statistics,
-          or remaining digital token records.
+          Further information regarding cancellation, digital delivery, refund
+          eligibility, payment errors, and refund processing is contained in
+          the Refund, Cancellation & Delivery Policy.
         </p>
-
-        <button
-          type="button"
-          onClick={() => router.push("/cancel-subscription")}
-          className="w-full py-3 rounded-xl font-semibold bg-red-600 text-white hover:bg-red-500 transition"
-        >
-          Cancel Subscription
-        </button>
 
         {/* 7 */}
         <h2 className="font-semibold text-white">
@@ -214,11 +207,10 @@ export default function TermsPage() {
           A user does not acquire ownership of any financial asset by receiving
           or holding Teez tokens.
         </p>
-        
 
-        {/* 10 */}
+        {/* 8 */}
         <h2 className="font-semibold text-white">
-          10. Golf Challenges and Results
+          8. Golf Challenges and Results
         </h2>
 
         <p>
@@ -228,7 +220,7 @@ export default function TermsPage() {
 
         <p>
           The challenge creator is responsible for selecting the correct
-          challenge format, scoring method, course, participants.
+          challenge format, scoring method, course, and participants.
         </p>
 
         <p>
@@ -241,9 +233,9 @@ export default function TermsPage() {
           may not be reopened through the normal user interface.
         </p>
 
-        {/* 11 */}
+        {/* 9 */}
         <h2 className="font-semibold text-white">
-          11. Rankings, Statistics and Achievements
+          9. Rankings, Statistics and Achievements
         </h2>
 
         <p>
@@ -268,13 +260,14 @@ export default function TermsPage() {
           improve fairness, accuracy, or Platform operation.
         </p>
 
-        {/* 12 */}
+        {/* 10 */}
         <h2 className="font-semibold text-white">
-          12. Payments
+          10. Payments and Security
         </h2>
 
         <p>
-          An approved payment gateway is provided, which gives the user save and easy access to the game. 
+          An approved payment gateway is provided, which gives the user safe and
+          easy access to the game.
         </p>
 
         <p>
@@ -284,39 +277,31 @@ export default function TermsPage() {
         </p>
 
         <p>
-          Users will approve the payment amount, subscription activation
-          and payment information in the provided payment portal. 
+          Users will approve the payment amount, subscription activation, and
+          payment information in the provided payment portal.
         </p>
 
-        {/* 13 */}
+        {/* 11 */}
         <h2 className="font-semibold text-white">
-          13. Refunds
+          11. Refund and Cancellation Policy
         </h2>
 
         <p>
-          A refund will immediately be done in the unlikely situation where: 
+          Subscription payments relate to digital Platform access and digital
+          subscription services.
         </p>
-
-        <ul className="list-disc pl-6 space-y-1">
-          
-          <li>
-            Payment was done but subscription access was not activated, due to, e.g. technical issue.
-          </li>
-          <li>
-            An administrative error caused an incorrect account or subscription
-            allocation.
-          </li>
-          <li>
-            A verified technical failure prevented delivery of the paid digital
-            service.
-          </li>
-        </ul>
 
         <p>
           Once subscription access has been activated and used, subscription
-          payments are generally non-refundable.
+          payments are generally non-refundable, subject to applicable consumer
+          rights and the Refund, Cancellation & Delivery Policy.
         </p>
 
+        <p>
+          The complete rules regarding cancellation, refund eligibility,
+          payment errors, digital delivery, and refund processing are available
+          in the Refund, Cancellation & Delivery Policy.
+        </p>
 
         <button
           type="button"
@@ -326,17 +311,17 @@ export default function TermsPage() {
           View Refund, Cancellation & Delivery Policy
         </button>
 
-        {/* 15 */}
+        {/* 12 */}
         <h2 className="font-semibold text-white">
-          15. Personal Information and Privacy
+          12. Personal Information and Privacy
         </h2>
 
         <p>
           Personal information may be collected and processed for account
           registration, identity and contact verification, subscription
-          administration, player profiles, challenge
-          participation, rankings, customer support, fraud prevention, security,
-          dispute resolution, and legal compliance.
+          administration, player profiles, challenge participation, rankings,
+          customer support, fraud prevention, security, dispute resolution, and
+          legal compliance.
         </p>
 
         <p>
@@ -358,11 +343,10 @@ export default function TermsPage() {
         >
           View Privacy Policy
         </button>
-     
 
-        {/* 18 */}
+        {/* 13 */}
         <h2 className="font-semibold text-white">
-          18. User Responsibility and Golf Participation
+          13. User Responsibility and Golf Participation
         </h2>
 
         <p>
@@ -377,9 +361,9 @@ export default function TermsPage() {
           equipment, travel, or other real-world circumstances.
         </p>
 
-        {/* 19 */}
+        {/* 14 */}
         <h2 className="font-semibold text-white">
-          19. Platform Availability
+          14. Platform Availability
         </h2>
 
         <p>
@@ -395,9 +379,9 @@ export default function TermsPage() {
           temporarily affect access.
         </p>
 
-        {/* 20 */}
+        {/* 15 */}
         <h2 className="font-semibold text-white">
-          20. Limitation of Liability
+          15. Limitation of Liability
         </h2>
 
         <p>
@@ -412,9 +396,9 @@ export default function TermsPage() {
           that cannot lawfully be excluded or limited under South African law.
         </p>
 
-        {/* 21 */}
+        {/* 16 */}
         <h2 className="font-semibold text-white">
-          21. Intellectual Property
+          16. Intellectual Property
         </h2>
 
         <p>
@@ -430,15 +414,15 @@ export default function TermsPage() {
           permission.
         </p>
 
-        {/* 22 */}
+        {/* 17 */}
         <h2 className="font-semibold text-white">
-          22. Complaints and Disputes
+          17. Complaints and Disputes
         </h2>
 
         <p>
           Users should first contact Honey Badger Technologies (PTY) LTD
-          regarding complaints, subscription issues, account
-          issues, technical errors, or refund requests.
+          regarding complaints, subscription issues, account issues, technical
+          errors, or refund requests.
         </p>
 
         <p>
@@ -447,9 +431,9 @@ export default function TermsPage() {
           payment provider, regulator, court, or ombudsman where applicable.
         </p>
 
-        {/* 23 */}
+        {/* 18 */}
         <h2 className="font-semibold text-white">
-          23. Governing Law
+          18. Governing Law
         </h2>
 
         <p>
@@ -476,9 +460,9 @@ export default function TermsPage() {
           South Africa
         </p>
 
-        {/* 24 */}
+        {/* 19 */}
         <h2 className="font-semibold text-white">
-          24. Changes to These Terms
+          19. Changes to These Terms
         </h2>
 
         <p>
@@ -494,9 +478,9 @@ export default function TermsPage() {
           to accept the updated Terms before continuing.
         </p>
 
-        {/* 25 */}
+        {/* 20 */}
         <h2 className="font-semibold text-white">
-          25. Contact Details
+          20. Contact Details
         </h2>
 
         <p>

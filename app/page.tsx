@@ -197,7 +197,7 @@ export default function HomePage() {
       onClick={() => router.push("/app")}
       className="bg-green-400 text-black px-8 py-3 rounded-full font-semibold animate-pulse shadow-[0_0_20px_rgba(34,197,94,0.8)] hover:scale-105 transition"
     >
-      REGISTER
+      SUBSCRIBE
     </button>
 
     <button

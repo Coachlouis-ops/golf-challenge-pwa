@@ -334,7 +334,7 @@ export default function TermsPage() {
         <p>
           Personal information may be collected and processed for account
           registration, identity and contact verification, subscription
-          administration, payment confirmation, player profiles, challenge
+          administration, player profiles, challenge
           participation, rankings, customer support, fraud prevention, security,
           dispute resolution, and legal compliance.
         </p>
@@ -437,9 +437,8 @@ export default function TermsPage() {
 
         <p>
           Users should first contact Honey Badger Technologies (PTY) LTD
-          regarding complaints, payment disputes, subscription issues, account
-          issues, technical errors, or refund requests so that the matter can be
-          investigated.
+          regarding complaints, subscription issues, account
+          issues, technical errors, or refund requests.
         </p>
 
         <p>

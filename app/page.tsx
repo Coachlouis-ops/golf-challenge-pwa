@@ -463,20 +463,31 @@ export default function HomePage() {
               cookies.
             </p>
 
-            <div className="flex gap-3 flex-wrap justify-center">
-              <button
-                onClick={acceptCookies}
-                className="bg-green-400 text-black px-4 py-2 rounded text-xs font-semibold hover:scale-105 transition"
-              >
-                Accept All
-              </button>
-              <button
-                onClick={rejectCookies}
-                className="border border-white px-4 py-2 rounded text-xs hover:bg-white hover:text-black transition"
-              >
-                Reject
-              </button>
-            </div>
+           <div className="flex gap-3 flex-wrap justify-center">
+  <button
+    type="button"
+    onClick={acceptCookies}
+    className="bg-green-400 text-black px-4 py-2 rounded text-xs font-semibold hover:scale-105 transition"
+  >
+    Accept All
+  </button>
+
+  <button
+    type="button"
+    onClick={rejectCookies}
+    className="border border-white px-4 py-2 rounded text-xs hover:bg-white hover:text-black transition"
+  >
+    Reject Non-Essential
+  </button>
+
+  <button
+    type="button"
+    onClick={() => router.push("/legal/cookie-policy")}
+    className="underline text-xs text-gray-300 hover:text-white transition"
+  >
+    Cookie Policy
+  </button>
+</div>
           </div>
         </div>
       )}

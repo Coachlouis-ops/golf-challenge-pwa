@@ -120,6 +120,61 @@ function DashboardContent() {
             VIEW RANKINGS
           </button>
 
+<div className="w-full border-t border-white/20 pt-6 mt-2 flex flex-col gap-4">
+  <p className="text-center text-xs tracking-[2px] text-gray-300">
+    SUBSCRIPTION & ACCOUNT
+  </p>
+
+  <button
+    onClick={() => router.push("/payment")}
+    className="arena-btn"
+  >
+    MANAGE SUBSCRIPTION
+  </button>
+
+  <button
+    onClick={() => router.push("/cancel-subscription")}
+    className="arena-btn"
+  >
+    CANCEL SUBSCRIPTION
+  </button>
+</div>
+
+<div className="w-full border-t border-white/20 pt-6 mt-2 flex flex-col gap-3">
+  <p className="text-center text-xs tracking-[2px] text-gray-300">
+    LEGAL & POLICIES
+  </p>
+
+  <button
+    onClick={() => router.push("/terms")}
+    className="text-xs tracking-widest text-gray-300 underline hover:text-white"
+  >
+    PLATFORM TERMS & CONDITIONS
+  </button>
+
+  <button
+    onClick={() => router.push("/legal/payment-policy")}
+    className="text-xs tracking-widest text-gray-300 underline hover:text-white"
+  >
+    PAYMENT & SUBSCRIPTION POLICY
+  </button>
+
+  <button
+    onClick={() => router.push("/legal/refund-policy")}
+    className="text-xs tracking-widest text-gray-300 underline hover:text-white"
+  >
+    REFUND, CANCELLATION & DELIVERY POLICY
+  </button>
+
+  <button
+    onClick={() => router.push("/privacy")}
+    className="text-xs tracking-widest text-gray-300 underline hover:text-white"
+  >
+    PRIVACY POLICY
+  </button>
+</div>
+
+
           <button
             onClick={() => router.push("/")}
             className="text-xs tracking-widest text-gray-400 underline mt-2 hover:text-white"

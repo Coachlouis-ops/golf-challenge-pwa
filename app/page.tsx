@@ -117,39 +117,36 @@ export default function HomePage() {
         <div className="flex justify-center">
         </div>
 
-    {/* TOP NAVIGATION BUTTONS */}
+   {/* TOP NAVIGATION BUTTONS */}
 <div className="flex justify-center gap-2 flex-wrap">
   <button
+    type="button"
     onClick={() => router.push("/legal/terms")}
-    className="bg-gradient-to-br from-zinc-100 via-zinc-400 to-zinc-900 text-black px-4 py-2 text-xs rounded-lg font-bold border border-zinc-300 shadow-[0_0_18px_rgba(255,255,255,0.75)] hover:shadow-[0_0_35px_rgba(255,255,255,1)] hover:scale-105 animate-pulse transition"
+    className="bg-gradient-to-br from-zinc-100 via-zinc-400 to-zinc-900 text-black px-4 py-2 text-xs rounded-lg font-bold border border-zinc-300 shadow-[0_0_18px_rgba(255,255,255,0.75)] hover:shadow-[0_0_35px_rgba(255,255,255,1)] hover:scale-105 transition"
   >
     Terms & Conditions
   </button>
 
   <button
+    type="button"
     onClick={() => router.push("/legal/refund-policy")}
-    className="bg-gradient-to-br from-zinc-100 via-zinc-400 to-zinc-900 text-black px-4 py-2 text-xs rounded-lg font-bold border border-zinc-300 shadow-[0_0_18px_rgba(255,255,255,0.75)] hover:shadow-[0_0_35px_rgba(255,255,255,1)] hover:scale-105 animate-pulse transition"
+    className="bg-gradient-to-br from-zinc-100 via-zinc-400 to-zinc-900 text-black px-4 py-2 text-xs rounded-lg font-bold border border-zinc-300 shadow-[0_0_18px_rgba(255,255,255,0.75)] hover:shadow-[0_0_35px_rgba(255,255,255,1)] hover:scale-105 transition"
   >
     Refund Policy
   </button>
 
   <button
-    onClick={() => router.push("/payment")}
-    className="bg-gradient-to-br from-zinc-100 via-zinc-400 to-zinc-900 text-black px-4 py-2 text-xs rounded-lg font-bold border border-zinc-300 shadow-[0_0_18px_rgba(255,255,255,0.75)] hover:shadow-[0_0_35px_rgba(255,255,255,1)] hover:scale-105 animate-pulse transition"
+    type="button"
+    onClick={() => router.push("/privacy")}
+    className="bg-gradient-to-br from-zinc-100 via-zinc-400 to-zinc-900 text-black px-4 py-2 text-xs rounded-lg font-bold border border-zinc-300 shadow-[0_0_18px_rgba(255,255,255,0.75)] hover:shadow-[0_0_35px_rgba(255,255,255,1)] hover:scale-105 transition"
   >
-    Pay Registration
+    Privacy Policy
   </button>
 
   <button
-    onClick={() => router.push("/wallet")}
-    className="bg-gradient-to-br from-zinc-100 via-zinc-400 to-zinc-900 text-black px-4 py-2 text-xs rounded-lg font-bold border border-zinc-300 shadow-[0_0_18px_rgba(255,255,255,0.75)] hover:shadow-[0_0_35px_rgba(255,255,255,1)] hover:scale-105 animate-pulse transition"
-  >
-    Enter Competition
-  </button>
-
-  <button
+    type="button"
     onClick={() => router.push("/contact")}
-    className="bg-gradient-to-br from-zinc-100 via-zinc-400 to-zinc-900 text-black px-4 py-2 text-xs rounded-lg font-bold border border-zinc-300 shadow-[0_0_18px_rgba(255,255,255,0.75)] hover:shadow-[0_0_35px_rgba(255,255,255,1)] hover:scale-105 animate-pulse transition"
+    className="bg-gradient-to-br from-zinc-100 via-zinc-400 to-zinc-900 text-black px-4 py-2 text-xs rounded-lg font-bold border border-zinc-300 shadow-[0_0_18px_rgba(255,255,255,0.75)] hover:shadow-[0_0_35px_rgba(255,255,255,1)] hover:scale-105 transition"
   >
     Contact
   </button>

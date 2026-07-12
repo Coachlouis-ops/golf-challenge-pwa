@@ -655,7 +655,7 @@ export default function PrivacyPolicyPage() {
           </p>
 
           <p className="text-xs text-gray-500 pt-4">
-            Last updated: July 2026
+           Last updated: July 2026 • Version 1.0
           </p>
 
           <div className="flex flex-col gap-3 pt-4">
@@ -674,6 +674,22 @@ export default function PrivacyPolicyPage() {
             >
               View Refund, Cancellation & Delivery Policy
             </button>
+
+<button
+  type="button"
+  onClick={() => router.push("/legal/cookie-policy")}
+  className="w-full py-3 rounded-xl font-semibold border border-white/30 hover:bg-white hover:text-black transition"
+>
+  View Cookie Policy
+</button>
+
+            <button
+  type="button"
+  onClick={() => router.push("/legal/payment-policy")}
+  className="w-full py-3 rounded-xl font-semibold border border-white/30 hover:bg-white hover:text-black transition"
+>
+  View Payment & Subscription Policy
+</button>
 
             <button
               type="button"

@@ -49,21 +49,32 @@ export default function VerifyPhonePage() {
         return;
       }
 
-      const snap = await getDoc(
-        doc(db, "profiles", uid)
-      );
+ try {
 
-      if (!snap.exists()) {
-        alert("Profile not found.");
-        router.push("/profile");
-        return;
-      }
+  console.log("VERIFY PAGE UID:", uid);
 
-      const data = snap.data();
+  const snap = await getDoc(
+    doc(db, "profiles", uid)
+  );
 
-      setPhoneNumber(
-        data.phoneNumber || ""
-      );
+  console.log("PROFILE EXISTS:", snap.exists());
+
+  if (!snap.exists()) {
+    console.log("NO PROFILE FOUND");
+    return;
+  }
+
+  const data = snap.data();
+
+  console.log("PROFILE DATA:", data);
+
+  setPhoneNumber(data.phoneNumber || "");
+
+} catch (err) {
+
+  console.error("PROFILE LOAD ERROR:", err);
+
+}
     }
 
     loadProfile();

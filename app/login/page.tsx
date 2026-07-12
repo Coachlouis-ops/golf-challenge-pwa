@@ -2,115 +2,116 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { login, db } from "@/src/lib/firebase";
 import { doc, getDoc } from "firebase/firestore";
+
+import { login, db } from "@/src/lib/firebase";
 
 export default function LoginPage() {
   const router = useRouter();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
 
     setError(null);
     setLoading(true);
 
     try {
-      const userCred = await login(email, password);
+      const userCredential = await login(email, password);
 
-      await userCred.user.reload();
+      await userCredential.user.reload();
 
-      const freshUser = userCred.user;
+      const currentUser = userCredential.user;
 
-      if (!freshUser.emailVerified) {
-        router.push("/verify-email");
+      if (!currentUser.emailVerified) {
+        router.replace("/verify-email");
         return;
       }
 
-      await handleRouting(freshUser.uid);
-    } catch (err: any) {
-      console.log("LOGIN ERROR:", err);
-      setError(err.code || err.message);
+      await handleRouting(currentUser.uid);
+    } catch (error: any) {
+      console.error("Login failed:", error);
+
+      setError(
+        error?.message ||
+          "Login failed. Check your email address and password."
+      );
     } finally {
       setLoading(false);
     }
   }
 
-  // -------------------------------
-  // CENTRAL SETUP ROUTING LOGIC
-  // -------------------------------
-
   async function handleRouting(uid: string) {
-    // ---------------- ADMIN CHECK ----------------
+    // ADMIN CHECK
     const userRef = doc(db, "users", uid);
-    const userSnap = await getDoc(userRef);
+    const userSnapshot = await getDoc(userRef);
 
-    const userData = userSnap.exists() ? userSnap.data() : null;
+    const userData = userSnapshot.exists()
+      ? userSnapshot.data()
+      : null;
+
     const role = userData?.role || "player";
 
     if (role === "admin") {
-      router.push("/admin");
+      router.replace("/admin");
       return;
     }
 
-    // ---------------- PROFILE CHECK ----------------
+    // PROFILE CHECK
     const profileRef = doc(db, "profiles", uid);
-    const profileSnap = await getDoc(profileRef);
+    const profileSnapshot = await getDoc(profileRef);
 
-    if (!profileSnap.exists()) {
-      router.push("/profile");
+    if (!profileSnapshot.exists()) {
+      router.replace("/profile");
       return;
     }
 
-    const profile = profileSnap.data();
+    const profileData = profileSnapshot.data();
 
     if (
-      !profile.name ||
-      !profile.surname ||
-      !profile.battleName ||
-      !profile.club ||
-      !profile.division
+      !profileData.name ||
+      !profileData.surname ||
+      !profileData.battleName ||
+      !profileData.club ||
+      !profileData.division
     ) {
-      router.push("/profile");
+      router.replace("/profile");
       return;
     }
 
-    // ---------------- PHONE CHECK ----------------
-    if (!profile.phoneVerified) {
-      router.push("/verify-phone");
+    // PHONE VERIFICATION CHECK
+    if (!profileData.phoneVerified) {
+      router.replace("/verify-phone");
       return;
     }
 
-    // ---------------- SUBSCRIPTION CHECK ----------------
-    if (!userSnap.exists()) {
-      router.push("/payment");
-      return;
-    }
-
-    if (userData?.subscriptionStatus !== "active") {
-      router.push("/payment");
+    // SUBSCRIPTION CHECK
+    if (
+      !userSnapshot.exists() ||
+      userData?.subscriptionStatus !== "active"
+    ) {
+      router.replace("/payment");
       return;
     }
 
     if (userData?.subscriptionExpires) {
-      const expires =
+      const subscriptionExpiry =
         typeof userData.subscriptionExpires.toDate === "function"
           ? userData.subscriptionExpires.toDate()
           : new Date(userData.subscriptionExpires);
 
-      if (new Date().getTime() > expires.getTime()) {
-        router.push("/payment");
+      if (Date.now() > subscriptionExpiry.getTime()) {
+        router.replace("/payment");
         return;
       }
     }
 
-    router.push("/dashboard");
+    router.replace("/dashboard");
   }
 
   return (
@@ -123,11 +124,15 @@ export default function LoginPage() {
           Sign In
         </h1>
 
+        <p className="text-sm text-gray-400 text-center">
+          Continue your setup or access your Teez Golf Challenges dashboard.
+        </p>
+
         <input
           type="email"
           placeholder="Email"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(event) => setEmail(event.target.value)}
           className="w-full bg-black border border-neutral-600 rounded-xl p-3 text-white"
           required
         />
@@ -137,17 +142,19 @@ export default function LoginPage() {
             type={showPassword ? "text" : "password"}
             placeholder="Password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full bg-black border border-neutral-600 rounded-xl p-3 pr-12 text-white"
+            onChange={(event) => setPassword(event.target.value)}
+            className="w-full bg-black border border-neutral-600 rounded-xl p-3 pr-16 text-white"
             required
           />
 
           <button
             type="button"
-            onClick={() => setShowPassword((prev) => !prev)}
+            onClick={() =>
+              setShowPassword((previous) => !previous)
+            }
             className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-gray-400"
           >
-            {showPassword ? "🙈" : "👁"}
+            {showPassword ? "Hide" : "Show"}
           </button>
         </div>
 
@@ -160,9 +167,25 @@ export default function LoginPage() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-green-500 hover:bg-green-400 text-black font-semibold py-3 rounded-xl"
+          className="w-full bg-green-500 hover:bg-green-400 text-black font-semibold py-3 rounded-xl disabled:opacity-40"
         >
-          {loading ? "Loading..." : "Continue"}
+          {loading ? "Signing In..." : "Continue"}
+        </button>
+
+        <button
+          type="button"
+          onClick={() => router.push("/register")}
+          className="w-full text-sm text-gray-400 underline"
+        >
+          Create a new account
+        </button>
+
+        <button
+          type="button"
+          onClick={() => router.push("/")}
+          className="w-full text-sm text-gray-500 underline"
+        >
+          Back to Home
         </button>
       </form>
     </main>

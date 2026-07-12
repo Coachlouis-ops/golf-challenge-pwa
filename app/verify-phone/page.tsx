@@ -125,6 +125,16 @@ export default function VerifyPhonePage() {
       // SEND OTP
       // -------------------------------------------------
 
+console.log("========== SEND OTP ==========");
+console.log("AUTH CURRENT USER:", auth.currentUser);
+console.log("AUTH UID:", auth.currentUser?.uid);
+console.log("PHONE NUMBER:", phoneNumber);
+console.log(
+  "LOCAL STORAGE UID:",
+  localStorage.getItem("phoneVerificationUid")
+);
+console.log("==============================");
+
       const confirmationResult =
         await signInWithPhoneNumber(
           auth,

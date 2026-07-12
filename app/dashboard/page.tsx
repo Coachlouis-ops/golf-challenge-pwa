@@ -2,11 +2,32 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { useAuth } from "@/src/lib/AuthContext";
+
+type LockedFeature = {
+  title: string;
+  route: string;
+};
 
 function DashboardContent() {
   const router = useRouter();
   const { user, loading } = useAuth();
+
+  const [lockedFeature, setLockedFeature] =
+    useState<LockedFeature | null>(null);
+
+  const openFeature = (title: string, route: string) => {
+    if (!user) {
+      setLockedFeature({
+        title,
+        route,
+      });
+      return;
+    }
+
+    router.push(route);
+  };
 
   if (loading) {
     return (
@@ -14,11 +35,6 @@ function DashboardContent() {
         Loading...
       </div>
     );
-  }
-
-  if (!user) {
-    router.push("/login");
-    return null;
   }
 
   return (
@@ -41,6 +57,7 @@ function DashboardContent() {
             fill
             className="object-cover"
           />
+
           <div className="absolute inset-0 bg-gradient-to-b from-black/20 to-black/80" />
         </div>
 
@@ -48,6 +65,41 @@ function DashboardContent() {
           <p className="text-center text-[15px] tracking-[2px] font-semibold text-transparent bg-clip-text bg-gradient-to-r from-gray-300 via-white to-gray-400 drop-shadow-[0_0_12px_rgba(200,200,200,0.9)]">
             SETTLE THE SCORE. PLAY WITH PURPOSE
           </p>
+
+          {!user && (
+            <div className="w-full border border-green-400/60 bg-black/80 rounded-2xl p-5 text-center shadow-[0_0_20px_rgba(34,197,94,0.25)]">
+              <p className="text-green-400 font-semibold tracking-wide">
+                EXPLORE THE FULL TEEZ DASHBOARD
+              </p>
+
+              <p className="text-sm text-gray-300 mt-3 leading-6">
+                Log in and activate your subscription to unlock competitive
+                features.
+              </p>
+
+              <p className="text-xl font-bold mt-4">R99/month</p>
+
+              <p className="text-xs text-gray-400 mt-2">
+                Includes 100 Teez Tokens every month
+              </p>
+
+              <div className="grid grid-cols-2 gap-3 mt-5">
+                <button
+                  onClick={() => router.push("/login")}
+                  className="h-11 rounded-xl border border-white/40 text-sm font-semibold hover:bg-white hover:text-black transition"
+                >
+                  LOG IN
+                </button>
+
+                <button
+                  onClick={() => router.push("/register")}
+                  className="h-11 rounded-xl bg-green-400 text-black text-sm font-semibold hover:scale-[1.02] transition"
+                >
+                  SUBSCRIBE
+                </button>
+              </div>
+            </div>
+          )}
 
           <style jsx>{`
             .arena-btn {
@@ -76,104 +128,137 @@ function DashboardContent() {
             .arena-btn:active {
               transform: scale(0.97);
             }
+
+            .locked-btn {
+              position: relative;
+              opacity: 0.75;
+            }
+
+            .locked-btn::after {
+              content: "LOCKED";
+              position: absolute;
+              right: 14px;
+              font-size: 9px;
+              letter-spacing: 1px;
+              color: #111;
+              background: #4ade80;
+              padding: 3px 6px;
+              border-radius: 999px;
+            }
           `}</style>
 
           <button
-            onClick={() => router.push("/challenges/create")}
-            className="arena-btn"
+            onClick={() =>
+              openFeature("Create Challenge", "/challenges/create")
+            }
+            className={`arena-btn ${!user ? "locked-btn" : ""}`}
           >
             CREATE CHALLENGE
           </button>
 
           <button
-            onClick={() => router.push("/my-challenges")}
-            className="arena-btn"
+            onClick={() =>
+              openFeature("My Challenges", "/my-challenges")
+            }
+            className={`arena-btn ${!user ? "locked-btn" : ""}`}
           >
             MY CHALLENGES
           </button>
 
           <button
-            onClick={() => router.push("/my-invites")}
-            className="arena-btn"
+            onClick={() => openFeature("My Invites", "/my-invites")}
+            className={`arena-btn ${!user ? "locked-btn" : ""}`}
           >
             MY INVITES
           </button>
 
           <button
-            onClick={() => router.push("/profile")}
-            className="arena-btn"
+            onClick={() => openFeature("My Profile", "/profile")}
+            className={`arena-btn ${!user ? "locked-btn" : ""}`}
           >
             MY PROFILE
           </button>
 
-                   <button
-            onClick={() => router.push("/wallet")}
-            className="arena-btn"
+          <button
+            onClick={() => openFeature("Token Wallet", "/wallet")}
+            className={`arena-btn ${!user ? "locked-btn" : ""}`}
           >
             TOKEN WALLET
           </button>
 
           <button
-            onClick={() => router.push("/rankings")}
-            className="arena-btn"
+            onClick={() => openFeature("View Rankings", "/rankings")}
+            className={`arena-btn ${!user ? "locked-btn" : ""}`}
           >
             VIEW RANKINGS
           </button>
 
-<div className="w-full border-t border-white/20 pt-6 mt-2 flex flex-col gap-4">
-  <p className="text-center text-xs tracking-[2px] text-gray-300">
-    SUBSCRIPTION & ACCOUNT
-  </p>
+          <div className="w-full border-t border-white/20 pt-6 mt-2 flex flex-col gap-4">
+            <p className="text-center text-xs tracking-[2px] text-gray-300">
+              SUBSCRIPTION & ACCOUNT
+            </p>
 
-  <button
-    onClick={() => router.push("/payment")}
-    className="arena-btn"
-  >
-    MANAGE SUBSCRIPTION
-  </button>
+            <button
+              onClick={() =>
+                router.push(user ? "/payment" : "/register")
+              }
+              className="arena-btn"
+            >
+              {user ? "MANAGE SUBSCRIPTION" : "ACTIVATE SUBSCRIPTION"}
+            </button>
 
-  <button
-    onClick={() => router.push("/cancel-subscription")}
-    className="arena-btn"
-  >
-    CANCEL SUBSCRIPTION
-  </button>
-</div>
+            {user && (
+              <button
+                onClick={() => router.push("/cancel-subscription")}
+                className="arena-btn"
+              >
+                CANCEL SUBSCRIPTION
+              </button>
+            )}
 
-<div className="w-full border-t border-white/20 pt-6 mt-2 flex flex-col gap-3">
-  <p className="text-center text-xs tracking-[2px] text-gray-300">
-    LEGAL & POLICIES
-  </p>
+            {!user && (
+              <button
+                onClick={() => router.push("/login")}
+                className="arena-btn"
+              >
+                LOG IN
+              </button>
+            )}
+          </div>
 
-  <button
-    onClick={() => router.push("/terms")}
-    className="text-xs tracking-widest text-gray-300 underline hover:text-white"
-  >
-    PLATFORM TERMS & CONDITIONS
-  </button>
+          <div className="w-full border-t border-white/20 pt-6 mt-2 flex flex-col gap-3">
+            <p className="text-center text-xs tracking-[2px] text-gray-300">
+              LEGAL & POLICIES
+            </p>
 
-  <button
-    onClick={() => router.push("/legal/payment-policy")}
-    className="text-xs tracking-widest text-gray-300 underline hover:text-white"
-  >
-    PAYMENT & SUBSCRIPTION POLICY
-  </button>
+            <button
+              onClick={() => router.push("/terms")}
+              className="text-xs tracking-widest text-gray-300 underline hover:text-white"
+            >
+              PLATFORM TERMS & CONDITIONS
+            </button>
 
-  <button
-    onClick={() => router.push("/legal/refund-policy")}
-    className="text-xs tracking-widest text-gray-300 underline hover:text-white"
-  >
-    REFUND, CANCELLATION & DELIVERY POLICY
-  </button>
+            <button
+              onClick={() => router.push("/legal/payment-policy")}
+              className="text-xs tracking-widest text-gray-300 underline hover:text-white"
+            >
+              PAYMENT & SUBSCRIPTION POLICY
+            </button>
 
-  <button
-    onClick={() => router.push("/privacy")}
-    className="text-xs tracking-widest text-gray-300 underline hover:text-white"
-  >
-    PRIVACY POLICY
-  </button>
-</div>
+            <button
+              onClick={() => router.push("/legal/refund-policy")}
+              className="text-xs tracking-widest text-gray-300 underline hover:text-white"
+            >
+              REFUND, CANCELLATION & DELIVERY POLICY
+            </button>
 
+            <button
+              onClick={() => router.push("/privacy")}
+              className="text-xs tracking-widest text-gray-300 underline hover:text-white"
+            >
+              PRIVACY POLICY
+            </button>
+          </div>
 
           <button
             onClick={() => router.push("/")}
@@ -183,6 +268,51 @@ function DashboardContent() {
           </button>
         </div>
       </main>
+
+      {lockedFeature && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 px-6">
+          <div className="w-full max-w-sm rounded-2xl border border-green-400/60 bg-zinc-950 p-6 text-center shadow-[0_0_30px_rgba(34,197,94,0.35)]">
+            <p className="text-xs tracking-[2px] text-green-400">
+              FEATURE LOCKED
+            </p>
+
+            <h2 className="text-xl font-bold mt-3">
+              {lockedFeature.title}
+            </h2>
+
+            <p className="text-sm text-gray-300 mt-4 leading-6">
+              Log in and activate your Teez subscription to use this feature.
+            </p>
+
+            <p className="text-2xl font-bold mt-5">R99/month</p>
+
+            <p className="text-xs text-gray-400 mt-2">
+              Includes 100 Teez Tokens every month
+            </p>
+
+            <button
+              onClick={() => router.push("/login")}
+              className="w-full h-12 mt-6 rounded-xl border border-white/40 font-semibold hover:bg-white hover:text-black transition"
+            >
+              LOG IN
+            </button>
+
+            <button
+              onClick={() => router.push("/register")}
+              className="w-full h-12 mt-3 rounded-xl bg-green-400 text-black font-semibold hover:scale-[1.02] transition"
+            >
+              ACTIVATE SUBSCRIPTION
+            </button>
+
+            <button
+              onClick={() => setLockedFeature(null)}
+              className="mt-5 text-xs tracking-widest text-gray-400 underline hover:text-white"
+            >
+              CONTINUE VIEWING DASHBOARD
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

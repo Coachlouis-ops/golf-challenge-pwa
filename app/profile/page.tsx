@@ -358,7 +358,9 @@ export default function ProfilePage() {
         { merge: true }
       );
 
-      alert("Profile saved successfully.");
+      alert(
+  "Profile saved successfully. Continue to phone verification to complete your account setup."
+);
       setProfileExists(true);
       setIsEditing(false);
 
@@ -374,7 +376,9 @@ export default function ProfilePage() {
       // -------------------------------------------------
       // NEXT SETUP STEP: SUBSCRIPTION PAYMENT
       // -------------------------------------------------
-      router.push("/payment");
+// Phone verification complete.
+// Next step: activate your monthly subscription.
+    router.push("/payment");
     } catch (err: any) {
       console.error(err);
       alert(err.message || "Failed to send OTP");

@@ -323,19 +323,33 @@ export default function HomePage() {
               Developed and Managed by Honey Badger Technologies (PTY) LTD
             </p>
 
-        <div className="flex flex-col gap-3 justify-center md:justify-start text-xs">
+       <div className="flex flex-col gap-3 justify-center md:justify-start text-xs">
   <span
     onClick={() => router.push("/legal/terms")}
     className="underline cursor-pointer hover:text-gray-800"
   >
-    Terms & Conditions
+    Website Terms & Conditions
+  </span>
+
+  <span
+    onClick={() => router.push("/terms")}
+    className="underline cursor-pointer hover:text-gray-800"
+  >
+    Platform Terms & Conditions
+  </span>
+
+  <span
+    onClick={() => router.push("/legal/payment-policy")}
+    className="underline cursor-pointer hover:text-gray-800"
+  >
+    Payment & Subscription Policy
   </span>
 
   <span
     onClick={() => router.push("/legal/refund-policy")}
     className="underline cursor-pointer hover:text-gray-800"
   >
-    Refund & Cancellation Policy
+    Refund, Cancellation & Delivery Policy
   </span>
 
   <span
@@ -346,10 +360,24 @@ export default function HomePage() {
   </span>
 
   <span
-    onClick={() => router.push("/cancel-subscription")}
+    onClick={() => router.push("/legal/cookie-policy")}
     className="underline cursor-pointer hover:text-gray-800"
   >
-    Cancel Subscription
+    Cookie Policy
+  </span>
+
+  <span
+    onClick={() => router.push("/legal/acceptable-use")}
+    className="underline cursor-pointer hover:text-gray-800"
+  >
+    Acceptable Use Policy
+  </span>
+
+  <span
+    onClick={() => router.push("/legal/community-rules")}
+    className="underline cursor-pointer hover:text-gray-800"
+  >
+    Community & Competition Rules
   </span>
 
   <span

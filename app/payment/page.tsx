@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { httpsCallable } from "firebase/functions";
+
 import { functions } from "@/src/lib/firebase";
 import { useAuth } from "@/src/lib/AuthContext";
 
@@ -20,7 +21,7 @@ export default function PaymentPage() {
     }
 
     if (!accepted) {
-      alert("Accept the subscription terms first.");
+      alert("Accept the subscription and legal terms first.");
       return;
     }
 
@@ -35,13 +36,17 @@ export default function PaymentPage() {
       await activateTestSubscription({});
 
       alert(
-        "Subscription activated. Your wallet has been credited with 100 Teez tokens."
+        "Subscription activated. Your wallet has been credited with 100 Teez Tokens."
       );
 
       router.push("/dashboard");
-    } catch (err: any) {
-      console.error(err);
-      alert(err.message || "Failed to activate subscription.");
+    } catch (error: any) {
+      console.error(error);
+
+      alert(
+        error?.message ||
+          "Subscription activation failed. Please try again."
+      );
     } finally {
       setSubmitting(false);
     }
@@ -67,22 +72,25 @@ export default function PaymentPage() {
         </h2>
 
         <p className="text-gray-400 max-w-xl">
-          Subscribe to unlock competitive golf challenges, rankings, player stats,
-          and 100 monthly Teez tokens.
+          Subscribe to unlock competitive golf challenges, rankings, player
+          statistics, live scoreboards, and 100 monthly Teez Tokens.
         </p>
       </div>
 
-      <div className="bg-zinc-800 border border-zinc-600 p-8 rounded-xl shadow-xl flex flex-col gap-6 text-center max-w-md w-full">
+      <div className="bg-zinc-800 border border-zinc-600 p-8 rounded-xl shadow-xl flex flex-col gap-6 text-center max-w-lg w-full">
         <h3 className="text-xl font-bold text-green-400">
-          Monthly Game Access
+          Monthly Platform Access
         </h3>
 
         <p className="text-4xl font-bold">
-          R99 <span className="text-sm text-gray-400">/ month</span>
+          R99{" "}
+          <span className="text-sm text-gray-400">
+            / month
+          </span>
         </p>
 
         <p className="text-sm text-gray-400">
-          Includes 100 Teez tokens every month.
+          Includes 100 Teez Tokens for every active subscription month.
         </p>
 
         <div className="bg-black/40 border border-zinc-700 rounded-xl p-6 flex flex-col gap-4">
@@ -91,72 +99,125 @@ export default function PaymentPage() {
           </p>
 
           <p className="text-sm text-gray-400">
-            This placeholder activates the subscription flow while the final
-            bank-approved payment portal is being connected.
+            This temporary button activates the subscription flow while the
+            approved secure payment portal is being connected.
           </p>
 
           <p className="text-sm text-gray-400">
-            Once the payment portal is live, this button will be replaced with
-            the official subscription payment checkout.
+            Once the payment portal is live, this button will be replaced by the
+            official recurring subscription checkout.
           </p>
         </div>
 
-        <div className="text-left bg-black/40 border border-zinc-700 rounded-xl p-4 space-y-4 text-sm text-gray-300">
+        <div className="text-left bg-black/40 border border-zinc-700 rounded-xl p-5 space-y-4 text-sm text-gray-300">
           <p className="text-green-400 font-semibold">
-            Subscription Terms
+            Subscription and Payment Terms
           </p>
 
           <p>
-            Payments are made to{" "}
-            <strong>Honey Badger Technologies (PTY) LTD</strong>.
-          </p>
-
-          <p>
-            Teez tokens are digital play credits used only inside Teez Golf
-            Challenges. Tokens have no cash value and cannot be withdrawn,
-            redeemed, transferred for cash, or converted into any real-world value.
-          </p>
-
-          <p>
-            On activation, your subscription becomes active and your wallet
-            receives 100 Teez tokens.
-          </p>
-
-          <p>
-            By proceeding, you agree to the full{" "}
-            <span
-              onClick={() => router.push("/legal/terms")}
-              className="text-green-400 underline cursor-pointer"
-            >
-              Terms & Conditions
-            </span>{" "}
-            and the{" "}
-            <span
-              onClick={() => router.push("/legal/refund-policy")}
-              className="text-green-400 underline cursor-pointer"
-            >
-              Refund Policy
-            </span>
+            The subscription is provided by{" "}
+            <strong>
+              Honey Badger Technologies (PTY) LTD
+            </strong>
             .
           </p>
 
-          <label className="flex items-start gap-3 pt-2">
+          <p>
+            The subscription fee is R99 per month and includes 100 Teez Tokens
+            per active month.
+          </p>
+
+          <p>
+            The subscription is intended to renew monthly through the approved
+            secure payment portal until cancelled through the Platform&apos;s
+            self-service cancellation functionality.
+          </p>
+
+          <p>
+            Cancellation takes effect immediately once successfully confirmed,
+            and access to subscription-only playing features ends immediately.
+          </p>
+
+          <p>
+            Teez Tokens are digital play credits only. They have no cash value,
+            cannot be redeemed, withdrawn, sold, transferred for payment, or
+            converted into money, cryptocurrency, vouchers, goods, services, or
+            external rewards.
+          </p>
+
+          <p>
+            No physical goods are delivered. Subscription delivery takes place
+            digitally through Platform activation, dashboard access, and Teez
+            Token allocation.
+          </p>
+
+          <div className="border-t border-zinc-700 pt-4 space-y-3">
+            <p className="text-green-400 font-semibold">
+              Review the Legal Policies
+            </p>
+
+            <button
+              type="button"
+              onClick={() => router.push("/legal/terms")}
+              className="block text-green-400 underline"
+            >
+              Website Terms & Conditions
+            </button>
+
+            <button
+              type="button"
+              onClick={() => router.push("/terms")}
+              className="block text-green-400 underline"
+            >
+              Platform Terms & Conditions
+            </button>
+
+            <button
+              type="button"
+              onClick={() => router.push("/legal/payment-policy")}
+              className="block text-green-400 underline"
+            >
+              Payment & Subscription Policy
+            </button>
+
+            <button
+              type="button"
+              onClick={() => router.push("/legal/refund-policy")}
+              className="block text-green-400 underline"
+            >
+              Refund, Cancellation & Delivery Policy
+            </button>
+
+            <button
+              type="button"
+              onClick={() => router.push("/privacy")}
+              className="block text-green-400 underline"
+            >
+              Privacy Policy
+            </button>
+          </div>
+
+          <label className="flex items-start gap-3 pt-4 border-t border-zinc-700">
             <input
               type="checkbox"
               checked={accepted}
-              onChange={(e) => setAccepted(e.target.checked)}
+              onChange={(event) => setAccepted(event.target.checked)}
               className="mt-1"
             />
 
             <span>
-              I agree that Teez tokens are digital play credits only and that
-              this temporary activation is for app-flow testing until the final
-              payment portal is connected.
+              I confirm that I have reviewed and accept the Website Terms &
+              Conditions, Platform Terms & Conditions, Payment & Subscription
+              Policy, Refund, Cancellation & Delivery Policy, and Privacy
+              Policy. I understand the R99 monthly subscription, recurring
+              billing, immediate self-service cancellation, digital delivery,
+              and Teez Token rules.
             </span>
           </label>
         </div>
 
         <button
+          type="button"
           onClick={activateSubscription}
           disabled={!accepted || submitting}
           className={`w-full py-4 rounded-xl font-bold transition ${
@@ -165,15 +226,23 @@ export default function PaymentPage() {
               : "bg-gray-700 text-gray-400 cursor-not-allowed"
           }`}
         >
-          {submitting ? "ACTIVATING..." : "ACTIVATE SUBSCRIPTION"}
+          {submitting
+            ? "ACTIVATING..."
+            : "ACTIVATE TEST SUBSCRIPTION"}
         </button>
 
         <p className="text-xs text-gray-400">
-          Your dashboard unlocks after subscription activation.
+          This is currently a test activation and does not process a real
+          payment.
+        </p>
+
+        <p className="text-xs text-gray-400">
+          Your dashboard unlocks after successful subscription activation.
         </p>
       </div>
 
       <button
+        type="button"
         onClick={() => router.push("/login")}
         className="text-sm text-gray-400 underline"
       >

@@ -117,40 +117,6 @@ export default function HomePage() {
         <div className="flex justify-center">
         </div>
 
-   {/* TOP NAVIGATION BUTTONS */}
-<div className="flex justify-center gap-2 flex-wrap">
-  <button
-    type="button"
-    onClick={() => router.push("/legal/terms")}
-    className="bg-gradient-to-br from-zinc-100 via-zinc-400 to-zinc-900 text-black px-4 py-2 text-xs rounded-lg font-bold border border-zinc-300 shadow-[0_0_18px_rgba(255,255,255,0.75)] hover:shadow-[0_0_35px_rgba(255,255,255,1)] hover:scale-105 transition"
-  >
-    Terms & Conditions
-  </button>
-
-  <button
-    type="button"
-    onClick={() => router.push("/legal/refund-policy")}
-    className="bg-gradient-to-br from-zinc-100 via-zinc-400 to-zinc-900 text-black px-4 py-2 text-xs rounded-lg font-bold border border-zinc-300 shadow-[0_0_18px_rgba(255,255,255,0.75)] hover:shadow-[0_0_35px_rgba(255,255,255,1)] hover:scale-105 transition"
-  >
-    Refund Policy
-  </button>
-
-  <button
-    type="button"
-    onClick={() => router.push("/privacy")}
-    className="bg-gradient-to-br from-zinc-100 via-zinc-400 to-zinc-900 text-black px-4 py-2 text-xs rounded-lg font-bold border border-zinc-300 shadow-[0_0_18px_rgba(255,255,255,0.75)] hover:shadow-[0_0_35px_rgba(255,255,255,1)] hover:scale-105 transition"
-  >
-    Privacy Policy
-  </button>
-
-  <button
-    type="button"
-    onClick={() => router.push("/contact")}
-    className="bg-gradient-to-br from-zinc-100 via-zinc-400 to-zinc-900 text-black px-4 py-2 text-xs rounded-lg font-bold border border-zinc-300 shadow-[0_0_18px_rgba(255,255,255,0.75)] hover:shadow-[0_0_35px_rgba(255,255,255,1)] hover:scale-105 transition"
-  >
-    Contact
-  </button>
-</div>
       </header>
 
       {/* SLOGAN SECTION */}
@@ -191,21 +157,26 @@ export default function HomePage() {
 <div className="flex flex-col items-center gap-4">
   <div className="flex justify-center gap-4 flex-wrap">
     <button
-      onClick={() => router.push("/app")}
+      onClick={() => router.push("/register")}
       className="bg-green-400 text-black px-8 py-3 rounded-full font-semibold animate-pulse shadow-[0_0_20px_rgba(34,197,94,0.8)] hover:scale-105 transition"
     >
       SUBSCRIBE
     </button>
 
     <button
-      onClick={() => router.push("/app")}
+      onClick={() => router.push("/login")}
       className="bg-green-400 text-black px-8 py-3 rounded-full font-semibold animate-pulse shadow-[0_0_20px_rgba(34,197,94,0.8)] hover:scale-105 transition"
     >
       LOGIN
     </button>
+
+    <button
+      onClick={() => router.push("/dashboard")}
+      className="border border-green-400 text-green-400 px-8 py-3 rounded-full font-semibold shadow-[0_0_18px_rgba(34,197,94,0.45)] hover:bg-green-400 hover:text-black hover:scale-105 transition"
+    >
+      VIEW FULL DASHBOARD
+    </button>
   </div>
-
-
 </div>
         </div>
       </section>

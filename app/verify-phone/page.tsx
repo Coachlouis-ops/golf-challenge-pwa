@@ -14,7 +14,7 @@ import { auth, db } from "@/src/lib/firebase";
 
 import {
   RecaptchaVerifier,
-  signInWithPhoneNumber,
+  linkWithPhoneNumber,
 } from "firebase/auth";
 
 export default function VerifyPhonePage() {
@@ -134,13 +134,18 @@ console.log(
   localStorage.getItem("phoneVerificationUid")
 );
 console.log("==============================");
+const currentUser = auth.currentUser;
 
-      const confirmationResult =
-        await signInWithPhoneNumber(
-          auth,
-          phoneNumber,
-          recaptcha
-        );
+if (!currentUser) {
+  throw new Error("No authenticated user found.");
+}
+
+const confirmationResult =
+  await linkWithPhoneNumber(
+    currentUser,
+    phoneNumber,
+    recaptcha
+  );
 
       (window as any).confirmationResult =
         confirmationResult;
@@ -191,18 +196,11 @@ console.log("==============================");
         return;
       }
 
+/// -------------------------------------------------
+// VERIFY OTP AND LINK PHONE TO CURRENT USER
 // -------------------------------------------------
-// VERIFY OTP WITHOUT REPLACING EMAIL SESSION
-// -------------------------------------------------
-
-const currentUser = auth.currentUser;
 
 await confirmationResult.confirm(otp);
-
-// RESTORE ORIGINAL EMAIL USER
-if (currentUser) {
-  await auth.updateCurrentUser(currentUser);
-}
 
       // -------------------------------------------------
       // UPDATE PROFILE

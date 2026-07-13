@@ -15,34 +15,40 @@ type CareerData = {
   club: string;
   division: string;
 
-  ranking?: {
+ranking?: {
 
-    club: number;
-    province: number;
-    national: number;
-    international: number;
+  club: number;
+  province: number;
+  national: number;
+  international: number;
 
-    powerScore: number;
-    playerLevel: number;
-    careerXP: number;
+  powerScore: number;
+  playerLevel: number;
+  careerXP: number;
 
-    careerPoints: number;
+  careerPoints: number;
 
-    matchesPlayed: number;
-    wins: number;
-    losses: number;
+  matchesPlayed: number;
+  wins: number;
+  losses: number;
 
-    winPercentage: number;
+  winPercentage: number;
 
-    currentWinStreak: number;
-    bestWinStreak: number;
+  bestFinish: number;
 
-    currentLosingStreak: number;
-    bestLosingStreak: number;
+  top3: number;
+  top5: number;
+  top10: number;
 
-    bestFormat: string;
-    bestFormatWinPercentage: number;
-  };
+  currentWinStreak: number;
+  bestWinStreak: number;
+
+  currentLosingStreak: number;
+  bestLosingStreak: number;
+
+  bestFormat: string;
+  bestFormatWinPercentage: number;
+};
 
 };
 
@@ -213,14 +219,190 @@ export default function MyCareerPage() {
   color="yellow"
 />
 
-         </div>
+       </div>
 
-      {/* CLOSE max-w-md */}
+      {/* CURRENT RANKINGS */}
+
+      <div className="space-y-4 mt-8">
+
+        <h2 className="text-xl font-bold text-green-400">
+          Current Rankings
+        </h2>
+
+        <div className="grid grid-cols-2 gap-4">
+
+          <StatCard
+            title="Club Rank"
+            value={`#${ranking.clubPosition}`}
+            color="green"
+          />
+
+          <StatCard
+            title="Province Rank"
+            value={`#${ranking.provincePosition}`}
+            color="blue"
+          />
+
+          <StatCard
+            title="National Rank"
+            value={`#${ranking.nationalPosition}`}
+            color="purple"
+          />
+
+          <StatCard
+            title="Global Rank"
+            value={`#${ranking.internationalPosition}`}
+            color="yellow"
+          />
+
+        </div>
+
+      </div>
+{/* PERFORMANCE */}
+
+<div className="space-y-4 mt-8">
+
+  <h2 className="text-xl font-bold text-green-400">
+    Performance
+  </h2>
+
+  <div className="grid grid-cols-2 gap-4">
+
+    <StatCard
+      title="Matches Played"
+      value={career?.ranking?.matchesPlayed ?? 0}
+      color="green"
+    />
+
+    <StatCard
+      title="Wins"
+      value={career?.ranking?.wins ?? 0}
+      color="blue"
+    />
+
+    <StatCard
+      title="Losses"
+      value={career?.ranking?.losses ?? 0}
+      color="purple"
+    />
+
+<StatCard
+  title="Win %"
+  value={`${career?.ranking?.winPercentage ?? 0}%`}
+  color="yellow"
+/>
+
+  </div>
+
+</div>
+
+{/* CAREER RECORD */}
+
+<div className="space-y-4 mt-8">
+
+  <h2 className="text-xl font-bold text-green-400">
+    Career Record
+  </h2>
+
+  <div className="grid grid-cols-2 gap-4">
+
+    <StatCard
+      title="Best Finish"
+      value={career?.ranking?.bestFinish ?? "-"}
+      color="green"
+    />
+
+    <StatCard
+      title="Top 3"
+      value={career?.ranking?.top3 ?? 0}
+      color="blue"
+    />
+
+    <StatCard
+      title="Top 5"
+      value={career?.ranking?.top5 ?? 0}
+      color="purple"
+    />
+
+    <StatCard
+      title="Top 10"
+      value={career?.ranking?.top10 ?? 0}
+      color="yellow"
+    />
+
+  </div>
+
+</div>
+
+{/* STREAKS */}
+
+<div className="space-y-4 mt-8">
+
+  <h2 className="text-xl font-bold text-green-400">
+    Streaks
+  </h2>
+
+  <div className="grid grid-cols-2 gap-4">
+
+    <StatCard
+      title="Current Win Streak"
+      value={career?.ranking?.currentWinStreak ?? 0}
+      color="green"
+    />
+
+    <StatCard
+      title="Best Win Streak"
+      value={career?.ranking?.bestWinStreak ?? 0}
+      color="blue"
+    />
+
+    <StatCard
+      title="Current Losing Streak"
+      value={career?.ranking?.currentLosingStreak ?? 0}
+      color="purple"
+    />
+
+    <StatCard
+      title="Worst Losing Streak"
+      value={career?.ranking?.bestLosingStreak ?? 0}
+      color="yellow"
+    />
+
+  </div>
+
+</div>
+
+{/* BEST FORMAT */}
+
+<div className="space-y-4 mt-8">
+
+  <h2 className="text-xl font-bold text-green-400">
+    Best Format
+  </h2>
+
+  <div className="rounded-2xl border border-green-500/40 bg-neutral-900 p-6">
+
+    <p className="text-xs uppercase tracking-widest text-gray-400">
+      Favourite Competition Format
+    </p>
+
+    <h3 className="mt-3 text-3xl font-black text-green-400">
+      {career?.ranking?.bestFormat || "-"}
+    </h3>
+
+    <p className="mt-2 text-lg text-white">
+      {career?.ranking?.bestFormatWinPercentage ?? 0}% Win Rate
+    </p>
+
+  </div>
+
+</div>
+
     </div>
 
   </main>
 
-);
+  );
 
 }
 

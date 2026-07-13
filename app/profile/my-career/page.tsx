@@ -192,72 +192,151 @@ export default function MyCareerPage() {
 
   </div>
 
-      {/* CAREER OVERVIEW */}
-      <div className="mt-8 grid grid-cols-2 gap-4">
+{/* PLAYER OVERVIEW */}
 
-      <StatCard
-  title="Player Level"
-  value={career?.ranking?.playerLevel ?? 1}
-  color="green"
-/>
+<div className="mt-8 rounded-3xl border border-green-500/40 bg-gradient-to-br from-neutral-900 to-black p-6 space-y-6 shadow-[0_0_40px_rgba(34,197,94,0.15)]">
 
-<StatCard
-  title="Power Score"
-  value={career?.ranking?.powerScore ?? 1000}
-  color="blue"
-/>
+  <div className="text-center">
 
-<StatCard
-  title="Career XP"
-  value={career?.ranking?.careerXP ?? 0}
-  color="purple"
-/>
+    <p className="text-xs uppercase tracking-[0.25em] text-green-400">
+      Player Level
+    </p>
 
-<StatCard
-  title="Career Points"
-  value={career?.ranking?.careerPoints ?? 0}
-  color="yellow"
-/>
+    <h2 className="text-6xl font-black text-green-400 mt-2">
+      {career?.ranking?.playerLevel ?? 1}
+    </h2>
 
-       </div>
+    <p className="text-gray-400 mt-2">
+      {career?.ranking?.careerXP ?? 0} Career XP
+    </p>
 
-      {/* CURRENT RANKINGS */}
+  </div>
 
-      <div className="space-y-4 mt-8">
+  <div>
 
-        <h2 className="text-xl font-bold text-green-400">
-          Current Rankings
-        </h2>
+    <div className="flex justify-between text-xs text-gray-400 mb-2">
+      <span>XP Progress</span>
+      <span>{career?.ranking?.careerXP ?? 0} XP</span>
+    </div>
 
-        <div className="grid grid-cols-2 gap-4">
+    <div className="w-full h-3 rounded-full bg-neutral-800 overflow-hidden">
 
-          <StatCard
-            title="Club Rank"
-            value={`#${ranking.clubPosition}`}
-            color="green"
-          />
+      <div
+        className="h-full rounded-full bg-green-500"
+        style={{
+          width: `${Math.min(
+            ((career?.ranking?.careerXP ?? 0) % 1000) / 10,
+            100
+          )}%`,
+        }}
+      />
 
-          <StatCard
-            title="Province Rank"
-            value={`#${ranking.provincePosition}`}
-            color="blue"
-          />
+    </div>
 
-          <StatCard
-            title="National Rank"
-            value={`#${ranking.nationalPosition}`}
-            color="purple"
-          />
+  </div>
 
-          <StatCard
-            title="Global Rank"
-            value={`#${ranking.internationalPosition}`}
-            color="yellow"
-          />
+  <div className="grid grid-cols-2 gap-4">
 
-        </div>
+    <StatCard
+      title="Power Score"
+      value={career?.ranking?.powerScore ?? 1000}
+      color="blue"
+    />
 
+    <StatCard
+      title="Career Points"
+      value={career?.ranking?.careerPoints ?? 0}
+      color="yellow"
+    />
+
+  </div>
+
+</div>
+
+{/* PLAYER RATING */}
+
+<div className="mt-8 rounded-3xl border border-blue-500/40 bg-gradient-to-br from-neutral-900 to-black p-6 shadow-[0_0_35px_rgba(59,130,246,0.15)]">
+
+  <p className="text-xs uppercase tracking-[0.25em] text-blue-400">
+    Overall Rating
+  </p>
+
+  <div className="mt-5 flex items-center justify-between">
+
+    <div>
+
+      <p className="text-7xl font-black text-blue-400">
+        {Math.min(
+          99,
+          Math.max(
+            1,
+            Math.floor((career?.ranking?.powerScore ?? 1000) / 25)
+          )
+        )}
+      </p>
+
+      <p className="text-gray-400 mt-2">
+        Calculated from Power Score
+      </p>
+
+    </div>
+
+    <div className="text-right space-y-2">
+
+      <div className="text-green-400">
+        ⭐ Level {career?.ranking?.playerLevel ?? 1}
       </div>
+
+      <div className="text-yellow-400">
+        🏆 {career?.ranking?.careerPoints ?? 0} Points
+      </div>
+
+      <div className="text-purple-400">
+        ⚡ {career?.ranking?.powerScore ?? 1000} Power
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+
+ {/* CURRENT RANKINGS */}
+
+<div className="mt-8 rounded-3xl border border-yellow-500/40 bg-gradient-to-br from-neutral-900 to-black p-6 shadow-[0_0_35px_rgba(250,204,21,0.15)]">
+
+  <h2 className="text-xl font-bold text-yellow-400 mb-6">
+    Current Rankings
+  </h2>
+
+  <RankingBar
+    title="Club"
+    value={ranking.clubPosition}
+    colour="green"
+  />
+
+  <RankingBar
+    title="Province"
+    value={ranking.provincePosition}
+    colour="blue"
+  />
+
+  <RankingBar
+    title="National"
+    value={ranking.nationalPosition}
+    colour="purple"
+  />
+
+  <RankingBar
+    title="Global"
+    value={ranking.internationalPosition}
+    colour="yellow"
+  />
+
+</div>
+
 {/* PERFORMANCE */}
 
 <div className="space-y-4 mt-8">
@@ -398,6 +477,44 @@ export default function MyCareerPage() {
 
 </div>
 
+{/* ACHIEVEMENTS */}
+
+<div className="space-y-4 mt-8">
+
+  <h2 className="text-xl font-bold text-green-400">
+    Achievements
+  </h2>
+
+  <div className="grid grid-cols-2 gap-4">
+
+    <StatCard
+      title="Current Win Streak"
+      value={career?.ranking?.currentWinStreak ?? 0}
+      color="green"
+    />
+
+    <StatCard
+      title="Best Win Streak"
+      value={career?.ranking?.bestWinStreak ?? 0}
+      color="blue"
+    />
+
+    <StatCard
+      title="Best Format"
+      value={career?.ranking?.bestFormat || "-"}
+      color="purple"
+    />
+
+    <StatCard
+      title="Format Win %"
+      value={`${career?.ranking?.bestFormatWinPercentage ?? 0}%`}
+      color="yellow"
+    />
+
+  </div>
+
+</div>
+
     </div>
 
   </main>
@@ -434,4 +551,64 @@ function StatCard({
       </p>
     </div>
   );
+
+}
+
+function RankingBar({
+  title,
+  value,
+  colour,
+}:{
+  title:string;
+  value:number;
+  colour:"green"|"blue"|"purple"|"yellow";
+}) {
+
+  const colours = {
+    green: "bg-green-500",
+    blue: "bg-blue-500",
+    purple: "bg-purple-500",
+    yellow: "bg-yellow-500",
+  };
+
+  const progress =
+    Math.max(
+      5,
+      Math.min(
+        100,
+        100 - (value / 1000) * 100
+      )
+    );
+
+  return (
+
+    <div className="mb-5">
+
+      <div className="flex justify-between mb-2">
+
+        <span className="text-sm text-gray-300">
+          {title}
+        </span>
+
+        <span className="font-bold text-white">
+          #{value}
+        </span>
+
+      </div>
+
+      <div className="h-3 rounded-full bg-neutral-800 overflow-hidden">
+
+        <div
+          className={`h-full ${colours[colour]}`}
+          style={{
+            width: `${progress}%`,
+          }}
+        />
+
+      </div>
+
+    </div>
+
+  );
+
 }

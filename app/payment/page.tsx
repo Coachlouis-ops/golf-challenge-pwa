@@ -151,51 +151,55 @@ export default function PaymentPage() {
             Token allocation.
           </p>
 
-          <div className="border-t border-zinc-700 pt-4 space-y-3">
-            <p className="text-green-400 font-semibold">
-              Review the Legal Policies
-            </p>
+        <div className="border-t border-zinc-700 pt-4">
+  <p className="text-green-400 font-semibold mb-4">
+    Review the Legal Policies
+  </p>
 
-            <button
-              type="button"
-              onClick={() => router.push("/legal/terms")}
-              className="block text-green-400 underline"
-            >
-              Website Terms & Conditions
-            </button>
+  <div className="flex flex-col items-start gap-3">
 
-            <button
-              type="button"
-              onClick={() => router.push("/terms")}
-              className="block text-green-400 underline"
-            >
-              Platform Terms & Conditions
-            </button>
+    <button
+      type="button"
+      onClick={() => router.push("/legal/terms")}
+      className="text-left text-green-400 underline hover:text-green-300"
+    >
+      Website Terms & Conditions
+    </button>
 
-            <button
-              type="button"
-              onClick={() => router.push("/legal/payment-policy")}
-              className="block text-green-400 underline"
-            >
-              Payment & Subscription Policy
-            </button>
+    <button
+      type="button"
+      onClick={() => router.push("/terms")}
+      className="text-left text-green-400 underline hover:text-green-300"
+    >
+      Platform Terms & Conditions
+    </button>
 
-            <button
-              type="button"
-              onClick={() => router.push("/legal/refund-policy")}
-              className="block text-green-400 underline"
-            >
-              Refund, Cancellation & Delivery Policy
-            </button>
+    <button
+      type="button"
+      onClick={() => router.push("/legal/payment-policy")}
+      className="text-left text-green-400 underline hover:text-green-300"
+    >
+      Payment & Subscription Policy
+    </button>
 
-            <button
-              type="button"
-              onClick={() => router.push("/privacy")}
-              className="block text-green-400 underline"
-            >
-              Privacy Policy
-            </button>
-          </div>
+    <button
+      type="button"
+      onClick={() => router.push("/legal/refund-policy")}
+      className="text-left text-green-400 underline hover:text-green-300"
+    >
+      Refund, Cancellation & Delivery Policy
+    </button>
+
+    <button
+      type="button"
+      onClick={() => router.push("/privacy")}
+      className="text-left text-green-400 underline hover:text-green-300"
+    >
+      Privacy Policy
+    </button>
+
+  </div>
+</div>
 
           <label className="flex items-start gap-3 pt-4 border-t border-zinc-700">
             <input

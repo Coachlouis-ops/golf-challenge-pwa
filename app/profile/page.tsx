@@ -41,12 +41,32 @@ type Profile = {
   totalGames?: number;
   matchesWon?: number;
 
-  ranking?: {
-    club: number;
-    province: number;
-    national: number;
-    international: number;
-  };
+ ranking?: {
+  // Ranking Points
+  club: number;
+  province: number;
+  national: number;
+  international: number;
+
+  // Career
+  careerPoints?: number;
+  seasonPoints?: number;
+
+  // Progression
+  powerScore?: number;
+  playerLevel?: number;
+  careerXP?: number;
+
+  // Performance
+  matchesPlayed?: number;
+  wins?: number;
+  losses?: number;
+  winPercentage?: number;
+
+  // Format
+  bestFormat?: string;
+  bestFormatWinPercentage?: number;
+};
 
   // -------------------------------------------------
   // LAST CHALLENGE SNAPSHOT (NEW)
@@ -96,11 +116,6 @@ export default function ProfilePage() {
   const [saving, setSaving] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [profileExists, setProfileExists] = useState(false);
-
-  const [profileWallet, setProfileWallet] = useState({
-    winningTokens: 0,
-    lockedTokens: 0,
-  });
 
   const [rankingPosition, setRankingPosition] = useState<RankingPosition>({
     // GLOBAL
@@ -158,13 +173,11 @@ export default function ProfilePage() {
     (async () => {
       const profileRef = doc(db, "profiles", user.uid);
       const rankingRef = doc(db, "playerRankings", user.uid);
-      const walletRef = doc(db, "wallets", user.uid);
 
-      const [profileSnap, rankingSnap, walletSnap] = await Promise.all([
-        getDoc(profileRef),
-        getDoc(rankingRef),
-        getDoc(walletRef),
-      ]);
+      const [profileSnap, rankingSnap] = await Promise.all([
+  getDoc(profileRef),
+  getDoc(rankingRef),
+]);
 
       // ---------------- PROFILE ----------------
       if (profileSnap.exists()) {
@@ -177,13 +190,6 @@ export default function ProfilePage() {
       }
 
       // ---------------- WALLET ----------------
-      if (walletSnap.exists()) {
-        const data = walletSnap.data();
-        setProfileWallet({
-          winningTokens: data.winningTokens || 0,
-          lockedTokens: data.lockedTokens || 0,
-        });
-      }
 
       // ---------------- RANKING (REAL ONLY — NO OFFSET) ----------------
       if (rankingSnap.exists()) {
@@ -492,21 +498,38 @@ export default function ProfilePage() {
                 />
               </div>
             </div>
+{/* PLAYER OVERVIEW */}
+<div className="grid grid-cols-3 gap-3">
+  <TokenCard
+    title="Total Games"
+    value={(profile as any)?.totalGames ?? 0}
+  />
 
-            {/* TOKEN STATS + LAST CHANGE */}
-            <div className="grid grid-cols-3 gap-3">
-              <TokenCard title="Total Games" value={(profile as any)?.totalGames ?? 0} />
-              <TokenCard title="Matches Won" value={(profile as any)?.matchesWon ?? 0} />
-              <TokenCard title="Your Prizes Available" value={profileWallet?.winningTokens ?? 0} />
-            </div>
+  <TokenCard
+    title="Matches Won"
+    value={(profile as any)?.matchesWon ?? 0}
+  />
+
+  <TokenCard
+    title="Level"
+    value={profile.ranking?.playerLevel ?? 1}
+  />
+</div>
 
             <div className="space-y-3 mt-4">
               <button
-                onClick={() => setIsEditing(true)}
-                className="w-full bg-green-500 hover:bg-green-400 text-black font-semibold py-3 rounded-xl"
-              >
-                Edit Profile
-              </button>
+  onClick={() => setIsEditing(true)}
+  className="w-full bg-green-500 hover:bg-green-400 text-black font-semibold py-3 rounded-xl"
+>
+  Edit Profile
+</button>
+
+<button
+  onClick={() => router.push("/profile/my-career")}
+  className="w-full bg-neutral-900 border border-green-500 text-green-400 hover:bg-green-500 hover:text-black font-semibold py-3 rounded-xl transition"
+>
+  My Career
+</button>
 
               <details className="bg-neutral-900 border border-green-500 rounded-xl p-4">
                 <summary className="cursor-pointer text-green-400 font-semibold">
@@ -651,7 +674,7 @@ export default function ProfilePage() {
               disabled={saving}
               className="w-full bg-green-500 hover:bg-green-400 text-black font-semibold py-3 rounded-xl"
             >
-              {saving ? "Saving..." : "Save Profile"}
+              {saving ? "Saving..." : "Save Changes"}
             </button>
           </div>
         )}
@@ -664,14 +687,7 @@ export default function ProfilePage() {
 }
 
 /* RANK CARD */
-function RankCard({ title, value }: { title: string; value: number }) {
-  return (
-    <div className="bg-neutral-900 border border-neutral-700 rounded-lg p-4 text-center">
-      <p className="text-xs text-gray-400">{title}</p>
-      <p className="text-2xl font-bold text-green-400">#{value}</p>
-    </div>
-  );
-}
+
 
 /* NEW ADVANCED RANK CARD */
 function RankCardAdvanced({
@@ -735,20 +751,4 @@ function TokenCard({ title, value }: { title: string; value: number }) {
   );
 }
 
-function TokenCardAdvanced({
-  title,
-  total,
-  last,
-}: {
-  title: string;
-  total: number;
-  last: number;
-}) {
-  return (
-    <div className="bg-neutral-900 border border-neutral-700 rounded-lg p-4 text-center space-y-1">
-      <p className="text-xs text-gray-400">{title}</p>
-      <p className="text-2xl font-bold text-green-400">{total}</p>
-      <p className="text-xs text-green-400">+{last}</p>
-    </div>
-  );
-}
+

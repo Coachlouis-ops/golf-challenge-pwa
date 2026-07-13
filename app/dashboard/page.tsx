@@ -7,26 +7,54 @@ import { useAuth } from "@/src/lib/AuthContext";
 
 type LockedFeature = {
   title: string;
-  route: string;
+  reason: "login" | "subscription";
 };
 
 function DashboardContent() {
   const router = useRouter();
-  const { user, loading } = useAuth();
+
+  const {
+    user,
+    loading,
+    isSubscribed,
+  } = useAuth();
 
   const [lockedFeature, setLockedFeature] =
     useState<LockedFeature | null>(null);
 
-  const openFeature = (title: string, route: string) => {
+  const openCompetitiveFeature = (
+    title: string,
+    route: string
+  ) => {
     if (!user) {
       setLockedFeature({
         title,
-        route,
+        reason: "login",
+      });
+      return;
+    }
+
+    if (!isSubscribed) {
+      setLockedFeature({
+        title,
+        reason: "subscription",
       });
       return;
     }
 
     router.push(route);
+  };
+
+  const openProfile = () => {
+    if (!user) {
+      setLockedFeature({
+        title: "My Profile",
+        reason: "login",
+      });
+      return;
+    }
+
+    router.push("/profile");
   };
 
   if (loading) {
@@ -36,6 +64,9 @@ function DashboardContent() {
       </div>
     );
   }
+
+  const competitiveFeaturesLocked =
+    !user || !isSubscribed;
 
   return (
     <div className="relative min-h-screen text-white overflow-hidden bg-black">
@@ -73,11 +104,13 @@ function DashboardContent() {
               </p>
 
               <p className="text-sm text-gray-300 mt-3 leading-6">
-                Log in and activate your subscription to unlock competitive
-                features.
+                Log in to create your player profile and activate your
+                subscription.
               </p>
 
-              <p className="text-xl font-bold mt-4">R99/month</p>
+              <p className="text-xl font-bold mt-4">
+                R99/month
+              </p>
 
               <p className="text-xs text-gray-400 mt-2">
                 Includes 100 Teez Tokens every month
@@ -95,9 +128,37 @@ function DashboardContent() {
                   onClick={() => router.push("/register")}
                   className="h-11 rounded-xl bg-green-400 text-black text-sm font-semibold hover:scale-[1.02] transition"
                 >
-                  SUBSCRIBE
+                  REGISTER
                 </button>
               </div>
+            </div>
+          )}
+
+          {user && !isSubscribed && (
+            <div className="w-full border border-green-400/60 bg-black/80 rounded-2xl p-5 text-center shadow-[0_0_20px_rgba(34,197,94,0.25)]">
+              <p className="text-green-400 font-semibold tracking-wide">
+                ACTIVATE YOUR SUBSCRIPTION
+              </p>
+
+              <p className="text-sm text-gray-300 mt-3 leading-6">
+                Subscribe to unlock challenges, rankings, invites, live
+                scoring and your token wallet.
+              </p>
+
+              <p className="text-xl font-bold mt-4">
+                R99/month
+              </p>
+
+              <p className="text-xs text-gray-400 mt-2">
+                Includes 100 Teez Tokens every month
+              </p>
+
+              <button
+                onClick={() => router.push("/payment")}
+                className="w-full h-11 mt-5 rounded-xl bg-green-400 text-black text-sm font-semibold hover:scale-[1.02] transition"
+              >
+                ACTIVATE SUBSCRIPTION
+              </button>
             </div>
           )}
 
@@ -131,7 +192,7 @@ function DashboardContent() {
 
             .locked-btn {
               position: relative;
-              opacity: 0.75;
+              opacity: 0.72;
             }
 
             .locked-btn::after {
@@ -149,46 +210,89 @@ function DashboardContent() {
 
           <button
             onClick={() =>
-              openFeature("Create Challenge", "/challenges/create")
+              openCompetitiveFeature(
+                "Create Challenge",
+                "/challenges/create"
+              )
             }
-            className={`arena-btn ${!user ? "locked-btn" : ""}`}
+            className={`arena-btn ${
+              competitiveFeaturesLocked
+                ? "locked-btn"
+                : ""
+            }`}
           >
             CREATE CHALLENGE
           </button>
 
           <button
             onClick={() =>
-              openFeature("My Challenges", "/my-challenges")
+              openCompetitiveFeature(
+                "My Challenges",
+                "/my-challenges"
+              )
             }
-            className={`arena-btn ${!user ? "locked-btn" : ""}`}
+            className={`arena-btn ${
+              competitiveFeaturesLocked
+                ? "locked-btn"
+                : ""
+            }`}
           >
             MY CHALLENGES
           </button>
 
           <button
-            onClick={() => openFeature("My Invites", "/my-invites")}
-            className={`arena-btn ${!user ? "locked-btn" : ""}`}
+            onClick={() =>
+              openCompetitiveFeature(
+                "My Invites",
+                "/my-invites"
+              )
+            }
+            className={`arena-btn ${
+              competitiveFeaturesLocked
+                ? "locked-btn"
+                : ""
+            }`}
           >
             MY INVITES
           </button>
 
           <button
-            onClick={() => openFeature("My Profile", "/profile")}
-            className={`arena-btn ${!user ? "locked-btn" : ""}`}
+            onClick={openProfile}
+            className={`arena-btn ${
+              !user ? "locked-btn" : ""
+            }`}
           >
             MY PROFILE
           </button>
 
           <button
-            onClick={() => openFeature("Token Wallet", "/wallet")}
-            className={`arena-btn ${!user ? "locked-btn" : ""}`}
+            onClick={() =>
+              openCompetitiveFeature(
+                "Token Wallet",
+                "/wallet"
+              )
+            }
+            className={`arena-btn ${
+              competitiveFeaturesLocked
+                ? "locked-btn"
+                : ""
+            }`}
           >
             TOKEN WALLET
           </button>
 
           <button
-            onClick={() => openFeature("View Rankings", "/rankings")}
-            className={`arena-btn ${!user ? "locked-btn" : ""}`}
+            onClick={() =>
+              openCompetitiveFeature(
+                "View Rankings",
+                "/rankings"
+              )
+            }
+            className={`arena-btn ${
+              competitiveFeaturesLocked
+                ? "locked-btn"
+                : ""
+            }`}
           >
             VIEW RANKINGS
           </button>
@@ -198,31 +302,51 @@ function DashboardContent() {
               SUBSCRIPTION & ACCOUNT
             </p>
 
-            <button
-              onClick={() =>
-                router.push(user ? "/payment" : "/register")
-              }
-              className="arena-btn"
-            >
-              {user ? "MANAGE SUBSCRIPTION" : "ACTIVATE SUBSCRIPTION"}
-            </button>
+            {!user && (
+              <>
+                <button
+                  onClick={() => router.push("/login")}
+                  className="arena-btn"
+                >
+                  LOG IN
+                </button>
 
-            {user && (
+                <button
+                  onClick={() => router.push("/register")}
+                  className="arena-btn"
+                >
+                  REGISTER
+                </button>
+              </>
+            )}
+
+            {user && !isSubscribed && (
               <button
-                onClick={() => router.push("/cancel-subscription")}
+                onClick={() => router.push("/payment")}
                 className="arena-btn"
               >
-                CANCEL SUBSCRIPTION
+                ACTIVATE SUBSCRIPTION
               </button>
             )}
 
-            {!user && (
-              <button
-                onClick={() => router.push("/login")}
-                className="arena-btn"
-              >
-                LOG IN
-              </button>
+            {user && isSubscribed && (
+              <>
+                <button
+                  onClick={() => router.push("/payment")}
+                  className="arena-btn"
+                >
+                  MANAGE SUBSCRIPTION
+                </button>
+
+                <button
+                  onClick={() =>
+                    router.push("/cancel-subscription")
+                  }
+                  className="arena-btn"
+                >
+                  CANCEL SUBSCRIPTION
+                </button>
+              </>
             )}
           </div>
 
@@ -239,14 +363,18 @@ function DashboardContent() {
             </button>
 
             <button
-              onClick={() => router.push("/legal/payment-policy")}
+              onClick={() =>
+                router.push("/legal/payment-policy")
+              }
               className="text-xs tracking-widest text-gray-300 underline hover:text-white"
             >
               PAYMENT & SUBSCRIPTION POLICY
             </button>
 
             <button
-              onClick={() => router.push("/legal/refund-policy")}
+              onClick={() =>
+                router.push("/legal/refund-policy")
+              }
               className="text-xs tracking-widest text-gray-300 underline hover:text-white"
             >
               REFUND, CANCELLATION & DELIVERY POLICY
@@ -280,29 +408,48 @@ function DashboardContent() {
               {lockedFeature.title}
             </h2>
 
-            <p className="text-sm text-gray-300 mt-4 leading-6">
-              Log in and activate your Teez subscription to use this feature.
-            </p>
+            {lockedFeature.reason === "login" ? (
+              <>
+                <p className="text-sm text-gray-300 mt-4 leading-6">
+                  Log in or register to access this feature.
+                </p>
 
-            <p className="text-2xl font-bold mt-5">R99/month</p>
+                <button
+                  onClick={() => router.push("/login")}
+                  className="w-full h-12 mt-6 rounded-xl border border-white/40 font-semibold hover:bg-white hover:text-black transition"
+                >
+                  LOG IN
+                </button>
 
-            <p className="text-xs text-gray-400 mt-2">
-              Includes 100 Teez Tokens every month
-            </p>
+                <button
+                  onClick={() => router.push("/register")}
+                  className="w-full h-12 mt-3 rounded-xl bg-green-400 text-black font-semibold hover:scale-[1.02] transition"
+                >
+                  REGISTER
+                </button>
+              </>
+            ) : (
+              <>
+                <p className="text-sm text-gray-300 mt-4 leading-6">
+                  Subscribe to unlock this competitive feature.
+                </p>
 
-            <button
-              onClick={() => router.push("/login")}
-              className="w-full h-12 mt-6 rounded-xl border border-white/40 font-semibold hover:bg-white hover:text-black transition"
-            >
-              LOG IN
-            </button>
+                <p className="text-2xl font-bold mt-5">
+                  R99/month
+                </p>
 
-            <button
-              onClick={() => router.push("/register")}
-              className="w-full h-12 mt-3 rounded-xl bg-green-400 text-black font-semibold hover:scale-[1.02] transition"
-            >
-              ACTIVATE SUBSCRIPTION
-            </button>
+                <p className="text-xs text-gray-400 mt-2">
+                  Includes 100 Teez Tokens every month
+                </p>
+
+                <button
+                  onClick={() => router.push("/payment")}
+                  className="w-full h-12 mt-6 rounded-xl bg-green-400 text-black font-semibold hover:scale-[1.02] transition"
+                >
+                  ACTIVATE SUBSCRIPTION
+                </button>
+              </>
+            )}
 
             <button
               onClick={() => setLockedFeature(null)}

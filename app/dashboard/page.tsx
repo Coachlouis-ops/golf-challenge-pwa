@@ -116,6 +116,13 @@ function DashboardContent() {
                 Includes 100 Teez Tokens every month
               </p>
 
+              <button
+  onClick={() => router.push("/legal/payment-policy")}
+  className="mt-2 text-xs text-green-400 underline hover:text-green-300"
+>
+  View Payment & Subscription Policy
+</button>
+
               <div className="grid grid-cols-2 gap-3 mt-5">
                 <button
                   onClick={() => router.push("/login")}

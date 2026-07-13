@@ -15,40 +15,57 @@ type CareerData = {
   club: string;
   division: string;
 
-ranking?: {
+  ranking?: {
 
-  club: number;
-  province: number;
-  national: number;
-  international: number;
+    club: number;
+    province: number;
+    national: number;
+    international: number;
 
-  powerScore: number;
-  playerLevel: number;
-  careerXP: number;
+    powerScore: number;
+    playerLevel: number;
+    careerXP: number;
 
-  careerPoints: number;
+    careerPoints: number;
 
-  matchesPlayed: number;
-  wins: number;
-  losses: number;
+    matchesPlayed: number;
+    wins: number;
+    losses: number;
 
-  winPercentage: number;
+    winPercentage: number;
 
-  bestFinish: number;
+    bestFinish: number;
 
-  top3: number;
-  top5: number;
-  top10: number;
+    top3: number;
+    top5: number;
+    top10: number;
 
-  currentWinStreak: number;
-  bestWinStreak: number;
+    currentWinStreak: number;
+    bestWinStreak: number;
 
-  currentLosingStreak: number;
-  bestLosingStreak: number;
+    currentLosingStreak: number;
+    bestLosingStreak: number;
 
-  bestFormat: string;
-  bestFormatWinPercentage: number;
-};
+    bestFormat: string;
+    bestFormatWinPercentage: number;
+  };
+
+  lastChallenge?: {
+    ranking?: {
+      before?: {
+        club: number;
+        province: number;
+        national: number;
+        international: number;
+      };
+      after?: {
+        club: number;
+        province: number;
+        national: number;
+        international: number;
+      };
+    };
+  };
 
 };
 
@@ -301,7 +318,63 @@ export default function MyCareerPage() {
 
 </div>
 
+{/* LAST CHALLENGE */}
 
+<div className="mt-8 rounded-3xl border border-cyan-500/40 bg-gradient-to-br from-neutral-900 to-black p-6 shadow-[0_0_35px_rgba(6,182,212,0.15)]">
+
+  <h2 className="text-xl font-bold text-cyan-400 mb-5">
+    Last Challenge
+  </h2>
+
+  <MovementRow
+  title="Club"
+  before={career?.lastChallenge?.ranking?.before?.club ?? 0}
+  after={career?.lastChallenge?.ranking?.after?.club ?? 0}
+/>
+
+<MovementRow
+  title="Province"
+  before={career?.lastChallenge?.ranking?.before?.province ?? 0}
+  after={career?.lastChallenge?.ranking?.after?.province ?? 0}
+/>
+
+<MovementRow
+  title="National"
+  before={career?.lastChallenge?.ranking?.before?.national ?? 0}
+  after={career?.lastChallenge?.ranking?.after?.national ?? 0}
+/>
+
+<MovementRow
+  title="Global"
+  before={career?.lastChallenge?.ranking?.before?.international ?? 0}
+  after={career?.lastChallenge?.ranking?.after?.international ?? 0}
+/>
+
+  <MovementRow
+    title="Club"
+    before={career?.lastChallenge?.ranking?.before?.club ?? 0}
+    after={career?.lastChallenge?.ranking?.after?.club ?? 0}
+  />
+
+  <MovementRow
+    title="Province"
+    before={career?.lastChallenge?.ranking?.before?.province ?? 0}
+    after={career?.lastChallenge?.ranking?.after?.province ?? 0}
+  />
+
+  <MovementRow
+    title="National"
+    before={career?.lastChallenge?.ranking?.before?.national ?? 0}
+    after={career?.lastChallenge?.ranking?.after?.national ?? 0}
+  />
+
+  <MovementRow
+    title="Global"
+    before={career?.lastChallenge?.ranking?.before?.international ?? 0}
+    after={career?.lastChallenge?.ranking?.after?.international ?? 0}
+  />
+
+</div>
 
  {/* CURRENT RANKINGS */}
 
@@ -604,6 +677,62 @@ function RankingBar({
             width: `${progress}%`,
           }}
         />
+
+      </div>
+
+    </div>
+
+  );
+
+}
+
+function MovementRow({
+  title,
+  before,
+  after,
+}: {
+  title: string;
+  before: number;
+  after: number;
+}) {
+
+  const movement = before - after;
+
+  const colour =
+    movement > 0
+      ? "text-green-400"
+      : movement < 0
+      ? "text-red-400"
+      : "text-gray-400";
+
+  const symbol =
+    movement > 0
+      ? "▲"
+      : movement < 0
+      ? "▼"
+      : "•";
+
+  return (
+
+    <div className="flex items-center justify-between py-3 border-b border-neutral-800 last:border-b-0">
+
+      <div>
+
+        <p className="text-white font-medium">
+          {title}
+        </p>
+
+        <p className="text-xs text-gray-500">
+          {before} → {after}
+        </p>
+
+      </div>
+
+      <div className={`font-bold text-lg ${colour}`}>
+
+        {movement === 0
+          ? "No Change"
+          : `${symbol} ${Math.abs(movement)}`}
 
       </div>
 

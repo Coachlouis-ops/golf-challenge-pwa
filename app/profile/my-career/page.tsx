@@ -163,43 +163,33 @@ export default function MyCareerPage() {
     ← Back
   </button>
 
-  {/* HERO */}
+ {/* HERO */}
 
-  <div className="rounded-3xl border border-green-500/40 bg-gradient-to-br from-neutral-900 via-black to-neutral-900 shadow-[0_0_40px_rgba(34,197,94,0.15)] p-6">
+<div className="rounded-3xl overflow-hidden border border-green-500/40 bg-gradient-to-br from-neutral-900 via-black to-neutral-900 shadow-[0_0_45px_rgba(34,197,94,0.18)]">
 
-    <div className="flex items-center justify-between">
+  <div className="p-6">
+
+    <div className="flex justify-between items-start">
 
       <div>
 
-        <p className="text-xs uppercase tracking-[0.25em] text-green-400">
-          My Career
+        <p className="text-xs uppercase tracking-[0.30em] text-green-400">
+          PLAYER PROFILE
         </p>
 
-        <h1 className="text-3xl font-black mt-2">
+        <h1 className="text-4xl font-black mt-3">
           {career?.battleName}
         </h1>
 
-        <p className="text-gray-400 mt-1">
+        <p className="text-gray-400 mt-2">
           {career?.name} {career?.surname}
         </p>
 
-        <div className="mt-4 flex gap-2 flex-wrap">
-
-          <span className="px-3 py-1 rounded-full bg-green-500/20 text-green-400 text-xs">
-            {career?.division}
-          </span>
-
-          <span className="px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 text-xs">
-            {career?.club}
-          </span>
-
-        </div>
-
       </div>
 
-      <div className="h-24 w-24 rounded-full border-2 border-green-500 flex items-center justify-center bg-neutral-900">
+      <div className="h-28 w-28 rounded-full border-4 border-green-500 bg-neutral-900 flex items-center justify-center shadow-[0_0_25px_rgba(34,197,94,0.35)]">
 
-        <span className="text-4xl">
+        <span className="text-5xl">
           ⛳
         </span>
 
@@ -207,7 +197,61 @@ export default function MyCareerPage() {
 
     </div>
 
+    <div className="mt-8 grid grid-cols-3 gap-3">
+
+      <div className="rounded-xl bg-black/40 p-4 text-center">
+
+        <p className="text-gray-500 text-xs">
+          LEVEL
+        </p>
+
+        <p className="text-3xl font-black text-green-400">
+          {career?.ranking?.playerLevel ?? 1}
+        </p>
+
+      </div>
+
+      <div className="rounded-xl bg-black/40 p-4 text-center">
+
+        <p className="text-gray-500 text-xs">
+          POWER
+        </p>
+
+        <p className="text-3xl font-black text-blue-400">
+          {career?.ranking?.powerScore ?? 1000}
+        </p>
+
+      </div>
+
+      <div className="rounded-xl bg-black/40 p-4 text-center">
+
+        <p className="text-gray-500 text-xs">
+          POINTS
+        </p>
+
+        <p className="text-3xl font-black text-yellow-400">
+          {career?.ranking?.careerPoints ?? 0}
+        </p>
+
+      </div>
+
+    </div>
+
+    <div className="mt-6 flex flex-wrap gap-2">
+
+      <span className="px-4 py-2 rounded-full bg-green-500/20 text-green-400 text-sm font-semibold">
+        {career?.division}
+      </span>
+
+      <span className="px-4 py-2 rounded-full bg-blue-500/20 text-blue-300 text-sm font-semibold">
+        {career?.club}
+      </span>
+
+    </div>
+
   </div>
+
+</div>
 
 {/* PLAYER OVERVIEW */}
 
@@ -270,47 +314,71 @@ export default function MyCareerPage() {
 
 </div>
 
-{/* PLAYER RATING */}
+{/* OVERALL RATING */}
 
-<div className="mt-8 rounded-3xl border border-blue-500/40 bg-gradient-to-br from-neutral-900 to-black p-6 shadow-[0_0_35px_rgba(59,130,246,0.15)]">
+<div className="mt-8 rounded-3xl border border-blue-500/40 bg-gradient-to-br from-neutral-900 to-black p-8 shadow-[0_0_45px_rgba(59,130,246,0.18)]">
 
-  <p className="text-xs uppercase tracking-[0.25em] text-blue-400">
+  <p className="text-center text-sm uppercase tracking-[0.3em] text-blue-400">
     Overall Rating
   </p>
 
-  <div className="mt-5 flex items-center justify-between">
+  <div className="mt-5 text-center">
 
-    <div>
+    <p className="text-8xl font-black text-blue-400">
+      {Math.min(
+        99,
+        Math.max(
+          1,
+          Math.floor((career?.ranking?.powerScore ?? 1000) / 25)
+        )
+      )}
+    </p>
 
-      <p className="text-7xl font-black text-blue-400">
-        {Math.min(
-          99,
-          Math.max(
-            1,
-            Math.floor((career?.ranking?.powerScore ?? 1000) / 25)
-          )
-        )}
+    <div className="mt-3 text-yellow-400 text-3xl">
+      ★★★★★
+    </div>
+
+    <p className="mt-5 text-gray-400">
+      Based on your complete competitive career.
+    </p>
+
+  </div>
+
+  <div className="grid grid-cols-3 gap-4 mt-8">
+
+    <div className="text-center">
+
+      <p className="text-gray-500 text-xs">
+        LEVEL
       </p>
 
-      <p className="text-gray-400 mt-2">
-        Calculated from Power Score
+      <p className="text-2xl font-bold text-green-400">
+        {career?.ranking?.playerLevel ?? 1}
       </p>
 
     </div>
 
-    <div className="text-right space-y-2">
+    <div className="text-center">
 
-      <div className="text-green-400">
-        ⭐ Level {career?.ranking?.playerLevel ?? 1}
-      </div>
+      <p className="text-gray-500 text-xs">
+        POWER
+      </p>
 
-      <div className="text-yellow-400">
-        🏆 {career?.ranking?.careerPoints ?? 0} Points
-      </div>
+      <p className="text-2xl font-bold text-blue-400">
+        {career?.ranking?.powerScore ?? 0}
+      </p>
 
-      <div className="text-purple-400">
-        ⚡ {career?.ranking?.powerScore ?? 1000} Power
-      </div>
+    </div>
+
+    <div className="text-center">
+
+      <p className="text-gray-500 text-xs">
+        POINTS
+      </p>
+
+      <p className="text-2xl font-bold text-yellow-400">
+        {career?.ranking?.careerPoints ?? 0}
+      </p>
 
     </div>
 
@@ -376,6 +444,103 @@ export default function MyCareerPage() {
 
 </div>
 
+{/* PLAYER PROGRESS */}
+
+<div className="mt-8 rounded-3xl border border-green-500/40 bg-gradient-to-br from-neutral-900 to-black p-6 shadow-[0_0_35px_rgba(34,197,94,0.15)]">
+
+  <h2 className="text-xl font-bold text-green-400 mb-6">
+    Player Progress
+  </h2>
+
+  <div className="text-center">
+
+    <p className="text-6xl font-black text-green-400">
+      {career?.ranking?.playerLevel ?? 1}
+    </p>
+
+    <p className="text-gray-400 mt-2">
+      Current Level
+    </p>
+
+  </div>
+
+  <div className="mt-6">
+
+    <div className="flex justify-between text-xs text-gray-400 mb-2">
+
+      <span>XP Progress</span>
+
+      <span>
+        {career?.ranking?.careerXP ?? 0} XP
+      </span>
+
+    </div>
+
+    <div className="w-full h-4 rounded-full bg-neutral-800 overflow-hidden">
+
+      <div
+        className="h-full bg-green-500 rounded-full"
+        style={{
+          width: `${Math.min(
+            ((career?.ranking?.careerXP ?? 0) % 1000) / 10,
+            100
+          )}%`,
+        }}
+      />
+
+    </div>
+
+    <p className="text-center text-gray-500 text-xs mt-3">
+
+      {1000 - ((career?.ranking?.careerXP ?? 0) % 1000)} XP until next level
+
+    </p>
+
+  </div>
+
+</div>
+
+
+{/* HALL OF FAME */}
+
+<div className="mt-8 rounded-3xl border border-amber-500/40 bg-gradient-to-br from-neutral-900 to-black p-6 shadow-[0_0_40px_rgba(245,158,11,0.15)]">
+
+  <h2 className="text-xl font-bold text-amber-400 mb-6">
+    Hall of Fame
+  </h2>
+
+  <div className="grid grid-cols-2 gap-4">
+
+    <StatCard
+      title="Best Finish"
+      value={career?.ranking?.bestFinish ?? "-"}
+      color="green"
+    />
+
+    <StatCard
+      title="Top 3 Finishes"
+      value={career?.ranking?.top3 ?? 0}
+      color="blue"
+    />
+
+    <StatCard
+      title="Top 5 Finishes"
+      value={career?.ranking?.top5 ?? 0}
+      color="purple"
+    />
+
+    <StatCard
+      title="Top 10 Finishes"
+      value={career?.ranking?.top10 ?? 0}
+      color="yellow"
+    />
+
+  </div>
+
+</div>
+
+
+
  {/* CURRENT RANKINGS */}
 
 <div className="mt-8 rounded-3xl border border-yellow-500/40 bg-gradient-to-br from-neutral-900 to-black p-6 shadow-[0_0_35px_rgba(250,204,21,0.15)]">
@@ -410,18 +575,18 @@ export default function MyCareerPage() {
 
 </div>
 
-{/* PERFORMANCE */}
+{/* PLAYER PERFORMANCE */}
 
-<div className="space-y-4 mt-8">
+<div className="mt-8 rounded-3xl border border-indigo-500/40 bg-gradient-to-br from-neutral-900 to-black p-6 shadow-[0_0_35px_rgba(99,102,241,0.15)]">
 
-  <h2 className="text-xl font-bold text-green-400">
-    Performance
+  <h2 className="text-xl font-bold text-indigo-400 mb-6">
+    Player Performance
   </h2>
 
   <div className="grid grid-cols-2 gap-4">
 
     <StatCard
-      title="Matches Played"
+      title="Matches"
       value={career?.ranking?.matchesPlayed ?? 0}
       color="green"
     />
@@ -438,127 +603,11 @@ export default function MyCareerPage() {
       color="purple"
     />
 
-<StatCard
-  title="Win %"
-  value={`${career?.ranking?.winPercentage ?? 0}%`}
-  color="yellow"
-/>
-
-  </div>
-
-</div>
-
-{/* CAREER RECORD */}
-
-<div className="space-y-4 mt-8">
-
-  <h2 className="text-xl font-bold text-green-400">
-    Career Record
-  </h2>
-
-  <div className="grid grid-cols-2 gap-4">
-
     <StatCard
-      title="Best Finish"
-      value={career?.ranking?.bestFinish ?? "-"}
-      color="green"
-    />
-
-    <StatCard
-      title="Top 3"
-      value={career?.ranking?.top3 ?? 0}
-      color="blue"
-    />
-
-    <StatCard
-      title="Top 5"
-      value={career?.ranking?.top5 ?? 0}
-      color="purple"
-    />
-
-    <StatCard
-      title="Top 10"
-      value={career?.ranking?.top10 ?? 0}
+      title="Win %"
+      value={`${career?.ranking?.winPercentage ?? 0}%`}
       color="yellow"
     />
-
-  </div>
-
-</div>
-
-{/* STREAKS */}
-
-<div className="space-y-4 mt-8">
-
-  <h2 className="text-xl font-bold text-green-400">
-    Streaks
-  </h2>
-
-  <div className="grid grid-cols-2 gap-4">
-
-    <StatCard
-      title="Current Win Streak"
-      value={career?.ranking?.currentWinStreak ?? 0}
-      color="green"
-    />
-
-    <StatCard
-      title="Best Win Streak"
-      value={career?.ranking?.bestWinStreak ?? 0}
-      color="blue"
-    />
-
-    <StatCard
-      title="Current Losing Streak"
-      value={career?.ranking?.currentLosingStreak ?? 0}
-      color="purple"
-    />
-
-    <StatCard
-      title="Worst Losing Streak"
-      value={career?.ranking?.bestLosingStreak ?? 0}
-      color="yellow"
-    />
-
-  </div>
-
-</div>
-
-{/* BEST FORMAT */}
-
-<div className="space-y-4 mt-8">
-
-  <h2 className="text-xl font-bold text-green-400">
-    Best Format
-  </h2>
-
-  <div className="rounded-2xl border border-green-500/40 bg-neutral-900 p-6">
-
-    <p className="text-xs uppercase tracking-widest text-gray-400">
-      Favourite Competition Format
-    </p>
-
-    <h3 className="mt-3 text-3xl font-black text-green-400">
-      {career?.ranking?.bestFormat || "-"}
-    </h3>
-
-    <p className="mt-2 text-lg text-white">
-      {career?.ranking?.bestFormatWinPercentage ?? 0}% Win Rate
-    </p>
-
-  </div>
-
-</div>
-
-{/* ACHIEVEMENTS */}
-
-<div className="space-y-4 mt-8">
-
-  <h2 className="text-xl font-bold text-green-400">
-    Achievements
-  </h2>
-
-  <div className="grid grid-cols-2 gap-4">
 
     <StatCard
       title="Current Win Streak"
@@ -582,6 +631,104 @@ export default function MyCareerPage() {
       title="Format Win %"
       value={`${career?.ranking?.bestFormatWinPercentage ?? 0}%`}
       color="yellow"
+    />
+
+  </div>
+
+</div>
+
+
+{/* CAREER SUMMARY */}
+
+<div className="mt-8 rounded-3xl border border-pink-500/40 bg-gradient-to-br from-neutral-900 to-black p-6 shadow-[0_0_35px_rgba(236,72,153,0.15)]">
+
+  <h2 className="text-xl font-bold text-pink-400 mb-6">
+    Career Summary
+  </h2>
+
+  <div className="space-y-5">
+
+    <SummaryRow
+      label="Career Points"
+      value={career?.ranking?.careerPoints ?? 0}
+    />
+
+    <SummaryRow
+      label="Power Score"
+      value={career?.ranking?.powerScore ?? 0}
+    />
+
+    <SummaryRow
+      label="Player Level"
+      value={career?.ranking?.playerLevel ?? 1}
+    />
+
+    <SummaryRow
+      label="Career XP"
+      value={career?.ranking?.careerXP ?? 0}
+    />
+
+  </div>
+
+</div>
+
+
+{/* ACHIEVEMENTS */}
+
+<div className="mt-8 rounded-3xl border border-orange-500/40 bg-gradient-to-br from-neutral-900 to-black p-6 shadow-[0_0_40px_rgba(249,115,22,0.15)]">
+
+  <h2 className="text-xl font-bold text-orange-400 mb-6">
+    Achievements
+  </h2>
+
+  <div className="grid grid-cols-2 gap-4">
+
+    <AchievementBadge
+      icon="🥇"
+      title="First Victory"
+      unlocked={(career?.ranking?.wins ?? 0) >= 1}
+    />
+
+    <AchievementBadge
+      icon="🔥"
+      title="5 Win Streak"
+      unlocked={(career?.ranking?.bestWinStreak ?? 0) >= 5}
+    />
+
+    <AchievementBadge
+      icon="⚡"
+      title="Level 10"
+      unlocked={(career?.ranking?.playerLevel ?? 1) >= 10}
+    />
+
+    <AchievementBadge
+      icon="💯"
+      title="100 Career Points"
+      unlocked={(career?.ranking?.careerPoints ?? 0) >= 100}
+    />
+
+    <AchievementBadge
+      icon="🌍"
+      title="Top 100"
+      unlocked={ranking.internationalPosition <= 100 && ranking.internationalPosition > 0}
+    />
+
+    <AchievementBadge
+      icon="🎯"
+      title="75% Win Rate"
+      unlocked={(career?.ranking?.winPercentage ?? 0) >= 75}
+    />
+
+    <AchievementBadge
+      icon="🏆"
+      title="Top 10 Club"
+      unlocked={ranking.clubPosition <= 10 && ranking.clubPosition > 0}
+    />
+
+    <AchievementBadge
+      icon="⭐"
+      title="Rising Star"
+      unlocked={(career?.ranking?.playerLevel ?? 1) >= 5}
     />
 
   </div>
@@ -735,6 +882,64 @@ function MovementRow({
           : `${symbol} ${Math.abs(movement)}`}
 
       </div>
+
+    </div>
+
+  );
+
+}
+function SummaryRow({
+  label,
+  value,
+}:{
+  label:string;
+  value:number|string;
+}){
+
+  return(
+
+    <div className="flex items-center justify-between border-b border-neutral-800 pb-3">
+
+      <span className="text-gray-400">
+        {label}
+      </span>
+
+      <span className="text-2xl font-bold text-white">
+        {value}
+      </span>
+
+    </div>
+
+  );
+
+}
+function AchievementBadge({
+  icon,
+  title,
+  unlocked,
+}:{
+  icon:string;
+  title:string;
+  unlocked:boolean;
+}){
+
+  return(
+
+    <div
+      className={`rounded-2xl border p-5 text-center transition-all ${
+        unlocked
+          ? "border-yellow-500 bg-yellow-500/10 shadow-[0_0_20px_rgba(234,179,8,0.25)]"
+          : "border-neutral-700 bg-neutral-900 opacity-50"
+      }`}
+    >
+
+      <div className="text-4xl">
+        {icon}
+      </div>
+
+      <p className="mt-3 font-semibold">
+        {title}
+      </p>
 
     </div>
 

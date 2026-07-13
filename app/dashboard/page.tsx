@@ -288,22 +288,6 @@ function DashboardContent() {
             TOKEN WALLET
           </button>
 
-          <button
-            onClick={() =>
-              openCompetitiveFeature(
-                "View Rankings",
-                "/rankings"
-              )
-            }
-            className={`arena-btn ${
-              competitiveFeaturesLocked
-                ? "locked-btn"
-                : ""
-            }`}
-          >
-            VIEW RANKINGS
-          </button>
-
           <div className="w-full border-t border-white/20 pt-6 mt-2 flex flex-col gap-4">
             <p className="text-center text-xs tracking-[2px] text-gray-300">
               SUBSCRIPTION & ACCOUNT

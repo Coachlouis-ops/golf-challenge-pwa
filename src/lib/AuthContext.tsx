@@ -24,14 +24,25 @@ import {
   db,
 } from "./firebase";
 
+type SubscriptionStatus =
+  | "active"
+  | "inactive"
+  | "cancelled"
+  | "expired"
+  | "pending";
+
 type AuthContextType = {
   user: User | null;
   loading: boolean;
+  subscriptionStatus: SubscriptionStatus;
+  isSubscribed: boolean;
 };
 
 const AuthContext = createContext<AuthContextType>({
   user: null,
   loading: true,
+  subscriptionStatus: "inactive",
+  isSubscribed: false,
 });
 
 export function AuthProvider({
@@ -42,159 +53,227 @@ export function AuthProvider({
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
+  const [subscriptionStatus, setSubscriptionStatus] =
+    useState<SubscriptionStatus>("inactive");
+
   useEffect(() => {
-    const unsub = onAuthStateChanged(auth, async (firebaseUser) => {
-      if (!firebaseUser) {
-        setUser(null);
-        setLoading(false);
-        return;
-      }
+    const unsub = onAuthStateChanged(
+      auth,
+      async (firebaseUser) => {
+        setLoading(true);
 
-      try {
-        const isPhoneOnlyUser =
-          firebaseUser.providerData.length === 1 &&
-          firebaseUser.providerData[0]?.providerId === "phone";
-
-        if (isPhoneOnlyUser) {
-          console.log("Skipping bootstrap for temporary phone auth user");
+        if (!firebaseUser) {
+          setUser(null);
+          setSubscriptionStatus("inactive");
           setLoading(false);
           return;
         }
 
-        const uid = firebaseUser.uid;
+        try {
+          const isPhoneOnlyUser =
+            firebaseUser.providerData.length === 1 &&
+            firebaseUser.providerData[0]?.providerId === "phone";
 
-        // -----------------------------------
-        // SCORING CLUB CHECK
-        // -----------------------------------
-        const scoringClubRef = doc(db, "scoringClubs", uid);
-        const scoringClubSnap = await getDoc(scoringClubRef);
+          if (isPhoneOnlyUser) {
+            console.log(
+              "Skipping bootstrap for temporary phone auth user"
+            );
 
-        if (scoringClubSnap.exists()) {
-          setUser(firebaseUser);
-          setLoading(false);
-          return;
-        }
+            setUser(null);
+            setSubscriptionStatus("inactive");
+            setLoading(false);
+            return;
+          }
 
-        // -----------------------------------
-        // PROFILE CHECK / CREATE
-        // -----------------------------------
-        const profileRef = doc(db, "profiles", uid);
-        const profileSnap = await getDoc(profileRef);
+          const uid = firebaseUser.uid;
 
-        if (!profileSnap.exists()) {
-          await setDoc(profileRef, {
-            uid,
-            email: firebaseUser.email ?? "",
+          // -----------------------------------
+          // SCORING CLUB CHECK
+          // -----------------------------------
+          const scoringClubRef = doc(
+            db,
+            "scoringClubs",
+            uid
+          );
 
-            name: "",
-            surname: "",
-            battleName: "",
-            club: "",
-            division: "",
+          const scoringClubSnap =
+            await getDoc(scoringClubRef);
 
-            phoneNumber: "",
-            phoneVerified: false,
+          if (scoringClubSnap.exists()) {
+            setUser(firebaseUser);
+            setSubscriptionStatus("active");
+            setLoading(false);
+            return;
+          }
 
-            stats: {
-              matchesPlayed: 0,
-              wins: 0,
-              losses: 0,
-              winPercentage: 0,
-              currentStreak: 0,
-              bestStreak: 0,
-            },
+          // -----------------------------------
+          // PROFILE CHECK / CREATE
+          // -----------------------------------
+          const profileRef = doc(
+            db,
+            "profiles",
+            uid
+          );
 
-            ranking: {
+          const profileSnap =
+            await getDoc(profileRef);
+
+          if (!profileSnap.exists()) {
+            await setDoc(profileRef, {
+              uid,
+              email: firebaseUser.email ?? "",
+
+              name: "",
+              surname: "",
+              battleName: "",
+              club: "",
+              division: "",
+
+              phoneNumber: "",
+              phoneVerified: false,
+
+              stats: {
+                matchesPlayed: 0,
+                wins: 0,
+                losses: 0,
+                winPercentage: 0,
+                currentStreak: 0,
+                bestStreak: 0,
+              },
+
+              ranking: {
+                club: 0,
+                division: 0,
+                national: 0,
+              },
+
+              achievements: [],
+
+              tokensPlayed: 0,
+              tokensWon: 0,
+
+              profileComplete: false,
+
+              createdAt: serverTimestamp(),
+              updatedAt: serverTimestamp(),
+            });
+          }
+
+          // -----------------------------------
+          // WALLET CHECK / CREATE
+          // -----------------------------------
+          const walletRef = doc(
+            db,
+            "wallets",
+            uid
+          );
+
+          const walletSnap =
+            await getDoc(walletRef);
+
+          if (!walletSnap.exists()) {
+            await setDoc(walletRef, {
+              balance: 0,
+              lifetimeWon: 0,
+              lifetimeSpent: 0,
+
+              subscriptionTokensIssued: 0,
+              topUpTokensPurchased: 0,
+
+              createdAt: serverTimestamp(),
+              updatedAt: serverTimestamp(),
+            });
+          }
+
+          // -----------------------------------
+          // USER SUBSCRIPTION CHECK / CREATE
+          // -----------------------------------
+          const userRef = doc(
+            db,
+            "users",
+            uid
+          );
+
+          const userSnap =
+            await getDoc(userRef);
+
+          let currentSubscriptionStatus:
+            SubscriptionStatus = "inactive";
+
+          if (!userSnap.exists()) {
+            await setDoc(userRef, {
+              uid,
+              email: firebaseUser.email ?? "",
+              role: "player",
+
+              subscriptionStatus: "inactive",
+              subscriptionPlan: "",
+              subscriptionStartedAt: null,
+              subscriptionExpires: null,
+
+              createdAt: serverTimestamp(),
+              updatedAt: serverTimestamp(),
+            });
+          } else {
+            const userData = userSnap.data();
+
+            currentSubscriptionStatus =
+              (userData.subscriptionStatus as SubscriptionStatus) ||
+              "inactive";
+          }
+
+          // -----------------------------------
+          // PLAYER RANKING CHECK / CREATE
+          // -----------------------------------
+          const rankingRef = doc(
+            db,
+            "playerRankings",
+            uid
+          );
+
+          const rankingSnap =
+            await getDoc(rankingRef);
+
+          if (!rankingSnap.exists()) {
+            await setDoc(rankingRef, {
               club: 0,
               division: 0,
               national: 0,
-            },
+              updatedAt: serverTimestamp(),
+            });
+          }
 
-            achievements: [],
+          setUser(firebaseUser);
+          setSubscriptionStatus(
+            currentSubscriptionStatus
+          );
+        } catch (err) {
+          console.error(
+            "Auth bootstrap error:",
+            err
+          );
 
-            tokensPlayed: 0,
-            tokensWon: 0,
-
-            profileComplete: false,
-
-            createdAt: serverTimestamp(),
-            updatedAt: serverTimestamp(),
-          });
+          setUser(firebaseUser);
+          setSubscriptionStatus("inactive");
         }
 
-        // -----------------------------------
-        // WALLET CHECK / CREATE
-        // -----------------------------------
-        const walletRef = doc(db, "wallets", uid);
-        const walletSnap = await getDoc(walletRef);
-
-        if (!walletSnap.exists()) {
-          await setDoc(walletRef, {
-            balance: 0,
-            lifetimeWon: 0,
-            lifetimeSpent: 0,
-
-            subscriptionTokensIssued: 0,
-            topUpTokensPurchased: 0,
-
-            createdAt: serverTimestamp(),
-            updatedAt: serverTimestamp(),
-          });
-        }
-
-        // -----------------------------------
-        // USER SUBSCRIPTION CHECK / CREATE
-        // -----------------------------------
-        const userRef = doc(db, "users", uid);
-        const userSnap = await getDoc(userRef);
-
-        if (!userSnap.exists()) {
-          await setDoc(userRef, {
-            uid,
-            email: firebaseUser.email ?? "",
-            role: "player",
-
-            subscriptionStatus: "inactive",
-            subscriptionPlan: "",
-            subscriptionStartedAt: null,
-            subscriptionExpires: null,
-
-            createdAt: serverTimestamp(),
-            updatedAt: serverTimestamp(),
-          });
-        }
-
-        // -----------------------------------
-        // PLAYER RANKING CHECK / CREATE
-        // -----------------------------------
-        const rankingRef = doc(db, "playerRankings", uid);
-        const rankingSnap = await getDoc(rankingRef);
-
-        if (!rankingSnap.exists()) {
-          await setDoc(rankingRef, {
-            club: 0,
-            division: 0,
-            national: 0,
-            updatedAt: serverTimestamp(),
-          });
-        }
-
-        setUser(firebaseUser);
-      } catch (err) {
-        console.error("Auth bootstrap error:", err);
+        setLoading(false);
       }
-
-      setLoading(false);
-    });
+    );
 
     return () => unsub();
   }, []);
+
+  const isSubscribed =
+    subscriptionStatus === "active";
 
   return (
     <AuthContext.Provider
       value={{
         user,
         loading,
+        subscriptionStatus,
+        isSubscribed,
       }}
     >
       {children}

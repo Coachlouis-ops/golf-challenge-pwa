@@ -131,23 +131,125 @@ export default function MyCareerPage() {
 
     <main className="min-h-screen bg-black text-white px-6 py-8">
 
-      <div className="max-w-md mx-auto space-y-6">
+    <div className="max-w-md mx-auto space-y-6">
 
-        <button
-          onClick={() => router.back()}
-          className="text-gray-400 hover:text-green-400"
-        >
-          ← Back
-        </button>
+  <button
+    onClick={() => router.back()}
+    className="text-gray-400 hover:text-green-400"
+  >
+    ← Back
+  </button>
 
-        <h1 className="text-3xl font-bold text-green-400">
-          MY CAREER
+  {/* HERO */}
+
+  <div className="rounded-3xl border border-green-500/40 bg-gradient-to-br from-neutral-900 via-black to-neutral-900 shadow-[0_0_40px_rgba(34,197,94,0.15)] p-6">
+
+    <div className="flex items-center justify-between">
+
+      <div>
+
+        <p className="text-xs uppercase tracking-[0.25em] text-green-400">
+          My Career
+        </p>
+
+        <h1 className="text-3xl font-black mt-2">
+          {career?.battleName}
         </h1>
+
+        <p className="text-gray-400 mt-1">
+          {career?.name} {career?.surname}
+        </p>
+
+        <div className="mt-4 flex gap-2 flex-wrap">
+
+          <span className="px-3 py-1 rounded-full bg-green-500/20 text-green-400 text-xs">
+            {career?.division}
+          </span>
+
+          <span className="px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 text-xs">
+            {career?.club}
+          </span>
+
+        </div>
 
       </div>
 
-    </main>
+      <div className="h-24 w-24 rounded-full border-2 border-green-500 flex items-center justify-center bg-neutral-900">
 
+        <span className="text-4xl">
+          ⛳
+        </span>
+
+      </div>
+
+    </div>
+
+  </div>
+
+      {/* CAREER OVERVIEW */}
+      <div className="mt-8 grid grid-cols-2 gap-4">
+
+      <StatCard
+  title="Player Level"
+  value={career?.ranking?.playerLevel ?? 1}
+  color="green"
+/>
+
+<StatCard
+  title="Power Score"
+  value={career?.ranking?.powerScore ?? 1000}
+  color="blue"
+/>
+
+<StatCard
+  title="Career XP"
+  value={career?.ranking?.careerXP ?? 0}
+  color="purple"
+/>
+
+<StatCard
+  title="Career Points"
+  value={career?.ranking?.careerPoints ?? 0}
+  color="yellow"
+/>
+
+         </div>
+
+      {/* CLOSE max-w-md */}
+    </div>
+
+  </main>
+
+);
+
+}
+
+function StatCard({
+  title,
+  value,
+  color,
+}: {
+  title: string;
+  value: number | string;
+  color: "green" | "blue" | "purple" | "yellow";
+}) {
+
+  const colours = {
+    green: "border-green-500 text-green-400",
+    blue: "border-blue-500 text-blue-400",
+    purple: "border-purple-500 text-purple-400",
+    yellow: "border-yellow-500 text-yellow-400",
+  };
+
+  return (
+    <div className={`rounded-xl border bg-neutral-900 p-4 ${colours[color]}`}>
+      <p className="text-xs text-gray-400">
+        {title}
+      </p>
+
+      <p className="mt-2 text-3xl font-bold">
+        {value}
+      </p>
+    </div>
   );
-
 }

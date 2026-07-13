@@ -63,7 +63,7 @@ export default function HomePage() {
   {/* BRANDING (ADDED) */}
   <div className="text-center">
     <p className="text-green-400 text-sm font-semibold">
-      Teez Golf Challenges by Honey Badger Apps
+      Teez Golf Challenges by Honey Badger Technologies PTY.LTD
     </p>
   </div>
 

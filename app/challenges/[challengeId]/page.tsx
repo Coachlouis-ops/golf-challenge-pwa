@@ -399,78 +399,112 @@ export default function ChallengeDetailPage() {
           Back to Dashboard
         </button>
 
-        {(() => {
-          const acceptedPlayers = players.length;
-          const pendingInvites = invitedUids.filter(
-            (uid) => !players.some((player) => String(player.uid) === String(uid))
-          ).length;
+               {isCreator ? (
+          (() => {
+            const acceptedPlayers = players.length;
+            const pendingInvites = invitedUids.filter(
+              (uid) =>
+                !players.some(
+                  (player) => String(player.uid) === String(uid)
+                )
+            ).length;
 
-          let title = "INVITE PLAYERS";
-          let message =
-            "Invite players by searching their names in the Invite Players tab.";
-          let notes: string[] = [
-            "Players who accepted your challenge will appear in the Participants section below.",
-            "The creator of the challenge must also invite and accept themselves to enter the challenge.",
-          ];
-
-          if (invitedUids.length > 0 && acceptedPlayers === 0) {
-            title = "WAITING FOR ACCEPTANCE";
-            message = "Search and invite next player.";
-            notes = ["Waiting for invited players to accept the challenge."];
-          }
-
-          if (acceptedPlayers > 0 && challenge.status !== "completed") {
-            title = "ENTER RESULTS";
-            message =
-              "After completion of challenge enter the scores/results - update scoreboard, scoreboard can be updated as scores are being added, once finalized the challenge cannot be reopened.";
-            notes = [
-              "Accepted players are listed in the Participants section below.",
+            let title = "INVITE PLAYERS";
+            let message =
+              "Invite players by searching their names in the Invite Players tab.";
+            let notes: string[] = [
+              "Players who accepted your challenge will appear in the Participants section below.",
+              "The creator of the challenge must also invite and accept themselves to enter the challenge.",
             ];
-          }
 
-          if (challenge.status === "completed") {
-            title = "CHALLENGE COMPLETED";
-            message =
-              "See My Challenges for results and My Profile for rankings and prizes.";
-            notes = ["This challenge has been finalized successfully."];
-          }
+            if (invitedUids.length > 0 && acceptedPlayers === 0) {
+              title = "WAITING FOR ACCEPTANCE";
+              message = "Search and invite next player.";
+              notes = [
+                "Waiting for invited players to accept the challenge.",
+              ];
+            }
 
-          return (
-            <div className="border border-red-500/40 bg-red-950/30 backdrop-blur-md rounded-2xl p-5 shadow-[0_0_35px_rgba(255,0,0,0.35)]">
-              <div className="flex items-center justify-between mb-4">
-                <div>
-                  <div className="text-xs tracking-[0.3em] text-red-400 font-bold">
-                    CHALLENGE GUIDE
+            if (
+              acceptedPlayers > 0 &&
+              challenge.status !== "completed"
+            ) {
+              title = "ENTER RESULTS";
+              message =
+                "After completion of challenge enter the scores/results - update scoreboard, scoreboard can be updated as scores are being added, once finalized the challenge cannot be reopened.";
+              notes = [
+                "Accepted players are listed in the Participants section below.",
+              ];
+            }
+
+            if (challenge.status === "completed") {
+              title = "CHALLENGE COMPLETED";
+              message =
+                "See My Challenges for results and My Profile for rankings and prizes.";
+              notes = [
+                "This challenge has been finalized successfully.",
+              ];
+            }
+
+            return (
+              <div className="border border-red-500/40 bg-red-950/30 backdrop-blur-md rounded-2xl p-5 shadow-[0_0_35px_rgba(255,0,0,0.35)]">
+                <div className="flex items-center justify-between mb-4">
+                  <div>
+                    <div className="text-xs tracking-[0.3em] text-red-400 font-bold">
+                      CHALLENGE GUIDE
+                    </div>
+
+                    <div className="text-2xl font-extrabold text-red-300 mt-1">
+                      {title}
+                    </div>
                   </div>
-                  <div className="text-2xl font-extrabold text-red-300 mt-1">
-                    {title}
+
+                  <div className="text-right text-xs text-red-200 space-y-1">
+                    <div>Players Joined: {acceptedPlayers}</div>
+                    <div>Pending Invites: {pendingInvites}</div>
+                    <div>Status: {challenge.status}</div>
                   </div>
                 </div>
 
-                <div className="text-right text-xs text-red-200 space-y-1">
-                  <div>Players Joined: {acceptedPlayers}</div>
-                  <div>Pending Invites: {pendingInvites}</div>
-                  <div>Status: {challenge.status}</div>
+                <div className="text-sm text-red-100 leading-relaxed">
+                  {message}
+                </div>
+
+                <div className="mt-4 flex flex-col gap-2">
+                  {notes.map((note, index) => (
+                    <div
+                      key={index}
+                      className="text-xs text-red-200 bg-black/30 border border-red-500/20 rounded-lg px-3 py-2"
+                    >
+                      • {note}
+                    </div>
+                  ))}
                 </div>
               </div>
-
-              <div className="text-sm text-red-100 leading-relaxed">
-                {message}
-              </div>
-
-              <div className="mt-4 flex flex-col gap-2">
-                {notes.map((note, i) => (
-                  <div
-                    key={i}
-                    className="text-xs text-red-200 bg-black/30 border border-red-500/20 rounded-lg px-3 py-2"
-                  >
-                    • {note}
-                  </div>
-                ))}
-              </div>
+            );
+          })()
+        ) : (
+          <div className="border border-blue-500/40 bg-blue-950/30 backdrop-blur-md rounded-2xl p-5 shadow-[0_0_35px_rgba(0,120,255,0.25)]">
+            <div className="text-xs tracking-[0.3em] text-blue-400 font-bold">
+              CHALLENGE DETAILS
             </div>
-          );
-        })()}
+
+            <div className="text-2xl font-extrabold text-blue-200 mt-1">
+              VIEW-ONLY ACCESS
+            </div>
+
+            <p className="text-sm text-blue-100 leading-relaxed mt-4">
+              You are participating in this challenge. You can view the
+              challenge details, participants, live scoreboard and final
+              results.
+            </p>
+
+            <p className="text-xs text-blue-300 bg-black/30 border border-blue-500/20 rounded-lg px-3 py-2 mt-4">
+              Only the challenge creator can invite players, enter scores,
+              update the scoreboard and finalize the challenge.
+            </p>
+          </div>
+        )}
 
         <h1 className="text-2xl font-semibold">{challenge.challengeTitle}</h1>
 

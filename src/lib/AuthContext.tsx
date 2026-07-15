@@ -15,6 +15,7 @@ import {
 import {
   doc,
   getDoc,
+  onSnapshot,
   setDoc,
   serverTimestamp,
 } from "firebase/firestore";
@@ -57,10 +58,17 @@ export function AuthProvider({
     useState<SubscriptionStatus>("inactive");
 
   useEffect(() => {
-    const unsub = onAuthStateChanged(
+    let unsubscribeUserDocument: (() => void) | null = null;
+
+    const unsubscribeAuth = onAuthStateChanged(
       auth,
       async (firebaseUser) => {
         setLoading(true);
+
+        if (unsubscribeUserDocument) {
+          unsubscribeUserDocument();
+          unsubscribeUserDocument = null;
+        }
 
         if (!firebaseUser) {
           setUser(null);
@@ -197,9 +205,6 @@ export function AuthProvider({
           const userSnap =
             await getDoc(userRef);
 
-          let currentSubscriptionStatus:
-            SubscriptionStatus = "inactive";
-
           if (!userSnap.exists()) {
             await setDoc(userRef, {
               uid,
@@ -214,12 +219,6 @@ export function AuthProvider({
               createdAt: serverTimestamp(),
               updatedAt: serverTimestamp(),
             });
-          } else {
-            const userData = userSnap.data();
-
-            currentSubscriptionStatus =
-              (userData.subscriptionStatus as SubscriptionStatus) ||
-              "inactive";
           }
 
           // -----------------------------------
@@ -244,8 +243,40 @@ export function AuthProvider({
           }
 
           setUser(firebaseUser);
-          setSubscriptionStatus(
-            currentSubscriptionStatus
+
+          // -----------------------------------
+          // LIVE SUBSCRIPTION LISTENER
+          // -----------------------------------
+          unsubscribeUserDocument = onSnapshot(
+            userRef,
+            (snapshot) => {
+              if (!snapshot.exists()) {
+                setSubscriptionStatus("inactive");
+                setLoading(false);
+                return;
+              }
+
+              const userData = snapshot.data();
+
+              const liveSubscriptionStatus =
+                (userData.subscriptionStatus as SubscriptionStatus) ||
+                "inactive";
+
+              setSubscriptionStatus(
+                liveSubscriptionStatus
+              );
+
+              setLoading(false);
+            },
+            (error) => {
+              console.error(
+                "Subscription listener error:",
+                error
+              );
+
+              setSubscriptionStatus("inactive");
+              setLoading(false);
+            }
           );
         } catch (err) {
           console.error(
@@ -255,13 +286,18 @@ export function AuthProvider({
 
           setUser(firebaseUser);
           setSubscriptionStatus("inactive");
+          setLoading(false);
         }
-
-        setLoading(false);
       }
     );
 
-    return () => unsub();
+    return () => {
+      unsubscribeAuth();
+
+      if (unsubscribeUserDocument) {
+        unsubscribeUserDocument();
+      }
+    };
   }, []);
 
   const isSubscribed =

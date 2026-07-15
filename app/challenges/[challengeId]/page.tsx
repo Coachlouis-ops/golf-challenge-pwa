@@ -513,8 +513,10 @@ export default function ChallengeDetailPage() {
           </p>
         </div>
 
-        {/* INVITE SECTION */}
-        <div className="border rounded p-4 flex flex-col gap-3">
+      {/* INVITE SECTION */}
+{isCreator && (
+<div className="border rounded p-4 flex flex-col gap-3">
+
           <h2 className="font-semibold">Invite Players</h2>
 
           <div className="flex flex-col gap-2">
@@ -592,7 +594,9 @@ export default function ChallengeDetailPage() {
               </div>
             );
           })}
-        </div>
+
+       </div>
+)}
 
         {/* ENTER RESULTS */}
         {isCreator && (

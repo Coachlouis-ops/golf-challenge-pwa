@@ -30,6 +30,7 @@ type Challenge = {
   entryTokens: number;
   status: string;
   creatorUid: string;
+  participants?: string[];
   joinCode?: string;
   createdAt?: any;
 };
@@ -92,20 +93,32 @@ export default function ChallengeDetailPage() {
 
         const data = snap.data() as any;
 
-        setChallenge({
-          challengeId: data.challengeId || snap.id,
-          challengeTitle: data.challengeTitle || "—",
-          courseName: data.courseName || "—",
-          gameFormat: data.gameFormat || "—",
-          scoringMethod: data.scoringMethod || "—",
-          teamFormat: data.teamFormat || "—",
-          typeOfGame: data.typeOfGame || "—",
-          entryTokens: data.entryTokens || 0,
-          status: data.status || "—",
-          creatorUid: data.creatorUid,
-          joinCode: data.joinCode,
-          createdAt: data.createdAt,
-        });
+       setChallenge({
+  challengeId: data.challengeId || snap.id,
+  challengeTitle: data.challengeTitle || "—",
+  courseName: data.courseName || "—",
+  gameFormat: data.gameFormat || "—",
+  scoringMethod: data.scoringMethod || "—",
+  teamFormat: data.teamFormat || "—",
+  typeOfGame: data.typeOfGame || "—",
+  entryTokens: data.entryTokens || 0,
+  status: data.status || "—",
+  creatorUid: data.creatorUid,
+  participants: data.participants || [],
+  joinCode: data.joinCode,
+  createdAt: data.createdAt,
+});
+
+const participants = data.participants || [];
+
+if (
+  data.creatorUid !== user.uid &&
+  !participants.includes(user.uid)
+) {
+  router.replace("/my-challenges");
+  return;
+}
+
 
         setLoading(false);
       } catch (e: any) {

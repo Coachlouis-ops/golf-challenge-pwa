@@ -550,6 +550,47 @@ export default function MyCareerPage() {
             </div>
           </section>
 
+
+{/* PLAYER REWARDS */}
+
+<section>
+  <SectionHeading
+    title="Player Rewards"
+    description="Unlock rewards through your career progress"
+  />
+
+  <button
+    type="button"
+    onClick={() => router.push("/profile/rewards")}
+    className="w-full overflow-hidden rounded-[26px] border border-green-300 bg-gradient-to-br from-green-50 via-white to-amber-50 p-5 text-left shadow-[0_10px_28px_rgba(15,23,42,0.10)] transition hover:-translate-y-1"
+  >
+    <div className="flex items-center gap-4">
+      <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-green-100 text-3xl">
+        🎁
+      </div>
+
+      <div className="min-w-0 flex-1">
+        <p className="text-xs font-bold uppercase tracking-[0.18em] text-green-600">
+          Reward Board
+        </p>
+
+        <h3 className="mt-1 text-xl font-black text-gray-900">
+          Open Career Rewards
+        </h3>
+
+        <p className="mt-2 text-sm leading-5 text-gray-500">
+          View locked rewards and track what you need to unlock next.
+        </p>
+      </div>
+
+      <span className="text-2xl font-bold text-green-600">
+        ›
+      </span>
+    </div>
+  </button>
+</section>
+
+
           {/* ACHIEVEMENTS */}
 
           <section>

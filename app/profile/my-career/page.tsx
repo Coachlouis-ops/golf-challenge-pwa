@@ -2,835 +2,823 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/src/lib/AuthContext";
-import { db } from "@/src/lib/firebase";
 import { doc, getDoc } from "firebase/firestore";
 
+import { useAuth } from "@/src/lib/AuthContext";
+import { db } from "@/src/lib/firebase";
+
+type RankingData = {
+  powerScore?: number;
+  playerLevel?: number;
+  careerXP?: number;
+  careerPoints?: number;
+
+  matchesPlayed?: number;
+  wins?: number;
+  losses?: number;
+  winPercentage?: number;
+
+  bestFinish?: number;
+  top3?: number;
+  top5?: number;
+  top10?: number;
+
+  currentWinStreak?: number;
+  bestWinStreak?: number;
+  currentLosingStreak?: number;
+  bestLosingStreak?: number;
+
+  bestFormat?: string;
+  bestFormatWinPercentage?: number;
+};
+
 type CareerData = {
+  battleName?: string;
+  name?: string;
+  surname?: string;
+  club?: string;
+  division?: string;
 
-  battleName: string;
-  name: string;
-  surname: string;
-
-  club: string;
-  division: string;
-
-  ranking?: {
-
-    club: number;
-    province: number;
-    national: number;
-    international: number;
-
-    powerScore: number;
-    playerLevel: number;
-    careerXP: number;
-
-    careerPoints: number;
-
-    matchesPlayed: number;
-    wins: number;
-    losses: number;
-
-    winPercentage: number;
-
-    bestFinish: number;
-
-    top3: number;
-    top5: number;
-    top10: number;
-
-    currentWinStreak: number;
-    bestWinStreak: number;
-
-    currentLosingStreak: number;
-    bestLosingStreak: number;
-
-    bestFormat: string;
-    bestFormatWinPercentage: number;
-  };
+  ranking?: RankingData;
 
   lastChallenge?: {
     ranking?: {
       before?: {
-        club: number;
-        province: number;
-        national: number;
-        international: number;
+        club?: number;
+        province?: number;
+        national?: number;
+        international?: number;
       };
       after?: {
-        club: number;
-        province: number;
-        national: number;
-        international: number;
+        club?: number;
+        province?: number;
+        national?: number;
+        international?: number;
       };
     };
   };
-
 };
 
 type RankingPosition = {
-
   clubPosition: number;
   provincePosition: number;
   nationalPosition: number;
   internationalPosition: number;
+};
 
+type Accent =
+  | "green"
+  | "blue"
+  | "purple"
+  | "yellow"
+  | "orange"
+  | "pink";
+
+const DEFAULT_RANKINGS: RankingPosition = {
+  clubPosition: 0,
+  provincePosition: 0,
+  nationalPosition: 0,
+  internationalPosition: 0,
 };
 
 export default function MyCareerPage() {
-
   const router = useRouter();
   const { user } = useAuth();
 
   const [loading, setLoading] = useState(true);
-
-  const [career, setCareer] =
-    useState<CareerData | null>(null);
-
+  const [career, setCareer] = useState<CareerData | null>(null);
   const [ranking, setRanking] =
-    useState<RankingPosition>({
-      clubPosition: 0,
-      provincePosition: 0,
-      nationalPosition: 0,
-      internationalPosition: 0,
-    });
+    useState<RankingPosition>(DEFAULT_RANKINGS);
 
-  useEffect(() => {
+ useEffect(() => {
+  if (!user) {
+    setLoading(false);
+    return;
+  }
 
-    if (!user) return;
+  const uid = user.uid;
 
-    (async () => {
+  async function loadCareer() {
+    try {
+      const [profileSnap, rankingSnap] = await Promise.all([
+        getDoc(doc(db, "profiles", uid)),
+        getDoc(doc(db, "playerRankings", uid)),
+      ]);
 
-      const profileSnap = await getDoc(
-        doc(db, "profiles", user.uid)
-      );
+        const profileData = profileSnap.exists()
+          ? (profileSnap.data() as CareerData)
+          : {};
 
-      const rankingSnap = await getDoc(
-        doc(db, "playerRankings", user.uid)
-      );
+        const rankingData = rankingSnap.exists()
+          ? rankingSnap.data()
+          : {};
 
-      if (profileSnap.exists()) {
-        setCareer(profileSnap.data() as CareerData);
-      }
-
-      if (rankingSnap.exists()) {
-
-        const data = rankingSnap.data();
-
-        setRanking({
-
-          clubPosition:
-            data.clubPosition || 0,
-
-          provincePosition:
-            data.provincePosition || 0,
-
-          nationalPosition:
-            data.nationalPosition || 0,
-
-          internationalPosition:
-            data.internationalPosition || 0,
-
+        setCareer({
+          ...profileData,
+          ranking: {
+            ...(profileData.ranking ?? {}),
+            ...rankingData,
+          },
         });
 
+        setRanking({
+          clubPosition: Number(rankingData.clubPosition ?? 0),
+          provincePosition: Number(
+            rankingData.provincePosition ?? 0
+          ),
+          nationalPosition: Number(
+            rankingData.nationalPosition ?? 0
+          ),
+          internationalPosition: Number(
+            rankingData.internationalPosition ?? 0
+          ),
+        });
+      } catch (error) {
+        console.error("Unable to load career data:", error);
+      } finally {
+        setLoading(false);
       }
+    }
 
-      setLoading(false);
-
-    })();
-
+    loadCareer();
   }, [user]);
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-black flex items-center justify-center text-white">
-        Loading Career...
+      <main className="flex min-h-screen items-center justify-center bg-[#f4f6f8] px-6">
+        <div className="rounded-3xl bg-white px-8 py-6 text-center shadow-lg">
+          <div className="mx-auto h-10 w-10 animate-spin rounded-full border-4 border-gray-200 border-t-green-500" />
+
+          <p className="mt-4 font-semibold text-gray-700">
+            Loading career...
+          </p>
+        </div>
       </main>
     );
   }
 
-  return (
-
-    <main className="min-h-screen bg-black text-white px-6 py-8">
-
-    <div className="max-w-md mx-auto space-y-6">
-
-  <button
-    onClick={() => router.back()}
-    className="text-gray-400 hover:text-green-400"
-  >
-    ← Back
-  </button>
-
- {/* HERO */}
-
-<div className="rounded-3xl overflow-hidden border border-green-500/40 bg-gradient-to-br from-neutral-900 via-black to-neutral-900 shadow-[0_0_45px_rgba(34,197,94,0.18)]">
-
-  <div className="p-6">
-
-    <div className="flex justify-between items-start">
-
-      <div>
-
-        <p className="text-xs uppercase tracking-[0.30em] text-green-400">
-          PLAYER PROFILE
-        </p>
-
-        <h1 className="text-4xl font-black mt-3">
-          {career?.battleName}
-        </h1>
-
-        <p className="text-gray-400 mt-2">
-          {career?.name} {career?.surname}
-        </p>
-
-      </div>
-
-      <div className="h-28 w-28 rounded-full border-4 border-green-500 bg-neutral-900 flex items-center justify-center shadow-[0_0_25px_rgba(34,197,94,0.35)]">
-
-        <span className="text-5xl">
-          ⛳
-        </span>
-
-      </div>
-
-    </div>
-
-    <div className="mt-8 grid grid-cols-3 gap-3">
-
-      <div className="rounded-xl bg-black/40 p-4 text-center">
-
-        <p className="text-gray-500 text-xs">
-          LEVEL
-        </p>
-
-        <p className="text-3xl font-black text-green-400">
-          {career?.ranking?.playerLevel ?? 1}
-        </p>
-
-      </div>
-
-      <div className="rounded-xl bg-black/40 p-4 text-center">
-
-        <p className="text-gray-500 text-xs">
-          POWER
-        </p>
-
-        <p className="text-3xl font-black text-blue-400">
-          {career?.ranking?.powerScore ?? 1000}
-        </p>
-
-      </div>
-
-      <div className="rounded-xl bg-black/40 p-4 text-center">
-
-        <p className="text-gray-500 text-xs">
-          POINTS
-        </p>
-
-        <p className="text-3xl font-black text-yellow-400">
-          {career?.ranking?.careerPoints ?? 0}
-        </p>
-
-      </div>
-
-    </div>
-
-    <div className="mt-6 flex flex-wrap gap-2">
-
-      <span className="px-4 py-2 rounded-full bg-green-500/20 text-green-400 text-sm font-semibold">
-        {career?.division}
-      </span>
-
-      <span className="px-4 py-2 rounded-full bg-blue-500/20 text-blue-300 text-sm font-semibold">
-        {career?.club}
-      </span>
-
-    </div>
-
-  </div>
-
-</div>
-
-{/* PLAYER OVERVIEW */}
-
-<div className="mt-8 rounded-3xl border border-green-500/40 bg-gradient-to-br from-neutral-900 to-black p-6 space-y-6 shadow-[0_0_40px_rgba(34,197,94,0.15)]">
-
-  <div className="text-center">
-
-    <p className="text-xs uppercase tracking-[0.25em] text-green-400">
-      Player Level
-    </p>
-
-    <h2 className="text-6xl font-black text-green-400 mt-2">
-      {career?.ranking?.playerLevel ?? 1}
-    </h2>
-
-    <p className="text-gray-400 mt-2">
-      {career?.ranking?.careerXP ?? 0} Career XP
-    </p>
-
-  </div>
-
-  <div>
-
-    <div className="flex justify-between text-xs text-gray-400 mb-2">
-      <span>XP Progress</span>
-      <span>{career?.ranking?.careerXP ?? 0} XP</span>
-    </div>
-
-    <div className="w-full h-3 rounded-full bg-neutral-800 overflow-hidden">
-
-      <div
-        className="h-full rounded-full bg-green-500"
-        style={{
-          width: `${Math.min(
-            ((career?.ranking?.careerXP ?? 0) % 1000) / 10,
-            100
-          )}%`,
-        }}
-      />
-
-    </div>
-
-  </div>
-
-  <div className="grid grid-cols-2 gap-4">
-
-    <StatCard
-      title="Power Score"
-      value={career?.ranking?.powerScore ?? 1000}
-      color="blue"
-    />
-
-    <StatCard
-      title="Career Points"
-      value={career?.ranking?.careerPoints ?? 0}
-      color="yellow"
-    />
-
-  </div>
-
-</div>
-
-{/* OVERALL RATING */}
-
-<div className="mt-8 rounded-3xl border border-blue-500/40 bg-gradient-to-br from-neutral-900 to-black p-8 shadow-[0_0_45px_rgba(59,130,246,0.18)]">
-
-  <p className="text-center text-sm uppercase tracking-[0.3em] text-blue-400">
-    Overall Rating
-  </p>
-
-  <div className="mt-5 text-center">
-
-    <p className="text-8xl font-black text-blue-400">
-      {Math.min(
-        99,
-        Math.max(
-          1,
-          Math.floor((career?.ranking?.powerScore ?? 1000) / 25)
-        )
-      )}
-    </p>
-
-    <div className="mt-3 text-yellow-400 text-3xl">
-      ★★★★★
-    </div>
-
-    <p className="mt-5 text-gray-400">
-      Based on your complete competitive career.
-    </p>
-
-  </div>
-
-  <div className="grid grid-cols-3 gap-4 mt-8">
-
-    <div className="text-center">
-
-      <p className="text-gray-500 text-xs">
-        LEVEL
-      </p>
-
-      <p className="text-2xl font-bold text-green-400">
-        {career?.ranking?.playerLevel ?? 1}
-      </p>
-
-    </div>
-
-    <div className="text-center">
-
-      <p className="text-gray-500 text-xs">
-        POWER
-      </p>
-
-      <p className="text-2xl font-bold text-blue-400">
-        {career?.ranking?.powerScore ?? 0}
-      </p>
-
-    </div>
-
-    <div className="text-center">
-
-      <p className="text-gray-500 text-xs">
-        POINTS
-      </p>
-
-      <p className="text-2xl font-bold text-yellow-400">
-        {career?.ranking?.careerPoints ?? 0}
-      </p>
-
-    </div>
-
-  </div>
-
-</div>
-
-{/* LAST CHALLENGE */}
-
-<div className="mt-8 rounded-3xl border border-cyan-500/40 bg-gradient-to-br from-neutral-900 to-black p-6 shadow-[0_0_35px_rgba(6,182,212,0.15)]">
-
-  <h2 className="text-xl font-bold text-cyan-400 mb-5">
-    Last Challenge
-  </h2>
-
-  <MovementRow
-  title="Club"
-  before={career?.lastChallenge?.ranking?.before?.club ?? 0}
-  after={career?.lastChallenge?.ranking?.after?.club ?? 0}
-/>
-
-<MovementRow
-  title="Province"
-  before={career?.lastChallenge?.ranking?.before?.province ?? 0}
-  after={career?.lastChallenge?.ranking?.after?.province ?? 0}
-/>
-
-<MovementRow
-  title="National"
-  before={career?.lastChallenge?.ranking?.before?.national ?? 0}
-  after={career?.lastChallenge?.ranking?.after?.national ?? 0}
-/>
-
-<MovementRow
-  title="Global"
-  before={career?.lastChallenge?.ranking?.before?.international ?? 0}
-  after={career?.lastChallenge?.ranking?.after?.international ?? 0}
-/>
-
-  <MovementRow
-    title="Club"
-    before={career?.lastChallenge?.ranking?.before?.club ?? 0}
-    after={career?.lastChallenge?.ranking?.after?.club ?? 0}
-  />
-
-  <MovementRow
-    title="Province"
-    before={career?.lastChallenge?.ranking?.before?.province ?? 0}
-    after={career?.lastChallenge?.ranking?.after?.province ?? 0}
-  />
-
-  <MovementRow
-    title="National"
-    before={career?.lastChallenge?.ranking?.before?.national ?? 0}
-    after={career?.lastChallenge?.ranking?.after?.national ?? 0}
-  />
-
-  <MovementRow
-    title="Global"
-    before={career?.lastChallenge?.ranking?.before?.international ?? 0}
-    after={career?.lastChallenge?.ranking?.after?.international ?? 0}
-  />
-
-</div>
-
-{/* PLAYER PROGRESS */}
-
-<div className="mt-8 rounded-3xl border border-green-500/40 bg-gradient-to-br from-neutral-900 to-black p-6 shadow-[0_0_35px_rgba(34,197,94,0.15)]">
-
-  <h2 className="text-xl font-bold text-green-400 mb-6">
-    Player Progress
-  </h2>
-
-  <div className="text-center">
-
-    <p className="text-6xl font-black text-green-400">
-      {career?.ranking?.playerLevel ?? 1}
-    </p>
-
-    <p className="text-gray-400 mt-2">
-      Current Level
-    </p>
-
-  </div>
-
-  <div className="mt-6">
-
-    <div className="flex justify-between text-xs text-gray-400 mb-2">
-
-      <span>XP Progress</span>
-
-      <span>
-        {career?.ranking?.careerXP ?? 0} XP
-      </span>
-
-    </div>
-
-    <div className="w-full h-4 rounded-full bg-neutral-800 overflow-hidden">
-
-      <div
-        className="h-full bg-green-500 rounded-full"
-        style={{
-          width: `${Math.min(
-            ((career?.ranking?.careerXP ?? 0) % 1000) / 10,
-            100
-          )}%`,
-        }}
-      />
-
-    </div>
-
-    <p className="text-center text-gray-500 text-xs mt-3">
-
-      {1000 - ((career?.ranking?.careerXP ?? 0) % 1000)} XP until next level
-
-    </p>
-
-  </div>
-
-</div>
-
-
-{/* HALL OF FAME */}
-
-<div className="mt-8 rounded-3xl border border-amber-500/40 bg-gradient-to-br from-neutral-900 to-black p-6 shadow-[0_0_40px_rgba(245,158,11,0.15)]">
-
-  <h2 className="text-xl font-bold text-amber-400 mb-6">
-    Hall of Fame
-  </h2>
-
-  <div className="grid grid-cols-2 gap-4">
-
-    <StatCard
-      title="Best Finish"
-      value={career?.ranking?.bestFinish ?? "-"}
-      color="green"
-    />
-
-    <StatCard
-      title="Top 3 Finishes"
-      value={career?.ranking?.top3 ?? 0}
-      color="blue"
-    />
-
-    <StatCard
-      title="Top 5 Finishes"
-      value={career?.ranking?.top5 ?? 0}
-      color="purple"
-    />
-
-    <StatCard
-      title="Top 10 Finishes"
-      value={career?.ranking?.top10 ?? 0}
-      color="yellow"
-    />
-
-  </div>
-
-</div>
-
-
-
- {/* CURRENT RANKINGS */}
-
-<div className="mt-8 rounded-3xl border border-yellow-500/40 bg-gradient-to-br from-neutral-900 to-black p-6 shadow-[0_0_35px_rgba(250,204,21,0.15)]">
-
-  <h2 className="text-xl font-bold text-yellow-400 mb-6">
-    Current Rankings
-  </h2>
-
-  <RankingBar
-    title="Club"
-    value={ranking.clubPosition}
-    colour="green"
-  />
-
-  <RankingBar
-    title="Province"
-    value={ranking.provincePosition}
-    colour="blue"
-  />
-
-  <RankingBar
-    title="National"
-    value={ranking.nationalPosition}
-    colour="purple"
-  />
-
-  <RankingBar
-    title="Global"
-    value={ranking.internationalPosition}
-    colour="yellow"
-  />
-
-</div>
-
-{/* PLAYER PERFORMANCE */}
-
-<div className="mt-8 rounded-3xl border border-indigo-500/40 bg-gradient-to-br from-neutral-900 to-black p-6 shadow-[0_0_35px_rgba(99,102,241,0.15)]">
-
-  <h2 className="text-xl font-bold text-indigo-400 mb-6">
-    Player Performance
-  </h2>
-
-  <div className="grid grid-cols-2 gap-4">
-
-    <StatCard
-      title="Matches"
-      value={career?.ranking?.matchesPlayed ?? 0}
-      color="green"
-    />
-
-    <StatCard
-      title="Wins"
-      value={career?.ranking?.wins ?? 0}
-      color="blue"
-    />
-
-    <StatCard
-      title="Losses"
-      value={career?.ranking?.losses ?? 0}
-      color="purple"
-    />
-
-    <StatCard
-      title="Win %"
-      value={`${career?.ranking?.winPercentage ?? 0}%`}
-      color="yellow"
-    />
-
-    <StatCard
-      title="Current Win Streak"
-      value={career?.ranking?.currentWinStreak ?? 0}
-      color="green"
-    />
-
-    <StatCard
-      title="Best Win Streak"
-      value={career?.ranking?.bestWinStreak ?? 0}
-      color="blue"
-    />
-
-    <StatCard
-      title="Best Format"
-      value={career?.ranking?.bestFormat || "-"}
-      color="purple"
-    />
-
-    <StatCard
-      title="Format Win %"
-      value={`${career?.ranking?.bestFormatWinPercentage ?? 0}%`}
-      color="yellow"
-    />
-
-  </div>
-
-</div>
-
-
-{/* CAREER SUMMARY */}
-
-<div className="mt-8 rounded-3xl border border-pink-500/40 bg-gradient-to-br from-neutral-900 to-black p-6 shadow-[0_0_35px_rgba(236,72,153,0.15)]">
-
-  <h2 className="text-xl font-bold text-pink-400 mb-6">
-    Career Summary
-  </h2>
-
-  <div className="space-y-5">
-
-    <SummaryRow
-      label="Career Points"
-      value={career?.ranking?.careerPoints ?? 0}
-    />
-
-    <SummaryRow
-      label="Power Score"
-      value={career?.ranking?.powerScore ?? 0}
-    />
-
-    <SummaryRow
-      label="Player Level"
-      value={career?.ranking?.playerLevel ?? 1}
-    />
-
-    <SummaryRow
-      label="Career XP"
-      value={career?.ranking?.careerXP ?? 0}
-    />
-
-  </div>
-
-</div>
-
-
-{/* ACHIEVEMENTS */}
-
-<div className="mt-8 rounded-3xl border border-orange-500/40 bg-gradient-to-br from-neutral-900 to-black p-6 shadow-[0_0_40px_rgba(249,115,22,0.15)]">
-
-  <h2 className="text-xl font-bold text-orange-400 mb-6">
-    Achievements
-  </h2>
-
-  <div className="grid grid-cols-2 gap-4">
-
-    <AchievementBadge
-      icon="🥇"
-      title="First Victory"
-      unlocked={(career?.ranking?.wins ?? 0) >= 1}
-    />
-
-    <AchievementBadge
-      icon="🔥"
-      title="5 Win Streak"
-      unlocked={(career?.ranking?.bestWinStreak ?? 0) >= 5}
-    />
-
-    <AchievementBadge
-      icon="⚡"
-      title="Level 10"
-      unlocked={(career?.ranking?.playerLevel ?? 1) >= 10}
-    />
-
-    <AchievementBadge
-      icon="💯"
-      title="100 Career Points"
-      unlocked={(career?.ranking?.careerPoints ?? 0) >= 100}
-    />
-
-    <AchievementBadge
-      icon="🌍"
-      title="Top 100"
-      unlocked={ranking.internationalPosition <= 100 && ranking.internationalPosition > 0}
-    />
-
-    <AchievementBadge
-      icon="🎯"
-      title="75% Win Rate"
-      unlocked={(career?.ranking?.winPercentage ?? 0) >= 75}
-    />
-
-    <AchievementBadge
-      icon="🏆"
-      title="Top 10 Club"
-      unlocked={ranking.clubPosition <= 10 && ranking.clubPosition > 0}
-    />
-
-    <AchievementBadge
-      icon="⭐"
-      title="Rising Star"
-      unlocked={(career?.ranking?.playerLevel ?? 1) >= 5}
-    />
-
-  </div>
-
-</div>
-
-    </div>
-
-  </main>
-
+  const stats = career?.ranking;
+
+  const playerLevel = Number(stats?.playerLevel ?? 1);
+  const careerXP = Number(stats?.careerXP ?? 0);
+  const careerPoints = Number(stats?.careerPoints ?? 0);
+  const powerScore = Number(stats?.powerScore ?? 1000);
+
+  const matchesPlayed = Number(stats?.matchesPlayed ?? 0);
+  const wins = Number(stats?.wins ?? 0);
+  const losses = Number(stats?.losses ?? 0);
+  const winPercentage = Number(stats?.winPercentage ?? 0);
+
+  const xpInCurrentLevel = careerXP % 1000;
+  const xpProgress = Math.min(100, xpInCurrentLevel / 10);
+  const xpRemaining =
+    xpInCurrentLevel === 0 && careerXP > 0
+      ? 1000
+      : 1000 - xpInCurrentLevel;
+
+  const displayName =
+    career?.battleName?.trim() ||
+    `${career?.name ?? ""} ${career?.surname ?? ""}`.trim() ||
+    "Teez Player";
+
+  const overallRating = Math.min(
+    99,
+    Math.max(1, Math.floor(powerScore / 25))
   );
 
+  return (
+    <main className="min-h-screen bg-[#f4f6f8] text-[#202124]">
+      <div className="mx-auto max-w-md pb-12">
+        {/* HEADER */}
+
+        <header className="sticky top-0 z-30 border-b border-gray-200 bg-white/95 px-5 pb-4 pt-5 backdrop-blur">
+          <div className="flex items-center justify-between">
+            <button
+              type="button"
+              onClick={() => router.back()}
+              className="flex h-10 w-10 items-center justify-center rounded-full text-2xl text-gray-600 transition hover:bg-gray-100"
+              aria-label="Go back"
+            >
+              ‹
+            </button>
+
+            <div className="text-center">
+              <p className="text-xs font-bold uppercase tracking-[0.24em] text-green-600">
+                Player Dashboard
+              </p>
+
+              <h1 className="text-xl font-black">
+                My Career
+              </h1>
+            </div>
+
+            <div className="h-10 w-10" />
+          </div>
+        </header>
+
+        <div className="space-y-6 px-4 pt-5">
+          {/* PLAYER HERO */}
+
+          <section className="overflow-hidden rounded-[28px] border border-gray-200 bg-white shadow-[0_12px_35px_rgba(15,23,42,0.10)]">
+            <div className="bg-gradient-to-br from-[#102b20] via-[#0c1712] to-black px-6 py-6 text-white">
+              <div className="flex items-center gap-4">
+                <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-full border-4 border-green-400 bg-white/10 text-4xl shadow-[0_0_24px_rgba(74,222,128,0.35)]">
+                  ⛳
+                </div>
+
+                <div className="min-w-0">
+                  <p className="text-xs font-bold uppercase tracking-[0.2em] text-green-400">
+                    Career Profile
+                  </p>
+
+                  <h2 className="mt-1 truncate text-3xl font-black">
+                    {displayName}
+                  </h2>
+
+                  <p className="mt-1 truncate text-sm text-gray-300">
+                    {career?.name} {career?.surname}
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-5 flex flex-wrap gap-2">
+                <ProfilePill
+                  text={career?.division || "Division pending"}
+                />
+
+                <ProfilePill
+                  text={career?.club || "Club pending"}
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-3 divide-x divide-gray-200 px-2 py-5">
+              <HeroStat
+                label="Level"
+                value={playerLevel}
+              />
+
+              <HeroStat
+                label="Power"
+                value={powerScore}
+              />
+
+              <HeroStat
+                label="Points"
+                value={careerPoints}
+              />
+            </div>
+          </section>
+
+          {/* CAREER PROGRESS */}
+
+          <section>
+            <SectionHeading
+              title="Career Progress"
+              description="Your current career level and progress"
+            />
+
+            <div className="grid grid-cols-2 gap-3">
+              <ProgressTile
+                icon="⭐"
+                title="Player Level"
+                value={playerLevel}
+                progress={xpProgress}
+                accent="green"
+                footer={`${xpRemaining} XP to next level`}
+              />
+
+              <ProgressTile
+                icon="⚡"
+                title="Power Score"
+                value={powerScore}
+                progress={Math.min(
+                  100,
+                  (powerScore / 2500) * 100
+                )}
+                accent="blue"
+                footer="Competitive rating"
+              />
+
+              <ProgressTile
+                icon="🏆"
+                title="Career Points"
+                value={careerPoints}
+                progress={Math.min(
+                  100,
+                  (careerPoints / 1000) * 100
+                )}
+                accent="yellow"
+                footer="Lifetime points earned"
+              />
+
+              <ProgressTile
+                icon="🎯"
+                title="Overall Rating"
+                value={overallRating}
+                progress={overallRating}
+                accent="purple"
+                footer="Complete career rating"
+              />
+            </div>
+          </section>
+
+          {/* PERFORMANCE */}
+
+          <section>
+            <SectionHeading
+              title="Player Performance"
+              description="Your competitive challenge record"
+            />
+
+            <div className="grid grid-cols-2 gap-3">
+              <MetricTile
+                icon="🏌️"
+                title="Matches"
+                value={matchesPlayed}
+                footer="Challenges played"
+                accent="green"
+              />
+
+              <MetricTile
+                icon="🥇"
+                title="Wins"
+                value={wins}
+                footer="Challenges won"
+                accent="yellow"
+              />
+
+              <MetricTile
+                icon="✕"
+                title="Losses"
+                value={losses}
+                footer="Recorded losses"
+                accent="pink"
+              />
+
+              <MetricTile
+                icon="📈"
+                title="Win Rate"
+                value={`${winPercentage}%`}
+                footer="Career win percentage"
+                accent="blue"
+              />
+            </div>
+          </section>
+
+          {/* CURRENT RANKINGS */}
+
+          <section>
+            <SectionHeading
+              title="Current Rankings"
+              description="Your position across every ranking level"
+            />
+
+            <div className="grid grid-cols-2 gap-3">
+              <RankingTile
+                icon="🏠"
+                title="Club"
+                value={ranking.clubPosition}
+                accent="green"
+              />
+
+              <RankingTile
+                icon="📍"
+                title="Province"
+                value={ranking.provincePosition}
+                accent="blue"
+              />
+
+              <RankingTile
+                icon="🇿🇦"
+                title="National"
+                value={ranking.nationalPosition}
+                accent="purple"
+              />
+
+              <RankingTile
+                icon="🌍"
+                title="Global"
+                value={ranking.internationalPosition}
+                accent="yellow"
+              />
+            </div>
+          </section>
+
+          {/* LAST CHALLENGE */}
+
+          <section>
+            <SectionHeading
+              title="Last Challenge"
+              description="Ranking movement from your latest result"
+            />
+
+            <div className="overflow-hidden rounded-[26px] border border-gray-200 bg-white px-5 shadow-[0_8px_24px_rgba(15,23,42,0.08)]">
+              <MovementRow
+                title="Club"
+                before={
+                  career?.lastChallenge?.ranking?.before
+                    ?.club ?? 0
+                }
+                after={
+                  career?.lastChallenge?.ranking?.after
+                    ?.club ?? 0
+                }
+              />
+
+              <MovementRow
+                title="Province"
+                before={
+                  career?.lastChallenge?.ranking?.before
+                    ?.province ?? 0
+                }
+                after={
+                  career?.lastChallenge?.ranking?.after
+                    ?.province ?? 0
+                }
+              />
+
+              <MovementRow
+                title="National"
+                before={
+                  career?.lastChallenge?.ranking?.before
+                    ?.national ?? 0
+                }
+                after={
+                  career?.lastChallenge?.ranking?.after
+                    ?.national ?? 0
+                }
+              />
+
+              <MovementRow
+                title="Global"
+                before={
+                  career?.lastChallenge?.ranking?.before
+                    ?.international ?? 0
+                }
+                after={
+                  career?.lastChallenge?.ranking?.after
+                    ?.international ?? 0
+                }
+              />
+            </div>
+          </section>
+
+          {/* HALL OF FAME */}
+
+          <section>
+            <SectionHeading
+              title="Hall of Fame"
+              description="Your strongest career finishes"
+            />
+
+            <div className="grid grid-cols-2 gap-3">
+              <MetricTile
+                icon="🏆"
+                title="Best Finish"
+                value={stats?.bestFinish ?? "-"}
+                footer="Highest final position"
+                accent="yellow"
+              />
+
+              <MetricTile
+                icon="🥉"
+                title="Top 3"
+                value={stats?.top3 ?? 0}
+                footer="Podium finishes"
+                accent="orange"
+              />
+
+              <MetricTile
+                icon="⭐"
+                title="Top 5"
+                value={stats?.top5 ?? 0}
+                footer="Top-five finishes"
+                accent="purple"
+              />
+
+              <MetricTile
+                icon="🎯"
+                title="Top 10"
+                value={stats?.top10 ?? 0}
+                footer="Top-ten finishes"
+                accent="blue"
+              />
+            </div>
+          </section>
+
+          {/* FORM AND STREAKS */}
+
+          <section>
+            <SectionHeading
+              title="Form and Streaks"
+              description="Your strongest current performance indicators"
+            />
+
+            <div className="grid grid-cols-2 gap-3">
+              <MetricTile
+                icon="🔥"
+                title="Current Streak"
+                value={stats?.currentWinStreak ?? 0}
+                footer="Consecutive wins"
+                accent="orange"
+              />
+
+              <MetricTile
+                icon="⚡"
+                title="Best Streak"
+                value={stats?.bestWinStreak ?? 0}
+                footer="Career-best run"
+                accent="yellow"
+              />
+
+              <MetricTile
+                icon="⛳"
+                title="Best Format"
+                value={stats?.bestFormat || "-"}
+                footer="Strongest game format"
+                accent="green"
+              />
+
+              <MetricTile
+                icon="📊"
+                title="Format Win Rate"
+                value={`${stats?.bestFormatWinPercentage ?? 0}%`}
+                footer="Best-format performance"
+                accent="blue"
+              />
+            </div>
+          </section>
+
+          {/* ACHIEVEMENTS */}
+
+          <section>
+            <SectionHeading
+              title="Achievements"
+              description="Career milestones earned through play"
+            />
+
+            <div className="grid grid-cols-2 gap-3">
+              <AchievementTile
+                icon="🥇"
+                title="First Victory"
+                unlocked={wins >= 1}
+              />
+
+              <AchievementTile
+                icon="🔥"
+                title="Five-Win Streak"
+                unlocked={
+                  Number(stats?.bestWinStreak ?? 0) >= 5
+                }
+              />
+
+              <AchievementTile
+                icon="⚡"
+                title="Level 10"
+                unlocked={playerLevel >= 10}
+              />
+
+              <AchievementTile
+                icon="💯"
+                title="100 Career Points"
+                unlocked={careerPoints >= 100}
+              />
+
+              <AchievementTile
+                icon="🌍"
+                title="Global Top 100"
+                unlocked={
+                  ranking.internationalPosition > 0 &&
+                  ranking.internationalPosition <= 100
+                }
+              />
+
+              <AchievementTile
+                icon="🎯"
+                title="75% Win Rate"
+                unlocked={winPercentage >= 75}
+              />
+
+              <AchievementTile
+                icon="🏆"
+                title="Club Top 10"
+                unlocked={
+                  ranking.clubPosition > 0 &&
+                  ranking.clubPosition <= 10
+                }
+              />
+
+              <AchievementTile
+                icon="⭐"
+                title="Rising Star"
+                unlocked={playerLevel >= 5}
+              />
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+  );
 }
 
-function StatCard({
+function SectionHeading({
   title,
-  value,
-  color,
+  description,
 }: {
   title: string;
-  value: number | string;
-  color: "green" | "blue" | "purple" | "yellow";
+  description: string;
 }) {
-
-  const colours = {
-    green: "border-green-500 text-green-400",
-    blue: "border-blue-500 text-blue-400",
-    purple: "border-purple-500 text-purple-400",
-    yellow: "border-yellow-500 text-yellow-400",
-  };
-
   return (
-    <div className={`rounded-xl border bg-neutral-900 p-4 ${colours[color]}`}>
-      <p className="text-xs text-gray-400">
+    <div className="mb-3 px-1">
+      <h2 className="text-xl font-black text-gray-900">
         {title}
+      </h2>
+
+      <p className="mt-1 text-sm text-gray-500">
+        {description}
+      </p>
+    </div>
+  );
+}
+
+function ProfilePill({ text }: { text: string }) {
+  return (
+    <span className="rounded-full border border-white/15 bg-white/10 px-4 py-2 text-xs font-bold text-gray-100">
+      {text}
+    </span>
+  );
+}
+
+function HeroStat({
+  label,
+  value,
+}: {
+  label: string;
+  value: number | string;
+}) {
+  return (
+    <div className="text-center">
+      <p className="text-[11px] font-bold uppercase tracking-wider text-gray-400">
+        {label}
       </p>
 
-      <p className="mt-2 text-3xl font-bold">
+      <p className="mt-1 text-xl font-black text-gray-900">
         {value}
       </p>
     </div>
   );
-
 }
 
-function RankingBar({
+function ProgressTile({
+  icon,
   title,
   value,
-  colour,
-}:{
-  title:string;
-  value:number;
-  colour:"green"|"blue"|"purple"|"yellow";
+  progress,
+  footer,
+  accent,
+}: {
+  icon: string;
+  title: string;
+  value: number | string;
+  progress: number;
+  footer: string;
+  accent: Accent;
 }) {
-
-  const colours = {
-    green: "bg-green-500",
-    blue: "bg-blue-500",
-    purple: "bg-purple-500",
-    yellow: "bg-yellow-500",
-  };
-
-  const progress =
-    Math.max(
-      5,
-      Math.min(
-        100,
-        100 - (value / 1000) * 100
-      )
-    );
-
-  return (
-
-    <div className="mb-5">
-
-      <div className="flex justify-between mb-2">
-
-        <span className="text-sm text-gray-300">
-          {title}
-        </span>
-
-        <span className="font-bold text-white">
-          #{value}
-        </span>
-
-      </div>
-
-      <div className="h-3 rounded-full bg-neutral-800 overflow-hidden">
-
-        <div
-          className={`h-full ${colours[colour]}`}
-          style={{
-            width: `${progress}%`,
-          }}
-        />
-
-      </div>
-
-    </div>
-
+  const safeProgress = Math.min(
+    100,
+    Math.max(0, progress)
   );
 
+  const accentClass = getAccentText(accent);
+  const ringColour = getRingColour(accent);
+
+  return (
+    <div className="rounded-[24px] border border-gray-200 bg-white p-4 shadow-[0_8px_24px_rgba(15,23,42,0.08)]">
+      <div className="flex items-start justify-between gap-2">
+        <div>
+          <p className="text-2xl">{icon}</p>
+
+          <h3 className="mt-2 text-sm font-black text-gray-800">
+            {title}
+          </h3>
+        </div>
+
+        <div
+          className="relative flex h-16 w-16 shrink-0 items-center justify-center rounded-full"
+          style={{
+            background: `conic-gradient(${ringColour} ${safeProgress}%, #e5e7eb ${safeProgress}% 100%)`,
+          }}
+        >
+          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white">
+            <span
+              className={`text-base font-black ${accentClass}`}
+            >
+              {Math.round(safeProgress)}%
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <p className={`mt-4 text-3xl font-black ${accentClass}`}>
+        {value}
+      </p>
+
+      <p className="mt-1 min-h-10 text-xs leading-5 text-gray-500">
+        {footer}
+      </p>
+    </div>
+  );
+}
+
+function MetricTile({
+  icon,
+  title,
+  value,
+  footer,
+  accent,
+}: {
+  icon: string;
+  title: string;
+  value: number | string;
+  footer: string;
+  accent: Accent;
+}) {
+  return (
+    <div className="rounded-[24px] border border-gray-200 bg-white p-4 shadow-[0_8px_24px_rgba(15,23,42,0.08)]">
+      <div className="flex items-center justify-between gap-2">
+        <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gray-100 text-2xl">
+          {icon}
+        </div>
+
+        <span className="h-3 w-3 rounded-full bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.45)]" />
+      </div>
+
+      <h3 className="mt-4 text-sm font-bold text-gray-600">
+        {title}
+      </h3>
+
+      <p
+        className={`mt-1 break-words text-3xl font-black ${getAccentText(
+          accent
+        )}`}
+      >
+        {value}
+      </p>
+
+      <p className="mt-2 min-h-10 text-xs leading-5 text-gray-500">
+        {footer}
+      </p>
+    </div>
+  );
+}
+
+function RankingTile({
+  icon,
+  title,
+  value,
+  accent,
+}: {
+  icon: string;
+  title: string;
+  value: number;
+  accent: Accent;
+}) {
+  const hasRanking = value > 0;
+
+  return (
+    <div className="rounded-[24px] border border-gray-200 bg-white p-4 shadow-[0_8px_24px_rgba(15,23,42,0.08)]">
+      <div className="flex items-center justify-between">
+        <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gray-100 text-xl">
+          {icon}
+        </div>
+
+        <div
+          className={`h-3 w-3 rounded-full ${
+            hasRanking ? "bg-green-500" : "bg-gray-300"
+          }`}
+        />
+      </div>
+
+      <p className="mt-4 text-sm font-bold text-gray-600">
+        {title}
+      </p>
+
+      <p
+        className={`mt-1 text-3xl font-black ${getAccentText(
+          accent
+        )}`}
+      >
+        {hasRanking ? `#${value}` : "—"}
+      </p>
+
+      <p className="mt-2 text-xs text-gray-500">
+        {hasRanking
+          ? `${title} ranking position`
+          : "Not ranked yet"}
+      </p>
+    </div>
+  );
 }
 
 function MovementRow({
@@ -842,107 +830,110 @@ function MovementRow({
   before: number;
   after: number;
 }) {
-
+  const hasData = before > 0 || after > 0;
   const movement = before - after;
 
-  const colour =
+  const movementStyle =
     movement > 0
-      ? "text-green-400"
+      ? "bg-green-100 text-green-700"
       : movement < 0
-      ? "text-red-400"
-      : "text-gray-400";
+        ? "bg-red-100 text-red-700"
+        : "bg-gray-100 text-gray-600";
 
-  const symbol =
-    movement > 0
-      ? "▲"
-      : movement < 0
-      ? "▼"
-      : "•";
+  const movementLabel =
+    !hasData
+      ? "No data"
+      : movement > 0
+        ? `▲ ${Math.abs(movement)}`
+        : movement < 0
+          ? `▼ ${Math.abs(movement)}`
+          : "No change";
 
   return (
-
-    <div className="flex items-center justify-between py-3 border-b border-neutral-800 last:border-b-0">
-
+    <div className="flex items-center justify-between border-b border-gray-100 py-4 last:border-b-0">
       <div>
-
-        <p className="text-white font-medium">
+        <p className="font-bold text-gray-800">
           {title}
         </p>
 
-        <p className="text-xs text-gray-500">
-          {before} → {after}
+        <p className="mt-1 text-xs text-gray-500">
+          {hasData ? `#${before} → #${after}` : "No ranking recorded"}
         </p>
-
       </div>
 
-      <div className={`font-bold text-lg ${colour}`}>
-
-        {movement === 0
-          ? "No Change"
-          : `${symbol} ${Math.abs(movement)}`}
-
-      </div>
-
-    </div>
-
-  );
-
-}
-function SummaryRow({
-  label,
-  value,
-}:{
-  label:string;
-  value:number|string;
-}){
-
-  return(
-
-    <div className="flex items-center justify-between border-b border-neutral-800 pb-3">
-
-      <span className="text-gray-400">
-        {label}
+      <span
+        className={`rounded-full px-3 py-2 text-xs font-black ${movementStyle}`}
+      >
+        {movementLabel}
       </span>
-
-      <span className="text-2xl font-bold text-white">
-        {value}
-      </span>
-
     </div>
-
   );
-
 }
-function AchievementBadge({
+
+function AchievementTile({
   icon,
   title,
   unlocked,
-}:{
-  icon:string;
-  title:string;
-  unlocked:boolean;
-}){
-
-  return(
-
+}: {
+  icon: string;
+  title: string;
+  unlocked: boolean;
+}) {
+  return (
     <div
-      className={`rounded-2xl border p-5 text-center transition-all ${
+      className={`rounded-[24px] border p-4 text-center shadow-[0_8px_24px_rgba(15,23,42,0.07)] ${
         unlocked
-          ? "border-yellow-500 bg-yellow-500/10 shadow-[0_0_20px_rgba(234,179,8,0.25)]"
-          : "border-neutral-700 bg-neutral-900 opacity-50"
+          ? "border-amber-300 bg-gradient-to-b from-amber-50 to-white"
+          : "border-gray-200 bg-white"
       }`}
     >
-
-      <div className="text-4xl">
-        {icon}
+      <div
+        className={`mx-auto flex h-16 w-16 items-center justify-center rounded-full text-3xl ${
+          unlocked
+            ? "bg-amber-100"
+            : "bg-gray-100 grayscale"
+        }`}
+      >
+        {unlocked ? icon : "🔒"}
       </div>
 
-      <p className="mt-3 font-semibold">
+      <p className="mt-3 text-sm font-black text-gray-800">
         {title}
       </p>
 
+      <p
+        className={`mt-2 text-xs font-bold ${
+          unlocked ? "text-amber-600" : "text-gray-400"
+        }`}
+      >
+        {unlocked ? "Unlocked" : "Locked"}
+      </p>
     </div>
-
   );
+}
 
+function getAccentText(accent: Accent) {
+  const styles: Record<Accent, string> = {
+    green: "text-green-600",
+    blue: "text-blue-600",
+    purple: "text-purple-600",
+    yellow: "text-amber-500",
+    orange: "text-orange-500",
+    pink: "text-pink-500",
+  };
+
+  return styles[accent];
+}
+
+function getRingColour(accent: Accent) {
+  const colours: Record<Accent, string> = {
+    green: "#16a34a",
+    blue: "#2563eb",
+    purple: "#9333ea",
+    yellow: "#f59e0b",
+    orange: "#f97316",
+    pink: "#ec4899",
+  };
+
+  return colours[accent];
 }

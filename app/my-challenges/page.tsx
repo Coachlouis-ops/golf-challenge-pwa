@@ -7,7 +7,6 @@ import { db } from "@/src/lib/firebase";
 import {
   collection,
   getDocs,
-  orderBy,
   query,
   where,
 } from "firebase/firestore";
@@ -44,30 +43,73 @@ export default function ChallengesPage() {
         setLoading(true);
         setError(null);
 
-        const challengesQuery = query(
-          collection(db, "challenges"),
-          where("participants", "array-contains", uid),
-          orderBy("createdAt", "desc")
-        );
+     const createdQuery = query(
+  collection(db, "challenges"),
+  where("creatorUid", "==", uid)
+);
 
-        const snapshot = await getDocs(challengesQuery);
+const joinedQuery = query(
+  collection(db, "challenges"),
+  where("participants", "array-contains", uid)
+);
 
-        const rows: Challenge[] = snapshot.docs.map((challengeDocument) => {
-          const data = challengeDocument.data() as any;
+const [createdSnapshot, joinedSnapshot] =
+  await Promise.all([
+    getDocs(createdQuery),
+    getDocs(joinedQuery),
+  ]);
 
-          return {
-            challengeId: data.challengeId || challengeDocument.id,
-            challengeTitle: data.challengeTitle || "Untitled Challenge",
-            courseName: data.courseName || "—",
-            gameFormat: data.gameFormat || "—",
-            entryTokens: data.entryTokens || 0,
-            status: data.status || "pending",
-            creatorUid: data.creatorUid || "",
-            createdAt: data.createdAt,
-          };
-        });
+const challengeMap = new Map<string, Challenge>();
 
-        setChallenges(rows);
+function addChallenge(
+  challengeDocument: any
+) {
+  const data = challengeDocument.data();
+
+  challengeMap.set(challengeDocument.id, {
+    challengeId:
+      data.challengeId || challengeDocument.id,
+    challengeTitle:
+      data.challengeTitle || "Untitled Challenge",
+    courseName:
+      data.courseName || "—",
+    gameFormat:
+      data.gameFormat || "—",
+    entryTokens:
+      Number(data.entryTokens || 0),
+    status:
+      data.status || "pending",
+    creatorUid:
+      data.creatorUid || "",
+    createdAt:
+      data.createdAt,
+  });
+}
+
+createdSnapshot.docs.forEach(addChallenge);
+joinedSnapshot.docs.forEach(addChallenge);
+
+const rows = Array.from(
+  challengeMap.values()
+);
+
+rows.sort((a, b) => {
+  const aTime =
+    a.createdAt?.toMillis?.() ??
+    a.createdAt?.seconds ??
+    0;
+
+  const bTime =
+    b.createdAt?.toMillis?.() ??
+    b.createdAt?.seconds ??
+    0;
+
+  return bTime - aTime;
+});
+
+setChallenges(rows);
+
+
       } catch (err: any) {
         console.error("Failed to load challenges:", err);
         setError(err.message || "Failed to load challenges.");

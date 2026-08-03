@@ -21,13 +21,112 @@ export default function ChallengesPage() {
   const [loading, setLoading] = useState(true);
   const [challenges, setChallenges] = useState<Challenge[]>([]);
 
-  useEffect(() => {
+ useEffect(() => {
+  if (!user) {
+    setChallenges([]);
+    setLoading(false);
+    return;
+  }
 
-  setChallenges([]);
+  const uid = user.uid;
 
-  setLoading(false);
+  async function loadChallenges() {
+    setLoading(true);
 
-}, []);
+    try {
+      const createdQuery = query(
+        collection(db, "challenges"),
+        where("creatorUid", "==", uid)
+      );
+
+      const participatingQuery = query(
+        collection(db, "challenges"),
+        where("participants", "array-contains", uid)
+      );
+
+      const [createdSnap, participatingSnap] =
+        await Promise.all([
+          getDocs(createdQuery),
+          getDocs(participatingQuery),
+        ]);
+
+      const challengeMap = new Map<string, Challenge>();
+
+      createdSnap.docs.forEach((challengeDoc) => {
+        const data = challengeDoc.data();
+
+        challengeMap.set(challengeDoc.id, {
+          challengeId:
+            data.challengeId || challengeDoc.id,
+          challengeTitle:
+            data.challengeTitle || "Untitled Challenge",
+          courseName:
+            data.courseName || "",
+          gameFormat:
+            data.gameFormat || "",
+          entryTokens:
+            Number(data.entryTokens || 0),
+          status:
+            data.status || "created",
+          createdAt:
+            data.createdAt,
+        });
+      });
+
+      participatingSnap.docs.forEach((challengeDoc) => {
+        const data = challengeDoc.data();
+
+        challengeMap.set(challengeDoc.id, {
+          challengeId:
+            data.challengeId || challengeDoc.id,
+          challengeTitle:
+            data.challengeTitle || "Untitled Challenge",
+          courseName:
+            data.courseName || "",
+          gameFormat:
+            data.gameFormat || "",
+          entryTokens:
+            Number(data.entryTokens || 0),
+          status:
+            data.status || "created",
+          createdAt:
+            data.createdAt,
+        });
+      });
+
+      const loadedChallenges = Array.from(
+        challengeMap.values()
+      );
+
+      loadedChallenges.sort((a, b) => {
+        const aTime =
+          a.createdAt?.seconds ??
+          a.createdAt?.toMillis?.() ??
+          0;
+
+        const bTime =
+          b.createdAt?.seconds ??
+          b.createdAt?.toMillis?.() ??
+          0;
+
+        return bTime - aTime;
+      });
+
+      setChallenges(loadedChallenges);
+    } catch (error) {
+      console.error(
+        "Unable to load challenges:",
+        error
+      );
+
+      setChallenges([]);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  loadChallenges();
+}, [user]);
   
 
   if (loading) {

@@ -182,14 +182,14 @@ export default function PlayerVaultPage() {
 
         <header className="sticky top-0 z-20 border-b border-gray-200 bg-white/95 px-5 py-5 backdrop-blur">
           <div className="flex items-center justify-between">
-            <button
-              type="button"
-              onClick={() => router.back()}
-              className="flex h-10 w-10 items-center justify-center rounded-full text-2xl text-gray-600 hover:bg-gray-100"
-              aria-label="Go back"
-            >
-              ‹
-            </button>
+           <button
+  type="button"
+  onClick={() => router.push("/dashboard")}
+  className="flex h-10 w-10 items-center justify-center rounded-full text-2xl text-gray-600 hover:bg-gray-100"
+  aria-label="Go back"
+>
+  ‹
+</button>
 
             <div className="text-center">
               <p className="text-xs font-bold uppercase tracking-[0.22em] text-green-600">

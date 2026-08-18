@@ -125,7 +125,7 @@ for (const rankingDoc of leaderboardSnap.docs) {
               </p>
 
               <h1 className="text-xl font-black">
-                Race to Paradise
+                Race to Final
               </h1>
             </div>
 
@@ -142,26 +142,25 @@ for (const rankingDoc of leaderboardSnap.docs) {
             </p>
 
             <h2 className="mt-2 text-3xl font-black">
-              Race to Paradise
+              Race to Final
             </h2>
 
             <p className="mt-3 text-sm leading-6 text-cyan-50/90">
               Compete throughout the season, earn Race Points and climb
-              the global Race to Paradise leaderboard.
+              the global Race to the Final leaderboard.
             </p>
 
             <div className="mt-5 rounded-2xl border border-white/15 bg-white/10 p-4">
               <p className="text-xs font-bold uppercase tracking-wider text-cyan-100">
-                The Prize
+                The Final
               </p>
 
               <p className="mt-2 text-lg font-black">
-                Top 8 Players Worldwide
+                Top 8 Players 
               </p>
 
               <p className="mt-2 text-sm leading-6 text-cyan-50/90">
-                The season&apos;s Top 8 players will be taken to Mauritius
-                on a TEEZ-sponsored golf trip to compete in the final
+                The season&apos;s Top 8 players will compete in the final
                 challenge and play for the title of TEEZ Champion of the Year.
               </p>
             </div>
@@ -251,7 +250,7 @@ for (const rankingDoc of leaderboardSnap.docs) {
               </h2>
 
               <p className="mt-1 text-sm text-gray-500">
-                The Top 8 qualify for Mauritius.
+                The Top 8 qualify for Final.
               </p>
             </div>
 
@@ -309,12 +308,12 @@ for (const rankingDoc of leaderboardSnap.docs) {
             </div>
 
             <h2 className="mt-3 text-2xl font-black">
-              Mauritius Final
+              The Final
             </h2>
 
             <p className="mt-3 text-sm leading-6 text-gray-600">
               At the end of the season, the Top 8 qualifying players will
-              travel to Mauritius for the final TEEZ challenge.
+             compete for the final TEEZ challenge.
             </p>
 
             <p className="mt-3 text-sm font-bold text-gray-900">

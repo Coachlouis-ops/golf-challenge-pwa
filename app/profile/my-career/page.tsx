@@ -605,6 +605,51 @@ export default function MyCareerPage() {
           </section>      
 
 
+
+{/* HOW MY CAREER WORKS */}
+
+<section>
+  <SectionHeading
+    title="How My Career Works"
+    description="See exactly how your career statistics are calculated"
+  />
+
+  <button
+    type="button"
+    onClick={() =>
+      router.push("/profile/how-career-works")
+    }
+    className="w-full overflow-hidden rounded-[26px] border border-gray-200 bg-white p-5 text-left shadow-[0_10px_28px_rgba(15,23,42,0.08)] transition hover:-translate-y-1"
+  >
+    <div className="flex items-center gap-4">
+      <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-gray-100 text-3xl">
+        📘
+      </div>
+
+      <div className="min-w-0 flex-1">
+        <p className="text-xs font-bold uppercase tracking-[0.18em] text-gray-500">
+          Career Guide
+        </p>
+
+        <h3 className="mt-1 text-xl font-black text-gray-900">
+          How My Career Works
+        </h3>
+
+        <p className="mt-2 text-sm leading-5 text-gray-500">
+          View how Career Points, rankings, Power Score, XP,
+          levels, streaks, Vault Keys and Race Points are calculated.
+        </p>
+      </div>
+
+      <span className="text-2xl font-bold text-gray-500">
+        ›
+      </span>
+    </div>
+  </button>
+</section>
+
+
+
 {/* PLAYER REWARDS */}
 
 <section>

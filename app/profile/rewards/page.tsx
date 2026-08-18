@@ -157,119 +157,134 @@ export default function PlayerVaultPage() {
     initialiseVault();
   }, [user, loadVault]);
 
-  if (loading) {
-    return (
-      <main className="flex min-h-screen items-center justify-center bg-[#f4f6f8] px-6">
-        <div className="rounded-3xl bg-white px-8 py-6 text-center shadow-lg">
-          <div className="mx-auto h-10 w-10 animate-spin rounded-full border-4 border-gray-200 border-t-green-500" />
-
-          <p className="mt-4 font-semibold text-gray-700">
-            Loading Player Vault...
-          </p>
-        </div>
-      </main>
-    );
-  }
-
-  const completedMilestones = Object.keys(
-    vault.claimedMilestones ?? {}
-  ).length;
-
+ if (loading) {
   return (
-    <main className="min-h-screen bg-[#f4f6f8] text-gray-900">
-      <div className="mx-auto max-w-md pb-12">
+    <main className="flex min-h-screen items-center justify-center bg-[#eef1f4] px-6">
+      <div className="border border-slate-200 bg-white px-8 py-6 text-center shadow-sm">
+        <div className="mx-auto h-8 w-8 animate-spin rounded-full border-2 border-slate-200 border-t-[#0f5132]" />
+
+        <p className="mt-4 text-sm font-semibold text-slate-700">
+          Loading Player Vault
+        </p>
+      </div>
+    </main>
+  );
+}
+
+const completedMilestones = Object.keys(
+  vault.claimedMilestones ?? {}
+).length;
+
+return (
+  <main className="min-h-screen bg-[#eef1f4] text-[#111827]">
+      <div className="mx-auto max-w-md pb-14">
+
         {/* HEADER */}
 
-        <header className="sticky top-0 z-20 border-b border-gray-200 bg-white/95 px-5 py-5 backdrop-blur">
+        <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/95 px-5 py-4 backdrop-blur">
           <div className="flex items-center justify-between">
-           <button
-  type="button"
-  onClick={() => router.push("/dashboard")}
-  className="flex h-10 w-10 items-center justify-center rounded-full text-2xl text-gray-600 hover:bg-gray-100"
-  aria-label="Go back"
->
-  ‹
-</button>
+            <button
+              type="button"
+              onClick={() => router.push("/dashboard")}
+              className="flex h-9 w-9 items-center justify-center border border-slate-200 bg-white text-xl text-slate-600"
+              aria-label="Go back"
+            >
+              ‹
+            </button>
 
             <div className="text-center">
-              <p className="text-xs font-bold uppercase tracking-[0.22em] text-green-600">
-                Career Rewards
+              <p className="text-[10px] font-bold uppercase tracking-[0.26em] text-[#0f5132]">
+                TEEZ Career Rewards
               </p>
 
-              <h1 className="text-xl font-black">
-                Player Vault
+              <h1 className="mt-1 text-lg font-black tracking-tight">
+                PLAYER VAULT
               </h1>
             </div>
 
-            <div className="h-10 w-10" />
+            <div className="h-9 w-9" />
           </div>
         </header>
 
-        <div className="space-y-6 px-4 pt-5">
-          {/* HERO */}
+        <div className="space-y-7 px-4 pt-5">
 
-          <section className="overflow-hidden rounded-[28px] bg-gradient-to-br from-[#153d2b] via-[#10271c] to-black p-6 text-white shadow-[0_14px_35px_rgba(15,23,42,0.18)]">
-            <p className="text-xs font-bold uppercase tracking-[0.22em] text-green-400">
-              Mystery Coin Vault
-            </p>
+          {/* VAULT HERO */}
 
-            <h2 className="mt-2 text-3xl font-black">
-              Earn Keys. Flip Coins.
-            </h2>
+          <section className="overflow-hidden border border-[#1f2937] bg-[#0d1821] shadow-[0_8px_22px_rgba(15,23,42,0.16)]">
 
-            <p className="mt-3 text-sm leading-6 text-gray-300">
-              Career milestones award Vault Keys. Use each key to open
-              one mystery coin and reveal an in-game reward.
-            </p>
+            <div className="flex items-start gap-4 border-b border-white/10 p-5">
 
-            {newKeysEarned > 0 && (
-              <div className="mt-5 rounded-2xl border border-green-400/30 bg-green-400/15 p-4">
-                <p className="text-xs font-bold uppercase tracking-wider text-green-300">
-                  New milestone reward
+              <div className="flex h-16 w-16 shrink-0 items-center justify-center border border-[#b89b5e] bg-[#14232d]">
+                <span className="text-[10px] font-black tracking-[0.08em] text-[#d6bd7a]">
+                  VAULT
+                </span>
+              </div>
+
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#8eb89f]">
+                  Career Reward System
                 </p>
 
-                <p className="mt-1 text-2xl font-black">
+                <h2 className="mt-1 text-2xl font-black tracking-tight text-white">
+                  Earn Keys. Open Vaults.
+                </h2>
+
+                <p className="mt-2 text-sm leading-5 text-slate-300">
+                  Career milestones award Vault Keys.
+                  Each key opens one mystery coin containing
+                  a player reward.
+                </p>
+              </div>
+            </div>
+
+            {newKeysEarned > 0 && (
+              <div className="border-b border-white/10 bg-[#10261c] px-5 py-4">
+                <p className="text-[9px] font-bold uppercase tracking-[0.18em] text-[#8eb89f]">
+                  New Milestone
+                </p>
+
+                <p className="mt-1 text-xl font-black text-[#d6bd7a]">
                   +{newKeysEarned} Vault{" "}
                   {newKeysEarned === 1 ? "Key" : "Keys"}
                 </p>
               </div>
             )}
 
-            <div className="mt-5 grid grid-cols-2 gap-3">
-              <SummaryCard
+            <div className="grid grid-cols-2 border-t border-white/10">
+              <VaultSummary
+                code="AVL"
                 title="Available Keys"
                 value={vault.availableKeys}
               />
 
-              <SummaryCard
+              <VaultSummary
+                code="LIFE"
                 title="Lifetime Keys"
                 value={vault.lifetimeKeysEarned}
               />
 
-              <SummaryCard
+              <VaultSummary
+                code="OPEN"
                 title="Coins Opened"
                 value={vault.totalCoinsOpened}
               />
 
-              <SummaryCard
+              <VaultSummary
+                code="MILE"
                 title="Milestones"
                 value={completedMilestones}
               />
             </div>
           </section>
 
-          {/* VAULTS */}
+          {/* VAULT PROGRESSION */}
 
           <section>
-            <div className="mb-3 px-1">
-              <h2 className="text-xl font-black">
-                Career Vaults
-              </h2>
-
-              <p className="mt-1 text-sm text-gray-500">
-                Complete each vault to unlock the next board.
-              </p>
-            </div>
+            <SectionHeading
+              eyebrow="CAREER REWARD SERIES"
+              title="Vault Progression"
+              description="Complete each 50-coin vault to advance to the next reward tier"
+            />
 
             <div className="space-y-4">
               {VAULTS.map((vaultConfig) => (
@@ -286,27 +301,62 @@ export default function PlayerVaultPage() {
               ))}
             </div>
           </section>
+
         </div>
       </div>
     </main>
   );
 }
 
-function SummaryCard({
+function SectionHeading({
+  eyebrow,
+  title,
+  description,
+}: {
+  eyebrow: string;
+  title: string;
+  description: string;
+}) {
+  return (
+    <div className="mb-3">
+      <div className="mb-2 h-[2px] w-8 bg-[#0f5132]" />
+
+      <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#0f5132]">
+        {eyebrow}
+      </p>
+
+      <h2 className="mt-1 text-xl font-black tracking-tight">
+        {title}
+      </h2>
+
+      <p className="mt-1 text-sm leading-5 text-slate-500">
+        {description}
+      </p>
+    </div>
+  );
+}
+
+function VaultSummary({
+  code,
   title,
   value,
 }: {
+  code: string;
   title: string;
   value: number;
 }) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/10 p-4">
-      <p className="text-xs font-semibold text-gray-300">
-        {title}
+    <div className="border-b border-r border-white/10 px-5 py-4">
+      <p className="text-[9px] font-black uppercase tracking-[0.16em] text-[#8eb89f]">
+        {code}
       </p>
 
-      <p className="mt-1 text-3xl font-black text-white">
+      <p className="mt-1 text-2xl font-black text-white">
         {value}
+      </p>
+
+      <p className="mt-1 text-xs text-slate-500">
+        {title}
       </p>
     </div>
   );
@@ -331,84 +381,125 @@ function VaultCard({
     50,
     Math.max(
       0,
-      playerVault.totalCoinsOpened -
-        openedBeforeVault
+      playerVault.totalCoinsOpened - openedBeforeVault
     )
   );
 
   const progress =
     (coinsOpenedInVault / 50) * 100;
 
-  const completed = coinsOpenedInVault >= 50;
+  const completed =
+    coinsOpenedInVault >= 50;
+
+  const vaultStyle = {
+    bronze: {
+      code: "BRZ",
+      border: "border-[#9a6a3a]",
+      accent: "#9a6a3a",
+      panel: "bg-[#fbf6f1]",
+    },
+    silver: {
+      code: "SLV",
+      border: "border-[#9ca3af]",
+      accent: "#6b7280",
+      panel: "bg-[#f8fafc]",
+    },
+    gold: {
+      code: "GLD",
+      border: "border-[#c9b37a]",
+      accent: "#9a7531",
+      panel: "bg-[#faf7ef]",
+    },
+    diamond: {
+      code: "DIA",
+      border: "border-[#7c95a5]",
+      accent: "#4f6978",
+      panel: "bg-[#f3f7f9]",
+    },
+  }[config.id];
 
   return (
     <div
-      className={`overflow-hidden rounded-[26px] border bg-white shadow-[0_8px_24px_rgba(15,23,42,0.08)] ${
+      className={`overflow-hidden border bg-white shadow-sm ${
         isUnlocked
-          ? "border-gray-200"
-          : "border-gray-200 opacity-70"
+          ? vaultStyle.border
+          : "border-slate-200 opacity-70"
       }`}
     >
-      <div className="p-5">
-        <div className="flex items-start gap-4">
-          <div
-            className={`flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl text-4xl ${
-              isUnlocked
-                ? "bg-gray-100"
-                : "bg-gray-100 grayscale"
-            }`}
-          >
-            {isUnlocked ? config.icon : "🔒"}
-          </div>
+      <div className="flex items-start gap-4 p-5">
 
-          <div className="min-w-0 flex-1">
-            <p className="text-xs font-bold uppercase tracking-[0.18em] text-gray-400">
-              Coins {config.coinStart}–{config.coinEnd}
-            </p>
-
-            <h3 className="mt-1 text-xl font-black">
-              {config.title}
-            </h3>
-
-            <p className="mt-2 text-sm leading-5 text-gray-500">
-              {config.description}
-            </p>
-          </div>
+        <div
+          className={`flex h-14 min-w-14 items-center justify-center border px-2 text-[9px] font-black tracking-[0.08em] ${
+            isUnlocked
+              ? `${vaultStyle.border} ${vaultStyle.panel}`
+              : "border-slate-200 bg-slate-50 text-slate-400"
+          }`}
+          style={{
+            color: isUnlocked
+              ? vaultStyle.accent
+              : undefined,
+          }}
+        >
+          {isUnlocked
+            ? vaultStyle.code
+            : "LOCK"}
         </div>
 
-        <div className="mt-5">
-          <div className="mb-2 flex items-center justify-between text-xs font-bold">
-            <span className="text-gray-500">
-              Vault progress
-            </span>
+        <div className="min-w-0 flex-1">
 
-            <span className="text-gray-800">
-              {coinsOpenedInVault} / 50
-            </span>
-          </div>
+          <p className="text-[9px] font-bold uppercase tracking-[0.18em] text-slate-400">
+            Coins {config.coinStart}–{config.coinEnd}
+          </p>
 
-          <div className="h-3 overflow-hidden rounded-full bg-gray-200">
-            <div
-              className="h-full rounded-full bg-green-500 transition-all"
-              style={{
-                width: `${Math.min(100, progress)}%`,
-              }}
-            />
-          </div>
+          <h3 className="mt-1 text-xl font-black">
+            {config.title}
+          </h3>
+
+          <p className="mt-2 text-sm leading-5 text-slate-500">
+            {config.description}
+          </p>
+        </div>
+      </div>
+
+      <div className="border-t border-slate-100 px-5 py-4">
+
+        <div className="flex items-center justify-between">
+          <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-slate-400">
+            Vault Progress
+          </p>
+
+          <p className="text-sm font-black text-[#111827]">
+            {coinsOpenedInVault} / 50
+          </p>
+        </div>
+
+        <div className="mt-3 h-2 bg-slate-200">
+          <div
+            className="h-full"
+            style={{
+              width: `${Math.min(
+                100,
+                progress
+              )}%`,
+              backgroundColor: isUnlocked
+                ? vaultStyle.accent
+                : "#cbd5e1",
+            }}
+          />
         </div>
 
         <button
           type="button"
           onClick={onEnter}
           disabled={!isUnlocked}
-          className={`mt-5 w-full rounded-2xl py-3 text-sm font-black transition ${
+          className={`mt-4 w-full border py-3 text-xs font-black uppercase tracking-[0.12em] ${
             isUnlocked
-              ? "bg-green-600 text-white hover:bg-green-500"
-              : "cursor-not-allowed bg-gray-200 text-gray-400"
+              ? "border-[#0f5132] bg-[#0f5132] text-white"
+              : "cursor-not-allowed border-slate-200 bg-slate-100 text-slate-400"
           }`}
         >
           {!isUnlocked
-            ? `Complete the previous vault`
+            ? "Complete Previous Vault"
             : completed
               ? `${config.title} Completed`
               : `Enter ${config.title}`}

@@ -57,83 +57,133 @@ export default function HomePage() {
 
   return (
     <main className="bg-black text-white">
-    {/* ================= HEADER ================= */}
-<header className="w-full bg-black px-4 py-3 flex flex-col gap-3">
+{/* ================= HEADER ================= */}
+<header className="w-full bg-[#07110d] px-4 py-3 text-white">
 
-  {/* BRANDING (ADDED) */}
+  {/* BRAND */}
   <div className="text-center">
-    <p className="text-green-400 text-sm font-semibold">
-      Teez Golf Challenges by Honey Badger Technologies PTY.LTD
+    <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-green-400">
+      TEEZ GOLF CHALLENGES
+    </p>
+
+    <p className="mt-1 text-[9px] uppercase tracking-[0.14em] text-gray-500">
+      A Honey Badger Technologies Platform
     </p>
   </div>
 
-  {/* TOP ROW */}
-  <div className="flex items-center justify-between">
-    {/* LEFT */}
+  {/* INTERNATIONAL GOLF STRIP */}
+  <div className="mt-3 border-y border-white/10 py-2">
+    <div className="flex items-center justify-center gap-2">
+      <span className="text-base">🇺🇸</span>
+      <span className="text-base">🇬🇧</span>
+      <span className="text-base">🇿🇦</span>
+      <span className="text-base">🇦🇺</span>
+      <span className="text-base">🇯🇵</span>
+      <span className="text-base">🇦🇪</span>
+      <span className="text-base">🇪🇺</span>
+    </div>
+
+    <p className="mt-1 text-center text-[8px] font-bold uppercase tracking-[0.22em] text-gray-400">
+      Global Golf Competition Platform
+    </p>
+  </div>
+
+  {/* ACTION / SOCIAL ROW */}
+  <div className="mt-3 flex items-center justify-between">
+
     <button
       onClick={handleExit}
-      className="px-3 py-1 rounded-lg bg-red-500 text-white text-xs"
+      className="border border-red-500/50 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.1em] text-red-400"
     >
       Exit
     </button>
 
-    {/* SOCIALS */}
-    <div className="flex items-center gap-3">
+    <div className="flex items-center gap-2">
+
+      {/* FACEBOOK */}
       <a
         href="https://facebook.com/profile.php?id=61575742530808"
         target="_blank"
+        rel="noreferrer"
+        aria-label="Facebook"
+        className="flex h-8 w-8 items-center justify-center rounded-full border border-white/15 bg-white/[0.05]"
       >
-        <svg width="18" height="18" fill="#1877F2" viewBox="0 0 24 24">
+        <svg
+          width="15"
+          height="15"
+          fill="white"
+          viewBox="0 0 24 24"
+        >
           <path d="M22 12a10 10 0 1 0-11.5 9.87v-6.99H8v-2.88h2.5V9.41c0-2.47 1.47-3.84 3.72-3.84 1.08 0 2.2.19 2.2.19v2.42h-1.24c-1.23 0-1.61.76-1.61 1.54v1.85H16l-.4 2.88h-2.21v6.99A10 10 0 0 0 22 12z" />
         </svg>
       </a>
 
-      <a href="https://youtube.com/teezgolfchallenges" target="_blank">
-        <svg width="18" height="18" fill="#FF0000" viewBox="0 0 24 24">
-          <path d="M23.5 6.2s-.2-1.7-.8-2.4c-.8-.9-1.7-.9-2.1-1C17.8 2.5 12 2.5 12 2.5h0s-5.8 0-8.6.3c-.4.1-1.3.1-2.1 1C.7 4.5.5 6.2.5 6.2S.3 8.2.3 10.2v1.6c0 2 .2 4 .2 4s.2 1.7.8 2.4c.8.9 1.9.9 2.4 1 1.7.2 7.3.3 7.3.3s5.8 0 8.6-.3c.4-.1 1.3-.1 2.1-1 .6-.7.8-2.4.8-2.4s.2-2 .2-4v-1.6c0-2-.2-4-.2-4zM9.8 14.7V7.9l6.4 3.4-6.4 3.4z" />
+      {/* YOUTUBE */}
+      <a
+        href="https://youtube.com/teezgolfchallenges"
+        target="_blank"
+        rel="noreferrer"
+        aria-label="YouTube"
+        className="flex h-8 w-8 items-center justify-center rounded-full border border-white/15 bg-white/[0.05]"
+      >
+        <svg
+          width="16"
+          height="16"
+          fill="white"
+          viewBox="0 0 24 24"
+        >
+          <path d="M23.5 6.2s-.2-1.7-.8-2.4c-.8-.9-1.7-.9-2.1-1C17.8 2.5 12 2.5 12 2.5s-5.8 0-8.6.3c-.4.1-1.3.1-2.1 1C.7 4.5.5 6.2.5 6.2S.3 8.2.3 10.2v1.6c0 2 .2 4 .2 4s.2 1.7.8 2.4c.8.9 1.9.9 2.4 1 1.7.2 7.3.3 7.3.3s5.8 0 8.6-.3c.4-.1 1.3-.1 2.1-1 .6-.7.8-2.4.8-2.4s.2-2 .2-4v-1.6c0-2-.2-4-.2-4zM9.8 14.7V7.9l6.4 3.4-6.4 3.4z" />
         </svg>
       </a>
 
-      <a href="https://tiktok.com/teezgolfchallenges" target="_blank">
-        <svg width="18" height="18" viewBox="0 0 24 24">
-          <path
-            fill="#25F4EE"
-            d="M9 3v12.5a2.5 2.5 0 1 1-2.5-2.5H8V9H6.5A6.5 6.5 0 1 0 13 15.5V8.5c1.1 1 2.6 1.5 4 1.5V6.5c-1.6 0-3-1.3-3-3H9z"
-          />
+      {/* TIKTOK */}
+      <a
+        href="https://tiktok.com/teezgolfchallenges"
+        target="_blank"
+        rel="noreferrer"
+        aria-label="TikTok"
+        className="flex h-8 w-8 items-center justify-center rounded-full border border-white/15 bg-white/[0.05]"
+      >
+        <svg
+          width="15"
+          height="15"
+          viewBox="0 0 24 24"
+          fill="white"
+        >
+          <path d="M9 3v12.5a2.5 2.5 0 1 1-2.5-2.5H8V9H6.5A6.5 6.5 0 1 0 13 15.5V8.5c1.1 1 2.6 1.5 4 1.5V6.5c-1.6 0-3-1.3-3-3H9z" />
         </svg>
       </a>
 
-      <a href="https://instagram.com/teezgolfchallenges" target="_blank">
-        <svg width="18" height="18" viewBox="0 0 24 24">
-          <defs>
-            <linearGradient id="ig" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#feda75" />
-              <stop offset="50%" stopColor="#d62976" />
-              <stop offset="100%" stopColor="#4f5bd5" />
-            </linearGradient>
-          </defs>
-          <path
-            fill="url(#ig)"
-            d="M7 2C4.2 2 2 4.2 2 7v10c0 2.8 2.2 5 5 5h10c2.8 0 5-2.2 5-5V7c0-2.8-2.2-5-5-5H7z"
-          />
+      {/* INSTAGRAM */}
+      <a
+        href="https://instagram.com/teezgolfchallenges"
+        target="_blank"
+        rel="noreferrer"
+        aria-label="Instagram"
+        className="flex h-8 w-8 items-center justify-center rounded-full border border-white/15 bg-white/[0.05]"
+      >
+        <svg
+          width="15"
+          height="15"
+          viewBox="0 0 24 24"
+          fill="white"
+        >
+          <path d="M7 2C4.2 2 2 4.2 2 7v10c0 2.8 2.2 5 5 5h10c2.8 0 5-2.2 5-5V7c0-2.8-2.2-5-5-5H7zm5 4.8A5.2 5.2 0 1 1 6.8 12 5.2 5.2 0 0 1 12 6.8zm6.5-.3a1.2 1.2 0 1 1-1.2-1.2 1.2 1.2 0 0 1 1.2 1.2zM12 9.3A2.7 2.7 0 1 0 14.7 12 2.7 2.7 0 0 0 12 9.3z" />
         </svg>
       </a>
+
     </div>
   </div>
 
-  {/* CONTACT DETAILS (ADDED) */}
-  <div className="text-center text-[11px] text-gray-400 leading-5">
-    <p className="text-white font-semibold">Contact Teez Golf Challenges</p>
-    <p>admin@teezgolfchallenges.com</p>
-    <p>info@honeybadgertechnologies.com</p>
-    <p>Tel No: +27 082 837 0266</p>
-    <p>
-      71 Silver Stream, Silver Lakes Road, Pretoria, South Africa, 0081
+  {/* COMPACT CONTACT */}
+  <div className="mt-3 text-center">
+    <p className="text-[9px] text-gray-500">
+      Pretoria, South Africa · Global Platform
     </p>
-  </div>
 
-  {/* SHOP BUTTON */}
-  <div className="flex justify-center">
+    <p className="mt-1 text-[9px] text-gray-400">
+      admin@teezgolfchallenges.com · +27 82 837 0266
+    </p>
   </div>
 
 </header>

@@ -573,11 +573,11 @@ export default function MyCareerPage() {
 
                 <div className="min-w-0 flex-1">
                   <p className="text-xs font-bold uppercase tracking-[0.18em] text-cyan-700">
-                    Mauritius Final
+                    TEEZ CHALLENGES FINAL
                   </p>
 
                   <h3 className="mt-1 text-xl font-black text-gray-900">
-                    Race to Paradise
+                    Race to the Final
                   </h3>
 
                   <p className="mt-2 text-sm leading-5 text-gray-500">

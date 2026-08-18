@@ -66,14 +66,6 @@ type RankingPosition = {
   internationalPosition: number;
 };
 
-type Accent =
-  | "green"
-  | "blue"
-  | "purple"
-  | "yellow"
-  | "orange"
-  | "pink";
-
 const DEFAULT_RANKINGS: RankingPosition = {
   clubPosition: 0,
   provincePosition: 0,
@@ -87,23 +79,24 @@ export default function MyCareerPage() {
 
   const [loading, setLoading] = useState(true);
   const [career, setCareer] = useState<CareerData | null>(null);
+
   const [ranking, setRanking] =
     useState<RankingPosition>(DEFAULT_RANKINGS);
 
- useEffect(() => {
-  if (!user) {
-    setLoading(false);
-    return;
-  }
+  useEffect(() => {
+    if (!user) {
+      setLoading(false);
+      return;
+    }
 
-  const uid = user.uid;
+    const uid = user.uid;
 
-  async function loadCareer() {
-    try {
-      const [profileSnap, rankingSnap] = await Promise.all([
-        getDoc(doc(db, "profiles", uid)),
-        getDoc(doc(db, "playerRankings", uid)),
-      ]);
+    async function loadCareer() {
+      try {
+        const [profileSnap, rankingSnap] = await Promise.all([
+          getDoc(doc(db, "profiles", uid)),
+          getDoc(doc(db, "playerRankings", uid)),
+        ]);
 
         const profileData = profileSnap.exists()
           ? (profileSnap.data() as CareerData)
@@ -122,7 +115,9 @@ export default function MyCareerPage() {
         });
 
         setRanking({
-          clubPosition: Number(rankingData.clubPosition ?? 0),
+          clubPosition: Number(
+            rankingData.clubPosition ?? 0
+          ),
           provincePosition: Number(
             rankingData.provincePosition ?? 0
           ),
@@ -134,7 +129,10 @@ export default function MyCareerPage() {
           ),
         });
       } catch (error) {
-        console.error("Unable to load career data:", error);
+        console.error(
+          "Unable to load career data:",
+          error
+        );
       } finally {
         setLoading(false);
       }
@@ -145,12 +143,12 @@ export default function MyCareerPage() {
 
   if (loading) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-[#f4f6f8] px-6">
-        <div className="rounded-3xl bg-white px-8 py-6 text-center shadow-lg">
-          <div className="mx-auto h-10 w-10 animate-spin rounded-full border-4 border-gray-200 border-t-green-500" />
+      <main className="flex min-h-screen items-center justify-center bg-[#eef1f4] px-6">
+        <div className="border border-slate-200 bg-white px-8 py-6 text-center shadow-sm">
+          <div className="mx-auto h-8 w-8 animate-spin rounded-full border-2 border-slate-200 border-t-[#0f5132]" />
 
-          <p className="mt-4 font-semibold text-gray-700">
-            Loading career...
+          <p className="mt-4 text-sm font-semibold text-slate-700">
+            Loading career
           </p>
         </div>
       </main>
@@ -159,18 +157,46 @@ export default function MyCareerPage() {
 
   const stats = career?.ranking;
 
-  const playerLevel = Number(stats?.playerLevel ?? 1);
-  const careerXP = Number(stats?.careerXP ?? 0);
-  const careerPoints = Number(stats?.careerPoints ?? 0);
-  const powerScore = Number(stats?.powerScore ?? 1000);
+  const playerLevel = Number(
+    stats?.playerLevel ?? 1
+  );
 
-  const matchesPlayed = Number(stats?.matchesPlayed ?? 0);
-  const wins = Number(stats?.wins ?? 0);
-  const losses = Number(stats?.losses ?? 0);
-  const winPercentage = Number(stats?.winPercentage ?? 0);
+  const careerXP = Number(
+    stats?.careerXP ?? 0
+  );
 
-  const xpInCurrentLevel = careerXP % 1000;
-  const xpProgress = Math.min(100, xpInCurrentLevel / 10);
+  const careerPoints = Number(
+    stats?.careerPoints ?? 0
+  );
+
+  const powerScore = Number(
+    stats?.powerScore ?? 1000
+  );
+
+  const matchesPlayed = Number(
+    stats?.matchesPlayed ?? 0
+  );
+
+  const wins = Number(
+    stats?.wins ?? 0
+  );
+
+  const losses = Number(
+    stats?.losses ?? 0
+  );
+
+  const winPercentage = Number(
+    stats?.winPercentage ?? 0
+  );
+
+  const xpInCurrentLevel =
+    careerXP % 1000;
+
+  const xpProgress = Math.min(
+    100,
+    xpInCurrentLevel / 10
+  );
+
   const xpRemaining =
     xpInCurrentLevel === 0 && careerXP > 0
       ? 1000
@@ -178,93 +204,113 @@ export default function MyCareerPage() {
 
   const displayName =
     career?.battleName?.trim() ||
-    `${career?.name ?? ""} ${career?.surname ?? ""}`.trim() ||
-    "Teez Player";
+    `${career?.name ?? ""} ${
+      career?.surname ?? ""
+    }`.trim() ||
+    "TEEZ Player";
 
   const overallRating = Math.min(
     99,
-    Math.max(1, Math.floor(powerScore / 25))
+    Math.max(
+      1,
+      Math.floor(powerScore / 25)
+    )
   );
 
   return (
-    <main className="min-h-screen bg-[#f4f6f8] text-[#202124]">
-      <div className="mx-auto max-w-md pb-12">
+    <main className="min-h-screen bg-[#eef1f4] text-[#111827]">
+      <div className="mx-auto max-w-md pb-14">
+
         {/* HEADER */}
 
-        <header className="sticky top-0 z-30 border-b border-gray-200 bg-white/95 px-5 pb-4 pt-5 backdrop-blur">
+        <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/95 px-5 py-4 backdrop-blur">
           <div className="flex items-center justify-between">
+
             <button
               type="button"
               onClick={() => router.back()}
-              className="flex h-10 w-10 items-center justify-center rounded-full text-2xl text-gray-600 transition hover:bg-gray-100"
+              className="flex h-9 w-9 items-center justify-center border border-slate-200 bg-white text-xl text-slate-600"
               aria-label="Go back"
             >
               ‹
             </button>
 
             <div className="text-center">
-              <p className="text-xs font-bold uppercase tracking-[0.24em] text-green-600">
-                Player Dashboard
+              <p className="text-[10px] font-bold uppercase tracking-[0.26em] text-[#0f5132]">
+                TEEZ Player Career
               </p>
 
-              <h1 className="text-xl font-black">
-                My Career
+              <h1 className="mt-1 text-lg font-black tracking-tight text-[#111827]">
+                MY CAREER
               </h1>
             </div>
 
-            <div className="h-10 w-10" />
+            <div className="h-9 w-9" />
           </div>
         </header>
 
-        <div className="space-y-6 px-4 pt-5">
+        <div className="space-y-7 px-4 pt-5">
+
           {/* PLAYER HERO */}
 
-          <section className="overflow-hidden rounded-[28px] border border-gray-200 bg-white shadow-[0_12px_35px_rgba(15,23,42,0.10)]">
-            <div className="bg-gradient-to-br from-[#102b20] via-[#0c1712] to-black px-6 py-6 text-white">
-              <div className="flex items-center gap-4">
-                <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-full border-4 border-green-400 bg-white/10 text-4xl shadow-[0_0_24px_rgba(74,222,128,0.35)]">
-                  ⛳
+          <section className="overflow-hidden border border-[#1f2937] bg-[#0d1821] shadow-[0_8px_22px_rgba(15,23,42,0.16)]">
+
+            <div className="border-b border-white/10 px-5 py-5">
+
+              <div className="flex items-start gap-4">
+
+                <div className="flex h-16 w-16 shrink-0 items-center justify-center border border-[#b89b5e] bg-[#14232d]">
+                  <span className="text-lg font-black tracking-tight text-[#d6bd7a]">
+                    TEEZ
+                  </span>
                 </div>
 
-                <div className="min-w-0">
-                  <p className="text-xs font-bold uppercase tracking-[0.2em] text-green-400">
-                    Career Profile
+                <div className="min-w-0 flex-1">
+
+                  <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#9badb7]">
+                    Player Profile
                   </p>
 
-                  <h2 className="mt-1 truncate text-3xl font-black">
+                  <h2 className="mt-1 truncate text-2xl font-black tracking-tight text-white">
                     {displayName}
                   </h2>
 
-                  <p className="mt-1 truncate text-sm text-gray-300">
+                  <p className="mt-1 truncate text-sm text-slate-400">
                     {career?.name} {career?.surname}
                   </p>
+
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    <ProfilePill
+                      text={
+                        career?.division ||
+                        "Division pending"
+                      }
+                    />
+
+                    <ProfilePill
+                      text={
+                        career?.club ||
+                        "Club pending"
+                      }
+                    />
+                  </div>
                 </div>
-              </div>
-
-              <div className="mt-5 flex flex-wrap gap-2">
-                <ProfilePill
-                  text={career?.division || "Division pending"}
-                />
-
-                <ProfilePill
-                  text={career?.club || "Club pending"}
-                />
               </div>
             </div>
 
-            <div className="grid grid-cols-3 divide-x divide-gray-200 px-2 py-5">
+            <div className="grid grid-cols-3 divide-x divide-white/10">
               <HeroStat
-                label="Level"
+                label="LEVEL"
                 value={playerLevel}
               />
 
               <HeroStat
-                label="Power"
+                label="POWER"
                 value={powerScore}
               />
 
               <HeroStat
-                label="Points"
+                label="CAREER PTS"
                 value={careerPoints}
               />
             </div>
@@ -274,51 +320,53 @@ export default function MyCareerPage() {
 
           <section>
             <SectionHeading
+              eyebrow="PLAYER DEVELOPMENT"
               title="Career Progress"
-              description="Your current career level and progress"
+              description="Current career level and competitive development"
             />
 
             <div className="grid grid-cols-2 gap-3">
+
               <ProgressTile
-                icon="⭐"
+                code="LVL"
                 title="Player Level"
                 value={playerLevel}
                 progress={xpProgress}
-                accent="green"
                 footer={`${xpRemaining} XP to next level`}
+                accent="green"
               />
 
               <ProgressTile
-                icon="⚡"
+                code="PWR"
                 title="Power Score"
                 value={powerScore}
                 progress={Math.min(
                   100,
                   (powerScore / 2500) * 100
                 )}
-                accent="blue"
                 footer="Competitive rating"
+                accent="navy"
               />
 
               <ProgressTile
-                icon="🏆"
+                code="PTS"
                 title="Career Points"
                 value={careerPoints}
                 progress={Math.min(
                   100,
                   (careerPoints / 1000) * 100
                 )}
-                accent="yellow"
-                footer="Lifetime points earned"
+                footer="Lifetime points"
+                accent="gold"
               />
 
               <ProgressTile
-                icon="🎯"
+                code="OVR"
                 title="Overall Rating"
                 value={overallRating}
                 progress={overallRating}
-                accent="purple"
-                footer="Complete career rating"
+                footer="Career rating"
+                accent="slate"
               />
             </div>
           </section>
@@ -327,41 +375,40 @@ export default function MyCareerPage() {
 
           <section>
             <SectionHeading
+              eyebrow="COMPETITIVE RECORD"
               title="Player Performance"
-              description="Your competitive challenge record"
+              description="Career results across completed challenges"
             />
 
             <div className="grid grid-cols-2 gap-3">
+
               <MetricTile
-                icon="🏌️"
+                code="PLD"
                 title="Matches"
                 value={matchesPlayed}
                 footer="Challenges played"
-                accent="green"
               />
 
               <MetricTile
-                icon="🥇"
+                code="WIN"
                 title="Wins"
                 value={wins}
                 footer="Challenges won"
-                accent="yellow"
+                highlight
               />
 
               <MetricTile
-                icon="✕"
+                code="LOS"
                 title="Losses"
                 value={losses}
                 footer="Recorded losses"
-                accent="pink"
               />
 
               <MetricTile
-                icon="📈"
+                code="WIN%"
                 title="Win Rate"
                 value={`${winPercentage}%`}
                 footer="Career win percentage"
-                accent="blue"
               />
             </div>
           </section>
@@ -370,37 +417,38 @@ export default function MyCareerPage() {
 
           <section>
             <SectionHeading
+              eyebrow="OFFICIAL STANDINGS"
               title="Current Rankings"
-              description="Your position across every ranking level"
+              description="Current position across each competitive level"
             />
 
             <div className="grid grid-cols-2 gap-3">
+
               <RankingTile
-                icon="🏠"
+                code="CLB"
                 title="Club"
                 value={ranking.clubPosition}
-                accent="green"
               />
 
               <RankingTile
-                icon="📍"
+                code="PRV"
                 title="Province"
                 value={ranking.provincePosition}
-                accent="blue"
               />
 
               <RankingTile
-                icon="🇿🇦"
+                code="NAT"
                 title="National"
                 value={ranking.nationalPosition}
-                accent="purple"
               />
 
               <RankingTile
-                icon="🌍"
+                code="GLB"
                 title="Global"
-                value={ranking.internationalPosition}
-                accent="yellow"
+                value={
+                  ranking.internationalPosition
+                }
+                premium
               />
             </div>
           </section>
@@ -409,338 +457,331 @@ export default function MyCareerPage() {
 
           <section>
             <SectionHeading
+              eyebrow="LATEST RESULT"
               title="Last Challenge"
-              description="Ranking movement from your latest result"
+              description="Ranking movement from your latest completed challenge"
             />
 
-            <div className="overflow-hidden rounded-[26px] border border-gray-200 bg-white px-5 shadow-[0_8px_24px_rgba(15,23,42,0.08)]">
+            <div className="border border-slate-200 bg-white px-5 shadow-sm">
+
               <MovementRow
                 title="Club"
                 before={
-                  career?.lastChallenge?.ranking?.before
-                    ?.club ?? 0
+                  career?.lastChallenge?.ranking
+                    ?.before?.club ?? 0
                 }
                 after={
-                  career?.lastChallenge?.ranking?.after
-                    ?.club ?? 0
+                  career?.lastChallenge?.ranking
+                    ?.after?.club ?? 0
                 }
               />
 
               <MovementRow
                 title="Province"
                 before={
-                  career?.lastChallenge?.ranking?.before
-                    ?.province ?? 0
+                  career?.lastChallenge?.ranking
+                    ?.before?.province ?? 0
                 }
                 after={
-                  career?.lastChallenge?.ranking?.after
-                    ?.province ?? 0
+                  career?.lastChallenge?.ranking
+                    ?.after?.province ?? 0
                 }
               />
 
               <MovementRow
                 title="National"
                 before={
-                  career?.lastChallenge?.ranking?.before
-                    ?.national ?? 0
+                  career?.lastChallenge?.ranking
+                    ?.before?.national ?? 0
                 }
                 after={
-                  career?.lastChallenge?.ranking?.after
-                    ?.national ?? 0
+                  career?.lastChallenge?.ranking
+                    ?.after?.national ?? 0
                 }
               />
 
               <MovementRow
                 title="Global"
                 before={
-                  career?.lastChallenge?.ranking?.before
-                    ?.international ?? 0
+                  career?.lastChallenge?.ranking
+                    ?.before?.international ?? 0
                 }
                 after={
-                  career?.lastChallenge?.ranking?.after
-                    ?.international ?? 0
+                  career?.lastChallenge?.ranking
+                    ?.after?.international ?? 0
                 }
               />
             </div>
           </section>
 
-          {/* HALL OF FAME */}
+          {/* CAREER RECORD */}
 
           <section>
             <SectionHeading
+              eyebrow="CAREER RECORD"
               title="Hall of Fame"
               description="Your strongest career finishes"
             />
 
             <div className="grid grid-cols-2 gap-3">
+
               <MetricTile
-                icon="🏆"
+                code="BEST"
                 title="Best Finish"
-                value={stats?.bestFinish ?? "-"}
-                footer="Highest final position"
-                accent="yellow"
+                value={
+                  stats?.bestFinish ?? "-"
+                }
+                footer="Highest finish"
+                highlight
               />
 
               <MetricTile
-                icon="🥉"
+                code="TOP3"
                 title="Top 3"
                 value={stats?.top3 ?? 0}
                 footer="Podium finishes"
-                accent="orange"
               />
 
               <MetricTile
-                icon="⭐"
+                code="TOP5"
                 title="Top 5"
                 value={stats?.top5 ?? 0}
                 footer="Top-five finishes"
-                accent="purple"
               />
 
               <MetricTile
-                icon="🎯"
+                code="TOP10"
                 title="Top 10"
                 value={stats?.top10 ?? 0}
                 footer="Top-ten finishes"
-                accent="blue"
               />
             </div>
           </section>
 
-          {/* FORM AND STREAKS */}
+          {/* FORM */}
 
           <section>
             <SectionHeading
-              title="Form and Streaks"
-              description="Your strongest current performance indicators"
+              eyebrow="CURRENT FORM"
+              title="Form & Streaks"
+              description="Current and career-best performance indicators"
             />
 
             <div className="grid grid-cols-2 gap-3">
+
               <MetricTile
-                icon="🔥"
+                code="STRK"
                 title="Current Streak"
-                value={stats?.currentWinStreak ?? 0}
+                value={
+                  stats?.currentWinStreak ?? 0
+                }
                 footer="Consecutive wins"
-                accent="orange"
               />
 
               <MetricTile
-                icon="⚡"
+                code="BEST"
                 title="Best Streak"
-                value={stats?.bestWinStreak ?? 0}
+                value={
+                  stats?.bestWinStreak ?? 0
+                }
                 footer="Career-best run"
-                accent="yellow"
+                highlight
               />
 
               <MetricTile
-                icon="⛳"
+                code="FMT"
                 title="Best Format"
-                value={stats?.bestFormat || "-"}
-                footer="Strongest game format"
-                accent="green"
+                value={
+                  stats?.bestFormat || "-"
+                }
+                footer="Strongest format"
               />
 
               <MetricTile
-                icon="📊"
+                code="FMT%"
                 title="Format Win Rate"
-                value={`${stats?.bestFormatWinPercentage ?? 0}%`}
+                value={`${
+                  stats?.bestFormatWinPercentage ??
+                  0
+                }%`}
                 footer="Best-format performance"
-                accent="blue"
               />
             </div>
           </section>
 
-
-             {/* RACE TO PARADISE */}
+          {/* RACE TO FINAL */}
 
           <section>
             <SectionHeading
+              eyebrow="SEASON CHAMPIONSHIP"
               title="Race to the Final"
-              description="Your road to the TEEZ Championship Final"
+              description="Compete for a place in the annual TEEZ Championship Final"
             />
 
             <button
               type="button"
               onClick={() =>
-                router.push("/profile/race-to-paradise")
+                router.push(
+                  "/profile/race-to-paradise"
+                )
               }
-              className="w-full overflow-hidden rounded-[26px] border border-cyan-300 bg-gradient-to-br from-cyan-50 via-white to-emerald-50 p-5 text-left shadow-[0_10px_28px_rgba(15,23,42,0.10)] transition hover:-translate-y-1"
+              className="w-full overflow-hidden border border-[#1c4532] bg-[#10261c] text-left shadow-[0_6px_18px_rgba(15,23,42,0.12)]"
             >
-              <div className="flex items-center gap-4">
-                <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-cyan-100 text-3xl">
-                  🏝️
+
+              <div className="flex items-center gap-4 border-b border-white/10 p-5">
+
+                <div className="flex h-14 w-14 shrink-0 items-center justify-center border border-[#c6a96a] bg-[#172d23]">
+                  <span className="text-sm font-black tracking-[0.08em] text-[#d8c18a]">
+                    RTF
+                  </span>
                 </div>
 
                 <div className="min-w-0 flex-1">
-                  <p className="text-xs font-bold uppercase tracking-[0.18em] text-cyan-700">
-                    TEEZ CHALLENGES FINAL
+
+                  <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#8eb89f]">
+                    TEEZ Championship Series
                   </p>
 
-                  <h3 className="mt-1 text-xl font-black text-gray-900">
+                  <h3 className="mt-1 text-xl font-black text-white">
                     Race to the Final
                   </h3>
 
-                  <p className="mt-2 text-sm leading-5 text-gray-500">
-                    Earn Race Points throughout the season to reach the 
-                    annual TEEZ GOLF CHALLENGE FINAL.
+                  <p className="mt-2 text-sm leading-5 text-slate-300">
+                    Earn Race Points throughout the season and compete for a Top 8 position.
                   </p>
                 </div>
 
-                <span className="text-2xl font-bold text-cyan-600">
+                <span className="text-xl text-[#d8c18a]">
                   ›
                 </span>
               </div>
 
-              <div className="mt-5 rounded-2xl border border-cyan-100 bg-white/80 px-4 py-3">
-                <p className="text-xs font-bold uppercase tracking-wider text-gray-400">
-                  Season Goal
-                </p>
+              <div className="grid grid-cols-2 divide-x divide-white/10">
 
-                <p className="mt-1 font-black text-gray-900">
-                  Finish inside the Global Top 8
-                </p>
+                <div className="px-5 py-4">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">
+                    Season Goal
+                  </p>
+
+                  <p className="mt-1 text-sm font-black text-white">
+                    Global Top 8
+                  </p>
+                </div>
+
+                <div className="px-5 py-4">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">
+                    Competition
+                  </p>
+
+                  <p className="mt-1 text-sm font-black text-[#d8c18a]">
+                    Championship Final
+                  </p>
+                </div>
               </div>
             </button>
-          </section>      
+          </section>
 
+          {/* CAREER GUIDE */}
 
+          <section>
+            <SectionHeading
+              eyebrow="PLAYER INFORMATION"
+              title="How My Career Works"
+              description="Understand how each career statistic is calculated"
+            />
 
-{/* HOW MY CAREER WORKS */}
+            <ActionTile
+              code="GUIDE"
+              title="Career Calculation Guide"
+              text="Career Points, rankings, Power Score, XP, levels, streaks, Vault Keys and Race Points."
+              onClick={() =>
+                router.push(
+                  "/profile/how-career-works"
+                )
+              }
+            />
+          </section>
 
-<section>
-  <SectionHeading
-    title="How My Career Works"
-    description="See exactly how your career statistics are calculated"
-  />
+          {/* PLAYER VAULT */}
 
-  <button
-    type="button"
-    onClick={() =>
-      router.push("/profile/how-career-works")
-    }
-    className="w-full overflow-hidden rounded-[26px] border border-gray-200 bg-white p-5 text-left shadow-[0_10px_28px_rgba(15,23,42,0.08)] transition hover:-translate-y-1"
-  >
-    <div className="flex items-center gap-4">
-      <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-gray-100 text-3xl">
-        📘
-      </div>
+          <section>
+            <SectionHeading
+              eyebrow="CAREER REWARDS"
+              title="Player Vault"
+              description="Career milestones earn access to mystery rewards"
+            />
 
-      <div className="min-w-0 flex-1">
-        <p className="text-xs font-bold uppercase tracking-[0.18em] text-gray-500">
-          Career Guide
-        </p>
-
-        <h3 className="mt-1 text-xl font-black text-gray-900">
-          How My Career Works
-        </h3>
-
-        <p className="mt-2 text-sm leading-5 text-gray-500">
-          View how Career Points, rankings, Power Score, XP,
-          levels, streaks, Vault Keys and Race Points are calculated.
-        </p>
-      </div>
-
-      <span className="text-2xl font-bold text-gray-500">
-        ›
-      </span>
-    </div>
-  </button>
-</section>
-
-
-
-{/* PLAYER REWARDS */}
-
-<section>
-  <SectionHeading
-    title="Player Rewards"
-    description="Unlock rewards through your career progress"
-  />
-
-  <button
-    type="button"
-    onClick={() => router.push("/profile/rewards")}
-    className="w-full overflow-hidden rounded-[26px] border border-green-300 bg-gradient-to-br from-green-50 via-white to-amber-50 p-5 text-left shadow-[0_10px_28px_rgba(15,23,42,0.10)] transition hover:-translate-y-1"
-  >
-    <div className="flex items-center gap-4">
-      <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-green-100 text-3xl">
-        🎁
-      </div>
-
-      <div className="min-w-0 flex-1">
-        <p className="text-xs font-bold uppercase tracking-[0.18em] text-green-600">
-          Reward Board
-        </p>
-
-        <h3 className="mt-1 text-xl font-black text-gray-900">
-          Open Career Rewards
-        </h3>
-
-        <p className="mt-2 text-sm leading-5 text-gray-500">
-          View locked rewards and track what you need to unlock next.
-        </p>
-      </div>
-
-      <span className="text-2xl font-bold text-green-600">
-        ›
-      </span>
-    </div>
-  </button>
-</section>
-
+            <ActionTile
+              code="VAULT"
+              title="Open Player Vault"
+              text="View Vault Keys, career milestones and available mystery coins."
+              onClick={() =>
+                router.push("/profile/rewards")
+              }
+              premium
+            />
+          </section>
 
           {/* ACHIEVEMENTS */}
 
           <section>
             <SectionHeading
+              eyebrow="CAREER MILESTONES"
               title="Achievements"
-              description="Career milestones earned through play"
+              description="Recognition earned through competitive play"
             />
 
             <div className="grid grid-cols-2 gap-3">
+
               <AchievementTile
-                icon="🥇"
+                code="WIN"
                 title="First Victory"
                 unlocked={wins >= 1}
               />
 
               <AchievementTile
-                icon="🔥"
+                code="STRK"
                 title="Five-Win Streak"
                 unlocked={
-                  Number(stats?.bestWinStreak ?? 0) >= 5
+                  Number(
+                    stats?.bestWinStreak ?? 0
+                  ) >= 5
                 }
               />
 
               <AchievementTile
-                icon="⚡"
+                code="LV10"
                 title="Level 10"
                 unlocked={playerLevel >= 10}
               />
 
               <AchievementTile
-                icon="💯"
+                code="100"
                 title="100 Career Points"
                 unlocked={careerPoints >= 100}
               />
 
               <AchievementTile
-                icon="🌍"
+                code="G100"
                 title="Global Top 100"
                 unlocked={
-                  ranking.internationalPosition > 0 &&
-                  ranking.internationalPosition <= 100
+                  ranking.internationalPosition >
+                    0 &&
+                  ranking.internationalPosition <=
+                    100
                 }
               />
 
               <AchievementTile
-                icon="🎯"
+                code="75%"
                 title="75% Win Rate"
-                unlocked={winPercentage >= 75}
+                unlocked={
+                  winPercentage >= 75
+                }
               />
 
               <AchievementTile
-                icon="🏆"
+                code="C10"
                 title="Club Top 10"
                 unlocked={
                   ranking.clubPosition > 0 &&
@@ -749,7 +790,7 @@ export default function MyCareerPage() {
               />
 
               <AchievementTile
-                icon="⭐"
+                code="STAR"
                 title="Rising Star"
                 unlocked={playerLevel >= 5}
               />
@@ -762,28 +803,40 @@ export default function MyCareerPage() {
 }
 
 function SectionHeading({
+  eyebrow,
   title,
   description,
 }: {
+  eyebrow: string;
   title: string;
   description: string;
 }) {
   return (
-    <div className="mb-3 px-1">
-      <h2 className="text-xl font-black text-gray-900">
+    <div className="mb-3">
+      <div className="mb-2 h-[2px] w-8 bg-[#0f5132]" />
+
+      <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#0f5132]">
+        {eyebrow}
+      </p>
+
+      <h2 className="mt-1 text-xl font-black tracking-tight text-[#111827]">
         {title}
       </h2>
 
-      <p className="mt-1 text-sm text-gray-500">
+      <p className="mt-1 text-sm leading-5 text-slate-500">
         {description}
       </p>
     </div>
   );
 }
 
-function ProfilePill({ text }: { text: string }) {
+function ProfilePill({
+  text,
+}: {
+  text: string;
+}) {
   return (
-    <span className="rounded-full border border-white/15 bg-white/10 px-4 py-2 text-xs font-bold text-gray-100">
+    <span className="border border-white/15 bg-white/[0.05] px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.12em] text-slate-300">
       {text}
     </span>
   );
@@ -797,12 +850,12 @@ function HeroStat({
   value: number | string;
 }) {
   return (
-    <div className="text-center">
-      <p className="text-[11px] font-bold uppercase tracking-wider text-gray-400">
+    <div className="px-2 py-4 text-center">
+      <p className="text-[9px] font-bold uppercase tracking-[0.18em] text-slate-500">
         {label}
       </p>
 
-      <p className="mt-1 text-xl font-black text-gray-900">
+      <p className="mt-1 text-xl font-black text-white">
         {value}
       </p>
     </div>
@@ -810,60 +863,84 @@ function HeroStat({
 }
 
 function ProgressTile({
-  icon,
+  code,
   title,
   value,
   progress,
   footer,
   accent,
 }: {
-  icon: string;
+  code: string;
   title: string;
   value: number | string;
   progress: number;
   footer: string;
-  accent: Accent;
+  accent:
+    | "green"
+    | "navy"
+    | "gold"
+    | "slate";
 }) {
   const safeProgress = Math.min(
     100,
     Math.max(0, progress)
   );
 
-  const accentClass = getAccentText(accent);
-  const ringColour = getRingColour(accent);
+  const colours = {
+    green: "#0f5132",
+    navy: "#17324a",
+    gold: "#b08a42",
+    slate: "#475569",
+  };
+
+  const colour = colours[accent];
 
   return (
-    <div className="rounded-[24px] border border-gray-200 bg-white p-4 shadow-[0_8px_24px_rgba(15,23,42,0.08)]">
-      <div className="flex items-start justify-between gap-2">
-        <div>
-          <p className="text-2xl">{icon}</p>
+    <div className="border border-slate-200 bg-white p-4 shadow-sm">
 
-          <h3 className="mt-2 text-sm font-black text-gray-800">
+      <div className="flex items-start justify-between gap-3">
+
+        <div>
+          <span
+            className="inline-flex h-8 min-w-8 items-center justify-center border px-2 text-[9px] font-black tracking-[0.08em]"
+            style={{
+              borderColor: `${colour}55`,
+              color: colour,
+              backgroundColor: `${colour}0d`,
+            }}
+          >
+            {code}
+          </span>
+
+          <h3 className="mt-3 text-xs font-bold uppercase tracking-[0.08em] text-slate-500">
             {title}
           </h3>
         </div>
 
         <div
-          className="relative flex h-16 w-16 shrink-0 items-center justify-center rounded-full"
+          className="relative flex h-14 w-14 shrink-0 items-center justify-center rounded-full"
           style={{
-            background: `conic-gradient(${ringColour} ${safeProgress}%, #e5e7eb ${safeProgress}% 100%)`,
+            background: `conic-gradient(${colour} ${safeProgress}%, #e5e7eb ${safeProgress}% 100%)`,
           }}
         >
-          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white">
-            <span
-              className={`text-base font-black ${accentClass}`}
-            >
+          <div className="flex h-[46px] w-[46px] items-center justify-center rounded-full bg-white">
+            <span className="text-[10px] font-black text-slate-700">
               {Math.round(safeProgress)}%
             </span>
           </div>
         </div>
       </div>
 
-      <p className={`mt-4 text-3xl font-black ${accentClass}`}>
+      <p
+        className="mt-4 text-3xl font-black tracking-tight"
+        style={{
+          color: colour,
+        }}
+      >
         {value}
       </p>
 
-      <p className="mt-1 min-h-10 text-xs leading-5 text-gray-500">
+      <p className="mt-1 min-h-9 text-xs leading-4 text-slate-400">
         {footer}
       </p>
     </div>
@@ -871,41 +948,56 @@ function ProgressTile({
 }
 
 function MetricTile({
-  icon,
+  code,
   title,
   value,
   footer,
-  accent,
+  highlight = false,
 }: {
-  icon: string;
+  code: string;
   title: string;
   value: number | string;
   footer: string;
-  accent: Accent;
+  highlight?: boolean;
 }) {
   return (
-    <div className="rounded-[24px] border border-gray-200 bg-white p-4 shadow-[0_8px_24px_rgba(15,23,42,0.08)]">
-      <div className="flex items-center justify-between gap-2">
-        <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gray-100 text-2xl">
-          {icon}
-        </div>
+    <div
+      className={`border bg-white p-4 shadow-sm ${
+        highlight
+          ? "border-[#c9b37a]"
+          : "border-slate-200"
+      }`}
+    >
+      <div className="flex items-center justify-between">
 
-        <span className="h-3 w-3 rounded-full bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.45)]" />
+        <span
+          className={`text-[9px] font-black uppercase tracking-[0.12em] ${
+            highlight
+              ? "text-[#9a7531]"
+              : "text-[#0f5132]"
+          }`}
+        >
+          {code}
+        </span>
+
+        <div
+          className={`h-[3px] w-7 ${
+            highlight
+              ? "bg-[#b08a42]"
+              : "bg-[#0f5132]"
+          }`}
+        />
       </div>
 
-      <h3 className="mt-4 text-sm font-bold text-gray-600">
+      <h3 className="mt-4 text-xs font-bold uppercase tracking-[0.08em] text-slate-500">
         {title}
       </h3>
 
-      <p
-        className={`mt-1 break-words text-3xl font-black ${getAccentText(
-          accent
-        )}`}
-      >
+      <p className="mt-1 break-words text-3xl font-black tracking-tight text-[#111827]">
         {value}
       </p>
 
-      <p className="mt-2 min-h-10 text-xs leading-5 text-gray-500">
+      <p className="mt-2 min-h-9 text-xs leading-4 text-slate-400">
         {footer}
       </p>
     </div>
@@ -913,48 +1005,61 @@ function MetricTile({
 }
 
 function RankingTile({
-  icon,
+  code,
   title,
   value,
-  accent,
+  premium = false,
 }: {
-  icon: string;
+  code: string;
   title: string;
   value: number;
-  accent: Accent;
+  premium?: boolean;
 }) {
   const hasRanking = value > 0;
 
   return (
-    <div className="rounded-[24px] border border-gray-200 bg-white p-4 shadow-[0_8px_24px_rgba(15,23,42,0.08)]">
+    <div
+      className={`border bg-white p-4 shadow-sm ${
+        premium
+          ? "border-[#c9b37a]"
+          : "border-slate-200"
+      }`}
+    >
       <div className="flex items-center justify-between">
-        <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gray-100 text-xl">
-          {icon}
-        </div>
 
-        <div
-          className={`h-3 w-3 rounded-full ${
-            hasRanking ? "bg-green-500" : "bg-gray-300"
+        <span
+          className={`text-[9px] font-black uppercase tracking-[0.12em] ${
+            premium
+              ? "text-[#9a7531]"
+              : "text-[#0f5132]"
+          }`}
+        >
+          {code}
+        </span>
+
+        <span
+          className={`h-2 w-2 ${
+            hasRanking
+              ? premium
+                ? "bg-[#b08a42]"
+                : "bg-[#0f5132]"
+              : "bg-slate-300"
           }`}
         />
       </div>
 
-      <p className="mt-4 text-sm font-bold text-gray-600">
+      <p className="mt-4 text-xs font-bold uppercase tracking-[0.08em] text-slate-500">
         {title}
       </p>
 
-      <p
-        className={`mt-1 text-3xl font-black ${getAccentText(
-          accent
-        )}`}
-      >
+      <p className="mt-1 text-3xl font-black tracking-tight text-[#111827]">
         {hasRanking ? `#${value}` : "—"}
       </p>
 
-      <p className="mt-2 text-xs text-gray-500">
+      <p className="mt-2 text-xs text-slate-400">
         {hasRanking
-          ? `${title} ranking position`
-          : "Not ranked yet"}
+          ? `${title} position`
+          : "Not ranked"}
       </p>
     </div>
   );
@@ -969,39 +1074,44 @@ function MovementRow({
   before: number;
   after: number;
 }) {
-  const hasData = before > 0 || after > 0;
+  const hasData =
+    before > 0 || after > 0;
+
   const movement = before - after;
 
   const movementStyle =
     movement > 0
-      ? "bg-green-100 text-green-700"
+      ? "text-[#0f5132]"
       : movement < 0
-        ? "bg-red-100 text-red-700"
-        : "bg-gray-100 text-gray-600";
+        ? "text-[#9f3a38]"
+        : "text-slate-500";
 
   const movementLabel =
     !hasData
-      ? "No data"
+      ? "NO DATA"
       : movement > 0
         ? `▲ ${Math.abs(movement)}`
         : movement < 0
           ? `▼ ${Math.abs(movement)}`
-          : "No change";
+          : "NO CHANGE";
 
   return (
-    <div className="flex items-center justify-between border-b border-gray-100 py-4 last:border-b-0">
+    <div className="flex items-center justify-between border-b border-slate-100 py-4 last:border-b-0">
+
       <div>
-        <p className="font-bold text-gray-800">
+        <p className="text-xs font-bold uppercase tracking-[0.08em] text-slate-600">
           {title}
         </p>
 
-        <p className="mt-1 text-xs text-gray-500">
-          {hasData ? `#${before} → #${after}` : "No ranking recorded"}
+        <p className="mt-1 text-xs text-slate-400">
+          {hasData
+            ? `#${before} → #${after}`
+            : "No ranking recorded"}
         </p>
       </div>
 
       <span
-        className={`rounded-full px-3 py-2 text-xs font-black ${movementStyle}`}
+        className={`text-xs font-black tracking-[0.06em] ${movementStyle}`}
       >
         {movementLabel}
       </span>
@@ -1009,70 +1119,108 @@ function MovementRow({
   );
 }
 
+function ActionTile({
+  code,
+  title,
+  text,
+  onClick,
+  premium = false,
+}: {
+  code: string;
+  title: string;
+  text: string;
+  onClick: () => void;
+  premium?: boolean;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`w-full border bg-white p-5 text-left shadow-sm ${
+        premium
+          ? "border-[#c9b37a]"
+          : "border-slate-200"
+      }`}
+    >
+      <div className="flex items-center gap-4">
+
+        <div
+          className={`flex h-12 min-w-12 items-center justify-center border px-2 text-[9px] font-black tracking-[0.08em] ${
+            premium
+              ? "border-[#c9b37a] bg-[#faf7ef] text-[#9a7531]"
+              : "border-[#b8c7bd] bg-[#f3f7f4] text-[#0f5132]"
+          }`}
+        >
+          {code}
+        </div>
+
+        <div className="min-w-0 flex-1">
+
+          <h3 className="text-base font-black text-[#111827]">
+            {title}
+          </h3>
+
+          <p className="mt-1 text-sm leading-5 text-slate-500">
+            {text}
+          </p>
+        </div>
+
+        <span
+          className={
+            premium
+              ? "text-xl text-[#9a7531]"
+              : "text-xl text-[#0f5132]"
+          }
+        >
+          ›
+        </span>
+      </div>
+    </button>
+  );
+}
+
 function AchievementTile({
-  icon,
+  code,
   title,
   unlocked,
 }: {
-  icon: string;
+  code: string;
   title: string;
   unlocked: boolean;
 }) {
   return (
     <div
-      className={`rounded-[24px] border p-4 text-center shadow-[0_8px_24px_rgba(15,23,42,0.07)] ${
+      className={`border bg-white p-4 text-center shadow-sm ${
         unlocked
-          ? "border-amber-300 bg-gradient-to-b from-amber-50 to-white"
-          : "border-gray-200 bg-white"
+          ? "border-[#c9b37a]"
+          : "border-slate-200"
       }`}
     >
       <div
-        className={`mx-auto flex h-16 w-16 items-center justify-center rounded-full text-3xl ${
+        className={`mx-auto flex h-12 min-w-12 items-center justify-center border px-2 text-[9px] font-black tracking-[0.08em] ${
           unlocked
-            ? "bg-amber-100"
-            : "bg-gray-100 grayscale"
+            ? "border-[#c9b37a] bg-[#faf7ef] text-[#9a7531]"
+            : "border-slate-200 bg-slate-50 text-slate-400"
         }`}
       >
-        {unlocked ? icon : "🔒"}
+        {unlocked ? code : "LOCK"}
       </div>
 
-      <p className="mt-3 text-sm font-black text-gray-800">
+      <p className="mt-3 text-sm font-black text-[#111827]">
         {title}
       </p>
 
       <p
-        className={`mt-2 text-xs font-bold ${
-          unlocked ? "text-amber-600" : "text-gray-400"
+        className={`mt-2 text-[10px] font-bold uppercase tracking-[0.12em] ${
+          unlocked
+            ? "text-[#9a7531]"
+            : "text-slate-400"
         }`}
       >
-        {unlocked ? "Unlocked" : "Locked"}
+        {unlocked
+          ? "Achieved"
+          : "Not achieved"}
       </p>
     </div>
   );
-}
-
-function getAccentText(accent: Accent) {
-  const styles: Record<Accent, string> = {
-    green: "text-green-600",
-    blue: "text-blue-600",
-    purple: "text-purple-600",
-    yellow: "text-amber-500",
-    orange: "text-orange-500",
-    pink: "text-pink-500",
-  };
-
-  return styles[accent];
-}
-
-function getRingColour(accent: Accent) {
-  const colours: Record<Accent, string> = {
-    green: "#16a34a",
-    blue: "#2563eb",
-    purple: "#9333ea",
-    yellow: "#f59e0b",
-    orange: "#f97316",
-    pink: "#ec4899",
-  };
-
-  return colours[accent];
 }

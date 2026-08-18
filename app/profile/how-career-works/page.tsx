@@ -50,7 +50,7 @@ export default function HowCareerWorksPage() {
             <p className="mt-3 text-sm leading-6 text-gray-300">
               Your TEEZ career develops every time a completed challenge
               is finalized. Results affect your rankings, career points,
-              power score, XP, level, streaks and Race to Paradise points.
+              power score, XP, level, streaks and Race to Final points.
             </p>
           </section>
 
@@ -303,8 +303,8 @@ export default function HowCareerWorksPage() {
 
           <CareerSection
             icon="🏝️"
-            title="Race to Paradise"
-            description="Race Points form a separate annual competition toward the Mauritius Final."
+            title="Race to Final"
+            description="Race Points form a separate annual competition toward the the TEEZ Challenges Final."
           >
             <InfoLine
               title="Complete a Challenge"
@@ -338,7 +338,7 @@ export default function HowCareerWorksPage() {
 
             <InfoLine
               title="Qualification"
-              text="The Top 8 players on the global Race to Paradise leaderboard qualify for the TEEZ Championship Final in Mauritius."
+              text="The Top 8 players on the global Race qualify for the TEEZ Championship Final."
             />
           </CareerSection>
 

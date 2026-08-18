@@ -209,85 +209,98 @@ export default function BronzeVaultPage() {
     (openedCount / 50) * 100
   );
 
-  return (
-    <main className="min-h-screen bg-[#f4f6f8] text-gray-900">
-      <div className="mx-auto max-w-md pb-12">
+    return (
+    <main className="min-h-screen bg-[#eef1f4] text-[#111827]">
+      <div className="mx-auto max-w-md pb-14">
+
         {/* HEADER */}
 
-        <header className="sticky top-0 z-30 border-b border-gray-200 bg-white/95 px-5 py-5 backdrop-blur">
+        <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/95 px-5 py-4 backdrop-blur">
           <div className="flex items-center justify-between">
             <button
               type="button"
-              onClick={() =>
-                router.push("/profile/rewards")
-              }
-              className="flex h-10 w-10 items-center justify-center rounded-full text-2xl text-gray-600 hover:bg-gray-100"
+              onClick={() => router.push("/profile/rewards")}
+              className="flex h-9 w-9 items-center justify-center border border-slate-200 bg-white text-xl text-slate-600"
               aria-label="Back to Player Vault"
             >
               ‹
             </button>
 
             <div className="text-center">
-              <p className="text-xs font-bold uppercase tracking-[0.22em] text-amber-700">
-                Mystery Coin Board
+              <p className="text-[10px] font-bold uppercase tracking-[0.26em] text-[#9a6a3a]">
+                TEEZ Player Vault
               </p>
 
-              <h1 className="text-xl font-black">
-                Bronze Vault
+              <h1 className="mt-1 text-lg font-black tracking-tight">
+                BRONZE VAULT
               </h1>
             </div>
 
-            <div className="h-10 w-10" />
+            <div className="h-9 w-9" />
           </div>
         </header>
 
-        <div className="space-y-6 px-4 pt-5">
+        <div className="space-y-7 px-4 pt-5">
+
           {/* HERO */}
 
-          <section className="overflow-hidden rounded-[28px] bg-gradient-to-br from-[#74431f] via-[#3f2414] to-black p-6 text-white shadow-[0_14px_35px_rgba(120,53,15,0.25)]">
-            <div className="flex items-center gap-4">
-              <div className="flex h-16 w-16 items-center justify-center rounded-2xl border border-amber-300/30 bg-white/10 text-4xl">
-                🥉
+          <section className="overflow-hidden border border-[#81562f] bg-[#18130f] shadow-[0_8px_22px_rgba(15,23,42,0.16)]">
+
+            <div className="flex items-start gap-4 border-b border-white/10 p-5">
+
+              <div className="flex h-16 w-16 shrink-0 items-center justify-center border border-[#a9794d] bg-[#2a1d14]">
+                <span className="text-sm font-black tracking-[0.08em] text-[#c99662]">
+                  BRZ
+                </span>
               </div>
 
               <div>
-                <p className="text-xs font-bold uppercase tracking-[0.2em] text-amber-300">
-                  Vault One
+                <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#b8895d]">
+                  Vault Series 01
                 </p>
 
-                <h2 className="mt-1 text-3xl font-black">
-                  Flip a Coin
+                <h2 className="mt-1 text-2xl font-black tracking-tight text-white">
+                  Mystery Coin Board
                 </h2>
+
+                <p className="mt-2 text-sm leading-5 text-slate-300">
+                  Select any unopened coin. One Vault Key
+                  is required for each reveal.
+                </p>
               </div>
             </div>
 
-            <p className="mt-4 text-sm leading-6 text-amber-50/80">
-              Use one Vault Key to flip any unopened
-              mystery coin. The reward beneath it is
-              selected securely when the coin opens.
-            </p>
-
-            <div className="mt-5 grid grid-cols-2 gap-3">
-              <VaultStat
-                label="Available Keys"
+            <div className="grid grid-cols-3 divide-x divide-white/10">
+              <VaultHeroStat
+                label="KEYS"
                 value={availableKeys}
               />
 
-              <VaultStat
-                label="Coins Opened"
-                value={`${openedCount} / 50`}
+              <VaultHeroStat
+                label="OPENED"
+                value={openedCount}
+              />
+
+              <VaultHeroStat
+                label="REMAINING"
+                value={50 - openedCount}
               />
             </div>
 
-            <div className="mt-5">
-              <div className="mb-2 flex justify-between text-xs font-bold text-amber-100">
-                <span>Bronze progress</span>
-                <span>{Math.round(progress)}%</span>
+            <div className="border-t border-white/10 px-5 py-4">
+              <div className="flex items-center justify-between">
+                <p className="text-[9px] font-bold uppercase tracking-[0.16em] text-slate-500">
+                  Bronze Progress
+                </p>
+
+                <p className="text-xs font-black text-[#c99662]">
+                  {openedCount} / 50
+                </p>
               </div>
 
-              <div className="h-3 overflow-hidden rounded-full bg-black/30">
+              <div className="mt-3 h-2 bg-white/10">
                 <div
-                  className="h-full rounded-full bg-amber-400 transition-all"
+                  className="h-full bg-[#a96f3d]"
                   style={{
                     width: `${progress}%`,
                   }}
@@ -296,17 +309,42 @@ export default function BronzeVaultPage() {
             </div>
           </section>
 
-          {/* NO KEYS NOTICE */}
+          {/* NEW KEY STATUS */}
 
-          {availableKeys < 1 && (
-            <section className="rounded-[22px] border border-gray-200 bg-white p-4 text-center shadow-sm">
-              <p className="font-black text-gray-800">
-                No Vault Keys available
+          {availableKeys > 0 ? (
+            <section className="border border-[#b8c7bd] bg-[#f3f7f4] px-5 py-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-[9px] font-black uppercase tracking-[0.16em] text-[#0f5132]">
+                    Vault Access Available
+                  </p>
+
+                  <p className="mt-1 text-sm font-bold text-[#111827]">
+                    {availableKeys}{" "}
+                    {availableKeys === 1 ? "key" : "keys"} available
+                  </p>
+                </div>
+
+                <div className="flex h-10 min-w-10 items-center justify-center border border-[#0f5132] px-2">
+                  <span className="text-xs font-black text-[#0f5132]">
+                    {availableKeys}
+                  </span>
+                </div>
+              </div>
+            </section>
+          ) : (
+            <section className="border border-slate-200 bg-white px-5 py-4">
+              <p className="text-[9px] font-black uppercase tracking-[0.16em] text-slate-400">
+                Vault Access
               </p>
 
-              <p className="mt-1 text-sm text-gray-500">
-                Complete more career milestones to earn
-                another key.
+              <p className="mt-1 text-sm font-black text-[#111827]">
+                No Vault Keys Available
+              </p>
+
+              <p className="mt-1 text-xs leading-5 text-slate-500">
+                Continue your career and complete milestones
+                to earn additional Vault Keys.
               </p>
             </section>
           )}
@@ -314,70 +352,135 @@ export default function BronzeVaultPage() {
           {/* COIN BOARD */}
 
           <section>
-            <div className="mb-3 px-1">
-              <h2 className="text-xl font-black">
-                Choose a Mystery Coin
-              </h2>
+            <SectionHeading
+              eyebrow="BRONZE SERIES · COINS 01–50"
+              title="Select a Mystery Coin"
+              description="Opened coins remain permanently revealed on your personal board"
+            />
 
-              <p className="mt-1 text-sm text-gray-500">
-                Every unopened coin can hide a different
-                career reward.
-              </p>
-            </div>
+            <div className="border border-[#b9926c] bg-[#f8f4ef] p-4 shadow-sm">
 
-            <div className="grid grid-cols-5 gap-3 rounded-[28px] border border-amber-200 bg-gradient-to-b from-amber-50 to-white p-4 shadow-[0_10px_30px_rgba(120,53,15,0.10)]">
-              {Array.from(
-                { length: 50 },
-                (_, index) => index + 1
-              ).map((coinNumber) => (
-                <MysteryCoin
-                  key={coinNumber}
-                  coinNumber={coinNumber}
-                  openedCoin={
-                    openedCoins[coinNumber]
-                  }
-                  opening={
-                    openingCoin === coinNumber
-                  }
-                  disabled={
-                    availableKeys < 1 ||
-                    openingCoin !== null
-                  }
-                  onOpen={() =>
-                    flipCoin(coinNumber)
-                  }
-                />
-              ))}
+              <div className="mb-4 flex items-center justify-between border-b border-[#e4d7ca] pb-3">
+                <p className="text-[9px] font-black uppercase tracking-[0.14em] text-[#81562f]">
+                  Official Coin Board
+                </p>
+
+                <p className="text-[9px] font-bold uppercase tracking-[0.12em] text-slate-400">
+                  50 Positions
+                </p>
+              </div>
+
+              <div className="grid grid-cols-5 gap-3">
+                {Array.from(
+                  { length: 50 },
+                  (_, index) => index + 1
+                ).map((coinNumber) => (
+                  <MysteryCoin
+                    key={coinNumber}
+                    coinNumber={coinNumber}
+                    openedCoin={openedCoins[coinNumber]}
+                    opening={openingCoin === coinNumber}
+                    disabled={
+                      availableKeys < 1 ||
+                      openingCoin !== null
+                    }
+                    onOpen={() => flipCoin(coinNumber)}
+                  />
+                ))}
+              </div>
+
+              <div className="mt-4 border-t border-[#e4d7ca] pt-3">
+                <div className="flex items-center justify-between">
+                  <BoardLegend
+                    marker="01"
+                    text="Available"
+                  />
+
+                  <BoardLegend
+                    marker="✓"
+                    text="Opened"
+                  />
+
+                  <BoardLegend
+                    marker="—"
+                    text="Locked"
+                  />
+                </div>
+              </div>
             </div>
           </section>
 
+          {/* COMPLETION */}
+
           {openedCount >= 50 && (
-            <button
-              type="button"
-              onClick={() =>
-                router.push("/profile/rewards")
-              }
-              className="w-full rounded-2xl bg-gray-900 py-4 font-black text-white"
-            >
-              Bronze Complete — Unlock Silver
-            </button>
+            <section className="overflow-hidden border border-[#c9b37a] bg-white shadow-sm">
+              <div className="p-5">
+                <p className="text-[9px] font-black uppercase tracking-[0.18em] text-[#9a7531]">
+                  Vault Completed
+                </p>
+
+                <h2 className="mt-1 text-xl font-black">
+                  Bronze Series Complete
+                </h2>
+
+                <p className="mt-2 text-sm leading-5 text-slate-500">
+                  All 50 Bronze mystery coins have been opened.
+                  Your next Vault tier is now available.
+                </p>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => router.push("/profile/rewards")}
+                className="w-full border-t border-[#c9b37a] bg-[#0d1821] py-4 text-xs font-black uppercase tracking-[0.14em] text-white"
+              >
+                Continue to Silver Vault
+              </button>
+            </section>
           )}
+
         </div>
       </div>
 
       {revealedCoin && (
         <CoinRevealModal
           coin={revealedCoin}
-          onClose={() =>
-            setRevealedCoin(null)
-          }
+          onClose={() => setRevealedCoin(null)}
         />
       )}
     </main>
   );
 }
 
-function VaultStat({
+function SectionHeading({
+  eyebrow,
+  title,
+  description,
+}: {
+  eyebrow: string;
+  title: string;
+  description: string;
+}) {
+  return (
+    <div className="mb-3">
+      <div className="mb-2 h-[2px] w-8 bg-[#9a6a3a]" />
+
+      <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#9a6a3a]">
+        {eyebrow}
+      </p>
+
+      <h2 className="mt-1 text-xl font-black tracking-tight">
+        {title}
+      </h2>
+
+      <p className="mt-1 text-sm leading-5 text-slate-500">
+        {description}
+      </p>
+    </div>
+  );
+}
+
+function VaultHeroStat({
   label,
   value,
 }: {
@@ -385,14 +488,34 @@ function VaultStat({
   value: number | string;
 }) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/10 p-4">
-      <p className="text-xs font-semibold text-amber-100/70">
+    <div className="px-2 py-4 text-center">
+      <p className="text-[9px] font-bold uppercase tracking-[0.16em] text-slate-500">
         {label}
       </p>
 
-      <p className="mt-1 text-2xl font-black">
+      <p className="mt-1 text-xl font-black text-white">
         {value}
       </p>
+    </div>
+  );
+}
+
+function BoardLegend({
+  marker,
+  text,
+}: {
+  marker: string;
+  text: string;
+}) {
+  return (
+    <div className="flex items-center gap-1.5">
+      <span className="flex h-5 min-w-5 items-center justify-center border border-[#b9926c] bg-white px-1 text-[7px] font-black text-[#81562f]">
+        {marker}
+      </span>
+
+      <span className="text-[8px] font-bold uppercase tracking-[0.08em] text-slate-400">
+        {text}
+      </span>
     </div>
   );
 }
@@ -416,40 +539,44 @@ function MysteryCoin({
     <button
       type="button"
       onClick={onOpen}
-      disabled={
-        opened ||
-        opening ||
-        disabled
-      }
+      disabled={opened || opening || disabled}
       title={
         opened
           ? openedCoin?.rewardLabel
           : `Mystery Coin ${coinNumber}`
       }
-      className={`relative aspect-square rounded-full border-2 text-xs font-black shadow-md transition ${
+      className={`relative aspect-square rounded-full border text-[9px] font-black ${
         opened
-          ? "border-green-400 bg-green-100 text-green-800"
+          ? "border-[#6d927c] bg-[#eaf2ed] text-[#0f5132]"
           : opening
-            ? "animate-[spin_0.7s_linear_infinite] border-amber-400 bg-amber-300 text-amber-900"
+            ? "animate-[spin_0.7s_linear_infinite] border-[#c99662] bg-[#d5a26e] text-white"
             : disabled
-              ? "cursor-not-allowed border-gray-300 bg-gray-200 text-gray-400"
-              : "border-amber-700 bg-gradient-to-br from-amber-300 via-amber-500 to-amber-800 text-white hover:-translate-y-1 hover:scale-105 active:rotate-180"
+              ? "cursor-not-allowed border-slate-300 bg-slate-200 text-slate-400"
+              : "border-[#81562f] bg-[#a96f3d] text-white shadow-[inset_0_0_0_2px_rgba(255,255,255,0.14),0_2px_4px_rgba(60,35,20,0.18)] active:scale-95"
       }`}
     >
       {opened ? (
-        <span className="text-lg">
-          {openedCoin?.rewardIcon}
-        </span>
-      ) : opening ? (
-        <span className="text-base">🪙</span>
-      ) : (
-        <>
-          <span className="block text-base">
-            🪙
+        <div className="flex h-full flex-col items-center justify-center">
+          <span className="text-sm leading-none">
+            {openedCoin?.rewardIcon}
           </span>
 
-          <span className="absolute bottom-1 left-0 right-0 text-[8px]">
+          <span className="mt-1 text-[7px]">
             {coinNumber}
+          </span>
+        </div>
+      ) : opening ? (
+        <span className="text-[8px] uppercase tracking-wide">
+          OPEN
+        </span>
+      ) : (
+        <>
+          <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-[58%] text-[11px] font-black">
+            T
+          </span>
+
+          <span className="absolute bottom-[4px] left-0 right-0 text-[7px] font-bold">
+            {String(coinNumber).padStart(2, "0")}
           </span>
         </>
       )}
@@ -465,36 +592,70 @@ function CoinRevealModal({
   onClose: () => void;
 }) {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 px-6 backdrop-blur-sm">
-      <div className="w-full max-w-sm animate-[rewardReveal_0.5s_ease-out] rounded-[30px] border border-amber-300 bg-white p-7 text-center shadow-[0_0_70px_rgba(245,158,11,0.45)]">
-        <p className="text-xs font-black uppercase tracking-[0.25em] text-amber-700">
-          Coin {coin.coinNumber} Opened
-        </p>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#07100c]/90 px-6 backdrop-blur-sm">
 
-        <div className="mx-auto mt-5 flex h-28 w-28 items-center justify-center rounded-full border-4 border-amber-500 bg-gradient-to-br from-amber-100 via-amber-300 to-amber-600 text-6xl shadow-[0_0_35px_rgba(245,158,11,0.45)]">
-          {coin.rewardIcon}
+      <div className="w-full max-w-sm overflow-hidden border border-[#b9926c] bg-white shadow-[0_24px_70px_rgba(0,0,0,0.4)]">
+
+        <div className="bg-[#18130f] px-6 py-5 text-center">
+          <p className="text-[9px] font-black uppercase tracking-[0.22em] text-[#c99662]">
+            Bronze Vault · Coin {String(coin.coinNumber).padStart(2, "0")}
+          </p>
+
+          <h2 className="mt-1 text-xl font-black text-white">
+            Reward Revealed
+          </h2>
         </div>
 
-        <h2 className="mt-6 text-2xl font-black">
-          Reward Revealed
-        </h2>
+        <div className="px-6 py-7 text-center">
 
-        <div className="mt-4 rounded-2xl bg-green-50 px-4 py-5 text-xl font-black text-green-700">
-          {coin.rewardLabel}
+          <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-full border-2 border-[#9a6a3a] bg-[#f8f4ef] shadow-[inset_0_0_0_5px_#ffffff]">
+            <span className="text-4xl">
+              {coin.rewardIcon}
+            </span>
+          </div>
+
+          <p className="mt-6 text-[9px] font-black uppercase tracking-[0.18em] text-[#0f5132]">
+            Player Reward
+          </p>
+
+          <h3 className="mt-2 text-2xl font-black tracking-tight text-[#111827]">
+            {coin.rewardLabel}
+          </h3>
+
+          <p className="mt-3 text-sm leading-5 text-slate-500">
+            This reward has been applied to your player account.
+          </p>
+
+          <div className="mt-6 grid grid-cols-2 border border-slate-200">
+            <div className="border-r border-slate-200 px-3 py-3">
+              <p className="text-[8px] font-bold uppercase tracking-[0.12em] text-slate-400">
+                Keys Remaining
+              </p>
+
+              <p className="mt-1 text-lg font-black">
+                {coin.availableKeys}
+              </p>
+            </div>
+
+            <div className="px-3 py-3">
+              <p className="text-[8px] font-bold uppercase tracking-[0.12em] text-slate-400">
+                Bronze Opened
+              </p>
+
+              <p className="mt-1 text-lg font-black">
+                {coin.bronzeCoinsOpened} / 50
+              </p>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            onClick={onClose}
+            className="mt-6 w-full border border-[#0f5132] bg-[#0f5132] py-3 text-xs font-black uppercase tracking-[0.14em] text-white"
+          >
+            Continue
+          </button>
         </div>
-
-        <p className="mt-4 text-sm text-gray-500">
-          The reward has been added to your player
-          account.
-        </p>
-
-        <button
-          type="button"
-          onClick={onClose}
-          className="mt-6 w-full rounded-2xl bg-green-600 py-3 font-black text-white hover:bg-green-500"
-        >
-          Continue
-        </button>
       </div>
     </div>
   );

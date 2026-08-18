@@ -1,9 +1,99 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/src/lib/AuthContext";
+import { db } from "@/src/lib/firebase";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  orderBy,
+  query,
+  limit,
+} from "firebase/firestore";
+
+type RacePlayer = {
+  uid: string;
+  battleName: string;
+  racePoints: number;
+};
 
 export default function RaceToParadisePage() {
   const router = useRouter();
+  const { user } = useAuth();
+
+  const [racePoints, setRacePoints] = useState(0);
+  const [globalPosition, setGlobalPosition] = useState<number | null>(null);
+  const [leaders, setLeaders] = useState<RacePlayer[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!user) return;
+
+    const uid = user.uid;
+
+    async function loadRace() {
+      try {
+        const playerSnap = await getDoc(
+          doc(db, "playerRankings", uid)
+        );
+
+        if (playerSnap.exists()) {
+          setRacePoints(
+            Number(playerSnap.data().racePoints || 0)
+          );
+        }
+
+        const leaderboardQuery = query(
+          collection(db, "playerRankings"),
+          orderBy("racePoints", "desc"),
+          limit(100)
+        );
+
+        const leaderboardSnap =
+          await getDocs(leaderboardQuery);
+
+        const rows: RacePlayer[] = [];
+
+        leaderboardSnap.docs.forEach((rankingDoc) => {
+          const data = rankingDoc.data();
+
+          rows.push({
+            uid: rankingDoc.id,
+            battleName:
+              data.battleName ||
+              data.name ||
+              "TEEZ Player",
+            racePoints:
+              Number(data.racePoints || 0),
+          });
+        });
+
+        setLeaders(rows.slice(0, 8));
+
+        const playerIndex = rows.findIndex(
+          (player) => player.uid === uid
+        );
+
+        setGlobalPosition(
+          playerIndex >= 0
+            ? playerIndex + 1
+            : null
+        );
+      } catch (error) {
+        console.error(
+          "Unable to load Race to Paradise:",
+          error
+        );
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadRace();
+  }, [user]);
 
   return (
     <main className="min-h-screen bg-[#f4f6f8] text-gray-900">
@@ -83,17 +173,17 @@ export default function RaceToParadisePage() {
             </div>
 
             <div className="grid grid-cols-2 gap-3">
-              <StatTile
-                title="Race Points"
-                value="0"
-                footer="Season total"
-              />
+             <StatTile
+  title="Race Points"
+  value={racePoints.toLocaleString()}
+  footer="Season total"
+/>
 
-              <StatTile
-                title="Global Position"
-                value="—"
-                footer="Race ranking"
-              />
+<StatTile
+  title="Global Position"
+  value={globalPosition ? `#${globalPosition}` : "—"}
+  footer="Race ranking"
+/>
 
               <StatTile
                 title="Qualification"
@@ -159,32 +249,46 @@ export default function RaceToParadisePage() {
 
             <div className="rounded-[26px] border border-gray-200 bg-white p-5 shadow-[0_8px_24px_rgba(15,23,42,0.08)]">
               <div className="space-y-3">
-                {Array.from({ length: 8 }, (_, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center justify-between border-b border-gray-100 pb-3 last:border-b-0 last:pb-0"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="flex h-9 w-9 items-center justify-center rounded-full bg-cyan-50 text-sm font-black text-cyan-700">
-                        {index + 1}
-                      </div>
+               {leaders.length === 0 ? (
+  <div className="py-6 text-center">
+    <p className="font-bold text-gray-700">
+      No Race standings yet
+    </p>
 
-                      <div>
-                        <p className="font-bold text-gray-800">
-                          Position Open
-                        </p>
+    <p className="mt-1 text-sm text-gray-400">
+      Rankings will appear once Race Points are earned.
+    </p>
+  </div>
+) : (
+  leaders.map((player, index) => (
+    <div
+      key={player.uid}
+      className="flex items-center justify-between border-b border-gray-100 pb-3 last:border-b-0 last:pb-0"
+    >
+      <div className="flex items-center gap-3">
+        <div className="flex h-9 w-9 items-center justify-center rounded-full bg-cyan-50 text-sm font-black text-cyan-700">
+          {index + 1}
+        </div>
 
-                        <p className="text-xs text-gray-400">
-                          Race leaderboard
-                        </p>
-                      </div>
-                    </div>
+        <div>
+          <p className="font-bold text-gray-800">
+            {player.battleName}
+          </p>
 
-                    <span className="text-sm font-black text-gray-400">
-                      —
-                    </span>
-                  </div>
-                ))}
+          <p className="text-xs text-gray-400">
+            {index < 8
+              ? "Mauritius qualification position"
+              : "Race leaderboard"}
+          </p>
+        </div>
+      </div>
+
+      <span className="text-sm font-black text-cyan-700">
+        {player.racePoints.toLocaleString()} pts
+      </span>
+    </div>
+  ))
+)}
               </div>
             </div>
           </section>

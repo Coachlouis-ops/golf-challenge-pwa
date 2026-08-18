@@ -551,6 +551,60 @@ export default function MyCareerPage() {
           </section>
 
 
+             {/* RACE TO PARADISE */}
+
+          <section>
+            <SectionHeading
+              title="Race to Paradise"
+              description="Your road to the TEEZ Championship Final"
+            />
+
+            <button
+              type="button"
+              onClick={() =>
+                router.push("/profile/race-to-paradise")
+              }
+              className="w-full overflow-hidden rounded-[26px] border border-cyan-300 bg-gradient-to-br from-cyan-50 via-white to-emerald-50 p-5 text-left shadow-[0_10px_28px_rgba(15,23,42,0.10)] transition hover:-translate-y-1"
+            >
+              <div className="flex items-center gap-4">
+                <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-cyan-100 text-3xl">
+                  🏝️
+                </div>
+
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs font-bold uppercase tracking-[0.18em] text-cyan-700">
+                    Mauritius Final
+                  </p>
+
+                  <h3 className="mt-1 text-xl font-black text-gray-900">
+                    Race to Paradise
+                  </h3>
+
+                  <p className="mt-2 text-sm leading-5 text-gray-500">
+                    Earn Race Points throughout the season.
+                    The world&apos;s Top 8 qualify for the
+                    TEEZ Championship Final in Mauritius.
+                  </p>
+                </div>
+
+                <span className="text-2xl font-bold text-cyan-600">
+                  ›
+                </span>
+              </div>
+
+              <div className="mt-5 rounded-2xl border border-cyan-100 bg-white/80 px-4 py-3">
+                <p className="text-xs font-bold uppercase tracking-wider text-gray-400">
+                  Season Goal
+                </p>
+
+                <p className="mt-1 font-black text-gray-900">
+                  Finish inside the Global Top 8
+                </p>
+              </div>
+            </button>
+          </section>      
+
+
 {/* PLAYER REWARDS */}
 
 <section>

@@ -92,7 +92,7 @@ for (const rankingDoc of leaderboardSnap.docs) {
         );
       } catch (error) {
         console.error(
-          "Unable to load Race to Paradise:",
+          "Unable to load Race to the Final:",
           error
         );
       } finally {
@@ -147,7 +147,7 @@ for (const rankingDoc of leaderboardSnap.docs) {
 
             <p className="mt-3 text-sm leading-6 text-cyan-50/90">
               Compete throughout the season, earn Race Points and climb
-              the global Race to the Final leaderboard.
+              the Global Race to the Final Leaderboard.
             </p>
 
             <div className="mt-5 rounded-2xl border border-white/15 bg-white/10 p-4">

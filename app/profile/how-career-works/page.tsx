@@ -74,51 +74,83 @@ export default function HowCareerWorksPage() {
             </div>
           </section>
 
-          <GuideSection
+            <GuideSection
             code="PTS"
-            eyebrow="CAREER SCORING"
+            eyebrow="COMPETITION VALUE"
             title="Career Points"
-            description="Your permanent lifetime competitive points."
+            description="Every finalized challenge is scored using the same competition-value system."
           >
             <InfoLine
-              title="Match Play"
-              text="Win = 130 Club Points, Draw = 65, Loss = 25."
-            />
-
-            <InfoLine
-              title="Other Formats"
-              text="Points are calculated from your finishing position and the number of players in the challenge."
+              title="Three Factors"
+              text="Career Points are calculated from your finishing position, the number of tokens played and the total number of players in the challenge."
             />
 
             <FormulaBox>
-              Position Score = (Players − Position + 1) ÷ Players
+              Competition Score =
               {"\n"}
-              Volume Multiplier = log₁₀(Players) + 1
-              {"\n"}
-              Base Points = Position Score × Volume Multiplier × 100
+              100 × Position Factor × Token Factor × Field Factor
             </FormulaBox>
 
             <InfoLine
-              title="Minimum Points"
-              text="A minimum floor of 25% of the available volume-based points ensures every completed player earns points."
+              title="Position Factor"
+              text="Finishing higher earns a larger share of the available competition value. First place receives the maximum position factor."
+            />
+
+            <InfoLine
+              title="Token Factor"
+              text="Higher-token challenges carry greater competitive value, but the increase is controlled so players cannot simply buy ranking position."
+            />
+
+            <InfoLine
+              title="Field Factor"
+              text="Challenges with more players carry greater competitive value because the player is competing against a larger field."
+            />
+
+            <InfoLine
+              title="All Game Formats"
+              text="The same three-factor principle applies to Match Play, Stroke Play, Stableford, Scramble and other supported competitive formats."
             />
 
             <InfoLine
               title="Career Total"
-              text="Club Points earned from every challenge are added to your Career Points."
+              text="Your Competition Score is added to your Career Points after the challenge is finalized."
             />
           </GuideSection>
 
-          <GuideSection
+               <GuideSection
             code="RPTS"
             eyebrow="RANKING SYSTEM"
             title="Ranking Points"
-            description="Each challenge result contributes across four ranking levels."
+            description="Ranking Points are derived directly from your Competition Score."
           >
-            <ValueRow title="Club" value="100%" text="of base points" />
-            <ValueRow title="Province" value="70%" text="approximately" />
-            <ValueRow title="National" value="40%" text="approximately" />
-            <ValueRow title="Global" value="20%" text="approximately" />
+            <ValueRow
+              title="Club"
+              value="100%"
+              text="of Competition Score"
+            />
+
+            <ValueRow
+              title="Province"
+              value="70%"
+              text="of Competition Score"
+            />
+
+            <ValueRow
+              title="National"
+              value="40%"
+              text="of Competition Score"
+            />
+
+            <ValueRow
+              title="Global"
+              value="20%"
+              text="of Competition Score"
+            />
+
+            <InfoLine
+              title="Ranking Progress"
+              text="These points accumulate after every finalized challenge and determine your position against other players at each ranking level."
+            />
           </GuideSection>
 
           <GuideSection
@@ -157,61 +189,52 @@ export default function HowCareerWorksPage() {
               text="TEEZ records the highest ranking position you have achieved during your career."
             />
           </GuideSection>
-
           <GuideSection
             code="PWR"
             eyebrow="COMPETITIVE RATING"
             title="Power Score"
-            description="A measure of your current competitive strength."
+            description="Power Score now derives directly from the Competition Score earned in each finalized challenge."
           >
-            <p className="text-sm leading-5 text-slate-500">
-              Power Score starts at 1,000 and increases after
-              each completed challenge.
-            </p>
-
             <FormulaBox>
-              Club Points ÷ 10
-              {"\n"}+ 25 for winning
-              {"\n"}+ 10 for a Top 3 finish
-              {"\n"}+ Field Size bonus
-              {"\n"}+ Win Streak bonus
-              {"\n"}+ Win Percentage bonus
+              Power Score Gain =
+              {"\n"}
+              Competition Score × 10%
             </FormulaBox>
 
             <InfoLine
-              title="Field Size"
-              text="An additional point is earned for every five players in the challenge."
+              title="Competition Value"
+              text="Because Competition Score already includes finishing position, tokens played and field size, Power Score automatically reflects all three factors."
             />
 
             <InfoLine
-              title="Win Streak"
-              text="Your current win streak contributes 2 Power Score points per consecutive win."
+              title="Career Total"
+              text="The calculated Power Score gain is added to your existing Power Score after each finalized challenge."
             />
           </GuideSection>
 
-          <GuideSection
+                   <GuideSection
             code="XP"
             eyebrow="PLAYER DEVELOPMENT"
             title="Career XP"
-            description="Measures long-term activity and career progression."
+            description="Career XP is now based directly on the competitive value of each finalized challenge."
           >
-            <p className="text-sm leading-5 text-slate-500">
-              Every completed challenge starts with 25 XP.
-            </p>
-
             <FormulaBox>
-              25 Base XP
-              {"\n"}+ Finishing Position XP
-              {"\n"}+ 50 XP for winning
-              {"\n"}+ Number of players in the field
-              {"\n"}+ Club Points ÷ 10
+              Career XP Earned =
+              {"\n"}
+              Competition Score × 50%
             </FormulaBox>
 
             <InfoLine
-              title="Finishing Position XP"
-              text="Higher finishing positions earn more XP. The calculation awards 5 XP for every position from your finishing place to the bottom of the field."
+              title="Competition Value"
+              text="A stronger result in a higher-token challenge or larger field produces more Career XP because all three factors are already included in the Competition Score."
+            />
+
+            <InfoLine
+              title="Career Progression"
+              text="Career XP accumulates over time and is used to determine your Player Level."
             />
           </GuideSection>
+
 
           <GuideSection
             code="LVL"
@@ -337,13 +360,27 @@ export default function HowCareerWorksPage() {
               </div>
             </div>
 
-            <div className="bg-white px-5">
-              <RaceRow title="Complete a Challenge" value="+10" />
-              <RaceRow title="Win" value="+25" />
-              <RaceRow title="Top 3 Finish" value="+10" />
-              <RaceRow title="3-Win Streak" value="+10" />
-              <RaceRow title="5-Win Streak" value="+20" />
-              <RaceRow title="10-Win Streak" value="+50" />
+                        <div className="bg-white px-5">
+              <InfoLine
+                title="Race Points"
+                text="Race Points earned from finalized challenges are calculated from the same Competition Score used by the career system."
+              />
+
+              <FormulaBox>
+                Race Points Earned =
+                {"\n"}
+                Competition Score × 25%
+              </FormulaBox>
+
+              <InfoLine
+                title="Competition Value"
+                text="Finishing position, tokens played and field size therefore all influence Race Points earned from a challenge."
+              />
+
+              <InfoLine
+                title="Vault Bonuses"
+                text="From Silver Vault onward, selected mystery coins can also award additional Race to Final bonus points."
+              />
             </div>
 
             <div className="border-t border-[#d7c28c] bg-[#faf7ef] px-5 py-4">

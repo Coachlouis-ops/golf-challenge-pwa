@@ -277,35 +277,38 @@ export default function HomePage() {
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-14">
             <h2 className="text-3xl md:text-5xl font-bold mb-6">
-              ABOUT TEEZ GOLF CHALLENGES
+              BUILD YOUR GOLF CAREER
             </h2>
             <div className="w-24 h-1 bg-green-400 mx-auto rounded-full" />
           </div>
 
           <div className="space-y-8 text-gray-700 text-base md:text-lg leading-8">
-            <p>
-              Teez Golf Challenges is built around the original essence of golf —
-              where the most important shot, is the next shot. 
-            </p>
-            <p>
-              Golf was never meant to be played against the course. At its
-              core, it is a game of personal turmoil and finding inner piece and acceptance.
-              To strategize, out-think, and apply your skill. 
-            </p>
-            <p>
-              Teez Golf Challenges brings that format back into focus by creating
-              structured challenges.
-            </p>
-            <p>
-              Players enter competitions using the Teez Golf Challenges platform and compete over
-              real rounds of golf. Whether it’s stroke play, matchplay, or
-              any of the challenge-based formats.
-            </p>
-            <p>
-              Performance drives everything. There are no shortcuts, no luck, and
-              no randomness. The outcome is determined entirely by how you think
-              and how you back it by play.
-            </p>
+        <p>
+  Every golfer has imagined what it would feel like to build a career in the game —
+  to compete, win, climb the rankings and see how far their ability can take them.
+</p>
+
+<p>
+  Teez Golf Challenges turns that ambition into a structured digital golf career.
+  Create your player profile, compete in real golf challenges and begin building
+  a competitive record that grows every time you play.
+</p>
+
+<p>
+  Every result matters. Your performances build your Career Points, Power Score,
+  rankings and player statistics as you compete against golfers across an
+  increasingly international playing field.
+</p>
+
+<p>
+  Take on bigger challenges, compete for position, progress through your Player Vault
+  and build your standing in the Race to Final. The more you compete, the more your
+  Teez career develops.
+</p>
+
+<p className="font-semibold text-black">
+  You already play golf. Now build a career from it.
+</p>
           </div>
 
           <div className="flex justify-center mt-14">

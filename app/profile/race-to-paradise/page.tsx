@@ -103,140 +103,168 @@ for (const rankingDoc of leaderboardSnap.docs) {
     loadRace();
   }, [user]);
 
-  return (
-    <main className="min-h-screen bg-[#f4f6f8] text-gray-900">
-      <div className="mx-auto max-w-md pb-12">
+    return (
+    <main className="min-h-screen bg-[#eef1f4] text-[#111827]">
+      <div className="mx-auto max-w-md pb-14">
+
         {/* HEADER */}
 
-        <header className="sticky top-0 z-20 border-b border-gray-200 bg-white/95 px-5 py-5 backdrop-blur">
+        <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/95 px-5 py-4 backdrop-blur">
           <div className="flex items-center justify-between">
             <button
               type="button"
               onClick={() => router.back()}
-              className="flex h-10 w-10 items-center justify-center rounded-full text-2xl text-gray-600 hover:bg-gray-100"
+              className="flex h-9 w-9 items-center justify-center border border-slate-200 bg-white text-xl text-slate-600"
               aria-label="Go back"
             >
               ‹
             </button>
 
             <div className="text-center">
-              <p className="text-xs font-bold uppercase tracking-[0.22em] text-cyan-700">
-                Annual Championship
+              <p className="text-[10px] font-bold uppercase tracking-[0.26em] text-[#0f5132]">
+                TEEZ Championship Series
               </p>
 
-              <h1 className="text-xl font-black">
-                Race to Final
+              <h1 className="mt-1 text-lg font-black tracking-tight">
+                RACE TO THE FINAL
               </h1>
             </div>
 
-            <div className="h-10 w-10" />
+            <div className="h-9 w-9" />
           </div>
         </header>
 
-        <div className="space-y-6 px-4 pt-5">
-          {/* HERO */}
+        <div className="space-y-7 px-4 pt-5">
 
-          <section className="overflow-hidden rounded-[28px] bg-gradient-to-br from-cyan-700 via-emerald-700 to-[#0b281d] p-6 text-white shadow-[0_14px_35px_rgba(15,23,42,0.18)]">
-            <p className="text-xs font-bold uppercase tracking-[0.22em] text-cyan-100">
-              TEEZ Championship Journey
-            </p>
+          {/* CHAMPIONSHIP HERO */}
 
-            <h2 className="mt-2 text-3xl font-black">
-              Race to Final
-            </h2>
+          <section className="overflow-hidden border border-[#1f2937] bg-[#0d1821] shadow-[0_8px_22px_rgba(15,23,42,0.16)]">
 
-            <p className="mt-3 text-sm leading-6 text-cyan-50/90">
-              Compete throughout the season, earn Race Points and climb
-              the Global Race to the Final Leaderboard.
-            </p>
+            <div className="border-b border-white/10 p-5">
+              <div className="flex items-start gap-4">
 
-            <div className="mt-5 rounded-2xl border border-white/15 bg-white/10 p-4">
-              <p className="text-xs font-bold uppercase tracking-wider text-cyan-100">
-                The Final
-              </p>
+                <div className="flex h-16 w-16 shrink-0 items-center justify-center border border-[#b89b5e] bg-[#14232d]">
+                  <span className="text-sm font-black tracking-[0.08em] text-[#d6bd7a]">
+                    RTF
+                  </span>
+                </div>
 
-              <p className="mt-2 text-lg font-black">
-                Top 8 Players 
-              </p>
+                <div className="min-w-0 flex-1">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#8eb89f]">
+                    Annual Championship
+                  </p>
 
-              <p className="mt-2 text-sm leading-6 text-cyan-50/90">
-                The season&apos;s Top 8 players will compete in the final
-                challenge and play for the title of TEEZ Champion of the Year.
-              </p>
+                  <h2 className="mt-1 text-2xl font-black tracking-tight text-white">
+                    Race to the Final
+                  </h2>
+
+                  <p className="mt-2 text-sm leading-5 text-slate-300">
+                    Compete throughout the season, earn Race Points
+                    and climb the global standings.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 divide-x divide-white/10">
+              <div className="px-5 py-4">
+                <p className="text-[9px] font-bold uppercase tracking-[0.18em] text-slate-500">
+                  Qualification
+                </p>
+
+                <p className="mt-1 text-lg font-black text-white">
+                  Global Top 8
+                </p>
+              </div>
+
+              <div className="px-5 py-4">
+                <p className="text-[9px] font-bold uppercase tracking-[0.18em] text-slate-500">
+                  Championship
+                </p>
+
+                <p className="mt-1 text-lg font-black text-[#d6bd7a]">
+                  The Final
+                </p>
+              </div>
             </div>
           </section>
 
-          {/* PLAYER STATUS */}
+          {/* YOUR RACE */}
 
           <section>
-            <div className="mb-3 px-1">
-              <h2 className="text-xl font-black">
-                Your Race
-              </h2>
-
-              <p className="mt-1 text-sm text-gray-500">
-                Your current position in the season race.
-              </p>
-            </div>
+            <SectionHeading
+              eyebrow="PLAYER STANDING"
+              title="Your Race"
+              description="Your current position in the championship season"
+            />
 
             <div className="grid grid-cols-2 gap-3">
-             <StatTile
-  title="Race Points"
-  value={racePoints.toLocaleString()}
-  footer="Season total"
-/>
-
-<StatTile
-  title="Global Position"
-  value={globalPosition ? `#${globalPosition}` : "—"}
-  footer="Race ranking"
-/>
-
               <StatTile
-                title="Qualification"
-                value="Top 8"
-                footer="Required to qualify"
+                code="PTS"
+                title="Race Points"
+                value={racePoints.toLocaleString()}
+                footer="Season total"
+                highlight
               />
 
               <StatTile
+                code="GLB"
+                title="Global Position"
+                value={
+                  globalPosition
+                    ? `#${globalPosition}`
+                    : "—"
+                }
+                footer="Current standing"
+              />
+
+              <StatTile
+                code="CUT"
+                title="Qualification"
+                value="Top 8"
+                footer="Required position"
+              />
+
+              <StatTile
+                code="STS"
                 title="Status"
-                value="Racing"
-                footer="Season active"
+                value={
+                  globalPosition &&
+                  globalPosition <= 8
+                    ? "QUALIFIED"
+                    : "RACING"
+                }
+                footer="Season status"
               />
             </div>
           </section>
 
-          {/* HOW TO EARN */}
+          {/* EARNING POINTS */}
 
           <section>
-            <div className="mb-3 px-1">
-              <h2 className="text-xl font-black">
-                Earn Race Points
-              </h2>
+            <SectionHeading
+              eyebrow="SCORING"
+              title="Earn Race Points"
+              description="Race Points are earned through competitive performance and selected career rewards"
+            />
 
-              <p className="mt-1 text-sm text-gray-500">
-                Race Points will be earned through selected competitive
-                achievements and special rewards.
-              </p>
-            </div>
-
-            <div className="space-y-3">
+            <div className="border border-slate-200 bg-white px-5 shadow-sm">
               <InfoRow
-                icon="🏆"
+                code="COMP"
                 title="Challenge Performance"
-                text="Earn Race Points through selected challenge results and achievements."
+                text="Earn Race Points through selected challenge results and competitive achievements."
               />
 
               <InfoRow
-                icon="🪙"
-                title="Mystery Vault Rewards"
+                code="VLT"
+                title="Player Vault"
                 text="Selected mystery coins can reveal Race Points as a career reward."
               />
 
               <InfoRow
-                icon="🔥"
-                title="Special Season Achievements"
-                text="Season milestones and special events can award additional Race Points."
+                code="SEAS"
+                title="Season Achievements"
+                text="Selected season milestones and events can award additional Race Points."
               />
             </div>
           </section>
@@ -244,108 +272,228 @@ for (const rankingDoc of leaderboardSnap.docs) {
           {/* LEADERBOARD */}
 
           <section>
-            <div className="mb-3 px-1">
-              <h2 className="text-xl font-black">
-                Global Race Leaderboard
-              </h2>
+            <SectionHeading
+              eyebrow="OFFICIAL STANDINGS"
+              title="Global Race Leaderboard"
+              description="The leading eight positions form the championship qualification zone"
+            />
 
-              <p className="mt-1 text-sm text-gray-500">
-                The Top 8 qualify for Final.
-              </p>
+            <div className="overflow-hidden border border-slate-200 bg-white shadow-sm">
+
+              <div className="grid grid-cols-[44px_1fr_auto] border-b border-slate-200 bg-[#f7f8f9] px-4 py-3">
+                <p className="text-[9px] font-black uppercase tracking-[0.14em] text-slate-400">
+                  Pos
+                </p>
+
+                <p className="text-[9px] font-black uppercase tracking-[0.14em] text-slate-400">
+                  Player
+                </p>
+
+                <p className="text-right text-[9px] font-black uppercase tracking-[0.14em] text-slate-400">
+                  Points
+                </p>
+              </div>
+
+              {leaders.length === 0 ? (
+                <div className="px-5 py-8 text-center">
+                  <p className="text-sm font-bold text-slate-700">
+                    No official standings yet
+                  </p>
+
+                  <p className="mt-1 text-xs text-slate-400">
+                    Standings will appear once Race Points are earned.
+                  </p>
+                </div>
+              ) : (
+                leaders.map((player, index) => {
+                  const isCurrentPlayer =
+                    player.uid === user?.uid;
+
+                  return (
+                    <div
+                      key={player.uid}
+                      className={`grid grid-cols-[44px_1fr_auto] items-center border-b border-slate-100 px-4 py-4 last:border-b-0 ${
+                        isCurrentPlayer
+                          ? "bg-[#f2f7f4]"
+                          : "bg-white"
+                      }`}
+                    >
+                      <div>
+                        <span
+                          className={`text-lg font-black ${
+                            index < 3
+                              ? "text-[#9a7531]"
+                              : "text-slate-700"
+                          }`}
+                        >
+                          {index + 1}
+                        </span>
+                      </div>
+
+                      <div className="min-w-0 pr-3">
+                        <div className="flex items-center gap-2">
+                          <p className="truncate text-sm font-black text-[#111827]">
+                            {player.battleName}
+                          </p>
+
+                          {isCurrentPlayer && (
+                            <span className="bg-[#0f5132] px-1.5 py-0.5 text-[8px] font-black uppercase tracking-wider text-white">
+                              You
+                            </span>
+                          )}
+                        </div>
+
+                        <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.08em] text-[#0f5132]">
+                          Qualification Position
+                        </p>
+                      </div>
+
+                      <p className="text-right text-sm font-black tabular-nums text-[#111827]">
+                        {player.racePoints.toLocaleString()}
+                      </p>
+                    </div>
+                  );
+                })
+              )}
             </div>
 
-            <div className="rounded-[26px] border border-gray-200 bg-white p-5 shadow-[0_8px_24px_rgba(15,23,42,0.08)]">
-              <div className="space-y-3">
-               {leaders.length === 0 ? (
-  <div className="py-6 text-center">
-    <p className="font-bold text-gray-700">
-      No Race standings yet
-    </p>
-
-    <p className="mt-1 text-sm text-gray-400">
-      Rankings will appear once Race Points are earned.
-    </p>
-  </div>
-) : (
-  leaders.map((player, index) => (
-    <div
-      key={player.uid}
-      className="flex items-center justify-between border-b border-gray-100 pb-3 last:border-b-0 last:pb-0"
-    >
-      <div className="flex items-center gap-3">
-        <div className="flex h-9 w-9 items-center justify-center rounded-full bg-cyan-50 text-sm font-black text-cyan-700">
-          {index + 1}
-        </div>
-
-        <div>
-          <p className="font-bold text-gray-800">
-            {player.battleName}
-          </p>
-
-          <p className="text-xs text-gray-400">
-            {index < 8
-              ? "Mauritius qualification position"
-              : "Race leaderboard"}
-          </p>
-        </div>
-      </div>
-
-      <span className="text-sm font-black text-cyan-700">
-        {player.racePoints.toLocaleString()} pts
-      </span>
-    </div>
-  ))
-)}
-              </div>
+            <div className="border-x border-b border-[#d7c28c] bg-[#faf7ef] px-4 py-3">
+              <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#8a6b30]">
+                Championship Cut · Top 8 Qualify
+              </p>
             </div>
           </section>
 
           {/* FINAL */}
 
-          <section className="rounded-[28px] border border-amber-200 bg-gradient-to-br from-amber-50 via-white to-cyan-50 p-6 shadow-[0_10px_28px_rgba(15,23,42,0.08)]">
-            <div className="text-4xl">
-              🏝️
+          <section>
+            <SectionHeading
+              eyebrow="SEASON FINALE"
+              title="The Final"
+              description="The championship stage of the Race to the Final"
+            />
+
+            <div className="border border-[#c9b37a] bg-white shadow-sm">
+              <div className="flex items-start gap-4 p-5">
+
+                <div className="flex h-14 w-14 shrink-0 items-center justify-center border border-[#c9b37a] bg-[#faf7ef]">
+                  <span className="text-[10px] font-black tracking-[0.08em] text-[#9a7531]">
+                    FINAL
+                  </span>
+                </div>
+
+                <div>
+                  <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#9a7531]">
+                    TEEZ Championship
+                  </p>
+
+                  <h3 className="mt-1 text-xl font-black text-[#111827]">
+                    Top 8 Players
+                  </h3>
+
+                  <p className="mt-2 text-sm leading-5 text-slate-500">
+                    At the end of the season, the eight qualifying
+                    players advance to the final TEEZ challenge.
+                  </p>
+                </div>
+              </div>
+
+              <div className="border-t border-slate-100 bg-[#0d1821] px-5 py-4">
+                <p className="text-sm font-black text-white">
+                  Eight qualifiers. One final challenge.
+                </p>
+
+                <p className="mt-1 text-sm font-bold text-[#d6bd7a]">
+                  One TEEZ Champion of the Year.
+                </p>
+              </div>
             </div>
-
-            <h2 className="mt-3 text-2xl font-black">
-              The Final
-            </h2>
-
-            <p className="mt-3 text-sm leading-6 text-gray-600">
-              At the end of the season, the Top 8 qualifying players will
-             compete for the final TEEZ challenge.
-            </p>
-
-            <p className="mt-3 text-sm font-bold text-gray-900">
-              One player will return as TEEZ Champion of the Year.
-            </p>
           </section>
+
         </div>
       </div>
     </main>
   );
 }
 
+function SectionHeading({
+  eyebrow,
+  title,
+  description,
+}: {
+  eyebrow: string;
+  title: string;
+  description: string;
+}) {
+  return (
+    <div className="mb-3">
+      <div className="mb-2 h-[2px] w-8 bg-[#0f5132]" />
+
+      <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#0f5132]">
+        {eyebrow}
+      </p>
+
+      <h2 className="mt-1 text-xl font-black tracking-tight text-[#111827]">
+        {title}
+      </h2>
+
+      <p className="mt-1 text-sm leading-5 text-slate-500">
+        {description}
+      </p>
+    </div>
+  );
+}
+
 function StatTile({
+  code,
   title,
   value,
   footer,
+  highlight = false,
 }: {
+  code: string;
   title: string;
   value: string;
   footer: string;
+  highlight?: boolean;
 }) {
   return (
-    <div className="rounded-[24px] border border-gray-200 bg-white p-4 shadow-[0_8px_24px_rgba(15,23,42,0.08)]">
-      <p className="text-sm font-bold text-gray-500">
+    <div
+      className={`border bg-white p-4 shadow-sm ${
+        highlight
+          ? "border-[#c9b37a]"
+          : "border-slate-200"
+      }`}
+    >
+      <div className="flex items-center justify-between">
+        <span
+          className={`text-[9px] font-black uppercase tracking-[0.12em] ${
+            highlight
+              ? "text-[#9a7531]"
+              : "text-[#0f5132]"
+          }`}
+        >
+          {code}
+        </span>
+
+        <div
+          className={`h-[3px] w-7 ${
+            highlight
+              ? "bg-[#b08a42]"
+              : "bg-[#0f5132]"
+          }`}
+        />
+      </div>
+
+      <p className="mt-4 text-xs font-bold uppercase tracking-[0.08em] text-slate-500">
         {title}
       </p>
 
-      <p className="mt-2 text-3xl font-black text-cyan-700">
+      <p className="mt-1 break-words text-2xl font-black tracking-tight text-[#111827]">
         {value}
       </p>
 
-      <p className="mt-2 text-xs text-gray-400">
+      <p className="mt-2 text-xs text-slate-400">
         {footer}
       </p>
     </div>
@@ -353,30 +501,31 @@ function StatTile({
 }
 
 function InfoRow({
-  icon,
+  code,
   title,
   text,
 }: {
-  icon: string;
+  code: string;
   title: string;
   text: string;
 }) {
   return (
-    <div className="rounded-[24px] border border-gray-200 bg-white p-4 shadow-[0_8px_24px_rgba(15,23,42,0.07)]">
-      <div className="flex gap-4">
-        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-cyan-50 text-2xl">
-          {icon}
-        </div>
+    <div className="flex gap-4 border-b border-slate-100 py-4 last:border-b-0">
 
-        <div>
-          <h3 className="font-black text-gray-800">
-            {title}
-          </h3>
+      <div className="flex h-11 min-w-11 shrink-0 items-center justify-center border border-[#b8c7bd] bg-[#f3f7f4] px-2">
+        <span className="text-[8px] font-black tracking-[0.06em] text-[#0f5132]">
+          {code}
+        </span>
+      </div>
 
-          <p className="mt-1 text-sm leading-5 text-gray-500">
-            {text}
-          </p>
-        </div>
+      <div>
+        <h3 className="text-sm font-black text-[#111827]">
+          {title}
+        </h3>
+
+        <p className="mt-1 text-sm leading-5 text-slate-500">
+          {text}
+        </p>
       </div>
     </div>
   );

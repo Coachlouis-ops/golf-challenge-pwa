@@ -371,15 +371,35 @@ export default function HowCareerWorksPage() {
               text="Each earned key allows you to flip one unopened mystery coin."
             />
 
-            <VaultRow title="Bronze" text="50 mystery coins" />
-            <VaultRow title="Silver" text="Unlocks after Bronze is completed" />
-            <VaultRow title="Gold" text="Unlocks after Silver is completed" />
-            <VaultRow title="Diamond" text="Unlocks after Gold is completed" />
+                       <VaultRow
+              title="Bronze"
+              text="50 mystery coins focused on core career and gameplay rewards."
+            />
 
-            <p className="text-sm leading-5 text-slate-500">
-              Mystery coins can contain bonus tokens, Career XP,
-              Career Points, Power Score boosts and free challenge entries.
-            </p>
+            <VaultRow
+              title="Silver"
+              text="Unlocks after Bronze. Race to Final bonus points become available from this tier."
+            />
+
+            <VaultRow
+              title="Gold"
+              text="Unlocks after Silver. Contains stronger career rewards and increased Race to Final reward potential."
+            />
+
+            <VaultRow
+              title="Diamond"
+              text="Unlocks after Gold. The final Vault tier with the highest career and Race to Final reward potential."
+            />
+
+            <InfoLine
+              title="Vault Progression"
+              text="Each Vault contains 50 mystery coins. One Vault Key opens one coin, and all 50 coins in the current Vault must be opened before the next tier unlocks."
+            />
+
+            <InfoLine
+              title="Mystery Rewards"
+              text="Mystery coins can contain bonus tokens, Career XP, Career Points, Power Score boosts and free challenge entries. From Silver onward, selected coins can also contain Race to Final bonus points."
+            />
           </GuideSection>
 
           {/* IMPORTANT */}

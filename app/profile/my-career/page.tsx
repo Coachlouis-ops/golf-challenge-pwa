@@ -555,7 +555,7 @@ export default function MyCareerPage() {
 
           <section>
             <SectionHeading
-              title="Race to Paradise"
+              title="Race to the Final"
               description="Your road to the TEEZ Championship Final"
             />
 
@@ -581,9 +581,8 @@ export default function MyCareerPage() {
                   </h3>
 
                   <p className="mt-2 text-sm leading-5 text-gray-500">
-                    Earn Race Points throughout the season.
-                    The world&apos;s Top 8 qualify for the
-                    TEEZ Championship Final in Mauritius.
+                    Earn Race Points throughout the season to reach the 
+                    annual TEEZ GOLF CHALLENGE FINAL.
                   </p>
                 </div>
 

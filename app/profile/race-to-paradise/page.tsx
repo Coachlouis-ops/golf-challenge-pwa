@@ -57,19 +57,27 @@ export default function RaceToParadisePage() {
 
         const rows: RacePlayer[] = [];
 
-        leaderboardSnap.docs.forEach((rankingDoc) => {
-          const data = rankingDoc.data();
+for (const rankingDoc of leaderboardSnap.docs) {
+  const data = rankingDoc.data();
 
-          rows.push({
-            uid: rankingDoc.id,
-            battleName:
-              data.battleName ||
-              data.name ||
-              "TEEZ Player",
-            racePoints:
-              Number(data.racePoints || 0),
-          });
-        });
+  const profileSnap = await getDoc(
+    doc(db, "profiles", rankingDoc.id)
+  );
+
+  const profileData = profileSnap.exists()
+    ? profileSnap.data()
+    : {};
+
+  rows.push({
+    uid: rankingDoc.id,
+    battleName:
+      profileData.battleName ||
+      `${profileData.name || ""} ${profileData.surname || ""}`.trim() ||
+      "TEEZ Player",
+    racePoints:
+      Number(data.racePoints || 0),
+  });
+}
 
         setLeaders(rows.slice(0, 8));
 

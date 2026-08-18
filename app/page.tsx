@@ -178,7 +178,7 @@ export default function HomePage() {
   {/* COMPACT CONTACT */}
   <div className="mt-3 text-center">
     <p className="text-[9px] text-gray-500">
-      Pretoria, South Africa · Global Platform
+      Global Platform
     </p>
 
     <p className="mt-1 text-[9px] text-gray-400">

@@ -2,10 +2,10 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { httpsCallable } from "firebase/functions";
-
-import { functions } from "@/src/lib/firebase";
 import { useAuth } from "@/src/lib/AuthContext";
+
+
+
 
 export default function PaymentPage() {
   const router = useRouter();
@@ -14,43 +14,70 @@ export default function PaymentPage() {
   const [accepted, setAccepted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
-  async function activateSubscription() {
-    if (!user) {
-      router.push("/login");
-      return;
-    }
 
-    if (!accepted) {
-      alert("Accept the subscription and legal terms first.");
-      return;
-    }
 
-    try {
-      setSubmitting(true);
 
-      const activateTestSubscription = httpsCallable(
-        functions,
-        "activateTestSubscription"
-      );
 
-      await activateTestSubscription({});
-
-      alert(
-        "Subscription activated. Your wallet has been credited with 100 Teez Tokens."
-      );
-
-      router.push("/dashboard");
-    } catch (error: any) {
-      console.error(error);
-
-      alert(
-        error?.message ||
-          "Subscription activation failed. Please try again."
-      );
-    } finally {
-      setSubmitting(false);
-    }
+ async function activateSubscription() {
+  if (!user) {
+    router.push("/login");
+    return;
   }
+
+  if (!accepted) {
+    alert("Accept the subscription and legal terms first.");
+    return;
+  }
+
+  try {
+    setSubmitting(true);
+
+    const idToken = await user.getIdToken(true);
+
+    const response = await fetch(
+      "/api/peach/create-checkout",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${idToken}`,
+        },
+        body: JSON.stringify({
+          product: "membership_monthly",
+        }),
+      }
+    );
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(
+        result?.error ||
+          "Unable to create Peach payment checkout."
+      );
+    }
+
+    if (!result?.redirectUrl) {
+      throw new Error(
+        "Peach did not return a checkout URL."
+      );
+    }
+
+    window.location.href = result.redirectUrl;
+  } catch (error: any) {
+    console.error(
+      "Peach checkout error:",
+      error
+    );
+
+    alert(
+      error?.message ||
+        "Unable to start payment. Please try again."
+    );
+
+    setSubmitting(false);
+  }
+}
 
   if (loading) {
     return (

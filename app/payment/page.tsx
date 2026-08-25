@@ -98,9 +98,9 @@ export default function PaymentPage() {
           Teez Subscription
         </h2>
 
-        <p className="text-gray-400 max-w-xl">
-          Subscribe to unlock competitive golf challenges, rankings, player
-          statistics, live scoreboards, and 100 monthly Teez Tokens.
+               <p className="text-gray-400 max-w-xl">
+          Activate 30 days of Teez membership access and receive 100 Teez
+          Tokens after your payment is securely confirmed by Peach Payments.
         </p>
       </div>
 
@@ -116,23 +116,25 @@ export default function PaymentPage() {
           </span>
         </p>
 
-        <p className="text-sm text-gray-400">
-          Includes 100 Teez Tokens for every active subscription month.
+             <p className="text-sm text-gray-400">
+          Includes 100 Teez Tokens with each successfully paid 30-day
+          membership period.
         </p>
 
         <div className="bg-black/40 border border-zinc-700 rounded-xl p-6 flex flex-col gap-4">
           <p className="text-green-400 font-semibold">
-            Temporary Payment Placeholder
+            Secure Payment via Peach Payments
           </p>
 
           <p className="text-sm text-gray-400">
-            This temporary button activates the subscription flow while the
-            approved secure payment portal is being connected.
+            You will be redirected to Peach Payments to securely authorise your
+            payment using the available payment methods.
           </p>
 
           <p className="text-sm text-gray-400">
-            Once the payment portal is live, this button will be replaced by the
-            official recurring subscription checkout.
+            This membership does not automatically renew. When your current
+            membership period expires, you must authorise a new payment to
+            continue access.
           </p>
         </div>
 
@@ -154,15 +156,14 @@ export default function PaymentPage() {
             per active month.
           </p>
 
-          <p>
-            The subscription is intended to renew monthly through the approved
-            secure payment portal until cancelled through the Platform&apos;s
-            self-service cancellation functionality.
+                  <p>
+            The membership does not automatically renew. A new customer-authorised
+            payment is required when the current 30-day membership period expires.
           </p>
 
           <p>
-            Cancellation takes effect immediately once successfully confirmed,
-            and access to subscription-only playing features ends immediately.
+            If you do not make another payment, subscription-only access ends
+            when the current paid membership period expires.
           </p>
 
           <p>
@@ -236,13 +237,13 @@ export default function PaymentPage() {
               className="mt-1"
             />
 
-            <span>
+                       <span>
               I confirm that I have reviewed and accept the Website Terms &
               Conditions, Platform Terms & Conditions, Payment & Subscription
               Policy, Refund, Cancellation & Delivery Policy, and Privacy
-              Policy. I understand the R99 monthly subscription, recurring
-              billing, immediate self-service cancellation, digital delivery,
-              and Teez Token rules.
+              Policy. I understand that the R99 payment provides 30 days of
+              membership access and 100 Teez Tokens, does not automatically
+              renew, and requires a new authorised payment for the next period.
             </span>
           </label>
         </div>
@@ -257,18 +258,19 @@ export default function PaymentPage() {
               : "bg-gray-700 text-gray-400 cursor-not-allowed"
           }`}
         >
-          {submitting
-            ? "ACTIVATING..."
-            : "ACTIVATE TEST SUBSCRIPTION"}
+                 {submitting
+            ? "OPENING SECURE CHECKOUT..."
+            : "PAY R99 WITH PEACH PAYMENTS"}
         </button>
 
-        <p className="text-xs text-gray-400">
-          This is currently a test activation and does not process a real
-          payment.
+                <p className="text-xs text-gray-400">
+          Payment is processed securely by Peach Payments using 3D Secure where
+          applicable.
         </p>
 
         <p className="text-xs text-gray-400">
-          Your dashboard unlocks after successful subscription activation.
+          Your dashboard unlocks only after Teez receives verified payment
+          confirmation from Peach Payments.
         </p>
       </div>
 

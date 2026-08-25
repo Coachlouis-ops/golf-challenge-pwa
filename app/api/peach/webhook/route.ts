@@ -3,23 +3,44 @@ export const runtime = "nodejs";
 import crypto from "crypto";
 import { NextResponse } from "next/server";
 
+import {
+  initializeApp,
+  getApps,
+  cert,
+} from "firebase-admin/app";
+
+import {
+  FieldValue,
+  Timestamp,
+  getFirestore,
+} from "firebase-admin/firestore";
+
 const PEACH_WEBHOOK_URL =
   "https://www.teezgolfchallenges.com/api/peach/webhook";
+
+function initFirebaseAdmin() {
+  if (!getApps().length) {
+    const serviceAccount = JSON.parse(
+      process.env.FIREBASE_SERVICE_ACCOUNT_KEY as string
+    );
+
+    initializeApp({
+      credential: cert(serviceAccount),
+      projectId: serviceAccount.project_id,
+    });
+  }
+}
 
 function safeCompareHex(
   expected: string,
   received: string
 ) {
   try {
-    const expectedBuffer = Buffer.from(
-      expected,
-      "hex"
-    );
+    const expectedBuffer =
+      Buffer.from(expected, "hex");
 
-    const receivedBuffer = Buffer.from(
-      received,
-      "hex"
-    );
+    const receivedBuffer =
+      Buffer.from(received, "hex");
 
     if (
       expectedBuffer.length === 0 ||
@@ -38,25 +59,47 @@ function safeCompareHex(
   }
 }
 
+function isSuccessfulPeachResult(
+  resultCode: string
+) {
+  // Peach documentation identifies 000.000.000
+  // as successful in live processing.
+  //
+  // 000.100.110 is also documented in Peach's
+  // successful Integrator Test Mode examples.
+  return (
+    resultCode === "000.000.000" ||
+    resultCode === "000.100.110"
+  );
+}
+
 export async function POST(req: Request) {
   try {
     const contentType =
       req.headers.get("content-type") || "";
 
-    const rawBody = await req.text();
+    const rawBody =
+      await req.text();
 
     // --------------------------------------------------
-    // INITIAL PEACH WEBHOOK CONFIGURATION CHECK
+    // INITIAL PEACH CONFIGURATION WEBHOOK
     // --------------------------------------------------
-    // Peach sends the initial verification request as JSON.
-    if (contentType.includes("application/json")) {
+    if (
+      contentType.includes(
+        "application/json"
+      )
+    ) {
       let payload: any = null;
 
       try {
-        payload = JSON.parse(rawBody);
+        payload =
+          JSON.parse(rawBody);
       } catch {
         return NextResponse.json(
-          { error: "Invalid JSON payload" },
+          {
+            error:
+              "Invalid JSON payload",
+          },
           { status: 400 }
         );
       }
@@ -84,7 +127,7 @@ export async function POST(req: Request) {
     }
 
     // --------------------------------------------------
-    // CHECKOUT PAYMENT WEBHOOK
+    // CHECKOUT WEBHOOK CONTENT TYPE
     // --------------------------------------------------
     if (
       !contentType.includes(
@@ -92,7 +135,10 @@ export async function POST(req: Request) {
       )
     ) {
       return NextResponse.json(
-        { error: "Unsupported content type" },
+        {
+          error:
+            "Unsupported content type",
+        },
         { status: 415 }
       );
     }
@@ -144,14 +190,18 @@ export async function POST(req: Request) {
       );
 
       return NextResponse.json(
-        { error: "Invalid webhook signature" },
+        {
+          error:
+            "Invalid webhook signature",
+        },
         { status: 401 }
       );
     }
 
     if (
       algorithm &&
-      algorithm.toLowerCase() !== "sha256" &&
+      algorithm.toLowerCase() !==
+        "sha256" &&
       algorithm.toLowerCase() !==
         "hmac-sha256"
     ) {
@@ -170,14 +220,8 @@ export async function POST(req: Request) {
     }
 
     // --------------------------------------------------
-    // VERIFY HMAC SHA256
+    // VERIFY PEACH HMAC
     // --------------------------------------------------
-    // Peach specification:
-    //
-    // timestamp.webhookId.webhookUrl.rawBody
-    //
-    // IMPORTANT:
-    // rawBody must remain exactly as received.
     const signatureMessage =
       `${timestamp}.${webhookId}.` +
       `${PEACH_WEBHOOK_URL}.${rawBody}`;
@@ -191,13 +235,12 @@ export async function POST(req: Request) {
         .update(signatureMessage)
         .digest("hex");
 
-    const signatureValid =
-      safeCompareHex(
+    if (
+      !safeCompareHex(
         calculatedSignature,
         receivedSignature
-      );
-
-    if (!signatureValid) {
+      )
+    ) {
       console.error(
         "Invalid Peach webhook signature.",
         {
@@ -207,16 +250,21 @@ export async function POST(req: Request) {
       );
 
       return NextResponse.json(
-        { error: "Invalid webhook signature" },
+        {
+          error:
+            "Invalid webhook signature",
+        },
         { status: 401 }
       );
     }
 
     // --------------------------------------------------
-    // PARSE VERIFIED PEACH PAYLOAD
+    // PARSE VERIFIED WEBHOOK
     // --------------------------------------------------
     const params =
-      new URLSearchParams(rawBody);
+      new URLSearchParams(
+        rawBody
+      );
 
     const checkoutId =
       params.get("checkoutId") || "";
@@ -226,7 +274,7 @@ export async function POST(req: Request) {
         "merchantTransactionId"
       ) || "";
 
-    const amount =
+    const amountString =
       params.get("amount") || "";
 
     const currency =
@@ -244,8 +292,12 @@ export async function POST(req: Request) {
       "";
 
     const resultDescription =
-      params.get("result.description") ||
-      params.get("result_description") ||
+      params.get(
+        "result.description"
+      ) ||
+      params.get(
+        "result_description"
+      ) ||
       "";
 
     const peachTimestamp =
@@ -273,27 +325,486 @@ export async function POST(req: Request) {
       );
     }
 
+    initFirebaseAdmin();
+
+    const db =
+      getFirestore();
+
     // --------------------------------------------------
-    // IMPORTANT:
-    // NO PAYMENT FULFILMENT YET.
-    //
-    // At this stage we only authenticate and parse the
-    // webhook. Firestore payment records and idempotent
-    // membership/token fulfilment will be added next.
+    // FIND INTERNAL PAYMENT
     // --------------------------------------------------
+    const paymentQuery =
+      await db
+        .collection("payments")
+        .where(
+          "merchantTransactionId",
+          "==",
+          merchantTransactionId
+        )
+        .limit(1)
+        .get();
+
+    if (paymentQuery.empty) {
+      console.error(
+        "No Teez payment record matches Peach transaction.",
+        {
+          webhookId,
+          merchantTransactionId,
+          checkoutId,
+        }
+      );
+
+      return NextResponse.json(
+        {
+          error:
+            "Payment record not found",
+        },
+        { status: 404 }
+      );
+    }
+
+    const paymentDoc =
+      paymentQuery.docs[0];
+
+    const paymentRef =
+      paymentDoc.ref;
+
+    const payment =
+      paymentDoc.data();
+
+    // --------------------------------------------------
+    // VERIFY PEACH PAYMENT AGAINST OUR OWN RECORD
+    // --------------------------------------------------
+    const receivedAmount =
+      Number(amountString);
+
+    const expectedAmount =
+      Number(
+        payment.expectedAmount
+      );
+
+    if (
+      !Number.isFinite(
+        receivedAmount
+      ) ||
+      receivedAmount !==
+        expectedAmount ||
+      currency !==
+        payment.currency ||
+      paymentType !== "DB"
+    ) {
+      console.error(
+        "Peach payment details do not match Teez payment record.",
+        {
+          webhookId,
+          merchantTransactionId,
+          checkoutId,
+          receivedAmount,
+          expectedAmount,
+          currency,
+          expectedCurrency:
+            payment.currency,
+          paymentType,
+        }
+      );
+
+      await paymentRef.set(
+        {
+          peachCheckoutId:
+            checkoutId,
+
+          peachTransactionId:
+            transactionId || null,
+
+          status:
+            "verification_failed",
+
+          lastWebhookId:
+            webhookId,
+
+          lastPeachResultCode:
+            resultCode,
+
+          lastPeachTimestamp:
+            peachTimestamp,
+
+          updatedAt:
+            FieldValue.serverTimestamp(),
+        },
+        { merge: true }
+      );
+
+      return NextResponse.json(
+        {
+          error:
+            "Payment verification failed",
+        },
+        { status: 400 }
+      );
+    }
+
+    // --------------------------------------------------
+    // NON-SUCCESSFUL EVENT
+    // --------------------------------------------------
+    if (
+      !isSuccessfulPeachResult(
+        resultCode
+      )
+    ) {
+      if (!payment.fulfilled) {
+        await paymentRef.set(
+          {
+            peachCheckoutId:
+              checkoutId,
+
+            peachTransactionId:
+              transactionId || null,
+
+            status:
+              resultCode ===
+                "000.200.000"
+                ? "pending"
+                : resultCode ===
+                    "100.396.101"
+                  ? "cancelled"
+                  : resultCode ===
+                      "100.396.104"
+                    ? "uncertain"
+                    : "processing",
+
+            lastWebhookId:
+              webhookId,
+
+            lastPeachResultCode:
+              resultCode,
+
+            lastPeachResultDescription:
+              resultDescription,
+
+            lastPeachTimestamp:
+              peachTimestamp,
+
+            updatedAt:
+              FieldValue.serverTimestamp(),
+          },
+          { merge: true }
+        );
+      }
+
+      return NextResponse.json(
+        {
+          received: true,
+          verified: true,
+          fulfilled: false,
+        },
+        { status: 200 }
+      );
+    }
+
+    // --------------------------------------------------
+    // ONLY THE CURRENT MEMBERSHIP PRODUCT IS SUPPORTED
+    // --------------------------------------------------
+    if (
+      payment.product !==
+      "membership_monthly"
+    ) {
+      console.error(
+        "Unsupported Peach payment product.",
+        {
+          paymentId:
+            paymentRef.id,
+          product:
+            payment.product,
+        }
+      );
+
+      return NextResponse.json(
+        {
+          error:
+            "Unsupported payment product",
+        },
+        { status: 400 }
+      );
+    }
+
+    const uid =
+      payment.uid;
+
+    if (!uid) {
+      return NextResponse.json(
+        {
+          error:
+            "Payment user missing",
+        },
+        { status: 400 }
+      );
+    }
+
+    const userRef =
+      db
+        .collection("users")
+        .doc(uid);
+
+    const walletRef =
+      db
+        .collection("wallets")
+        .doc(uid);
+
+    const webhookEventRef =
+      db
+        .collection(
+          "peachWebhookEvents"
+        )
+        .doc(webhookId);
+
+    // --------------------------------------------------
+    // IDEMPOTENT FULFILMENT TRANSACTION
+    // --------------------------------------------------
+    await db.runTransaction(
+      async (tx) => {
+        const [
+          freshPaymentSnap,
+          userSnap,
+          webhookEventSnap,
+        ] = await Promise.all([
+          tx.get(paymentRef),
+          tx.get(userRef),
+          tx.get(webhookEventRef),
+        ]);
+
+        // Exact webhook already processed.
+        if (
+          webhookEventSnap.exists
+        ) {
+          return;
+        }
+
+        if (
+          !freshPaymentSnap.exists
+        ) {
+          throw new Error(
+            "Payment disappeared during fulfilment."
+          );
+        }
+
+              const freshPayment =
+          freshPaymentSnap.data();
+
+        if (!freshPayment) {
+          throw new Error(
+            "Payment data missing during fulfilment."
+          );
+        }
+
+        // Payment was already fulfilled by another
+        // Peach retry/webhook.
+        if (
+          freshPayment.fulfilled ===
+          true
+        ) {
+          tx.set(
+            webhookEventRef,
+            {
+              webhookId,
+              paymentId:
+                paymentRef.id,
+              checkoutId,
+              merchantTransactionId,
+              resultCode,
+              duplicate:
+                true,
+              createdAt:
+                FieldValue.serverTimestamp(),
+            }
+          );
+
+          return;
+        }
+
+        const now =
+          Timestamp.now();
+
+        let subscriptionBase =
+          now.toDate();
+
+              if (
+          userSnap.exists
+        ) {
+          const userData =
+            userSnap.data();
+
+          if (!userData) {
+            throw new Error(
+              "User data missing during fulfilment."
+            );
+          }
+
+          const currentExpiry =
+            userData.subscriptionExpires;
+
+          if (currentExpiry) {
+            const expiryDate =
+              typeof currentExpiry.toDate ===
+              "function"
+                ? currentExpiry.toDate()
+                : new Date(
+                    currentExpiry
+                  );
+
+            if (
+              expiryDate.getTime() >
+              subscriptionBase.getTime()
+            ) {
+              subscriptionBase =
+                expiryDate;
+            }
+          }
+        }
+
+        const expires =
+          Timestamp.fromDate(
+            new Date(
+              subscriptionBase.getTime() +
+                30 *
+                  24 *
+                  60 *
+                  60 *
+                  1000
+            )
+          );
+
+        tx.set(
+          userRef,
+          {
+            uid,
+
+            email:
+              payment.email || "",
+
+            role:
+              userSnap.exists
+                ? userSnap.get(
+                    "role"
+                  ) || "player"
+                : "player",
+
+            subscriptionStatus:
+              "active",
+
+            subscriptionPlan:
+              "monthly_100_tokens",
+
+            subscriptionStartedAt:
+              now,
+
+            subscriptionExpires:
+              expires,
+
+            updatedAt:
+              now,
+          },
+          { merge: true }
+        );
+
+        tx.set(
+          walletRef,
+          {
+            uid,
+
+            balance:
+              FieldValue.increment(
+                100
+              ),
+
+            subscriptionTokensIssued:
+              FieldValue.increment(
+                100
+              ),
+
+            updatedAt:
+              now,
+
+            createdAt:
+              now,
+          },
+          { merge: true }
+        );
+
+        tx.set(
+          paymentRef,
+          {
+            peachCheckoutId:
+              checkoutId,
+
+            peachTransactionId:
+              transactionId || null,
+
+            status:
+              "paid",
+
+            fulfilmentStatus:
+              "fulfilled",
+
+            fulfilled:
+              true,
+
+            fulfilledAt:
+              now,
+
+            lastWebhookId:
+              webhookId,
+
+            lastPeachResultCode:
+              resultCode,
+
+            lastPeachResultDescription:
+              resultDescription,
+
+            lastPeachTimestamp:
+              peachTimestamp,
+
+            updatedAt:
+              now,
+          },
+          { merge: true }
+        );
+
+        tx.set(
+          webhookEventRef,
+          {
+            webhookId,
+
+            paymentId:
+              paymentRef.id,
+
+            checkoutId,
+
+            merchantTransactionId,
+
+            peachTransactionId:
+              transactionId || null,
+
+            resultCode,
+
+            processed:
+              true,
+
+            createdAt:
+              now,
+          }
+        );
+      }
+    );
+
     console.log(
-      "Verified Peach checkout webhook received.",
+      "Peach membership payment processed.",
       {
         webhookId,
         checkoutId,
         merchantTransactionId,
-        amount,
-        currency,
-        paymentType,
-        transactionId,
-        resultCode,
-        resultDescription,
-        peachTimestamp,
+        paymentId:
+          paymentRef.id,
+        uid,
       }
     );
 
@@ -301,6 +812,7 @@ export async function POST(req: Request) {
       {
         received: true,
         verified: true,
+        fulfilled: true,
       },
       { status: 200 }
     );

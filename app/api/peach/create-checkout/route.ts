@@ -146,28 +146,52 @@ export async function POST(req: Request) {
     const requestBody =
       await req.json();
 
-    const product =
-      requestBody?.product;
+      const product =
+      requestBody?.product as
+        | "participation_access"
+        | "token_topup_100"
+        | undefined;
 
-    // -----------------------------------
+       // -----------------------------------
     // SERVER-SIDE PRODUCT SOURCE OF TRUTH
     // -----------------------------------
-       if (
-      product !== "participation_access"
+    const products = {
+      participation_access: {
+        amount: 99,
+        tokens: 100,
+        participationAccess: true,
+      },
+
+      token_topup_100: {
+        amount: 99,
+        tokens: 100,
+        participationAccess: false,
+      },
+    } as const;
+
+    if (
+      product !== "participation_access" &&
+      product !== "token_topup_100"
     ) {
       return NextResponse.json(
         {
-          error:
-            "Unsupported product",
+          error: "Unsupported product",
         },
         { status: 400 }
       );
     }
 
-    const amount = 99;
+    const selectedProduct =
+      products[product];
+
+    const amount =
+      selectedProduct.amount;
+
+    const tokens =
+      selectedProduct.tokens;
+
     const currency = "ZAR";
     const paymentType = "DB";
-    const tokens = 100;
 
     const entityId =
       process.env.PEACH_ENTITY_ID;
@@ -181,8 +205,8 @@ export async function POST(req: Request) {
     const db =
       getFirestore();
 
-    // -----------------------------------
-    // PREVENT ACTIVE MEMBER REPURCHASE
+        // -----------------------------------
+    // PARTICIPATION ACCESS / TOP-UP RULES
     // -----------------------------------
     const userRef =
       db.collection("users").doc(uid);
@@ -190,43 +214,26 @@ export async function POST(req: Request) {
     const userSnap =
       await userRef.get();
 
-    if (userSnap.exists) {
-      const userData =
-        userSnap.data();
+    const userData =
+      userSnap.exists
+        ? userSnap.data()
+        : null;
 
-      const status =
-        userData?.subscriptionStatus ||
-        "inactive";
+    const participationActive =
+      userData?.participationStatus === "active" ||
+      userData?.subscriptionStatus === "active";
 
-      const expiresRaw =
-        userData?.subscriptionExpires;
-
-      let stillActive = false;
-
-      if (
-        status === "active" &&
-        expiresRaw
-      ) {
-        const expires =
-          typeof expiresRaw.toDate ===
-          "function"
-            ? expiresRaw.toDate()
-            : new Date(expiresRaw);
-
-        stillActive =
-          Date.now() <
-          expires.getTime();
-      }
-
-      if (stillActive) {
-        return NextResponse.json(
-          {
-            error:
-              "Subscription already active",
-          },
-          { status: 409 }
-        );
-      }
+    if (
+      product === "participation_access" &&
+      participationActive
+    ) {
+      return NextResponse.json(
+        {
+          error:
+            "Participation Access is already active. Use Token Top-Up to buy more Teez Play Tokens.",
+        },
+        { status: 409 }
+      );
     }
 
     // -----------------------------------
@@ -249,18 +256,17 @@ export async function POST(req: Request) {
     await paymentRef.set({
       uid,
       email,
-
-                  product:
-              "participation_access",
+      product,
 
       expectedAmount:
         amount,
 
       currency,
 
-           entitlement: {
+             entitlement: {
         tokens,
-        participationAccess: true,
+        participationAccess:
+          selectedProduct.participationAccess,
       },
 
       paymentProvider:
@@ -321,8 +327,7 @@ export async function POST(req: Request) {
             paymentId:
               paymentRef.id,
             uid,
-                 product:
-        "participation_access",
+            product,
           }),
       },
 

@@ -77,17 +77,13 @@ export default function MembershipGuard({
         return;
       }
 
-      if (userData.subscriptionExpires) {
-        const expires =
-          typeof userData.subscriptionExpires.toDate === "function"
-            ? userData.subscriptionExpires.toDate()
-            : new Date(userData.subscriptionExpires);
-
-        if (new Date().getTime() > expires.getTime()) {
-          router.replace("/payment");
-          return;
-        }
+      
+      if (userData.subscriptionStatus !== "active") {
+        router.replace("/payment");
+        return;
       }
+
+      setAllowed(true);
 
       setAllowed(true);
     })();

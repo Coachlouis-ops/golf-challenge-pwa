@@ -99,16 +99,12 @@ export default function LoginPage() {
       return;
     }
 
-    if (userData?.subscriptionExpires) {
-      const subscriptionExpiry =
-        typeof userData.subscriptionExpires.toDate === "function"
-          ? userData.subscriptionExpires.toDate()
-          : new Date(userData.subscriptionExpires);
-
-      if (Date.now() > subscriptionExpiry.getTime()) {
-        router.replace("/payment");
-        return;
-      }
+ if (
+      !userSnapshot.exists() ||
+      userData?.subscriptionStatus !== "active"
+    ) {
+      router.replace("/payment");
+      return;
     }
 
     router.replace("/dashboard");

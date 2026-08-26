@@ -221,27 +221,6 @@ export function AuthProvider({
             });
           }
 
-          // -----------------------------------
-          // PLAYER RANKING CHECK / CREATE
-          // -----------------------------------
-          const rankingRef = doc(
-            db,
-            "playerRankings",
-            uid
-          );
-
-          const rankingSnap =
-            await getDoc(rankingRef);
-
-          if (!rankingSnap.exists()) {
-            await setDoc(rankingRef, {
-              club: 0,
-              division: 0,
-              national: 0,
-              updatedAt: serverTimestamp(),
-            });
-          }
-
           setUser(firebaseUser);
 
           // -----------------------------------

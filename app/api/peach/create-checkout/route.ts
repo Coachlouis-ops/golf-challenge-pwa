@@ -152,8 +152,8 @@ export async function POST(req: Request) {
     // -----------------------------------
     // SERVER-SIDE PRODUCT SOURCE OF TRUTH
     // -----------------------------------
-    if (
-      product !== "membership_monthly"
+       if (
+      product !== "participation_access"
     ) {
       return NextResponse.json(
         {
@@ -250,17 +250,17 @@ export async function POST(req: Request) {
       uid,
       email,
 
-      product:
-        "membership_monthly",
+                  product:
+              "participation_access",
 
       expectedAmount:
         amount,
 
       currency,
 
-      entitlement: {
-        subscriptionDays: 30,
+           entitlement: {
         tokens,
+        participationAccess: true,
       },
 
       paymentProvider:
@@ -321,8 +321,8 @@ export async function POST(req: Request) {
             paymentId:
               paymentRef.id,
             uid,
-            product:
-              "membership_monthly",
+                 product:
+        "participation_access",
           }),
       },
 

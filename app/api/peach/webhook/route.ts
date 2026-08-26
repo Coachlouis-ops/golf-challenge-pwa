@@ -501,12 +501,20 @@ export async function POST(req: Request) {
       );
     }
 
+        // --------------------------------------------------
+    // SUPPORTED PEACH PRODUCTS
     // --------------------------------------------------
-    // ONLY THE CURRENT MEMBERSHIP PRODUCT IS SUPPORTED
-    // --------------------------------------------------
+    const isParticipationAccess =
+      payment.product ===
+      "participation_access";
+
+    const isTokenTopUp =
+      payment.product ===
+      "token_topup_100";
+
     if (
-      payment.product !==
-      "membership_monthly"
+      !isParticipationAccess &&
+      !isTokenTopUp
     ) {
       console.error(
         "Unsupported Peach payment product.",
@@ -624,44 +632,96 @@ export async function POST(req: Request) {
                const now =
           Timestamp.now();
 
-        tx.set(
-          userRef,
-          {
-            uid,
+                if (isParticipationAccess) {
+          tx.set(
+            userRef,
+            {
+              uid,
 
-            email:
-              payment.email || "",
+              email:
+                payment.email || "",
 
-            role:
-              userSnap.exists
-                ? userSnap.get(
-                    "role"
-                  ) || "player"
-                : "player",
+              role:
+                userSnap.exists
+                  ? userSnap.get(
+                      "role"
+                    ) || "player"
+                  : "player",
 
-            subscriptionStatus:
-              "active",
+              subscriptionStatus:
+                "active",
 
-            subscriptionPlan:
-              "participation_access",
+              subscriptionPlan:
+                "participation_access",
 
-            subscriptionStartedAt:
-              now,
+              subscriptionStartedAt:
+                now,
 
-            subscriptionExpires:
-              null,
+              subscriptionExpires:
+                null,
 
-            participationStatus:
-              "active",
+              participationStatus:
+                "active",
 
-            participationActivatedAt:
-              now,
+              participationActivatedAt:
+                now,
 
-            updatedAt:
-              now,
-          },
-          { merge: true }
-        );
+              updatedAt:
+                now,
+            },
+            { merge: true }
+          );
+
+          tx.set(
+            walletRef,
+            {
+              uid,
+
+              balance:
+                FieldValue.increment(
+                  100
+                ),
+
+              subscriptionTokensIssued:
+                FieldValue.increment(
+                  100
+                ),
+
+              updatedAt:
+                now,
+
+              createdAt:
+                now,
+            },
+            { merge: true }
+          );
+        }
+
+        if (isTokenTopUp) {
+          tx.set(
+            walletRef,
+            {
+              uid,
+
+              balance:
+                FieldValue.increment(
+                  100
+                ),
+
+              topUpTokensPurchased:
+                FieldValue.increment(
+                  100
+                ),
+
+              updatedAt:
+                now,
+
+              createdAt:
+                now,
+            },
+            { merge: true }
+          );
+        }
 
         tx.set(
           walletRef,

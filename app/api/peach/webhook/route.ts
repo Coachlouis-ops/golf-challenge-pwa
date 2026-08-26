@@ -62,15 +62,10 @@ function safeCompareHex(
 function isSuccessfulPeachResult(
   resultCode: string
 ) {
-  // Peach documentation identifies 000.000.000
-  // as successful in live processing.
-  //
-  // 000.100.110 is also documented in Peach's
-  // successful Integrator Test Mode examples.
-  return (
-    resultCode === "000.000.000" ||
-    resultCode === "000.100.110"
-  );
+  // LIVE Peach payments are fulfilled only
+  // when Peach returns the confirmed live
+  // successful transaction result.
+  return resultCode === "000.000.000";
 }
 
 export async function POST(req: Request) {

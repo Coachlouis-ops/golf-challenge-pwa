@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/src/lib/AuthContext";
-
+import Image from "next/image";
 
 
 
@@ -104,33 +104,90 @@ export default function PaymentPage() {
         </p>
       </div>
 
-      <div className="bg-zinc-800 border border-zinc-600 p-8 rounded-xl shadow-xl flex flex-col gap-6 text-center max-w-lg w-full">
-                <h3 className="text-xl font-bold text-green-400">
-          Participation Access
-        </h3>
+      <div className="bg-gradient-to-b from-zinc-900 to-black border border-orange-400/60 p-8 rounded-2xl shadow-[0_0_35px_rgba(255,153,51,0.18)] flex flex-col gap-6 text-center max-w-lg w-full">
+                 <div className="flex flex-col items-center gap-2">
+          <p className="text-xs uppercase tracking-[3px] text-orange-300">
+            Secure Checkout
+          </p>
 
-        <p className="text-4xl font-bold">
-          R99
-        </p>
+          <h3 className="text-2xl font-bold text-white">
+            Participation Access
+          </h3>
+
+          <p className="text-sm font-semibold text-orange-400">
+            Powered by Peach Payments
+          </p>
+        </div>
+        <div>
+          <p className="text-5xl font-bold text-white">
+            R99
+          </p>
+
+          <p className="text-xs text-gray-500 mt-2">
+            One-time authorised payment
+          </p>
+        </div>
 
         <p className="text-sm text-gray-400">
           Includes 100 Teez Play Tokens. Your tokens remain in your wallet
           until you use them.
         </p>
 
-        <div className="bg-black/40 border border-zinc-700 rounded-xl p-6 flex flex-col gap-4">
-          <p className="text-green-400 font-semibold">
+                    <div className="bg-black/50 border border-orange-400/30 rounded-xl p-5 flex flex-col gap-4">
+
+          <div className="w-full overflow-hidden rounded-xl border border-orange-400/30">
+            <Image
+              src="/peach-payment-tile.png"
+              alt="Secure payments powered by Peach Payments"
+              width={1024}
+              height={1536}
+              className="w-full h-auto object-contain"
+              priority
+            />
+          </div>
+
+          <p className="text-orange-400 font-semibold">
             Secure Payment via Peach Payments
           </p>
 
-          <p className="text-sm text-gray-400">
+          <p className="text-sm text-gray-300">
             You will be redirected to Peach Payments to securely authorise your
-            payment using the available payment methods.
+            payment.
           </p>
 
-                   <p className="text-sm text-gray-400">
-            This is a one-time authorised payment. There is no automatic
-            renewal or recurring monthly deduction.
+          <div className="flex flex-wrap justify-center gap-3 py-2 text-xs text-gray-300">
+            <span className="border border-zinc-700 rounded-lg px-3 py-2">
+              VISA
+            </span>
+
+            <span className="border border-zinc-700 rounded-lg px-3 py-2">
+              MASTERCARD
+            </span>
+
+            <span className="border border-zinc-700 rounded-lg px-3 py-2">
+              GOOGLE PAY
+            </span>
+
+            <span className="border border-zinc-700 rounded-lg px-3 py-2">
+              APPLE PAY
+            </span>
+
+            <span className="border border-zinc-700 rounded-lg px-3 py-2">
+              PAY BY BANK
+            </span>
+
+            <span className="border border-zinc-700 rounded-lg px-3 py-2">
+              PAYSHAP
+            </span>
+          </div>
+
+          <p className="text-xs text-gray-500">
+            3D Secure authentication is enabled where applicable.
+          </p>
+
+          <p className="text-sm text-gray-400">
+            One-time authorised payment. No automatic renewal or recurring
+            deduction.
           </p>
         </div>
 
@@ -161,10 +218,6 @@ export default function PaymentPage() {
             the Token Wallet.
           </p>
 
-          <p>
-            If you do not make another payment, subscription-only access ends
-            when the current paid membership period expires.
-          </p>
 
           <p>
             Teez Tokens are digital play credits only. They have no cash value,
@@ -247,19 +300,19 @@ export default function PaymentPage() {
           </label>
         </div>
 
-        <button
+               <button
           type="button"
           onClick={activateSubscription}
           disabled={!accepted || submitting}
-          className={`w-full py-4 rounded-xl font-bold transition ${
+          className={`w-full py-4 rounded-xl font-bold transition shadow-lg ${
             accepted && !submitting
-              ? "bg-green-500 hover:bg-green-400 text-black"
+              ? "bg-orange-400 hover:bg-orange-300 text-black shadow-[0_0_25px_rgba(251,146,60,0.35)]"
               : "bg-gray-700 text-gray-400 cursor-not-allowed"
           }`}
         >
-                 {submitting
-            ? "OPENING SECURE CHECKOUT..."
-            : "PAY R99 WITH PEACH PAYMENTS"}
+          {submitting
+            ? "OPENING PEACH SECURE CHECKOUT..."
+            : "CONTINUE TO PEACH PAYMENTS"}
         </button>
 
                 <p className="text-xs text-gray-400">

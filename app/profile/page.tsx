@@ -21,7 +21,6 @@ type Profile = {
   // -------------------------------------------------
   division:
     | "junior"
-    | "amateur"
     | "open"
     | "senior"
     | "ladies"
@@ -142,7 +141,8 @@ export default function ProfilePage() {
     // -------------------------------------------------
     // DEFAULT DIVISION
     // -------------------------------------------------
-    division: "amateur",
+    
+    division: "open",
 
     country: "",
     stateProvince: "",
@@ -598,9 +598,11 @@ export default function ProfilePage() {
 
             <Input label="Province / State" value={profile.stateProvince} onChange={(v) => setProfile({ ...profile, stateProvince: v })} />
 
-            {/* DIVISION */}
+                      {/* DIVISION */}
             <div className="space-y-2">
-              <p className="text-xs text-gray-400">Player Division</p>
+              <p className="text-xs text-gray-400">
+                Player Division
+              </p>
 
               <select
                 className="w-full bg-[#1f1f1f] border border-gray-500 text-white px-3 py-2 rounded-md focus:border-green-400 focus:outline-none"
@@ -610,7 +612,6 @@ export default function ProfilePage() {
                     ...profile,
                     division: e.target.value as
                       | "junior"
-                      | "amateur"
                       | "open"
                       | "senior"
                       | "ladies"
@@ -618,23 +619,22 @@ export default function ProfilePage() {
                   })
                 }
               >
-                <option value="junior">Junior Division</option>
-                <option value="amateur">Amateur Division</option>
-                <option value="open">Open Division</option>
-                <option value="senior">Senior Division</option>
-                <option value="ladies">Ladies Division</option>
-                <option value="professional">Professional Division</option>
+                <option value="junior">
+                  Junior Division
+                </option>
+                <option value="open">
+                  Open Division
+                </option>
+                <option value="senior">
+                  Senior Division
+                </option>
+                <option value="ladies">
+                  Ladies Division
+                </option>
+                <option value="professional">
+                  Professional Division
+                </option>
               </select>
-
-              {(profile.division === "open" || profile.division === "professional") && (
-                <div className="bg-yellow-900/30 border border-yellow-600 rounded-lg p-3">
-                  <p className="text-xs text-yellow-300 leading-relaxed">
-                    By selecting this division, you acknowledge that Teez tokens
-                    are digital play credits only and cannot be withdrawn,
-                    redeemed, or converted to cash.
-                  </p>
-                </div>
-              )}
             </div>
 
             {/* COUNTRY */}

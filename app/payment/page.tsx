@@ -94,31 +94,28 @@ export default function PaymentPage() {
           ACTIVATE YOUR GAME
         </h1>
 
-        <h2 className="text-3xl font-semibold">
-          Teez Subscription
+         <h2 className="text-3xl font-semibold">
+          Teez Participation Access
         </h2>
 
-               <p className="text-gray-400 max-w-xl">
-          Activate 30 days of Teez membership access and receive 100 Teez
-          Tokens after your payment is securely confirmed by Peach Payments.
+        <p className="text-gray-400 max-w-xl">
+          Get access to Teez Golf Challenges and receive 100 Teez Play Tokens
+          after your payment is securely confirmed by Peach Payments.
         </p>
       </div>
 
       <div className="bg-zinc-800 border border-zinc-600 p-8 rounded-xl shadow-xl flex flex-col gap-6 text-center max-w-lg w-full">
-        <h3 className="text-xl font-bold text-green-400">
-          Monthly Platform Access
+                <h3 className="text-xl font-bold text-green-400">
+          Participation Access
         </h3>
 
         <p className="text-4xl font-bold">
-          R99{" "}
-          <span className="text-sm text-gray-400">
-            / month
-          </span>
+          R99
         </p>
 
-             <p className="text-sm text-gray-400">
-          Includes 100 Teez Tokens with each successfully paid 30-day
-          membership period.
+        <p className="text-sm text-gray-400">
+          Includes 100 Teez Play Tokens. Your tokens remain in your wallet
+          until you use them.
         </p>
 
         <div className="bg-black/40 border border-zinc-700 rounded-xl p-6 flex flex-col gap-4">
@@ -131,20 +128,19 @@ export default function PaymentPage() {
             payment using the available payment methods.
           </p>
 
-          <p className="text-sm text-gray-400">
-            This membership does not automatically renew. When your current
-            membership period expires, you must authorise a new payment to
-            continue access.
+                   <p className="text-sm text-gray-400">
+            This is a one-time authorised payment. There is no automatic
+            renewal or recurring monthly deduction.
           </p>
         </div>
 
         <div className="text-left bg-black/40 border border-zinc-700 rounded-xl p-5 space-y-4 text-sm text-gray-300">
-          <p className="text-green-400 font-semibold">
-            Subscription and Payment Terms
+                   <p className="text-green-400 font-semibold">
+            Participation and Payment Terms
           </p>
 
           <p>
-            The subscription is provided by{" "}
+            Participation Access is provided by{" "}
             <strong>
               Honey Badger Technologies (PTY) LTD
             </strong>
@@ -152,13 +148,17 @@ export default function PaymentPage() {
           </p>
 
           <p>
-            The subscription fee is R99 per month and includes 100 Teez Tokens
-            per active month.
+            The R99 Participation Access payment includes 100 Teez Play Tokens.
           </p>
 
-                  <p>
-            The membership does not automatically renew. A new customer-authorised
-            payment is required when the current 30-day membership period expires.
+          <p>
+            Participation Access does not expire and does not automatically
+            renew. No recurring monthly deduction is made.
+          </p>
+
+          <p>
+            Additional Teez Play Tokens can be purchased when required through
+            the Token Wallet.
           </p>
 
           <p>
@@ -173,10 +173,9 @@ export default function PaymentPage() {
             external rewards.
           </p>
 
-          <p>
-            No physical goods are delivered. Subscription delivery takes place
-            digitally through Platform activation, dashboard access, and Teez
-            Token allocation.
+                  <p>
+            No physical goods are delivered. Participation Access and Teez Play
+            Tokens are delivered digitally through the Platform.
           </p>
 
         <div className="border-t border-zinc-700 pt-4">
@@ -237,13 +236,13 @@ export default function PaymentPage() {
               className="mt-1"
             />
 
-                       <span>
+                         <span>
               I confirm that I have reviewed and accept the Website Terms &
               Conditions, Platform Terms & Conditions, Payment & Subscription
               Policy, Refund, Cancellation & Delivery Policy, and Privacy
-              Policy. I understand that the R99 payment provides 30 days of
-              membership access and 100 Teez Tokens, does not automatically
-              renew, and requires a new authorised payment for the next period.
+              Policy. I understand that the R99 payment provides Participation
+              Access and 100 Teez Play Tokens, does not automatically renew,
+              and that additional tokens can be purchased when required.
             </span>
           </label>
         </div>

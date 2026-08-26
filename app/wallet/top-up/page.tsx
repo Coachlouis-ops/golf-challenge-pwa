@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/src/lib/AuthContext";
@@ -90,7 +91,23 @@ export default function TokenTopUpPage() {
           </p>
         </div>
 
-               <div className="bg-neutral-900 border border-green-500 rounded-2xl p-8 text-center space-y-5">
+                   <div className="bg-gradient-to-b from-zinc-900 to-black border border-orange-400/60 rounded-2xl p-6 text-center space-y-5 shadow-[0_0_35px_rgba(255,153,51,0.18)]">
+
+          <div className="w-full overflow-hidden rounded-xl border border-orange-400/30">
+            <Image
+              src="/peach-payment-tile.png"
+              alt="Secure payments powered by Peach Payments"
+              width={1024}
+              height={1536}
+              className="w-full h-auto object-contain"
+              priority
+            />
+          </div>
+
+          <p className="text-xs uppercase tracking-[3px] text-orange-300">
+            Secure Token Top-Up
+          </p>
+
           <p className="text-green-400 font-semibold">
             100 Teez Play Tokens
           </p>

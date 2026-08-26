@@ -1,11 +1,83 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/src/lib/AuthContext";
+
+
+
 
 export default function TokenTopUpPage() {
   const router = useRouter();
+  const { user } = useAuth();
+
+    const [submitting, setSubmitting] =
+    useState(false);
+
+  async function topUpTokens() {
+    if (!user) {
+      router.push("/login");
+      return;
+    }
+
+    try {
+      setSubmitting(true);
+
+      const idToken =
+        await user.getIdToken(true);
+
+      const response = await fetch(
+        "/api/peach/create-checkout",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type":
+              "application/json",
+            Authorization:
+              `Bearer ${idToken}`,
+          },
+          body: JSON.stringify({
+            product:
+              "token_topup_100",
+          }),
+        }
+      );
+
+      const result =
+        await response.json();
+
+      if (!response.ok) {
+        throw new Error(
+          result?.error ||
+            "Unable to create Peach token top-up checkout."
+        );
+      }
+
+      if (!result?.redirectUrl) {
+        throw new Error(
+          "Peach did not return a checkout URL."
+        );
+      }
+
+      window.location.href =
+        result.redirectUrl;
+    } catch (error: any) {
+      console.error(
+        "Peach token top-up error:",
+        error
+      );
+
+      alert(
+        error?.message ||
+          "Unable to start token top-up. Please try again."
+      );
+
+      setSubmitting(false);
+    }
+  }
 
   return (
+    
     <main className="min-h-screen bg-black text-white px-6 py-10 flex flex-col items-center">
       <div className="w-full max-w-md space-y-8">
         <div className="text-center space-y-3">
@@ -18,20 +90,43 @@ export default function TokenTopUpPage() {
           </p>
         </div>
 
-        <div className="bg-neutral-900 border border-green-500 rounded-2xl p-8 text-center space-y-5">
+               <div className="bg-neutral-900 border border-green-500 rounded-2xl p-8 text-center space-y-5">
           <p className="text-green-400 font-semibold">
-            Token Top-Ups
+            100 Teez Play Tokens
+          </p>
+
+          <p className="text-4xl font-bold">
+            R99
           </p>
 
           <p className="text-gray-300 text-sm">
-            Secure Peach Payments token packages will be available here.
+            Add 100 Teez Play Tokens directly to your wallet.
           </p>
 
           <p className="text-gray-500 text-xs">
-            Tokens remain in your wallet until used and are not subject to a
-            monthly expiry.
+            Tokens remain in your wallet until used and do not expire monthly.
+          </p>
+
+          <button
+            type="button"
+            onClick={topUpTokens}
+            disabled={submitting}
+            className={`w-full py-4 rounded-xl font-bold transition ${
+              !submitting
+                ? "bg-green-500 hover:bg-green-400 text-black"
+                : "bg-gray-700 text-gray-400 cursor-not-allowed"
+            }`}
+          >
+            {submitting
+              ? "OPENING SECURE CHECKOUT..."
+              : "TOP UP 100 TOKENS WITH PEACH"}
+          </button>
+
+          <p className="text-xs text-gray-500">
+            Payment is securely processed by Peach Payments.
           </p>
         </div>
+
 
         <button
           type="button"

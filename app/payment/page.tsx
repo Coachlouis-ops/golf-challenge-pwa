@@ -25,7 +25,7 @@ export default function PaymentPage() {
   }
 
   if (!accepted) {
-    alert("Accept the subscription and legal terms first.");
+      alert("Accept the participation and legal terms first.");
     return;
   }
 
@@ -42,8 +42,8 @@ export default function PaymentPage() {
           "Content-Type": "application/json",
           Authorization: `Bearer ${idToken}`,
         },
-        body: JSON.stringify({
-          product: "membership_monthly",
+                body: JSON.stringify({
+          product: "participation_access",
         }),
       }
     );

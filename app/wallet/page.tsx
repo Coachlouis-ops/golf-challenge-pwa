@@ -85,8 +85,8 @@ export default function WalletPage() {
           </div>
 
           <div className="bg-neutral-900 border border-neutral-700 rounded-xl p-5 text-center">
-            <p className="text-xs text-gray-400">
-              Subscription Tokens
+                      <p className="text-xs text-gray-400">
+              Participation Tokens
             </p>
 
             <p className="text-2xl font-bold text-white mt-2">
@@ -120,9 +120,16 @@ export default function WalletPage() {
           </p>
         </div>
 
+                <button
+          onClick={() => router.push("/wallet/top-up")}
+          className="w-full bg-green-500 hover:bg-green-400 text-black font-semibold py-4 rounded-xl"
+        >
+          TOP UP TEEZ PLAY TOKENS
+        </button>
+
         <button
           onClick={() => router.push("/challenges/create")}
-          className="w-full bg-green-500 hover:bg-green-400 text-black font-semibold py-4 rounded-xl"
+          className="w-full bg-neutral-800 hover:bg-neutral-700 border border-green-500 text-green-400 font-semibold py-4 rounded-xl"
         >
           PLAY MATCH
         </button>

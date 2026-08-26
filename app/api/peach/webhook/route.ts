@@ -621,57 +621,8 @@ export async function POST(req: Request) {
           return;
         }
 
-        const now =
+               const now =
           Timestamp.now();
-
-        let subscriptionBase =
-          now.toDate();
-
-              if (
-          userSnap.exists
-        ) {
-          const userData =
-            userSnap.data();
-
-          if (!userData) {
-            throw new Error(
-              "User data missing during fulfilment."
-            );
-          }
-
-          const currentExpiry =
-            userData.subscriptionExpires;
-
-          if (currentExpiry) {
-            const expiryDate =
-              typeof currentExpiry.toDate ===
-              "function"
-                ? currentExpiry.toDate()
-                : new Date(
-                    currentExpiry
-                  );
-
-            if (
-              expiryDate.getTime() >
-              subscriptionBase.getTime()
-            ) {
-              subscriptionBase =
-                expiryDate;
-            }
-          }
-        }
-
-        const expires =
-          Timestamp.fromDate(
-            new Date(
-              subscriptionBase.getTime() +
-                30 *
-                  24 *
-                  60 *
-                  60 *
-                  1000
-            )
-          );
 
         tx.set(
           userRef,
@@ -692,13 +643,19 @@ export async function POST(req: Request) {
               "active",
 
             subscriptionPlan:
-              "monthly_100_tokens",
+              "participation_access",
 
             subscriptionStartedAt:
               now,
 
             subscriptionExpires:
-              expires,
+              null,
+
+            participationStatus:
+              "active",
+
+            participationActivatedAt:
+              now,
 
             updatedAt:
               now,

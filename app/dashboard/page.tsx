@@ -103,25 +103,29 @@ function DashboardContent() {
                 EXPLORE THE FULL TEEZ DASHBOARD
               </p>
 
-              <p className="text-sm text-gray-300 mt-3 leading-6">
-                Log in to create your player profile and activate your
-                subscription.
+                       <p className="text-sm text-gray-300 mt-3 leading-6">
+                Log in to create your player profile and activate
+                Participation Access.
               </p>
 
               <p className="text-xl font-bold mt-4">
-                R99/month
+                R99
               </p>
 
               <p className="text-xs text-gray-400 mt-2">
-                Includes 100 Teez Tokens every month
+                Includes Participation Access + 100 Teez Play Tokens
+              </p>
+
+              <p className="text-xs text-gray-500 mt-2">
+                No automatic renewal. Top up more tokens whenever you need them.
               </p>
 
               <button
-  onClick={() => router.push("/legal/payment-policy")}
-  className="mt-2 text-xs text-green-400 underline hover:text-green-300"
->
-  View Payment & Subscription Policy
-</button>
+                onClick={() => router.push("/legal/payment-policy")}
+                className="mt-2 text-xs text-green-400 underline hover:text-green-300"
+              >
+                View Payment & Participation Policy
+              </button>
 
               <div className="grid grid-cols-2 gap-3 mt-5">
                 <button
@@ -141,30 +145,34 @@ function DashboardContent() {
             </div>
           )}
 
-          {user && !isSubscribed && (
+                   {user && !isSubscribed && (
             <div className="w-full border border-green-400/60 bg-black/80 rounded-2xl p-5 text-center shadow-[0_0_20px_rgba(34,197,94,0.25)]">
               <p className="text-green-400 font-semibold tracking-wide">
-                ACTIVATE YOUR SUBSCRIPTION
+                ACTIVATE PARTICIPATION ACCESS
               </p>
 
               <p className="text-sm text-gray-300 mt-3 leading-6">
-                Subscribe to unlock challenges, rankings, invites, live
-                scoring and your token wallet.
+                Activate Participation Access to unlock challenges, rankings,
+                invites, live scoring and your Teez Play Token Wallet.
               </p>
 
               <p className="text-xl font-bold mt-4">
-                R99/month
+                R99
               </p>
 
               <p className="text-xs text-gray-400 mt-2">
-                Includes 100 Teez Tokens every month
+                Includes 100 Teez Play Tokens
+              </p>
+
+              <p className="text-xs text-gray-500 mt-2">
+                One-time authorised payment. No automatic renewal.
               </p>
 
               <button
                 onClick={() => router.push("/payment")}
                 className="w-full h-11 mt-5 rounded-xl bg-green-400 text-black text-sm font-semibold hover:scale-[1.02] transition"
               >
-                ACTIVATE SUBSCRIPTION
+                ACTIVATE PARTICIPATION ACCESS
               </button>
             </div>
           )}
@@ -288,9 +296,9 @@ function DashboardContent() {
             TOKEN WALLET
           </button>
 
-          <div className="w-full border-t border-white/20 pt-6 mt-2 flex flex-col gap-4">
+                    <div className="w-full border-t border-white/20 pt-6 mt-2 flex flex-col gap-4">
             <p className="text-center text-xs tracking-[2px] text-gray-300">
-              SUBSCRIPTION & ACCOUNT
+              PARTICIPATION & ACCOUNT
             </p>
 
             {!user && (
@@ -311,31 +319,29 @@ function DashboardContent() {
               </>
             )}
 
-            {user && !isSubscribed && (
+                        {user && !isSubscribed && (
               <button
                 onClick={() => router.push("/payment")}
                 className="arena-btn"
               >
-                ACTIVATE SUBSCRIPTION
+                ACTIVATE PARTICIPATION ACCESS
               </button>
             )}
 
-            {user && isSubscribed && (
+                       {user && isSubscribed && (
               <>
                 <button
-                  onClick={() => router.push("/payment")}
+                  onClick={() => router.push("/wallet")}
                   className="arena-btn"
                 >
-                  MANAGE SUBSCRIPTION
+                  VIEW TOKEN WALLET
                 </button>
 
                 <button
-                  onClick={() =>
-                    router.push("/cancel-subscription")
-                  }
+                  onClick={() => router.push("/wallet/top-up")}
                   className="arena-btn"
                 >
-                  CANCEL SUBSCRIPTION
+                  TOP UP TEEZ PLAY TOKENS
                 </button>
               </>
             )}
@@ -353,13 +359,13 @@ function DashboardContent() {
               PLATFORM TERMS & CONDITIONS
             </button>
 
-            <button
+                       <button
               onClick={() =>
                 router.push("/legal/payment-policy")
               }
               className="text-xs tracking-widest text-gray-300 underline hover:text-white"
             >
-              PAYMENT & SUBSCRIPTION POLICY
+              PAYMENT & PARTICIPATION POLICY
             </button>
 
             <button
@@ -421,23 +427,27 @@ function DashboardContent() {
               </>
             ) : (
               <>
-                <p className="text-sm text-gray-300 mt-4 leading-6">
-                  Subscribe to unlock this competitive feature.
+                                <p className="text-sm text-gray-300 mt-4 leading-6">
+                  Activate Participation Access to unlock this competitive feature.
                 </p>
 
                 <p className="text-2xl font-bold mt-5">
-                  R99/month
+                  R99
                 </p>
 
                 <p className="text-xs text-gray-400 mt-2">
-                  Includes 100 Teez Tokens every month
+                  Includes 100 Teez Play Tokens
+                </p>
+
+                <p className="text-xs text-gray-500 mt-2">
+                  One-time authorised payment. No automatic renewal.
                 </p>
 
                 <button
                   onClick={() => router.push("/payment")}
                   className="w-full h-12 mt-6 rounded-xl bg-green-400 text-black font-semibold hover:scale-[1.02] transition"
                 >
-                  ACTIVATE SUBSCRIPTION
+                  ACTIVATE PARTICIPATION ACCESS
                 </button>
               </>
             )}

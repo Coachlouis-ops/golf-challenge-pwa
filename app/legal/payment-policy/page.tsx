@@ -9,20 +9,20 @@ export default function PaymentPolicyPage() {
     <main className="min-h-screen bg-black text-white px-6 md:px-16 py-16">
       <div className="max-w-4xl mx-auto">
         <h1 className="text-3xl font-bold mb-3">
-          Payment & Subscription Policy
+          Payment & Participation Policy
         </h1>
 
         <p className="text-sm text-gray-400 mb-8">
-          Teez Golf Challenges payment, subscription, recurring billing, digital
-          delivery, and transaction terms
+          Teez Golf Challenges participation payments, token purchases,
+          digital delivery, refunds, and transaction terms
         </p>
 
         <div className="space-y-6 text-sm text-gray-300">
           <p>
-            This Payment & Subscription Policy explains how payments,
-            subscriptions, recurring billing, payment authorisation, digital
-            delivery, cancellations, failed payments, refunds, and related
-            transactions are handled through the Teez Golf Challenges Platform.
+            This Payment & Participation Policy explains how Participation
+            Access payments, Teez Play Token purchases, payment authorisation,
+            digital delivery, failed payments, refunds, and related transactions
+            are handled through the Teez Golf Challenges Platform.
           </p>
 
           <p>
@@ -35,15 +35,16 @@ export default function PaymentPolicyPage() {
 
           <p>
             This Policy must be read together with the Platform Terms &
-            Conditions, Website Terms & Conditions, Refund, Cancellation &
-            Delivery Policy, Privacy Policy, Cookie Policy, Acceptable Use
-            Policy, and Community & Competition Rules.
+            Conditions, Website Terms & Conditions, Refund & Delivery Policy,
+            Privacy Policy, Cookie Policy, Acceptable Use Policy, and Community
+            & Competition Rules.
           </p>
 
           <p>
-            By activating a subscription, authorising payment, or continuing to
-            use paid Platform services, the user confirms that they have read,
-            understood, and accepted this Policy.
+            By purchasing Participation Access, purchasing Teez Play Tokens,
+            authorising payment, or continuing to use paid Platform services,
+            the user confirms that they have read, understood, and accepted
+            this Policy.
           </p>
 
           {/* 1 */}
@@ -65,16 +66,14 @@ export default function PaymentPolicyPage() {
             Industry: Digital services and online software platforms
             <br />
             Merchant Country: South Africa
-            <br />
-            Transaction Currency: South African Rand (ZAR)
           </p>
 
           <p>
             Honey Badger Technologies (PTY) LTD takes responsibility for the
-            digital subscription services sold through the Platform, including
-            subscription delivery, account access, customer support, payment
-            issue review, refund review, complaint handling, and dispute
-            resolution.
+            digital services sold through the Platform, including Participation
+            Access, Teez Play Token allocation, account access, customer
+            support, payment issue review, refund review, complaint handling,
+            and dispute resolution.
           </p>
 
           {/* 2 */}
@@ -83,13 +82,13 @@ export default function PaymentPolicyPage() {
           </h2>
 
           <p>
-            Teez Golf Challenges is a subscription-based, skill-based
-            competitive golf Platform.
+            Teez Golf Challenges is a skill-based competitive golf Platform
+            that allows registered players to participate in structured golf
+            challenges and related Platform activities.
           </p>
 
           <p>
-            The Platform provides registered users with digital access to
-            features including:
+            Platform features may include:
           </p>
 
           <ul className="list-disc pl-6 space-y-1">
@@ -100,129 +99,194 @@ export default function PaymentPolicyPage() {
             <li>Competition history.</li>
             <li>Rankings and leaderboards.</li>
             <li>Statistics, streaks, and achievements.</li>
-            <li>Digital Teez Token wallet functionality.</li>
+            <li>Digital Teez Play Token wallet functionality.</li>
             <li>Other approved Platform gameplay features.</li>
           </ul>
 
           <p>
             The Platform does not facilitate gambling, betting, wagering,
-            casino-style games, games of chance, cash prizes, cash payouts,
-            money transmission, or Teez Token redemption.
+            casino-style games, games of chance, cash payouts, money
+            transmission, or the conversion of Teez Play Tokens into cash.
           </p>
 
           {/* 3 */}
           <h2 className="text-white font-semibold">
-            3. Subscription Plan
+            3. Participation Access
           </h2>
 
           <p>
-            Access to the main subscription-only features of Teez Golf
-            Challenges requires an active monthly subscription.
+            Players who wish to participate in paid Teez Golf Challenges
+            activities must activate Participation Access.
           </p>
 
-          <p>The current subscription plan includes:</p>
+          <p>
+            The current Participation Access purchase is:
+          </p>
 
           <ul className="list-disc pl-6 space-y-1">
             <li>
-              Subscription fee:{" "}
-              <strong className="text-white">R99 per month</strong>.
+              Participation Access payment:{" "}
+              <strong className="text-white">R149</strong>.
             </li>
-            <li>Billing frequency: Monthly.</li>
             <li>
               Included allocation:{" "}
               <strong className="text-white">
-                100 Teez Tokens per active month
+                100 Teez Play Tokens
               </strong>
               .
             </li>
-            <li>Service type: Digital Platform access.</li>
+            <li>Payment type: One-time authorised payment.</li>
+            <li>No automatic renewal.</li>
+            <li>No recurring monthly deduction.</li>
           </ul>
 
           <p>
-            The applicable subscription price, billing frequency, included Teez
-            Token allocation, and payment terms will be displayed before the
-            user confirms payment.
+            Participation Access does not expire merely because a player does
+            not purchase additional Teez Play Tokens.
           </p>
 
           <p>
-            Honey Badger Technologies (PTY) LTD may introduce revised pricing,
-            promotional offers, or additional subscription plans in the future.
-            Any applicable amount and recurring billing terms will be disclosed
-            before payment is authorised.
+            The applicable price and included allocation displayed at checkout
+            will apply to the transaction being authorised.
           </p>
 
           {/* 4 */}
           <h2 className="text-white font-semibold">
-            4. Digital Services Only
+            4. Teez Play Token Top-Ups
           </h2>
 
           <p>
-            No physical goods are supplied or delivered under the Teez Golf
-            Challenges subscription.
+            After Participation Access has been activated, players may purchase
+            additional Teez Play Tokens when they require them.
           </p>
 
           <p>
-            All subscription payments relate to digital Platform access and
-            associated digital services.
+            The current standard top-up is:
           </p>
 
+          <ul className="list-disc pl-6 space-y-1">
+            <li>
+              Top-up payment:{" "}
+              <strong className="text-white">R149</strong>.
+            </li>
+            <li>
+              Allocation:{" "}
+              <strong className="text-white">
+                100 Teez Play Tokens
+              </strong>
+              .
+            </li>
+            <li>Payment type: One-time authorised payment.</li>
+            <li>No automatic top-up.</li>
+            <li>No recurring billing.</li>
+          </ul>
+
           <p>
-            Teez Tokens are digital play credits only and are not physical
-            products, financial instruments, legal tender, electronic money, or
-            stored monetary value.
+            Players decide when to purchase additional Teez Play Tokens.
           </p>
 
           {/* 5 */}
           <h2 className="text-white font-semibold">
-            5. South African Availability
+            5. Nature of Teez Play Tokens
           </h2>
 
           <p>
-            The paid subscription offering is currently available to South
-            African customers only.
+            Teez Play Tokens are digital participation and play credits used
+            within the Teez Golf Challenges Platform.
           </p>
 
           <p>
-            The merchant outlet country when payment options are presented is
-            South Africa, and all transactions are processed in South African
-            Rand (ZAR).
+            Teez Play Tokens:
+          </p>
+
+          <ul className="list-disc pl-6 space-y-1">
+            <li>Have no cash value.</li>
+            <li>Are not legal tender.</li>
+            <li>Are not electronic money.</li>
+            <li>Are not cryptocurrency.</li>
+            <li>Are not financial instruments.</li>
+            <li>Are not stored monetary value.</li>
+            <li>Cannot be withdrawn as cash.</li>
+            <li>Cannot be converted into cash.</li>
+            <li>Cannot be sold or transferred for payment.</li>
+          </ul>
+
+          <p>
+            Teez Play Tokens remain available in the player&apos;s wallet until
+            used, subject to these Terms, legitimate Platform corrections,
+            account enforcement, and applicable law.
           </p>
 
           {/* 6 */}
           <h2 className="text-white font-semibold">
-            6. Approved Payment Portal
+            6. Digital Services Only
           </h2>
 
           <p>
-            Payments are completed through the approved secure payment portal
-            provided on the Platform.
+            Participation Access and Teez Play Token purchases are digital
+            Platform services and digital credits.
           </p>
 
           <p>
-            The payment portal may be operated by an approved third-party
-            payment gateway or payment-processing provider.
+            No physical goods are supplied or delivered as part of these
+            purchases.
           </p>
 
-          <p>
-            Available payment methods may include Visa, Mastercard, or other
-            payment methods supported and displayed by the approved payment
-            portal.
-          </p>
-
-          <p>
-            The availability of a particular payment method may depend on the
-            payment portal, issuing bank, card network, customer location,
-            technical availability, and applicable payment rules.
-          </p>
           {/* 7 */}
           <h2 className="text-white font-semibold">
-            7. Payment Authorisation
+            7. International Availability and Currency
           </h2>
 
           <p>
-            The user must review the subscription amount, billing frequency,
-            payment method, and recurring payment terms before authorising
-            payment.
+            Teez Golf Challenges is intended for users in supported territories,
+            subject to applicable laws, payment-provider availability, Platform
+            availability, and any geographic restrictions that may apply.
+          </p>
+
+          <p>
+            The transaction currency and amount presented to a user may depend
+            on the payment configuration, supported currencies, customer
+            location, acquiring arrangements, and payment methods available at
+            checkout.
+          </p>
+
+          <p>
+            The final amount and transaction currency will be displayed before
+            the user authorises payment.
+          </p>
+
+          {/* 8 */}
+          <h2 className="text-white font-semibold">
+            8. Approved Payment Portal
+          </h2>
+
+          <p>
+            Payments are completed through an approved secure payment portal.
+            The Platform currently uses Peach Payments for supported payment
+            processing.
+          </p>
+
+          <p>
+            Available payment methods may include cards, bank-based payment
+            methods, digital wallets, or other methods displayed by the secure
+            payment portal.
+          </p>
+
+          <p>
+            Availability may depend on customer location, issuing bank, payment
+            network, payment provider, technical availability, and applicable
+            payment rules.
+          </p>
+
+          {/* 9 */}
+          <h2 className="text-white font-semibold">
+            9. Payment Authorisation
+          </h2>
+
+          <p>
+            Before authorising payment, the user must review the product,
+            amount, currency, payment method, and other transaction information
+            displayed at checkout.
           </p>
 
           <p>
@@ -233,12 +297,12 @@ export default function PaymentPolicyPage() {
             <li>They are authorised to use the selected payment method.</li>
             <li>The payment information provided is accurate.</li>
             <li>
-              Honey Badger Technologies (PTY) LTD and the approved payment
-              portal may process the transaction.
+              Honey Badger Technologies (PTY) LTD and its approved payment
+              providers may process the transaction.
             </li>
             <li>
-              The monthly subscription fee may be charged on a recurring basis
-              until the subscription is cancelled.
+              They understand that the transaction is a one-time payment unless
+              expressly stated otherwise before authorisation.
             </li>
             <li>
               They have reviewed the applicable legal policies before payment.
@@ -246,243 +310,176 @@ export default function PaymentPolicyPage() {
           </ul>
 
           <p>
-            A person may not use a payment method without the permission of the
+            A person may not use a payment method without permission from the
             lawful account holder.
-          </p>
-
-          {/* 8 */}
-          <h2 className="text-white font-semibold">
-            8. Recurring Monthly Billing
-          </h2>
-
-          <p>
-            The Teez Golf Challenges subscription is billed monthly on a
-            recurring basis.
-          </p>
-
-          <p>
-            By activating the subscription, the user authorises the approved
-            payment portal to process the recurring monthly subscription amount
-            displayed at checkout.
-          </p>
-
-          <p>
-            The subscription will continue to renew monthly until it is
-            cancelled through the Platform&apos;s self-service cancellation
-            functionality.
-          </p>
-
-          <p>
-            The user is responsible for ensuring that their selected payment
-            method remains valid, authorised, and capable of processing the
-            recurring subscription charge.
-          </p>
-
-          {/* 9 */}
-          <h2 className="text-white font-semibold">
-            9. Price Disclosure
-          </h2>
-
-          <p>
-            All applicable subscription fees will be displayed before payment is
-            confirmed.
-          </p>
-
-          <p>
-            The displayed amount will identify the price payable for the
-            subscription and the applicable recurring billing frequency.
-          </p>
-
-          <p>
-            The Platform does not charge undisclosed shipping or delivery fees
-            because no physical goods are delivered.
-          </p>
-
-          <p>
-            Any applicable taxes, gateway charges, or other lawful transaction
-            amounts will be disclosed before payment where required.
           </p>
 
           {/* 10 */}
           <h2 className="text-white font-semibold">
-            10. Changes to Subscription Pricing
+            10. No Recurring Billing
           </h2>
 
           <p>
-            Honey Badger Technologies (PTY) LTD may change subscription pricing
-            for future billing periods where reasonably necessary.
+            Participation Access and standard Teez Play Token top-ups are
+            one-time purchases.
           </p>
 
           <p>
-            A pricing change will not retrospectively alter a transaction that
-            has already been completed.
+            Teez Golf Challenges does not automatically renew these purchases,
+            automatically purchase additional tokens, or automatically deduct a
+            monthly participation fee.
           </p>
 
           <p>
-            Where required by applicable law, a material pricing change will be
-            communicated before it takes effect.
-          </p>
-
-          <p>
-            The applicable subscription amount will be displayed before a new
-            subscription is activated or before renewed consent is obtained
-            where required.
+            A new payment requires a new payment instruction and authorisation
+            by the user.
           </p>
 
           {/* 11 */}
           <h2 className="text-white font-semibold">
-            11. Automatic Subscription Activation
+            11. Price Disclosure and Changes
           </h2>
 
           <p>
-            Subscription activation is completed automatically through the
-            Platform after the required registration, verification, and payment
-            steps have been successfully completed.
+            The applicable price and transaction currency will be displayed
+            before payment is confirmed.
           </p>
 
           <p>
-            Once successful payment and activation have been confirmed, the
-            Platform will grant access to the applicable subscription-only
-            features.
+            Honey Badger Technologies (PTY) LTD may change future Participation
+            Access prices, Teez Play Token package prices, package sizes,
+            promotional offers, or other paid services.
           </p>
 
           <p>
-            The Platform will also allocate the included 100 Teez Tokens to the
-            user&apos;s in-app wallet for the applicable active subscription
-            month.
+            A pricing change will not retrospectively alter a transaction that
+            has already been successfully completed.
           </p>
 
           <p>
-            No email request, telephone request, administrator request, support
-            ticket, or manual approval is required during normal subscription
-            activation.
+            The price displayed at checkout at the time of authorisation applies
+            to that transaction.
           </p>
 
           {/* 12 */}
           <h2 className="text-white font-semibold">
-            12. Digital Delivery
+            12. Participation Activation and Token Allocation
           </h2>
 
           <p>
-            Delivery is completed digitally through activation of the
-            subscription and access to the paid Platform service.
+            Participation Access and Teez Play Token allocation are processed
+            after the Platform receives valid confirmation that the relevant
+            payment was successful.
           </p>
 
-          <p>Digital delivery may be confirmed through:</p>
+          <p>
+            A successful Participation Access purchase is intended to:
+          </p>
 
           <ul className="list-disc pl-6 space-y-1">
-            <li>Subscription-status confirmation.</li>
-            <li>Player dashboard access.</li>
-            <li>Player profile access.</li>
-            <li>Access to subscription-only gameplay features.</li>
-            <li>Allocation of 100 Teez Tokens.</li>
-            <li>An account or payment confirmation.</li>
+            <li>Activate Participation Access.</li>
+            <li>Allocate the included 100 Teez Play Tokens.</li>
+            <li>Update the player&apos;s digital wallet.</li>
           </ul>
 
           <p>
-            Because the service is delivered digitally, no courier, postal
-            service, collection process, or physical delivery charge applies.
+            A successful standard token top-up is intended to allocate an
+            additional 100 Teez Play Tokens to the player&apos;s wallet.
           </p>
 
           {/* 13 */}
           <h2 className="text-white font-semibold">
-            13. Delivery Timing
+            13. Digital Delivery
           </h2>
 
           <p>
-            Subscription access is intended to be activated immediately after
-            successful payment confirmation and completion of the required
-            Platform steps.
+            Delivery is completed digitally through the player&apos;s Teez Golf
+            Challenges Account.
           </p>
 
           <p>
-            Temporary delays may occur because of payment processing, network
-            issues, service-provider outages, verification delays, maintenance,
-            or technical errors.
+            Digital delivery may be confirmed through:
           </p>
 
+          <ul className="list-disc pl-6 space-y-1">
+            <li>Participation-status confirmation.</li>
+            <li>Player dashboard access.</li>
+            <li>Player profile access.</li>
+            <li>Access to applicable gameplay features.</li>
+            <li>Teez Play Token wallet allocation.</li>
+            <li>Payment or account confirmation.</li>
+          </ul>
+
           <p>
-            Where a verified technical or payment issue prevents activation, the
-            user should allow a reasonable opportunity for the issue to be
-            investigated and corrected.
+            No courier, postal service, collection process, or physical
+            delivery charge applies.
           </p>
 
           {/* 14 */}
           <h2 className="text-white font-semibold">
-            14. Payment Confirmation
+            14. Delivery Timing
           </h2>
 
           <p>
-            A payment is only treated as successful once the approved payment
-            portal and the Platform confirm that the transaction has been
-            successfully processed or authorised.
+            Digital access and token allocation are intended to occur promptly
+            after successful payment confirmation.
           </p>
 
           <p>
-            A pending, declined, cancelled, reversed, incomplete, or failed
-            transaction does not activate the subscription.
+            Temporary delays may occur because of payment processing, security
+            verification, network issues, service-provider outages,
+            maintenance, or technical errors.
           </p>
 
           <p>
-            Screenshots, bank notifications, or payment attempts that are not
-            confirmed by the payment portal do not automatically prove that a
-            successful payment was received.
+            Where a verified technical or payment issue prevents delivery, the
+            user should allow a reasonable opportunity for the issue to be
+            investigated and corrected.
           </p>
 
           {/* 15 */}
           <h2 className="text-white font-semibold">
-            15. Failed or Declined Payments
+            15. Payment Confirmation
           </h2>
 
           <p>
-            A subscription may not activate or renew where the payment is
-            declined, rejected, reversed, expired, unauthorised, incomplete, or
-            otherwise unsuccessful.
+            A payment is treated as successful only after the approved payment
+            provider and Platform records confirm successful processing or
+            authorisation.
           </p>
 
-          <p>Payment failure may result from:</p>
+          <p>
+            A pending, declined, cancelled, reversed, incomplete, or failed
+            transaction does not qualify for Participation Access activation or
+            Teez Play Token allocation.
+          </p>
 
-          <ul className="list-disc pl-6 space-y-1">
-            <li>Insufficient funds.</li>
-            <li>Expired payment details.</li>
-            <li>Incorrect payment information.</li>
-            <li>Bank or card issuer restrictions.</li>
-            <li>Payment portal security checks.</li>
-            <li>Failed authentication.</li>
-            <li>Network or technical errors.</li>
-            <li>Suspected fraud.</li>
-          </ul>
+          <p>
+            A screenshot, bank notification, attempted transaction, or other
+            unverified payment evidence does not by itself establish successful
+            payment.
+          </p>
+
+          {/* 16 */}
+          <h2 className="text-white font-semibold">
+            16. Failed or Declined Payments
+          </h2>
+
+          <p>
+            Participation Access or Teez Play Tokens will not be delivered where
+            the relevant payment is declined, rejected, cancelled, reversed,
+            unauthorised, incomplete, or otherwise unsuccessful.
+          </p>
+
+          <p>
+            A user may initiate a new payment attempt through the normal
+            Platform checkout process.
+          </p>
 
           <p>
             Honey Badger Technologies (PTY) LTD is not responsible for a bank,
             card issuer, payment provider, or payment portal declining a
             transaction.
-          </p>
-
-          {/* 16 */}
-          <h2 className="text-white font-semibold">
-            16. Effect of Failed Renewal
-          </h2>
-
-          <p>
-            Where a recurring subscription payment fails, the Platform may
-            suspend or remove access to subscription-only features.
-          </p>
-
-          <p>
-            The Platform may allow the user to retry payment or activate a new
-            subscription through the normal self-service process.
-          </p>
-
-          <p>
-            No administrator request is required for a normal payment retry or
-            re-subscription.
-          </p>
-
-          <p>
-            The user is responsible for updating or replacing an invalid payment
-            method through the approved payment portal where that functionality
-            is available.
           </p>
 
           {/* 17 */}
@@ -491,148 +488,99 @@ export default function PaymentPolicyPage() {
           </h2>
 
           <p>
-            Users must report suspected duplicate charges, incorrect amounts,
-            failed allocations, or payment-processing errors as soon as
+            Users should report suspected duplicate charges, incorrect amounts,
+            failed token allocations, or payment-processing errors as soon as
             reasonably possible.
           </p>
 
           <p>
             Honey Badger Technologies (PTY) LTD may review Platform records,
-            transaction references, payment portal confirmations, and other
-            relevant information when investigating the issue.
+            transaction references, payment-provider confirmations, wallet
+            records, and other relevant information.
           </p>
 
           <p>
-            A verified duplicate or incorrect payment may qualify for correction
-            or refund in accordance with the Refund, Cancellation & Delivery
-            Policy.
+            A verified duplicate or incorrect payment may qualify for
+            correction or refund in accordance with the applicable Refund &
+            Delivery Policy and applicable law.
           </p>
 
           {/* 18 */}
           <h2 className="text-white font-semibold">
-            18. Subscription Cancellation
+            18. Incorrect or Duplicate Token Allocation
           </h2>
 
           <p>
-            Users may cancel their Teez Golf Challenges subscription at any time
-            through the Platform&apos;s self-service Cancel Subscription
-            functionality.
+            Where a verified technical, payment-processing, duplicate-processing,
+            or administrative error causes an incorrect Teez Play Token
+            allocation, Honey Badger Technologies (PTY) LTD may correct the
+            player&apos;s wallet.
           </p>
 
           <p>
-            No email request, telephone request, written notice, support ticket,
-            administrator request, or manual approval is required for routine
-            cancellation.
+            Corrections may include:
           </p>
 
+          <ul className="list-disc pl-6 space-y-1">
+            <li>Restoring incorrectly deducted tokens.</li>
+            <li>Removing duplicate or incorrectly allocated tokens.</li>
+            <li>Correcting an incorrect wallet balance.</li>
+            <li>Correcting transaction and allocation records.</li>
+          </ul>
+
           <p>
-            The user is responsible for completing the cancellation process
-            through the Platform and receiving confirmation that the
-            cancellation was successful.
+            A wallet correction does not convert Teez Play Tokens into cash or
+            create a right to cash value.
           </p>
 
           {/* 19 */}
           <h2 className="text-white font-semibold">
-            19. Immediate Effect of Cancellation
+            19. Refund Policy
           </h2>
 
           <p>
-            Cancellation takes effect immediately once the Platform confirms
-            that the cancellation process has been successfully completed.
+            Completed digital transactions are generally non-refundable once
+            the applicable digital service or Teez Play Tokens have been
+            successfully delivered or used, except where applicable law or a
+            verified payment, technical, Platform, or administrative error
+            requires otherwise.
           </p>
 
           <p>
-            Future subscription renewal will stop and access to
-            subscription-only Platform features will end immediately.
+            A refund may be considered where:
           </p>
 
-          <p>
-            Stopping use of the Platform, deleting a shortcut, closing a
-            browser, removing an application, or sending an informal message
-            does not cancel the subscription.
-          </p>
+          <ul className="list-disc pl-6 space-y-1">
+            <li>A duplicate payment was processed.</li>
+            <li>An incorrect amount was charged.</li>
+            <li>
+              Payment succeeded but the purchased digital service or token
+              allocation was not delivered because of a verified technical
+              error.
+            </li>
+            <li>
+              A verified administrative or processing error caused an incorrect
+              transaction or allocation.
+            </li>
+            <li>A refund is required under applicable law.</li>
+          </ul>
 
           <p>
-            A user may subscribe again at any time by completing the normal
-            self-service subscription process.
+            Complete refund rules are contained in the Refund & Delivery Policy.
           </p>
 
           {/* 20 */}
           <h2 className="text-white font-semibold">
-            20. Effect of Cancellation on Teez Tokens
+            20. Refund Requests
           </h2>
 
           <p>
-            Cancellation does not convert unused or remaining Teez Tokens into
-            cash, credit, money, cryptocurrency, vouchers, goods, services, or
-            any other external value.
+            Refund requests should be submitted as soon as reasonably possible
+            after the relevant transaction.
           </p>
 
           <p>
-            Teez Tokens are digital play credits only and cannot be withdrawn,
-            redeemed, sold, or transferred for payment.
-          </p>
-
-          <p>
-            Access to remaining Teez Tokens may end when the subscription is
-            cancelled in accordance with the Platform Terms & Conditions.
-          </p>
-
-          {/* 21 */}
-          <h2 className="text-white font-semibold">
-            21. Refund Policy
-          </h2>
-
-          <p>
-            Once subscription access has been successfully activated and used,
-            subscription payments are generally non-refundable, except where
-            applicable law or a verified payment, technical, Platform, or
-            administrative error requires otherwise.
-          </p>
-
-          <p>A refund may be considered where:</p>
-
-          <ul className="list-disc pl-6 space-y-1">
-            <li>A duplicate subscription payment was processed.</li>
-            <li>An incorrect subscription amount was charged.</li>
-            <li>
-              Payment succeeded but subscription access was not activated
-              because of a verified technical error.
-            </li>
-            <li>
-              A verified administrative error caused an incorrect account,
-              payment, or subscription allocation.
-            </li>
-            <li>
-              The user was charged after a valid cancellation had already been
-              successfully completed before the relevant renewal transaction.
-            </li>
-            <li>A refund is required under applicable South African law.</li>
-          </ul>
-
-          <p>
-            Complete refund rules are contained in the Refund, Cancellation &
-            Delivery Policy.
-          </p>
-
-          {/* 22 */}
-          <h2 className="text-white font-semibold">
-            22. Refund Requests
-          </h2>
-
-          <p>
-            Refund requests should be submitted within 30 days after the
-            relevant transaction date.
-          </p>
-
-          <p>
-            Honey Badger Technologies (PTY) LTD may consider a later request
-            where required by law or where reasonable supporting circumstances
-            exist.
-          </p>
-
-          <p>
-            Refund requests may require supporting information such as:
+            Supporting information may be required, including:
           </p>
 
           <ul className="list-disc pl-6 space-y-1">
@@ -641,150 +589,112 @@ export default function PaymentPolicyPage() {
             <li>Registered email address.</li>
             <li>User ID.</li>
             <li>Transaction date.</li>
-            <li>Bank or card confirmation.</li>
-            <li>Payment portal confirmation.</li>
+            <li>Bank, card, or payment-provider confirmation.</li>
             <li>Screenshots showing the reported issue.</li>
-            <li>Available cancellation confirmation.</li>
           </ul>
 
-          {/* 23 */}
+          {/* 21 */}
           <h2 className="text-white font-semibold">
-            23. Refund Processing
+            21. Refund Processing
           </h2>
 
           <p>
-            Approved refunds will normally be submitted for processing within
-            7 business days where reasonably possible.
+            Approved refunds will be submitted for processing within a
+            reasonable period.
           </p>
 
           <p>
             The time required for funds to reflect may depend on the payment
-            portal, bank, card issuer, payment method, and payment-processing
-            system used.
+            provider, bank, card issuer, payment method, and processing system.
           </p>
 
           <p>
-            Refunds will normally be returned through the original payment method
-            where reasonably possible.
+            Refunds will normally be returned through the original payment
+            method where reasonably possible.
           </p>
 
-          {/* 24 */}
+          {/* 22 */}
           <h2 className="text-white font-semibold">
-            24. Unauthorised Transactions
+            22. Unauthorised Transactions
           </h2>
 
           <p>
             Users must report suspected unauthorised transactions as soon as
-            reasonably possible to the relevant bank, card issuer, payment
-            provider, and Honey Badger Technologies (PTY) LTD.
+            reasonably possible to their bank or payment provider and to Honey
+            Badger Technologies (PTY) LTD.
           </p>
 
           <p>
-            Honey Badger Technologies (PTY) LTD may cooperate with the approved
-            payment portal, acquiring bank, issuing bank, card network, payment
-            provider, regulator, or law-enforcement authority when reviewing the
+            Honey Badger Technologies (PTY) LTD may cooperate with payment
+            providers, acquiring banks, issuing banks, card networks,
+            regulators, or law-enforcement authorities when reviewing a
             reported transaction.
           </p>
 
-          <p>
-            A user must not knowingly submit a false unauthorised-payment claim.
-          </p>
-
-          {/* 25 */}
+          {/* 23 */}
           <h2 className="text-white font-semibold">
-            25. Chargebacks
+            23. Chargebacks and Payment Reversals
           </h2>
 
           <p>
-            Users should first report a disputed payment to Honey Badger
-            Technologies (PTY) LTD so that the Company has a reasonable
-            opportunity to investigate and attempt to resolve the matter.
+            Users should first report disputed transactions to Honey Badger
+            Technologies (PTY) LTD where reasonably appropriate so that the
+            matter can be investigated.
           </p>
 
           <p>
-            Chargebacks must not be used fraudulently, abusively, or as a method
-            of avoiding valid payment obligations.
-          </p>
-
-          <p>
-            Where a chargeback, payment reversal, or refund removes payment for a
-            subscription, the Platform may suspend or remove access to the
-            related paid service.
+            Where a chargeback, reversal, refund, or other payment reversal
+            removes payment for a digital purchase, the Platform may reverse
+            the associated digital entitlement or incorrectly retained Teez
+            Play Tokens where lawful and appropriate.
           </p>
 
           <p>
             Nothing in this section prevents a user from exercising any right
-            that cannot lawfully be excluded under applicable South African law.
+            that cannot lawfully be excluded.
           </p>
 
-          {/* 26 */}
+          {/* 24 */}
           <h2 className="text-white font-semibold">
-            26. Fraud and Payment Abuse
+            24. Fraud and Payment Abuse
           </h2>
 
-          <p>The following conduct is prohibited:</p>
+          <p>
+            Prohibited conduct includes:
+          </p>
 
           <ul className="list-disc pl-6 space-y-1">
             <li>Using stolen or unauthorised payment information.</li>
             <li>Submitting false proof of payment.</li>
-            <li>Submitting duplicate or fraudulent refund claims.</li>
-            <li>Misusing chargeback procedures.</li>
-            <li>Manipulating subscription status.</li>
+            <li>Submitting fraudulent refund claims.</li>
+            <li>Fraudulently misusing chargeback procedures.</li>
+            <li>Manipulating Participation Access status.</li>
             <li>Attempting to access paid services without valid payment.</li>
-            <li>Manipulating Teez Token allocations or wallet balances.</li>
+            <li>Manipulating Teez Play Token allocations or wallet balances.</li>
             <li>Providing false payment or transaction information.</li>
             <li>Using the Platform for transaction laundering.</li>
           </ul>
 
           <p>
-            Honey Badger Technologies (PTY) LTD may temporarily suspend or
-            restrict an Account while suspected payment fraud, abuse, or
-            security issues are investigated.
+            Honey Badger Technologies (PTY) LTD may temporarily restrict an
+            Account while suspected payment fraud, abuse, or security issues
+            are investigated.
           </p>
 
-          {/* 27 */}
+          {/* 25 */}
           <h2 className="text-white font-semibold">
-            27. Teez Token Corrections
+            25. Customer and Payment Information
           </h2>
 
           <p>
-            Where a verified technical, duplicate-processing, payment, or
-            administrative error caused an incorrect Teez Token deduction or
-            allocation, Honey Badger Technologies (PTY) LTD may:
-          </p>
-
-          <ul className="list-disc pl-6 space-y-1">
-            <li>Restore incorrectly deducted Teez Tokens.</li>
-            <li>Reverse a duplicate Teez Token deduction.</li>
-            <li>Correct the user&apos;s in-app Teez Token balance.</li>
-            <li>Make another fair digital Account correction.</li>
-          </ul>
-
-          <p>
-            Teez Token corrections are digital Platform corrections only. They
-            do not represent a cash refund, payment, voucher, or transfer of
-            financial value.
-          </p>
-
-                    {/* 28 */}
-          <h2 className="text-white font-semibold">
-            28. Customer Information and Card Information
-          </h2>
-
-          <p>
-            Customer Account information is stored separately from complete card
-            information entered through the approved secure payment portal.
-          </p>
-
-          <p>
-            Honey Badger Technologies (PTY) LTD may process customer information
-            required for:
+            Honey Badger Technologies (PTY) LTD may process customer
+            information required for:
           </p>
 
           <ul className="list-disc pl-6 space-y-1">
             <li>Account registration.</li>
-            <li>Email and mobile verification.</li>
-            <li>Subscription activation and management.</li>
+            <li>Participation Access activation.</li>
+            <li>Teez Play Token allocation.</li>
             <li>Payment confirmation.</li>
             <li>Customer support.</li>
             <li>Refund and payment-error review.</li>
@@ -794,199 +704,146 @@ export default function PaymentPolicyPage() {
           </ul>
 
           <p>
-            Complete card information is entered and processed through the
-            approved secure payment portal and is not stored by the Teez Golf
-            Challenges Platform.
+            Complete card information entered through an approved secure
+            payment portal is processed by the applicable payment provider and
+            is not stored by the Teez Golf Challenges Platform.
           </p>
 
-          {/* 29 */}
+          {/* 26 */}
           <h2 className="text-white font-semibold">
-            29. Payment Information We Do Not Store
+            26. Payment Information We Do Not Store
           </h2>
 
           <p>
-            Honey Badger Technologies (PTY) LTD does not store:
+            Honey Badger Technologies (PTY) LTD does not store complete card
+            numbers, CVV/security codes, card PINs, banking passwords, OTPs, or
+            confidential online-banking credentials.
           </p>
-
-          <ul className="list-disc pl-6 space-y-1">
-            <li>Complete card numbers.</li>
-            <li>CVV or security codes.</li>
-            <li>Card PINs.</li>
-            <li>Banking passwords.</li>
-            <li>One-time PINs or OTPs.</li>
-            <li>Confidential online-banking credentials.</li>
-          </ul>
 
           <p>
-            Users must never send this information directly to Honey Badger
-            Technologies (PTY) LTD by email, support message, telephone, or any
-            other Platform channel.
+            Users must not send such information directly to Honey Badger
+            Technologies (PTY) LTD through email, support messages, telephone,
+            or other Platform channels.
           </p>
 
-          {/* 30 */}
+          {/* 27 */}
           <h2 className="text-white font-semibold">
-            30. Payment Security
+            27. Payment Security
           </h2>
 
           <p>
-            The Platform uses HTTPS/SSL to support the secure transmission of
+            The Platform uses HTTPS/SSL to support secure transmission of
             information.
           </p>
 
           <p>
-            The approved payment portal is responsible for the payment security
-            controls applicable to its systems, including supported transaction
-            authentication, fraud prevention, encryption, and payment-processing
+            The approved payment provider is responsible for security controls
+            applicable to its payment systems, including supported
+            authentication, encryption, fraud-prevention, and payment-processing
             requirements.
           </p>
 
           <p>
-            Payment security may also depend on the user&apos;s bank, card
-            issuer, device, browser, network connection, and compliance with
-            security instructions.
+            Users remain responsible for protecting their devices, passwords,
+            payment methods, banking applications, and authentication
+            information.
           </p>
 
-          <p>
-            Users are responsible for protecting their payment methods, devices,
-            passwords, banking applications, and authentication information.
-          </p>
-
-          {/* 31 */}
+          {/* 28 */}
           <h2 className="text-white font-semibold">
-            31. Third-Party Payment Portal
+            28. Third-Party Payment Providers
           </h2>
 
           <p>
-            The approved secure payment portal may be operated by a third-party
-            payment gateway, processor, acquiring bank, or payment provider.
+            Secure payment functionality may be operated by Peach Payments or
+            another approved payment gateway, processor, acquiring bank, or
+            payment provider.
           </p>
 
           <p>
-            The user&apos;s use of the payment portal may also be subject to the
-            payment provider&apos;s own:
+            Use of a payment provider may also be subject to that
+            provider&apos;s own payment terms, privacy notices, security
+            requirements, supported payment methods, transaction limits, and
+            refund-processing procedures.
           </p>
 
-          <ul className="list-disc pl-6 space-y-1">
-            <li>Payment terms.</li>
-            <li>Privacy notice.</li>
-            <li>Security requirements.</li>
-            <li>Transaction limits.</li>
-            <li>Supported payment methods.</li>
-            <li>Refund-processing procedures.</li>
-          </ul>
-
-          <p>
-            Honey Badger Technologies (PTY) LTD remains responsible for the
-            declared Teez Golf Challenges digital service sold through the
-            Platform.
-          </p>
-
-          {/* 32 */}
+          {/* 29 */}
           <h2 className="text-white font-semibold">
-            32. Payment Portal Availability
+            29. Payment Provider Availability
           </h2>
 
           <p>
-            The availability of checkout and payment functionality may be
-            affected by:
+            Checkout and payment functionality may be affected by payment
+            provider maintenance, bank or card-network outages, technical
+            failures, security reviews, payment-method restrictions, regulatory
+            requirements, or suspected fraud.
           </p>
-
-          <ul className="list-disc pl-6 space-y-1">
-            <li>Payment provider maintenance.</li>
-            <li>Bank or card-network outages.</li>
-            <li>Technical or network failures.</li>
-            <li>Security reviews.</li>
-            <li>Payment-method restrictions.</li>
-            <li>Regulatory requirements.</li>
-            <li>Suspected fraud.</li>
-          </ul>
 
           <p>
             Honey Badger Technologies (PTY) LTD will take reasonable steps to
-            restore or provide access to payment functionality where the issue is
-            within its control.
+            address issues within its control.
           </p>
 
-          {/* 33 */}
+          {/* 30 */}
           <h2 className="text-white font-semibold">
-            33. Merchant Responsibility
+            30. Merchant Responsibility
           </h2>
 
           <p>
-            Honey Badger Technologies (PTY) LTD takes responsibility for all
-            aspects relating to the declared digital subscription service sold
-            through the Platform, including:
+            Honey Badger Technologies (PTY) LTD takes responsibility for the
+            declared Teez Golf Challenges digital services sold through the
+            Platform, including:
           </p>
 
           <ul className="list-disc pl-6 space-y-1">
             <li>Description of the digital service.</li>
-            <li>Subscription pricing disclosure.</li>
+            <li>Pricing disclosure.</li>
             <li>Digital delivery.</li>
-            <li>Subscription activation.</li>
-            <li>Platform access.</li>
+            <li>Participation Access activation.</li>
+            <li>Teez Play Token allocation.</li>
             <li>Customer service and support.</li>
             <li>Refund and payment-error review.</li>
             <li>Complaint and dispute resolution.</li>
           </ul>
 
-          <p>
-            The approved payment portal is responsible for payment-processing
-            services performed through its systems, subject to its own terms,
-            security controls, and regulatory obligations.
-          </p>
-
-          {/* 34 */}
+          {/* 31 */}
           <h2 className="text-white font-semibold">
-            34. Declared Business Activity
+            31. Declared Business Activity
           </h2>
 
           <p>
-            Payments accepted through the Platform relate only to the declared
-            Teez Golf Challenges digital subscription service and other digital
-            services expressly approved by the applicable acquiring bank or
-            payment provider.
+            Payments accepted through the Platform relate only to declared and
+            approved Teez Golf Challenges digital services and other services
+            expressly permitted by the applicable acquiring bank or payment
+            provider.
           </p>
 
           <p>
             The Platform will not knowingly process payments for undeclared,
-            unrelated, prohibited, or unlawful products and services.
+            unrelated, prohibited, or unlawful products or services.
           </p>
 
-          {/* 35 */}
+          {/* 32 */}
           <h2 className="text-white font-semibold">
-            35. Prohibited Transactions
+            32. Prohibited Transactions
           </h2>
 
           <p>
-            The Platform may not be used to sell, advertise, facilitate, or
-            process payments for prohibited or restricted products and services,
-            including:
+            The Platform may not be used to process transactions for illegal,
+            prohibited, undeclared, or unlawfully supplied products, services,
+            or activities.
           </p>
 
-          <ul className="list-disc pl-6 space-y-1">
-            <li>Illegal drugs or drug paraphernalia.</li>
-            <li>Counterfeit goods or currency.</li>
-            <li>Unlicensed firearms, ammunition, or weapons.</li>
-            <li>Illegal or exploitative sexual content.</li>
-            <li>Unregulated gambling, betting, or wagering.</li>
-            <li>Pyramid or Ponzi schemes.</li>
-            <li>Unauthorised cryptocurrency exchange services.</li>
-            <li>Hacking tools, malware, or malicious software.</li>
-            <li>Unlicensed pharmaceuticals or supplements.</li>
-            <li>Unlicensed tobacco, vaping, or alcohol sales.</li>
-            <li>Endangered wildlife or protected-species products.</li>
-            <li>Hazardous, radioactive, or prohibited materials.</li>
-            <li>Stolen or unlawfully obtained goods.</li>
-            <li>Any activity prohibited by South African law.</li>
-            <li>
-              Any activity prohibited by Visa, Mastercard, the acquiring bank,
-              card issuer, or approved payment portal.
-            </li>
-          </ul>
+          <p>
+            This includes unlawful gambling or wagering, transaction laundering,
+            stolen or counterfeit goods, unlawful financial services, or any
+            activity prohibited by applicable law, payment networks, acquiring
+            banks, or approved payment providers.
+          </p>
 
-          {/* 36 */}
+          {/* 33 */}
           <h2 className="text-white font-semibold">
-            36. Transaction Laundering
+            33. Transaction Laundering
           </h2>
 
           <p>
@@ -995,56 +852,39 @@ export default function PaymentPolicyPage() {
 
           <p>
             The Platform may not be used to process payments for another
-            business, person, website, product, service, or activity that has not
-            been declared and approved.
+            business, person, website, product, service, or activity that has
+            not been properly declared and approved.
           </p>
 
-          <p>
-            Honey Badger Technologies (PTY) LTD may suspend transactions,
-            restrict Accounts, or cooperate with the applicable bank or payment
-            provider where transaction laundering is suspected.
-          </p>
-
-          {/* 37 */}
+          {/* 34 */}
           <h2 className="text-white font-semibold">
-            37. Payment Records
+            34. Payment Records
           </h2>
 
           <p>
             Honey Badger Technologies (PTY) LTD may retain payment-related
-            records where reasonably necessary for:
+            records where reasonably necessary for accounting, tax compliance,
+            transaction administration, refund and dispute review, fraud
+            prevention, chargeback management, regulatory compliance, and legal
+            claims.
           </p>
-
-          <ul className="list-disc pl-6 space-y-1">
-            <li>Subscription administration.</li>
-            <li>Accounting and tax records.</li>
-            <li>Refund and dispute review.</li>
-            <li>Fraud prevention.</li>
-            <li>Chargeback management.</li>
-            <li>Regulatory compliance.</li>
-            <li>Legal claims.</li>
-          </ul>
 
           <p>
-            Retained records may include transaction references, dates, amounts,
-            subscription status, payment status, and payment portal
-            confirmations.
+            Records may include transaction references, dates, amounts,
+            currencies, payment status, digital entitlement status, token
+            allocations, and payment-provider confirmations.
           </p>
 
-          {/* 38 */}
+          {/* 35 */}
           <h2 className="text-white font-semibold">
-            38. Privacy and Personal Information
+            35. Privacy and Personal Information
           </h2>
 
           <p>
-            Personal information connected to payments and subscriptions is
-            processed in accordance with the Protection of Personal Information
-            Act 4 of 2013 and the Teez Golf Challenges Privacy Policy.
-          </p>
-
-          <p>
-            Honey Badger Technologies (PTY) LTD does not sell users&apos;
-            personal information to third parties.
+            Personal information connected to payments is processed in
+            accordance with applicable data-protection law, including the
+            Protection of Personal Information Act 4 of 2013 where applicable,
+            and the Teez Golf Challenges Privacy Policy.
           </p>
 
           <p>
@@ -1053,76 +893,60 @@ export default function PaymentPolicyPage() {
             authorities where reasonably necessary and lawful.
           </p>
 
-          {/* 39 */}
+          {/* 36 */}
           <h2 className="text-white font-semibold">
-            39. Customer Support
+            36. Customer Support
           </h2>
 
           <p>
-            Routine registration, subscription activation, cancellation,
-            payment retry, and re-subscription are completed through the
-            Platform&apos;s self-service functionality.
+            Users should contact customer support where a genuine payment,
+            technical, security, refund, token-allocation, or digital-delivery
+            issue requires assistance.
           </p>
 
-          <p>
-            Customer support should be contacted only where a genuine payment,
-            technical, security, refund, or delivery issue prevents the normal
-            self-service process from functioning correctly.
-          </p>
-
-          {/* 40 */}
+          {/* 37 */}
           <h2 className="text-white font-semibold">
-            40. Complaints and Disputes
+            37. Complaints and Disputes
           </h2>
 
           <p>
             Users should first contact Honey Badger Technologies (PTY) LTD
-            regarding a genuine payment, subscription, refund, cancellation
-            confirmation, or digital delivery dispute.
+            regarding genuine payment, refund, token-allocation, or digital
+            delivery disputes where reasonably appropriate.
           </p>
 
           <p>
-            The user should provide sufficient information to allow the matter
-            to be investigated.
+            If a dispute cannot be resolved directly, the user may exercise
+            applicable rights through their bank, payment provider, regulator,
+            consumer protection body, recognised ombudsman, or court with
+            jurisdiction.
           </p>
 
-          <p>
-            If a dispute cannot be resolved directly, the user may approach an
-            applicable South African consumer protection body, bank, card
-            issuer, payment provider, regulator, court, or recognised ombudsman
-            where the matter falls within that body&apos;s jurisdiction.
-          </p>
-
-          {/* 41 */}
+          {/* 38 */}
           <h2 className="text-white font-semibold">
-            41. Consumer Rights
+            38. Consumer Rights
           </h2>
 
           <p>
             Nothing in this Policy is intended to remove, reduce, or limit any
-            legal right that cannot lawfully be excluded under applicable South
-            African law.
+            legal right that cannot lawfully be excluded or limited.
           </p>
 
-          <p>
-            Payment, refund, cancellation, and digital delivery matters will be
-            handled fairly and reasonably in accordance with applicable legal
-            obligations.
-          </p>
-
-          {/* 42 */}
+          {/* 39 */}
           <h2 className="text-white font-semibold">
-            42. Governing Law
+            39. Governing Law
           </h2>
 
           <p>
-            This Policy is governed by the laws of the Republic of South Africa.
+            This Policy is governed by the laws of the Republic of South Africa,
+            subject to any mandatory consumer rights or laws that may apply to a
+            user in another jurisdiction and cannot lawfully be excluded.
           </p>
 
           <p>
-            Honey Badger Technologies (PTY) LTD chooses the following address as
-            its domicilium citandi et executandi for formal notices and legal
-            process:
+            Honey Badger Technologies (PTY) LTD chooses the following address
+            as its domicilium citandi et executandi for formal notices and
+            legal process:
           </p>
 
           <p>
@@ -1139,41 +963,33 @@ export default function PaymentPolicyPage() {
             South Africa
           </p>
 
-          {/* 43 */}
+          {/* 40 */}
           <h2 className="text-white font-semibold">
-            43. Changes to this Policy
+            40. Changes to this Policy
           </h2>
 
           <p>
             Honey Badger Technologies (PTY) LTD may update this Policy where
-            reasonably necessary to reflect:
+            reasonably necessary to reflect changes to pricing, token packages,
+            payment providers, payment methods, Platform functionality,
+            acquiring-bank requirements, applicable law, security, or
+            operations.
           </p>
-
-          <ul className="list-disc pl-6 space-y-1">
-            <li>Changes to subscription pricing or structure.</li>
-            <li>Changes to the approved payment portal.</li>
-            <li>Changes to payment methods.</li>
-            <li>Changes to acquiring-bank requirements.</li>
-            <li>Changes to card-scheme requirements.</li>
-            <li>Changes to applicable law.</li>
-            <li>Security or operational improvements.</li>
-          </ul>
 
           <p>
-            Updated versions will be published on the Platform. Material changes
-            will be communicated or presented for renewed acceptance where
-            required by applicable law.
+            Updated versions will be published on the Platform. Material
+            changes will be communicated or presented for renewed acceptance
+            where required by applicable law.
           </p>
 
-          {/* 44 */}
+          {/* 41 */}
           <h2 className="text-white font-semibold">
-            44. Contact Details
+            41. Contact Details
           </h2>
 
           <p>
-            Genuine payment, refund, subscription, cancellation confirmation,
-            and digital delivery issues may be submitted using the following
-            details:
+            Payment, refund, token-allocation, security, and digital-delivery
+            issues may be submitted using the following details:
           </p>
 
           <p>
@@ -1192,7 +1008,7 @@ export default function PaymentPolicyPage() {
           </p>
 
           <p className="text-xs text-gray-500 pt-4">
-            Last updated: July 2026
+            Last updated: August 2026
           </p>
 
           <div className="flex flex-col gap-3 pt-4">
@@ -1201,7 +1017,7 @@ export default function PaymentPolicyPage() {
               onClick={() => router.push("/legal/refund-policy")}
               className="w-full py-3 rounded-xl font-semibold bg-white text-black hover:bg-gray-200 transition"
             >
-              View Refund, Cancellation & Delivery Policy
+              View Refund & Delivery Policy
             </button>
 
             <button

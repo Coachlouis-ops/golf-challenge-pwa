@@ -109,7 +109,7 @@ function DashboardContent() {
               </p>
 
               <p className="text-xl font-bold mt-4">
-                R99
+                R149
               </p>
 
               <p className="text-xs text-gray-400 mt-2">
@@ -157,7 +157,7 @@ function DashboardContent() {
               </p>
 
               <p className="text-xl font-bold mt-4">
-                R99
+                R149
               </p>
 
               <p className="text-xs text-gray-400 mt-2">
@@ -432,7 +432,7 @@ function DashboardContent() {
                 </p>
 
                 <p className="text-2xl font-bold mt-5">
-                  R99
+                  R149
                 </p>
 
                 <p className="text-xs text-gray-400 mt-2">

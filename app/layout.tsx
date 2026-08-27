@@ -33,21 +33,21 @@ export const metadata = {
       "Compete in global golf challenges, climb rankings, and win real rewards.",
     url: "https://www.teezgolfchallenges.com",
     siteName: "Teez Golf Challenges",
-    images: [
-      {
-        url: "/teezman_1.png",
-        width: 1200,
-        height: 630,
-        alt: "Teez Golf Challenges",
-      },
-    ],
+   images: [
+  {
+    url: "/teez-whatsapp-preview.png",
+    width: 1200,
+    height: 630,
+    alt: "Teez Golf Challenges",
+  },
+],
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
     title: "Teez Golf Challenges",
     description: "Compete in global golf challenges and win rewards.",
-    images: ["/teezman_1.png"],
+    images: ["/teez-whatsapp-preview.png"],
   },
 };
 

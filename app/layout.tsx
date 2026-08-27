@@ -1,4 +1,4 @@
-
+import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/src/lib/AuthContext";
@@ -13,41 +13,53 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata = {
+const previewImageUrl =
+  "https://www.teezgolfchallenges.com/teez-whatsapp-preview.png";
+
+export const metadata: Metadata = {
   metadataBase: new URL("https://www.teezgolfchallenges.com"),
+
   title: {
     default: "Teez Golf Challenges",
     template: "%s | Teez Golf Challenges",
   },
+
   description:
-    "Compete in global golf challenges, climb rankings, and win real rewards. Play with purpose.",
+    "Compete in global golf challenges, climb rankings, and build your golf career.",
+
   manifest: "https://golf-challenge-pwa.vercel.app/manifest.json",
+
   icons: {
     icon: "/icons/icon-192.png",
     shortcut: "/icons/icon-192.png",
     apple: "/icons/icon-192.png",
   },
+
   openGraph: {
     title: "Teez Golf Challenges",
     description:
-      "Compete in global golf challenges, climb rankings, and win real rewards.",
-    url: "https://www.teezgolfchallenges.com",
+      "Compete in global golf challenges, climb rankings, and build your golf career.",
+    url: "https://www.teezgolfchallenges.com/",
     siteName: "Teez Golf Challenges",
-   images: [
-  {
-    url: "/teez-whatsapp-preview.png",
-    width: 1200,
-    height: 630,
-    alt: "Teez Golf Challenges",
-  },
-],
     type: "website",
+    images: [
+      {
+        url: previewImageUrl,
+        secureUrl: previewImageUrl,
+        width: 1200,
+        height: 630,
+        type: "image/png",
+        alt: "Teez Golf Challenges - Build Your Golf Career",
+      },
+    ],
   },
+
   twitter: {
     card: "summary_large_image",
     title: "Teez Golf Challenges",
-    description: "Compete in global golf challenges and win rewards.",
-    images: ["/teez-whatsapp-preview.png"],
+    description:
+      "Compete in global golf challenges, climb rankings, and build your golf career.",
+    images: [previewImageUrl],
   },
 };
 

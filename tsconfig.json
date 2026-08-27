@@ -12,20 +12,17 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "react-jsx",
-        "incremental": true,
-
-    "baseUrl": ".",
+    "incremental": true,
+    "noUncheckedSideEffectImports": false,
     "paths": {
       "@/*": ["./*"]
     },
-
     "plugins": [
       {
         "name": "next"
       }
     ]
   },
-
   "include": [
     "next-env.d.ts",
     "**/*.ts",

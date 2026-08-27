@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 const previewImageUrl =
-  "https://www.teezgolfchallenges.com/teez-whatsapp-preview.png";
+  "https://www.teezgolfchallenges.com/teez-whatsapp-preview.jpg";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.teezgolfchallenges.com"),
@@ -48,7 +48,7 @@ export const metadata: Metadata = {
         secureUrl: previewImageUrl,
         width: 1200,
         height: 630,
-        type: "image/png",
+        type: "image/jpeg",
         alt: "Teez Golf Challenges - Build Your Golf Career",
       },
     ],

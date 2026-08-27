@@ -120,7 +120,7 @@ export default function PaymentPage() {
         </div>
         <div>
           <p className="text-5xl font-bold text-white">
-            R99
+            R149
           </p>
 
           <p className="text-xs text-gray-500 mt-2">
@@ -205,7 +205,7 @@ export default function PaymentPage() {
           </p>
 
           <p>
-            The R99 Participation Access payment includes 100 Teez Play Tokens.
+            The R149 Participation Access payment includes 100 Teez Play Tokens.
           </p>
 
           <p>
@@ -293,7 +293,7 @@ export default function PaymentPage() {
               I confirm that I have reviewed and accept the Website Terms &
               Conditions, Platform Terms & Conditions, Payment & Subscription
               Policy, Refund, Cancellation & Delivery Policy, and Privacy
-              Policy. I understand that the R99 payment provides Participation
+              Policy. I understand that the R149 payment provides Participation
               Access and 100 Teez Play Tokens, does not automatically renew,
               and that additional tokens can be purchased when required.
             </span>

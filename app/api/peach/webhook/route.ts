@@ -718,31 +718,7 @@ export async function POST(req: Request) {
           );
         }
 
-        tx.set(
-          walletRef,
-          {
-            uid,
-
-            balance:
-              FieldValue.increment(
-                100
-              ),
-
-            subscriptionTokensIssued:
-              FieldValue.increment(
-                100
-              ),
-
-            updatedAt:
-              now,
-
-            createdAt:
-              now,
-          },
-          { merge: true }
-        );
-
-        tx.set(
+               tx.set(
           paymentRef,
           {
             peachCheckoutId:

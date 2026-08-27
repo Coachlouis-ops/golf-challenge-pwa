@@ -157,13 +157,13 @@ export async function POST(req: Request) {
     // -----------------------------------
     const products = {
       participation_access: {
-        amount: 99,
+        amount: 149,
         tokens: 100,
         participationAccess: true,
       },
 
       token_topup_100: {
-        amount: 99,
+        amount: 149,
         tokens: 100,
         participationAccess: false,
       },

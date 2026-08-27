@@ -1,0 +1,18 @@
+{
+  "name": "Teez Golf Challenges",
+  "short_name": "Teez",
+  "description": "Compete in golf challenges, climb rankings and build your golf career.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "icons": [
+    {
+      "src": "/teez-app-icon-v4.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

@@ -182,7 +182,7 @@ export default function HomePage() {
     </p>
 
     <p className="mt-1 text-[9px] text-gray-400">
-      admin@teezgolfchallenges.com · +27 82 837 0266
+      admin@teezgolfchallenges.com · +27 63 650 1619
     </p>
   </div>
 
@@ -371,7 +371,7 @@ export default function HomePage() {
         <p className="font-semibold text-black">Contact Teez Golf Challenges</p>
         <p>admin@teezgolfchallenges.com</p>
         <p>info@honeybadgertechnologies.com</p>
-        <p>Tel No: +27 082 837 0266</p>
+        <p>Tel No: +27 63 650 1619</p>
         <p>
           71 Silver Stream, Silver Lakes Road, Pretoria, South Africa, 0081
         </p>
@@ -548,4 +548,5 @@ export default function HomePage() {
     </main>
   );
 }
+
 

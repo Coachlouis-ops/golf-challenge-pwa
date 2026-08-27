@@ -511,9 +511,9 @@ export default function RefundPolicyPage() {
           <br />
           Registration Number: 2026/102722/07
           <br />
-          Email: info@honeybadgertech.com
+          Email: admin@teezgolfchallenges.com
           <br />
-          Telephone: +27 82 837 0266
+          Telephone: +27 63 650 1619
           <br />
           Physical Address: 71 Duke Close, Silver Stream Estate, Pretoria,
           Gauteng, 0081, South Africa

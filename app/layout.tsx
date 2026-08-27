@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/src/lib/AuthContext";
@@ -18,6 +18,10 @@ const siteUrl = "https://www.teezgolfchallenges.com";
 const previewImageUrl =
   "https://www.teezgolfchallenges.com/teez-link-preview-v3.jpg";
 
+export const viewport: Viewport = {
+  themeColor: "#000000",
+};
+
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
 
@@ -27,20 +31,38 @@ export const metadata: Metadata = {
   },
 
   description:
-    "Compete in global golf challenges, climb rankings, and build your golf career.",
+    "Compete in global golf challenges, climb rankings, win rewards, and build your golf career.",
 
-  manifest: "https://golf-challenge-pwa.vercel.app/manifest.json",
+  manifest: "/site.webmanifest",
 
   icons: {
-    icon: "/icons/icon-192.png",
-    shortcut: "/icons/icon-192.png",
-    apple: "/icons/icon-192.png",
+    icon: [
+      {
+        url: "/teez-app-icon-v4.png",
+        type: "image/png",
+        sizes: "512x512",
+      },
+    ],
+    apple: [
+      {
+        url: "/teez-app-icon-v4.png",
+        type: "image/png",
+        sizes: "512x512",
+      },
+    ],
+    shortcut: ["/teez-app-icon-v4.png"],
+  },
+
+  appleWebApp: {
+    capable: true,
+    title: "Teez Golf Challenges",
+    statusBarStyle: "black",
   },
 
   openGraph: {
     title: "Teez Golf Challenges",
     description:
-      "Compete in global golf challenges, climb rankings, and build your golf career.",
+      "Compete in global golf challenges, climb rankings, win rewards, and build your golf career.",
     url: siteUrl,
     siteName: "Teez Golf Challenges",
     images: [
@@ -59,7 +81,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Teez Golf Challenges",
     description:
-      "Compete in global golf challenges, climb rankings, and build your golf career.",
+      "Compete in global golf challenges, climb rankings, win rewards, and build your golf career.",
     images: [previewImageUrl],
   },
 };
@@ -74,7 +96,7 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">
+      <body className="min-h-full flex flex-col bg-black">
         <AuthProvider>{children}</AuthProvider>
       </body>
     </html>

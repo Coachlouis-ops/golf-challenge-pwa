@@ -316,9 +316,9 @@ export default function ProfilePage() {
       // -------------------------------------------------
       // SOUTH AFRICA PHONE NORMALIZATION
       // ACCEPTS:
-      // 0828370266
-      // +27828370266
-      // 27828370266
+      // 0636501619
+      // +27636501619
+      // 27636501619
       // -------------------------------------------------
       if (formattedPhone.startsWith("0")) {
         formattedPhone = "+27" + formattedPhone.substring(1);
@@ -750,5 +750,6 @@ function TokenCard({ title, value }: { title: string; value: number }) {
     </div>
   );
 }
+
 
 

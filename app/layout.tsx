@@ -13,11 +13,13 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const siteUrl = "https://www.teezgolfchallenges.com";
+
 const previewImageUrl =
-  "https://www.teezgolfchallenges.com/teez-whatsapp-preview.jpg";
+  "https://www.teezgolfchallenges.com/teez-link-preview-v3.jpg";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://www.teezgolfchallenges.com"),
+  metadataBase: new URL(siteUrl),
 
   title: {
     default: "Teez Golf Challenges",
@@ -39,19 +41,18 @@ export const metadata: Metadata = {
     title: "Teez Golf Challenges",
     description:
       "Compete in global golf challenges, climb rankings, and build your golf career.",
-    url: "https://www.teezgolfchallenges.com/",
+    url: siteUrl,
     siteName: "Teez Golf Challenges",
-    type: "website",
     images: [
       {
         url: previewImageUrl,
-        secureUrl: previewImageUrl,
         width: 1200,
         height: 630,
-        type: "image/jpeg",
         alt: "Teez Golf Challenges - Build Your Golf Career",
       },
     ],
+    locale: "en_ZA",
+    type: "website",
   },
 
   twitter: {
@@ -65,9 +66,9 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
+}>) {
   return (
     <html
       lang="en"

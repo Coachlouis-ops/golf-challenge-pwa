@@ -373,7 +373,7 @@ export default function HomePage() {
         <p>info@honeybadgertechnologies.com</p>
         <p>Tel No: +27 63 650 1619</p>
         <p>
-          71 Silver Stream, Silver Lakes Road, Pretoria, South Africa, 0081
+          71 Pine Grove, Nevada, USA
         </p>
       </div>
 

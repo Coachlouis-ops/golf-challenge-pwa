@@ -13,7 +13,7 @@ export default function LegalTermsPage() {
         </h1>
 
         <p className="text-sm text-gray-400 mb-8">
-          Teez Golf Challenges website, merchant, subscription, payment, and
+          Teez Golf Challenges website, merchant, participation, payment, and
           digital delivery terms
         </p>
 
@@ -30,14 +30,14 @@ export default function LegalTermsPage() {
 
           <p>
             These Website Terms & Conditions contain the merchant, payment,
-            subscription, digital delivery, and company disclosures applicable
-            to transactions completed through this website.
+            Participation Access, digital delivery, and company disclosures
+            applicable to transactions completed through this website.
           </p>
 
           <p>
             Use of the Teez Golf Challenges Platform is also governed by the
-            separate Platform Terms & Conditions, Refund, Cancellation &
-            Delivery Policy, and Privacy Policy.
+            separate Platform Terms & Conditions, Payment & Participation
+            Policy, Refund & Delivery Policy, and Privacy Policy.
           </p>
 
           {/* 1 */}
@@ -52,8 +52,8 @@ export default function LegalTermsPage() {
           </p>
 
           <p>
-            Teez Golf Challenges is a subscription-based, skill-based competitive
-            golf Platform.
+            Teez Golf Challenges is a skill-based competitive golf Platform
+            operating on a pay-as-you-play participation model.
           </p>
 
           <p>
@@ -66,112 +66,157 @@ export default function LegalTermsPage() {
 
           <p>
             Teez Golf Challenges does not facilitate gambling, betting,
-            wagering, casino-style games, games of chance, cash prizes, cash
-            payouts, or token redemption.
+            wagering, casino-style games, games of chance, cash payouts, money
+            transmission, or the conversion of Teez Play Tokens into cash.
           </p>
 
           {/* 2 */}
           <h2 className="text-white font-semibold">
-            2. Subscription Model and Pricing
+            2. Participation Access and Pricing
           </h2>
 
           <p>
-            Access to subscription-only Platform features requires an active
-            monthly subscription.
+            Players who wish to participate in paid Teez Golf Challenges
+            activities must activate Participation Access.
           </p>
 
           <p>
-            The current subscription fee is{" "}
-            <strong className="text-white">R99 per month</strong>.
+            The current Participation Access payment is{" "}
+            <strong className="text-white">R149</strong>.
           </p>
 
           <p>
-            Each active monthly subscription includes{" "}
-            <strong className="text-white">100 Teez Tokens</strong>.
+            Participation Access includes{" "}
+            <strong className="text-white">100 Teez Play Tokens</strong>.
           </p>
 
           <p>
-            The applicable subscription amount, billing frequency, included
-            Teez Token allocation, and payment terms will be displayed before
-            payment is completed.
+            Participation Access is a one-time authorised payment. It is not a
+            monthly subscription, does not automatically renew, and does not
+            create a recurring monthly deduction.
           </p>
 
           <p>
-            Subscription pricing or included benefits may be changed for future
-            billing periods. Any applicable changes will be displayed or
-            communicated as required before they take effect.
+            Participation Access does not expire merely because the player does
+            not purchase additional Teez Play Tokens.
+          </p>
+
+          <p>
+            The applicable price, currency, included token allocation, and
+            payment terms will be displayed before payment is authorised.
           </p>
 
           {/* 3 */}
           <h2 className="text-white font-semibold">
-            3. Teez Tokens
+            3. Teez Play Token Top-Ups
           </h2>
 
           <p>
-            Teez Tokens are digital play credits used only within the Teez Golf
-            Challenges Platform.
+            Players with Participation Access may purchase additional Teez Play
+            Tokens when required.
           </p>
 
-          <p>Teez Tokens:</p>
-
-          <ul className="list-disc pl-6 space-y-1">
-            <li>Have no cash or monetary value.</li>
-            <li>Are not legal tender or electronic money.</li>
-            <li>Cannot be redeemed for cash.</li>
-            <li>Cannot be withdrawn.</li>
-            <li>Cannot be converted into money or cryptocurrency.</li>
-            <li>Cannot be exchanged for vouchers, goods, or services.</li>
-            <li>Cannot be sold or transferred between users for payment.</li>
-            <li>May only be used for approved Platform gameplay.</li>
-          </ul>
+          <p>
+            The current standard top-up is{" "}
+            <strong className="text-white">
+              R149 for 100 Teez Play Tokens
+            </strong>
+            .
+          </p>
 
           <p>
-            Receiving or holding Teez Tokens does not give a user ownership of
-            any financial asset.
+            Token top-ups are one-time purchases. There are no automatic
+            top-ups and no recurring billing.
+          </p>
+
+          <p>
+            Players decide when to purchase additional Teez Play Tokens.
+          </p>
+
+          <p>
+            Prices, package sizes, and supported transaction currencies may
+            change prospectively. The price and currency displayed before
+            authorisation apply to that transaction.
           </p>
 
           {/* 4 */}
           <h2 className="text-white font-semibold">
-            4. Digital Delivery Policy
+            4. Teez Play Tokens
           </h2>
 
           <p>
-            No physical goods are delivered. Payments relate entirely to digital
-            Platform access and related digital subscription services.
+            Teez Play Tokens are digital participation and play credits used
+            only within the Teez Golf Challenges Platform.
           </p>
 
-          <p>
-            Subject to successful registration, verification, payment
-            authorisation, and Platform confirmation, subscription activation is
-            completed digitally and automatically.
-          </p>
-
-          <p>Digital delivery may be confirmed through:</p>
+          <p>Teez Play Tokens:</p>
 
           <ul className="list-disc pl-6 space-y-1">
-            <li>Subscription activation.</li>
-            <li>Player dashboard access.</li>
-            <li>Player profile access.</li>
-            <li>Access to subscription-only Platform features.</li>
-            <li>Allocation of 100 Teez Tokens to the user&apos;s wallet.</li>
-            <li>An account, subscription, or payment confirmation.</li>
+            <li>Have no cash or monetary value.</li>
+            <li>Are not legal tender.</li>
+            <li>Are not electronic money.</li>
+            <li>Are not cryptocurrency.</li>
+            <li>Are not financial instruments.</li>
+            <li>Cannot be redeemed or withdrawn as cash.</li>
+            <li>Cannot be converted into cash.</li>
+            <li>Cannot be sold or transferred between users for payment.</li>
+            <li>May only be used for approved Platform activities.</li>
           </ul>
 
           <p>
-            No manual activation request or administrator approval is required
-            during normal Platform operation.
+            Receiving or holding Teez Play Tokens does not give a user ownership
+            of a financial asset.
+          </p>
+
+          <p>
+            Teez Play Tokens remain available in the player&apos;s wallet until
+            used, subject to legitimate Platform corrections, account
+            enforcement, these Terms, and applicable law.
           </p>
 
           {/* 5 */}
           <h2 className="text-white font-semibold">
-            5. Service Availability
+            5. Digital Delivery
+          </h2>
+
+          <p>
+            Participation Access and Teez Play Token purchases are digital
+            services and digital credits. No physical goods are delivered as
+            part of these purchases.
+          </p>
+
+          <p>
+            Subject to successful registration, verification, payment
+            authorisation, and Platform confirmation, digital delivery is
+            completed through the user&apos;s Teez Golf Challenges Account.
+          </p>
+
+          <p>
+            A successful Participation Access purchase is intended to:
+          </p>
+
+          <ul className="list-disc pl-6 space-y-1">
+            <li>Activate Participation Access.</li>
+            <li>Allocate 100 Teez Play Tokens.</li>
+            <li>Update the player&apos;s digital wallet.</li>
+            <li>Provide access to applicable participation features.</li>
+          </ul>
+
+          <p>
+            A successful standard token top-up is intended to allocate an
+            additional 100 Teez Play Tokens to the player&apos;s wallet.
+          </p>
+
+          {/* 6 */}
+          <h2 className="text-white font-semibold">
+            6. Service Availability
           </h2>
 
           <p>
             The provision of digital services is subject to successful payment,
             technical availability, supported devices, internet access,
-            third-party service availability, and compliance with the applicable
-            legal policies.
+            third-party service availability, geographic availability, and
+            compliance with applicable legal policies.
           </p>
 
           <p>
@@ -180,82 +225,78 @@ export default function LegalTermsPage() {
             uninterrupted, or error-free access.
           </p>
 
-          {/* 6 */}
-          <h2 className="text-white font-semibold">
-            6. Geographic Availability
-          </h2>
-
-          <p>
-            The offering on this website is currently available to South African
-            clients only.
-          </p>
-
           {/* 7 */}
           <h2 className="text-white font-semibold">
-            7. Subscription Cancellation
+            7. Geographic Availability
           </h2>
 
           <p>
-            Users may cancel their subscriptions at any time through the
-            Platform&apos;s self-service Cancel Subscription functionality.
+            Teez Golf Challenges is intended for users in supported territories,
+            subject to applicable laws, payment-provider availability, Platform
+            availability, and any geographic restrictions that may apply.
           </p>
 
           <p>
-            No email request, telephone request, support ticket, written notice,
-            administrator request, or manual approval is required for routine
-            cancellation.
-          </p>
-
-          <p>
-            Cancellation takes effect immediately once the Platform confirms
-            that the cancellation process has been successfully completed.
-          </p>
-
-          <p>
-            The user immediately loses access to subscription-only playing
-            features after successful cancellation.
-          </p>
-
-          <p>
-            A user may subscribe again at any time by completing the normal
-            self-service subscription process.
+            Availability of particular payment methods or currencies may vary
+            according to customer location, payment provider, acquiring
+            arrangements, issuing bank, and supported payment methods.
           </p>
 
           {/* 8 */}
           <h2 className="text-white font-semibold">
-            8. Refund Policy Summary
+            8. No Recurring Subscription
           </h2>
 
           <p>
-            Once subscription access has been successfully activated and used,
-            subscription payments are generally non-refundable, except where
-            applicable law or a verified payment, technical, Platform, or
-            administrative error requires otherwise.
+            Participation Access and standard Teez Play Token top-ups are
+            one-time purchases.
+          </p>
+
+          <p>
+            There is no automatic monthly renewal, automatic token top-up, or
+            recurring monthly participation deduction.
+          </p>
+
+          <p>
+            A player who does not wish to purchase additional Teez Play Tokens
+            simply does not initiate another top-up payment.
+          </p>
+
+          {/* 9 */}
+          <h2 className="text-white font-semibold">
+            9. Refund Policy Summary
+          </h2>
+
+          <p>
+            Completed digital transactions are generally non-refundable once
+            the purchased digital service or Teez Play Tokens have been
+            successfully delivered or used, except where applicable law or a
+            verified payment, technical, Platform, or administrative error
+            requires otherwise.
           </p>
 
           <p>A refund may be considered where:</p>
 
           <ul className="list-disc pl-6 space-y-1">
-            <li>A duplicate subscription payment was processed.</li>
-            <li>An incorrect subscription amount was charged.</li>
+            <li>A duplicate payment was processed.</li>
+            <li>An incorrect amount was charged.</li>
             <li>
-              Payment succeeded but subscription access was not activated
-              because of a verified technical error.
+              Payment succeeded but the purchased digital service was not
+              delivered because of a verified technical error.
             </li>
             <li>
-              A verified administrative error caused an incorrect account,
-              payment, or subscription allocation.
+              Payment succeeded but the correct Teez Play Token allocation was
+              not delivered because of a verified Platform error.
             </li>
             <li>
-              The user was charged after cancellation had already been
-              successfully completed before the relevant renewal transaction.
+              A verified administrative or processing error caused an incorrect
+              transaction or allocation.
             </li>
-            <li>A refund is required under applicable South African law.</li>
+            <li>A refund is required under applicable law.</li>
           </ul>
 
           <p>
-            The complete rules are contained in the Refund, Cancellation &
-            Delivery Policy.
+            The complete rules are contained in the Refund & Delivery Policy.
           </p>
 
           <button
@@ -263,27 +304,28 @@ export default function LegalTermsPage() {
             onClick={() => router.push("/legal/refund-policy")}
             className="w-full py-3 rounded-xl font-semibold bg-white text-black hover:bg-gray-200 transition"
           >
-            View Refund, Cancellation & Delivery Policy
+            View Refund & Delivery Policy
           </button>
 
-          {/* 9 */}
+          {/* 10 */}
           <h2 className="text-white font-semibold">
-            9. Payment Options
+            10. Payment Options
           </h2>
 
           <p>
-            Payments are processed through an approved third-party payment
-            gateway.
+            Payments are processed through an approved secure third-party
+            payment portal. The Platform currently uses Peach Payments for
+            supported payment processing.
           </p>
 
           <p>
-            Available payment methods may include Visa, Mastercard, or other
-            payment methods supported and displayed by the approved payment
-            gateway.
+            Available payment methods may include cards, bank-based payment
+            methods, digital wallets, or other methods displayed by the secure
+            payment portal.
           </p>
 
           <p>
-            Users must review the subscription amount, billing frequency, and
+            Users must review the product, transaction amount, currency, and
             payment information before authorising payment.
           </p>
 
@@ -292,59 +334,60 @@ export default function LegalTermsPage() {
             complete the transaction.
           </p>
 
-          {/* 10 */}
+          {/* 11 */}
           <h2 className="text-white font-semibold">
-            10. Payment Processing and Security
+            11. Payment Processing and Security
           </h2>
 
           <p>
-            Card transactions are entered and processed through the secure
-            systems of the approved payment gateway.
+            Payment information is entered and processed through the secure
+            systems of the approved payment provider.
           </p>
 
           <p>
             Honey Badger Technologies (PTY) LTD does not store complete card
-            numbers, CVV numbers, card PINs, banking passwords, one-time PINs, or
-            confidential banking login credentials on the Platform.
+            numbers, CVV numbers, card PINs, banking passwords, one-time PINs,
+            or confidential banking login credentials on the Platform.
           </p>
 
           <p>
-            The website uses HTTPS/SSL to support the secure transmission of
+            The website uses HTTPS/SSL to support secure transmission of
             information.
           </p>
 
           <p>
-            The approved payment gateway is responsible for the payment
-            processing security controls applicable to its payment portal,
-            including supported card authentication and security measures.
-          </p>
-
-          {/* 11 */}
-          <h2 className="text-white font-semibold">
-            11. Customer Information and Card Information
-          </h2>
-
-          <p>
-            Customer account information is stored separately from complete card
-            information entered through the approved payment gateway.
-          </p>
-
-          <p>
-            Customer information may be processed for registration, email and
-            phone verification, subscription management, payment confirmation,
-            account access, customer support, fraud prevention, security,
-            dispute resolution, and legal compliance.
-          </p>
-
-          <p>
-            Users must never provide card PINs, banking passwords, one-time PINs,
-            or confidential banking credentials directly to Honey Badger
-            Technologies (PTY) LTD.
+            The approved payment provider is responsible for the payment
+            processing security controls applicable to its payment systems.
           </p>
 
           {/* 12 */}
           <h2 className="text-white font-semibold">
-            12. Customer Privacy
+            12. Customer Information and Payment Information
+          </h2>
+
+          <p>
+            Customer Account information is stored separately from complete
+            payment-card information entered through the approved payment
+            provider.
+          </p>
+
+          <p>
+            Customer information may be processed for registration,
+            verification, Participation Access activation, payment
+            confirmation, Teez Play Token allocation, Account access, customer
+            support, fraud prevention, security, dispute resolution, and legal
+            compliance.
+          </p>
+
+          <p>
+            Users must never provide card PINs, banking passwords, one-time
+            PINs, or confidential banking credentials directly to Honey Badger
+            Technologies (PTY) LTD.
+          </p>
+
+          {/* 13 */}
+          <h2 className="text-white font-semibold">
+            13. Customer Privacy
           </h2>
 
           <p>
@@ -354,9 +397,10 @@ export default function LegalTermsPage() {
           </p>
 
           <p>
-            Personal information is processed in accordance with the Protection
-            of Personal Information Act 4 of 2013 and the Platform Privacy
-            Policy.
+            Personal information is processed in accordance with applicable
+            data-protection law, including the Protection of Personal
+            Information Act 4 of 2013 where applicable, and the Platform
+            Privacy Policy.
           </p>
 
           <p>
@@ -364,23 +408,30 @@ export default function LegalTermsPage() {
             personal information to third parties.
           </p>
 
-          {/* 13 */}
+          {/* 14 */}
           <h2 className="text-white font-semibold">
-            13. Merchant Outlet Country and Transaction Currency
+            14. Merchant Country and Transaction Currency
           </h2>
 
           <p>
-            The merchant outlet country when payment options are presented is
-            South Africa.
+            Honey Badger Technologies (PTY) LTD is a South African merchant.
           </p>
 
           <p>
-            The transaction currency is South African Rand (ZAR).
+            The transaction currency and amount presented to a user may depend
+            on the supported checkout configuration, customer location,
+            acquiring arrangements, payment provider, and available payment
+            methods.
           </p>
 
-          {/* 14 */}
+          <p>
+            The final transaction amount and currency will be displayed before
+            the user authorises payment.
+          </p>
+
+          {/* 15 */}
           <h2 className="text-white font-semibold">
-            14. Merchant Responsibility
+            15. Merchant Responsibility
           </h2>
 
           <p>
@@ -389,76 +440,67 @@ export default function LegalTermsPage() {
           </p>
 
           <ul className="list-disc pl-6 space-y-1">
-            <li>Subscription delivery.</li>
+            <li>Participation Access activation.</li>
+            <li>Teez Play Token allocation.</li>
             <li>Account and Platform access.</li>
             <li>Customer service and support.</li>
             <li>Refund and payment-error review.</li>
             <li>Complaint and dispute resolution.</li>
-            <li>Delivery of the declared digital subscription service.</li>
+            <li>Delivery of the declared digital services.</li>
           </ul>
 
           <p>
-            The approved third-party payment gateway is responsible for payment
-            processing services provided through its payment portal, subject to
-            its applicable security systems, terms, and supported payment
-            methods.
-          </p>
-
-          {/* 15 */}
-          <h2 className="text-white font-semibold">
-            15. Declared Business Activity
-          </h2>
-
-          <p>
-            Payments accepted through this website relate only to the Teez Golf
-            Challenges digital subscription service and other digital services
-            expressly declared to the applicable acquiring bank and payment
-            provider.
-          </p>
-
-          <p>
-            The website does not offer or process payments for prohibited,
-            unlawful, undeclared, or unrelated products and services.
+            The approved third-party payment provider is responsible for
+            payment-processing services provided through its payment systems,
+            subject to its applicable security systems, terms, and supported
+            payment methods.
           </p>
 
           {/* 16 */}
           <h2 className="text-white font-semibold">
-            16. Prohibited Products and Activities
+            16. Declared Business Activity
           </h2>
 
           <p>
-            Teez Golf Challenges does not sell, facilitate, advertise, or process
-            payments for prohibited or restricted products and services,
-            including:
+            Payments accepted through this website relate only to declared and
+            approved Teez Golf Challenges digital services and other services
+            expressly permitted by the applicable acquiring bank or payment
+            provider.
           </p>
 
-          <ul className="list-disc pl-6 space-y-1">
-            <li>Illegal drugs or drug paraphernalia.</li>
-            <li>Counterfeit goods or currency.</li>
-            <li>Unlicensed firearms, ammunition, or weapons.</li>
-            <li>Illegal or exploitative sexual content.</li>
-            <li>Unregulated gambling, betting, or wagering.</li>
-            <li>Pyramid or Ponzi schemes.</li>
-            <li>Unauthorised cryptocurrency exchange services.</li>
-            <li>Hacking tools, malware, or malicious software.</li>
-            <li>Unlicensed tobacco, vaping, alcohol, or pharmaceutical sales.</li>
-            <li>Endangered wildlife or protected-species products.</li>
-            <li>Any product or service prohibited by South African law.</li>
-            <li>
-              Any product or service prohibited by Visa, Mastercard, the
-              acquiring bank, or the approved payment gateway.
-            </li>
-          </ul>
+          <p>
+            The website does not knowingly offer or process payments for
+            prohibited, unlawful, undeclared, or unrelated products or services.
+          </p>
 
           {/* 17 */}
           <h2 className="text-white font-semibold">
-            17. Fraud and Payment Misuse
+            17. Prohibited Products and Activities
+          </h2>
+
+          <p>
+            Teez Golf Challenges does not knowingly sell, facilitate,
+            advertise, or process payments for prohibited or unlawful products,
+            services, or activities.
+          </p>
+
+          <p>
+            This includes unlawful gambling or wagering, transaction laundering,
+            unlawful financial services, stolen or counterfeit goods, or other
+            activities prohibited by applicable law, payment networks,
+            acquiring banks, or approved payment providers.
+          </p>
+
+          {/* 18 */}
+          <h2 className="text-white font-semibold">
+            18. Fraud and Payment Misuse
           </h2>
 
           <p>
             Fraud, false payment claims, chargeback misuse, unauthorised use of
-            payment methods, subscription manipulation, and attempts to obtain
-            duplicate refunds are prohibited.
+            payment methods, manipulation of Participation Access or Teez Play
+            Token allocations, and attempts to obtain duplicate refunds are
+            prohibited.
           </p>
 
           <p>
@@ -467,16 +509,16 @@ export default function LegalTermsPage() {
             chargeback issue is reviewed.
           </p>
 
-          {/* 18 */}
+          {/* 19 */}
           <h2 className="text-white font-semibold">
-            18. Platform Terms
+            19. Platform Terms
           </h2>
 
           <p>
-            Registration, accounts, subscriptions, Teez Tokens, challenges,
-            rankings, fair play, user conduct, suspension, intellectual
-            property, and Platform use are governed by the separate Platform
-            Terms & Conditions.
+            Registration, Accounts, Participation Access, Teez Play Tokens,
+            challenges, rankings, fair play, user conduct, suspension,
+            intellectual property, and Platform use are governed by the separate
+            Platform Terms & Conditions.
           </p>
 
           <button
@@ -487,20 +529,19 @@ export default function LegalTermsPage() {
             View Platform Terms & Conditions
           </button>
 
-          {/* 19 */}
+          {/* 20 */}
           <h2 className="text-white font-semibold">
-            19. Consumer Rights
+            20. Consumer Rights
           </h2>
 
           <p>
             Nothing in these Website Terms is intended to remove, reduce, or
-            limit any legal right that cannot lawfully be excluded under
-            applicable South African law.
+            limit any legal right that cannot lawfully be excluded or limited.
           </p>
 
-          {/* 20 */}
+          {/* 21 */}
           <h2 className="text-white font-semibold">
-            20. Limitation of Liability
+            21. Limitation of Liability
           </h2>
 
           <p>
@@ -515,9 +556,9 @@ export default function LegalTermsPage() {
             lawfully be excluded or limited.
           </p>
 
-          {/* 21 */}
+          {/* 22 */}
           <h2 className="text-white font-semibold">
-            21. Intellectual Property
+            22. Intellectual Property
           </h2>
 
           <p>
@@ -527,14 +568,16 @@ export default function LegalTermsPage() {
             or its authorised licensors.
           </p>
 
-          {/* 22 */}
+          {/* 23 */}
           <h2 className="text-white font-semibold">
-            22. Governing Law and Domicilium
+            23. Governing Law and Domicilium
           </h2>
 
           <p>
             These Website Terms are governed by the laws of the Republic of
-            South Africa.
+            South Africa, subject to mandatory consumer rights or laws
+            applicable to users in other jurisdictions that cannot lawfully be
+            excluded.
           </p>
 
           <p>
@@ -557,16 +600,16 @@ export default function LegalTermsPage() {
             South Africa
           </p>
 
-          {/* 23 */}
+          {/* 24 */}
           <h2 className="text-white font-semibold">
-            23. Changes to these Website Terms
+            24. Changes to these Website Terms
           </h2>
 
           <p>
             Honey Badger Technologies (PTY) LTD may update these Website Terms
             where reasonably necessary to reflect changes in the services,
-            subscription model, legal requirements, acquiring-bank
-            requirements, payment-provider requirements, or security controls.
+            participation model, pricing, payment providers, legal
+            requirements, acquiring-bank requirements, or security controls.
           </p>
 
           <p>
@@ -575,9 +618,9 @@ export default function LegalTermsPage() {
             where required by applicable law.
           </p>
 
-          {/* 24 */}
+          {/* 25 */}
           <h2 className="text-white font-semibold">
-            24. Company Information
+            25. Company Information
           </h2>
 
           <p>
@@ -588,13 +631,11 @@ export default function LegalTermsPage() {
             Trading Platform: Teez Golf Challenges
             <br />
             Merchant Country: South Africa
-            <br />
-            Transaction Currency: South African Rand (ZAR)
           </p>
 
-          {/* 25 */}
+          {/* 26 */}
           <h2 className="text-white font-semibold">
-            25. Contact Details
+            26. Contact Details
           </h2>
 
           <p>
@@ -609,7 +650,7 @@ export default function LegalTermsPage() {
           </p>
 
           <p className="text-xs text-gray-500 pt-4">
-            Last updated: July 2026
+            Last updated: August 2026
           </p>
 
           <button

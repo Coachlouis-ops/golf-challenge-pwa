@@ -645,29 +645,31 @@ if (
        </div>
 )}
 
-        {/* ENTER RESULTS */}
+               {/* ENTER RESULTS */}
         {isCreator && (
-          <div className="border border-red-500/30 bg-black/30 rounded-2xl p-5 flex flex-col gap-5 shadow-[0_0_30px_rgba(255,0,0,0.2)]">
+          <div className="border-2 border-red-500 bg-neutral-900/95 rounded-2xl p-5 flex flex-col gap-5 shadow-[0_0_35px_rgba(255,0,0,0.45)]">
             <div>
-              <div className="text-red-400 text-xs tracking-[0.25em] font-bold">
+              <div className="text-red-400 text-sm tracking-[0.25em] font-extrabold">
                 LIVE MATCH CONTROL
               </div>
-              <div className="text-2xl font-extrabold text-white mt-1">
+
+              <div className="text-3xl font-extrabold text-white mt-1">
                 ENTER RESULTS
               </div>
             </div>
 
-            <div className="text-sm text-red-100 leading-relaxed">
-              After completion of challenge enter the scores/results and update
-              scoreboard. Scoreboard can be updated as scores are being added.
+            <div className="text-base font-medium text-white leading-relaxed">
+              Enter each player's final score or result below, then select
+              UPDATE SCOREBOARD.
             </div>
 
-            <div className="text-xs text-red-300 bg-black/30 border border-red-500/20 rounded-xl p-3">
-              Once finalized the challenge cannot be reopened.
+            <div className="text-sm font-semibold text-red-200 bg-red-950/60 border border-red-500 rounded-xl p-3">
+              Scoreboard can be updated while scores are being added. Once the
+              challenge is finalized it cannot be reopened.
             </div>
 
             {players.length === 0 && (
-              <p className="text-sm text-red-300">
+              <p className="text-base font-semibold text-red-300">
                 No players available for scoring yet.
               </p>
             )}
@@ -675,9 +677,9 @@ if (
             {players.map((player) => (
               <div
                 key={player.uid}
-                className="border border-red-500/20 rounded-2xl p-4 bg-black/40 flex flex-col gap-3"
+                className="border-2 border-red-500/70 rounded-2xl p-4 bg-neutral-950 flex flex-col gap-3 shadow-[0_0_18px_rgba(255,0,0,0.20)]"
               >
-                <label className="text-sm font-semibold text-red-100">
+                <label className="text-base font-bold text-white">
                   Score for {player.displayName}
                 </label>
 
@@ -691,12 +693,12 @@ if (
                       }))
                     }
                     disabled={challenge?.status === "completed"}
-                    className="border border-red-500/30 bg-black/50 text-white rounded-xl p-3 disabled:opacity-50 focus:outline-none focus:border-red-400 focus:shadow-[0_0_15px_rgba(255,0,0,0.4)]"
+                    className="w-full border-2 border-red-500 bg-white text-black text-base font-bold rounded-xl p-4 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-red-400"
                   >
-                    <option value="">Select result</option>
-                    <option value="win">Win</option>
-                    <option value="lost">Lost</option>
-                    <option value="draw">Draw</option>
+                    <option value="">SELECT RESULT</option>
+                    <option value="win">WIN</option>
+                    <option value="lost">LOST</option>
+                    <option value="draw">DRAW</option>
                   </select>
                 ) : (
                   <input
@@ -708,13 +710,9 @@ if (
                         [player.uid]: e.target.value,
                       }))
                     }
-                    placeholder={
-                      challenge?.typeOfGame?.toLowerCase().includes("match")
-                        ? "win / lost / draw"
-                        : "score / points / win / lost / draw"
-                    }
+                    placeholder="ENTER SCORE / POINTS / RESULT"
                     disabled={challenge?.status === "completed"}
-                    className="border border-red-500/30 bg-black/50 text-white rounded-xl p-3 disabled:opacity-50 focus:outline-none focus:border-red-400 focus:shadow-[0_0_15px_rgba(255,0,0,0.4)]"
+                    className="w-full border-2 border-red-500 bg-white text-black placeholder:text-gray-600 text-base font-bold rounded-xl p-4 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-red-400"
                   />
                 )}
               </div>
@@ -723,16 +721,20 @@ if (
             <button
               onClick={handleUpdateScoreboard}
               disabled={
-                updating || challenge?.status === "completed" || players.length === 0
+                updating ||
+                challenge?.status === "completed" ||
+                players.length === 0
               }
-              className="bg-red-600 text-white px-5 py-3 rounded-2xl font-bold tracking-wide hover:bg-red-500 hover:shadow-[0_0_25px_rgba(255,0,0,0.7)] hover:scale-[1.02] transition-all disabled:opacity-30"
+              className="bg-red-600 border-2 border-red-400 text-white px-5 py-4 rounded-2xl text-lg font-extrabold tracking-wide shadow-[0_0_25px_rgba(255,0,0,0.55)] hover:bg-red-500 hover:shadow-[0_0_35px_rgba(255,0,0,0.8)] hover:scale-[1.02] transition-all disabled:opacity-30"
             >
               {updating ? "UPDATING SCOREBOARD..." : "UPDATE SCOREBOARD"}
             </button>
           </div>
         )}
 
-        {/* FINALIZE */}
+
+
+              {/* FINALIZE */}
         {isCreator && challenge?.status !== "completed" && players.length > 0 && (
           <div className="border border-red-500/30 bg-red-950/20 rounded-2xl p-5 flex flex-col gap-4 shadow-[0_0_30px_rgba(255,0,0,0.25)]">
             <div>

@@ -394,6 +394,13 @@ async function updateLeaderboard() {
         : numberValue;
     };
 
+
+        const isCombinedStableford =
+      competition.scoringType ===
+        "combinedStableford" ||
+      competition.format ===
+        "Combined Stableford";
+
     const leaderboard: {
       position?: number;
 
@@ -561,13 +568,24 @@ if (
     const p1 = rows[i];
     const p2 = rows[i + 1];
 
-    if (
+       if (
       !p1 ||
       !p2 ||
       !p1.displayName ||
       !p2.displayName ||
       p1.score === ""
     ) continue;
+
+    if (
+      isCombinedStableford &&
+      p2.score === ""
+    ) continue;
+
+    const teamTotal =
+      isCombinedStableford
+        ? (Number(p1.score) || 0) +
+          (Number(p2.score) || 0)
+        : Number(p1.score) || 0;
 
     leaderboard.push({
 
@@ -577,8 +595,8 @@ if (
       division:
         p1.division || "Open",
 
-      total:
-        Number(p1.score) || 0,
+          total:
+        teamTotal,
 
       countOutPosition:
         p1.countOutPosition !== undefined
@@ -594,8 +612,9 @@ if (
   }
 
   if (
-    competition.scoringType ===
-    "points"
+   competition.scoringType ===
+    "points" ||
+  isCombinedStableford
   ) {
 
     leaderboard.sort((a, b) => {
@@ -724,7 +743,8 @@ if (
 
   if (
     competition.scoringType ===
-    "points"
+    "points" ||
+  isCombinedStableford
   ) {
 
     leaderboard.sort((a, b) => {
@@ -830,8 +850,9 @@ divisions.forEach(
         .sort((a, b) => {
 
           if (
-            competition.scoringType ===
-            "points"
+          competition.scoringType ===
+    "points" ||
+  isCombinedStableford
           ) {
 
             if (a.total !== b.total) {
@@ -1686,7 +1707,10 @@ return (
 
                         <div className="col-span-5">
 
-                          {(competition.playerConfiguration === "Singles" ||
+                                                 {(competition.playerConfiguration === "Singles" ||
+                            competition.scoringType === "combinedStableford" ||
+                            competition.format === "Combined Stableford" ||
+                            index % 2 === 0) && (
                             index % 2 === 0) && (
 
                             <input

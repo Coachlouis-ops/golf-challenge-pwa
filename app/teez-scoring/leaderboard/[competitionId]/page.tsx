@@ -68,6 +68,9 @@ const [scoringType, setScoringType] =
 const [playerConfiguration, setPlayerConfiguration] =
   useState("Singles");
 
+  const [competitionFormat, setCompetitionFormat] =
+  useState("");
+
   const [rows, setRows] =
     useState<PlayerRow[]>([]);
 
@@ -114,6 +117,11 @@ const [playerConfiguration, setPlayerConfiguration] =
       data.scoringType || "gross"
     );
 
+    setCompetitionFormat(
+      data.format || ""
+    );
+
+
     setPlayerConfiguration(
       data.playerConfiguration || "Singles"
     );
@@ -126,10 +134,11 @@ const [playerConfiguration, setPlayerConfiguration] =
     setRows(loadedRows);
 
     const rebuilt =
-      buildLeaderboards(
+          buildLeaderboards(
         loadedRows,
         data.scoringType || "gross",
-        data.playerConfiguration || "Singles"
+        data.playerConfiguration || "Singles",
+        data.format || ""
       );
 
     setLeaderboard(
@@ -159,8 +168,13 @@ const [playerConfiguration, setPlayerConfiguration] =
 function buildLeaderboards(
   sourceRows: PlayerRow[],
   type: string,
-  config: string
+  config: string,
+  format: string
 ) {
+
+  const isCombinedStableford =
+    type === "combinedStableford" ||
+    format === "Combined Stableford";
 
   const leaderboardRows: LeaderboardRow[] = [];
 
@@ -218,13 +232,24 @@ function buildLeaderboards(
       const p2 =
         sourceRows[i + 1];
 
-      if (
+          if (
         !p1 ||
         !p2 ||
         !p1.displayName ||
         !p2.displayName ||
         p1.score === ""
       ) continue;
+
+      if (
+        isCombinedStableford &&
+        p2.score === ""
+      ) continue;
+
+      const teamTotal =
+        isCombinedStableford
+          ? (Number(p1.score) || 0) +
+            (Number(p2.score) || 0)
+          : Number(p1.score) || 0;
 
       leaderboardRows.push({
         id:
@@ -239,8 +264,8 @@ function buildLeaderboards(
         division:
           p1.division || "Open",
 
-        total:
-          Number(p1.score) || 0,
+               total:
+          teamTotal,
 
         teeTime:
           p1.teeTime || "",
@@ -356,10 +381,12 @@ function sortLeaderboard(
 
     if (a.total !== b.total) {
 
-      if (type === "points") {
+            if (
+        type === "points" ||
+        type === "combinedStableford"
+      ) {
         return b.total - a.total;
       }
-
       return a.total - b.total;
     }
 
@@ -480,10 +507,11 @@ function updateCountOut(
   setRows(updatedRows);
 
   const rebuilt =
-    buildLeaderboards(
+        buildLeaderboards(
       updatedRows,
       scoringType,
-      playerConfiguration
+      playerConfiguration,
+      competitionFormat
     );
 
   setLeaderboard(
@@ -504,10 +532,11 @@ async function updateLeaderboard() {
     setSaving(true);
 
     const rebuilt =
-      buildLeaderboards(
+          buildLeaderboards(
         rows,
         scoringType,
-        playerConfiguration
+        playerConfiguration,
+        competitionFormat
       );
 
      const cleanRows =

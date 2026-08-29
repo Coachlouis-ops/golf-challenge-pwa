@@ -210,11 +210,27 @@ createdAt:
 
             <select
               value={format}
-              onChange={(e) =>
+                            onChange={(e) => {
+                const selectedFormat =
+                  e.target.value;
+
                 setFormat(
-                  e.target.value
-                )
-              }
+                  selectedFormat
+                );
+
+                if (
+                  selectedFormat ===
+                  "Combined Stableford"
+                ) {
+                  setPlayerConfig(
+                    "Doubles"
+                  );
+
+                  setScoringType(
+                    "combinedStableford"
+                  );
+                }
+              }}
               className="
                 w-full
                 bg-neutral-900
@@ -226,7 +242,8 @@ createdAt:
             >
 
               <option>Stroke Play</option>
-              <option>Stableford</option>
+                            <option>Stableford</option>
+              <option>Combined Stableford</option>
               <option>IPS</option>
               <option>Matchplay</option>
               <option>Scramble</option>
@@ -304,8 +321,12 @@ createdAt:
       Nett
     </option>
 
-    <option value="points">
+     <option value="points">
       Points
+    </option>
+
+    <option value="combinedStableford">
+      Combined Stableford
     </option>
 
   </select>

@@ -239,11 +239,18 @@ export default function HomePage() {
       LOGIN
     </button>
 
-    <button
+       <button
       onClick={() => router.push("/dashboard")}
       className="border border-green-400 text-green-400 px-8 py-3 rounded-full font-semibold shadow-[0_0_18px_rgba(34,197,94,0.45)] hover:bg-green-400 hover:text-black hover:scale-105 transition"
     >
       VIEW FULL DASHBOARD
+    </button>
+
+    <button
+      onClick={() => router.push("/teez-scoring")}
+      className="bg-cyan-400 text-black px-8 py-3 rounded-full font-semibold animate-pulse shadow-[0_0_20px_rgba(34,211,238,0.8)] hover:scale-105 transition"
+    >
+      TEEZ GOLF SCORING
     </button>
   </div>
 </div>

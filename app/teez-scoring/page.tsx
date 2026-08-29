@@ -22,7 +22,7 @@ export default function TeezScoringPage() {
 
         {/* ACTIVE BUTTONS */}
 
-        <div className="grid md:grid-cols-2 gap-6 mb-12">
+        <div className="grid md:grid-cols-3 gap-6 mb-12">
 
           <button
     onClick={() =>
@@ -76,6 +76,31 @@ export default function TeezScoringPage() {
             </p>
 
           </button>
+
+          <button 
+            onClick={() => 
+              router.push("/admin") 
+            } 
+            className=" 
+              bg-yellow-400 
+              text-black 
+              rounded-3xl 
+              p-10 
+              text-left 
+              font-bold 
+              hover:scale-[1.02] 
+              transition 
+            " 
+          > 
+            <h2 className="text-3xl font-black mb-4"> 
+              ADMIN 
+            </h2> 
+ 
+            <p> 
+              Admin access for managing scoring clubs, applications and platform controls. 
+            </p> 
+ 
+          </button> 
 
         </div>
 

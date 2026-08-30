@@ -255,9 +255,9 @@ export default function ClubDashboard() {
             </div>
 
             <button
-              onClick={() =>
-                router.push("/dashboard")
-              }
+  onClick={() =>
+    router.push("/teez-scoring")
+  }
               className="
                 bg-neutral-800
                 border border-white/10
@@ -272,7 +272,7 @@ export default function ClubDashboard() {
                 whitespace-nowrap
               "
             >
-              ← MAIN APP DASHBOARD
+              ← TEEZ SCORING MAIN PAGE
             </button>
 
           </div>

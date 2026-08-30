@@ -419,56 +419,30 @@ function sortLeaderboard(
   });
 }
 
-  function applyPositions(
+    function applyPositions(
     sourceRows: LeaderboardRow[]
   ) {
 
     let lastScore: number | null =
       null;
 
-    let lastCountOut = "";
-
     let lastPosition = 0;
 
     return sourceRows.map((row, index) => {
 
-      const hasManualCountOut =
-        row.countOutPosition &&
-        row.countOutPosition.trim() !== "";
-
       const sameScore =
         lastScore === row.total;
-
-      const sameCountOut =
-        lastCountOut ===
-        (row.countOutPosition || "");
 
       let position =
         index + 1;
 
-      if (
-        sameScore &&
-        !hasManualCountOut &&
-        !lastCountOut
-      ) {
-        position =
-          lastPosition;
-      }
-
-      if (
-        sameScore &&
-        hasManualCountOut &&
-        sameCountOut
-      ) {
+      if (sameScore) {
         position =
           lastPosition;
       }
 
       lastScore =
         row.total;
-
-      lastCountOut =
-        row.countOutPosition || "";
 
       lastPosition =
         position;

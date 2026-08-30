@@ -522,12 +522,9 @@ async function updateLeaderboard() {
       singles.forEach(
         (r, index) => {
 
-          const isTie =
+                 const isTie =
             lastScore !== null &&
-            r.total === lastScore &&
-            getCountOutValue(
-              r.countOutPosition
-            ) === 999;
+            r.total === lastScore;
 
           if (isTie) {
 
@@ -652,12 +649,9 @@ if (
   leaderboard.forEach(
     (r, index) => {
 
-      const isTie =
-        lastScore !== null &&
-        r.total === lastScore &&
-        getCountOutValue(
-          r.countOutPosition
-        ) === 999;
+            const isTie =
+          lastScore !== null &&
+          r.total === lastScore;
 
       if (isTie) {
 
@@ -782,12 +776,9 @@ if (
   leaderboard.forEach(
     (r, index) => {
 
-      const isTie =
-        lastScore !== null &&
-        r.total === lastScore &&
-        getCountOutValue(
-          r.countOutPosition
-        ) === 999;
+             const isTie =
+          lastScore !== null &&
+          r.total === lastScore;
 
       if (isTie) {
 
@@ -883,12 +874,9 @@ divisions.forEach(
     filtered.forEach(
       (r, index) => {
 
-        const isTie =
+              const isTie =
           lastScore !== null &&
-          r.total === lastScore &&
-          getCountOutValue(
-            r.countOutPosition
-          ) === 999;
+          r.total === lastScore;
 
         if (!isTie) {
           currentPosition =

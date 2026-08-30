@@ -200,7 +200,7 @@ export default function ClubDashboard() {
 
         <div className="bg-neutral-900 border border-green-400/20 rounded-3xl p-6 md:p-8 mb-10">
 
-          <div className="flex flex-col md:flex-row md:items-center gap-6">
+                   <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
 
             {club?.logoUrl ? (
 
@@ -230,7 +230,7 @@ export default function ClubDashboard() {
                 Club Competition Dashboard
               </p>
 
-              <div className="mt-5 grid gap-1 text-sm text-gray-500">
+                           <div className="mt-5 grid gap-1 text-sm text-gray-500">
 
                 {club?.contactPerson && (
                   <p>
@@ -253,6 +253,27 @@ export default function ClubDashboard() {
               </div>
 
             </div>
+
+            <button
+              onClick={() =>
+                router.push("/dashboard")
+              }
+              className="
+                bg-neutral-800
+                border border-white/10
+                text-white
+                px-5
+                py-3
+                rounded-2xl
+                font-bold
+                hover:border-green-400
+                hover:text-green-400
+                transition
+                whitespace-nowrap
+              "
+            >
+              ← MAIN APP DASHBOARD
+            </button>
 
           </div>
 

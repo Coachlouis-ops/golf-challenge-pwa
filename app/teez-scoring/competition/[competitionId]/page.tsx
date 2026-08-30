@@ -576,16 +576,8 @@ if (
       p1.score === ""
     ) continue;
 
-    if (
-      isCombinedStableford &&
-      p2.score === ""
-    ) continue;
-
-    const teamTotal =
-      isCombinedStableford
-        ? (Number(p1.score) || 0) +
-          (Number(p2.score) || 0)
-        : Number(p1.score) || 0;
+        const teamTotal =
+      Number(p1.score) || 0;
 
     leaderboard.push({
 
@@ -1707,9 +1699,7 @@ return (
 
                         <div className="col-span-5">
 
-                                                 {(competition.playerConfiguration === "Singles" ||
-                            competition.scoringType === "combinedStableford" ||
-                            competition.format === "Combined Stableford" ||
+                                                      {(competition.playerConfiguration === "Singles" ||
                             index % 2 === 0) && (
                             index % 2 === 0) && (
 
@@ -1722,7 +1712,12 @@ return (
                                   e.target.value
                                 )
                               }
-                              placeholder="Score"
+                             placeholder={
+  competition.scoringType === "combinedStableford" ||
+  competition.format === "Combined Stableford"
+    ? "Combined Score"
+    : "Score"
+}
                               className="
                                 w-full
                                 max-w-[140px]

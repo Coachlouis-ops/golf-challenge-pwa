@@ -240,16 +240,8 @@ function buildLeaderboards(
         p1.score === ""
       ) continue;
 
-      if (
-        isCombinedStableford &&
-        p2.score === ""
-      ) continue;
-
-      const teamTotal =
-        isCombinedStableford
-          ? (Number(p1.score) || 0) +
-            (Number(p2.score) || 0)
-          : Number(p1.score) || 0;
+         const teamTotal =
+        Number(p1.score) || 0;
 
       leaderboardRows.push({
         id:

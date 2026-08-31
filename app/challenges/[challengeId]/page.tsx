@@ -70,7 +70,8 @@ export default function ChallengeDetailPage() {
   const [players, setPlayers] = useState<Player[]>([]);
   const [invitingUid, setInvitingUid] = useState<string | null>(null);
 
-  const [finalizing, setFinalizing] = useState(false);
+const [finalizing, setFinalizing] = useState(false);
+const [scoreboardUpdated, setScoreboardUpdated] = useState(false);
 
   const isCreator = user && challenge && challenge.creatorUid === user.uid;
 
@@ -260,12 +261,14 @@ if (
         score,
       }));
 
-      await updateScoreboard({
-        challengeId,
-        scores,
-      });
+    await updateScoreboard({
+  challengeId,
+  scores,
+});
 
-      const snap = await getDoc(doc(db, "challenges", challengeId));
+setScoreboardUpdated(true);
+
+const snap = await getDoc(doc(db, "challenges", challengeId));
 
       if (snap.exists()) {
         setChallenge((prev) =>
@@ -686,12 +689,13 @@ if (
                 {challenge?.typeOfGame?.toLowerCase().includes("match") ? (
                   <select
                     value={scoreInputs[player.uid] || ""}
-                    onChange={(e) =>
-                      setScoreInputs((prev) => ({
-                        ...prev,
-                        [player.uid]: e.target.value,
-                      }))
-                    }
+                onChange={(e) => {
+  setScoreInputs((prev) => ({
+    ...prev,
+    [player.uid]: e.target.value,
+  }));
+  setScoreboardUpdated(false);
+}}
                     disabled={challenge?.status === "completed"}
                     className="w-full border-2 border-red-500 bg-white text-black text-base font-bold rounded-xl p-4 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-red-400"
                   >
@@ -704,12 +708,13 @@ if (
                   <input
                     type="text"
                     value={scoreInputs[player.uid] || ""}
-                    onChange={(e) =>
-                      setScoreInputs((prev) => ({
-                        ...prev,
-                        [player.uid]: e.target.value,
-                      }))
-                    }
+                  onChange={(e) => {
+  setScoreInputs((prev) => ({
+    ...prev,
+    [player.uid]: e.target.value,
+  }));
+  setScoreboardUpdated(false);
+}}
                    placeholder="SCORE / POINTS / WIN / LOST / DRAW"
                     disabled={challenge?.status === "completed"}
                     className="w-full border-2 border-red-500 bg-white text-black placeholder:text-gray-600 text-base font-bold rounded-xl p-4 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-red-400"

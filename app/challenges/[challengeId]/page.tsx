@@ -710,7 +710,7 @@ if (
                         [player.uid]: e.target.value,
                       }))
                     }
-                    placeholder="ENTER SCORE / POINTS / RESULT"
+                   placeholder="SCORE / POINTS / WIN / LOST / DRAW"
                     disabled={challenge?.status === "completed"}
                     className="w-full border-2 border-red-500 bg-white text-black placeholder:text-gray-600 text-base font-bold rounded-xl p-4 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-red-400"
                   />

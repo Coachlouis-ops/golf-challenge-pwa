@@ -116,6 +116,7 @@ const [saving, setSaving] = useState(false);
 const [isEditing, setIsEditing] = useState(false);
 const [profileExists, setProfileExists] = useState(false);
 const [showClubNotice, setShowClubNotice] = useState(false);
+const [clubNoticeRead, setClubNoticeRead] = useState(false);
 
 
   const [rankingPosition, setRankingPosition] = useState<RankingPosition>({
@@ -603,7 +604,18 @@ const [showClubNotice, setShowClubNotice] = useState(false);
     className="w-full bg-[#1f1f1f] border border-gray-500 text-white px-3 py-2 rounded-md focus:border-green-400 focus:outline-none"
     placeholder="Select Golf Club"
     value={profile.club}
-    onFocus={() => setShowClubNotice(true)}
+   onMouseDown={(e) => {
+  if (!clubNoticeRead) {
+    e.preventDefault();
+    setShowClubNotice(true);
+  }
+}}
+onFocus={() => {
+  if (!clubNoticeRead) {
+    clubInputRef.current?.blur();
+    setShowClubNotice(true);
+  }
+}}
     onChange={(e) => setProfile({ ...profile, club: e.target.value })}
   />
 </div>
@@ -693,7 +705,7 @@ const [showClubNotice, setShowClubNotice] = useState(false);
       </div>
 
 {showClubNotice && (
-  <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center px-4">
+ <div className="fixed inset-0 z-[9999] bg-black/90 flex items-center justify-center px-4">
     <div className="w-full max-w-md bg-neutral-900 border-2 border-green-500 rounded-2xl p-6 shadow-[0_0_35px_rgba(34,197,94,0.35)] space-y-5">
       <div className="text-center space-y-3">
         <h2 className="text-2xl font-extrabold text-green-400">
@@ -709,13 +721,20 @@ const [showClubNotice, setShowClubNotice] = useState(false);
         </p>
       </div>
 
-      <button
-        type="button"
-        onClick={() => setShowClubNotice(false)}
-        className="w-full bg-green-500 hover:bg-green-400 text-black font-extrabold py-3 rounded-xl transition"
-      >
-        READ
-      </button>
+     <button
+  type="button"
+  onClick={() => {
+    setClubNoticeRead(true);
+    setShowClubNotice(false);
+
+    setTimeout(() => {
+      clubInputRef.current?.focus();
+    }, 100);
+  }}
+  className="w-full bg-green-500 hover:bg-green-400 text-black font-extrabold py-3 rounded-xl transition"
+>
+  READ
+</button>
     </div>
   </div>
 )}

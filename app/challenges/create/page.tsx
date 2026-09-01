@@ -156,17 +156,17 @@ const GAME_ENGINE: Record<
   },
 
   NASSAU: {
-    description:
-      "Traditional three-part match separating front 9, back 9 and overall.",
-    gameplay:
-      "Players compete across multiple mini-matches in one round.",
-    outcome:
-      "Separate winners for front, back and total match.",
-    recommendedTeam: ["SINGLES", "PAIR"],
-    recommendedScoring: ["POINTS"],
-    players: "2-4 Players",
-    atmosphere: "Classic Match Format",
-  },
+  description:
+    "Four-part challenge separating Front 9, Back 9, Overall Game and Units.",
+  gameplay:
+    "Each section is played as an independent result inside the same round.",
+  outcome:
+    "A player can independently win, lose or draw the Front 9, Back 9, Overall Game and Units.",
+  recommendedTeam: ["SINGLES", "PAIR"],
+  recommendedScoring: ["POINTS"],
+  players: "2-4 Players",
+  atmosphere: "Classic Nassau Challenge",
+},
 
   SKINS: {
    description:
@@ -322,9 +322,15 @@ function CapsuleGroup({
 export default function CreateChallengePage() {
   const router = useRouter();
 
-  const [challengeTitle, setChallengeTitle] = useState("");
-  const [entryTokens, setEntryTokens] = useState<string>("");
-  const [teamFormat, setTeamFormat] = useState("");
+ const [challengeTitle, setChallengeTitle] = useState("");
+const [entryTokens, setEntryTokens] = useState<string>("");
+
+const [nassauFront9Tokens, setNassauFront9Tokens] = useState<string>("");
+const [nassauBack9Tokens, setNassauBack9Tokens] = useState<string>("");
+const [nassauGameTokens, setNassauGameTokens] = useState<string>("");
+const [nassauUnitsTokens, setNassauUnitsTokens] = useState<string>("");
+
+const [teamFormat, setTeamFormat] = useState("");
   const [gameFormat, setGameFormat] = useState("");
   const [typeOfGame, setTypeOfGame] = useState("");
   const [scoringMethod, setScoringMethod] = useState("");
@@ -440,15 +446,30 @@ if (
   );
 }
 
+const isNassau = typeOfGame === "NASSAU";
 
-  const isValid =
-    challengeTitle.trim().length > 0 &&
-    Number(entryTokens) > 0 &&
-    teamFormat &&
-    gameFormat &&
-    typeOfGame &&
-    scoringMethod &&
-    courseName.trim().length > 0;
+const nassauTotalTokens =
+  Number(nassauFront9Tokens || 0) +
+  Number(nassauBack9Tokens || 0) +
+  Number(nassauGameTokens || 0) +
+  Number(nassauUnitsTokens || 0);
+
+
+const isValid =
+  challengeTitle.trim().length > 0 &&
+  (
+    isNassau
+      ? Number(nassauFront9Tokens) > 0 &&
+        Number(nassauBack9Tokens) > 0 &&
+        Number(nassauGameTokens) > 0 &&
+        Number(nassauUnitsTokens) > 0
+      : Number(entryTokens) > 0
+  ) &&
+  teamFormat &&
+  gameFormat &&
+  typeOfGame &&
+  scoringMethod &&
+  courseName.trim().length > 0;
 
   async function handleCreate() {
     if (!isValid) {
@@ -462,15 +483,28 @@ if (
       const createChallenge =
         httpsCallable(functions, "createChallenge");
 
-      const result: any = await createChallenge({
-        challengeTitle: challengeTitle.trim(),
-        entryTokens: Number(entryTokens),
-        teamFormat,
-        gameFormat,
-        typeOfGame,
-        scoringMethod,
-        courseName: courseName.trim(),
-      });
+   const result: any = await createChallenge({
+  challengeTitle: challengeTitle.trim(),
+
+  entryTokens: isNassau
+    ? nassauTotalTokens
+    : Number(entryTokens),
+
+  nassauTokens: isNassau
+    ? {
+        front9: Number(nassauFront9Tokens || 0),
+        back9: Number(nassauBack9Tokens || 0),
+        game: Number(nassauGameTokens || 0),
+        units: Number(nassauUnitsTokens || 0),
+      }
+    : null,
+
+  teamFormat,
+  gameFormat,
+  typeOfGame,
+  scoringMethod,
+  courseName: courseName.trim(),
+});
 
       const challengeId =
         result.data.challengeId;
@@ -535,30 +569,76 @@ if (
 "
 />
 
-          <input
-            type="number"
-            placeholder="Entry Tokens"
-            value={entryTokens}
-            onChange={(e) =>
-              setEntryTokens(e.target.value)
-            }
-           className="
-  bg-black
-  border-2 border-cyan-400
-  rounded-xl
-  px-5 py-5
-  text-lg sm:text-xl
-  font-bold
-  text-white
-  placeholder:text-cyan-300
-  placeholder:font-bold
-  outline-none
-  shadow-[0_0_20px_rgba(34,211,238,0.55)]
-  focus:border-cyan-300
-  focus:shadow-[0_0_35px_rgba(34,211,238,0.9)]
-  transition-all duration-300
-"
-/>
+         {!isNassau ? (
+  <input
+    type="number"
+    placeholder="Entry Tokens"
+    value={entryTokens}
+    onChange={(e) =>
+      setEntryTokens(e.target.value)
+    }
+    className="
+      bg-black
+      border-2 border-cyan-400
+      rounded-xl
+      px-5 py-5
+      text-lg sm:text-xl
+      font-bold
+      text-white
+      placeholder:text-cyan-300
+      placeholder:font-bold
+      outline-none
+      shadow-[0_0_20px_rgba(34,211,238,0.55)]
+      focus:border-cyan-300
+      focus:shadow-[0_0_35px_rgba(34,211,238,0.9)]
+      transition-all duration-300
+    "
+  />
+) : (
+  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+    <input
+      type="number"
+      placeholder="Front 9 Tokens"
+      value={nassauFront9Tokens}
+      onChange={(e) => setNassauFront9Tokens(e.target.value)}
+      className="bg-black border-2 border-cyan-400 rounded-xl px-5 py-5 text-lg font-bold text-white placeholder:text-cyan-300 outline-none shadow-[0_0_20px_rgba(34,211,238,0.55)]"
+    />
+
+    <input
+      type="number"
+      placeholder="Back 9 Tokens"
+      value={nassauBack9Tokens}
+      onChange={(e) => setNassauBack9Tokens(e.target.value)}
+      className="bg-black border-2 border-cyan-400 rounded-xl px-5 py-5 text-lg font-bold text-white placeholder:text-cyan-300 outline-none shadow-[0_0_20px_rgba(34,211,238,0.55)]"
+    />
+
+    <input
+      type="number"
+      placeholder="Overall Game Tokens"
+      value={nassauGameTokens}
+      onChange={(e) => setNassauGameTokens(e.target.value)}
+      className="bg-black border-2 border-cyan-400 rounded-xl px-5 py-5 text-lg font-bold text-white placeholder:text-cyan-300 outline-none shadow-[0_0_20px_rgba(34,211,238,0.55)]"
+    />
+
+    <input
+      type="number"
+      placeholder="Units Tokens"
+      value={nassauUnitsTokens}
+      onChange={(e) => setNassauUnitsTokens(e.target.value)}
+      className="bg-black border-2 border-cyan-400 rounded-xl px-5 py-5 text-lg font-bold text-white placeholder:text-cyan-300 outline-none shadow-[0_0_20px_rgba(34,211,238,0.55)]"
+    />
+
+    <div className="sm:col-span-2 border border-green-400/30 bg-green-500/10 rounded-xl p-4 text-center">
+      <div className="text-xs tracking-[0.25em] text-green-400 font-bold">
+        TOTAL ENTRY TOKENS
+      </div>
+
+      <div className="text-3xl font-extrabold text-white mt-1">
+        {nassauTotalTokens}
+      </div>
+    </div>
+  </div>
+)}
 
 {/* ================= GAME PRESETS ================= */}
 

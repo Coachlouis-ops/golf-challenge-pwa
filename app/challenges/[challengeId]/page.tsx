@@ -27,8 +27,16 @@ type Challenge = {
   scoringMethod: string;
   teamFormat: string;
   typeOfGame: string;
-  entryTokens: number;
-  status: string;
+ entryTokens: number;
+
+nassauTokens?: {
+  front9: number;
+  back9: number;
+  game: number;
+  units: number;
+};
+
+status: string;
   creatorUid: string;
   participants?: string[];
   joinCode?: string;
@@ -61,8 +69,21 @@ export default function ChallengeDetailPage() {
   const [loading, setLoading] = useState(true);
   const [challenge, setChallenge] = useState<Challenge | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [scoreInputs, setScoreInputs] = useState<Record<string, string>>({});
-  const [updating, setUpdating] = useState(false);
+const [scoreInputs, setScoreInputs] = useState<Record<string, string>>({});
+
+const [nassauResults, setNassauResults] = useState<
+  Record<
+    string,
+    {
+      front9: string;
+      back9: string;
+      game: string;
+      units: string;
+    }
+  >
+>({});
+
+const [updating, setUpdating] = useState(false);
 
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState<Profile[]>([]);
@@ -102,8 +123,18 @@ const [scoreboardUpdated, setScoreboardUpdated] = useState(false);
   scoringMethod: data.scoringMethod || "—",
   teamFormat: data.teamFormat || "—",
   typeOfGame: data.typeOfGame || "—",
-  entryTokens: data.entryTokens || 0,
-  status: data.status || "—",
+ entryTokens: data.entryTokens || 0,
+
+nassauTokens: data.nassauTokens
+  ? {
+      front9: Number(data.nassauTokens.front9 || 0),
+      back9: Number(data.nassauTokens.back9 || 0),
+      game: Number(data.nassauTokens.game || 0),
+      units: Number(data.nassauTokens.units || 0),
+    }
+  : undefined,
+
+status: data.status || "â€”",
   creatorUid: data.creatorUid,
   participants: data.participants || [],
   joinCode: data.joinCode,
@@ -256,12 +287,23 @@ if (
 
       const updateScoreboard = httpsCallable(functions, "updateScoreboard");
 
-      const scores = Object.entries(scoreInputs).map(([uid, score]) => ({
+    const scores =
+  challenge.typeOfGame === "NASSAU"
+    ? players.map((player) => ({
+        uid: player.uid,
+        nassau: {
+          front9: nassauResults[player.uid]?.front9 || "",
+          back9: nassauResults[player.uid]?.back9 || "",
+          game: nassauResults[player.uid]?.game || "",
+          units: nassauResults[player.uid]?.units || "",
+        },
+      }))
+    : Object.entries(scoreInputs).map(([uid, score]) => ({
         uid,
         score,
       }));
 
-    await updateScoreboard({
+await updateScoreboard({
   challengeId,
   scores,
 });
@@ -740,40 +782,84 @@ const canFinalize =
           Score / Result for {player.displayName}
         </label>
 
-        {challenge?.typeOfGame?.toLowerCase().includes("match") ? (
-          <select
-            value={scoreInputs[player.uid] || ""}
-            onChange={(e) => {
-              setScoreInputs((prev) => ({
-                ...prev,
-                [player.uid]: e.target.value,
-              }));
-              setScoreboardUpdated(false);
-            }}
-            disabled={challenge?.status === "completed"}
-            className="w-full border-2 border-red-500 bg-white text-black text-base font-bold rounded-xl p-4 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-red-400"
-          >
-            <option value="">SELECT RESULT</option>
-            <option value="win">WIN</option>
-            <option value="lost">LOST</option>
-            <option value="draw">DRAW</option>
-          </select>
-        ) : (
-          <input
-            type="text"
-            value={scoreInputs[player.uid] || ""}
-            onChange={(e) => {
-              setScoreInputs((prev) => ({
-                ...prev,
-                [player.uid]: e.target.value,
-              }));
-              setScoreboardUpdated(false);
-            }}
-            placeholder="SCORE / POINTS / WIN / LOST / DRAW"
-            disabled={challenge?.status === "completed"}
-            className="w-full border-2 border-red-500 bg-white text-black placeholder:text-gray-600 text-base font-bold rounded-xl p-4 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-red-400"
-          />
-        )}
+      {challenge?.typeOfGame === "NASSAU" ? (
+  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+    {[
+      ["front9", "FRONT 9"],
+      ["back9", "BACK 9"],
+      ["game", "OVERALL GAME"],
+      ["units", "UNITS"],
+    ].map(([key, label]) => (
+      <div key={key} className="flex flex-col gap-2">
+        <div className="text-xs font-extrabold tracking-[0.18em] text-red-300">
+          {label}
+        </div>
+
+        <select
+          value={
+            nassauResults[player.uid]?.[
+              key as "front9" | "back9" | "game" | "units"
+            ] || ""
+          }
+          onChange={(e) => {
+            setNassauResults((prev) => ({
+              ...prev,
+              [player.uid]: {
+                front9: prev[player.uid]?.front9 || "",
+                back9: prev[player.uid]?.back9 || "",
+                game: prev[player.uid]?.game || "",
+                units: prev[player.uid]?.units || "",
+                [key]: e.target.value,
+              },
+            }));
+
+            setScoreboardUpdated(false);
+          }}
+          disabled={challenge?.status === "completed"}
+          className="w-full border-2 border-red-500 bg-white text-black text-base font-bold rounded-xl p-4 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-red-400"
+        >
+          <option value="">SELECT RESULT</option>
+          <option value="win">WIN</option>
+          <option value="lost">LOST</option>
+          <option value="draw">DRAW</option>
+        </select>
+      </div>
+    ))}
+  </div>
+) : challenge?.typeOfGame?.toLowerCase().includes("match") ? (
+  <select
+    value={scoreInputs[player.uid] || ""}
+    onChange={(e) => {
+      setScoreInputs((prev) => ({
+        ...prev,
+        [player.uid]: e.target.value,
+      }));
+      setScoreboardUpdated(false);
+    }}
+    disabled={challenge?.status === "completed"}
+    className="w-full border-2 border-red-500 bg-white text-black text-base font-bold rounded-xl p-4 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-red-400"
+  >
+    <option value="">SELECT RESULT</option>
+    <option value="win">WIN</option>
+    <option value="lost">LOST</option>
+    <option value="draw">DRAW</option>
+  </select>
+) : (
+  <input
+    type="text"
+    value={scoreInputs[player.uid] || ""}
+    onChange={(e) => {
+      setScoreInputs((prev) => ({
+        ...prev,
+        [player.uid]: e.target.value,
+      }));
+      setScoreboardUpdated(false);
+    }}
+    placeholder="SCORE / POINTS / WIN / LOST / DRAW"
+    disabled={challenge?.status === "completed"}
+    className="w-full border-2 border-red-500 bg-white text-black placeholder:text-gray-600 text-base font-bold rounded-xl p-4 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-red-400"
+  />
+)}
       </div>
     ))}
 
@@ -798,9 +884,20 @@ const canFinalize =
           updating ||
           challenge?.status === "completed" ||
           players.length === 0 ||
-          !players.every(
-            (player) => (scoreInputs[player.uid] || "").trim() !== ""
-          )
+          !players.every((player) => {
+  if (challenge?.typeOfGame === "NASSAU") {
+    const result = nassauResults[player.uid];
+
+    return (
+      result?.front9 &&
+      result?.back9 &&
+      result?.game &&
+      result?.units
+    );
+  }
+
+  return (scoreInputs[player.uid] || "").trim() !== "";
+})
         }
         className="w-full bg-red-600 border-2 border-red-400 text-white px-5 py-4 rounded-2xl text-lg font-extrabold tracking-wide shadow-[0_0_25px_rgba(255,0,0,0.55)] hover:bg-red-500 hover:shadow-[0_0_35px_rgba(255,0,0,0.8)] hover:scale-[1.02] transition-all disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none"
       >
@@ -808,10 +905,21 @@ const canFinalize =
           ? "UPDATING SCOREBOARD..."
           : players.length === 0
           ? "ADD PLAYERS TO CONTINUE"
-          : !players.every(
-              (player) => (scoreInputs[player.uid] || "").trim() !== ""
-            )
-          ? "ENTER ALL SCORES / RESULTS"
+          : !players.every((player) => {
+    if (challenge?.typeOfGame === "NASSAU") {
+      const result = nassauResults[player.uid];
+
+      return (
+        result?.front9 &&
+        result?.back9 &&
+        result?.game &&
+        result?.units
+      );
+    }
+
+    return (scoreInputs[player.uid] || "").trim() !== "";
+  })
+? "ENTER ALL SCORES / RESULTS"
           : "UPDATE SCOREBOARD"}
       </button>
     </div>

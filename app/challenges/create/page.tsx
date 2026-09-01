@@ -517,8 +517,23 @@ if (
             onChange={(e) =>
               setChallengeTitle(e.target.value)
             }
-            className="bg-black border border-neutral-700 focus:border-green-400 rounded p-3 outline-none transition-all focus:shadow-[0_0_10px_#39FF14]"
-          />
+          className="
+  bg-black
+  border-2 border-cyan-400
+  rounded-xl
+  px-5 py-5
+  text-lg sm:text-xl
+  font-bold
+  text-white
+  placeholder:text-cyan-300
+  placeholder:font-bold
+  outline-none
+  shadow-[0_0_20px_rgba(34,211,238,0.55)]
+  focus:border-cyan-300
+  focus:shadow-[0_0_35px_rgba(34,211,238,0.9)]
+  transition-all duration-300
+"
+/>
 
           <input
             type="number"
@@ -527,8 +542,23 @@ if (
             onChange={(e) =>
               setEntryTokens(e.target.value)
             }
-            className="bg-black border border-neutral-700 focus:border-green-400 rounded p-3 outline-none transition-all focus:shadow-[0_0_10px_#39FF14]"
-          />
+           className="
+  bg-black
+  border-2 border-cyan-400
+  rounded-xl
+  px-5 py-5
+  text-lg sm:text-xl
+  font-bold
+  text-white
+  placeholder:text-cyan-300
+  placeholder:font-bold
+  outline-none
+  shadow-[0_0_20px_rgba(34,211,238,0.55)]
+  focus:border-cyan-300
+  focus:shadow-[0_0_35px_rgba(34,211,238,0.9)]
+  transition-all duration-300
+"
+/>
 
 {/* ================= GAME PRESETS ================= */}
 
@@ -579,8 +609,23 @@ if (
             onChange={(e) =>
               setCourseName(e.target.value)
             }
-            className="bg-black border border-neutral-700 focus:border-green-400 rounded p-3 outline-none transition-all focus:shadow-[0_0_10px_#39FF14]"
-          />
+            className="
+  bg-black
+  border-2 border-cyan-400
+  rounded-xl
+  px-5 py-5
+  text-lg sm:text-xl
+  font-bold
+  text-white
+  placeholder:text-cyan-300
+  placeholder:font-bold
+  outline-none
+  shadow-[0_0_20px_rgba(34,211,238,0.55)]
+  focus:border-cyan-300
+  focus:shadow-[0_0_35px_rgba(34,211,238,0.9)]
+  transition-all duration-300
+"
+/>
 
           <CapsuleGroup
             title="Team Format"

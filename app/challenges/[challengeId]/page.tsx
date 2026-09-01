@@ -697,7 +697,7 @@ const canFinalize =
           <ParticipantsList challengeId={challengeId as string} />
         </div>
 
-        
+
 
                 ENTER RESULTS
               </div>
@@ -765,17 +765,28 @@ const canFinalize =
               </div>
             ))}
 
-            <button
-              onClick={handleUpdateScoreboard}
-              disabled={
-                updating ||
-                challenge?.status === "completed" ||
-                players.length === 0
-              }
-              className="bg-red-600 border-2 border-red-400 text-white px-5 py-4 rounded-2xl text-lg font-extrabold tracking-wide shadow-[0_0_25px_rgba(255,0,0,0.55)] hover:bg-red-500 hover:shadow-[0_0_35px_rgba(255,0,0,0.8)] hover:scale-[1.02] transition-all disabled:opacity-30"
-            >
-              {updating ? "UPDATING SCOREBOARD..." : "UPDATE SCOREBOARD"}
-            </button>
+           <button
+  onClick={handleUpdateScoreboard}
+  disabled={
+    updating ||
+    challenge?.status === "completed" ||
+    players.length === 0 ||
+    !players.every(
+      (player) => (scoreInputs[player.uid] || "").trim() !== ""
+    )
+  }
+  className="bg-red-600 border-2 border-red-400 text-white px-5 py-4 rounded-2xl text-lg font-extrabold tracking-wide shadow-[0_0_25px_rgba(255,0,0,0.55)] hover:bg-red-500 hover:shadow-[0_0_35px_rgba(255,0,0,0.8)] hover:scale-[1.02] transition-all disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none"
+>
+  {updating
+    ? "UPDATING SCOREBOARD..."
+    : players.length === 0
+    ? "ADD PLAYERS TO CONTINUE"
+    : !players.every(
+        (player) => (scoreInputs[player.uid] || "").trim() !== ""
+      )
+    ? "ENTER ALL SCORES / RESULTS"
+    : "UPDATE SCOREBOARD"}
+</button>
           </div>
         )}
 

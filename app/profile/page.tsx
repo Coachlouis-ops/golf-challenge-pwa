@@ -111,12 +111,16 @@ export default function ProfilePage() {
   const router = useRouter();
   const { user } = useAuth();
 
-  const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
-  const [profileExists, setProfileExists] = useState(false);
+ const [loading, setLoading] = useState(true);
+const [saving, setSaving] = useState(false);
+const [isEditing, setIsEditing] = useState(false);
+const [profileExists, setProfileExists] = useState(false);
+const [showClubNotice, setShowClubNotice] = useState(false);
+
 
   const [rankingPosition, setRankingPosition] = useState<RankingPosition>({
+
+
     // GLOBAL
     clubPosition: 0,
     provincePosition: 0,
@@ -588,13 +592,21 @@ export default function ProfilePage() {
             <Input label="Battle Name" value={profile.battleName} onChange={(v) => setProfile({ ...profile, battleName: v })} />
 
             {/* CLUB */}
-            <input
-              ref={clubInputRef}
-              className="w-full bg-[#1f1f1f] border border-gray-500 text-white px-3 py-2 rounded-md focus:border-green-400 focus:outline-none"
-              placeholder="Select Club - No Club Membership Required"
-              value={profile.club}
-              onChange={(e) => setProfile({ ...profile, club: e.target.value })}
-            />
+      
+<div className="space-y-2">
+  <p className="text-xs text-gray-400">
+    Golf Club
+  </p>
+
+  <input
+    ref={clubInputRef}
+    className="w-full bg-[#1f1f1f] border border-gray-500 text-white px-3 py-2 rounded-md focus:border-green-400 focus:outline-none"
+    placeholder="Select Golf Club"
+    value={profile.club}
+    onFocus={() => setShowClubNotice(true)}
+    onChange={(e) => setProfile({ ...profile, club: e.target.value })}
+  />
+</div>
 
             <Input label="Province / State" value={profile.stateProvince} onChange={(v) => setProfile({ ...profile, stateProvince: v })} />
 
@@ -679,6 +691,36 @@ export default function ProfilePage() {
           </div>
         )}
       </div>
+
+{showClubNotice && (
+  <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center px-4">
+    <div className="w-full max-w-md bg-neutral-900 border-2 border-green-500 rounded-2xl p-6 shadow-[0_0_35px_rgba(34,197,94,0.35)] space-y-5">
+      <div className="text-center space-y-3">
+        <h2 className="text-2xl font-extrabold text-green-400">
+          NO CLUB MEMBERSHIP REQUIRED
+        </h2>
+
+        <p className="text-white text-base leading-relaxed">
+          You do not need to be a member of the golf club you select.
+        </p>
+
+        <p className="text-gray-300 text-sm leading-relaxed">
+          Choose any golf club of your choice where you want your Teez Golf Challenges club ranking to be recorded.
+        </p>
+      </div>
+
+      <button
+        type="button"
+        onClick={() => setShowClubNotice(false)}
+        className="w-full bg-green-500 hover:bg-green-400 text-black font-extrabold py-3 rounded-xl transition"
+      >
+        READ
+      </button>
+    </div>
+  </div>
+)}
+
+
 
       {/* RECAPTCHA */}
       <div id="recaptcha-container"></div>

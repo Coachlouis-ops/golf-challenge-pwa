@@ -668,6 +668,35 @@ const canFinalize =
               </div>
 
               <div className="text-3xl font-extrabold text-white mt-1">
+
+    {/* PARTICIPANTS */}
+        <div className="border border-red-500/20 bg-black/30 rounded-2xl p-4 shadow-[0_0_25px_rgba(255,0,0,0.15)]">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <div className="text-red-400 text-xs tracking-[0.25em] font-bold">
+
+
+                CHALLENGE STAGE
+              </div>
+              <div className="text-xl font-bold text-white mt-1">
+
+
+                PARTICIPANTS
+              </div>
+            </div>
+
+            <div className="text-right text-xs text-red-300">
+              {players.length} Joined
+            </div>
+          </div>
+
+          <div className="text-xs text-red-200 mb-4">
+            Players who accepted your challenge are listed below.
+          </div>
+
+          <ParticipantsList challengeId={challengeId as string} />
+        </div>
+
                 ENTER RESULTS
               </div>
             </div>
@@ -788,29 +817,7 @@ const canFinalize =
           </div>
         )}
 
-        {/* PARTICIPANTS */}
-        <div className="border border-red-500/20 bg-black/30 rounded-2xl p-4 shadow-[0_0_25px_rgba(255,0,0,0.15)]">
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <div className="text-red-400 text-xs tracking-[0.25em] font-bold">
-                CHALLENGE STAGE
-              </div>
-              <div className="text-xl font-bold text-white mt-1">
-                PARTICIPANTS
-              </div>
-            </div>
-
-            <div className="text-right text-xs text-red-300">
-              {players.length} Joined
-            </div>
-          </div>
-
-          <div className="text-xs text-red-200 mb-4">
-            Players who accepted your challenge are listed below.
-          </div>
-
-          <ParticipantsList challengeId={challengeId as string} />
-        </div>
+    
 
         {/* PLAYER SUMMARY */}
         <div className="border border-red-500/20 bg-black/30 rounded-2xl p-4 shadow-[0_0_25px_rgba(255,0,0,0.15)]">

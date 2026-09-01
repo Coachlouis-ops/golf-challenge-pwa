@@ -578,7 +578,20 @@ const canFinalize =
 {isCreator && (
 <div className="border rounded p-4 flex flex-col gap-3">
 
-          <h2 className="font-semibold">Invite Players</h2>
+         <div>
+  <div className="text-red-400 text-xs tracking-[0.25em] font-extrabold">
+    STEP 1
+  </div>
+
+  <h2 className="text-2xl font-extrabold text-white mt-1">
+    ADD PLAYERS
+  </h2>
+
+  <p className="text-sm text-red-200 mt-2">
+    Search for each player and send an invite. Players must accept the
+    challenge before their scores/results can be entered.
+  </p>
+</div>
 
           <div className="flex flex-col gap-2">
             <input

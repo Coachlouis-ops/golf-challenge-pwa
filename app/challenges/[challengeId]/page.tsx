@@ -672,139 +672,154 @@ const canFinalize =
        </div>
 )}
 
-               {/* ENTER RESULTS */}
-        {isCreator && (
-          <div className="border-2 border-red-500 bg-neutral-900/95 rounded-2xl p-5 flex flex-col gap-5 shadow-[0_0_35px_rgba(255,0,0,0.45)]">
-            <div>
-              <div className="text-red-400 text-sm tracking-[0.25em] font-extrabold">
-                LIVE MATCH CONTROL
-              </div>
+      {/* PARTICIPANTS */}
+<div className="border border-red-500/20 bg-black/30 rounded-2xl p-4 shadow-[0_0_25px_rgba(255,0,0,0.15)]">
+  <div className="flex items-center justify-between mb-4">
+    <div>
+      <div className="text-red-400 text-xs tracking-[0.25em] font-bold">
+        PLAYERS READY
+      </div>
 
-              <div className="text-3xl font-extrabold text-white mt-1">
+      <div className="text-xl font-bold text-white mt-1">
+        PARTICIPANTS
+      </div>
+    </div>
 
-    {/* PARTICIPANTS */}
-        <div className="border border-red-500/20 bg-black/30 rounded-2xl p-4 shadow-[0_0_25px_rgba(255,0,0,0.15)]">
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <div className="text-red-400 text-xs tracking-[0.25em] font-bold">
+    <div className="text-right text-xs text-red-300">
+      {players.length} Joined
+    </div>
+  </div>
 
+  <div className="text-xs text-red-200 mb-4">
+    Players who accepted your challenge are listed below.
+  </div>
 
-                CHALLENGE STAGE
-              </div>
-              <div className="text-xl font-bold text-white mt-1">
+  <ParticipantsList challengeId={challengeId as string} />
+</div>
 
+{/* ENTER RESULTS */}
+{isCreator && (
+  <div className="border-2 border-red-500 bg-neutral-900/95 rounded-2xl p-5 flex flex-col gap-5 shadow-[0_0_35px_rgba(255,0,0,0.45)]">
 
-                PARTICIPANTS
-              </div>
-            </div>
+    <div>
+      <div className="text-red-400 text-xs tracking-[0.25em] font-extrabold">
+        STEP 2
+      </div>
 
-            <div className="text-right text-xs text-red-300">
-              {players.length} Joined
-            </div>
-          </div>
+      <div className="text-3xl font-extrabold text-white mt-1">
+        ENTER SCORES / RESULTS
+      </div>
+    </div>
 
-          <div className="text-xs text-red-200 mb-4">
-            Players who accepted your challenge are listed below.
-          </div>
+    <div className="text-base font-medium text-white leading-relaxed">
+      Enter a score, points or result for every player.
+    </div>
 
-          <ParticipantsList challengeId={challengeId as string} />
-        </div>
+    <div className="text-sm font-bold text-red-200 bg-black/40 border border-red-500/40 rounded-xl p-3">
+      SCORE / POINTS / WIN / LOST / DRAW
+    </div>
 
+    <div className="text-sm font-semibold text-red-200 bg-red-950/60 border border-red-500 rounded-xl p-3">
+      All players must have a score/result entered before the scoreboard can
+      be updated.
+    </div>
 
+    {players.length === 0 && (
+      <p className="text-base font-semibold text-red-300">
+        STEP LOCKED — Add players and wait for them to accept before entering
+        scores/results.
+      </p>
+    )}
 
-                ENTER RESULTS
-              </div>
-            </div>
+    {players.map((player) => (
+      <div
+        key={player.uid}
+        className="border-2 border-red-500/70 rounded-2xl p-4 bg-neutral-950 flex flex-col gap-3 shadow-[0_0_18px_rgba(255,0,0,0.20)]"
+      >
+        <label className="text-base font-bold text-white">
+          Score / Result for {player.displayName}
+        </label>
 
-            <div className="text-base font-medium text-white leading-relaxed">
-              Enter each player's final score or result below, then select
-              UPDATE SCOREBOARD.
-            </div>
-
-            <div className="text-sm font-semibold text-red-200 bg-red-950/60 border border-red-500 rounded-xl p-3">
-              Scoreboard can be updated while scores are being added. Once the
-              challenge is finalized it cannot be reopened.
-            </div>
-
-            {players.length === 0 && (
-              <p className="text-base font-semibold text-red-300">
-                No players available for scoring yet.
-              </p>
-            )}
-
-            {players.map((player) => (
-              <div
-                key={player.uid}
-                className="border-2 border-red-500/70 rounded-2xl p-4 bg-neutral-950 flex flex-col gap-3 shadow-[0_0_18px_rgba(255,0,0,0.20)]"
-              >
-                <label className="text-base font-bold text-white">
-                  Score for {player.displayName}
-                </label>
-
-                {challenge?.typeOfGame?.toLowerCase().includes("match") ? (
-                  <select
-                    value={scoreInputs[player.uid] || ""}
-                onChange={(e) => {
-  setScoreInputs((prev) => ({
-    ...prev,
-    [player.uid]: e.target.value,
-  }));
-  setScoreboardUpdated(false);
-}}
-                    disabled={challenge?.status === "completed"}
-                    className="w-full border-2 border-red-500 bg-white text-black text-base font-bold rounded-xl p-4 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-red-400"
-                  >
-                    <option value="">SELECT RESULT</option>
-                    <option value="win">WIN</option>
-                    <option value="lost">LOST</option>
-                    <option value="draw">DRAW</option>
-                  </select>
-                ) : (
-                  <input
-                    type="text"
-                    value={scoreInputs[player.uid] || ""}
-                  onChange={(e) => {
-  setScoreInputs((prev) => ({
-    ...prev,
-    [player.uid]: e.target.value,
-  }));
-  setScoreboardUpdated(false);
-}}
-                   placeholder="SCORE / POINTS / WIN / LOST / DRAW"
-                    disabled={challenge?.status === "completed"}
-                    className="w-full border-2 border-red-500 bg-white text-black placeholder:text-gray-600 text-base font-bold rounded-xl p-4 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-red-400"
-                  />
-                )}
-              </div>
-            ))}
-
-           <button
-  onClick={handleUpdateScoreboard}
-  disabled={
-    updating ||
-    challenge?.status === "completed" ||
-    players.length === 0 ||
-    !players.every(
-      (player) => (scoreInputs[player.uid] || "").trim() !== ""
-    )
-  }
-  className="bg-red-600 border-2 border-red-400 text-white px-5 py-4 rounded-2xl text-lg font-extrabold tracking-wide shadow-[0_0_25px_rgba(255,0,0,0.55)] hover:bg-red-500 hover:shadow-[0_0_35px_rgba(255,0,0,0.8)] hover:scale-[1.02] transition-all disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none"
->
-  {updating
-    ? "UPDATING SCOREBOARD..."
-    : players.length === 0
-    ? "ADD PLAYERS TO CONTINUE"
-    : !players.every(
-        (player) => (scoreInputs[player.uid] || "").trim() !== ""
-      )
-    ? "ENTER ALL SCORES / RESULTS"
-    : "UPDATE SCOREBOARD"}
-</button>
-          </div>
+        {challenge?.typeOfGame?.toLowerCase().includes("match") ? (
+          <select
+            value={scoreInputs[player.uid] || ""}
+            onChange={(e) => {
+              setScoreInputs((prev) => ({
+                ...prev,
+                [player.uid]: e.target.value,
+              }));
+              setScoreboardUpdated(false);
+            }}
+            disabled={challenge?.status === "completed"}
+            className="w-full border-2 border-red-500 bg-white text-black text-base font-bold rounded-xl p-4 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-red-400"
+          >
+            <option value="">SELECT RESULT</option>
+            <option value="win">WIN</option>
+            <option value="lost">LOST</option>
+            <option value="draw">DRAW</option>
+          </select>
+        ) : (
+          <input
+            type="text"
+            value={scoreInputs[player.uid] || ""}
+            onChange={(e) => {
+              setScoreInputs((prev) => ({
+                ...prev,
+                [player.uid]: e.target.value,
+              }));
+              setScoreboardUpdated(false);
+            }}
+            placeholder="SCORE / POINTS / WIN / LOST / DRAW"
+            disabled={challenge?.status === "completed"}
+            className="w-full border-2 border-red-500 bg-white text-black placeholder:text-gray-600 text-base font-bold rounded-xl p-4 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-red-400"
+          />
         )}
+      </div>
+    ))}
+
+    {/* STEP 3 - UPDATE SCOREBOARD */}
+    <div className="border-t border-red-500/40 pt-5">
+      <div className="text-red-400 text-xs tracking-[0.25em] font-extrabold">
+        STEP 3
+      </div>
+
+      <div className="text-2xl font-extrabold text-white mt-1 mb-2">
+        UPDATE SCOREBOARD
+      </div>
+
+      <div className="text-sm text-red-200 mb-4">
+        Once every player has a score/result, update the scoreboard before
+        continuing.
+      </div>
+
+      <button
+        onClick={handleUpdateScoreboard}
+        disabled={
+          updating ||
+          challenge?.status === "completed" ||
+          players.length === 0 ||
+          !players.every(
+            (player) => (scoreInputs[player.uid] || "").trim() !== ""
+          )
+        }
+        className="w-full bg-red-600 border-2 border-red-400 text-white px-5 py-4 rounded-2xl text-lg font-extrabold tracking-wide shadow-[0_0_25px_rgba(255,0,0,0.55)] hover:bg-red-500 hover:shadow-[0_0_35px_rgba(255,0,0,0.8)] hover:scale-[1.02] transition-all disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none"
+      >
+        {updating
+          ? "UPDATING SCOREBOARD..."
+          : players.length === 0
+          ? "ADD PLAYERS TO CONTINUE"
+          : !players.every(
+              (player) => (scoreInputs[player.uid] || "").trim() !== ""
+            )
+          ? "ENTER ALL SCORES / RESULTS"
+          : "UPDATE SCOREBOARD"}
+      </button>
+    </div>
+  </div>
+)}
 
 
-             {/* PLAYER SUMMARY */}
+{/* PLAYER SUMMARY */}
         <div className="border border-red-500/20 bg-black/30 rounded-2xl p-4 shadow-[0_0_25px_rgba(255,0,0,0.15)]">
           <div className="mb-4">
             <div className="text-red-400 text-xs tracking-[0.25em] font-bold">

@@ -381,7 +381,18 @@ const snap = await getDoc(doc(db, "challenges", challengeId));
   }
 
   const showResults =
-    challenge.status === "active" || challenge.status === "completed";
+  challenge.status === "active" || challenge.status === "completed";
+
+const allScoresEntered =
+  players.length > 0 &&
+  players.every(
+    (player) => (scoreInputs[player.uid] || "").trim() !== ""
+  );
+
+const canFinalize =
+  allScoresEntered &&
+  scoreboardUpdated &&
+  challenge.status !== "completed";
 
   return (
     <main className="relative min-h-screen flex justify-center px-4 py-12 bg-black text-white overflow-hidden">
@@ -761,13 +772,19 @@ const snap = await getDoc(doc(db, "challenges", challengeId));
               before finalizing.
             </div>
 
-            <button
-              onClick={handleFinalizeChallenge}
-              disabled={finalizing}
-              className="bg-red-600 text-white px-5 py-3 rounded-2xl font-bold tracking-wide hover:bg-red-500 hover:shadow-[0_0_25px_rgba(255,0,0,0.7)] hover:scale-[1.02] transition-all disabled:opacity-40"
-            >
-              {finalizing ? "FINALIZING..." : "FINALIZE CHALLENGE"}
-            </button>
+           <button
+  onClick={handleFinalizeChallenge}
+  disabled={finalizing || !canFinalize}
+  className="bg-red-600 text-white px-5 py-3 rounded-2xl font-bold tracking-wide hover:bg-red-500 hover:shadow-[0_0_25px_rgba(255,0,0,0.7)] hover:scale-[1.02] transition-all disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none"
+>
+  {finalizing
+    ? "FINALIZING..."
+    : !allScoresEntered
+    ? "ENTER ALL SCORES TO CONTINUE"
+    : !scoreboardUpdated
+    ? "UPDATE SCOREBOARD TO CONTINUE"
+    : "FINALIZE CHALLENGE"}
+</button>
           </div>
         )}
 

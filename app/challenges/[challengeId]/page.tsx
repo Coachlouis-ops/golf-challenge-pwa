@@ -839,44 +839,68 @@ const canFinalize =
         </div>
 
 
+{/* STEP 4 - FINALIZE */}
+{isCreator && challenge?.status !== "completed" && players.length > 0 && (
+  <div
+    className={`border rounded-2xl p-5 flex flex-col gap-4 transition-all ${
+      canFinalize
+        ? "border-red-500 bg-red-950/30 shadow-[0_0_30px_rgba(255,0,0,0.35)]"
+        : "border-gray-700 bg-neutral-900/70"
+    }`}
+  >
+    <div>
+      <div
+        className={`text-xs tracking-[0.25em] font-extrabold ${
+          canFinalize ? "text-red-400" : "text-gray-500"
+        }`}
+      >
+        STEP 4
+      </div>
 
-              {/* FINALIZE */}
-        {isCreator && challenge?.status !== "completed" && players.length > 0 && (
-          <div className="border border-red-500/30 bg-red-950/20 rounded-2xl p-5 flex flex-col gap-4 shadow-[0_0_30px_rgba(255,0,0,0.25)]">
-            <div>
-              <div className="text-red-400 text-xs tracking-[0.25em] font-bold">
-                FINAL STEP
-              </div>
-              <div className="text-2xl font-extrabold text-red-200 mt-1">
-                FINALIZE CHALLENGE
-              </div>
-            </div>
+      <div
+        className={`text-2xl font-extrabold mt-1 ${
+          canFinalize ? "text-red-200" : "text-gray-400"
+        }`}
+      >
+        FINALIZE CHALLENGE
+      </div>
+    </div>
 
-            <div className="text-sm text-red-100 leading-relaxed">
-              Once finalized the challenge cannot be reopened. Rankings, results
-              and winnings will lock permanently.
-            </div>
+    {!allScoresEntered ? (
+      <div className="text-sm font-bold text-yellow-300 bg-yellow-950/30 border border-yellow-500/40 rounded-xl p-3">
+        LOCKED — Enter a score/result for every player first.
+      </div>
+    ) : !scoreboardUpdated ? (
+      <div className="text-sm font-bold text-yellow-300 bg-yellow-950/30 border border-yellow-500/40 rounded-xl p-3">
+        LOCKED — Update the scoreboard before finalizing.
+      </div>
+    ) : (
+      <div className="text-sm font-bold text-green-300 bg-green-950/30 border border-green-500/40 rounded-xl p-3">
+        READY — Scores/results have been entered and the scoreboard has been
+        updated.
+      </div>
+    )}
 
-            <div className="text-xs text-red-300 bg-black/30 border border-red-500/20 rounded-xl p-3">
-              Make sure all player scores/results have been entered correctly
-              before finalizing.
-            </div>
+    <div className="text-sm text-red-100 leading-relaxed">
+      Check the scoreboard carefully before finalizing. Once finalized, the
+      challenge cannot be reopened.
+    </div>
 
-           <button
-  onClick={handleFinalizeChallenge}
-  disabled={finalizing || !canFinalize}
-  className="bg-red-600 text-white px-5 py-3 rounded-2xl font-bold tracking-wide hover:bg-red-500 hover:shadow-[0_0_25px_rgba(255,0,0,0.7)] hover:scale-[1.02] transition-all disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none"
->
-  {finalizing
-    ? "FINALIZING..."
-    : !allScoresEntered
-    ? "ENTER ALL SCORES TO CONTINUE"
-    : !scoreboardUpdated
-    ? "UPDATE SCOREBOARD TO CONTINUE"
-    : "FINALIZE CHALLENGE"}
-</button>
-          </div>
-        )}
+    <button
+      onClick={handleFinalizeChallenge}
+      disabled={finalizing || !canFinalize}
+      className="bg-red-600 text-white px-5 py-4 rounded-2xl text-lg font-extrabold tracking-wide hover:bg-red-500 hover:shadow-[0_0_25px_rgba(255,0,0,0.7)] hover:scale-[1.02] transition-all disabled:bg-gray-700 disabled:text-gray-400 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none"
+    >
+      {finalizing
+        ? "FINALIZING..."
+        : !allScoresEntered
+        ? "ENTER ALL SCORES TO CONTINUE"
+        : !scoreboardUpdated
+        ? "UPDATE SCOREBOARD TO CONTINUE"
+        : "FINALIZE CHALLENGE"}
+    </button>
+  </div>
+)}
 
     
 

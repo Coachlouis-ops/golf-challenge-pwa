@@ -697,6 +697,8 @@ const canFinalize =
           <ParticipantsList challengeId={challengeId as string} />
         </div>
 
+        
+
                 ENTER RESULTS
               </div>
             </div>
@@ -778,6 +780,26 @@ const canFinalize =
         )}
 
 
+             {/* PLAYER SUMMARY */}
+        <div className="border border-red-500/20 bg-black/30 rounded-2xl p-4 shadow-[0_0_25px_rgba(255,0,0,0.15)]">
+          <div className="mb-4">
+            <div className="text-red-400 text-xs tracking-[0.25em] font-bold">
+
+
+
+              LIVE SCOREBOARD
+            </div>
+            <div className="text-xl font-bold text-white mt-1">
+
+
+              PLAYER SUMMARY
+            </div>
+          </div>
+
+          <PlayerSummaryList challengeId={challengeId as string} />
+        </div>
+
+
 
               {/* FINALIZE */}
         {isCreator && challenge?.status !== "completed" && players.length > 0 && (
@@ -819,25 +841,16 @@ const canFinalize =
 
     
 
-        {/* PLAYER SUMMARY */}
-        <div className="border border-red-500/20 bg-black/30 rounded-2xl p-4 shadow-[0_0_25px_rgba(255,0,0,0.15)]">
-          <div className="mb-4">
-            <div className="text-red-400 text-xs tracking-[0.25em] font-bold">
-              LIVE SCOREBOARD
-            </div>
-            <div className="text-xl font-bold text-white mt-1">
-              PLAYER SUMMARY
-            </div>
-          </div>
-
-          <PlayerSummaryList challengeId={challengeId as string} />
-        </div>
+   
 
         {/* RESULTS */}
         {showResults && (
           <div className="border border-red-500/20 bg-black/30 rounded-2xl p-4 shadow-[0_0_25px_rgba(255,0,0,0.15)]">
             <div className="mb-4">
               <div className="text-red-400 text-xs tracking-[0.25em] font-bold">
+
+
+
                 FINAL RESULTS
               </div>
               <div className="text-xl font-bold text-white mt-1">RESULTS</div>

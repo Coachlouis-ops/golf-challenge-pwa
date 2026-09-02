@@ -298,92 +298,6 @@ const [clubNoticeRead, setClubNoticeRead] = useState(false);
   }, [isEditing]);
 
 
-  async function saveProfile() {
-    if (!user) return;
-
-    const uid = user.uid;
-
-    // DOB VALIDATION (YYYY/MM/DD)
-    const dobRegex = /^\d{4}\/\d{2}\/\d{2}$/;
-    if (!dobRegex.test(profile.dateOfBirth)) {
-      alert("Date of Birth must be in format YYYY/MM/DD (e.g. 1977/12/30)");
-      return;
-    }
-
-    setSaving(true);
-
-    try {
-      // -------------------------------------------------
-      // FORMAT PHONE NUMBER
-      // -------------------------------------------------
-      let formattedPhone = profile.phoneNumber.replace(/\s/g, "").replace(/-/g, "");
-
-      // -------------------------------------------------
-      // SOUTH AFRICA PHONE NORMALIZATION
-      // ACCEPTS:
-      // 0636501619
-      // +27636501619
-      // 27636501619
-      // -------------------------------------------------
-      if (formattedPhone.startsWith("0")) {
-        formattedPhone = "+27" + formattedPhone.substring(1);
-      } else if (formattedPhone.startsWith("27")) {
-        formattedPhone = "+" + formattedPhone;
-      } else if (!formattedPhone.startsWith("+27")) {
-        alert("Phone number must be South African format");
-        setSaving(false);
-        return;
-      }
-
-      // -------------------------------------------------
-      // SEARCH INDEX
-      // -------------------------------------------------
-      const searchIndex = `${profile.name} ${profile.surname} ${profile.battleName} ${profile.club} ${profile.country} ${profile.stateProvince}`.toLowerCase();
-
-      // -------------------------------------------------
-      // SAVE PROFILE
-      // -------------------------------------------------
-      await setDoc(
-        doc(db, "profiles", uid),
-        {
-          ...profile,
-          uid,
-          phoneNumber: formattedPhone,
-
-          // -------------------------------------------------
-          // RESET VERIFICATION ONLY IF PHONE CHANGED
-          // -------------------------------------------------
-          phoneVerified:
-            profile.phoneNumber === formattedPhone
-              ? (profile as any).phoneVerified ?? false
-              : false,
-          phoneVerifiedAt:
-            profile.phoneNumber === formattedPhone
-              ? (profile as any).phoneVerifiedAt ?? null
-              : null,
-
-          searchIndex,
-          updatedAt: serverTimestamp(),
-          createdAt: serverTimestamp(),
-        },
-        { merge: true }
-      );
-
-      alert(
-  "Profile saved successfully. Continue to phone verification to complete your account setup."
-);
-      setProfileExists(true);
-      setIsEditing(false);
-
-      // -------------------------------------------------
-      // ONLY VERIFY DURING FIRST SETUP
-      // -------------------------------------------------
-      if (!(profile as any).phoneVerified) {
-        localStorage.setItem("phoneVerificationUid", uid);
-        router.push("/verify-phone");
-        return;
-      }
-   /* SAVE PROFILE */
     /* SAVE PROFILE */
   async function saveProfile() {
     if (!user) return;
@@ -457,6 +371,7 @@ const [clubNoticeRead, setClubNoticeRead] = useState(false);
       setProfileExists(true);
       setIsEditing(false);
 
+      // NEXT STEP: PAYMENT
       router.push("/payment");
     } catch (err: any) {
       console.error(err);
@@ -469,6 +384,7 @@ const [clubNoticeRead, setClubNoticeRead] = useState(false);
       setSaving(false);
     }
   }
+
 
   if (!user) {
     return (

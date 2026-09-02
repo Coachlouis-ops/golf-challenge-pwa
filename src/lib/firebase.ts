@@ -1,11 +1,9 @@
-
 import { initializeApp } from "firebase/app";
 import {
   getAuth,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   signOut,
-  sendEmailVerification,
 
   // -----------------------------------
   // PHONE OTP
@@ -44,19 +42,14 @@ export const storage = getStorage(app);
 
 /* ===== FUNCTIONS ===== */
 export const functions = getFunctions(app, "europe-west1");
+
 /* ===== AUTH HELPERS ===== */
 export async function login(email: string, password: string) {
   return signInWithEmailAndPassword(auth, email, password);
 }
 
 export async function register(email: string, password: string) {
-  const userCred = await createUserWithEmailAndPassword(auth, email, password);
-
-  await sendEmailVerification(userCred.user, {
-    url: "https://www.teezgolfchallenges.com/verify-success",
-  });
-
-  return userCred;
+  return createUserWithEmailAndPassword(auth, email, password);
 }
 
 export async function logout() {

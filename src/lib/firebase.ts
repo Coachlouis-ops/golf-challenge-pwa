@@ -8,8 +8,7 @@ import {
   // -----------------------------------
   // PHONE OTP
   // -----------------------------------
-  RecaptchaVerifier,
-  signInWithPhoneNumber,
+
 } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getFunctions } from "firebase/functions";
@@ -31,8 +30,7 @@ export const auth = getAuth(app);
 
 // -------------------------------------------------
 // PHONE OTP EXPORTS
-// -------------------------------------------------
-export { RecaptchaVerifier, signInWithPhoneNumber };
+
 
 /* ===== FIRESTORE ===== */
 export const db = getFirestore(app);

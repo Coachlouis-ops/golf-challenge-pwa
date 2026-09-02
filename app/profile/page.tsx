@@ -384,6 +384,7 @@ const [clubNoticeRead, setClubNoticeRead] = useState(false);
         return;
       }
    /* SAVE PROFILE */
+    /* SAVE PROFILE */
   async function saveProfile() {
     if (!user) return;
 
@@ -411,10 +412,6 @@ const [clubNoticeRead, setClubNoticeRead] = useState(false);
 
       // -------------------------------------------------
       // SOUTH AFRICA PHONE NORMALIZATION
-      // ACCEPTS:
-      // 0636501619
-      // +27636501619
-      // 27636501619
       // -------------------------------------------------
       if (formattedPhone.startsWith("0")) {
         formattedPhone =
@@ -449,7 +446,6 @@ const [clubNoticeRead, setClubNoticeRead] = useState(false);
         { merge: true }
       );
 
-      // Keep local profile in sync with saved phone format
       setProfile((prev) => ({
         ...prev,
         phoneNumber: formattedPhone,
@@ -461,9 +457,6 @@ const [clubNoticeRead, setClubNoticeRead] = useState(false);
       setProfileExists(true);
       setIsEditing(false);
 
-      // -------------------------------------------------
-      // NEXT SETUP STEP: SUBSCRIPTION PAYMENT
-      // -------------------------------------------------
       router.push("/payment");
     } catch (err: any) {
       console.error(err);

@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useAuth } from "./AuthContext";
@@ -46,22 +45,10 @@ export default function RequireAuth({
 
     (async () => {
       try {
-        // 🔥 HARD SYNC WITH FIREBASE
-        await user.reload();
-
-        // 🔥 IMPORTANT: ALWAYS READ FROM AUTH (NOT STALE OBJECT)
-        const freshUser = user;
-
-        // 🔴 EMAIL VERIFICATION CHECK (AFTER RELOAD ONLY)
-        if (!freshUser.emailVerified) {
-          if (pathname !== "/verify-email") {
-            router.replace("/verify-email");
-          }
-          return;
-        }
-
-        // 🔴 PROFILE CHECK
-        const ref = doc(db, "profiles", freshUser.uid);
+        // -------------------------------------------------
+        // PROFILE CHECK
+        // -------------------------------------------------
+        const ref = doc(db, "profiles", user.uid);
         const snap = await getDoc(ref);
 
         if (!snap.exists()) {
@@ -85,7 +72,7 @@ export default function RequireAuth({
     })();
   }, [user, loading, router, pathname]);
 
-  // 🔒 BLOCK RENDER UNTIL EVERYTHING IS VERIFIED
+  // BLOCK RENDER UNTIL ACCOUNT CHECK IS COMPLETE
   if (loading || checking) return null;
 
   return <>{children}</>;

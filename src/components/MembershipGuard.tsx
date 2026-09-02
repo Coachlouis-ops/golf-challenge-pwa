@@ -24,17 +24,10 @@ export default function MembershipGuard({
     }
 
     (async () => {
-      await user.reload();
-      const freshUser = user;
-
-      // ---------------- EMAIL CHECK ----------------
-      if (!freshUser.emailVerified) {
-        router.replace("/verify-email");
-        return;
-      }
+      const uid = user.uid;
 
       // ---------------- PROFILE CHECK ----------------
-      const profileRef = doc(db, "profiles", freshUser.uid);
+      const profileRef = doc(db, "profiles", uid);
       const profileSnap = await getDoc(profileRef);
 
       if (!profileSnap.exists()) {
@@ -55,14 +48,8 @@ export default function MembershipGuard({
         return;
       }
 
-      // ---------------- PHONE CHECK ----------------
-      if (!profile.phoneVerified) {
-        router.replace("/verify-phone");
-        return;
-      }
-
       // ---------------- SUBSCRIPTION CHECK ----------------
-      const userRef = doc(db, "users", freshUser.uid);
+      const userRef = doc(db, "users", uid);
       const userSnap = await getDoc(userRef);
 
       if (!userSnap.exists()) {
@@ -76,14 +63,6 @@ export default function MembershipGuard({
         router.replace("/payment");
         return;
       }
-
-      
-      if (userData.subscriptionStatus !== "active") {
-        router.replace("/payment");
-        return;
-      }
-
-      setAllowed(true);
 
       setAllowed(true);
     })();

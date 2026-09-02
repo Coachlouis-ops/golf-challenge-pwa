@@ -29,25 +29,21 @@ export default function RegisterPage() {
     try {
       setLoading(true);
 
-      const credential = await createUserWithEmailAndPassword(
+      await createUserWithEmailAndPassword(
         auth,
-        email,
+        email.trim().toLowerCase(),
         password
       );
 
-      await fetch("/api/send-verification", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          uid: credential.user.uid,
-          email: credential.user.email,
-        }),
-      });
-
-      router.push("/verify-email");
+      router.push("/profile");
     } catch (error: any) {
+      if (error?.code === "auth/email-already-in-use") {
+        alert(
+          "An account already exists with this email address. Please login instead."
+        );
+        return;
+      }
+
       alert(error?.message || "Account registration failed.");
     } finally {
       setLoading(false);
@@ -61,8 +57,8 @@ export default function RegisterPage() {
       </h1>
 
       <p className="text-sm text-gray-400 text-center max-w-md">
-        Register your account, verify your email, create your player profile,
-        verify your mobile number, and activate your subscription.
+        Register your account, create your player profile, and activate your
+        subscription.
       </p>
 
       <input

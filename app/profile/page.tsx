@@ -3,8 +3,9 @@
 
 import { useEffect, useState, useRef } from "react";
 import { useAuth } from "@/src/lib/AuthContext";
-import { db } from "@/src/lib/firebase";
-import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
+import { db, functions } from "@/src/lib/firebase";
+import { doc, getDoc } from "firebase/firestore";
+import { httpsCallable } from "firebase/functions";
 import { countries } from "@/src/lib/countries";
 import { useRouter } from "next/navigation";
 
@@ -302,8 +303,6 @@ const [clubNoticeRead, setClubNoticeRead] = useState(false);
   async function saveProfile() {
     if (!user) return;
 
-    const uid = user.uid;
-
     // DOB VALIDATION (YYYY/MM/DD)
     const dobRegex = /^\d{4}\/\d{2}\/\d{2}$/;
 
@@ -314,30 +313,14 @@ const [clubNoticeRead, setClubNoticeRead] = useState(false);
       return;
     }
 
+    if (!profile.phoneNumber.trim()) {
+      alert("Please enter your cellphone number.");
+      return;
+    }
+
     setSaving(true);
 
     try {
-      // -------------------------------------------------
-      // FORMAT PHONE NUMBER
-      // -------------------------------------------------
-      let formattedPhone = profile.phoneNumber
-        .replace(/\s/g, "")
-        .replace(/-/g, "");
-
-      // -------------------------------------------------
-      // SOUTH AFRICA PHONE NORMALIZATION
-      // -------------------------------------------------
-      if (formattedPhone.startsWith("0")) {
-        formattedPhone =
-          "+27" + formattedPhone.substring(1);
-      } else if (formattedPhone.startsWith("27")) {
-        formattedPhone = "+" + formattedPhone;
-      } else if (!formattedPhone.startsWith("+27")) {
-        alert("Phone number must be South African format");
-        setSaving(false);
-        return;
-      }
-
       // -------------------------------------------------
       // SEARCH INDEX
       // -------------------------------------------------
@@ -345,24 +328,26 @@ const [clubNoticeRead, setClubNoticeRead] = useState(false);
         `${profile.name} ${profile.surname} ${profile.battleName} ${profile.club} ${profile.country} ${profile.stateProvince}`.toLowerCase();
 
       // -------------------------------------------------
-      // SAVE PROFILE
+      // SECURE SERVER-SIDE PROFILE SAVE
       // -------------------------------------------------
-      await setDoc(
-        doc(db, "profiles", uid),
-        {
-          ...profile,
-          uid,
-          phoneNumber: formattedPhone,
-          searchIndex,
-          updatedAt: serverTimestamp(),
-          createdAt: serverTimestamp(),
-        },
-        { merge: true }
+      const savePlayerProfile = httpsCallable(
+        functions,
+        "savePlayerProfile"
       );
+
+      const result: any = await savePlayerProfile({
+        ...profile,
+        searchIndex,
+      });
+
+      const savedPhone =
+        result?.data?.phoneNumber ||
+        profile.phoneNumber;
 
       setProfile((prev) => ({
         ...prev,
-        phoneNumber: formattedPhone,
+        uid: user.uid,
+        phoneNumber: savedPhone,
         searchIndex,
       }));
 
@@ -374,10 +359,52 @@ const [clubNoticeRead, setClubNoticeRead] = useState(false);
       // NEXT STEP: PAYMENT
       router.push("/payment");
     } catch (err: any) {
-      console.error(err);
+      console.error("PROFILE SAVE ERROR:", err);
+
+      const errorCode =
+        String(err?.code || "").toLowerCase();
+
+      const errorMessage =
+        String(err?.message || "");
+
+      if (
+        errorCode.includes("already-exists") &&
+        errorMessage
+          .toLowerCase()
+          .includes("cellphone")
+      ) {
+        alert(
+          "This cellphone number is already registered to another Teez account. Please use a different cellphone number."
+        );
+        return;
+      }
+
+      if (
+        errorCode.includes("already-exists") &&
+        errorMessage
+          .toLowerCase()
+          .includes("email")
+      ) {
+        alert(
+          "This email address is already registered to another Teez account. Please login to the existing account."
+        );
+        return;
+      }
+
+      if (
+        errorCode.includes("invalid-argument") &&
+        errorMessage
+          .toLowerCase()
+          .includes("phone")
+      ) {
+        alert(
+          "Please enter a valid South African cellphone number, for example 0631234567."
+        );
+        return;
+      }
 
       alert(
-        err?.message ||
+        errorMessage ||
           "Failed to save profile. Please try again."
       );
     } finally {
@@ -727,10 +754,6 @@ onFocus={() => {
   </div>
 )}
 
-
-
-      {/* RECAPTCHA */}
-      <div id="recaptcha-container"></div>
     </main>
   );
 }

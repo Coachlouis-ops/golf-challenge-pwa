@@ -15,7 +15,9 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(
+    event: React.FormEvent<HTMLFormElement>
+  ) {
     event.preventDefault();
 
     setError(null);
@@ -24,14 +26,7 @@ export default function LoginPage() {
     try {
       const userCredential = await login(email, password);
 
-      await userCredential.user.reload();
-
       const currentUser = userCredential.user;
-
-      if (!currentUser.emailVerified) {
-        router.replace("/verify-email");
-        return;
-      }
 
       await handleRouting(currentUser.uid);
     } catch (error: any) {
@@ -84,22 +79,8 @@ export default function LoginPage() {
       return;
     }
 
-    // PHONE VERIFICATION CHECK
-    if (!profileData.phoneVerified) {
-      router.replace("/verify-phone");
-      return;
-    }
-
     // SUBSCRIPTION CHECK
     if (
-      !userSnapshot.exists() ||
-      userData?.subscriptionStatus !== "active"
-    ) {
-      router.replace("/payment");
-      return;
-    }
-
- if (
       !userSnapshot.exists() ||
       userData?.subscriptionStatus !== "active"
     ) {
@@ -138,7 +119,9 @@ export default function LoginPage() {
             type={showPassword ? "text" : "password"}
             placeholder="Password"
             value={password}
-            onChange={(event) => setPassword(event.target.value)}
+            onChange={(event) =>
+              setPassword(event.target.value)
+            }
             className="w-full bg-black border border-neutral-600 rounded-xl p-3 pr-16 text-white"
             required
           />

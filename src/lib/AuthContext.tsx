@@ -138,8 +138,8 @@ export function AuthProvider({
               division: "",
 
               phoneNumber: "",
-              phoneVerified: false,
 
+              
               stats: {
                 matchesPlayed: 0,
                 wins: 0,

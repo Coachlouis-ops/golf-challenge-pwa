@@ -477,26 +477,128 @@ export default function MyCareerPage() {
 </section>
 
 
-          {/* PLAYER VAULT */}
+         {/* GAME BOOSTER BOARD */}
 
-          <section>
-            <SectionHeading
-              eyebrow="CAREER REWARDS"
-              title="Player Vault"
-              description="Career milestones earn access to mystery rewards"
-            />
+<section>
+  <SectionHeading
+    eyebrow="PLAYER BOOSTERS"
+    title="Game Booster Board"
+    description="Build your career, unlock mystery Booster Balls and earn rewards"
+  />
 
-            <ActionTile
-              code="VAULT"
-              title="Open Player Vault"
-              text="View Vault Keys, career milestones and available mystery coins."
-              onClick={() =>
-                router.push("/profile/rewards")
-              }
-              premium
-            />
-          </section>
+  <button
+    type="button"
+    onClick={() =>
+      router.push("/profile/rewards")
+    }
+    className="group relative w-full overflow-hidden border border-emerald-400/60 bg-[#04110c] text-left shadow-[0_0_34px_rgba(52,211,153,0.14)] transition duration-200 active:scale-[0.99]"
+  >
+    <div className="pointer-events-none absolute -right-20 -top-20 h-48 w-48 rounded-full bg-emerald-400/10 blur-3xl" />
 
+    <div className="pointer-events-none absolute -bottom-20 -left-20 h-44 w-44 rounded-full bg-cyan-400/[0.06] blur-3xl" />
+
+    <div className="relative flex items-center gap-4 border-b border-emerald-400/15 p-5">
+
+      <div className="relative flex h-16 w-16 shrink-0 items-center justify-center rounded-full border-2 border-emerald-300/70 bg-white shadow-[0_0_24px_rgba(52,211,153,0.28)]">
+
+        <div className="absolute inset-[5px] rounded-full border border-slate-300 bg-[radial-gradient(circle_at_30%_30%,#ffffff,#dce5e8)]" />
+
+        <span className="relative z-10 text-[10px] font-black tracking-[0.08em] text-[#06100c]">
+          TEEZ
+        </span>
+
+      </div>
+
+      <div className="min-w-0 flex-1">
+
+        <p className="text-[9px] font-black uppercase tracking-[0.22em] text-emerald-300">
+          Mystery Booster System
+        </p>
+
+        <h3 className="mt-1 text-xl font-black text-white">
+          Game Booster Board
+        </h3>
+
+        <p className="mt-2 text-sm leading-5 text-slate-400">
+          Earn Booster Balls through commitment, activity and performance.
+        </p>
+
+        <p className="mt-3 text-[9px] font-black uppercase tracking-[0.16em] text-emerald-300">
+          Give Your Game the Edge
+        </p>
+
+      </div>
+
+      <span className="text-2xl font-black text-emerald-300 transition group-hover:translate-x-1">
+        ›
+      </span>
+
+    </div>
+
+    <div className="relative grid grid-cols-3 divide-x divide-emerald-400/15">
+
+      <div className="px-3 py-4 text-center">
+        <p className="text-[9px] font-black uppercase tracking-[0.12em] text-slate-500">
+          Board
+        </p>
+
+        <p className="mt-1 text-base font-black text-white">
+          100
+        </p>
+
+        <p className="text-[8px] font-bold uppercase tracking-[0.08em] text-slate-500">
+          Booster Balls
+        </p>
+      </div>
+
+      <div className="px-3 py-4 text-center">
+        <p className="text-[9px] font-black uppercase tracking-[0.12em] text-slate-500">
+          Career
+        </p>
+
+        <p className="mt-1 text-base font-black text-cyan-300">
+          75
+        </p>
+
+        <p className="text-[8px] font-bold uppercase tracking-[0.08em] text-slate-500">
+          Boosters
+        </p>
+      </div>
+
+      <div className="px-3 py-4 text-center">
+        <p className="text-[9px] font-black uppercase tracking-[0.12em] text-slate-500">
+          Rewards
+        </p>
+
+        <p className="mt-1 text-base font-black text-amber-300">
+          25
+        </p>
+
+        <p className="text-[8px] font-bold uppercase tracking-[0.08em] text-slate-500">
+          Boosters
+        </p>
+      </div>
+
+    </div>
+
+    <div className="relative border-t border-emerald-400/15 bg-emerald-400/[0.04] px-5 py-3">
+
+      <div className="flex items-center justify-between">
+
+        <span className="text-[9px] font-black uppercase tracking-[0.14em] text-emerald-300">
+          Open Booster Board
+        </span>
+
+        <span className="text-sm font-black text-emerald-300">
+          100 BALL CHALLENGE
+        </span>
+
+      </div>
+
+    </div>
+
+  </button>
+</section>
 
          {/* LAST CHALLENGE */}
 

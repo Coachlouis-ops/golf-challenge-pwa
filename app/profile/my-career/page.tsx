@@ -208,88 +208,148 @@ export default function MyCareerPage() {
 
 
   return (
-    <main className="min-h-screen bg-[#eef1f4] text-[#111827]">
-      <div className="mx-auto max-w-md pb-14">
+    <main className="min-h-screen bg-[#030608] text-white">
+  <div className="mx-auto max-w-md pb-16">
 
-        {/* HEADER */}
+{/* HEADER */}
 
-        <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/95 px-5 py-4 backdrop-blur">
-          <div className="flex items-center justify-between">
+<header className="sticky top-0 z-30 border-b border-cyan-400/30 bg-[#030608]/95 px-5 py-3 backdrop-blur-xl">
 
-            <button
-              type="button"
-              onClick={() => router.back()}
-              className="flex h-9 w-9 items-center justify-center border border-slate-200 bg-white text-xl text-slate-600"
-              aria-label="Go back"
-            >
-              ‹
-            </button>
+  <div className="flex items-center justify-between">
 
-            <div className="text-center">
-              <p className="text-[10px] font-bold uppercase tracking-[0.26em] text-[#0f5132]">
-                TEEZ Player Career
-              </p>
+    <button
+      type="button"
+      onClick={() => router.back()}
+      className="flex h-10 w-10 items-center justify-center border border-cyan-400/30 bg-cyan-400/[0.05] text-2xl font-black text-cyan-300 shadow-[0_0_16px_rgba(34,211,238,0.15)]"
+      aria-label="Go back"
+    >
+      ‹
+    </button>
 
-              <h1 className="mt-1 text-lg font-black tracking-tight text-[#111827]">
-                MY CAREER
-              </h1>
-            </div>
 
-            <div className="h-9 w-9" />
-          </div>
-        </header>
+    <div className="flex flex-col items-center">
 
-        <div className="space-y-7 px-4 pt-5">
+      <img
+        src="/teez-app-icon-v4.png"
+        alt="TEEZ Golf Challenges"
+        className="h-16 w-16 object-contain drop-shadow-[0_0_14px_rgba(0,174,255,0.75)]"
+      />
 
-          {/* PLAYER HERO */}
+      <p className="mt-1 text-[8px] font-black uppercase tracking-[0.30em] text-cyan-400">
+        TEEZ Player Career
+      </p>
 
-          <section className="overflow-hidden border border-[#1f2937] bg-[#0d1821] shadow-[0_8px_22px_rgba(15,23,42,0.16)]">
+      <h1 className="text-lg font-black tracking-[0.08em] text-white">
+        MY CAREER
+      </h1>
 
-            <div className="border-b border-white/10 px-5 py-5">
+    </div>
 
-              <div className="flex items-start gap-4">
 
-                <div className="flex h-16 w-16 shrink-0 items-center justify-center border border-[#b89b5e] bg-[#14232d]">
-                  <span className="text-lg font-black tracking-tight text-[#d6bd7a]">
-                    TEEZ
-                  </span>
-                </div>
+    <div className="h-10 w-10" />
 
-                <div className="min-w-0 flex-1">
+  </div>
 
-                  <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#9badb7]">
-                    Player Profile
-                  </p>
+</header>
 
-                  <h2 className="mt-1 truncate text-2xl font-black tracking-tight text-white">
-                    {displayName}
-                  </h2>
+       <div className="space-y-8 px-4 pt-5">
 
-                  <p className="mt-1 truncate text-sm text-slate-400">
-                    {career?.name} {career?.surname}
-                  </p>
+      {/* PLAYER HERO */}
 
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    <ProfilePill
-                      text={
-                        career?.division ||
-                        "Division pending"
-                      }
-                    />
+<section className="relative overflow-hidden border border-cyan-400/30 bg-[#071017] shadow-[0_0_35px_rgba(34,211,238,0.10)]">
 
-                    <ProfilePill
-                      text={
-                        career?.club ||
-                        "Club pending"
-                      }
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
+  <div className="absolute -right-16 -top-16 h-44 w-44 rounded-full bg-cyan-400/10 blur-3xl" />
 
-           
-          </section>
+  <div className="absolute -bottom-20 -left-16 h-40 w-40 rounded-full bg-emerald-400/[0.06] blur-3xl" />
+
+  <div className="relative border-b border-white/10 p-5">
+
+    <div className="flex items-start gap-4">
+
+      <div className="flex h-16 w-16 shrink-0 items-center justify-center border border-cyan-400/40 bg-cyan-400/[0.06] shadow-[0_0_20px_rgba(34,211,238,0.10)]">
+
+        <span className="text-sm font-black tracking-[0.12em] text-cyan-300">
+          TEEZ
+        </span>
+
+      </div>
+
+      <div className="min-w-0 flex-1">
+
+        <div className="flex items-center gap-2">
+
+          <span className="h-2 w-2 bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
+
+          <p className="text-[9px] font-black uppercase tracking-[0.24em] text-cyan-400">
+            Active Player
+          </p>
+
+        </div>
+
+        <h2 className="mt-2 truncate text-2xl font-black tracking-tight text-white">
+          {displayName}
+        </h2>
+
+        <p className="mt-1 truncate text-sm font-medium text-slate-400">
+          {career?.name} {career?.surname}
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <div className="mt-5 flex flex-wrap gap-2">
+
+      <ProfilePill
+        text={
+          career?.division ||
+          "Division pending"
+        }
+      />
+
+      <ProfilePill
+        text={
+          career?.club ||
+          "Club pending"
+        }
+      />
+
+    </div>
+
+  </div>
+
+
+  <div className="grid grid-cols-2 divide-x divide-white/10">
+
+    <div className="px-5 py-4">
+
+      <p className="text-[9px] font-black uppercase tracking-[0.18em] text-slate-500">
+        Career Status
+      </p>
+
+      <p className="mt-1 text-sm font-black text-emerald-400">
+        ACTIVE
+      </p>
+
+    </div>
+
+    <div className="px-5 py-4">
+
+      <p className="text-[9px] font-black uppercase tracking-[0.18em] text-slate-500">
+        Competition
+      </p>
+
+      <p className="mt-1 text-sm font-black text-cyan-300">
+        TEEZ PLAYER
+      </p>
+
+    </div>
+
+  </div>
+
+</section>
+
 
    {/* CAREER GUIDE */}
 
@@ -470,61 +530,69 @@ export default function MyCareerPage() {
 
        {/* CURRENT RANKINGS */}
 
-<section>
-  <SectionHeading
-    eyebrow="OFFICIAL STANDINGS"
-    title="Current Rankings"
-    description="Select a ranking level to view the full TEEZ leaderboard"
-  />
+<section className="relative overflow-hidden border border-cyan-400/20 bg-[#050b10] p-4 shadow-[0_0_40px_rgba(34,211,238,0.08)]">
 
-  <div className="grid grid-cols-2 gap-3">
+  <div className="pointer-events-none absolute -right-20 -top-20 h-48 w-48 rounded-full bg-cyan-400/[0.07] blur-3xl" />
 
-    <RankingTile
-      code="CLB"
-      title="Club"
-      value={ranking.clubPosition}
-      onClick={() =>
-        router.push(
-          "/profile/my-career/rankings/club"
-        )
-      }
+  <div className="relative">
+
+    <SectionHeading
+      eyebrow="OFFICIAL STANDINGS"
+      title="Current Rankings"
+      description="Select a ranking level to view the full TEEZ leaderboard"
     />
 
-    <RankingTile
-      code="PRV"
-      title="Province"
-      value={ranking.provincePosition}
-      onClick={() =>
-        router.push(
-          "/profile/my-career/rankings/province"
-        )
-      }
-    />
+    <div className="grid grid-cols-2 gap-3">
 
-    <RankingTile
-      code="NAT"
-      title="National"
-      value={ranking.nationalPosition}
-      onClick={() =>
-        router.push(
-          "/profile/my-career/rankings/national"
-        )
-      }
-    />
+      <RankingTile
+        code="CLB"
+        title="Club"
+        value={ranking.clubPosition}
+        onClick={() =>
+          router.push(
+            "/profile/my-career/rankings/club"
+          )
+        }
+      />
 
-    <RankingTile
-      code="GLB"
-      title="Global"
-      value={ranking.internationalPosition}
-      onClick={() =>
-        router.push(
-          "/profile/my-career/rankings/global"
-        )
-      }
-      premium
-    />
+      <RankingTile
+        code="PRV"
+        title="Province"
+        value={ranking.provincePosition}
+        onClick={() =>
+          router.push(
+            "/profile/my-career/rankings/province"
+          )
+        }
+      />
+
+      <RankingTile
+        code="NAT"
+        title="National"
+        value={ranking.nationalPosition}
+        onClick={() =>
+          router.push(
+            "/profile/my-career/rankings/national"
+          )
+        }
+      />
+
+      <RankingTile
+        code="GLB"
+        title="Global"
+        value={ranking.internationalPosition}
+        onClick={() =>
+          router.push(
+            "/profile/my-career/rankings/global"
+          )
+        }
+        premium
+      />
+
+    </div>
 
   </div>
+
 </section>
 
 
@@ -793,20 +861,26 @@ function SectionHeading({
   description: string;
 }) {
   return (
-    <div className="mb-3">
-      <div className="mb-2 h-[2px] w-8 bg-[#0f5132]" />
+    <div className="mb-4">
 
-      <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#0f5132]">
-        {eyebrow}
-      </p>
+      <div className="mb-3 flex items-center gap-3">
 
-      <h2 className="mt-1 text-xl font-black tracking-tight text-[#111827]">
+        <div className="h-[2px] w-8 bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.7)]" />
+
+        <p className="text-[9px] font-black uppercase tracking-[0.24em] text-cyan-400">
+          {eyebrow}
+        </p>
+
+      </div>
+
+      <h2 className="text-xl font-black tracking-tight text-white">
         {title}
       </h2>
 
-      <p className="mt-1 text-sm leading-5 text-slate-500">
+      <p className="mt-1.5 text-sm leading-5 text-slate-400">
         {description}
       </p>
+
     </div>
   );
 }
@@ -817,7 +891,7 @@ function ProfilePill({
   text: string;
 }) {
   return (
-    <span className="border border-white/15 bg-white/[0.05] px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.12em] text-slate-300">
+    <span className="border border-cyan-400/20 bg-cyan-400/[0.05] px-3 py-1.5 text-[9px] font-black uppercase tracking-[0.14em] text-slate-300">
       {text}
     </span>
   );
@@ -1000,57 +1074,121 @@ function RankingTile({
 }) {
   const hasRanking = value > 0;
 
+  const accent =
+    premium
+      ? "amber"
+      : title === "Club"
+        ? "cyan"
+        : title === "Province"
+          ? "emerald"
+          : title === "National"
+            ? "violet"
+            : "cyan";
+
+  const styles = {
+    cyan: {
+      border: "border-cyan-400/60",
+      glow: "shadow-[0_0_28px_rgba(34,211,238,0.18)]",
+      badge:
+        "border-cyan-400/40 bg-cyan-400/[0.08] text-cyan-300",
+      rank: "text-cyan-300",
+      action:
+        "border-cyan-400/20 bg-cyan-400/[0.07] text-cyan-300",
+    },
+
+    emerald: {
+      border: "border-emerald-400/60",
+      glow: "shadow-[0_0_28px_rgba(52,211,153,0.16)]",
+      badge:
+        "border-emerald-400/40 bg-emerald-400/[0.08] text-emerald-300",
+      rank: "text-emerald-300",
+      action:
+        "border-emerald-400/20 bg-emerald-400/[0.07] text-emerald-300",
+    },
+
+    violet: {
+      border: "border-violet-400/60",
+      glow: "shadow-[0_0_28px_rgba(167,139,250,0.16)]",
+      badge:
+        "border-violet-400/40 bg-violet-400/[0.08] text-violet-300",
+      rank: "text-violet-300",
+      action:
+        "border-violet-400/20 bg-violet-400/[0.07] text-violet-300",
+    },
+
+    amber: {
+      border: "border-amber-400/70",
+      glow: "shadow-[0_0_32px_rgba(251,191,36,0.20)]",
+      badge:
+        "border-amber-400/50 bg-amber-400/[0.08] text-amber-300",
+      rank: "text-amber-300",
+      action:
+        "border-amber-400/20 bg-amber-400/[0.07] text-amber-300",
+    },
+  };
+
+  const current =
+    styles[accent];
+
   return (
     <button
       type="button"
       onClick={onClick}
-      className={`w-full border bg-white p-4 text-left shadow-sm transition active:scale-[0.98] ${
-        premium
-          ? "border-[#c9b37a]"
-          : "border-slate-200"
-      }`}
+      className={`group relative w-full overflow-hidden border bg-[#071017] p-4 text-left transition duration-200 active:scale-[0.98] ${current.border} ${current.glow}`}
     >
-      <div className="flex items-center justify-between">
 
-        <span
-          className={`text-[9px] font-black uppercase tracking-[0.12em] ${
-            premium
-              ? "text-[#9a7531]"
-              : "text-[#0f5132]"
-          }`}
-        >
-          {code}
-        </span>
+      <div className="absolute -right-8 -top-8 h-24 w-24 rounded-full bg-white/[0.03] blur-2xl" />
 
-        <span
-          className={`text-lg font-black ${
-            premium
-              ? "text-[#9a7531]"
-              : "text-[#0f5132]"
-          }`}
-        >
-          ›
-        </span>
-      </div>
+      <div className="relative">
 
-      <p className="mt-4 text-xs font-bold uppercase tracking-[0.08em] text-slate-500">
-        {title}
-      </p>
+        <div className="flex items-center justify-between">
 
-      <p className="mt-1 text-3xl font-black tracking-tight text-[#111827]">
-        {hasRanking ? `#${value}` : "—"}
-      </p>
+          <span
+            className={`inline-flex h-8 min-w-10 items-center justify-center border px-2 text-[9px] font-black uppercase tracking-[0.14em] ${current.badge}`}
+          >
+            {code}
+          </span>
 
-      <div className="mt-3 border-t border-slate-100 pt-3">
-        <p
-          className={`text-[10px] font-black uppercase tracking-[0.12em] ${
-            premium
-              ? "text-[#9a7531]"
-              : "text-[#0f5132]"
-          }`}
-        >
-          View Full Ranking
+          <span className="text-xl font-black text-white/70 transition group-hover:translate-x-1">
+            ›
+          </span>
+
+        </div>
+
+        <p className="mt-4 text-[10px] font-black uppercase tracking-[0.14em] text-slate-400">
+          {title} Ranking
         </p>
+
+        <p
+          className={`mt-1 text-4xl font-black tracking-tight ${current.rank}`}
+        >
+          {hasRanking
+            ? `#${value}`
+            : "—"}
+        </p>
+
+        <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.10em] text-slate-500">
+          {hasRanking
+            ? "Current Position"
+            : "Not Ranked"}
+        </p>
+
+        <div
+          className={`mt-4 border px-3 py-2.5 ${current.action}`}
+        >
+          <div className="flex items-center justify-between gap-2">
+
+            <span className="text-[9px] font-black uppercase tracking-[0.12em]">
+              Click to Open Full Ranking
+            </span>
+
+            <span className="text-base font-black">
+              ›
+            </span>
+
+          </div>
+        </div>
+
       </div>
     </button>
   );

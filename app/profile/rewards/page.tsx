@@ -17,8 +17,7 @@ export default function GameBoosterBoardPage() {
   const boardProgress =
     (boosterBallsOpened / TOTAL_BOOSTERS) * 100;
 
-  const boardCleared =
-    boosterBallsOpened >= TOTAL_BOOSTERS;
+
 
   return (
     <main className="min-h-screen bg-[#030608] text-white">
@@ -291,69 +290,58 @@ export default function GameBoosterBoardPage() {
           </section>
 
 
-          {/* RACE TO FINAL */}
+         {/* RACE TO FINAL */}
 
-          <section>
+<section>
 
-            <SectionHeading
-              eyebrow="CHAMPIONSHIP ELIGIBILITY"
-              title="Race to the Final"
-              description="The Game Booster Board forms part of your qualification for the Final"
-            />
+  <SectionHeading
+    eyebrow="CHAMPIONSHIP RACE"
+    title="Race to the Final"
+    description="Your Booster Board runs alongside your Race to the Final season"
+  />
 
-            <div
-              className={`border p-5 ${
-                boardCleared
-                  ? "border-emerald-400/60 bg-emerald-400/[0.07]"
-                  : "border-amber-400/50 bg-[#100c04]"
-              }`}
-            >
+  <div className="relative overflow-hidden border border-amber-400/50 bg-[#100c04] p-5 shadow-[0_0_30px_rgba(251,191,36,0.10)]">
 
-              <div className="flex items-center justify-between gap-4">
+    <div className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-amber-400/10 blur-3xl" />
 
-                <div>
+    <div className="relative">
 
-                  <p className="text-[9px] font-black uppercase tracking-[0.16em] text-slate-500">
-                    Booster Board Requirement
-                  </p>
+      <p className="text-[9px] font-black uppercase tracking-[0.18em] text-amber-300">
+        Final Qualification
+      </p>
 
-                  <p
-                    className={`mt-1 text-xl font-black ${
-                      boardCleared
-                        ? "text-emerald-300"
-                        : "text-amber-300"
-                    }`}
-                  >
-                    {boardCleared
-                      ? "BOARD CLEARED"
-                      : `${boosterBallsOpened} / 100 CLEARED`}
-                  </p>
+      <p className="mt-2 text-2xl font-black text-white">
+        TOP 8 + TIES
+      </p>
 
-                </div>
+      <p className="mt-3 text-sm leading-5 text-slate-400">
+        Finish inside the Race to the Final Top 8 to qualify
+        for the season Final. Players tied for the final
+        qualifying position also advance.
+      </p>
 
-                <div
-                  className={`border px-3 py-2 text-[9px] font-black uppercase tracking-[0.10em] ${
-                    boardCleared
-                      ? "border-emerald-400/40 text-emerald-300"
-                      : "border-amber-400/40 text-amber-300"
-                  }`}
-                >
-                  {boardCleared
-                    ? "ELIGIBLE"
-                    : "IN PROGRESS"}
-                </div>
+      <div className="mt-5 border-t border-amber-400/15 pt-4">
 
-              </div>
+        <p className="text-[9px] font-black uppercase tracking-[0.14em] text-slate-500">
+          Booster Board
+        </p>
 
-              <p className="mt-4 text-xs leading-5 text-slate-400">
-                A player must clear all 100 Booster Balls
-                and finish inside the qualifying Race to
-                the Final positions to qualify for the Final.
-              </p>
+        <p className="mt-1 text-sm font-black text-emerald-300">
+          {boosterBallsOpened} / {TOTAL_BOOSTERS} CLEARED
+        </p>
 
-            </div>
+        <p className="mt-2 text-xs leading-5 text-slate-500">
+          Booster Board progress does not determine Final
+          qualification.
+        </p>
 
-          </section>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
 
         </div>
 

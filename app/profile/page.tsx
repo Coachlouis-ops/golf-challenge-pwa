@@ -591,7 +591,7 @@ const [clubNoticeRead, setClubNoticeRead] = useState(false);
         href="mailto:admin@teezchallenges.com"
         className="text-cyan-300 font-semibold underline"
       >
-        admin@teezchallenges.com
+        admin@teezgolfchallenges.com
       </a>
     </p>
   </div>

@@ -1,6 +1,11 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { doc, getDoc } from "firebase/firestore";
+
+import { useAuth } from "@/src/lib/AuthContext";
+import { db } from "@/src/lib/firebase";
 
 const TOTAL_BOOSTERS = 200;
 const CAREER_BOOSTERS = 150;
@@ -8,13 +13,97 @@ const REWARD_BOOSTERS = 50;
 
 export default function GameBoosterBoardPage() {
   const router = useRouter();
+  const { user } = useAuth();
 
   // Temporary until the Booster backend is connected.
-  const boosterBallsEarned = 0;
-  const boosterBallsOpened = 0;
-  const boosterProgress = 0;
+  const [boosterBallsEarned, setBoosterBallsEarned] =
+  useState(0);
 
-  const boardProgress =
+const [boosterBallsOpened, setBoosterBallsOpened] =
+  useState(0);
+
+const [openedPositions, setOpenedPositions] =
+  useState<number[]>([]);
+
+const [boosterProgress, setBoosterProgress] =
+  useState(0);
+
+useEffect(() => {
+  if (!user) return;
+
+  async function loadBoosterBoard() {
+    try {
+      const boosterRef = doc(
+        db,
+        "boosterBoards",
+        "2026",
+        "players",
+        user.uid
+      );
+
+      const boosterSnap =
+        await getDoc(boosterRef);
+
+      if (!boosterSnap.exists()) {
+        return;
+      }
+
+      const data = boosterSnap.data();
+
+      const earned = Number(
+        data.boosterBallsEarned ?? 0
+      );
+
+      const opened = Number(
+        data.boosterBallsOpened ?? 0
+      );
+
+      const totalPoints = Number(
+        data.totalBoosterPoints ?? 0
+      );
+
+      setBoosterBallsEarned(
+        Math.max(0, earned - opened)
+      );
+
+      setBoosterBallsOpened(opened);
+
+const positions = Array.isArray(
+  data.openedPositions
+)
+  ? data.openedPositions.map(
+      (position: unknown) =>
+        Number(position)
+    )
+  : [];
+
+setOpenedPositions(
+  positions.filter(
+    (position: number) =>
+      Number.isInteger(position) &&
+      position >= 1 &&
+      position <= TOTAL_BOOSTERS
+  )
+);
+
+setBoosterProgress(
+        Math.min(
+          100,
+          (totalPoints % 1000) / 10
+        )
+      );
+    } catch (error) {
+      console.error(
+        "Unable to load Booster Board:",
+        error
+      );
+    }
+  }
+
+  loadBoosterBoard();
+}, [user]);
+
+const boardProgress =
     (boosterBallsOpened / TOTAL_BOOSTERS) * 100;
 
 
@@ -290,13 +379,17 @@ export default function GameBoosterBoardPage() {
                 {Array.from(
                   { length: TOTAL_BOOSTERS },
                   (_, index) => (
-                    <BoosterPosition
-                      key={index}
-                      number={index + 1}
-                      available={
-                        boosterBallsEarned > 0
-                      }
-                    />
+ <BoosterPosition
+  key={index}
+  number={index + 1}
+  available={
+    boosterBallsEarned > 0 &&
+    !openedPositions.includes(index + 1)
+  }
+  opened={
+    openedPositions.includes(index + 1)
+  }
+/>
                   )
                 )}
 
@@ -402,26 +495,36 @@ function BoosterBall({
 function BoosterPosition({
   number,
   available,
+  opened,
 }: {
   number: number;
   available: boolean;
+  opened: boolean;
 }) {
   return (
     <button
       type="button"
       disabled={!available}
-      className={`relative aspect-square rounded-full border transition ${
-        available
-          ? "border-emerald-300/70 bg-white shadow-[0_0_12px_rgba(52,211,153,0.22)] active:scale-95"
-          : "cursor-default border-slate-600 bg-slate-300 opacity-55"
-      }`}
+     className={`relative aspect-square rounded-full border transition ${
+  opened
+    ? "cursor-default border-amber-400/60 bg-amber-300 opacity-80 shadow-[0_0_10px_rgba(251,191,36,0.25)]"
+    : available
+      ? "border-emerald-300/70 bg-white shadow-[0_0_12px_rgba(52,211,153,0.22)] active:scale-95"
+      : "cursor-default border-slate-600 bg-slate-300 opacity-55"
+}`}
     >
 
       <div className="absolute inset-[3px] rounded-full bg-[radial-gradient(circle_at_30%_30%,#ffffff,#cfd8dc)]" />
 
-      <span className="absolute inset-0 z-10 flex items-center justify-center text-[8px] font-black text-slate-700">
-        {number}
-      </span>
+     <span
+  className={`absolute inset-0 z-10 flex items-center justify-center font-black ${
+    opened
+      ? "text-[10px] text-amber-900"
+      : "text-[8px] text-slate-700"
+  }`}
+>
+  {opened ? "✓" : number}
+</span>
 
     </button>
   );

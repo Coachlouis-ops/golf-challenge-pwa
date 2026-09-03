@@ -3,6 +3,10 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { doc, getDoc } from "firebase/firestore";
+import {
+  getFunctions,
+  httpsCallable,
+} from "firebase/functions";
 
 import { useAuth } from "@/src/lib/AuthContext";
 import { db } from "@/src/lib/firebase";
@@ -27,6 +31,18 @@ const [openedPositions, setOpenedPositions] =
 
 const [boosterProgress, setBoosterProgress] =
   useState(0);
+
+const [openingBall, setOpeningBall] =
+  useState<number | null>(null);
+
+const [revealedBall, setRevealedBall] =
+  useState<{
+    number: number;
+    type: "career" | "reward";
+  } | null>(null);
+
+const [openError, setOpenError] =
+  useState("");
 
 useEffect(() => {
   if (!user) return;
@@ -106,9 +122,87 @@ setBoosterProgress(
 }, [user]);
 
 const boardProgress =
-    (boosterBallsOpened / TOTAL_BOOSTERS) * 100;
+  (boosterBallsOpened / TOTAL_BOOSTERS) * 100;
 
+async function handleOpenBoosterBall(
+  ballNumber: number
+) {
+  if (
+    !user ||
+    boosterBallsEarned <= 0 ||
+    openingBall !== null ||
+    openedPositions.includes(ballNumber)
+  ) {
+    return;
+  }
 
+  try {
+    setOpeningBall(ballNumber);
+    setOpenError("");
+    setRevealedBall(null);
+
+    const functions =
+      getFunctions(undefined, "europe-west1");
+
+    const openBoosterBall =
+      httpsCallable<
+        { ballNumber: number },
+        {
+          success: boolean;
+          ball: {
+            ballNumber: number;
+            ballType: "career" | "reward";
+            boosterBallsEarned: number;
+            boosterBallsOpened: number;
+            boosterBallsAvailable: number;
+          };
+        }
+      >(
+        functions,
+        "openBoosterBall"
+      );
+
+    const response =
+      await openBoosterBall({
+        ballNumber,
+      });
+
+    const result = response.data.ball;
+
+    setOpenedPositions((current) =>
+      Array.from(
+        new Set([
+          ...current,
+          result.ballNumber,
+        ])
+      )
+    );
+
+    setBoosterBallsOpened(
+      result.boosterBallsOpened
+    );
+
+    setBoosterBallsEarned(
+      result.boosterBallsAvailable
+    );
+
+    setRevealedBall({
+      number: result.ballNumber,
+      type: result.ballType,
+    });
+  } catch (error) {
+    console.error(
+      "Unable to open Booster Ball:",
+      error
+    );
+
+    setOpenError(
+      "Unable to open this Booster Ball. Please try again."
+    );
+  } finally {
+    setOpeningBall(null);
+  }
+}
 
   return (
     <main className="min-h-screen bg-[#030608] text-white">
@@ -376,20 +470,59 @@ const boardProgress =
     </p>
   </div>
 
-  <div className="grid grid-cols-10 gap-1">
+  {revealedBall && (
+  <div
+    className={`mb-4 border p-4 text-center ${
+      revealedBall.type === "reward"
+        ? "border-amber-400/50 bg-amber-400/[0.08]"
+        : "border-cyan-400/50 bg-cyan-400/[0.08]"
+    }`}
+  >
+    <p className="text-[9px] font-black uppercase tracking-[0.18em] text-slate-400">
+      Booster Ball {revealedBall.number}
+    </p>
+
+    <p
+      className={`mt-1 text-xl font-black uppercase ${
+        revealedBall.type === "reward"
+          ? "text-amber-300"
+          : "text-cyan-300"
+      }`}
+    >
+      {revealedBall.type === "reward"
+        ? "Reward Booster"
+        : "Career Booster"}
+    </p>
+  </div>
+)}
+
+{openError && (
+  <div className="mb-4 border border-red-400/40 bg-red-500/[0.08] p-3 text-center text-xs font-bold text-red-300">
+    {openError}
+  </div>
+)}
+
+<div className="grid grid-cols-10 gap-1">
 
                 {Array.from(
                   { length: TOTAL_BOOSTERS },
                   (_, index) => (
- <BoosterPosition
+<BoosterPosition
   key={index}
   number={index + 1}
   available={
     boosterBallsEarned > 0 &&
+    openingBall === null &&
     !openedPositions.includes(index + 1)
   }
   opened={
     openedPositions.includes(index + 1)
+  }
+  opening={
+    openingBall === index + 1
+  }
+  onOpen={() =>
+    handleOpenBoosterBall(index + 1)
   }
 />
                   )
@@ -498,15 +631,20 @@ function BoosterPosition({
   number,
   available,
   opened,
+  opening,
+  onOpen,
 }: {
   number: number;
   available: boolean;
   opened: boolean;
+  opening: boolean;
+  onOpen: () => void;
 }) {
   return (
-    <button
+   <button
       type="button"
-      disabled={!available}
+      onClick={onOpen}
+      disabled={!available || opening}
      className={`relative aspect-square rounded-full border transition ${
   opened
     ? "cursor-default border-amber-400/60 bg-amber-300 opacity-80 shadow-[0_0_10px_rgba(251,191,36,0.25)]"
@@ -525,7 +663,7 @@ function BoosterPosition({
       : "text-[8px] text-slate-700"
   }`}
 >
-  {opened ? "✓" : number}
+{opening ? "..." : opened ? "✓" : number}
 </span>
 
     </button>

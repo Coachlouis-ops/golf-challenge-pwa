@@ -573,109 +573,235 @@ const [clubNoticeRead, setClubNoticeRead] = useState(false);
         {/* EDIT MODE */}
         {isEditing && (
           <div className="space-y-3">
-            <Input label="Name" value={profile.name} onChange={(v) => setProfile({ ...profile, name: v })} />
-            <Input label="Surname" value={profile.surname} onChange={(v) => setProfile({ ...profile, surname: v })} />
-            <Input label="Battle Name" value={profile.battleName} onChange={(v) => setProfile({ ...profile, battleName: v })} />
+          {profileExists && (
+  <div className="bg-neutral-900 border border-cyan-500/50 rounded-xl p-4">
+    <p className="text-cyan-300 font-bold text-sm">
+      PROFILE INFORMATION LOCKED
+    </p>
 
-            {/* CLUB */}
-      
-<div className="space-y-2">
-  <p className="text-xs text-gray-400">
-    Golf Club
-  </p>
+    <p className="text-gray-300 text-xs mt-2 leading-relaxed">
+      Your ranking and career information is locked after registration
+      to protect the integrity of Teez rankings.
+    </p>
 
-  <input
-    ref={clubInputRef}
-    className="w-full bg-[#1f1f1f] border border-gray-500 text-white px-3 py-2 rounded-md focus:border-green-400 focus:outline-none"
-    placeholder="Select Golf Club"
+    <p className="text-gray-300 text-xs mt-2">
+      To correct your personal, club, division or location information,
+      contact{" "}
+      <a
+        href="mailto:admin@teezchallenges.com"
+        className="text-cyan-300 font-semibold underline"
+      >
+        admin@teezchallenges.com
+      </a>
+    </p>
+  </div>
+)}
+     {profileExists ? (
+  <>
+    <LockedField label="Name" value={profile.name} />
+    <LockedField label="Surname" value={profile.surname} />
+  </>
+) : (
+  <>
+    <Input
+      label="Name"
+      value={profile.name}
+      onChange={(v) =>
+        setProfile({ ...profile, name: v })
+      }
+    />
+
+    <Input
+      label="Surname"
+      value={profile.surname}
+      onChange={(v) =>
+        setProfile({ ...profile, surname: v })
+      }
+    />
+  </>
+)}
+
+<Input
+  label="Battle Name"
+  value={profile.battleName}
+  onChange={(v) =>
+    setProfile({ ...profile, battleName: v })
+  }
+/>
+
+   {/* CLUB */}
+{profileExists ? (
+  <LockedField
+    label="Golf Club"
     value={profile.club}
-   onMouseDown={(e) => {
-  if (!clubNoticeRead) {
-    e.preventDefault();
-    setShowClubNotice(true);
-  }
-}}
-onFocus={() => {
-  if (!clubNoticeRead) {
-    clubInputRef.current?.blur();
-    setShowClubNotice(true);
-  }
-}}
-    onChange={(e) => setProfile({ ...profile, club: e.target.value })}
   />
-</div>
+) : (
+  <div className="space-y-2">
+    <p className="text-xs text-gray-400">
+      Golf Club
+    </p>
 
-            <Input label="Province / State" value={profile.stateProvince} onChange={(v) => setProfile({ ...profile, stateProvince: v })} />
+    <input
+      ref={clubInputRef}
+      className="w-full bg-[#1f1f1f] border border-gray-500 text-white px-3 py-2 rounded-md focus:border-green-400 focus:outline-none"
+      placeholder="Select Golf Club"
+      value={profile.club}
+      onMouseDown={(e) => {
+        if (!clubNoticeRead) {
+          e.preventDefault();
+          setShowClubNotice(true);
+        }
+      }}
+      onFocus={() => {
+        if (!clubNoticeRead) {
+          clubInputRef.current?.blur();
+          setShowClubNotice(true);
+        }
+      }}
+      onChange={(e) =>
+        setProfile({
+          ...profile,
+          club: e.target.value,
+        })
+      }
+    />
+  </div>
+)}
+           {profileExists ? (
+  <LockedField
+    label="Province / State"
+    value={profile.stateProvince}
+  />
+) : (
+  <Input
+    label="Province / State"
+    value={profile.stateProvince}
+    onChange={(v) =>
+      setProfile({
+        ...profile,
+        stateProvince: v,
+      })
+    }
+  />
+)}
+           {/* DIVISION */}
+{profileExists ? (
+  <LockedField
+    label="Player Division"
+    value={
+      profile.division
+        ? profile.division.charAt(0).toUpperCase() +
+          profile.division.slice(1)
+        : ""
+    }
+  />
+) : (
+  <div className="space-y-2">
+    <p className="text-xs text-gray-400">
+      Player Division
+    </p>
 
-                      {/* DIVISION */}
-            <div className="space-y-2">
-              <p className="text-xs text-gray-400">
-                Player Division
-              </p>
+    <select
+      className="w-full bg-[#1f1f1f] border border-gray-500 text-white px-3 py-2 rounded-md focus:border-green-400 focus:outline-none"
+      value={profile.division}
+      onChange={(e) =>
+        setProfile({
+          ...profile,
+          division: e.target.value as
+            | "junior"
+            | "open"
+            | "senior"
+            | "ladies"
+            | "professional",
+        })
+      }
+    >
+      <option value="junior">Junior Division</option>
+      <option value="open">Open Division</option>
+      <option value="senior">Senior Division</option>
+      <option value="ladies">Ladies Division</option>
+      <option value="professional">Professional Division</option>
+    </select>
+  </div>
+)}
 
-              <select
-                className="w-full bg-[#1f1f1f] border border-gray-500 text-white px-3 py-2 rounded-md focus:border-green-400 focus:outline-none"
-                value={profile.division}
-                onChange={(e) =>
-                  setProfile({
-                    ...profile,
-                    division: e.target.value as
-                      | "junior"
-                      | "open"
-                      | "senior"
-                      | "ladies"
-                      | "professional",
-                  })
-                }
-              >
-                <option value="junior">
-                  Junior Division
-                </option>
-                <option value="open">
-                  Open Division
-                </option>
-                <option value="senior">
-                  Senior Division
-                </option>
-                <option value="ladies">
-                  Ladies Division
-                </option>
-                <option value="professional">
-                  Professional Division
-                </option>
-              </select>
-            </div>
+          {/* COUNTRY */}
+{profileExists ? (
+  <LockedField
+    label="Country"
+    value={profile.country}
+  />
+) : (
+  <select
+    className="w-full bg-neutral-900 border border-gray-500 text-white px-3 py-2 rounded"
+    value={profile.country}
+    onChange={(e) =>
+      setProfile({
+        ...profile,
+        country: e.target.value,
+      })
+    }
+  >
+    <option value="">Select Country</option>
 
-            {/* COUNTRY */}
-            <select
-              className="w-full bg-neutral-900 border border-gray-500 text-white px-3 py-2 rounded"
-              value={profile.country}
-              onChange={(e) => setProfile({ ...profile, country: e.target.value })}
-            >
-              <option value="">Select Country</option>
-              {countries.map((c) => (
-                <option key={c}>{c}</option>
-              ))}
-            </select>
+    {countries.map((c) => (
+      <option key={c}>{c}</option>
+    ))}
+  </select>
+)}
 
-            <div className="space-y-1">
-              <p className="text-xs text-gray-400">Date of Birth</p>
-              <input
-                type="date"
-                className="w-full bg-[#1f1f1f] border border-gray-500 text-white px-3 py-2 rounded-md focus:border-green-400 focus:outline-none"
-                value={profile.dateOfBirth ? profile.dateOfBirth.replace(/\//g, "-") : ""}
-                onChange={(e) => {
-                  const raw = e.target.value; // YYYY-MM-DD
-                  setProfile({
-                    ...profile,
-                    dateOfBirth: raw.replace(/-/g, "/"), // store as YYYY/MM/DD
-                  });
-                }}
-              />
-              <p className="text-[10px] text-gray-500">Select your birthdate</p>
-            </div>
+         {profileExists ? (
+  <LockedField
+    label="Date of Birth"
+    value={profile.dateOfBirth}
+  />
+) : (
+  <div className="space-y-1">
+    <p className="text-xs text-gray-400">
+      Date of Birth
+    </p>
 
-            <Input label="ID Number" value={profile.idNumber} onChange={(v) => setProfile({ ...profile, idNumber: v })} />
+    <input
+      type="date"
+      className="w-full bg-[#1f1f1f] border border-gray-500 text-white px-3 py-2 rounded-md focus:border-green-400 focus:outline-none"
+      value={
+        profile.dateOfBirth
+          ? profile.dateOfBirth.replace(/\//g, "-")
+          : ""
+      }
+      onChange={(e) => {
+        const raw = e.target.value;
+
+        setProfile({
+          ...profile,
+          dateOfBirth: raw.replace(/-/g, "/"),
+        });
+      }}
+    />
+
+    <p className="text-[10px] text-gray-500">
+      Select your birthdate
+    </p>
+  </div>
+)}
+
+           {profileExists ? (
+  <LockedField
+    label="ID Number"
+    value={profile.idNumber}
+  />
+) : (
+  <Input
+    label="ID Number"
+    value={profile.idNumber}
+    onChange={(v) =>
+      setProfile({
+        ...profile,
+        idNumber: v,
+      })
+    }
+  />
+)}
             <Input label="Phone Number" value={profile.phoneNumber} onChange={(v) => setProfile({ ...profile, phoneNumber: v })} />
 
             <button
@@ -761,6 +887,32 @@ function RankCardAdvanced({
     </div>
   );
 }
+
+/* LOCKED PROFILE FIELD */
+function LockedField({
+  label,
+  value,
+}: {
+  label: string;
+  value: string;
+}) {
+  return (
+    <div className="space-y-1">
+      <p className="text-xs text-cyan-300 font-semibold">
+        {label}
+      </p>
+
+      <div className="w-full bg-neutral-900 border border-cyan-500/40 text-gray-300 px-3 py-2 rounded-md flex items-center justify-between">
+        <span>{value || "Not set"}</span>
+
+        <span className="text-[10px] text-cyan-400 font-bold tracking-wider">
+          LOCKED
+        </span>
+      </div>
+    </div>
+  );
+}
+
 
 /* INPUT COMPONENT */
 function Input({

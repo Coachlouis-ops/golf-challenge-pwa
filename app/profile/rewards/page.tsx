@@ -31,14 +31,16 @@ const [boosterProgress, setBoosterProgress] =
 useEffect(() => {
   if (!user) return;
 
+  const uid = user.uid;
+
   async function loadBoosterBoard() {
     try {
       const boosterRef = doc(
         db,
         "boosterBoards",
         "2026",
-        "players",
-        user.uid
+       "players",
+uid
       );
 
       const boosterSnap =

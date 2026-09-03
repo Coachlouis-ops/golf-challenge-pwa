@@ -316,300 +316,28 @@ export default function MyCareerPage() {
             </div>
           </section>
 
-          {/* CAREER PROGRESS */}
+   {/* CAREER GUIDE */}
 
           <section>
             <SectionHeading
-              eyebrow="PLAYER DEVELOPMENT"
-              title="Career Progress"
-              description="Current career level and competitive development"
+              eyebrow="PLAYER INFORMATION"
+              title="How My Career Works"
+              description="Understand how each career statistic is calculated"
             />
 
-            <div className="grid grid-cols-2 gap-3">
-
-              <ProgressTile
-                code="LVL"
-                title="Player Level"
-                value={playerLevel}
-                progress={xpProgress}
-                footer={`${xpRemaining} XP to next level`}
-                accent="green"
-              />
-
-              <ProgressTile
-                code="PWR"
-                title="Power Score"
-                value={powerScore}
-                progress={Math.min(
-                  100,
-                  (powerScore / 2500) * 100
-                )}
-                footer="Competitive rating"
-                accent="navy"
-              />
-
-              <ProgressTile
-                code="PTS"
-                title="Career Points"
-                value={careerPoints}
-                progress={Math.min(
-                  100,
-                  (careerPoints / 1000) * 100
-                )}
-                footer="Lifetime points"
-                accent="gold"
-              />
-
-              <ProgressTile
-                code="OVR"
-                title="Overall Rating"
-                value={overallRating}
-                progress={overallRating}
-                footer="Career rating"
-                accent="slate"
-              />
-            </div>
-          </section>
-
-          {/* PERFORMANCE */}
-
-          <section>
-            <SectionHeading
-              eyebrow="COMPETITIVE RECORD"
-              title="Player Performance"
-              description="Career results across completed challenges"
+            <ActionTile
+              code="GUIDE"
+              title="Career Calculation Guide"
+              text="Career Points, rankings, Power Score, XP, levels, streaks, Vault Keys and Race Points."
+              onClick={() =>
+                router.push(
+                  "/profile/how-career-works"
+                )
+              }
             />
-
-            <div className="grid grid-cols-2 gap-3">
-
-              <MetricTile
-                code="PLD"
-                title="Matches"
-                value={matchesPlayed}
-                footer="Challenges played"
-              />
-
-              <MetricTile
-                code="WIN"
-                title="Wins"
-                value={wins}
-                footer="Challenges won"
-                highlight
-              />
-
-              <MetricTile
-                code="LOS"
-                title="Losses"
-                value={losses}
-                footer="Recorded losses"
-              />
-
-              <MetricTile
-                code="WIN%"
-                title="Win Rate"
-                value={`${winPercentage}%`}
-                footer="Career win percentage"
-              />
-            </div>
           </section>
 
-          {/* CURRENT RANKINGS */}
-
-          <section>
-            <SectionHeading
-              eyebrow="OFFICIAL STANDINGS"
-              title="Current Rankings"
-              description="Current position across each competitive level"
-            />
-
-            <div className="grid grid-cols-2 gap-3">
-
-              <RankingTile
-                code="CLB"
-                title="Club"
-                value={ranking.clubPosition}
-              />
-
-              <RankingTile
-                code="PRV"
-                title="Province"
-                value={ranking.provincePosition}
-              />
-
-              <RankingTile
-                code="NAT"
-                title="National"
-                value={ranking.nationalPosition}
-              />
-
-              <RankingTile
-                code="GLB"
-                title="Global"
-                value={
-                  ranking.internationalPosition
-                }
-                premium
-              />
-            </div>
-          </section>
-
-          {/* LAST CHALLENGE */}
-
-          <section>
-            <SectionHeading
-              eyebrow="LATEST RESULT"
-              title="Last Challenge"
-              description="Ranking movement from your latest completed challenge"
-            />
-
-            <div className="border border-slate-200 bg-white px-5 shadow-sm">
-
-              <MovementRow
-                title="Club"
-                before={
-                  career?.lastChallenge?.ranking
-                    ?.before?.club ?? 0
-                }
-                after={
-                  career?.lastChallenge?.ranking
-                    ?.after?.club ?? 0
-                }
-              />
-
-              <MovementRow
-                title="Province"
-                before={
-                  career?.lastChallenge?.ranking
-                    ?.before?.province ?? 0
-                }
-                after={
-                  career?.lastChallenge?.ranking
-                    ?.after?.province ?? 0
-                }
-              />
-
-              <MovementRow
-                title="National"
-                before={
-                  career?.lastChallenge?.ranking
-                    ?.before?.national ?? 0
-                }
-                after={
-                  career?.lastChallenge?.ranking
-                    ?.after?.national ?? 0
-                }
-              />
-
-              <MovementRow
-                title="Global"
-                before={
-                  career?.lastChallenge?.ranking
-                    ?.before?.international ?? 0
-                }
-                after={
-                  career?.lastChallenge?.ranking
-                    ?.after?.international ?? 0
-                }
-              />
-            </div>
-          </section>
-
-          {/* CAREER RECORD */}
-
-          <section>
-            <SectionHeading
-              eyebrow="CAREER RECORD"
-              title="Hall of Fame"
-              description="Your strongest career finishes"
-            />
-
-            <div className="grid grid-cols-2 gap-3">
-
-              <MetricTile
-                code="BEST"
-                title="Best Finish"
-                value={
-                  stats?.bestFinish ?? "-"
-                }
-                footer="Highest finish"
-                highlight
-              />
-
-              <MetricTile
-                code="TOP3"
-                title="Top 3"
-                value={stats?.top3 ?? 0}
-                footer="Podium finishes"
-              />
-
-              <MetricTile
-                code="TOP5"
-                title="Top 5"
-                value={stats?.top5 ?? 0}
-                footer="Top-five finishes"
-              />
-
-              <MetricTile
-                code="TOP10"
-                title="Top 10"
-                value={stats?.top10 ?? 0}
-                footer="Top-ten finishes"
-              />
-            </div>
-          </section>
-
-          {/* FORM */}
-
-          <section>
-            <SectionHeading
-              eyebrow="CURRENT FORM"
-              title="Form & Streaks"
-              description="Current and career-best performance indicators"
-            />
-
-            <div className="grid grid-cols-2 gap-3">
-
-              <MetricTile
-                code="STRK"
-                title="Current Streak"
-                value={
-                  stats?.currentWinStreak ?? 0
-                }
-                footer="Consecutive wins"
-              />
-
-              <MetricTile
-                code="BEST"
-                title="Best Streak"
-                value={
-                  stats?.bestWinStreak ?? 0
-                }
-                footer="Career-best run"
-                highlight
-              />
-
-              <MetricTile
-                code="FMT"
-                title="Best Format"
-                value={
-                  stats?.bestFormat || "-"
-                }
-                footer="Strongest format"
-              />
-
-              <MetricTile
-                code="FMT%"
-                title="Format Win Rate"
-                value={`${
-                  stats?.bestFormatWinPercentage ??
-                  0
-                }%`}
-                footer="Best-format performance"
-              />
-            </div>
-          </section>
-
-          {/* RACE TO FINAL */}
+ {/* RACE TO FINAL */}
 
           <section>
             <SectionHeading
@@ -681,26 +409,6 @@ export default function MyCareerPage() {
             </button>
           </section>
 
-          {/* CAREER GUIDE */}
-
-          <section>
-            <SectionHeading
-              eyebrow="PLAYER INFORMATION"
-              title="How My Career Works"
-              description="Understand how each career statistic is calculated"
-            />
-
-            <ActionTile
-              code="GUIDE"
-              title="Career Calculation Guide"
-              text="Career Points, rankings, Power Score, XP, levels, streaks, Vault Keys and Race Points."
-              onClick={() =>
-                router.push(
-                  "/profile/how-career-works"
-                )
-              }
-            />
-          </section>
 
           {/* PLAYER VAULT */}
 
@@ -722,6 +430,303 @@ export default function MyCareerPage() {
             />
           </section>
 
+
+           {/* LAST CHALLENGE */}
+
+          <section>
+            <SectionHeading
+              eyebrow="LATEST RESULT"
+              title="Last Challenge"
+              description="Ranking movement from your latest completed challenge"
+            />
+
+            <div className="border border-slate-200 bg-white px-5 shadow-sm">
+
+              <MovementRow
+                title="Club"
+                before={
+                  career?.lastChallenge?.ranking
+                    ?.before?.club ?? 0
+                }
+                after={
+                  career?.lastChallenge?.ranking
+                    ?.after?.club ?? 0
+                }
+              />
+
+              <MovementRow
+                title="Province"
+                before={
+                  career?.lastChallenge?.ranking
+                    ?.before?.province ?? 0
+                }
+                after={
+                  career?.lastChallenge?.ranking
+                    ?.after?.province ?? 0
+                }
+              />
+
+              <MovementRow
+                title="National"
+                before={
+                  career?.lastChallenge?.ranking
+                    ?.before?.national ?? 0
+                }
+                after={
+                  career?.lastChallenge?.ranking
+                    ?.after?.national ?? 0
+                }
+              />
+
+              <MovementRow
+                title="Global"
+                before={
+                  career?.lastChallenge?.ranking
+                    ?.before?.international ?? 0
+                }
+                after={
+                  career?.lastChallenge?.ranking
+                    ?.after?.international ?? 0
+                }
+              />
+            </div>
+          </section>
+
+
+           {/* CURRENT RANKINGS */}
+
+          <section>
+            <SectionHeading
+              eyebrow="OFFICIAL STANDINGS"
+              title="Current Rankings"
+              description="Current position across each competitive level"
+            />
+
+            <div className="grid grid-cols-2 gap-3">
+
+              <RankingTile
+                code="CLB"
+                title="Club"
+                value={ranking.clubPosition}
+              />
+
+              <RankingTile
+                code="PRV"
+                title="Province"
+                value={ranking.provincePosition}
+              />
+
+              <RankingTile
+                code="NAT"
+                title="National"
+                value={ranking.nationalPosition}
+              />
+
+              <RankingTile
+                code="GLB"
+                title="Global"
+                value={
+                  ranking.internationalPosition
+                }
+                premium
+              />
+            </div>
+          </section>
+
+
+ {/* PERFORMANCE */}
+
+          <section>
+            <SectionHeading
+              eyebrow="COMPETITIVE RECORD"
+              title="Player Performance"
+              description="Career results across completed challenges"
+            />
+
+            <div className="grid grid-cols-2 gap-3">
+
+              <MetricTile
+                code="PLD"
+                title="Matches"
+                value={matchesPlayed}
+                footer="Challenges played"
+              />
+
+              <MetricTile
+                code="WIN"
+                title="Wins"
+                value={wins}
+                footer="Challenges won"
+                highlight
+              />
+
+              <MetricTile
+                code="LOS"
+                title="Losses"
+                value={losses}
+                footer="Recorded losses"
+              />
+
+              <MetricTile
+                code="WIN%"
+                title="Win Rate"
+                value={`${winPercentage}%`}
+                footer="Career win percentage"
+              />
+            </div>
+          </section>
+
+   {/* FORM */}
+
+          <section>
+            <SectionHeading
+              eyebrow="CURRENT FORM"
+              title="Form & Streaks"
+              description="Current and career-best performance indicators"
+            />
+
+            <div className="grid grid-cols-2 gap-3">
+
+              <MetricTile
+                code="STRK"
+                title="Current Streak"
+                value={
+                  stats?.currentWinStreak ?? 0
+                }
+                footer="Consecutive wins"
+              />
+
+              <MetricTile
+                code="BEST"
+                title="Best Streak"
+                value={
+                  stats?.bestWinStreak ?? 0
+                }
+                footer="Career-best run"
+                highlight
+              />
+
+              <MetricTile
+                code="FMT"
+                title="Best Format"
+                value={
+                  stats?.bestFormat || "-"
+                }
+                footer="Strongest format"
+              />
+
+              <MetricTile
+                code="FMT%"
+                title="Format Win Rate"
+                value={`${
+                  stats?.bestFormatWinPercentage ??
+                  0
+                }%`}
+                footer="Best-format performance"
+              />
+            </div>
+          </section>
+
+  {/* CAREER RECORD */}
+
+          <section>
+            <SectionHeading
+              eyebrow="CAREER RECORD"
+              title="Hall of Fame"
+              description="Your strongest career finishes"
+            />
+
+            <div className="grid grid-cols-2 gap-3">
+
+              <MetricTile
+                code="BEST"
+                title="Best Finish"
+                value={
+                  stats?.bestFinish ?? "-"
+                }
+                footer="Highest finish"
+                highlight
+              />
+
+              <MetricTile
+                code="TOP3"
+                title="Top 3"
+                value={stats?.top3 ?? 0}
+                footer="Podium finishes"
+              />
+
+              <MetricTile
+                code="TOP5"
+                title="Top 5"
+                value={stats?.top5 ?? 0}
+                footer="Top-five finishes"
+              />
+
+              <MetricTile
+                code="TOP10"
+                title="Top 10"
+                value={stats?.top10 ?? 0}
+                footer="Top-ten finishes"
+              />
+            </div>
+          </section>
+
+         {/* CAREER PROGRESS */}
+
+          <section>
+            <SectionHeading
+              eyebrow="PLAYER DEVELOPMENT"
+              title="Career Progress"
+              description="Current career level and competitive development"
+            />
+
+            <div className="grid grid-cols-2 gap-3">
+
+              <ProgressTile
+                code="LVL"
+                title="Player Level"
+                value={playerLevel}
+                progress={xpProgress}
+                footer={`${xpRemaining} XP to next level`}
+                accent="green"
+              />
+
+              <ProgressTile
+                code="PWR"
+                title="Power Score"
+                value={powerScore}
+                progress={Math.min(
+                  100,
+                  (powerScore / 2500) * 100
+                )}
+                footer="Competitive rating"
+                accent="navy"
+              />
+
+              <ProgressTile
+                code="PTS"
+                title="Career Points"
+                value={careerPoints}
+                progress={Math.min(
+                  100,
+                  (careerPoints / 1000) * 100
+                )}
+                footer="Lifetime points"
+                accent="gold"
+              />
+
+              <ProgressTile
+                code="OVR"
+                title="Overall Rating"
+                value={overallRating}
+                progress={overallRating}
+                footer="Career rating"
+                accent="slate"
+              />
+            </div>
+          </section> 
+
+        
           {/* ACHIEVEMENTS */}
 
           <section>

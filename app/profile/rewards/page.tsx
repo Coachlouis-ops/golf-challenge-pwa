@@ -1,312 +1,427 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { doc, getDoc } from "firebase/firestore";
-import { httpsCallable } from "firebase/functions";
 
-import { useAuth } from "@/src/lib/AuthContext";
-import { db, functions } from "@/src/lib/firebase";
+const TOTAL_BOOSTERS = 100;
+const CAREER_BOOSTERS = 75;
+const REWARD_BOOSTERS = 25;
 
-type VaultName = "bronze" | "silver" | "gold" | "diamond";
-
-type VaultData = {
-  availableKeys: number;
-  lifetimeKeysEarned: number;
-  totalCoinsOpened: number;
-  currentVault: VaultName;
-  unlockedVaults: VaultName[];
-  claimedMilestones?: Record<
-    string,
-    {
-      title?: string;
-      keys?: number;
-    }
-  >;
-};
-
-type VaultConfig = {
-  id: VaultName;
-  title: string;
-  icon: string;
-  coinStart: number;
-  coinEnd: number;
-  description: string;
-};
-
-const VAULTS: VaultConfig[] = [
-  {
-    id: "bronze",
-    title: "Bronze Vault",
-    icon: "🥉",
-    coinStart: 1,
-    coinEnd: 50,
-    description: "Build your career and open your first 50 mystery coins.",
-  },
-  {
-    id: "silver",
-    title: "Silver Vault",
-    icon: "🥈",
-    coinStart: 51,
-    coinEnd: 100,
-    description: "Unlock after every Bronze Vault coin has been opened.",
-  },
-  {
-    id: "gold",
-    title: "Gold Vault",
-    icon: "🥇",
-    coinStart: 101,
-    coinEnd: 150,
-    description: "Unlock after completing the Silver Vault.",
-  },
-  {
-    id: "diamond",
-    title: "Diamond Vault",
-    icon: "💎",
-    coinStart: 151,
-    coinEnd: 200,
-    description: "The final vault for long-term career achievement.",
-  },
-];
-
-const EMPTY_VAULT: VaultData = {
-  availableKeys: 0,
-  lifetimeKeysEarned: 0,
-  totalCoinsOpened: 0,
-  currentVault: "bronze",
-  unlockedVaults: ["bronze"],
-  claimedMilestones: {},
-};
-
-export default function PlayerVaultPage() {
+export default function GameBoosterBoardPage() {
   const router = useRouter();
-  const { user } = useAuth();
 
-  const [loading, setLoading] = useState(true);
-  const [vault, setVault] = useState<VaultData>(EMPTY_VAULT);
-  const [newKeysEarned, setNewKeysEarned] = useState(0);
+  // Temporary until the Booster backend is connected.
+  const boosterBallsEarned = 0;
+  const boosterBallsOpened = 0;
+  const boosterProgress = 0;
 
-  const loadVault = useCallback(async () => {
-    if (!user) return;
+  const boardProgress =
+    (boosterBallsOpened / TOTAL_BOOSTERS) * 100;
 
-    const uid = user.uid;
+  const boardCleared =
+    boosterBallsOpened >= TOTAL_BOOSTERS;
 
-    const syncVaultKeys = httpsCallable<
-      Record<string, never>,
-      {
-        success: boolean;
-        keysEarnedNow: number;
-        availableKeys: number;
-        lifetimeKeysEarned: number;
-      }
-    >(functions, "syncVaultKeys");
-
-    const syncResult = await syncVaultKeys({});
-
-    setNewKeysEarned(
-      Number(syncResult.data.keysEarnedNow ?? 0)
-    );
-
-    const vaultSnap = await getDoc(
-      doc(db, "userVaults", uid)
-    );
-
-    if (!vaultSnap.exists()) {
-      setVault(EMPTY_VAULT);
-      return;
-    }
-
-    const data = vaultSnap.data();
-
-    setVault({
-      availableKeys: Number(data.availableKeys ?? 0),
-      lifetimeKeysEarned: Number(
-        data.lifetimeKeysEarned ?? 0
-      ),
-      totalCoinsOpened: Number(
-        data.totalCoinsOpened ?? 0
-      ),
-      currentVault: data.currentVault ?? "bronze",
-      unlockedVaults: Array.isArray(data.unlockedVaults)
-        ? data.unlockedVaults
-        : ["bronze"],
-      claimedMilestones:
-        data.claimedMilestones ?? {},
-    });
-  }, [user]);
-
-  useEffect(() => {
-    if (!user) {
-      setLoading(false);
-      return;
-    }
-
-    async function initialiseVault() {
-      try {
-        await loadVault();
-      } catch (error) {
-        console.error(
-          "Unable to load Player Vault:",
-          error
-        );
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    initialiseVault();
-  }, [user, loadVault]);
-
- if (loading) {
   return (
-    <main className="flex min-h-screen items-center justify-center bg-[#eef1f4] px-6">
-      <div className="border border-slate-200 bg-white px-8 py-6 text-center shadow-sm">
-        <div className="mx-auto h-8 w-8 animate-spin rounded-full border-2 border-slate-200 border-t-[#0f5132]" />
-
-        <p className="mt-4 text-sm font-semibold text-slate-700">
-          Loading Player Vault
-        </p>
-      </div>
-    </main>
-  );
-}
-
-const completedMilestones = Object.keys(
-  vault.claimedMilestones ?? {}
-).length;
-
-return (
-  <main className="min-h-screen bg-[#eef1f4] text-[#111827]">
-      <div className="mx-auto max-w-md pb-14">
+    <main className="min-h-screen bg-[#030608] text-white">
+      <div className="mx-auto max-w-md pb-16">
 
         {/* HEADER */}
 
-        <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/95 px-5 py-4 backdrop-blur">
+        <header className="sticky top-0 z-30 border-b border-emerald-400/30 bg-[#030608]/95 px-5 py-3 backdrop-blur-xl">
           <div className="flex items-center justify-between">
+
             <button
               type="button"
-              onClick={() => router.push("/dashboard")}
-              className="flex h-9 w-9 items-center justify-center border border-slate-200 bg-white text-xl text-slate-600"
+              onClick={() => router.back()}
+              className="flex h-10 w-10 items-center justify-center border border-emerald-400/30 bg-emerald-400/[0.05] text-2xl font-black text-emerald-300"
               aria-label="Go back"
             >
               ‹
             </button>
 
-            <div className="text-center">
-              <p className="text-[10px] font-bold uppercase tracking-[0.26em] text-[#0f5132]">
-                TEEZ Career Rewards
+            <div className="flex flex-col items-center">
+
+              <img
+                src="/teez-app-icon-v4.png"
+                alt="TEEZ Golf Challenges"
+                className="h-14 w-14 object-contain drop-shadow-[0_0_14px_rgba(52,211,153,0.65)]"
+              />
+
+              <p className="mt-1 text-[8px] font-black uppercase tracking-[0.30em] text-emerald-400">
+                TEEZ Player Boosters
               </p>
 
-              <h1 className="mt-1 text-lg font-black tracking-tight">
-                PLAYER VAULT
+              <h1 className="text-lg font-black tracking-[0.06em] text-white">
+                GAME BOOSTER BOARD
               </h1>
+
             </div>
 
-            <div className="h-9 w-9" />
+            <div className="h-10 w-10" />
+
           </div>
         </header>
 
+
         <div className="space-y-7 px-4 pt-5">
 
-          {/* VAULT HERO */}
+          {/* HERO */}
 
-          <section className="overflow-hidden border border-[#1f2937] bg-[#0d1821] shadow-[0_8px_22px_rgba(15,23,42,0.16)]">
+          <section className="relative overflow-hidden border border-emerald-400/40 bg-[#06110d] shadow-[0_0_38px_rgba(52,211,153,0.12)]">
 
-            <div className="flex items-start gap-4 border-b border-white/10 p-5">
+            <div className="pointer-events-none absolute -right-20 -top-20 h-52 w-52 rounded-full bg-emerald-400/10 blur-3xl" />
 
-              <div className="flex h-16 w-16 shrink-0 items-center justify-center border border-[#b89b5e] bg-[#14232d]">
-                <span className="text-[10px] font-black tracking-[0.08em] text-[#d6bd7a]">
-                  VAULT
-                </span>
+            <div className="pointer-events-none absolute -bottom-20 -left-20 h-44 w-44 rounded-full bg-cyan-400/[0.06] blur-3xl" />
+
+            <div className="relative p-5">
+
+              <div className="flex items-center gap-4">
+
+                <BoosterBall size="large" />
+
+                <div className="min-w-0 flex-1">
+
+                  <p className="text-[9px] font-black uppercase tracking-[0.22em] text-emerald-300">
+                    Mystery Booster System
+                  </p>
+
+                  <h2 className="mt-1 text-2xl font-black tracking-tight text-white">
+                    100 Booster Balls
+                  </h2>
+
+                  <p className="mt-2 text-sm leading-5 text-slate-400">
+                    Earn Booster Balls through commitment,
+                    activity and performance.
+                  </p>
+
+                </div>
+
               </div>
 
-              <div>
-                <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#8eb89f]">
-                  Career Reward System
+              <div className="mt-5 border-t border-emerald-400/15 pt-4">
+
+                <p className="text-center text-[10px] font-black uppercase tracking-[0.18em] text-emerald-300">
+                  Give Your Game the Edge via Mystery Boosters
                 </p>
 
-                <h2 className="mt-1 text-2xl font-black tracking-tight text-white">
-                  Earn Keys. Open Vaults.
-                </h2>
-
-                <p className="mt-2 text-sm leading-5 text-slate-300">
-                  Career milestones award Vault Keys.
-                  Each key opens one mystery coin containing
-                  a player reward.
-                </p>
               </div>
+
             </div>
 
-            {newKeysEarned > 0 && (
-              <div className="border-b border-white/10 bg-[#10261c] px-5 py-4">
-                <p className="text-[9px] font-bold uppercase tracking-[0.18em] text-[#8eb89f]">
-                  New Milestone
-                </p>
-
-                <p className="mt-1 text-xl font-black text-[#d6bd7a]">
-                  +{newKeysEarned} Vault{" "}
-                  {newKeysEarned === 1 ? "Key" : "Keys"}
-                </p>
-              </div>
-            )}
-
-            <div className="grid grid-cols-2 border-t border-white/10">
-              <VaultSummary
-                code="AVL"
-                title="Available Keys"
-                value={vault.availableKeys}
-              />
-
-              <VaultSummary
-                code="LIFE"
-                title="Lifetime Keys"
-                value={vault.lifetimeKeysEarned}
-              />
-
-              <VaultSummary
-                code="OPEN"
-                title="Coins Opened"
-                value={vault.totalCoinsOpened}
-              />
-
-              <VaultSummary
-                code="MILE"
-                title="Milestones"
-                value={completedMilestones}
-              />
-            </div>
           </section>
 
-          {/* VAULT PROGRESSION */}
+
+          {/* BOARD SUMMARY */}
 
           <section>
+
             <SectionHeading
-              eyebrow="CAREER REWARD SERIES"
-              title="Vault Progression"
-              description="Complete each 50-coin vault to advance to the next reward tier"
+              eyebrow="YOUR BOARD"
+              title="Booster Board Progress"
+              description="Clear all 100 Booster Balls to complete your Game Booster Board"
             />
 
-            <div className="space-y-4">
-              {VAULTS.map((vaultConfig) => (
-                <VaultCard
-                  key={vaultConfig.id}
-                  config={vaultConfig}
-                  playerVault={vault}
-                  onEnter={() =>
-                    router.push(
-                      `/profile/rewards/${vaultConfig.id}`
-                    )
-                  }
+            <div className="overflow-hidden border border-cyan-400/30 bg-[#071017] shadow-[0_0_30px_rgba(34,211,238,0.08)]">
+
+              <div className="grid grid-cols-3 divide-x divide-white/10">
+
+                <SummaryTile
+                  title="Total"
+                  value={TOTAL_BOOSTERS}
+                  colour="text-white"
                 />
-              ))}
+
+                <SummaryTile
+                  title="Career"
+                  value={CAREER_BOOSTERS}
+                  colour="text-cyan-300"
+                />
+
+                <SummaryTile
+                  title="Rewards"
+                  value={REWARD_BOOSTERS}
+                  colour="text-amber-300"
+                />
+
+              </div>
+
+              <div className="border-t border-white/10 p-5">
+
+                <div className="flex items-center justify-between">
+
+                  <p className="text-[9px] font-black uppercase tracking-[0.16em] text-slate-500">
+                    Board Cleared
+                  </p>
+
+                  <p className="text-sm font-black text-emerald-300">
+                    {boosterBallsOpened} / {TOTAL_BOOSTERS}
+                  </p>
+
+                </div>
+
+                <div className="mt-3 h-3 overflow-hidden bg-slate-800">
+
+                  <div
+                    className="h-full bg-emerald-400 shadow-[0_0_12px_rgba(52,211,153,0.7)]"
+                    style={{
+                      width: `${Math.min(
+                        100,
+                        boardProgress
+                      )}%`,
+                    }}
+                  />
+
+                </div>
+
+              </div>
+
             </div>
+
+          </section>
+
+
+          {/* BOOSTER PROGRESS */}
+
+          <section>
+
+            <SectionHeading
+              eyebrow="EARN YOUR NEXT BALL"
+              title="Booster Progress"
+              description="Commitment + Activity + Performance build your Booster Progress"
+            />
+
+            <div className="relative overflow-hidden border border-violet-400/40 bg-[#0a0711] p-5 shadow-[0_0_30px_rgba(167,139,250,0.10)]">
+
+              <div className="flex items-center justify-between">
+
+                <div>
+
+                  <p className="text-[9px] font-black uppercase tracking-[0.16em] text-violet-300">
+                    Current Progress
+                  </p>
+
+                  <p className="mt-1 text-3xl font-black text-white">
+                    {boosterProgress}%
+                  </p>
+
+                </div>
+
+                <div className="text-right">
+
+                  <p className="text-[9px] font-black uppercase tracking-[0.14em] text-slate-500">
+                    Balls Available
+                  </p>
+
+                  <p className="mt-1 text-3xl font-black text-emerald-300">
+                    {boosterBallsEarned}
+                  </p>
+
+                </div>
+
+              </div>
+
+              <div className="mt-5 h-3 overflow-hidden bg-slate-800">
+
+                <div
+                  className="h-full bg-violet-400 shadow-[0_0_12px_rgba(167,139,250,0.7)]"
+                  style={{
+                    width: `${Math.min(
+                      100,
+                      boosterProgress
+                    )}%`,
+                  }}
+                />
+
+              </div>
+
+              <div className="mt-5 grid grid-cols-3 gap-2">
+
+                <WeightTile
+                  title="Commitment"
+                  value="30%"
+                />
+
+                <WeightTile
+                  title="Activity"
+                  value="40%"
+                />
+
+                <WeightTile
+                  title="Performance"
+                  value="30%"
+                />
+
+              </div>
+
+            </div>
+
+          </section>
+
+
+          {/* BOOSTER BALL BOARD */}
+
+          <section>
+
+            <SectionHeading
+              eyebrow="MYSTERY BOARD"
+              title="Choose Your Booster Ball"
+              description="Earn a Booster Ball, then choose an available position to reveal your mystery Booster"
+            />
+
+            <div className="border border-emerald-400/30 bg-[#050d0a] p-4 shadow-[0_0_34px_rgba(52,211,153,0.08)]">
+
+              <div className="grid grid-cols-5 gap-3">
+
+                {Array.from(
+                  { length: TOTAL_BOOSTERS },
+                  (_, index) => (
+                    <BoosterPosition
+                      key={index}
+                      number={index + 1}
+                      available={
+                        boosterBallsEarned > 0
+                      }
+                    />
+                  )
+                )}
+
+              </div>
+
+            </div>
+
+          </section>
+
+
+          {/* RACE TO FINAL */}
+
+          <section>
+
+            <SectionHeading
+              eyebrow="CHAMPIONSHIP ELIGIBILITY"
+              title="Race to the Final"
+              description="The Game Booster Board forms part of your qualification for the Final"
+            />
+
+            <div
+              className={`border p-5 ${
+                boardCleared
+                  ? "border-emerald-400/60 bg-emerald-400/[0.07]"
+                  : "border-amber-400/50 bg-[#100c04]"
+              }`}
+            >
+
+              <div className="flex items-center justify-between gap-4">
+
+                <div>
+
+                  <p className="text-[9px] font-black uppercase tracking-[0.16em] text-slate-500">
+                    Booster Board Requirement
+                  </p>
+
+                  <p
+                    className={`mt-1 text-xl font-black ${
+                      boardCleared
+                        ? "text-emerald-300"
+                        : "text-amber-300"
+                    }`}
+                  >
+                    {boardCleared
+                      ? "BOARD CLEARED"
+                      : `${boosterBallsOpened} / 100 CLEARED`}
+                  </p>
+
+                </div>
+
+                <div
+                  className={`border px-3 py-2 text-[9px] font-black uppercase tracking-[0.10em] ${
+                    boardCleared
+                      ? "border-emerald-400/40 text-emerald-300"
+                      : "border-amber-400/40 text-amber-300"
+                  }`}
+                >
+                  {boardCleared
+                    ? "ELIGIBLE"
+                    : "IN PROGRESS"}
+                </div>
+
+              </div>
+
+              <p className="mt-4 text-xs leading-5 text-slate-400">
+                A player must clear all 100 Booster Balls
+                and finish inside the qualifying Race to
+                the Final positions to qualify for the Final.
+              </p>
+
+            </div>
+
           </section>
 
         </div>
+
       </div>
     </main>
   );
 }
+
+
+function BoosterBall({
+  size = "small",
+}: {
+  size?: "small" | "large";
+}) {
+  return (
+    <div
+      className={`relative shrink-0 rounded-full border-2 border-emerald-300/70 bg-white shadow-[0_0_22px_rgba(52,211,153,0.24)] ${
+        size === "large"
+          ? "h-20 w-20"
+          : "h-12 w-12"
+      }`}
+    >
+
+      <div className="absolute inset-[5px] rounded-full border border-slate-300 bg-[radial-gradient(circle_at_30%_30%,#ffffff,#d7e0e3)]" />
+
+      <div className="absolute left-[26%] top-[25%] h-[7%] w-[7%] rounded-full bg-slate-300/70" />
+      <div className="absolute right-[24%] top-[32%] h-[6%] w-[6%] rounded-full bg-slate-300/70" />
+      <div className="absolute bottom-[26%] left-[35%] h-[6%] w-[6%] rounded-full bg-slate-300/70" />
+
+      {size === "large" && (
+        <span className="absolute inset-0 z-10 flex items-center justify-center text-[9px] font-black tracking-[0.08em] text-[#07110d]">
+          TEEZ
+        </span>
+      )}
+
+    </div>
+  );
+}
+
+
+function BoosterPosition({
+  number,
+  available,
+}: {
+  number: number;
+  available: boolean;
+}) {
+  return (
+    <button
+      type="button"
+      disabled={!available}
+      className={`relative aspect-square rounded-full border transition ${
+        available
+          ? "border-emerald-300/70 bg-white shadow-[0_0_12px_rgba(52,211,153,0.22)] active:scale-95"
+          : "cursor-default border-slate-600 bg-slate-300 opacity-55"
+      }`}
+    >
+
+      <div className="absolute inset-[3px] rounded-full bg-[radial-gradient(circle_at_30%_30%,#ffffff,#cfd8dc)]" />
+
+      <span className="absolute inset-0 z-10 flex items-center justify-center text-[8px] font-black text-slate-700">
+        {number}
+      </span>
+
+    </button>
+  );
+}
+
 
 function SectionHeading({
   eyebrow,
@@ -318,193 +433,76 @@ function SectionHeading({
   description: string;
 }) {
   return (
-    <div className="mb-3">
-      <div className="mb-2 h-[2px] w-8 bg-[#0f5132]" />
+    <div className="mb-4">
 
-      <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#0f5132]">
-        {eyebrow}
-      </p>
+      <div className="mb-3 flex items-center gap-3">
 
-      <h2 className="mt-1 text-xl font-black tracking-tight">
+        <div className="h-[2px] w-8 bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.7)]" />
+
+        <p className="text-[9px] font-black uppercase tracking-[0.24em] text-emerald-400">
+          {eyebrow}
+        </p>
+
+      </div>
+
+      <h2 className="text-xl font-black tracking-tight text-white">
         {title}
       </h2>
 
-      <p className="mt-1 text-sm leading-5 text-slate-500">
+      <p className="mt-1.5 text-sm leading-5 text-slate-400">
         {description}
       </p>
+
     </div>
   );
 }
 
-function VaultSummary({
-  code,
+
+function SummaryTile({
   title,
   value,
+  colour,
 }: {
-  code: string;
   title: string;
   value: number;
+  colour: string;
 }) {
   return (
-    <div className="border-b border-r border-white/10 px-5 py-4">
-      <p className="text-[9px] font-black uppercase tracking-[0.16em] text-[#8eb89f]">
-        {code}
+    <div className="px-3 py-4 text-center">
+
+      <p className="text-[9px] font-black uppercase tracking-[0.12em] text-slate-500">
+        {title}
       </p>
 
-      <p className="mt-1 text-2xl font-black text-white">
+      <p
+        className={`mt-1 text-2xl font-black ${colour}`}
+      >
         {value}
       </p>
 
-      <p className="mt-1 text-xs text-slate-500">
-        {title}
-      </p>
     </div>
   );
 }
 
-function VaultCard({
-  config,
-  playerVault,
-  onEnter,
+
+function WeightTile({
+  title,
+  value,
 }: {
-  config: VaultConfig;
-  playerVault: VaultData;
-  onEnter: () => void;
+  title: string;
+  value: string;
 }) {
-  const isUnlocked =
-    playerVault.unlockedVaults.includes(config.id);
-
-  const openedBeforeVault =
-    config.coinStart - 1;
-
-  const coinsOpenedInVault = Math.min(
-    50,
-    Math.max(
-      0,
-      playerVault.totalCoinsOpened - openedBeforeVault
-    )
-  );
-
-  const progress =
-    (coinsOpenedInVault / 50) * 100;
-
-  const completed =
-    coinsOpenedInVault >= 50;
-
-  const vaultStyle = {
-    bronze: {
-      code: "BRZ",
-      border: "border-[#9a6a3a]",
-      accent: "#9a6a3a",
-      panel: "bg-[#fbf6f1]",
-    },
-    silver: {
-      code: "SLV",
-      border: "border-[#9ca3af]",
-      accent: "#6b7280",
-      panel: "bg-[#f8fafc]",
-    },
-    gold: {
-      code: "GLD",
-      border: "border-[#c9b37a]",
-      accent: "#9a7531",
-      panel: "bg-[#faf7ef]",
-    },
-    diamond: {
-      code: "DIA",
-      border: "border-[#7c95a5]",
-      accent: "#4f6978",
-      panel: "bg-[#f3f7f9]",
-    },
-  }[config.id];
-
   return (
-    <div
-      className={`overflow-hidden border bg-white shadow-sm ${
-        isUnlocked
-          ? vaultStyle.border
-          : "border-slate-200 opacity-70"
-      }`}
-    >
-      <div className="flex items-start gap-4 p-5">
+    <div className="border border-violet-400/20 bg-violet-400/[0.05] px-2 py-3 text-center">
 
-        <div
-          className={`flex h-14 min-w-14 items-center justify-center border px-2 text-[9px] font-black tracking-[0.08em] ${
-            isUnlocked
-              ? `${vaultStyle.border} ${vaultStyle.panel}`
-              : "border-slate-200 bg-slate-50 text-slate-400"
-          }`}
-          style={{
-            color: isUnlocked
-              ? vaultStyle.accent
-              : undefined,
-          }}
-        >
-          {isUnlocked
-            ? vaultStyle.code
-            : "LOCK"}
-        </div>
+      <p className="text-lg font-black text-violet-300">
+        {value}
+      </p>
 
-        <div className="min-w-0 flex-1">
+      <p className="mt-1 text-[8px] font-black uppercase tracking-[0.08em] text-slate-500">
+        {title}
+      </p>
 
-          <p className="text-[9px] font-bold uppercase tracking-[0.18em] text-slate-400">
-            Coins {config.coinStart}–{config.coinEnd}
-          </p>
-
-          <h3 className="mt-1 text-xl font-black">
-            {config.title}
-          </h3>
-
-          <p className="mt-2 text-sm leading-5 text-slate-500">
-            {config.description}
-          </p>
-        </div>
-      </div>
-
-      <div className="border-t border-slate-100 px-5 py-4">
-
-        <div className="flex items-center justify-between">
-          <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-slate-400">
-            Vault Progress
-          </p>
-
-          <p className="text-sm font-black text-[#111827]">
-            {coinsOpenedInVault} / 50
-          </p>
-        </div>
-
-        <div className="mt-3 h-2 bg-slate-200">
-          <div
-            className="h-full"
-            style={{
-              width: `${Math.min(
-                100,
-                progress
-              )}%`,
-              backgroundColor: isUnlocked
-                ? vaultStyle.accent
-                : "#cbd5e1",
-            }}
-          />
-        </div>
-
-        <button
-          type="button"
-          onClick={onEnter}
-          disabled={!isUnlocked}
-          className={`mt-4 w-full border py-3 text-xs font-black uppercase tracking-[0.12em] ${
-            isUnlocked
-              ? "border-[#0f5132] bg-[#0f5132] text-white"
-              : "cursor-not-allowed border-slate-200 bg-slate-100 text-slate-400"
-          }`}
-        >
-          {!isUnlocked
-            ? "Complete Previous Vault"
-            : completed
-              ? `${config.title} Completed`
-              : `Enter ${config.title}`}
-        </button>
-      </div>
     </div>
   );
 }

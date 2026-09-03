@@ -542,9 +542,9 @@ export default function MyCareerPage() {
           Board
         </p>
 
-        <p className="mt-1 text-base font-black text-white">
-          100
-        </p>
+       <p className="mt-1 text-base font-black text-white">
+  200
+</p>
 
         <p className="text-[8px] font-bold uppercase tracking-[0.08em] text-slate-500">
           Booster Balls
@@ -556,9 +556,9 @@ export default function MyCareerPage() {
           Career
         </p>
 
-        <p className="mt-1 text-base font-black text-cyan-300">
-          75
-        </p>
+       <p className="mt-1 text-base font-black text-cyan-300">
+  150
+</p>
 
         <p className="text-[8px] font-bold uppercase tracking-[0.08em] text-slate-500">
           Boosters
@@ -570,9 +570,9 @@ export default function MyCareerPage() {
           Rewards
         </p>
 
-        <p className="mt-1 text-base font-black text-amber-300">
-          25
-        </p>
+       <p className="mt-1 text-base font-black text-amber-300">
+  50
+</p>
 
         <p className="text-[8px] font-bold uppercase tracking-[0.08em] text-slate-500">
           Boosters
@@ -589,9 +589,9 @@ export default function MyCareerPage() {
           Open Booster Board
         </span>
 
-        <span className="text-sm font-black text-emerald-300">
-          100 BALL CHALLENGE
-        </span>
+      <span className="text-sm font-black text-emerald-300">
+  200 BALL CHALLENGE
+</span>
 
       </div>
 

@@ -8,7 +8,7 @@ import { useAuth } from "@/src/lib/AuthContext";
 import { db } from "@/src/lib/firebase";
 
 type RankingData = {
-  powerScore?: number;
+  
   playerLevel?: number;
   careerXP?: number;
   careerPoints?: number;
@@ -169,9 +169,6 @@ export default function MyCareerPage() {
     stats?.careerPoints ?? 0
   );
 
-  const powerScore = Number(
-    stats?.powerScore ?? 1000
-  );
 
   const matchesPlayed = Number(
     stats?.matchesPlayed ?? 0
@@ -209,13 +206,6 @@ export default function MyCareerPage() {
     }`.trim() ||
     "TEEZ Player";
 
-  const overallRating = Math.min(
-    99,
-    Math.max(
-      1,
-      Math.floor(powerScore / 25)
-    )
-  );
 
   return (
     <main className="min-h-screen bg-[#eef1f4] text-[#111827]">
@@ -298,22 +288,7 @@ export default function MyCareerPage() {
               </div>
             </div>
 
-            <div className="grid grid-cols-3 divide-x divide-white/10">
-              <HeroStat
-                label="LEVEL"
-                value={playerLevel}
-              />
-
-              <HeroStat
-                label="POWER"
-                value={powerScore}
-              />
-
-              <HeroStat
-                label="CAREER PTS"
-                value={careerPoints}
-              />
-            </div>
+           
           </section>
 
    {/* CAREER GUIDE */}
@@ -433,12 +408,11 @@ export default function MyCareerPage() {
 
            {/* LAST CHALLENGE */}
 
-          <section>
-            <SectionHeading
-              eyebrow="LATEST RESULT"
-              title="Last Challenge"
-              description="Ranking movement from your latest completed challenge"
-            />
+          <SectionHeading
+  eyebrow="LATEST RESULT"
+  title="Last Challenge Ranking Movement"
+  description="See how your latest completed challenge changed your ranking positions"
+/>
 
             <div className="border border-slate-200 bg-white px-5 shadow-sm">
 
@@ -691,17 +665,6 @@ export default function MyCareerPage() {
                 accent="green"
               />
 
-              <ProgressTile
-                code="PWR"
-                title="Power Score"
-                value={powerScore}
-                progress={Math.min(
-                  100,
-                  (powerScore / 2500) * 100
-                )}
-                footer="Competitive rating"
-                accent="navy"
-              />
 
               <ProgressTile
                 code="PTS"
@@ -715,14 +678,7 @@ export default function MyCareerPage() {
                 accent="gold"
               />
 
-              <ProgressTile
-                code="OVR"
-                title="Overall Rating"
-                value={overallRating}
-                progress={overallRating}
-                footer="Career rating"
-                accent="slate"
-              />
+          
             </div>
           </section> 
 

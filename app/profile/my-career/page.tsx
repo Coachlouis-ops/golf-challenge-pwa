@@ -406,15 +406,16 @@ export default function MyCareerPage() {
           </section>
 
 
-           {/* LAST CHALLENGE */}
+         {/* LAST CHALLENGE */}
 
-          <SectionHeading
-  eyebrow="LATEST RESULT"
-  title="Last Challenge Ranking Movement"
-  description="See how your latest completed challenge changed your ranking positions"
-/>
+<section>
+  <SectionHeading
+    eyebrow="LATEST RESULT"
+    title="Last Challenge Ranking Movement"
+    description="See how your latest completed challenge changed your ranking positions"
+  />
 
-            <div className="border border-slate-200 bg-white px-5 shadow-sm">
+  <div className="border border-slate-200 bg-white px-5 shadow-sm">
 
               <MovementRow
                 title="Club"

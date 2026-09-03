@@ -210,13 +210,13 @@ async function handleOpenBoosterBall(
 
         {/* HEADER */}
 
-        <header className="sticky top-0 z-30 border-b border-emerald-400/30 bg-[#030608]/95 px-5 py-3 backdrop-blur-xl">
+      <header className="sticky top-0 z-30 border-b border-cyan-400/30 bg-[#030608]/95 px-5 py-3 backdrop-blur-xl">
           <div className="flex items-center justify-between">
 
             <button
               type="button"
               onClick={() => router.back()}
-              className="flex h-10 w-10 items-center justify-center border border-emerald-400/30 bg-emerald-400/[0.05] text-2xl font-black text-emerald-300"
+              className="flex h-10 w-10 items-center justify-center border border-cyan-400/30 bg-cyan-400/[0.05] text-2xl font-black text-cyan-300 shadow-[0_0_16px_rgba(34,211,238,0.15)]"
               aria-label="Go back"
             >
               ‹
@@ -227,10 +227,10 @@ async function handleOpenBoosterBall(
               <img
                 src="/teez-app-icon-v4.png"
                 alt="TEEZ Golf Challenges"
-                className="h-14 w-14 object-contain drop-shadow-[0_0_14px_rgba(52,211,153,0.65)]"
+                className="h-16 w-16 object-contain drop-shadow-[0_0_14px_rgba(0,174,255,0.75)]"
               />
 
-              <p className="mt-1 text-[8px] font-black uppercase tracking-[0.30em] text-emerald-400">
+              <p className="mt-1 text-[8px] font-black uppercase tracking-[0.30em] text-cyan-400">
                 TEEZ Player Boosters
               </p>
 
@@ -246,13 +246,13 @@ async function handleOpenBoosterBall(
         </header>
 
 
-        <div className="space-y-7 px-4 pt-5">
+    <div className="space-y-8 px-4 pt-5">
 
           {/* HERO */}
 
-          <section className="relative overflow-hidden border border-emerald-400/40 bg-[#06110d] shadow-[0_0_38px_rgba(52,211,153,0.12)]">
+          <section className="relative overflow-hidden border border-cyan-400/30 bg-[#071017] shadow-[0_0_35px_rgba(34,211,238,0.10)]">
 
-            <div className="pointer-events-none absolute -right-20 -top-20 h-52 w-52 rounded-full bg-emerald-400/10 blur-3xl" />
+           <div className="pointer-events-none absolute -right-16 -top-16 h-44 w-44 rounded-full bg-cyan-400/10 blur-3xl" />
 
             <div className="pointer-events-none absolute -bottom-20 -left-20 h-44 w-44 rounded-full bg-cyan-400/[0.06] blur-3xl" />
 
@@ -264,10 +264,9 @@ async function handleOpenBoosterBall(
 
                 <div className="min-w-0 flex-1">
 
-                  <p className="text-[9px] font-black uppercase tracking-[0.22em] text-emerald-300">
-                    Mystery Booster System
-                  </p>
-
+                 <p className="text-[9px] font-black uppercase tracking-[0.22em] text-cyan-400">
+  Mystery Booster System
+</p>
                  <h2 className="mt-1 text-2xl font-black tracking-tight text-white">
   200 Booster Balls
 </h2>
@@ -281,11 +280,11 @@ async function handleOpenBoosterBall(
 
               </div>
 
-              <div className="mt-5 border-t border-emerald-400/15 pt-4">
+             <div className="mt-5 border-t border-cyan-400/15 pt-4">
 
-                <p className="text-center text-[10px] font-black uppercase tracking-[0.18em] text-emerald-300">
-                  Give Your Game the Edge via Mystery Boosters
-                </p>
+               <p className="text-center text-[10px] font-black uppercase tracking-[0.18em] text-cyan-300">
+  Give Your Game the Edge via Mystery Boosters
+</p>
 
               </div>
 
@@ -336,16 +335,16 @@ async function handleOpenBoosterBall(
                     Board Cleared
                   </p>
 
-                  <p className="text-sm font-black text-emerald-300">
-                    {boosterBallsOpened} / {TOTAL_BOOSTERS}
-                  </p>
+                  <p className="text-sm font-black text-cyan-300">
+  {boosterBallsOpened} / {TOTAL_BOOSTERS}
+</p>
 
                 </div>
 
                 <div className="mt-3 h-3 overflow-hidden bg-slate-800">
 
-                  <div
-                    className="h-full bg-emerald-400 shadow-[0_0_12px_rgba(52,211,153,0.7)]"
+                 <div
+  className="h-full bg-cyan-400 shadow-[0_0_12px_rgba(34,211,238,0.7)]"
                     style={{
                       width: `${Math.min(
                         100,
@@ -373,13 +372,13 @@ async function handleOpenBoosterBall(
   description="Tokens Played + Tokens Won + Participation + Achievements build your Booster Progress"
 />
 
-            <div className="relative overflow-hidden border border-violet-400/40 bg-[#0a0711] p-5 shadow-[0_0_30px_rgba(167,139,250,0.10)]">
+           <div className="relative overflow-hidden border border-cyan-400/30 bg-[#071017] p-5 shadow-[0_0_30px_rgba(34,211,238,0.08)]">
 
               <div className="flex items-center justify-between">
 
                 <div>
 
-                  <p className="text-[9px] font-black uppercase tracking-[0.16em] text-violet-300">
+                 <p className="text-[9px] font-black uppercase tracking-[0.16em] text-cyan-300">
                     Current Progress
                   </p>
 
@@ -395,9 +394,9 @@ async function handleOpenBoosterBall(
                     Balls Available
                   </p>
 
-                  <p className="mt-1 text-3xl font-black text-emerald-300">
-                    {boosterBallsEarned}
-                  </p>
+                  <p className="mt-1 text-3xl font-black text-cyan-300">
+  {boosterBallsEarned}
+</p>
 
                 </div>
 
@@ -406,7 +405,7 @@ async function handleOpenBoosterBall(
               <div className="mt-5 h-3 overflow-hidden bg-slate-800">
 
                 <div
-                  className="h-full bg-violet-400 shadow-[0_0_12px_rgba(167,139,250,0.7)]"
+                  className="h-full bg-cyan-400 shadow-[0_0_12px_rgba(34,211,238,0.7)]"
                   style={{
                     width: `${Math.min(
                       100,
@@ -456,14 +455,14 @@ async function handleOpenBoosterBall(
               description="Earn a Booster Ball, then choose an available position to reveal your mystery Booster"
             />
 
-           <div className="border border-emerald-400/30 bg-[#050d0a] p-3 shadow-[0_0_34px_rgba(52,211,153,0.08)]">
+           <div className="border border-cyan-400/30 bg-[#071017] p-3 shadow-[0_0_34px_rgba(34,211,238,0.08)]">
 
   <div className="mb-3 flex items-center justify-between">
     <p className="text-[8px] font-black uppercase tracking-[0.14em] text-slate-500">
       20 ROWS × 10
     </p>
 
-    <p className="text-[8px] font-black uppercase tracking-[0.14em] text-emerald-300">
+    <p className="text-[8px] font-black uppercase tracking-[0.14em] text-cyan-300">
 
       
       200 MYSTERY BOOSTERS
@@ -571,9 +570,9 @@ async function handleOpenBoosterBall(
           Booster Board
         </p>
 
-        <p className="mt-1 text-sm font-black text-emerald-300">
-          {boosterBallsOpened} / {TOTAL_BOOSTERS} CLEARED
-        </p>
+        <p className="mt-1 text-sm font-black text-cyan-300">
+  {boosterBallsOpened} / {TOTAL_BOOSTERS} CLEARED
+</p>
 
         <p className="mt-2 text-xs leading-5 text-slate-500">
           Booster Board progress does not determine Final
@@ -603,7 +602,7 @@ function BoosterBall({
 }) {
   return (
     <div
-      className={`relative shrink-0 rounded-full border-2 border-emerald-300/70 bg-white shadow-[0_0_22px_rgba(52,211,153,0.24)] ${
+    className={`relative shrink-0 rounded-full border-2 border-cyan-300/70 bg-white shadow-[0_0_22px_rgba(34,211,238,0.24)] ${
         size === "large"
           ? "h-20 w-20"
           : "h-12 w-12"
@@ -649,7 +648,7 @@ function BoosterPosition({
   opened
     ? "cursor-default border-amber-400/60 bg-amber-300 opacity-80 shadow-[0_0_10px_rgba(251,191,36,0.25)]"
     : available
-      ? "border-emerald-300/70 bg-white shadow-[0_0_12px_rgba(52,211,153,0.22)] active:scale-95"
+  ? "border-cyan-300/70 bg-white shadow-[0_0_12px_rgba(34,211,238,0.22)] active:scale-95"
       : "cursor-default border-slate-600 bg-slate-300 opacity-55"
 }`}
     >
@@ -685,11 +684,11 @@ function SectionHeading({
 
       <div className="mb-3 flex items-center gap-3">
 
-        <div className="h-[2px] w-8 bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.7)]" />
+       <div className="h-[2px] w-8 bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.7)]" />
 
-        <p className="text-[9px] font-black uppercase tracking-[0.24em] text-emerald-400">
-          {eyebrow}
-        </p>
+<p className="text-[9px] font-black uppercase tracking-[0.24em] text-cyan-400">
+  {eyebrow}
+</p>
 
       </div>
 
@@ -741,11 +740,11 @@ function WeightTile({
   value: string;
 }) {
   return (
-    <div className="border border-violet-400/20 bg-violet-400/[0.05] px-2 py-3 text-center">
+    <div className="border border-cyan-400/20 bg-cyan-400/[0.05] px-2 py-3 text-center">
 
-      <p className="text-lg font-black text-violet-300">
-        {value}
-      </p>
+  <p className="text-lg font-black text-cyan-300">
+    {value}
+  </p>
 
       <p className="mt-1 text-[8px] font-black uppercase tracking-[0.08em] text-slate-500">
         {title}

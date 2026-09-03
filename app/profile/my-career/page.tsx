@@ -142,18 +142,30 @@ export default function MyCareerPage() {
   }, [user]);
 
   if (loading) {
-    return (
-      <main className="flex min-h-screen items-center justify-center bg-[#eef1f4] px-6">
-        <div className="border border-slate-200 bg-white px-8 py-6 text-center shadow-sm">
-          <div className="mx-auto h-8 w-8 animate-spin rounded-full border-2 border-slate-200 border-t-[#0f5132]" />
+  return (
+    <main className="flex min-h-screen items-center justify-center bg-[#030608] px-6">
 
-          <p className="mt-4 text-sm font-semibold text-slate-700">
-            Loading career
-          </p>
-        </div>
-      </main>
-    );
-  }
+      <div className="relative overflow-hidden border border-cyan-400/30 bg-[#071017] px-10 py-8 text-center shadow-[0_0_35px_rgba(34,211,238,0.14)]">
+
+        <div className="absolute -right-10 -top-10 h-28 w-28 rounded-full bg-cyan-400/10 blur-3xl" />
+
+        <img
+          src="/teez-app-icon-v4.png"
+          alt="TEEZ Golf Challenges"
+          className="relative mx-auto h-16 w-16 object-contain drop-shadow-[0_0_14px_rgba(34,211,238,0.7)]"
+        />
+
+        <div className="relative mx-auto mt-5 h-9 w-9 animate-spin rounded-full border-2 border-cyan-400/20 border-t-cyan-300" />
+
+        <p className="relative mt-4 text-[10px] font-black uppercase tracking-[0.22em] text-cyan-300">
+          Loading Player Career
+        </p>
+
+      </div>
+
+    </main>
+  );
+}
 
   const stats = career?.ranking;
 
@@ -372,77 +384,97 @@ export default function MyCareerPage() {
             />
           </section>
 
- {/* RACE TO FINAL */}
+{/* RACE TO FINAL */}
 
-          <section>
-            <SectionHeading
-              eyebrow="SEASON CHAMPIONSHIP"
-              title="Race to the Final"
-              description="Compete for a place in the annual TEEZ Championship Final"
-            />
+<section>
 
-            <button
-              type="button"
-              onClick={() =>
-                router.push(
-                  "/profile/race-to-paradise"
-                )
-              }
-              className="w-full overflow-hidden border border-[#1c4532] bg-[#10261c] text-left shadow-[0_6px_18px_rgba(15,23,42,0.12)]"
-            >
+  <SectionHeading
+    eyebrow="SEASON CHAMPIONSHIP"
+    title="Race to the Final"
+    description="Compete for a place in the annual TEEZ Championship Final"
+  />
 
-              <div className="flex items-center gap-4 border-b border-white/10 p-5">
+  <button
+    type="button"
+    onClick={() =>
+      router.push(
+        "/profile/race-to-paradise"
+      )
+    }
+    className="group relative w-full overflow-hidden border border-amber-400/60 bg-[#100c04] text-left shadow-[0_0_34px_rgba(251,191,36,0.14)] transition duration-200 active:scale-[0.99]"
+  >
 
-                <div className="flex h-14 w-14 shrink-0 items-center justify-center border border-[#c6a96a] bg-[#172d23]">
-                  <span className="text-sm font-black tracking-[0.08em] text-[#d8c18a]">
-                    RTF
-                  </span>
-                </div>
+    <div className="pointer-events-none absolute -right-20 -top-20 h-48 w-48 rounded-full bg-amber-400/10 blur-3xl" />
 
-                <div className="min-w-0 flex-1">
+    <div className="pointer-events-none absolute -bottom-20 -left-20 h-44 w-44 rounded-full bg-orange-500/[0.06] blur-3xl" />
 
-                  <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#8eb89f]">
-                    TEEZ Championship Series
-                  </p>
+    <div className="relative flex items-center gap-4 border-b border-amber-400/15 p-5">
 
-                  <h3 className="mt-1 text-xl font-black text-white">
-                    Race to the Final
-                  </h3>
+      <div className="flex h-16 w-16 shrink-0 items-center justify-center border border-amber-400/50 bg-amber-400/[0.08] shadow-[0_0_22px_rgba(251,191,36,0.16)]">
 
-                  <p className="mt-2 text-sm leading-5 text-slate-300">
-                    Earn Race Points throughout the season and compete for a Top 8 position.
-                  </p>
-                </div>
+        <span className="text-sm font-black tracking-[0.10em] text-amber-300">
+          RTF
+        </span>
 
-                <span className="text-xl text-[#d8c18a]">
-                  ›
-                </span>
-              </div>
+      </div>
 
-              <div className="grid grid-cols-2 divide-x divide-white/10">
+      <div className="min-w-0 flex-1">
 
-                <div className="px-5 py-4">
-                  <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">
-                    Season Goal
-                  </p>
+        <p className="text-[9px] font-black uppercase tracking-[0.22em] text-amber-300">
+          TEEZ Championship Series
+        </p>
 
-                  <p className="mt-1 text-sm font-black text-white">
-                    Global Top 8
-                  </p>
-                </div>
+        <h3 className="mt-1 text-xl font-black text-white">
+          Race to the Final
+        </h3>
 
-                <div className="px-5 py-4">
-                  <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">
-                    Competition
-                  </p>
+        <p className="mt-2 text-sm leading-5 text-slate-400">
+          Earn Race Points throughout the season and fight for a place in the Final.
+        </p>
 
-                  <p className="mt-1 text-sm font-black text-[#d8c18a]">
-                    Championship Final
-                  </p>
-                </div>
-              </div>
-            </button>
-          </section>
+        <p className="mt-3 text-[9px] font-black uppercase tracking-[0.16em] text-amber-300">
+          Click to View Championship Race
+        </p>
+
+      </div>
+
+      <span className="text-2xl font-black text-amber-300 transition group-hover:translate-x-1">
+        ›
+      </span>
+
+    </div>
+
+    <div className="relative grid grid-cols-2 divide-x divide-amber-400/15">
+
+      <div className="px-5 py-4">
+
+        <p className="text-[9px] font-black uppercase tracking-[0.16em] text-slate-500">
+          Season Goal
+        </p>
+
+        <p className="mt-1 text-base font-black text-amber-300">
+          GLOBAL TOP 8
+        </p>
+
+      </div>
+
+      <div className="px-5 py-4">
+
+        <p className="text-[9px] font-black uppercase tracking-[0.16em] text-slate-500">
+          Destination
+        </p>
+
+        <p className="mt-1 text-base font-black text-white">
+          THE FINAL
+        </p>
+
+      </div>
+
+    </div>
+
+  </button>
+
+</section>
 
 
           {/* PLAYER VAULT */}
@@ -475,7 +507,7 @@ export default function MyCareerPage() {
     description="See how your latest completed challenge changed your ranking positions"
   />
 
-  <div className="border border-slate-200 bg-white px-5 shadow-sm">
+<div className="relative overflow-hidden border border-violet-400/40 bg-[#090711] px-5 shadow-[0_0_30px_rgba(167,139,250,0.12)]">
 
               <MovementRow
                 title="Club"
@@ -749,7 +781,7 @@ export default function MyCareerPage() {
                 title="Player Level"
                 value={playerLevel}
                 progress={xpProgress}
-                footer={`${xpRemaining} XP to next level`}
+                footer={`${xpRemaining} Experience Points to next level`}
                 accent="green"
               />
 
@@ -897,25 +929,6 @@ function ProfilePill({
   );
 }
 
-function HeroStat({
-  label,
-  value,
-}: {
-  label: string;
-  value: number | string;
-}) {
-  return (
-    <div className="px-2 py-4 text-center">
-      <p className="text-[9px] font-bold uppercase tracking-[0.18em] text-slate-500">
-        {label}
-      </p>
-
-      <p className="mt-1 text-xl font-black text-white">
-        {value}
-      </p>
-    </div>
-  );
-}
 
 function ProgressTile({
   code,
@@ -942,62 +955,87 @@ function ProgressTile({
   );
 
   const colours = {
-    green: "#0f5132",
-    navy: "#17324a",
-    gold: "#b08a42",
-    slate: "#475569",
+    green: "#34d399",
+    navy: "#38bdf8",
+    gold: "#fbbf24",
+    slate: "#94a3b8",
   };
 
   const colour = colours[accent];
 
   return (
-    <div className="border border-slate-200 bg-white p-4 shadow-sm">
+    <div className="relative overflow-hidden border border-cyan-400/30 bg-[#071017] p-4 shadow-[0_0_26px_rgba(34,211,238,0.08)]">
 
-      <div className="flex items-start justify-between gap-3">
+      <div
+        className="pointer-events-none absolute -right-10 -top-10 h-24 w-24 rounded-full blur-3xl"
+        style={{
+          backgroundColor: `${colour}15`,
+        }}
+      />
 
-        <div>
-          <span
-            className="inline-flex h-8 min-w-8 items-center justify-center border px-2 text-[9px] font-black tracking-[0.08em]"
+      <div className="relative">
+
+        <div className="flex items-start justify-between gap-3">
+
+          <div>
+
+            <span
+              className="inline-flex h-8 min-w-10 items-center justify-center border px-2 text-[9px] font-black tracking-[0.10em]"
+              style={{
+                borderColor: `${colour}66`,
+                color: colour,
+                backgroundColor: `${colour}12`,
+              }}
+            >
+              {code}
+            </span>
+
+            <h3 className="mt-3 text-[10px] font-black uppercase tracking-[0.10em] text-slate-500">
+              {title}
+            </h3>
+
+          </div>
+
+          <div
+            className="relative flex h-14 w-14 shrink-0 items-center justify-center rounded-full"
             style={{
-              borderColor: `${colour}55`,
-              color: colour,
-              backgroundColor: `${colour}0d`,
+              background: `conic-gradient(${colour} ${safeProgress}%, #17202a ${safeProgress}% 100%)`,
+              boxShadow: `0 0 18px ${colour}22`,
             }}
           >
-            {code}
-          </span>
 
-          <h3 className="mt-3 text-xs font-bold uppercase tracking-[0.08em] text-slate-500">
-            {title}
-          </h3>
-        </div>
+            <div className="flex h-[46px] w-[46px] items-center justify-center rounded-full bg-[#071017]">
 
-        <div
-          className="relative flex h-14 w-14 shrink-0 items-center justify-center rounded-full"
-          style={{
-            background: `conic-gradient(${colour} ${safeProgress}%, #e5e7eb ${safeProgress}% 100%)`,
-          }}
-        >
-          <div className="flex h-[46px] w-[46px] items-center justify-center rounded-full bg-white">
-            <span className="text-[10px] font-black text-slate-700">
-              {Math.round(safeProgress)}%
-            </span>
+              <span
+                className="text-[10px] font-black"
+                style={{
+  color: colour,
+}}
+              >
+                {Math.round(safeProgress)}%
+              </span>
+
+            </div>
+
           </div>
+
         </div>
+
+        <p
+          className="mt-4 text-3xl font-black tracking-tight"
+          style={{
+  color: colour,
+}}
+        >
+          {value}
+        </p>
+
+        <p className="mt-1 min-h-9 text-xs leading-4 text-slate-400">
+          {footer}
+        </p>
+
       </div>
 
-      <p
-        className="mt-4 text-3xl font-black tracking-tight"
-        style={{
-          color: colour,
-        }}
-      >
-        {value}
-      </p>
-
-      <p className="mt-1 min-h-9 text-xs leading-4 text-slate-400">
-        {footer}
-      </p>
     </div>
   );
 }
@@ -1017,44 +1055,65 @@ function MetricTile({
 }) {
   return (
     <div
-      className={`border bg-white p-4 shadow-sm ${
+      className={`relative overflow-hidden border bg-[#071017] p-4 ${
         highlight
-          ? "border-[#c9b37a]"
-          : "border-slate-200"
+          ? "border-amber-400/60 shadow-[0_0_26px_rgba(251,191,36,0.14)]"
+          : "border-cyan-400/30 shadow-[0_0_24px_rgba(34,211,238,0.08)]"
       }`}
     >
-      <div className="flex items-center justify-between">
 
-        <span
-          className={`text-[9px] font-black uppercase tracking-[0.12em] ${
+      <div
+        className={`pointer-events-none absolute -right-10 -top-10 h-24 w-24 rounded-full blur-3xl ${
+          highlight
+            ? "bg-amber-400/10"
+            : "bg-cyan-400/[0.07]"
+        }`}
+      />
+
+      <div className="relative">
+
+        <div className="flex items-center justify-between">
+
+          <span
+            className={`inline-flex h-8 min-w-10 items-center justify-center border px-2 text-[9px] font-black uppercase tracking-[0.12em] ${
+              highlight
+                ? "border-amber-400/40 bg-amber-400/[0.08] text-amber-300"
+                : "border-cyan-400/30 bg-cyan-400/[0.06] text-cyan-300"
+            }`}
+          >
+            {code}
+          </span>
+
+          <div
+            className={`h-[2px] w-8 ${
+              highlight
+                ? "bg-amber-300 shadow-[0_0_8px_rgba(251,191,36,0.8)]"
+                : "bg-cyan-300 shadow-[0_0_8px_rgba(34,211,238,0.7)]"
+            }`}
+          />
+
+        </div>
+
+        <h3 className="mt-4 text-[10px] font-black uppercase tracking-[0.12em] text-slate-500">
+          {title}
+        </h3>
+
+        <p
+          className={`mt-1 break-words text-3xl font-black tracking-tight ${
             highlight
-              ? "text-[#9a7531]"
-              : "text-[#0f5132]"
+              ? "text-amber-300"
+              : "text-white"
           }`}
         >
-          {code}
-        </span>
+          {value}
+        </p>
 
-        <div
-          className={`h-[3px] w-7 ${
-            highlight
-              ? "bg-[#b08a42]"
-              : "bg-[#0f5132]"
-          }`}
-        />
+        <p className="mt-2 min-h-9 text-xs leading-4 text-slate-400">
+          {footer}
+        </p>
+
       </div>
 
-      <h3 className="mt-4 text-xs font-bold uppercase tracking-[0.08em] text-slate-500">
-        {title}
-      </h3>
-
-      <p className="mt-1 break-words text-3xl font-black tracking-tight text-[#111827]">
-        {value}
-      </p>
-
-      <p className="mt-2 min-h-9 text-xs leading-4 text-slate-400">
-        {footer}
-      </p>
     </div>
   );
 }
@@ -1210,10 +1269,10 @@ function MovementRow({
 
   const movementStyle =
     movement > 0
-      ? "text-[#0f5132]"
+      ? "border-emerald-400/30 bg-emerald-400/[0.08] text-emerald-300 shadow-[0_0_12px_rgba(52,211,153,0.10)]"
       : movement < 0
-        ? "text-[#9f3a38]"
-        : "text-slate-500";
+        ? "border-red-400/30 bg-red-400/[0.08] text-red-300 shadow-[0_0_12px_rgba(248,113,113,0.10)]"
+        : "border-slate-600 bg-white/[0.03] text-slate-400";
 
   const movementLabel =
     !hasData
@@ -1225,25 +1284,28 @@ function MovementRow({
           : "NO CHANGE";
 
   return (
-    <div className="flex items-center justify-between border-b border-slate-100 py-4 last:border-b-0">
+    <div className="flex items-center justify-between border-b border-white/10 py-4 last:border-b-0">
 
       <div>
-        <p className="text-xs font-bold uppercase tracking-[0.08em] text-slate-600">
+
+        <p className="text-[10px] font-black uppercase tracking-[0.14em] text-violet-300">
           {title}
         </p>
 
-        <p className="mt-1 text-xs text-slate-400">
+        <p className="mt-1 text-sm font-black text-white">
           {hasData
             ? `#${before} → #${after}`
             : "No ranking recorded"}
         </p>
+
       </div>
 
       <span
-        className={`text-xs font-black tracking-[0.06em] ${movementStyle}`}
+        className={`border px-3 py-2 text-[9px] font-black uppercase tracking-[0.10em] ${movementStyle}`}
       >
         {movementLabel}
       </span>
+
     </div>
   );
 }
@@ -1341,37 +1403,55 @@ function AchievementTile({
 }) {
   return (
     <div
-      className={`border bg-white p-4 text-center shadow-sm ${
+      className={`relative overflow-hidden border p-4 text-center ${
         unlocked
-          ? "border-[#c9b37a]"
-          : "border-slate-200"
+          ? "border-amber-400/60 bg-[#100c04] shadow-[0_0_26px_rgba(251,191,36,0.14)]"
+          : "border-slate-700 bg-[#071017]"
       }`}
     >
-      <div
-        className={`mx-auto flex h-12 min-w-12 items-center justify-center border px-2 text-[9px] font-black tracking-[0.08em] ${
-          unlocked
-            ? "border-[#c9b37a] bg-[#faf7ef] text-[#9a7531]"
-            : "border-slate-200 bg-slate-50 text-slate-400"
-        }`}
-      >
-        {unlocked ? code : "LOCK"}
+
+      {unlocked && (
+        <div className="pointer-events-none absolute -right-10 -top-10 h-24 w-24 rounded-full bg-amber-400/10 blur-3xl" />
+      )}
+
+      <div className="relative">
+
+        <div
+          className={`mx-auto flex h-12 min-w-12 items-center justify-center border px-2 text-[9px] font-black tracking-[0.10em] ${
+            unlocked
+              ? "border-amber-400/50 bg-amber-400/[0.08] text-amber-300 shadow-[0_0_16px_rgba(251,191,36,0.12)]"
+              : "border-slate-700 bg-white/[0.02] text-slate-600"
+          }`}
+        >
+          {unlocked
+            ? code
+            : "LOCK"}
+        </div>
+
+        <p
+          className={`mt-3 text-sm font-black ${
+            unlocked
+              ? "text-white"
+              : "text-slate-500"
+          }`}
+        >
+          {title}
+        </p>
+
+        <p
+          className={`mt-2 text-[9px] font-black uppercase tracking-[0.14em] ${
+            unlocked
+              ? "text-amber-300"
+              : "text-slate-600"
+          }`}
+        >
+          {unlocked
+            ? "ACHIEVED"
+            : "LOCKED"}
+        </p>
+
       </div>
 
-      <p className="mt-3 text-sm font-black text-[#111827]">
-        {title}
-      </p>
-
-      <p
-        className={`mt-2 text-[10px] font-bold uppercase tracking-[0.12em] ${
-          unlocked
-            ? "text-[#9a7531]"
-            : "text-slate-400"
-        }`}
-      >
-        {unlocked
-          ? "Achieved"
-          : "Not achieved"}
-      </p>
     </div>
   );
 }

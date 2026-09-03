@@ -468,45 +468,64 @@ export default function MyCareerPage() {
           </section>
 
 
-           {/* CURRENT RANKINGS */}
+       {/* CURRENT RANKINGS */}
 
-          <section>
-            <SectionHeading
-              eyebrow="OFFICIAL STANDINGS"
-              title="Current Rankings"
-              description="Current position across each competitive level"
-            />
+<section>
+  <SectionHeading
+    eyebrow="OFFICIAL STANDINGS"
+    title="Current Rankings"
+    description="Select a ranking level to view the full TEEZ leaderboard"
+  />
 
-            <div className="grid grid-cols-2 gap-3">
+  <div className="grid grid-cols-2 gap-3">
 
-              <RankingTile
-                code="CLB"
-                title="Club"
-                value={ranking.clubPosition}
-              />
+    <RankingTile
+      code="CLB"
+      title="Club"
+      value={ranking.clubPosition}
+      onClick={() =>
+        router.push(
+          "/profile/my-career/rankings/club"
+        )
+      }
+    />
 
-              <RankingTile
-                code="PRV"
-                title="Province"
-                value={ranking.provincePosition}
-              />
+    <RankingTile
+      code="PRV"
+      title="Province"
+      value={ranking.provincePosition}
+      onClick={() =>
+        router.push(
+          "/profile/my-career/rankings/province"
+        )
+      }
+    />
 
-              <RankingTile
-                code="NAT"
-                title="National"
-                value={ranking.nationalPosition}
-              />
+    <RankingTile
+      code="NAT"
+      title="National"
+      value={ranking.nationalPosition}
+      onClick={() =>
+        router.push(
+          "/profile/my-career/rankings/national"
+        )
+      }
+    />
 
-              <RankingTile
-                code="GLB"
-                title="Global"
-                value={
-                  ranking.internationalPosition
-                }
-                premium
-              />
-            </div>
-          </section>
+    <RankingTile
+      code="GLB"
+      title="Global"
+      value={ranking.internationalPosition}
+      onClick={() =>
+        router.push(
+          "/profile/my-career/rankings/global"
+        )
+      }
+      premium
+    />
+
+  </div>
+</section>
 
 
  {/* PERFORMANCE */}
@@ -970,18 +989,22 @@ function RankingTile({
   code,
   title,
   value,
+  onClick,
   premium = false,
 }: {
   code: string;
   title: string;
   value: number;
+  onClick: () => void;
   premium?: boolean;
 }) {
   const hasRanking = value > 0;
 
   return (
-    <div
-      className={`border bg-white p-4 shadow-sm ${
+    <button
+      type="button"
+      onClick={onClick}
+      className={`w-full border bg-white p-4 text-left shadow-sm transition active:scale-[0.98] ${
         premium
           ? "border-[#c9b37a]"
           : "border-slate-200"
@@ -1000,14 +1023,14 @@ function RankingTile({
         </span>
 
         <span
-          className={`h-2 w-2 ${
-            hasRanking
-              ? premium
-                ? "bg-[#b08a42]"
-                : "bg-[#0f5132]"
-              : "bg-slate-300"
+          className={`text-lg font-black ${
+            premium
+              ? "text-[#9a7531]"
+              : "text-[#0f5132]"
           }`}
-        />
+        >
+          ›
+        </span>
       </div>
 
       <p className="mt-4 text-xs font-bold uppercase tracking-[0.08em] text-slate-500">
@@ -1018,12 +1041,18 @@ function RankingTile({
         {hasRanking ? `#${value}` : "—"}
       </p>
 
-      <p className="mt-2 text-xs text-slate-400">
-        {hasRanking
-          ? `${title} position`
-          : "Not ranked"}
-      </p>
-    </div>
+      <div className="mt-3 border-t border-slate-100 pt-3">
+        <p
+          className={`text-[10px] font-black uppercase tracking-[0.12em] ${
+            premium
+              ? "text-[#9a7531]"
+              : "text-[#0f5132]"
+          }`}
+        >
+          View Full Ranking
+        </p>
+      </div>
+    </button>
   );
 }
 

@@ -363,7 +363,7 @@ export default function MyCareerPage() {
             <ActionTile
               code="GUIDE"
               title="Career Calculation Guide"
-              text="Career Points, rankings, Power Score, XP, levels, streaks, Vault Keys and Race Points."
+             text="Career Points, rankings, Experience Points, player levels, streaks, achievements and Race Points."
               onClick={() =>
                 router.push(
                   "/profile/how-career-works"
@@ -1265,19 +1265,28 @@ function ActionTile({
     <button
       type="button"
       onClick={onClick}
-      className={`w-full border bg-white p-5 text-left shadow-sm ${
+      className={`group relative w-full overflow-hidden border p-5 text-left transition duration-200 active:scale-[0.99] ${
         premium
-          ? "border-[#c9b37a]"
-          : "border-slate-200"
+          ? "border-amber-400/60 bg-[#120e05] shadow-[0_0_28px_rgba(251,191,36,0.14)]"
+          : "border-cyan-400/40 bg-[#071017] shadow-[0_0_28px_rgba(34,211,238,0.12)]"
       }`}
     >
-      <div className="flex items-center gap-4">
+
+      <div
+        className={`pointer-events-none absolute -right-12 -top-12 h-32 w-32 rounded-full blur-3xl ${
+          premium
+            ? "bg-amber-400/10"
+            : "bg-cyan-400/10"
+        }`}
+      />
+
+      <div className="relative flex items-center gap-4">
 
         <div
-          className={`flex h-12 min-w-12 items-center justify-center border px-2 text-[9px] font-black tracking-[0.08em] ${
+          className={`flex h-14 min-w-14 items-center justify-center border px-2 text-[9px] font-black tracking-[0.10em] ${
             premium
-              ? "border-[#c9b37a] bg-[#faf7ef] text-[#9a7531]"
-              : "border-[#b8c7bd] bg-[#f3f7f4] text-[#0f5132]"
+              ? "border-amber-400/50 bg-amber-400/[0.08] text-amber-300 shadow-[0_0_18px_rgba(251,191,36,0.12)]"
+              : "border-cyan-400/50 bg-cyan-400/[0.08] text-cyan-300 shadow-[0_0_18px_rgba(34,211,238,0.12)]"
           }`}
         >
           {code}
@@ -1285,25 +1294,38 @@ function ActionTile({
 
         <div className="min-w-0 flex-1">
 
-          <h3 className="text-base font-black text-[#111827]">
+          <h3 className="text-base font-black text-white">
             {title}
           </h3>
 
-          <p className="mt-1 text-sm leading-5 text-slate-500">
+          <p className="mt-1 text-sm leading-5 text-slate-400">
             {text}
           </p>
+
+          <p
+            className={`mt-3 text-[9px] font-black uppercase tracking-[0.16em] ${
+              premium
+                ? "text-amber-300"
+                : "text-cyan-300"
+            }`}
+          >
+            Click to Open
+          </p>
+
         </div>
 
         <span
-          className={
+          className={`text-2xl font-black transition group-hover:translate-x-1 ${
             premium
-              ? "text-xl text-[#9a7531]"
-              : "text-xl text-[#0f5132]"
-          }
+              ? "text-amber-300"
+              : "text-cyan-300"
+          }`}
         >
           ›
         </span>
+
       </div>
+
     </button>
   );
 }

@@ -2,9 +2,9 @@
 
 import { useRouter } from "next/navigation";
 
-const TOTAL_BOOSTERS = 100;
-const CAREER_BOOSTERS = 75;
-const REWARD_BOOSTERS = 25;
+const TOTAL_BOOSTERS = 200;
+const CAREER_BOOSTERS = 150;
+const REWARD_BOOSTERS = 50;
 
 export default function GameBoosterBoardPage() {
   const router = useRouter();
@@ -83,14 +83,14 @@ export default function GameBoosterBoardPage() {
                     Mystery Booster System
                   </p>
 
-                  <h2 className="mt-1 text-2xl font-black tracking-tight text-white">
-                    100 Booster Balls
-                  </h2>
+                 <h2 className="mt-1 text-2xl font-black tracking-tight text-white">
+  200 Booster Balls
+</h2>
 
-                  <p className="mt-2 text-sm leading-5 text-slate-400">
-                    Earn Booster Balls through commitment,
-                    activity and performance.
-                  </p>
+<p className="mt-2 text-sm leading-5 text-slate-400">
+  Earn Booster Balls through tokens played,
+  tokens won, participation and achievements.
+</p>
 
                 </div>
 
@@ -116,7 +116,7 @@ export default function GameBoosterBoardPage() {
             <SectionHeading
               eyebrow="YOUR BOARD"
               title="Booster Board Progress"
-              description="Clear all 100 Booster Balls to complete your Game Booster Board"
+              description="Progress through 200 mystery Booster Balls during your season"
             />
 
             <div className="overflow-hidden border border-cyan-400/30 bg-[#071017] shadow-[0_0_30px_rgba(34,211,238,0.08)]">
@@ -182,11 +182,11 @@ export default function GameBoosterBoardPage() {
 
           <section>
 
-            <SectionHeading
-              eyebrow="EARN YOUR NEXT BALL"
-              title="Booster Progress"
-              description="Commitment + Activity + Performance build your Booster Progress"
-            />
+           <SectionHeading
+  eyebrow="EARN YOUR NEXT BALL"
+  title="Booster Progress"
+  description="Tokens Played + Tokens Won + Participation + Achievements build your Booster Progress"
+/>
 
             <div className="relative overflow-hidden border border-violet-400/40 bg-[#0a0711] p-5 shadow-[0_0_30px_rgba(167,139,250,0.10)]">
 
@@ -232,24 +232,29 @@ export default function GameBoosterBoardPage() {
 
               </div>
 
-              <div className="mt-5 grid grid-cols-3 gap-2">
+            <div className="mt-5 grid grid-cols-2 gap-2">
 
-                <WeightTile
-                  title="Commitment"
-                  value="30%"
-                />
+  <WeightTile
+    title="Tokens Played"
+    value="35%"
+  />
 
-                <WeightTile
-                  title="Activity"
-                  value="40%"
-                />
+  <WeightTile
+    title="Tokens Won"
+    value="30%"
+  />
 
-                <WeightTile
-                  title="Performance"
-                  value="30%"
-                />
+  <WeightTile
+    title="Participation"
+    value="25%"
+  />
 
-              </div>
+  <WeightTile
+    title="Achievements"
+    value="10%"
+  />
+
+</div>
 
             </div>
 
@@ -266,9 +271,21 @@ export default function GameBoosterBoardPage() {
               description="Earn a Booster Ball, then choose an available position to reveal your mystery Booster"
             />
 
-            <div className="border border-emerald-400/30 bg-[#050d0a] p-4 shadow-[0_0_34px_rgba(52,211,153,0.08)]">
+           <div className="border border-emerald-400/30 bg-[#050d0a] p-3 shadow-[0_0_34px_rgba(52,211,153,0.08)]">
 
-              <div className="grid grid-cols-5 gap-3">
+  <div className="mb-3 flex items-center justify-between">
+    <p className="text-[8px] font-black uppercase tracking-[0.14em] text-slate-500">
+      20 ROWS × 10
+    </p>
+
+    <p className="text-[8px] font-black uppercase tracking-[0.14em] text-emerald-300">
+
+      
+      200 MYSTERY BOOSTERS
+    </p>
+  </div>
+
+  <div className="grid grid-cols-10 gap-1">
 
                 {Array.from(
                   { length: TOTAL_BOOSTERS },

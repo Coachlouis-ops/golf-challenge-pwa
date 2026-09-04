@@ -6,457 +6,533 @@ export default function HowCareerWorksPage() {
   const router = useRouter();
 
   return (
-    <main className="min-h-screen bg-[#eef1f4] text-[#111827]">
-      <div className="mx-auto max-w-md pb-14">
+    <main className="min-h-screen bg-[#030608] text-white">
+      <div className="mx-auto max-w-md pb-16">
 
         {/* HEADER */}
 
-        <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/95 px-5 py-4 backdrop-blur">
+        <header className="sticky top-0 z-30 border-b border-cyan-400/30 bg-[#030608]/95 px-5 py-3 backdrop-blur-xl">
           <div className="flex items-center justify-between">
+
             <button
               type="button"
               onClick={() => router.back()}
-              className="flex h-9 w-9 items-center justify-center border border-slate-200 bg-white text-xl text-slate-600"
+              className="flex h-10 w-10 items-center justify-center border border-cyan-400/30 bg-cyan-400/[0.05] text-2xl font-black text-cyan-300 shadow-[0_0_16px_rgba(34,211,238,0.15)]"
               aria-label="Go back"
             >
               ‹
             </button>
 
-            <div className="text-center">
-              <p className="text-[10px] font-bold uppercase tracking-[0.26em] text-[#0f5132]">
+            <div className="flex flex-col items-center">
+              <img
+                src="/teez-app-icon-v4.png"
+                alt="TEEZ Golf Challenges"
+                className="h-16 w-16 object-contain drop-shadow-[0_0_14px_rgba(0,174,255,0.75)]"
+              />
+
+              <p className="mt-1 text-[8px] font-black uppercase tracking-[0.30em] text-cyan-400">
                 TEEZ Career System
               </p>
 
-              <h1 className="mt-1 text-lg font-black tracking-tight">
-                CAREER GUIDE
+              <h1 className="text-lg font-black tracking-[0.06em] text-white">
+                HOW MY CAREER WORKS
               </h1>
             </div>
 
-            <div className="h-9 w-9" />
+            <div className="h-10 w-10" />
+
           </div>
         </header>
 
-        <div className="space-y-7 px-4 pt-5">
 
-          {/* INTRO */}
+        <div className="space-y-8 px-4 pt-5">
 
-          <section className="overflow-hidden border border-[#1f2937] bg-[#0d1821] shadow-[0_8px_22px_rgba(15,23,42,0.16)]">
-            <div className="flex items-start gap-4 p-5">
+          {/* HERO */}
 
-              <div className="flex h-16 w-16 shrink-0 items-center justify-center border border-[#b89b5e] bg-[#14232d]">
-                <span className="text-[10px] font-black tracking-[0.08em] text-[#d6bd7a]">
-                  CAREER
-                </span>
-              </div>
+          <section className="relative overflow-hidden border border-cyan-400/30 bg-[#071017] shadow-[0_0_35px_rgba(34,211,238,0.10)]">
 
-              <div>
-                <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#8eb89f]">
-                  Player Information
-                </p>
+            <div className="pointer-events-none absolute -right-16 -top-16 h-44 w-44 rounded-full bg-cyan-400/10 blur-3xl" />
 
-                <h2 className="mt-1 text-2xl font-black tracking-tight text-white">
-                  How My Career Works
-                </h2>
+            <div className="relative px-5 py-7 text-center">
 
-                <p className="mt-2 text-sm leading-5 text-slate-300">
-                  Every completed challenge contributes to your
-                  TEEZ career record and competitive standing.
-                </p>
-              </div>
-            </div>
-
-            <div className="border-t border-white/10 px-5 py-4">
-              <p className="text-xs leading-5 text-slate-400">
-                Results can affect Career Points, rankings,
-                Power Score, XP, player level, form, streaks
-                and Race to Final points.
+              <p className="text-[9px] font-black uppercase tracking-[0.28em] text-cyan-400">
+                Your TEEZ Journey
               </p>
+
+              <h2 className="mt-2 text-3xl font-black tracking-tight text-white">
+                BUILD YOUR
+                <br />
+                GOLF CAREER.
+              </h2>
+
+              <p className="mx-auto mt-3 max-w-[300px] text-sm leading-5 text-slate-400">
+                Play challenges. Beat players. Earn points.
+                Climb the rankings. Build your career.
+              </p>
+
             </div>
+
           </section>
 
-            <GuideSection
-            code="PTS"
-            eyebrow="COMPETITION VALUE"
-            title="Career Points"
-            description="Every finalized challenge is scored using the same competition-value system."
-          >
-            <InfoLine
-              title="Three Factors"
-              text="Career Points are calculated from your finishing position, the number of tokens played and the total number of players in the challenge."
+
+          {/* 1 — PLAY */}
+
+          <section>
+
+            <SectionHeading
+              number="01"
+              eyebrow="START HERE"
+              title="Play Challenges"
+              description="Every completed TEEZ Challenge contributes to your competitive career."
             />
 
-            <FormulaBox>
-              Competition Score =
-              {"\n"}
-              100 × Position Factor × Token Factor × Field Factor
-            </FormulaBox>
-
-            <InfoLine
-              title="Position Factor"
-              text="Finishing higher earns a larger share of the available competition value. First place receives the maximum position factor."
-            />
-
-            <InfoLine
-              title="Token Factor"
-              text="Higher-token challenges carry greater competitive value, but the increase is controlled so players cannot simply buy ranking position."
-            />
-
-            <InfoLine
-              title="Field Factor"
-              text="Challenges with more players carry greater competitive value because the player is competing against a larger field."
-            />
-
-            <InfoLine
-              title="All Game Formats"
-              text="The same three-factor principle applies to Match Play, Stroke Play, Stableford, Scramble and other supported competitive formats."
-            />
-
-            <InfoLine
-              title="Career Total"
-              text="Your Competition Score is added to your Career Points after the challenge is finalized."
-            />
-          </GuideSection>
-
-               <GuideSection
-            code="RPTS"
-            eyebrow="RANKING SYSTEM"
-            title="Ranking Points"
-            description="Ranking Points are derived directly from your Competition Score."
-          >
-            <ValueRow
-              title="Club"
-              value="100%"
-              text="of Competition Score"
-            />
-
-            <ValueRow
-              title="Province"
-              value="70%"
-              text="of Competition Score"
-            />
-
-            <ValueRow
-              title="National"
-              value="40%"
-              text="of Competition Score"
-            />
-
-            <ValueRow
-              title="Global"
-              value="20%"
-              text="of Competition Score"
-            />
-
-            <InfoLine
-              title="Ranking Progress"
-              text="These points accumulate after every finalized challenge and determine your position against other players at each ranking level."
-            />
-          </GuideSection>
-
-          <GuideSection
-            code="RNK"
-            eyebrow="OFFICIAL STANDINGS"
-            title="Ranking Positions"
-            description="Positions are determined by comparing accumulated points against other players."
-          >
-            <InfoLine
-              title="Club Ranking"
-              text="Players are ordered from highest to lowest accumulated Club Points."
-            />
-
-            <InfoLine
-              title="Province Ranking"
-              text="Players are ordered from highest to lowest accumulated Province Points."
-            />
-
-            <InfoLine
-              title="National Ranking"
-              text="Players are ordered from highest to lowest accumulated National Points."
-            />
-
-            <InfoLine
-              title="Global Ranking"
-              text="Players are ordered from highest to lowest accumulated Global Points."
-            />
-
-            <InfoLine
-              title="Division Rankings"
-              text="The ranking process is repeated against players within your selected division."
-            />
-
-            <InfoLine
-              title="Personal Best"
-              text="TEEZ records the highest ranking position you have achieved during your career."
-            />
-          </GuideSection>
-          <GuideSection
-            code="PWR"
-            eyebrow="COMPETITIVE RATING"
-            title="Power Score"
-            description="Power Score now derives directly from the Competition Score earned in each finalized challenge."
-          >
-            <FormulaBox>
-              Power Score Gain =
-              {"\n"}
-              Competition Score × 10%
-            </FormulaBox>
-
-            <InfoLine
-              title="Competition Value"
-              text="Because Competition Score already includes finishing position, tokens played and field size, Power Score automatically reflects all three factors."
-            />
-
-            <InfoLine
-              title="Career Total"
-              text="The calculated Power Score gain is added to your existing Power Score after each finalized challenge."
-            />
-          </GuideSection>
-
-                   <GuideSection
-            code="XP"
-            eyebrow="PLAYER DEVELOPMENT"
-            title="Career XP"
-            description="Career XP is now based directly on the competitive value of each finalized challenge."
-          >
-            <FormulaBox>
-              Career XP Earned =
-              {"\n"}
-              Competition Score × 50%
-            </FormulaBox>
-
-            <InfoLine
-              title="Competition Value"
-              text="A stronger result in a higher-token challenge or larger field produces more Career XP because all three factors are already included in the Competition Score."
-            />
-
-            <InfoLine
-              title="Career Progression"
-              text="Career XP accumulates over time and is used to determine your Player Level."
-            />
-          </GuideSection>
-
-
-          <GuideSection
-            code="LVL"
-            eyebrow="PLAYER DEVELOPMENT"
-            title="Player Level"
-            description="Your level increases automatically as Career XP grows."
-          >
-            <FormulaBox>
-              Level = floor(√(Career XP ÷ 100)) + 1
-            </FormulaBox>
-
-            <p className="text-sm leading-5 text-slate-500">
-              Player Level can never fall below Level 1.
-            </p>
-          </GuideSection>
-
-          <GuideSection
-            code="WIN%"
-            eyebrow="PERFORMANCE"
-            title="Win Percentage"
-            description="Your career success rate across completed matches."
-          >
-            <FormulaBox>
-              Win % = Wins ÷ Matches Played × 100
-            </FormulaBox>
-
-            <p className="text-sm leading-5 text-slate-500">
-              The displayed percentage is rounded to the nearest whole number.
-            </p>
-          </GuideSection>
-
-          <GuideSection
-            code="FORM"
-            eyebrow="CURRENT FORM"
-            title="Winning & Losing Streaks"
-            description="Tracks current form and career-best competitive runs."
-          >
-            <InfoLine
-              title="Current Win Streak"
-              text="Increases by one after every consecutive win and resets to zero after a loss."
-            />
-
-            <InfoLine
-              title="Best Win Streak"
-              text="Records the longest winning streak achieved during your career."
-            />
-
-            <InfoLine
-              title="Losing Streak"
-              text="Works in the same way for consecutive losses."
-            />
-          </GuideSection>
-
-          <GuideSection
-            code="FIN"
-            eyebrow="CAREER RECORD"
-            title="Finishing Records"
-            description="Tracks your strongest challenge finishes."
-          >
-            <InfoLine
-              title="Best Finish"
-              text="The highest finishing position you have achieved."
-            />
-
-            <InfoLine
-              title="Top 3"
-              text="Number of challenges where you finished 1st, 2nd or 3rd."
-            />
-
-            <InfoLine
-              title="Top 5"
-              text="Number of challenges where you finished inside the Top 5."
-            />
-
-            <InfoLine
-              title="Top 10"
-              text="Number of challenges where you finished inside the Top 10."
-            />
-          </GuideSection>
-
-          <GuideSection
-            code="FMT"
-            eyebrow="PERFORMANCE ANALYSIS"
-            title="Best Format"
-            description="Results are tracked separately across game formats."
-          >
-            <InfoLine title="Match Play" text="Matches played and wins are recorded." />
-            <InfoLine title="Stroke Play" text="Matches played and wins are recorded." />
-            <InfoLine title="Stableford" text="Matches played and wins are recorded." />
-            <InfoLine title="Scramble" text="Matches played and wins are recorded." />
-
-            <p className="text-sm leading-5 text-slate-500">
-              Best Format is determined primarily by your highest
-              win percentage within these formats.
-            </p>
-          </GuideSection>
-
-          {/* RACE TO FINAL */}
-
-          <section className="overflow-hidden border border-[#1c4532] bg-[#10261c] shadow-sm">
-
-            <div className="flex items-start gap-4 border-b border-white/10 p-5">
-
-              <div className="flex h-12 min-w-12 items-center justify-center border border-[#c6a96a] bg-[#172d23] px-2">
-                <span className="text-[9px] font-black tracking-[0.08em] text-[#d8c18a]">
-                  RTF
-                </span>
-              </div>
-
-              <div>
-                <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#8eb89f]">
-                  Season Championship
-                </p>
-
-                <h2 className="mt-1 text-xl font-black text-white">
-                  Race to Final
-                </h2>
-
-                <p className="mt-1 text-sm leading-5 text-slate-300">
-                  Race Points form a separate annual competition
-                  toward the TEEZ Championship Final.
-                </p>
-              </div>
-            </div>
-
-                        <div className="bg-white px-5">
-              <InfoLine
-                title="Race Points"
-                text="Race Points earned from finalized challenges are calculated from the same Competition Score used by the career system."
+            <FlowCard>
+              <FlowItem
+                label="PLAY"
+                text="Enter a Challenge"
               />
 
-              <FormulaBox>
-                Race Points Earned =
-                {"\n"}
-                Competition Score × 25%
-              </FormulaBox>
+              <FlowArrow />
 
-              <InfoLine
-                title="Competition Value"
-                text="Finishing position, tokens played and field size therefore all influence Race Points earned from a challenge."
+              <FlowItem
+                label="COMPETE"
+                text="Take on the field"
               />
 
-              <InfoLine
-                title="Vault Bonuses"
-                text="From Silver Vault onward, selected mystery coins can also award additional Race to Final bonus points."
+              <FlowArrow />
+
+              <FlowItem
+                label="FINISH"
+                text="Record your result"
               />
-            </div>
+            </FlowCard>
 
-            <div className="border-t border-[#d7c28c] bg-[#faf7ef] px-5 py-4">
-              <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#8a6b30]">
-                Qualification
-              </p>
-
-              <p className="mt-1 text-sm font-black text-[#111827]">
-                Global Top 8 qualify for the TEEZ Championship Final.
-              </p>
-            </div>
           </section>
 
-          {/* PLAYER VAULT */}
 
-          <GuideSection
-            code="VLT"
-            eyebrow="CAREER REWARDS"
-            title="Player Vault"
-            description="Career milestones earn Vault Keys."
-            premium
-          >
-            <InfoLine
-              title="Vault Keys"
-              text="Each earned key allows you to flip one unopened mystery coin."
+          {/* 2 — COMPETITION SCORE */}
+
+          <section>
+
+            <SectionHeading
+              number="02"
+              eyebrow="CHALLENGE VALUE"
+              title="How Your Points Are Built"
+              description="Three things determine the competitive value of your result."
             />
 
-                       <VaultRow
-              title="Bronze"
-              text="50 mystery coins focused on core career and gameplay rewards."
+            <div className="border border-cyan-400/30 bg-[#071017] p-5 shadow-[0_0_30px_rgba(34,211,238,0.08)]">
+
+              <FactorCard
+                number="1"
+                title="FINISH POSITION"
+                text="Finish higher"
+              />
+
+              <MathSymbol symbol="×" />
+
+              <FactorCard
+                number="2"
+                title="TOKENS PLAYED"
+                text="Play for more"
+              />
+
+              <MathSymbol symbol="×" />
+
+              <FactorCard
+                number="3"
+                title="FIELD SIZE"
+                text="Compete against more players"
+              />
+
+              <div className="my-4 flex justify-center">
+                <div className="h-7 w-px bg-cyan-400/40" />
+              </div>
+
+              <div className="border border-cyan-300/50 bg-cyan-400/[0.08] px-4 py-5 text-center shadow-[0_0_24px_rgba(34,211,238,0.10)]">
+
+                <p className="text-[9px] font-black uppercase tracking-[0.20em] text-cyan-400">
+                  Result
+                </p>
+
+                <p className="mt-1 text-2xl font-black text-white">
+                  COMPETITION SCORE
+                </p>
+
+              </div>
+
+              <p className="mt-4 text-center text-xs font-bold leading-5 text-slate-400">
+                Finish higher. Play for more. Beat bigger fields.
+                Earn more.
+              </p>
+
+            </div>
+
+          </section>
+
+
+          {/* 3 — CAREER ENGINE */}
+
+          <section>
+
+            <SectionHeading
+              number="03"
+              eyebrow="CAREER ENGINE"
+              title="One Score Builds Your Career"
+              description="Your Competition Score drives your TEEZ career progression."
             />
 
-            <VaultRow
-              title="Silver"
-              text="Unlocks after Bronze. Race to Final bonus points become available from this tier."
+            <div className="border border-cyan-400/30 bg-[#071017] p-5">
+
+              <div className="border border-cyan-400/40 bg-cyan-400/[0.07] px-4 py-4 text-center">
+
+                <p className="text-[9px] font-black uppercase tracking-[0.18em] text-cyan-400">
+                  Your Challenge Result
+                </p>
+
+                <p className="mt-1 text-xl font-black text-white">
+                  COMPETITION SCORE
+                </p>
+
+              </div>
+
+              <div className="mx-auto h-7 w-px bg-cyan-400/30" />
+
+              <div className="grid grid-cols-2 gap-2">
+
+                <CareerOutput
+                  title="Career Points"
+                  text="Build your career total"
+                />
+
+                <CareerOutput
+                  title="Career XP"
+                  text="Develop your player"
+                />
+
+                <CareerOutput
+                  title="Power Score"
+                  text="Grow your rating"
+                />
+
+                <CareerOutput
+                  title="Rankings"
+                  text="Climb the standings"
+                />
+
+              </div>
+
+              <div className="mx-auto h-7 w-px bg-amber-400/30" />
+
+              <div className="border border-amber-400/30 bg-amber-400/[0.06] px-4 py-3 text-center">
+
+                <p className="text-sm font-black text-amber-300">
+                  RACE TO FINAL POINTS
+                </p>
+
+                <p className="mt-1 text-[10px] text-slate-400">
+                  Build your season championship position
+                </p>
+
+              </div>
+
+            </div>
+
+          </section>
+
+
+          {/* 4 — RANKINGS */}
+
+          <section>
+
+            <SectionHeading
+              number="04"
+              eyebrow="OFFICIAL STANDINGS"
+              title="Climb the Rankings"
+              description="Build your reputation from your golf club to the global leaderboard."
             />
 
-            <VaultRow
-              title="Gold"
-              text="Unlocks after Silver. Contains stronger career rewards and increased Race to Final reward potential."
+            <div className="overflow-hidden border border-cyan-400/30 bg-[#071017]">
+
+              <RankingStep
+                level="GLOBAL"
+                percentage="20%"
+                featured
+              />
+
+              <RankingArrow />
+
+              <RankingStep
+                level="NATIONAL"
+                percentage="40%"
+              />
+
+              <RankingArrow />
+
+              <RankingStep
+                level="PROVINCE"
+                percentage="70%"
+              />
+
+              <RankingArrow />
+
+              <RankingStep
+                level="CLUB"
+                percentage="100%"
+              />
+
+              <div className="border-t border-white/10 px-5 py-4 text-center">
+                <p className="text-xs font-bold text-slate-400">
+                  Keep earning points to climb every leaderboard.
+                </p>
+              </div>
+
+            </div>
+
+          </section>
+
+
+          {/* 5 — PLAYER PROFILE */}
+
+          <section>
+
+            <SectionHeading
+              number="05"
+              eyebrow="PLAYER DEVELOPMENT"
+              title="Build Your Player"
+              description="Every result adds another piece to your competitive profile."
             />
 
-            <VaultRow
-              title="Diamond"
-              text="Unlocks after Gold. The final Vault tier with the highest career and Race to Final reward potential."
+            <div className="grid grid-cols-2 gap-2">
+
+              <StatCard
+                title="WINS"
+                text="Build your record"
+              />
+
+              <StatCard
+                title="WIN %"
+                text="Track success rate"
+              />
+
+              <StatCard
+                title="STREAKS"
+                text="Build momentum"
+              />
+
+              <StatCard
+                title="CAREER XP"
+                text="Develop your player"
+              />
+
+              <StatCard
+                title="PLAYER LEVEL"
+                text="Level up"
+              />
+
+              <StatCard
+                title="POWER SCORE"
+                text="Grow your rating"
+              />
+
+              <StatCard
+                title="BEST FINISH"
+                text="Track top results"
+              />
+
+              <StatCard
+                title="BEST FORMAT"
+                text="Find your strength"
+              />
+
+            </div>
+
+          </section>
+
+
+          {/* 6 — BOOSTER BOARD */}
+
+          <section>
+
+            <SectionHeading
+              number="06"
+              eyebrow="GAME BOOSTERS"
+              title="Play. Earn. Open."
+              description="Your activity on TEEZ builds progress toward mystery Booster Balls."
             />
 
-            <InfoLine
-              title="Vault Progression"
-              text="Each Vault contains 50 mystery coins. One Vault Key opens one coin, and all 50 coins in the current Vault must be opened before the next tier unlocks."
+            <div className="relative overflow-hidden border border-cyan-400/30 bg-[#071017] p-5 shadow-[0_0_34px_rgba(34,211,238,0.08)]">
+
+              <div className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-cyan-400/10 blur-3xl" />
+
+              <div className="relative">
+
+                <div className="flex justify-center">
+                  <BoosterBall />
+                </div>
+
+                <p className="mt-4 text-center text-[9px] font-black uppercase tracking-[0.22em] text-cyan-400">
+                  Game Booster Board
+                </p>
+
+                <p className="mt-1 text-center text-2xl font-black text-white">
+                  200 MYSTERY BALLS
+                </p>
+
+                <p className="mt-1 text-center text-xs font-bold text-slate-400">
+                  Career Boosters + Reward Boosters
+                </p>
+
+
+                <div className="my-5 border-t border-white/10" />
+
+
+                <MiniFlow label="PLAY" />
+
+                <FlowDown />
+
+                <MiniFlow label="EARN BOOSTER POINTS" />
+
+                <FlowDown />
+
+                <MiniFlow label="EARN A BOOSTER BALL" />
+
+                <FlowDown />
+
+                <MiniFlow label="CHOOSE A BALL" />
+
+                <FlowDown />
+
+                <MiniFlow label="REVEAL YOUR BOOSTER" />
+
+
+                <div className="mt-5 grid grid-cols-2 gap-2">
+
+                  <BoosterWeight
+                    value="35%"
+                    title="Tokens Played"
+                  />
+
+                  <BoosterWeight
+                    value="30%"
+                    title="Tokens Won"
+                  />
+
+                  <BoosterWeight
+                    value="25%"
+                    title="Participation"
+                  />
+
+                  <BoosterWeight
+                    value="10%"
+                    title="Achievements"
+                  />
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </section>
+
+
+          {/* 7 — RACE TO FINAL */}
+
+          <section>
+
+            <SectionHeading
+              number="07"
+              eyebrow="SEASON CHAMPIONSHIP"
+              title="Race to the Final"
+              description="Every season has a destination."
+              amber
             />
 
-            <InfoLine
-              title="Mystery Rewards"
-              text="Mystery coins can contain bonus tokens, Career XP, Career Points, Power Score boosts and free challenge entries. From Silver onward, selected coins can also contain Race to Final bonus points."
-            />
-          </GuideSection>
+            <div className="relative overflow-hidden border border-amber-400/50 bg-[#100c04] p-5 shadow-[0_0_30px_rgba(251,191,36,0.10)]">
 
-          {/* IMPORTANT */}
+              <div className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-amber-400/10 blur-3xl" />
 
-          <section className="border border-slate-200 bg-white p-5 shadow-sm">
-            <div className="mb-3 h-[2px] w-8 bg-[#0f5132]" />
+              <div className="relative">
 
-            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#0f5132]">
-              System Information
-            </p>
+                <RaceStep text="PLAY CHALLENGES" />
 
-            <h2 className="mt-1 text-lg font-black">
-              Scoring & Progression
-            </h2>
+                <RaceArrow />
 
-            <p className="mt-2 text-sm leading-5 text-slate-500">
-              TEEZ may adjust scoring, progression and reward
-              formulas as the platform develops to maintain fair
-              competition and balanced gameplay.
-            </p>
+                <RaceStep text="EARN RACE POINTS" />
+
+                <RaceArrow />
+
+                <RaceStep text="CLIMB THE STANDINGS" />
+
+                <RaceArrow />
+
+                <div className="border border-amber-400/50 bg-amber-400/[0.08] px-4 py-4 text-center">
+
+                  <p className="text-[9px] font-black uppercase tracking-[0.18em] text-amber-400">
+                    Qualification
+                  </p>
+
+                  <p className="mt-1 text-2xl font-black text-white">
+                    TOP 8 + TIES
+                  </p>
+
+                </div>
+
+                <RaceArrow />
+
+                <div className="border border-amber-300/60 bg-amber-300 px-4 py-5 text-center shadow-[0_0_25px_rgba(251,191,36,0.20)]">
+
+                  <p className="text-[9px] font-black uppercase tracking-[0.18em] text-amber-950/70">
+                    Destination
+                  </p>
+
+                  <p className="mt-1 text-xl font-black text-[#160f02]">
+                    TEEZ CHAMPIONSHIP FINAL
+                  </p>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </section>
+
+
+          {/* FINAL MESSAGE */}
+
+          <section className="relative overflow-hidden border border-cyan-400/30 bg-[#071017] px-5 py-8 text-center shadow-[0_0_35px_rgba(34,211,238,0.08)]">
+
+            <div className="pointer-events-none absolute left-1/2 top-0 h-32 w-32 -translate-x-1/2 rounded-full bg-cyan-400/10 blur-3xl" />
+
+            <div className="relative">
+
+              <img
+                src="/teez-app-icon-v4.png"
+                alt="TEEZ Golf Challenges"
+                className="mx-auto h-20 w-20 object-contain drop-shadow-[0_0_18px_rgba(0,174,255,0.75)]"
+              />
+
+              <p className="mt-4 text-[9px] font-black uppercase tracking-[0.26em] text-cyan-400">
+                TEEZ Golf Challenges
+              </p>
+
+              <h2 className="mt-2 text-2xl font-black text-white">
+                BUILD YOUR GOLF CAREER.
+              </h2>
+
+              <p className="mx-auto mt-3 max-w-[300px] text-sm leading-5 text-slate-400">
+                Every challenge. Every result. Every point.
+                Every booster.
+              </p>
+
+              <p className="mt-2 text-sm font-black uppercase tracking-[0.12em] text-cyan-300">
+                It all counts.
+              </p>
+
+            </div>
+
           </section>
 
         </div>
@@ -465,150 +541,183 @@ export default function HowCareerWorksPage() {
   );
 }
 
-function GuideSection({
-  code,
+
+/* =========================================================
+   SECTION HEADING
+========================================================= */
+
+function SectionHeading({
+  number,
   eyebrow,
   title,
   description,
-  children,
-  premium = false,
+  amber = false,
 }: {
-  code: string;
+  number: string;
   eyebrow: string;
   title: string;
   description: string;
-  children: React.ReactNode;
-  premium?: boolean;
+  amber?: boolean;
 }) {
   return (
-    <section
-      className={`border bg-white shadow-sm ${
-        premium
-          ? "border-[#c9b37a]"
-          : "border-slate-200"
-      }`}
-    >
-      <div className="flex gap-4 border-b border-slate-100 p-5">
+    <div className="mb-4">
+
+      <div className="mb-3 flex items-center gap-3">
 
         <div
-          className={`flex h-12 min-w-12 shrink-0 items-center justify-center border px-2 text-[9px] font-black tracking-[0.08em] ${
-            premium
-              ? "border-[#c9b37a] bg-[#faf7ef] text-[#9a7531]"
-              : "border-[#b8c7bd] bg-[#f3f7f4] text-[#0f5132]"
+          className={`flex h-8 w-8 items-center justify-center border text-[10px] font-black ${
+            amber
+              ? "border-amber-400/40 bg-amber-400/[0.07] text-amber-300"
+              : "border-cyan-400/40 bg-cyan-400/[0.07] text-cyan-300"
           }`}
         >
-          {code}
+          {number}
         </div>
 
         <div>
-          <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-[#0f5132]">
+
+          <p
+            className={`text-[9px] font-black uppercase tracking-[0.24em] ${
+              amber
+                ? "text-amber-400"
+                : "text-cyan-400"
+            }`}
+          >
             {eyebrow}
           </p>
 
-          <h2 className="mt-1 text-xl font-black tracking-tight text-[#111827]">
-            {title}
-          </h2>
+          <div
+            className={`mt-1 h-[2px] w-8 ${
+              amber
+                ? "bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.6)]"
+                : "bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.7)]"
+            }`}
+          />
 
-          <p className="mt-1 text-sm leading-5 text-slate-500">
-            {description}
-          </p>
         </div>
+
       </div>
 
-      <div className="space-y-4 p-5">
-        {children}
-      </div>
-    </section>
-  );
-}
-
-function InfoLine({
-  title,
-  text,
-}: {
-  title: string;
-  text: string;
-}) {
-  return (
-    <div className="border-b border-slate-100 pb-4 last:border-b-0 last:pb-0">
-      <p className="text-xs font-bold uppercase tracking-[0.08em] text-slate-600">
+      <h2 className="text-xl font-black tracking-tight text-white">
         {title}
+      </h2>
+
+      <p className="mt-1.5 text-sm leading-5 text-slate-400">
+        {description}
       </p>
 
-      <p className="mt-1 text-sm leading-5 text-slate-500">
-        {text}
-      </p>
     </div>
   );
 }
 
-function FormulaBox({
+
+/* =========================================================
+   BASIC FLOW
+========================================================= */
+
+function FlowCard({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <div className="border-l-[3px] border-[#0f5132] bg-[#f7f8f9] px-4 py-3 font-mono text-xs leading-6 text-slate-700">
-      <div className="mb-1 text-[9px] font-sans font-black uppercase tracking-[0.16em] text-[#0f5132]">
-        Formula
-      </div>
-
-      <div className="whitespace-pre-line">
-        {children}
-      </div>
+    <div className="flex items-stretch border border-cyan-400/30 bg-[#071017] p-3">
+      {children}
     </div>
   );
 }
 
-function ValueRow({
-  title,
-  value,
+function FlowItem({
+  label,
   text,
 }: {
-  title: string;
-  value: string;
+  label: string;
   text: string;
 }) {
   return (
-    <div className="flex items-center justify-between border-b border-slate-100 py-2 last:border-b-0">
+    <div className="min-w-0 flex-1 text-center">
+
+      <div className="mx-auto flex h-11 w-11 items-center justify-center rounded-full border border-cyan-400/40 bg-cyan-400/[0.07]">
+
+        <div className="h-2.5 w-2.5 rounded-full bg-cyan-300 shadow-[0_0_10px_rgba(34,211,238,0.8)]" />
+
+      </div>
+
+      <p className="mt-2 text-[10px] font-black text-white">
+        {label}
+      </p>
+
+      <p className="mt-1 text-[8px] leading-3 text-slate-500">
+        {text}
+      </p>
+
+    </div>
+  );
+}
+
+function FlowArrow() {
+  return (
+    <div className="flex w-7 shrink-0 items-center justify-center text-lg font-black text-cyan-400">
+      →
+    </div>
+  );
+}
+
+
+/* =========================================================
+   COMPETITION SCORE
+========================================================= */
+
+function FactorCard({
+  number,
+  title,
+  text,
+}: {
+  number: string;
+  title: string;
+  text: string;
+}) {
+  return (
+    <div className="flex items-center gap-4 border border-white/10 bg-black/20 px-4 py-3">
+
+      <div className="flex h-9 w-9 shrink-0 items-center justify-center border border-cyan-400/30 bg-cyan-400/[0.06] text-sm font-black text-cyan-300">
+        {number}
+      </div>
+
       <div>
-        <p className="text-sm font-black text-[#111827]">
+
+        <p className="text-xs font-black text-white">
           {title}
         </p>
 
-        <p className="text-xs text-slate-400">
+        <p className="mt-0.5 text-[10px] text-slate-500">
           {text}
         </p>
+
       </div>
 
-      <p className="text-xl font-black text-[#0f5132]">
-        {value}
-      </p>
     </div>
   );
 }
 
-function RaceRow({
-  title,
-  value,
+function MathSymbol({
+  symbol,
 }: {
-  title: string;
-  value: string;
+  symbol: string;
 }) {
   return (
-    <div className="flex items-center justify-between border-b border-slate-100 py-3 last:border-b-0">
-      <p className="text-sm font-bold text-slate-600">
-        {title}
-      </p>
-
-      <p className="text-sm font-black text-[#0f5132]">
-        {value} pts
-      </p>
+    <div className="py-2 text-center text-xl font-black text-cyan-400">
+      {symbol}
     </div>
   );
 }
 
-function VaultRow({
+
+/* =========================================================
+   CAREER OUTPUTS
+========================================================= */
+
+function CareerOutput({
   title,
   text,
 }: {
@@ -616,14 +725,204 @@ function VaultRow({
   text: string;
 }) {
   return (
-    <div className="grid grid-cols-[70px_1fr] items-center border-b border-slate-100 py-2 last:border-b-0">
-      <p className="text-xs font-black uppercase tracking-[0.08em] text-[#9a7531]">
+    <div className="border border-cyan-400/20 bg-cyan-400/[0.04] px-3 py-4 text-center">
+
+      <p className="text-xs font-black text-cyan-300">
         {title}
       </p>
 
-      <p className="text-sm text-slate-500">
+      <p className="mt-1 text-[9px] leading-4 text-slate-500">
         {text}
       </p>
+
+    </div>
+  );
+}
+
+
+/* =========================================================
+   RANKINGS
+========================================================= */
+
+function RankingStep({
+  level,
+  percentage,
+  featured = false,
+}: {
+  level: string;
+  percentage: string;
+  featured?: boolean;
+}) {
+  return (
+    <div
+      className={`flex items-center justify-between px-5 py-4 ${
+        featured
+          ? "bg-cyan-400/[0.08]"
+          : ""
+      }`}
+    >
+
+      <div>
+
+        <p
+          className={`text-sm font-black ${
+            featured
+              ? "text-cyan-300"
+              : "text-white"
+          }`}
+        >
+          {level}
+        </p>
+
+        <p className="mt-0.5 text-[9px] uppercase tracking-[0.12em] text-slate-500">
+          Ranking Points
+        </p>
+
+      </div>
+
+      <p
+        className={`text-xl font-black ${
+          featured
+            ? "text-cyan-300"
+            : "text-white"
+        }`}
+      >
+        {percentage}
+      </p>
+
+    </div>
+  );
+}
+
+function RankingArrow() {
+  return (
+    <div className="border-y border-white/[0.05] py-1 text-center text-sm font-black text-cyan-400/50">
+      ↑
+    </div>
+  );
+}
+
+
+/* =========================================================
+   PLAYER STATS
+========================================================= */
+
+function StatCard({
+  title,
+  text,
+}: {
+  title: string;
+  text: string;
+}) {
+  return (
+    <div className="border border-cyan-400/20 bg-[#071017] px-3 py-4">
+
+      <p className="text-[10px] font-black text-cyan-300">
+        {title}
+      </p>
+
+      <p className="mt-1 text-[9px] leading-4 text-slate-500">
+        {text}
+      </p>
+
+    </div>
+  );
+}
+
+
+/* =========================================================
+   BOOSTER BOARD
+========================================================= */
+
+function BoosterBall() {
+  return (
+    <div className="relative h-20 w-20 rounded-full border-2 border-cyan-300/70 bg-white shadow-[0_0_24px_rgba(34,211,238,0.25)]">
+
+      <div className="absolute inset-[5px] rounded-full border border-slate-300 bg-[radial-gradient(circle_at_30%_30%,#ffffff,#d7e0e3)]" />
+
+      <div className="absolute left-[26%] top-[25%] h-[7%] w-[7%] rounded-full bg-slate-300/70" />
+      <div className="absolute right-[24%] top-[32%] h-[6%] w-[6%] rounded-full bg-slate-300/70" />
+      <div className="absolute bottom-[26%] left-[35%] h-[6%] w-[6%] rounded-full bg-slate-300/70" />
+
+      <span className="absolute inset-0 z-10 flex items-center justify-center text-[9px] font-black tracking-[0.08em] text-[#07110d]">
+        TEEZ
+      </span>
+
+    </div>
+  );
+}
+
+function MiniFlow({
+  label,
+}: {
+  label: string;
+}) {
+  return (
+    <div className="border border-cyan-400/20 bg-cyan-400/[0.04] px-4 py-3 text-center">
+
+      <p className="text-[10px] font-black uppercase tracking-[0.12em] text-white">
+        {label}
+      </p>
+
+    </div>
+  );
+}
+
+function FlowDown() {
+  return (
+    <div className="py-1 text-center text-base font-black text-cyan-400">
+      ↓
+    </div>
+  );
+}
+
+function BoosterWeight({
+  value,
+  title,
+}: {
+  value: string;
+  title: string;
+}) {
+  return (
+    <div className="border border-cyan-400/20 bg-cyan-400/[0.05] px-2 py-3 text-center">
+
+      <p className="text-lg font-black text-cyan-300">
+        {value}
+      </p>
+
+      <p className="mt-1 text-[8px] font-black uppercase tracking-[0.08em] text-slate-500">
+        {title}
+      </p>
+
+    </div>
+  );
+}
+
+
+/* =========================================================
+   RACE TO FINAL
+========================================================= */
+
+function RaceStep({
+  text,
+}: {
+  text: string;
+}) {
+  return (
+    <div className="border border-amber-400/20 bg-amber-400/[0.04] px-4 py-3 text-center">
+
+      <p className="text-[10px] font-black uppercase tracking-[0.12em] text-white">
+        {text}
+      </p>
+
+    </div>
+  );
+}
+
+function RaceArrow() {
+  return (
+    <div className="py-1 text-center text-base font-black text-amber-400">
+      ↓
     </div>
   );
 }

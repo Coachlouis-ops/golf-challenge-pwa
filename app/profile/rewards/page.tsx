@@ -40,6 +40,7 @@ const [revealedBall, setRevealedBall] =
     number: number;
     type: "career" | "improve_player";
     boosterType: string;
+    rewardValue: number;
   } | null>(null);
 
 const [openError, setOpenError] =
@@ -154,6 +155,7 @@ async function handleOpenBoosterBall(
             ballNumber: number;
           ballType: "career" | "improve_player";
 boosterType: string;
+rewardValue: number;
 boosterBallsEarned: number;
             boosterBallsOpened: number;
             boosterBallsAvailable: number;
@@ -192,6 +194,7 @@ setRevealedBall({
   number: result.ballNumber,
   type: result.ballType,
   boosterType: result.boosterType,
+  rewardValue: result.rewardValue,
 });
 
 
@@ -494,11 +497,25 @@ setRevealedBall({
       }`}
     >
       {revealedBall.type === "career"
-        ? "Career Booster"
-        : formatBoosterType(
-            revealedBall.boosterType
-          )}
+  ? formatCareerBoosterType(
+      revealedBall.boosterType
+    )
+  : formatBoosterType(
+      revealedBall.boosterType
+    )}
     </p>
+{revealedBall.type === "career" &&
+  revealedBall.rewardValue > 0 && (
+    <p className="mt-2 text-2xl font-black text-white">
+      +{revealedBall.rewardValue}{" "}
+      {formatCareerRewardUnit(
+        revealedBall.boosterType
+      )}
+    </p>
+  )}
+
+
+
   </div>
 )}
 
@@ -794,4 +811,46 @@ function formatBoosterType(
     names[boosterType] ||
     "Improve Player Booster"
   );
+}
+function formatCareerBoosterType(
+  boosterType: string
+) {
+  const names: Record<string, string> = {
+    career_points:
+      "Career Points Booster",
+
+    career_xp:
+      "Career XP Booster",
+
+    ranking_points:
+      "Ranking Points Booster",
+
+    race_points:
+      "Race Points Booster",
+  };
+
+  return (
+    names[boosterType] ||
+    "Career Booster"
+  );
+}
+
+function formatCareerRewardUnit(
+  boosterType: string
+) {
+  const names: Record<string, string> = {
+    career_points:
+      "CAREER POINTS",
+
+    career_xp:
+      "CAREER XP",
+
+    ranking_points:
+      "RANKING POINTS",
+
+    race_points:
+      "RACE POINTS",
+  };
+
+  return names[boosterType] || "POINTS";
 }

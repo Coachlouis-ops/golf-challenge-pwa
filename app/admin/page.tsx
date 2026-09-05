@@ -13,6 +13,10 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { db } from "@/src/lib/firebase";
+import {
+  getFunctions,
+  httpsCallable,
+} from "firebase/functions";
 import { useAuth } from "@/src/lib/AuthContext";
 
 type MembershipPayment = {
@@ -29,6 +33,58 @@ type MembershipPayment = {
 export default function AdminDashboard() {
   const router = useRouter();
   const { user } = useAuth();
+
+  const [testPlayerUid, setTestPlayerUid] =
+  useState("");
+
+const [grantingTestBall, setGrantingTestBall] =
+  useState(false);
+
+async function grantTestBoosterBall() {
+  const uid = testPlayerUid.trim();
+
+  if (!uid) {
+    alert("Enter the player's UID.");
+    return;
+  }
+
+  try {
+    setGrantingTestBall(true);
+
+    const functions =
+      getFunctions(undefined, "europe-west1");
+
+    const grantBall = httpsCallable<
+      { uid: string },
+      {
+        success: boolean;
+        uid: string;
+        granted: number;
+      }
+    >(
+      functions,
+      "grantTestBoosterBall"
+    );
+
+    await grantBall({ uid });
+
+    alert("1 test Booster Ball granted.");
+
+    setTestPlayerUid("");
+  } catch (e: any) {
+    console.error(
+      "GRANT TEST BOOSTER BALL ERROR:",
+      e
+    );
+
+    alert(
+      e?.message ||
+        "Could not grant test Booster Ball."
+    );
+  } finally {
+    setGrantingTestBall(false);
+  }
+}
 
   const [payments, setPayments] = useState<MembershipPayment[]>([]);
   const [loadingPayments, setLoadingPayments] = useState(true);
@@ -144,6 +200,39 @@ export default function AdminDashboard() {
         >
           TEEZ SCORING CLUBS
         </button>
+
+{/* BOOSTER BOARD TEST CONTROL */}
+<div className="w-full max-w-[520px] border border-amber-400/40 bg-black/70 p-5">
+  <p className="text-center text-xs font-black uppercase tracking-[0.18em] text-amber-300">
+    Booster Board Testing
+  </p>
+
+  <p className="mt-2 text-center text-xs text-gray-400">
+    Grant one test Booster Ball to a player.
+  </p>
+
+  <input
+    type="text"
+    value={testPlayerUid}
+    onChange={(e) =>
+      setTestPlayerUid(e.target.value)
+    }
+    placeholder="Player UID"
+    className="mt-4 w-full border border-white/20 bg-black px-4 py-3 text-sm text-white outline-none focus:border-amber-400"
+  />
+
+  <button
+    type="button"
+    onClick={grantTestBoosterBall}
+    disabled={grantingTestBall}
+    className="mt-3 w-full bg-amber-400 px-4 py-3 text-sm font-black text-black disabled:opacity-50"
+  >
+    {grantingTestBall
+      ? "GRANTING..."
+      : "GRANT 1 TEST BOOSTER BALL"}
+  </button>
+</div>
+
 
         {/* MEMBERSHIP PAYMENT APPLICATIONS */}
         <div className="w-full mt-8 bg-black/70 border border-cyan-400/40 rounded-2xl p-5">

@@ -13,7 +13,7 @@ import { db } from "@/src/lib/firebase";
 
 const TOTAL_BOOSTERS = 200;
 const CAREER_BOOSTERS = 150;
-const REWARD_BOOSTERS = 50;
+const IMPROVE_PLAYER_BOOSTERS = 50;
 
 export default function GameBoosterBoardPage() {
   const router = useRouter();
@@ -38,7 +38,8 @@ const [openingBall, setOpeningBall] =
 const [revealedBall, setRevealedBall] =
   useState<{
     number: number;
-    type: "career" | "reward";
+    type: "career" | "improve_player";
+    boosterType: string;
   } | null>(null);
 
 const [openError, setOpenError] =
@@ -151,8 +152,9 @@ async function handleOpenBoosterBall(
           success: boolean;
           ball: {
             ballNumber: number;
-            ballType: "career" | "reward";
-            boosterBallsEarned: number;
+          ballType: "career" | "improve_player";
+boosterType: string;
+boosterBallsEarned: number;
             boosterBallsOpened: number;
             boosterBallsAvailable: number;
           };
@@ -186,10 +188,13 @@ async function handleOpenBoosterBall(
       result.boosterBallsAvailable
     );
 
-    setRevealedBall({
-      number: result.ballNumber,
-      type: result.ballType,
-    });
+setRevealedBall({
+  number: result.ballNumber,
+  type: result.ballType,
+  boosterType: result.boosterType,
+});
+
+
   } catch (error) {
     console.error(
       "Unable to open Booster Ball:",
@@ -319,11 +324,11 @@ async function handleOpenBoosterBall(
                   colour="text-cyan-300"
                 />
 
-                <SummaryTile
-                  title="Rewards"
-                  value={REWARD_BOOSTERS}
-                  colour="text-amber-300"
-                />
+              <SummaryTile
+  title="Improve Player"
+  value={IMPROVE_PLAYER_BOOSTERS}
+  colour="text-amber-300"
+/>
 
               </div>
 
@@ -469,10 +474,10 @@ async function handleOpenBoosterBall(
     </p>
   </div>
 
-  {revealedBall && (
+ {revealedBall && (
   <div
     className={`mb-4 border p-4 text-center ${
-      revealedBall.type === "reward"
+      revealedBall.type === "improve_player"
         ? "border-amber-400/50 bg-amber-400/[0.08]"
         : "border-cyan-400/50 bg-cyan-400/[0.08]"
     }`}
@@ -483,14 +488,16 @@ async function handleOpenBoosterBall(
 
     <p
       className={`mt-1 text-xl font-black uppercase ${
-        revealedBall.type === "reward"
+        revealedBall.type === "improve_player"
           ? "text-amber-300"
           : "text-cyan-300"
       }`}
     >
-      {revealedBall.type === "reward"
-        ? "Reward Booster"
-        : "Career Booster"}
+      {revealedBall.type === "career"
+        ? "Career Booster"
+        : formatBoosterType(
+            revealedBall.boosterType
+          )}
     </p>
   </div>
 )}
@@ -751,5 +758,40 @@ function WeightTile({
       </p>
 
     </div>
+  );
+}
+
+function formatBoosterType(
+  boosterType: string
+) {
+  const names: Record<string, string> = {
+    player_protecting:
+      "Player Protecting Booster",
+
+    player_grip:
+      "Player Grip Booster",
+
+    player_reload:
+      "Player Reload Booster",
+
+    player_retrieval:
+      "Player Retrieval Booster",
+
+    player_nourishment:
+      "Player Nourishment Booster",
+
+    player_technical:
+      "Player Technical Booster",
+
+    player_distance:
+      "Player Distance Booster",
+
+    player_image:
+      "Player Image Booster",
+  };
+
+  return (
+    names[boosterType] ||
+    "Improve Player Booster"
   );
 }

@@ -23,7 +23,7 @@ export const IMPROVE_PLAYER_BOOSTERS: ImprovePlayerBoosterProduct[] = [
     productName: "Umbrella",
     description:
       "Automatic Open Golf Umbrella - Extra Large Double Canopy, All-Weather Protection",
-    image: "/boosters/protecting/player_protect001.png",
+    image: "/boosters/player_protect001.png",
   },
 
   {
@@ -32,7 +32,7 @@ export const IMPROVE_PLAYER_BOOSTERS: ImprovePlayerBoosterProduct[] = [
     productName: "Sunscreen",
     description:
       "Sun Lab - water resistant, non-greasy, non-sticky sport sunblock, SPF 50",
-    image: "/boosters/protecting/player_protect002.png",
+    image: "/boosters/player_protect002.png",
   },
 
   {
@@ -41,7 +41,7 @@ export const IMPROVE_PLAYER_BOOSTERS: ImprovePlayerBoosterProduct[] = [
     productName: "Golf Cap",
     description:
       "Premium golf cap - mens, ladies, various colours",
-    image: "/boosters/protecting/player_caps.png",
+    image: "/boosters/player_caps.png",
   },
 
   {
@@ -50,7 +50,7 @@ export const IMPROVE_PLAYER_BOOSTERS: ImprovePlayerBoosterProduct[] = [
     productName: "Golf Cap",
     description:
       "Premium golf cap - mens, ladies, various colours",
-    image: "/boosters/protecting/player_caps.png",
+    image: "/boosters/player_caps.png",
   },
 
   {
@@ -59,7 +59,7 @@ export const IMPROVE_PLAYER_BOOSTERS: ImprovePlayerBoosterProduct[] = [
     productName: "Sunglasses",
     description:
       "6 x Stylish Square Frame Fashion Glasses",
-    image: "/boosters/protecting/player_protect005.png",
+    image: "/boosters/player_protect005.png",
   },
 
   {
@@ -68,7 +68,7 @@ export const IMPROVE_PLAYER_BOOSTERS: ImprovePlayerBoosterProduct[] = [
     productName: "Umbrella",
     description:
       "Automatic Open Golf Umbrella - Extra Large Double Canopy, All-Weather Protection",
-    image: "/boosters/protecting/player_protect006.png",
+    image: "/boosters/player_protect006.png",
   },
 
   {
@@ -77,7 +77,7 @@ export const IMPROVE_PLAYER_BOOSTERS: ImprovePlayerBoosterProduct[] = [
     productName: "Sunscreen",
     description:
       "Sun Lab - water resistant, non-greasy, non-sticky sport sunblock, SPF 50",
-    image: "/boosters/protecting/player_protect007.png",
+    image: "/boosters/player_protect007.png",
   },
 
   {
@@ -86,7 +86,7 @@ export const IMPROVE_PLAYER_BOOSTERS: ImprovePlayerBoosterProduct[] = [
     productName: "Golf Cap",
     description:
       "Premium golf cap - mens, ladies, various colours",
-    image: "/boosters/protecting/player_caps.png",
+    image: "/boosters/player_caps.png",
   },
 
   {
@@ -95,7 +95,7 @@ export const IMPROVE_PLAYER_BOOSTERS: ImprovePlayerBoosterProduct[] = [
     productName: "Golf Cap",
     description:
       "Premium golf cap - mens, ladies, various colours",
-    image: "/boosters/protecting/player_caps.png",
+    image: "/boosters/player_caps.png",
   },
 
   {
@@ -104,7 +104,7 @@ export const IMPROVE_PLAYER_BOOSTERS: ImprovePlayerBoosterProduct[] = [
     productName: "Sunglasses",
     description:
       "6 x Stylish Square Frame Fashion Glasses",
-    image: "/boosters/protecting/player_protect0010.png",
+    image: "/boosters/player_image008.png",
   },
 
 
@@ -120,7 +120,7 @@ export const IMPROVE_PLAYER_BOOSTERS: ImprovePlayerBoosterProduct[] = [
       productName: "Premium Refurbished Golf Balls",
       description:
         "24 x premium refurbished golf balls",
-      image: "/boosters/reload/player_balls.png",
+      image: "/boosters/player_balls.png",
     })
   ),
 
@@ -135,7 +135,7 @@ export const IMPROVE_PLAYER_BOOSTERS: ImprovePlayerBoosterProduct[] = [
     productName: "Swing Trainer",
     description:
       "Golf Swing Trainer, Golf Training Aid",
-    image: "/boosters/technical/player_tech001.png",
+    image: "/boosters/player_tech001.png",
   },
 
   {
@@ -144,7 +144,7 @@ export const IMPROVE_PLAYER_BOOSTERS: ImprovePlayerBoosterProduct[] = [
     productName: "Putting Mirror",
     description:
       "Training Aid Lens Golf Putter Practice Posture Correction Equipment",
-    image: "/boosters/technical/player_tech002.png",
+    image: "/boosters/player_tech002.png",
   },
 
   {
@@ -153,7 +153,7 @@ export const IMPROVE_PLAYER_BOOSTERS: ImprovePlayerBoosterProduct[] = [
     productName: "Practice Green",
     description:
       "Mat Set with Return Track Indoor & Outdoor",
-    image: "/boosters/technical/player_tech003.png",
+    image: "/boosters/player_tech003.png",
   },
 
   {
@@ -162,7 +162,7 @@ export const IMPROVE_PLAYER_BOOSTERS: ImprovePlayerBoosterProduct[] = [
     productName: "Professional Lesson",
     description:
       "Professional lesson",
-    image: "/boosters/technical/player_tech004.png",
+    image: "/boosters/player_tech004.png",
   },
 
   {
@@ -171,7 +171,7 @@ export const IMPROVE_PLAYER_BOOSTERS: ImprovePlayerBoosterProduct[] = [
     productName: "Swing Trainer",
     description:
       "Golf swing trainer",
-    image: "/boosters/technical/player_tech005.png",
+    image: "/boosters/player_tech005.png",
   },
 
   {
@@ -180,7 +180,7 @@ export const IMPROVE_PLAYER_BOOSTERS: ImprovePlayerBoosterProduct[] = [
     productName: "Plane Sticks",
     description:
       "Golf Swing Trainer, Golf Training Aid",
-    image: "/boosters/technical/player_tech006.png",
+    image: "/boosters/player_tech006.png",
   },
 
   {
@@ -189,7 +189,7 @@ export const IMPROVE_PLAYER_BOOSTERS: ImprovePlayerBoosterProduct[] = [
     productName: "Putting Mirror",
     description:
       "Training Aid Lens Golf Putter Practice Posture Correction Equipment",
-    image: "/boosters/technical/player_tech007.png",
+    image: "/boosters/player_tech007.png",
   },
 
   {
@@ -198,7 +198,7 @@ export const IMPROVE_PLAYER_BOOSTERS: ImprovePlayerBoosterProduct[] = [
     productName: "Practice Green",
     description:
       "Mat Set with Return Track Indoor & Outdoor",
-    image: "/boosters/technical/player_tech008.png",
+    image: "/boosters/player_tech008.png",
   },
 
   {
@@ -207,7 +207,7 @@ export const IMPROVE_PLAYER_BOOSTERS: ImprovePlayerBoosterProduct[] = [
     productName: "Professional Lesson",
     description:
       "Professional lesson",
-    image: "/boosters/technical/player_tech009.png",
+    image: "/boosters/player_tech009.png",
   },
 
   {
@@ -216,7 +216,7 @@ export const IMPROVE_PLAYER_BOOSTERS: ImprovePlayerBoosterProduct[] = [
     productName: "Swing Trainer",
     description:
       "Golf swing trainer",
-    image: "/boosters/technical/player_tech0010.png",
+    image: "/boosters/player_tech005.png",
   },
 
 
@@ -230,7 +230,7 @@ export const IMPROVE_PLAYER_BOOSTERS: ImprovePlayerBoosterProduct[] = [
     productName: "Range Finder",
     description:
       "Golf Rangefinder with Slope Compensation",
-    image: "/boosters/accessory/player_access001.png",
+    image: "/boosters/player_access001.png",
   },
 
   {
@@ -239,7 +239,7 @@ export const IMPROVE_PLAYER_BOOSTERS: ImprovePlayerBoosterProduct[] = [
     productName: "Golf Accessories Combo",
     description:
       "Accessories for your golfing needs",
-    image: "/boosters/accessory/player_access002.png",
+    image: "/boosters/player_access002.png",
   },
 
   {
@@ -248,7 +248,7 @@ export const IMPROVE_PLAYER_BOOSTERS: ImprovePlayerBoosterProduct[] = [
     productName: "Putter",
     description:
       "Mallet Golf Putter",
-    image: "/boosters/accessory/player_access003.png",
+    image: "/boosters/player_access003.png",
   },
 
   {
@@ -257,7 +257,7 @@ export const IMPROVE_PLAYER_BOOSTERS: ImprovePlayerBoosterProduct[] = [
     productName: "Golf Ball Retriever",
     description:
       "Retractable 5-Section Golf Ball Retriever",
-    image: "/boosters/accessory/player_access004.png",
+    image: "/boosters/player_access004.png",
   },
 
   {
@@ -266,7 +266,7 @@ export const IMPROVE_PLAYER_BOOSTERS: ImprovePlayerBoosterProduct[] = [
     productName: "Portable Speaker",
     description:
       "Wireless Speakers, Portable",
-    image: "/boosters/accessory/player_access005.png",
+    image: "/boosters/player_access005.png",
   },
 
   {
@@ -275,7 +275,7 @@ export const IMPROVE_PLAYER_BOOSTERS: ImprovePlayerBoosterProduct[] = [
     productName: "Golf Grips",
     description:
       "8pcs/set Golf Grips",
-    image: "/boosters/accessory/player_access006.png",
+    image: "/boosters/player_access006.png",
   },
 
   {
@@ -284,7 +284,7 @@ export const IMPROVE_PLAYER_BOOSTERS: ImprovePlayerBoosterProduct[] = [
     productName: "Putter Grip",
     description:
       "Putter Grip, Non-Slip Ultra-Light Handle",
-    image: "/boosters/accessory/player_access007.png",
+    image: "/boosters/player_access007.png",
   },
 
   {
@@ -293,7 +293,7 @@ export const IMPROVE_PLAYER_BOOSTERS: ImprovePlayerBoosterProduct[] = [
     productName: "Golf Gloves",
     description:
       "2 x Gloves Anti-Slip",
-    image: "/boosters/accessory/player_access008.png",
+    image: "/boosters/player_access008.png",
   },
 
   {
@@ -302,7 +302,7 @@ export const IMPROVE_PLAYER_BOOSTERS: ImprovePlayerBoosterProduct[] = [
     productName: "Oversize Putter Grip",
     description:
       "Golf Grip Golf Putter Grip TOUR 5.0",
-    image: "/boosters/accessory/player_access009.png",
+    image: "/boosters/player_access009.png",
   },
 
   {
@@ -311,7 +311,7 @@ export const IMPROVE_PLAYER_BOOSTERS: ImprovePlayerBoosterProduct[] = [
     productName: "Golf Gloves",
     description:
       "2 x Gloves Anti-Slip",
-    image: "/boosters/accessory/player_access0010.png",
+    image: "/boosters/player_access0010.png",
   },
 
 
@@ -325,7 +325,7 @@ export const IMPROVE_PLAYER_BOOSTERS: ImprovePlayerBoosterProduct[] = [
     productName: "Golf Shirt",
     description:
       "Premium golf shirt - mens, ladies, various colours",
-    image: "/boosters/image/player_shirts.png",
+    image: "/boosters/player_shirts.png",
   },
 
   {
@@ -334,7 +334,7 @@ export const IMPROVE_PLAYER_BOOSTERS: ImprovePlayerBoosterProduct[] = [
     productName: "Golf Shirt",
     description:
       "Premium golf shirt - mens, ladies, various colours",
-    image: "/boosters/image/player_shirts.png",
+    image: "/boosters/player_shirts.png",
   },
 
   {
@@ -343,7 +343,7 @@ export const IMPROVE_PLAYER_BOOSTERS: ImprovePlayerBoosterProduct[] = [
     productName: "Golf Belts",
     description:
       "3 x golf belts",
-    image: "/boosters/image/player_image003.png",
+    image: "/boosters/player_image003.png",
   },
 
   {
@@ -352,7 +352,7 @@ export const IMPROVE_PLAYER_BOOSTERS: ImprovePlayerBoosterProduct[] = [
     productName: "Golf Shoes",
     description:
       "Premium golf shoes - mens, ladies, various colours",
-    image: "/boosters/image/player_shoes.png",
+    image: "/boosters/player_shoes.png",
   },
 
   {
@@ -361,7 +361,7 @@ export const IMPROVE_PLAYER_BOOSTERS: ImprovePlayerBoosterProduct[] = [
     productName: "Golf Shoes",
     description:
       "Premium golf shoes - mens, ladies, various colours",
-    image: "/boosters/image/player_shoes.png",
+    image: "/boosters/player_shoes.png",
   },
 
   {
@@ -370,7 +370,7 @@ export const IMPROVE_PLAYER_BOOSTERS: ImprovePlayerBoosterProduct[] = [
     productName: "Golf Shirt",
     description:
       "Premium golf shirt - mens, ladies, various colours",
-    image: "/boosters/image/player_shirts.png",
+    image: "/boosters/player_shirts.png",
   },
 
   {
@@ -379,7 +379,7 @@ export const IMPROVE_PLAYER_BOOSTERS: ImprovePlayerBoosterProduct[] = [
     productName: "Golf Cap",
     description:
       "Premium golf cap - mens, ladies, various colours",
-    image: "/boosters/image/player_caps.png",
+    image: "/boosters/player_caps.png",
   },
 
   {
@@ -388,7 +388,7 @@ export const IMPROVE_PLAYER_BOOSTERS: ImprovePlayerBoosterProduct[] = [
     productName: "Sunglasses",
     description:
       "6 x Stylish Square Frame Fashion Glasses",
-    image: "/boosters/image/player_image008.png",
+    image: "/boosters/player_image008.png",
   },
 
   {
@@ -397,7 +397,7 @@ export const IMPROVE_PLAYER_BOOSTERS: ImprovePlayerBoosterProduct[] = [
     productName: "Golf Outfit Combo",
     description:
       "Premium golf combo - mens, ladies, various colours",
-    image: "/boosters/image/player_image009.png",
+    image: "/boosters/player_image009.png",
   },
 
   {
@@ -406,7 +406,7 @@ export const IMPROVE_PLAYER_BOOSTERS: ImprovePlayerBoosterProduct[] = [
     productName: "Golf Outfit Combo",
     description:
       "Premium golf combo - mens, ladies, various colours",
-    image: "/boosters/image/player_image0010.png",
+    image: "/boosters/player_image0010.png",
   },
 ];
 

@@ -781,31 +781,22 @@ function WeightTile({
 function formatBoosterType(
   boosterType: string
 ) {
-  const names: Record<string, string> = {
-    player_protecting:
-      "Player Protecting Booster",
+ const names: Record<string, string> = {
+  player_protecting:
+    "Player Protecting Booster",
 
-    player_grip:
-      "Player Grip Booster",
+  player_reload:
+    "Player Reload Booster",
 
-    player_reload:
-      "Player Reload Booster",
+  player_tech:
+    "Player Technical Booster",
 
-    player_retrieval:
-      "Player Retrieval Booster",
+  player_accessory:
+    "Player Accessories Booster",
 
-    player_nourishment:
-      "Player Nourishment Booster",
-
-    player_technical:
-      "Player Technical Booster",
-
-    player_distance:
-      "Player Distance Booster",
-
-    player_image:
-      "Player Image Booster",
-  };
+  player_image:
+    "Player Image Booster",
+};
 
   return (
     names[boosterType] ||

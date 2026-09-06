@@ -1,7 +1,11 @@
 "use client";
 
 import { useMemo } from "react";
-import { useParams, useRouter } from "next/navigation";
+import {
+  useParams,
+  useRouter,
+  useSearchParams,
+} from "next/navigation";
 
 import {
   getImprovePlayerBoosters,
@@ -53,8 +57,11 @@ const CATEGORY_INFO: Record<
 };
 
 export default function ImprovePlayerBoosterPage() {
-  const router = useRouter();
-  const params = useParams();
+ const router = useRouter();
+const params = useParams();
+const searchParams = useSearchParams();
+
+const ballNumber = searchParams.get("ball");
 
   const category =
     String(params.category || "");
@@ -95,11 +102,11 @@ export default function ImprovePlayerBoosterPage() {
   function selectProduct(
     product: ImprovePlayerBoosterProduct
   ) {
-    router.push(
-      `/profile/rewards/improve-player/${category}/confirm?code=${encodeURIComponent(
-        product.code
-      )}`
-    );
+   router.push(
+  `/profile/rewards/improve-player/${category}/confirm?code=${encodeURIComponent(
+    product.code
+  )}&ball=${encodeURIComponent(ballNumber || "")}`
+);
   }
 
   return (

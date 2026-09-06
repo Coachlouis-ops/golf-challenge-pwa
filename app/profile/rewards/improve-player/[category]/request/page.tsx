@@ -19,8 +19,11 @@ export default function BoosterRequestPage() {
   const category =
     String(params.category || "");
 
-  const code =
-    String(searchParams.get("code") || "");
+const code =
+  String(searchParams.get("code") || "");
+
+const ballNumber =
+  Number(searchParams.get("ball") || 0);
 
   const product = useMemo(() => {
     return IMPROVE_PLAYER_BOOSTERS.find(

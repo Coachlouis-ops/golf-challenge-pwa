@@ -20,8 +20,11 @@ export default function ConfirmBoosterPage() {
   const category =
     String(params.category || "");
 
-  const code =
-    String(searchParams.get("code") || "");
+const code =
+  String(searchParams.get("code") || "");
+
+const ballNumber =
+  String(searchParams.get("ball") || "");
 
   const product = useMemo(() => {
     return IMPROVE_PLAYER_BOOSTERS.find(
@@ -55,10 +58,10 @@ export default function ConfirmBoosterPage() {
     selected: ImprovePlayerBoosterProduct
   ) {
     router.push(
-      `/profile/rewards/improve-player/${category}/request?code=${encodeURIComponent(
-        selected.code
-      )}`
-    );
+  `/profile/rewards/improve-player/${category}/request?code=${encodeURIComponent(
+    selected.code
+  )}&ball=${encodeURIComponent(ballNumber)}`
+);
   }
 
   return (

@@ -519,9 +519,9 @@ setRevealedBall({
       <button
         type="button"
         onClick={() =>
-          router.push(
-            `/profile/rewards/improve-player/${revealedBall.boosterType}`
-          )
+        router.push(
+  `/profile/rewards/improve-player/${revealedBall.boosterType}?ball=${revealedBall.number}`
+)
         }
         className="mt-4 w-full border border-amber-400/40 bg-amber-400/[0.08] px-4 py-3 text-xs font-black uppercase tracking-[0.14em] text-amber-300"
       >

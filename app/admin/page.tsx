@@ -148,8 +148,8 @@ async function openTestImprovePlayerBoosterBall() {
     const ball = response.data.ball;
 
     alert(
-      `Improve Player Booster opened.\n\nBall: ${ball.ballNumber}\nCategory: ${ball.boosterType}`
-    );
+  `Improve Player Booster granted.\n\nBall: ${ball.ballNumber}\nCategory: ${ball.boosterType}`
+);
   } catch (e: any) {
     console.error(
       "OPEN TEST IMPROVE PLAYER BALL ERROR:",
@@ -420,9 +420,9 @@ TEEZ Golf Challenges`
   disabled={openingTestImproveBall}
   className="mt-3 w-full bg-cyan-400 px-4 py-3 text-sm font-black text-black disabled:opacity-50"
 >
-  {openingTestImproveBall
-    ? "OPENING..."
-    : "OPEN TEST IMPROVE PLAYER BOOSTER"}
+{openingTestImproveBall
+  ? "GRANTING..."
+  : "GRANT TEST IMPROVE PLAYER BOOSTER"}
 </button>
 
 

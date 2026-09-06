@@ -497,25 +497,37 @@ setRevealedBall({
       }`}
     >
       {revealedBall.type === "career"
-  ? formatCareerBoosterType(
-      revealedBall.boosterType
-    )
-  : formatBoosterType(
-      revealedBall.boosterType
-    )}
+        ? formatCareerBoosterType(
+            revealedBall.boosterType
+          )
+        : formatBoosterType(
+            revealedBall.boosterType
+          )}
     </p>
-{revealedBall.type === "career" &&
-  revealedBall.rewardValue > 0 && (
-    <p className="mt-2 text-2xl font-black text-white">
-      +{revealedBall.rewardValue}{" "}
-      {formatCareerRewardUnit(
-        revealedBall.boosterType
+
+    {revealedBall.type === "career" &&
+      revealedBall.rewardValue > 0 && (
+        <p className="mt-2 text-2xl font-black text-white">
+          +{revealedBall.rewardValue}{" "}
+          {formatCareerRewardUnit(
+            revealedBall.boosterType
+          )}
+        </p>
       )}
-    </p>
-  )}
 
-
-
+    {revealedBall.type === "improve_player" && (
+      <button
+        type="button"
+        onClick={() =>
+          router.push(
+            `/profile/rewards/improve-player/${revealedBall.boosterType}`
+          )
+        }
+        className="mt-4 w-full border border-amber-400/40 bg-amber-400/[0.08] px-4 py-3 text-xs font-black uppercase tracking-[0.14em] text-amber-300"
+      >
+        Select Your Booster
+      </button>
+    )}
   </div>
 )}
 

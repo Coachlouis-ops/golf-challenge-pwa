@@ -19,6 +19,26 @@ import {
 } from "firebase/functions";
 import { useAuth } from "@/src/lib/AuthContext";
 
+
+
+type ImprovePlayerBoosterRequest = {
+  id: string;
+  requestId: string;
+  playerUid: string;
+  playerName: string;
+  playerEmail: string;
+  playerPhone: string;
+  ballNumber: number;
+  category: string;
+  productCode: string;
+  productName: string;
+  productDescription: string;
+  productImage: string;
+  status: string;
+  requestedAt?: any;
+};
+
+
 type MembershipPayment = {
   id: string;
   userId: string;
@@ -86,12 +106,27 @@ async function grantTestBoosterBall() {
   }
 }
 
-  const [payments, setPayments] = useState<MembershipPayment[]>([]);
-  const [loadingPayments, setLoadingPayments] = useState(true);
+const [payments, setPayments] =
+  useState<MembershipPayment[]>([]);
 
-  useEffect(() => {
-    loadMembershipPayments();
-  }, []);
+const [loadingPayments, setLoadingPayments] =
+  useState(true);
+
+
+const [
+  boosterRequests,
+  setBoosterRequests,
+] = useState<ImprovePlayerBoosterRequest[]>([]);
+
+const [
+  loadingBoosterRequests,
+  setLoadingBoosterRequests,
+] = useState(true);
+
+ useEffect(() => {
+  loadMembershipPayments();
+  loadBoosterRequests();
+}, []);
 
   async function loadMembershipPayments() {
     try {
@@ -116,6 +151,105 @@ async function grantTestBoosterBall() {
       setLoadingPayments(false);
     }
   }
+
+
+async function loadBoosterRequests() {
+  try {
+    setLoadingBoosterRequests(true);
+
+    const q = query(
+      collection(
+        db,
+        "improvePlayerBoosterRequests"
+      ),
+      orderBy("requestedAt", "desc")
+    );
+
+    const snap = await getDocs(q);
+
+    const rows = snap.docs.map((d) => ({
+      id: d.id,
+      ...(d.data() as Omit<
+        ImprovePlayerBoosterRequest,
+        "id"
+      >),
+    }));
+
+    setBoosterRequests(rows);
+  } catch (e) {
+    console.error(
+      "LOAD BOOSTER REQUESTS ERROR:",
+      e
+    );
+  } finally {
+    setLoadingBoosterRequests(false);
+  }
+}
+
+async function updateBoosterRequestStatus(
+  request: ImprovePlayerBoosterRequest,
+  status: "processing" | "contacted" | "fulfilled"
+) {
+  try {
+    await updateDoc(
+      doc(
+        db,
+        "improvePlayerBoosterRequests",
+        request.id
+      ),
+      {
+        status,
+        updatedAt: serverTimestamp(),
+        [`${status}At`]: serverTimestamp(),
+        [`${status}By`]:
+          user?.uid || "admin",
+      }
+    );
+
+    await loadBoosterRequests();
+  } catch (e: any) {
+    console.error(
+      "UPDATE BOOSTER REQUEST ERROR:",
+      e
+    );
+
+    alert(
+      e?.message ||
+        "Could not update Booster request."
+    );
+  }
+}
+
+function contactBoosterPlayer(
+  request: ImprovePlayerBoosterRequest
+) {
+  const subject =
+    encodeURIComponent(
+      `TEEZ Improve Player Booster - ${request.productName}`
+    );
+
+  const body =
+    encodeURIComponent(
+      `Hi ${request.playerName || "TEEZ Player"},
+
+We are contacting you regarding your Improve Player Booster.
+
+Booster Ball: ${request.ballNumber}
+Category: ${request.category}
+Item Code: ${request.productCode}
+Product: ${request.productName}
+Description: ${request.productDescription}
+
+We will arrange fulfilment and delivery with you directly.
+
+Regards,
+TEEZ Golf Challenges`
+    );
+
+  window.location.href =
+    `mailto:${request.playerEmail}?subject=${subject}&body=${body}`;
+}
+
 
   async function approvePayment(payment: MembershipPayment) {
     if (!confirm(`Approve membership payment for ${payment.email}?`)) return;
@@ -232,6 +366,165 @@ async function grantTestBoosterBall() {
       : "GRANT 1 TEST BOOSTER BALL"}
   </button>
 </div>
+
+
+{/* IMPROVE PLAYER BOOSTER REQUESTS */}
+<div className="w-full mt-8 bg-black/70 border border-amber-400/40 rounded-2xl p-5">
+  <h2 className="text-2xl font-bold text-amber-300 mb-4">
+    IMPROVE PLAYER BOOSTER REQUESTS
+  </h2>
+
+  {loadingBoosterRequests ? (
+    <p className="text-gray-400">
+      Loading Booster requests...
+    </p>
+  ) : boosterRequests.length === 0 ? (
+    <p className="text-gray-400">
+      No Booster requests found.
+    </p>
+  ) : (
+    <div className="flex flex-col gap-4">
+      {boosterRequests.map((request) => (
+        <div
+          key={request.id}
+          className="bg-zinc-900 border border-zinc-700 rounded-xl p-4"
+        >
+          <div className="grid grid-cols-1 md:grid-cols-[140px_1fr] gap-4">
+
+            <div className="bg-white rounded-lg overflow-hidden">
+              <img
+                src={request.productImage}
+                alt={request.productName}
+                className="w-full h-36 object-contain p-2"
+              />
+            </div>
+
+            <div className="space-y-2 text-sm">
+
+              <p>
+                <span className="text-gray-400">Player:</span>{" "}
+                <span className="font-semibold">
+                  {request.playerName || "Unknown"}
+                </span>
+              </p>
+
+              <p>
+                <span className="text-gray-400">UID:</span>{" "}
+                <span className="font-semibold break-all">
+                  {request.playerUid}
+                </span>
+              </p>
+
+              <p>
+                <span className="text-gray-400">Email:</span>{" "}
+                <span className="font-semibold break-all">
+                  {request.playerEmail}
+                </span>
+              </p>
+
+              <p>
+                <span className="text-gray-400">Phone:</span>{" "}
+                <span className="font-semibold">
+                  {request.playerPhone || "-"}
+                </span>
+              </p>
+
+              <p>
+                <span className="text-gray-400">Booster Ball:</span>{" "}
+                <span className="font-semibold">
+                  {request.ballNumber}
+                </span>
+              </p>
+
+              <p>
+                <span className="text-gray-400">Category:</span>{" "}
+                <span className="font-semibold">
+                  {request.category}
+                </span>
+              </p>
+
+              <p>
+                <span className="text-gray-400">Item Code:</span>{" "}
+                <span className="font-bold text-cyan-300">
+                  {request.productCode}
+                </span>
+              </p>
+
+              <p>
+                <span className="text-gray-400">Product:</span>{" "}
+                <span className="font-semibold">
+                  {request.productName}
+                </span>
+              </p>
+
+              <p>
+                <span className="text-gray-400">Description:</span>{" "}
+                <span className="font-semibold">
+                  {request.productDescription}
+                </span>
+              </p>
+
+              <p>
+                <span className="text-gray-400">Status:</span>{" "}
+                <span className="font-bold uppercase text-amber-300">
+                  {request.status}
+                </span>
+              </p>
+
+            </div>
+          </div>
+
+          <div className="mt-4 flex flex-col md:flex-row gap-3">
+            <button
+              type="button"
+              onClick={() =>
+                updateBoosterRequestStatus(
+                  request,
+                  "processing"
+                )
+              }
+              disabled={request.status === "fulfilled"}
+              className="px-4 py-2 rounded-lg font-semibold bg-yellow-400 text-black disabled:opacity-40"
+            >
+              Processing
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                contactBoosterPlayer(request);
+
+                updateBoosterRequestStatus(
+                  request,
+                  "contacted"
+                );
+              }}
+              disabled={request.status === "fulfilled"}
+              className="px-4 py-2 rounded-lg font-semibold bg-cyan-400 text-black disabled:opacity-40"
+            >
+              Contact Player
+            </button>
+
+            <button
+              type="button"
+              onClick={() =>
+                updateBoosterRequestStatus(
+                  request,
+                  "fulfilled"
+                )
+              }
+              disabled={request.status === "fulfilled"}
+              className="px-4 py-2 rounded-lg font-semibold bg-green-500 text-black disabled:opacity-40"
+            >
+              Fulfilled
+            </button>
+          </div>
+        </div>
+      ))}
+    </div>
+  )}
+</div>
+
 
 
         {/* MEMBERSHIP PAYMENT APPLICATIONS */}

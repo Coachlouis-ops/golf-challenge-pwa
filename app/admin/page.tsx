@@ -60,6 +60,12 @@ export default function AdminDashboard() {
 const [grantingTestBall, setGrantingTestBall] =
   useState(false);
 
+
+  const [
+  openingTestImproveBall,
+  setOpeningTestImproveBall,
+] = useState(false);
+
 async function grantTestBoosterBall() {
   const uid = testPlayerUid.trim();
 
@@ -103,6 +109,59 @@ async function grantTestBoosterBall() {
     );
   } finally {
     setGrantingTestBall(false);
+  }
+}
+
+async function openTestImprovePlayerBoosterBall() {
+  const uid = testPlayerUid.trim();
+
+  if (!uid) {
+    alert("Enter the player's UID.");
+    return;
+  }
+
+  try {
+    setOpeningTestImproveBall(true);
+
+    const functions =
+      getFunctions(undefined, "europe-west1");
+
+    const openImproveBall = httpsCallable<
+      { uid: string },
+      {
+        success: boolean;
+        ball: {
+          uid: string;
+          ballNumber: number;
+          ballType: "improve_player";
+          boosterType: string;
+        };
+      }
+    >(
+      functions,
+      "grantTestImprovePlayerBoosterBall"
+    );
+
+    const response =
+      await openImproveBall({ uid });
+
+    const ball = response.data.ball;
+
+    alert(
+      `Improve Player Booster opened.\n\nBall: ${ball.ballNumber}\nCategory: ${ball.boosterType}`
+    );
+  } catch (e: any) {
+    console.error(
+      "OPEN TEST IMPROVE PLAYER BALL ERROR:",
+      e
+    );
+
+    alert(
+      e?.message ||
+        "Could not open Improve Player Booster Ball."
+    );
+  } finally {
+    setOpeningTestImproveBall(false);
   }
 }
 
@@ -354,6 +413,19 @@ TEEZ Golf Challenges`
     placeholder="Player UID"
     className="mt-4 w-full border border-white/20 bg-black px-4 py-3 text-sm text-white outline-none focus:border-amber-400"
   />
+
+<button
+  type="button"
+  onClick={openTestImprovePlayerBoosterBall}
+  disabled={openingTestImproveBall}
+  className="mt-3 w-full bg-cyan-400 px-4 py-3 text-sm font-black text-black disabled:opacity-50"
+>
+  {openingTestImproveBall
+    ? "OPENING..."
+    : "OPEN TEST IMPROVE PLAYER BOOSTER"}
+</button>
+
+
 
   <button
     type="button"

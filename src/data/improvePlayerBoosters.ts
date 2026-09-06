@@ -11,6 +11,9 @@ export type ImprovePlayerBoosterProduct = {
   image: string;
 };
 
+
+
+
 export const IMPROVE_PLAYER_BOOSTERS: ImprovePlayerBoosterProduct[] = [
 
   // =========================================================
@@ -116,7 +119,7 @@ export const IMPROVE_PLAYER_BOOSTERS: ImprovePlayerBoosterProduct[] = [
     { length: 10 },
     (_, index) => ({
       code: `reload-${String(index + 1).padStart(3, "0")}`,
-      category: "player_reload" as const,
+    category: "player_reload" as const,
       productName: "Premium Refurbished Golf Balls",
       description:
         "24 x premium refurbished golf balls",
@@ -417,5 +420,14 @@ export function getImprovePlayerBoosters(
   return IMPROVE_PLAYER_BOOSTERS.filter(
     (product) =>
       product.category === category
+  );
+}
+
+export function getImprovePlayerBoosterByCode(
+  code: string
+) {
+  return IMPROVE_PLAYER_BOOSTERS.find(
+    (product) =>
+      product.code === String(code || "").trim()
   );
 }

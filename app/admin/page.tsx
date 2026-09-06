@@ -19,6 +19,10 @@ import {
 } from "firebase/functions";
 import { useAuth } from "@/src/lib/AuthContext";
 
+import {
+  IMPROVE_PLAYER_BOOSTERS,
+} from "@/src/data/improvePlayerBoosters";
+
 
 
 type ImprovePlayerBoosterRequest = {
@@ -464,11 +468,16 @@ TEEZ Golf Challenges`
           <div className="grid grid-cols-1 md:grid-cols-[140px_1fr] gap-4">
 
             <div className="bg-white rounded-lg overflow-hidden">
-              <img
-                src={request.productImage}
-                alt={request.productName}
-                className="w-full h-36 object-contain p-2"
-              />
+             <img
+  src={
+    IMPROVE_PLAYER_BOOSTERS.find(
+      (product) =>
+        product.code === request.productCode
+    )?.image || request.productImage
+  }
+  alt={request.productName}
+  className="w-full h-36 object-contain p-2"
+/>
             </div>
 
             <div className="space-y-2 text-sm">

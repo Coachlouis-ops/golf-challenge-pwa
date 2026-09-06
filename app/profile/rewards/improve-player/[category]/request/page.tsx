@@ -1,11 +1,16 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import {
   useParams,
   useRouter,
   useSearchParams,
 } from "next/navigation";
+
+import {
+  getFunctions,
+  httpsCallable,
+} from "firebase/functions";
 
 import {
   IMPROVE_PLAYER_BOOSTERS,
@@ -25,6 +30,15 @@ const code =
 const ballNumber =
   Number(searchParams.get("ball") || 0);
 
+  const [submitting, setSubmitting] =
+  useState(false);
+
+const [submitError, setSubmitError] =
+  useState("");
+
+const [submitted, setSubmitted] =
+  useState(false);
+
   const product = useMemo(() => {
     return IMPROVE_PLAYER_BOOSTERS.find(
       (item) =>
@@ -32,6 +46,66 @@ const ballNumber =
         item.category === category
     );
   }, [code, category]);
+
+
+  async function submitBoosterRequest() {
+  if (
+    !product ||
+    !Number.isInteger(ballNumber) ||
+    ballNumber < 1
+  ) {
+    setSubmitError(
+      "Invalid Booster Ball selection."
+    );
+    return;
+  }
+
+  try {
+    setSubmitting(true);
+    setSubmitError("");
+
+    const functions =
+      getFunctions(undefined, "europe-west1");
+
+    const submitRequest =
+      httpsCallable<
+        {
+          ballNumber: number;
+          category: string;
+          productCode: string;
+        },
+        {
+          success: boolean;
+          request: {
+            requestId: string;
+            status: string;
+          };
+        }
+      >(
+        functions,
+        "submitImprovePlayerBoosterRequest"
+      );
+
+    await submitRequest({
+      ballNumber,
+      category,
+      productCode: product.code,
+    });
+
+    setSubmitted(true);
+  } catch (error) {
+    console.error(
+      "Unable to submit Booster request:",
+      error
+    );
+
+    setSubmitError(
+      "Unable to submit your Booster request. Please try again."
+    );
+  } finally {
+    setSubmitting(false);
+  }
+}
 
   if (!product) {
     return (
@@ -199,17 +273,36 @@ const ballNumber =
 
           {/* HOOKUP PLACEHOLDER */}
 
-          <button
-            type="button"
-            disabled
-            className="w-full bg-cyan-400 px-4 py-4 text-sm font-black uppercase tracking-[0.12em] text-black opacity-50"
-          >
-            Submit Booster Request
-          </button>
+       {submitted ? (
+  <div className="border border-emerald-400/40 bg-emerald-400/[0.08] p-5 text-center">
+    <p className="text-sm font-black uppercase tracking-[0.12em] text-emerald-300">
+      Booster Request Submitted
+    </p>
 
-          <p className="text-center text-[9px] uppercase tracking-[0.12em] text-slate-600">
-            Request submission will be activated when the fulfilment system is connected.
-          </p>
+    <p className="mt-2 text-xs leading-5 text-slate-400">
+      TEEZ will contact you by email regarding fulfilment and delivery.
+    </p>
+  </div>
+) : (
+  <>
+    <button
+      type="button"
+      onClick={submitBoosterRequest}
+      disabled={submitting}
+      className="w-full bg-cyan-400 px-4 py-4 text-sm font-black uppercase tracking-[0.12em] text-black disabled:opacity-50"
+    >
+      {submitting
+        ? "Submitting..."
+        : "Submit Booster Request"}
+    </button>
+
+    {submitError && (
+      <p className="text-center text-xs font-bold text-red-300">
+        {submitError}
+      </p>
+    )}
+  </>
+)}
 
         </div>
 

@@ -356,8 +356,10 @@ const [clubNoticeRead, setClubNoticeRead] = useState(false);
       setProfileExists(true);
       setIsEditing(false);
 
-      // NEXT STEP: PAYMENT
-      router.push("/payment");
+      // PROFILE COMPLETE
+// Membership/payment status is handled by the dashboard.
+// Never force an already-paid player back to payment.
+router.replace("/dashboard");
     } catch (err: any) {
       console.error("PROFILE SAVE ERROR:", err);
 

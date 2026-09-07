@@ -115,84 +115,46 @@ export function AuthProvider({
           }
 
           // -----------------------------------
-          // PROFILE CHECK / CREATE
-          // -----------------------------------
-          const profileRef = doc(
-            db,
-            "profiles",
-            uid
-          );
+// PROFILE CHECK
+// Profile creation is handled securely elsewhere.
+// Auth bootstrap must never fail because a profile
+// or wallet does not yet exist.
+// -----------------------------------
+const profileRef = doc(
+  db,
+  "profiles",
+  uid
+);
 
-          const profileSnap =
-            await getDoc(profileRef);
+try {
+  await getDoc(profileRef);
+} catch (error) {
+  console.warn(
+    "Profile read skipped during auth bootstrap:",
+    error
+  );
+}
 
-          if (!profileSnap.exists()) {
-            await setDoc(profileRef, {
-              uid,
-              email: firebaseUser.email ?? "",
 
-              name: "",
-              surname: "",
-              battleName: "",
-              club: "",
-              division: "",
+// -----------------------------------
+// WALLET CHECK
+// Wallet creation / updates are server-controlled.
+// Do not attempt client-side writes here.
+// -----------------------------------
+const walletRef = doc(
+  db,
+  "wallets",
+  uid
+);
 
-              phoneNumber: "",
-
-              
-              stats: {
-                matchesPlayed: 0,
-                wins: 0,
-                losses: 0,
-                winPercentage: 0,
-                currentStreak: 0,
-                bestStreak: 0,
-              },
-
-              ranking: {
-                club: 0,
-                division: 0,
-                national: 0,
-              },
-
-              achievements: [],
-
-              tokensPlayed: 0,
-              tokensWon: 0,
-
-              profileComplete: false,
-
-              createdAt: serverTimestamp(),
-              updatedAt: serverTimestamp(),
-            });
-          }
-
-          // -----------------------------------
-          // WALLET CHECK / CREATE
-          // -----------------------------------
-          const walletRef = doc(
-            db,
-            "wallets",
-            uid
-          );
-
-          const walletSnap =
-            await getDoc(walletRef);
-
-          if (!walletSnap.exists()) {
-            await setDoc(walletRef, {
-              balance: 0,
-              lifetimeWon: 0,
-              lifetimeSpent: 0,
-
-              subscriptionTokensIssued: 0,
-              topUpTokensPurchased: 0,
-
-              createdAt: serverTimestamp(),
-              updatedAt: serverTimestamp(),
-            });
-          }
-
+try {
+  await getDoc(walletRef);
+} catch (error) {
+  console.warn(
+    "Wallet read skipped during auth bootstrap:",
+    error
+  );
+}
           // -----------------------------------
           // USER SUBSCRIPTION CHECK / CREATE
           // -----------------------------------

@@ -101,11 +101,11 @@ export default function PaymentPendingPage() {
             "Payment confirmed. Your membership is active and 100 Teez Tokens have been added to your wallet."
           );
 
-          setTimeout(() => {
-            router.replace(
-              "/dashboard"
-            );
-          }, 1500);
+         setTimeout(() => {
+  router.replace(
+    "/login"
+  );
+}, 1500);
 
           return;
         }

@@ -68,16 +68,15 @@ export default function LoginPage() {
 
     const profileData = profileSnapshot.data();
 
-    if (
-      !profileData.name ||
-      !profileData.surname ||
-      !profileData.battleName ||
-      !profileData.club ||
-      !profileData.division
-    ) {
-      router.replace("/profile");
-      return;
-    }
+   if (
+  !profileData.name ||
+  !profileData.surname ||
+  !profileData.battleName ||
+  !profileData.club
+) {
+  router.replace("/profile");
+  return;
+}
 
     // SUBSCRIPTION CHECK
     if (

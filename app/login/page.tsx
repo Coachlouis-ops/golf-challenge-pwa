@@ -41,54 +41,23 @@ export default function LoginPage() {
     }
   }
 
-  async function handleRouting(uid: string) {
-    // ADMIN CHECK
-    const userRef = doc(db, "users", uid);
-    const userSnapshot = await getDoc(userRef);
+async function handleRouting(uid: string) {
+  const userRef = doc(db, "users", uid);
+  const userSnapshot = await getDoc(userRef);
 
-    const userData = userSnapshot.exists()
-      ? userSnapshot.data()
-      : null;
+  const userData = userSnapshot.exists()
+    ? userSnapshot.data()
+    : null;
 
-    const role = userData?.role || "player";
+  const role = userData?.role || "player";
 
-    if (role === "admin") {
-      router.replace("/admin");
-      return;
-    }
-
-    // PROFILE CHECK
-    const profileRef = doc(db, "profiles", uid);
-    const profileSnapshot = await getDoc(profileRef);
-
-    if (!profileSnapshot.exists()) {
-      router.replace("/profile");
-      return;
-    }
-
-    const profileData = profileSnapshot.data();
-
-   if (
-  !profileData.name ||
-  !profileData.surname ||
-  !profileData.battleName ||
-  !profileData.club
-) {
-  router.replace("/profile");
-  return;
-}
-
-    // SUBSCRIPTION CHECK
-    if (
-      !userSnapshot.exists() ||
-      userData?.subscriptionStatus !== "active"
-    ) {
-      router.replace("/payment");
-      return;
-    }
-
-    router.replace("/dashboard");
+  if (role === "admin") {
+    router.replace("/admin");
+    return;
   }
+
+  router.replace("/dashboard");
+}
 
   return (
     <main className="min-h-screen flex items-center justify-center bg-black text-white px-6">

@@ -214,11 +214,49 @@ photoUrl: "",
 
 
       // ---------------- PROFILE ----------------
-      if (profileSnap.exists()) {
-        setProfile(profileSnap.data() as Profile);
-        setProfileExists(true);
-        setIsEditing(false);
-      } else {
+     if (profileSnap.exists()) {
+  const loadedProfile =
+    profileSnap.data() as Profile;
+
+  setProfile(loadedProfile);
+
+  const dialCode =
+    getDialCodeForCountry(
+      loadedProfile.country || ""
+    );
+
+  if (dialCode) {
+    setPhoneCountryCode(dialCode);
+
+    let savedPhone =
+      String(
+        loadedProfile.phoneNumber || ""
+      ).replace(/[^\d+]/g, "");
+
+    if (
+      savedPhone.startsWith(dialCode)
+    ) {
+      savedPhone =
+        savedPhone.substring(
+          dialCode.length
+        );
+    }
+
+    if (
+      loadedProfile.country ===
+        "South Africa" &&
+      savedPhone.startsWith("0")
+    ) {
+      savedPhone =
+        savedPhone.substring(1);
+    }
+
+    setPhoneLocalNumber(savedPhone);
+  }
+
+  setProfileExists(true);
+  setIsEditing(false);
+} else {
         setProfileExists(false);
         setIsEditing(true);
       }
@@ -404,16 +442,46 @@ if (!/^\+[1-9]\d{6,14}$/.test(normalizedPhoneNumber)) {
   result?.data?.phoneNumber ||
   normalizedPhoneNumber;
       setProfile((prev) => ({
-        ...prev,
-        uid: user.uid,
-        phoneNumber: savedPhone,
-        searchIndex,
-      }));
+  ...prev,
+  uid: user.uid,
+  phoneNumber: savedPhone,
+  searchIndex,
+}));
 
       alert("Profile saved successfully.");
 
       setProfileExists(true);
       setIsEditing(false);
+
+const savedDialCode =
+  getDialCodeForCountry(
+    profile.country || ""
+  );
+
+if (savedDialCode) {
+  setPhoneCountryCode(
+    savedDialCode
+  );
+
+  const localNumber =
+    String(savedPhone)
+      .replace(/[^\d+]/g, "")
+      .replace(
+        new RegExp(
+          `^\\${savedDialCode}`
+        ),
+        ""
+      );
+
+  setPhoneLocalNumber(
+    localNumber
+  );
+}
+
+
+
+
+
 
       // PROFILE COMPLETE
 // Membership/payment status is handled by the dashboard.

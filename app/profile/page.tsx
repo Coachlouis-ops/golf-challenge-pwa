@@ -43,7 +43,11 @@ type Profile = {
   stateProvince: string;
   club: string;
   phoneNumber: string;
-  dateOfBirth: string;
+
+profileContactVerified?: boolean;
+profileContactVerifiedAt?: any;
+
+dateOfBirth: string;
 
 identificationType:
   | "national_id"
@@ -577,6 +581,28 @@ router.replace("/dashboard");
 
           <p className="text-gray-400 text-sm">{user.email}</p>
         </div>
+
+
+        {profileExists &&
+  profile.profileContactVerified !== true && (
+    <div className="w-full rounded-xl border-2 border-amber-400 bg-amber-400/10 p-5 space-y-3 shadow-[0_0_24px_rgba(251,191,36,0.22)]">
+      <h2 className="text-lg font-extrabold text-amber-300">
+        VERIFY YOUR CELLPHONE NUMBER
+      </h2>
+
+      <p className="text-sm text-gray-300 leading-relaxed">
+        Please confirm your country code and cellphone number so Teez can contact you correctly for invites and callbacks.
+      </p>
+
+      <button
+        type="button"
+        onClick={() => setIsEditing(true)}
+        className="w-full bg-amber-400 text-black font-extrabold py-3 rounded-xl"
+      >
+        VERIFY CELLPHONE NUMBER
+      </button>
+    </div>
+  )}
 
         {/* PLAYER CARD */}
         {profileExists && !isEditing && (

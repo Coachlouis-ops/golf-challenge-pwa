@@ -8,6 +8,18 @@ import { doc, getDoc } from "firebase/firestore";
 import { httpsCallable } from "firebase/functions";
 import { countries } from "@/src/lib/countries";
 import { useRouter } from "next/navigation";
+import {
+  COUNTRY_CALLING_CODES,
+  getDialCodeForCountry,
+} from "@/src/lib/countryCallingCodes";
+
+
+
+
+
+
+
+
 
 declare const google: any;
 
@@ -32,8 +44,13 @@ type Profile = {
   club: string;
   phoneNumber: string;
   dateOfBirth: string;
-  idNumber: string;
-  photoUrl: string;
+
+identificationType:
+  | "national_id"
+  | "passport";
+
+idNumber: string;
+photoUrl: string;
   searchIndex: string;
 
   tokensPlayed?: number;
@@ -118,6 +135,11 @@ const [isEditing, setIsEditing] = useState(false);
 const [profileExists, setProfileExists] = useState(false);
 const [showClubNotice, setShowClubNotice] = useState(false);
 const [clubNoticeRead, setClubNoticeRead] = useState(false);
+const [phoneCountryCode, setPhoneCountryCode] =
+  useState("");
+
+const [phoneLocalNumber, setPhoneLocalNumber] =
+  useState("");
 
 
   const [rankingPosition, setRankingPosition] = useState<RankingPosition>({
@@ -155,8 +177,9 @@ const [clubNoticeRead, setClubNoticeRead] = useState(false);
     club: "",
     phoneNumber: "",
     dateOfBirth: "",
-    idNumber: "",
-    photoUrl: "",
+identificationType: "national_id",
+idNumber: "",
+photoUrl: "",
     searchIndex: "",
 
     tokensPlayed: 0,
@@ -184,6 +207,11 @@ const [clubNoticeRead, setClubNoticeRead] = useState(false);
   getDoc(profileRef),
   getDoc(rankingRef),
 ]);
+
+
+
+
+
 
       // ---------------- PROFILE ----------------
       if (profileSnap.exists()) {
@@ -218,6 +246,19 @@ const [clubNoticeRead, setClubNoticeRead] = useState(false);
       setLoading(false);
     })();
   }, [user]);
+
+
+useEffect(() => {
+  if (!profile.country) return;
+
+  const dialCode =
+    getDialCodeForCountry(profile.country);
+
+  if (dialCode) {
+    setPhoneCountryCode(dialCode);
+  }
+}, [profile.country]);
+
 
   /* GOOGLE CLUB SEARCH */
   useEffect(() => {
@@ -313,10 +354,28 @@ const [clubNoticeRead, setClubNoticeRead] = useState(false);
       return;
     }
 
-    if (!profile.phoneNumber.trim()) {
-      alert("Please enter your cellphone number.");
-      return;
-    }
+if (!phoneCountryCode) {
+  alert("Please select your country calling code.");
+  return;
+}
+
+if (!phoneLocalNumber.trim()) {
+  alert("Please enter your cellphone number.");
+  return;
+}
+
+const normalizedPhoneNumber =
+  `${phoneCountryCode}${phoneLocalNumber}`.replace(
+    /[^\d+]/g,
+    ""
+  );
+
+if (!/^\+[1-9]\d{6,14}$/.test(normalizedPhoneNumber)) {
+  alert(
+    "Please enter a valid international cellphone number."
+  );
+  return;
+}
 
     setSaving(true);
 
@@ -336,14 +395,14 @@ const [clubNoticeRead, setClubNoticeRead] = useState(false);
       );
 
       const result: any = await savePlayerProfile({
-        ...profile,
-        searchIndex,
-      });
+  ...profile,
+  phoneNumber: normalizedPhoneNumber,
+  searchIndex,
+});
 
-      const savedPhone =
-        result?.data?.phoneNumber ||
-        profile.phoneNumber;
-
+   const savedPhone =
+  result?.data?.phoneNumber ||
+  normalizedPhoneNumber;
       setProfile((prev) => ({
         ...prev,
         uid: user.uid,
@@ -468,8 +527,8 @@ router.replace("/dashboard");
                 <p><strong className="text-cyan-300">Province:</strong> {profile.stateProvince}</p>
                 <p><strong className="text-cyan-300">Country:</strong> {profile.country}</p>
                 <p><strong className="text-cyan-300">DOB:</strong> {profile.dateOfBirth}</p>
-                <p><strong className="text-cyan-300">ID:</strong> {profile.idNumber}</p>
-                <p><strong className="text-cyan-300">Phone:</strong> {profile.phoneNumber}</p>
+                <p><strong className="text-cyan-300">National ID / Passport:</strong>{profile.idNumber}</p>
+                <p><strong className="text-cyan-300">Cellphone:</strong>{profile.phoneNumber}</p>
               </div>
             </div>
 
@@ -787,25 +846,115 @@ router.replace("/dashboard");
   </div>
 )}
 
-           {profileExists ? (
-  <LockedField
-    label="ID Number"
-    value={profile.idNumber}
-  />
-) : (
-  <Input
-    label="ID Number"
-    value={profile.idNumber}
-    onChange={(v) =>
-      setProfile({
-        ...profile,
-        idNumber: v,
-      })
-    }
-  />
-)}
-            <Input label="Phone Number" value={profile.phoneNumber} onChange={(v) => setProfile({ ...profile, phoneNumber: v })} />
+    {profileExists ? (
+  <>
+    <LockedField
+      label="Identification Type"
+      value={
+        profile.identificationType === "passport"
+          ? "Passport"
+          : "National ID"
+      }
+    />
 
+    <LockedField
+      label="Identification Number"
+      value={profile.idNumber}
+    />
+  </>
+) : (
+  <>
+    <div className="space-y-2">
+      <p className="text-xs text-gray-400">
+        Identification Type
+      </p>
+
+      <select
+        className="w-full bg-[#1f1f1f] border border-gray-500 text-white px-3 py-2 rounded-md focus:border-green-400 focus:outline-none"
+        value={profile.identificationType}
+        onChange={(e) =>
+          setProfile({
+            ...profile,
+            identificationType:
+              e.target.value as
+                | "national_id"
+                | "passport",
+          })
+        }
+      >
+        <option value="national_id">
+          National ID
+        </option>
+
+        <option value="passport">
+          Passport
+        </option>
+      </select>
+    </div>
+
+    <Input
+      label="Identification Number"
+      value={profile.idNumber}
+      onChange={(v) =>
+        setProfile({
+          ...profile,
+          idNumber: v,
+        })
+      }
+    />
+  </>
+)}
+         <div className="space-y-2">
+  <p className="text-xs text-gray-400">
+    Cellphone Number
+  </p>
+
+  <div className="grid grid-cols-[120px_1fr] gap-2">
+    <select
+      className="bg-[#1f1f1f] border border-gray-500 text-white px-3 py-2 rounded-md focus:border-green-400 focus:outline-none"
+      value={phoneCountryCode}
+      onChange={(e) =>
+        setPhoneCountryCode(
+          e.target.value
+        )
+      }
+    >
+      <option value="">
+        Code
+      </option>
+
+      {COUNTRY_CALLING_CODES.map(
+        (item) => (
+          <option
+            key={`${item.country}-${item.dialCode}`}
+            value={item.dialCode}
+          >
+            {item.dialCode}
+          </option>
+        )
+      )}
+    </select>
+
+    <input
+      type="tel"
+      inputMode="tel"
+      placeholder="Cellphone number"
+      className="w-full bg-[#1f1f1f] border border-gray-500 text-white px-3 py-2 rounded-md focus:border-green-400 focus:outline-none"
+      value={phoneLocalNumber}
+      onChange={(e) =>
+        setPhoneLocalNumber(
+          e.target.value
+            .replace(/[^\d]/g, "")
+            .replace(/^0+/, "")
+        )
+      }
+    />
+  </div>
+
+  <p className="text-[10px] text-gray-500">
+    Example: +27 and 631234567
+  </p>
+</div>
             <button
               onClick={saveProfile}
               disabled={saving}

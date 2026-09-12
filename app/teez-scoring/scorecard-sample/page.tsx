@@ -137,43 +137,55 @@ export default function ScorecardSamplePage() {
     <main className="min-h-screen bg-black text-white">
       <div className="w-full max-w-[430px] mx-auto bg-[#04100d] min-h-screen pb-44">
 
-        {/* HERO */}
+      {/* HERO */}
 
-        <section
-          className="relative px-4 pt-7 pb-6 bg-cover bg-center"
-          style={{
-            backgroundImage:
-              "linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.95)), url('/hero_main.png')",
-          }}
-        >
-          <div className="flex items-start justify-between mb-7">
+<section
+  className="relative px-4 pt-6 pb-6 bg-cover bg-center"
+  style={{
+    backgroundImage:
+      "linear-gradient(to bottom, rgba(0,0,0,0.15), rgba(0,0,0,0.96)), url('/hero_main.png')",
+  }}
+>
+  <div className="flex items-center justify-between mb-6">
 
-            <div>
-              <div className="text-4xl font-black tracking-tight">
-                TEEZ
-              </div>
+    <div className="flex items-center gap-3">
+      <img
+        src="/JK6_logo.png"
+        alt="JK6"
+        className="w-16 h-16 object-contain rounded-xl bg-white/90 p-1"
+      />
 
-              <div className="text-[10px] tracking-[0.35em] text-gray-300">
-                GOLF SCORING
-              </div>
-            </div>
+      <div>
+        <div className="text-3xl font-black tracking-tight">
+          JK6
+        </div>
 
-            <div className="text-right text-[10px] tracking-[0.22em] text-green-400 font-bold">
-              MORE THAN A SCORE
-              <br />
-              A BETTER GAME
-            </div>
+        <div className="text-xs tracking-[0.22em] text-green-400 font-bold">
+          GOLF DAY
+        </div>
+      </div>
+    </div>
 
-          </div>
+    <div className="text-right">
+      <div className="text-xs tracking-[0.18em] text-gray-400 font-bold">
+        POWERED BY
+      </div>
 
-          <h1 className="text-3xl font-black leading-tight">
-            Woodhill Corporate Golf Day
-          </h1>
+      <div className="text-sm font-black text-gray-300">
+        TEEZ Golf Scoring
+      </div>
+    </div>
 
-          <p className="text-lg font-bold text-gray-300 mt-2">
-            4 Ball Alliance
-          </p>
-        </section>
+  </div>
+
+  <h1 className="text-3xl font-black leading-tight">
+    JK6 Corporate Golf Day
+  </h1>
+
+  <p className="text-lg font-bold text-gray-300 mt-2">
+    4 Ball Alliance · Mystery Count
+  </p>
+</section>
 
         {/* EVENT INFO */}
 
@@ -200,9 +212,9 @@ export default function ScorecardSamplePage() {
                 👥
               </div>
 
-              <h2 className="font-black text-base">
-                Vector Carts
-              </h2>
+             <h2 className="font-black text-base">
+  JK6
+</h2>
 
               <p className="text-xs text-gray-400 mt-1">
                 Team / Company
@@ -232,12 +244,12 @@ export default function ScorecardSamplePage() {
                 🕘
               </div>
 
-              <h3 className="text-lg font-black">
-                09:20
-              </h3>
+         <h3 className="text-lg font-black">
+  11:00am
+</h3>
 
               <p className="text-xs text-gray-400">
-                Tee Time
+                Shotgun Start
               </p>
             </div>
 

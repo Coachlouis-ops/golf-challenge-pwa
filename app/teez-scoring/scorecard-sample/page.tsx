@@ -110,9 +110,14 @@ export default function ScorecardSamplePage() {
   );
 
   function saveScorecard() {
-    setIsSaved(true);
-    alert("Scorecard updated. Leaderboard refreshed.");
-  }
+  setIsSaved(true);
+  alert("Scorecard updated. Leaderboard refreshed.");
+}
+
+function saveHoleScore(holeNumber: number) {
+  setIsSaved(true);
+  alert(`Hole ${holeNumber} score updated.`);
+}
 
   function finalizeRound() {
     if (!allScoresEntered) {
@@ -335,14 +340,22 @@ export default function ScorecardSamplePage() {
                   </div>
 
                   <div className="grid grid-cols-[1fr_54px] gap-2 items-center mt-3 min-w-0">
-                    <p className="font-bold text-gray-300 text-sm">
-                      Hole Total
-                    </p>
+  <p className="font-bold text-gray-300 text-sm">
+    Hole Total
+  </p>
 
-                    <div className="border border-green-400/40 rounded-xl px-1 py-2 text-center text-lg font-black text-green-400">
-                      {getHoleTotal(hole.hole)}
-                    </div>
-                  </div>
+  <div className="border border-green-400/40 rounded-xl px-1 py-2 text-center text-lg font-black text-green-400">
+    {getHoleTotal(hole.hole)}
+  </div>
+</div>
+
+<button
+  onClick={() => saveHoleScore(hole.hole)}
+  disabled={isFinalized}
+  className="w-full mt-3 bg-cyan-400 text-black rounded-xl py-3 font-black text-sm disabled:opacity-40"
+>
+  UPDATE HOLE {hole.hole} SCORE
+</button>
                 </div>
               </div>
             </div>

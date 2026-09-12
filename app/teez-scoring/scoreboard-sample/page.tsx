@@ -45,38 +45,7 @@ export default function ScorecardDashboardSamplePage() {
     alert("Leaderboard updated.");
   }
 
-  function finalizeTeam(teamId: string) {
-    setTeams((prev) =>
-      prev.map((team) =>
-        team.id === teamId
-          ? {
-              ...team,
-              finalized: true,
-            }
-          : team
-      )
-    );
-
-    alert("Team round finalized.");
-  }
-
-  function reopenTeam(teamId: string) {
-    if (leaderboardLocked) return;
-
-    setTeams((prev) =>
-      prev.map((team) =>
-        team.id === teamId
-          ? {
-              ...team,
-              finalized: false,
-            }
-          : team
-      )
-    );
-
-    alert("Team reopened for correction.");
-  }
-
+  
   function finalizeLeaderboard() {
     setLeaderboardLocked(true);
     alert("Leaderboard finalized and locked.");
@@ -168,34 +137,6 @@ export default function ScorecardDashboardSamplePage() {
                     className="w-full bg-neutral-900 border border-cyan-400/30 rounded-xl px-2 py-3 text-center text-2xl font-black disabled:opacity-40"
                   />
                 </div>
-
-                <div className="grid grid-cols-2 gap-2 mt-3">
-                  {!team.finalized ? (
-                    <button
-                      onClick={() => finalizeTeam(team.id)}
-                      disabled={leaderboardLocked}
-                      className="bg-green-400 text-black rounded-xl py-3 font-black disabled:opacity-40"
-                    >
-                      FINALIZE ROUND
-                    </button>
-                  ) : (
-                    <button
-                      onClick={() => reopenTeam(team.id)}
-                      disabled={leaderboardLocked}
-                      className="bg-red-500 text-white rounded-xl py-3 font-black disabled:opacity-40"
-                    >
-                      REOPEN
-                    </button>
-                  )}
-
-                  <button
-                    onClick={updateLeaderboard}
-                    disabled={leaderboardLocked}
-                    className="bg-cyan-400 text-black rounded-xl py-3 font-black disabled:opacity-40"
-                  >
-                    UPDATE
-                  </button>
-                </div>
               </div>
             ))}
           </div>
@@ -206,14 +147,14 @@ export default function ScorecardDashboardSamplePage() {
                 onClick={finalizeLeaderboard}
                 className="bg-green-400 text-black rounded-2xl py-4 font-black"
               >
-                FINALIZE LEADERBOARD
+                FINALIZE SCOREBOARD
               </button>
             ) : (
               <button
                 onClick={reopenLeaderboard}
                 className="bg-red-500 text-white rounded-2xl py-4 font-black"
               >
-                REOPEN LEADERBOARD
+               REOPEN SCOREBOARD
               </button>
             )}
 
@@ -222,7 +163,7 @@ export default function ScorecardDashboardSamplePage() {
               disabled={leaderboardLocked}
               className="bg-cyan-400 text-black rounded-2xl py-4 font-black disabled:opacity-40"
             >
-              UPDATE LEADERBOARD
+              UPDATE SCOREBOARD
             </button>
           </div>
 

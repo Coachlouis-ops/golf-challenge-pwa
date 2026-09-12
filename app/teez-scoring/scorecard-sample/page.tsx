@@ -137,18 +137,21 @@ export default function ScorecardSamplePage() {
     <main className="min-h-screen bg-black text-white">
       <div className="w-full max-w-[430px] mx-auto bg-[#04100d] min-h-screen pb-44">
 
-    {/* HERO */}
+{/* HERO */}
 
-<section
-  className="relative px-4 pt-6 pb-6 bg-cover bg-center"
-  style={{
-    backgroundImage:
-      "linear-gradient(to bottom, rgba(0,0,0,0.35), rgba(0,0,0,0.96)), url('/jk6_logo.png')",
-  }}
->
-  <div className="flex items-start justify-end mb-16">
+<section className="relative px-4 pt-6 pb-6 overflow-hidden bg-black">
 
-    <div className="text-right bg-black/50 border border-white/10 rounded-xl px-3 py-2">
+  <img
+    src="/jk6_logo.png"
+    alt="JK6"
+    className="absolute inset-0 w-full h-full object-contain opacity-35"
+  />
+
+  <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/45 to-black" />
+
+  <div className="relative z-10 flex items-start justify-end mb-20">
+
+    <div className="text-right bg-black/60 border border-white/10 rounded-xl px-3 py-2">
       <div className="text-[10px] tracking-[0.18em] text-gray-400 font-bold">
         POWERED BY
       </div>
@@ -160,13 +163,16 @@ export default function ScorecardSamplePage() {
 
   </div>
 
-  <h1 className="text-3xl font-black leading-tight">
-    JK6 Corporate Golf Day
-  </h1>
+  <div className="relative z-10">
+    <h1 className="text-3xl font-black leading-tight">
+      JK6 Corporate Golf Day
+    </h1>
 
-  <p className="text-lg font-bold text-gray-300 mt-2">
-    4 Ball Alliance · Mystery Count
-  </p>
+    <p className="text-lg font-bold text-gray-300 mt-2">
+      4 Ball Alliance · Mystery Count
+    </p>
+  </div>
+
 </section>
 
         {/* EVENT INFO */}

@@ -34,7 +34,6 @@ const holes: Hole[] = [
   { hole: 7, par: 3, menStroke: 15, ladiesStroke: 11, club: 169, championship: 186, ladies: 147 },
   { hole: 8, par: 4, menStroke: 5, ladiesStroke: 9, club: 428, championship: 451, ladies: 351 },
   { hole: 9, par: 4, menStroke: 17, ladiesStroke: 17, club: 335, championship: 361, ladies: 289 },
-
   { hole: 10, par: 4, menStroke: 6, ladiesStroke: 8, club: 339, championship: 386, ladies: 290 },
   { hole: 11, par: 5, menStroke: 18, ladiesStroke: 16, club: 476, championship: 492, ladies: 448 },
   { hole: 12, par: 3, menStroke: 12, ladiesStroke: 12, club: 179, championship: 202, ladies: 132 },
@@ -55,56 +54,38 @@ const holeImages = [
 ];
 
 export default function ScorecardSamplePage() {
-  const [activeNine, setActiveNine] =
-    useState<"front" | "back">("front");
-
-  const [scores, setScores] =
-    useState<Record<string, string>>({});
+  const [activeNine, setActiveNine] = useState<"front" | "back">("front");
+  const [scores, setScores] = useState<Record<string, string>>({});
+  const [isSaved, setIsSaved] = useState(false);
+  const [isFinalized, setIsFinalized] = useState(false);
 
   const visibleHoles = holes.filter((hole) =>
-    activeNine === "front"
-      ? hole.hole <= 9
-      : hole.hole >= 10
+    activeNine === "front" ? hole.hole <= 9 : hole.hole >= 10
   );
 
-  function updateScore(
-    hole: number,
-    playerId: string,
-    value: string
-  ) {
+  function updateScore(hole: number, playerId: string, value: string) {
+    if (isFinalized) return;
+
     const cleanValue =
       value === ""
         ? ""
-        : String(
-            Math.max(
-              0,
-              Math.min(
-                10,
-                Number(value) || 0
-              )
-            )
-          );
+        : String(Math.max(0, Math.min(10, Number(value) || 0)));
 
     setScores((prev) => ({
       ...prev,
       [`${hole}-${playerId}`]: cleanValue,
     }));
+
+    setIsSaved(false);
   }
 
-  function getScore(
-    hole: number,
-    playerId: string
-  ) {
+  function getScore(hole: number, playerId: string) {
     return scores[`${hole}-${playerId}`] || "";
   }
 
   function getHoleTotal(hole: number) {
     return players.reduce(
-      (total, player) =>
-        total +
-        (Number(
-          getScore(hole, player.id)
-        ) || 0),
+      (total, player) => total + (Number(getScore(hole, player.id)) || 0),
       0
     );
   }
@@ -113,78 +94,76 @@ export default function ScorecardSamplePage() {
     return players.map((player) => ({
       ...player,
       total: holes.reduce(
-        (total, hole) =>
-          total +
-          (Number(
-            getScore(
-              hole.hole,
-              player.id
-            )
-          ) || 0),
+        (total, hole) => total + (Number(getScore(hole.hole, player.id)) || 0),
         0
       ),
     }));
   }, [scores]);
 
-  const teamTotal =
-    playerTotals.reduce(
-      (total, player) =>
-        total + player.total,
-      0
-    );
+  const teamTotal = playerTotals.reduce(
+    (total, player) => total + player.total,
+    0
+  );
+
+  const allScoresEntered = holes.every((hole) =>
+    players.every((player) => getScore(hole.hole, player.id) !== "")
+  );
+
+  function saveScorecard() {
+    setIsSaved(true);
+    alert("Scorecard updated. Leaderboard refreshed.");
+  }
+
+  function finalizeRound() {
+    if (!allScoresEntered) {
+      alert("Please complete all 18 holes before finalizing.");
+      return;
+    }
+
+    setIsSaved(true);
+    setIsFinalized(true);
+    alert("Round finalized. Scorecard is now locked.");
+  }
+
+  function reopenScorecard() {
+    setIsFinalized(false);
+    alert("Scorecard reopened for editing.");
+  }
 
   return (
     <main className="min-h-screen bg-black text-white">
-      <div className="w-full max-w-[430px] mx-auto bg-[#04100d] min-h-screen pb-44">
+      <div className="w-full max-w-[430px] mx-auto bg-[#04100d] min-h-screen pb-52">
 
-{/* HERO */}
+        {/* LOGO HEADER */}
 
-<section className="relative px-4 pt-6 pb-6 overflow-hidden bg-black">
+        <section className="relative bg-black overflow-hidden">
+          <div className="relative min-h-[260px] flex items-center justify-center px-4 pt-8">
+            <img
+              src="/jk6_logo.png"
+              alt="JK6"
+              className="absolute inset-0 w-full h-full object-contain opacity-90"
+            />
 
-  <img
-    src="/jk6_logo.png"
-    alt="JK6"
-    className="absolute inset-0 w-full h-full object-contain opacity-35"
-  />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/15 to-black" />
+          </div>
 
-  <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/45 to-black" />
+          <div className="relative z-10 px-4 pb-6 pt-5 bg-black">
+            <h1 className="text-3xl font-black leading-tight text-red-500 animate-pulse drop-shadow-[0_0_14px_rgba(239,68,68,1)]">
+              JK6 Annual Fundraiser Golf Day 2026
+            </h1>
 
-  <div className="relative z-10 flex items-start justify-end mb-20">
-
-    <div className="text-right bg-black/60 border border-white/10 rounded-xl px-3 py-2">
-      <div className="text-[10px] tracking-[0.18em] text-gray-400 font-bold">
-        POWERED BY
-      </div>
-
-      <div className="text-xs font-black text-gray-300">
-        TEEZ Golf Scoring
-      </div>
-    </div>
-
-  </div>
-
-  <div className="relative z-10">
-    <h1 className="text-3xl font-black leading-tight">
-      JK6 Corporate Golf Day
-    </h1>
-
-    <p className="text-lg font-bold text-gray-300 mt-2">
-      4 Ball Alliance · Mystery Count
-    </p>
-  </div>
-
-</section>
+            <p className="text-lg font-black text-cyan-300 mt-3 animate-pulse drop-shadow-[0_0_14px_rgba(34,211,238,1)]">
+              4 Ball Alliance · Mystery Count
+            </p>
+          </div>
+        </section>
 
         {/* EVENT INFO */}
 
-        <section className="px-3 grid gap-3 -mt-2">
-
+        <section className="px-3 grid gap-3 mt-4">
           <div className="grid grid-cols-2 gap-3">
-
             <div className="bg-cyan-950/40 border border-cyan-400/30 rounded-2xl p-3">
-              <div className="text-green-400 text-2xl mb-2">
-                📍
-              </div>
+              <div className="text-green-400 text-2xl mb-2">📍</div>
 
               <h2 className="font-black leading-tight text-sm">
                 Woodhill Residential Estate & Country Club
@@ -196,51 +175,38 @@ export default function ScorecardSamplePage() {
             </div>
 
             <div className="bg-cyan-950/40 border border-cyan-400/30 rounded-2xl p-3">
-              <div className="text-green-400 text-2xl mb-2">
-                👥
-              </div>
+              <div className="text-green-400 text-2xl mb-2">👥</div>
 
-             <h2 className="font-black text-base">
-  JK6
-</h2>
+              <h2 className="font-black text-base">
+                JK6
+              </h2>
 
               <p className="text-xs text-gray-400 mt-1">
                 Team / Company
               </p>
             </div>
-
           </div>
 
           <div className="grid grid-cols-2 gap-3">
-
             <div className="bg-cyan-950/40 border border-cyan-400/30 rounded-2xl p-3">
-              <div className="text-green-400 text-2xl mb-1">
-                ⛳
-              </div>
+              <div className="text-green-400 text-2xl mb-1">⛳</div>
 
               <h3 className="text-lg font-black">
-                Tee 1
+                18 Holes
               </h3>
-
-              <p className="text-xs text-gray-400">
-                Start Hole
-              </p>
             </div>
 
             <div className="bg-cyan-950/40 border border-cyan-400/30 rounded-2xl p-3">
-              <div className="text-green-400 text-2xl mb-1">
-                🕘
-              </div>
+              <div className="text-green-400 text-2xl mb-1">🕚</div>
 
-         <h3 className="text-lg font-black">
-  11:00am
-</h3>
+              <h3 className="text-lg font-black">
+                11:00am
+              </h3>
 
               <p className="text-xs text-gray-400">
                 Shotgun Start
               </p>
             </div>
-
           </div>
 
           <div className="bg-cyan-950/40 border border-cyan-400/30 rounded-2xl p-3">
@@ -250,27 +216,20 @@ export default function ScorecardSamplePage() {
 
             <div className="grid grid-cols-2 gap-2 text-xs">
               {players.map((player) => (
-                <div
-                  key={player.id}
-                  className="font-bold truncate"
-                >
+                <div key={player.id} className="font-bold truncate">
                   ♙ {player.name}
                 </div>
               ))}
             </div>
           </div>
-
         </section>
 
         {/* TABS */}
 
         <section className="px-3 mt-5">
           <div className="grid grid-cols-2 border border-cyan-400/40 rounded-2xl overflow-hidden">
-
             <button
-              onClick={() =>
-                setActiveNine("front")
-              }
+              onClick={() => setActiveNine("front")}
               className={`py-4 font-black ${
                 activeNine === "front"
                   ? "bg-green-400 text-black"
@@ -281,9 +240,7 @@ export default function ScorecardSamplePage() {
             </button>
 
             <button
-              onClick={() =>
-                setActiveNine("back")
-              }
+              onClick={() => setActiveNine("back")}
               className={`py-4 font-black ${
                 activeNine === "back"
                   ? "bg-green-400 text-black"
@@ -292,27 +249,24 @@ export default function ScorecardSamplePage() {
             >
               Back 9
             </button>
-
           </div>
         </section>
 
         {/* HOLE CARDS */}
 
         <section className="px-3 mt-5 grid gap-4">
-
           {visibleHoles.map((hole, index) => (
-
             <div
               key={hole.hole}
               className="bg-cyan-950/30 border border-cyan-400/30 rounded-3xl overflow-hidden"
             >
               <div className="grid grid-cols-[105px_1fr] gap-3">
-
                 <div
                   className="min-h-[235px] bg-cover bg-center relative"
                   style={{
-                    backgroundImage:
-                      `linear-gradient(to bottom, rgba(0,0,0,0.10), rgba(0,0,0,0.78)), url('${holeImages[index % holeImages.length]}')`,
+                    backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,0.10), rgba(0,0,0,0.78)), url('${
+                      holeImages[index % holeImages.length]
+                    }')`,
                   }}
                 >
                   <div className="absolute top-4 left-3">
@@ -324,54 +278,37 @@ export default function ScorecardSamplePage() {
                       {hole.hole}
                     </p>
                   </div>
-
-                  <p className="absolute bottom-4 left-3 text-[9px] tracking-[0.25em] font-bold">
-                    TEEZ
-                    <br />
-                    GOLF
-                    <br />
-                    SCORING
-                  </p>
                 </div>
 
                 <div className="py-4 pr-3 min-w-0">
+                  <div className="flex flex-wrap items-center gap-2 mb-2">
+                    <p className="text-green-400 text-lg font-black">
+                      Par {hole.par}
+                    </p>
 
- <div className="flex flex-wrap items-center gap-2 mb-2">
-  <p className="text-green-400 text-lg font-black">
-    Par {hole.par}
-  </p>
+                    <span className="text-gray-500">|</span>
 
-  <span className="text-gray-500">
-    |
-  </span>
+                    <p className="text-gray-300 text-sm">
+                      Men SI{" "}
+                      <span className="text-green-400 font-black">
+                        {hole.menStroke}
+                      </span>
+                    </p>
 
-  <p className="text-gray-300 text-sm">
-    Men SI{" "}
-    <span className="text-green-400 font-black">
-      {hole.menStroke}
-    </span>
-  </p>
-
-  <span className="text-gray-500">
-    |
-  </span>
-
-  <p className="text-gray-300 text-sm">
-    Ladies SI{" "}
-    <span className="text-pink-300 font-black">
-      {hole.ladiesStroke}
-    </span>
-  </p>
-</div>
+                    <p className="text-gray-300 text-sm">
+                      Ladies SI{" "}
+                      <span className="text-pink-300 font-black">
+                        {hole.ladiesStroke}
+                      </span>
+                    </p>
+                  </div>
 
                   <p className="text-[10px] text-gray-500 mb-3">
                     Club {hole.club}m · Champ {hole.championship}m · Ladies {hole.ladies}m
                   </p>
 
                   <div className="grid gap-2">
-
                     {players.map((player) => (
-
                       <div
                         key={player.id}
                         className="grid grid-cols-[1fr_54px] gap-2 items-center min-w-0"
@@ -381,28 +318,20 @@ export default function ScorecardSamplePage() {
                         </div>
 
                         <input
-                          value={getScore(
-                            hole.hole,
-                            player.id
-                          )}
+                          value={getScore(hole.hole, player.id)}
                           onChange={(e) =>
-                            updateScore(
-                              hole.hole,
-                              player.id,
-                              e.target.value
-                            )
+                            updateScore(hole.hole, player.id, e.target.value)
                           }
+                          disabled={isFinalized}
                           type="number"
                           min="0"
                           max="10"
                           inputMode="numeric"
                           placeholder="–"
-                          className="w-full bg-black/40 border border-cyan-400/30 rounded-xl px-1 py-2 text-center text-lg font-black"
+                          className="w-full bg-black/40 border border-cyan-400/30 rounded-xl px-1 py-2 text-center text-lg font-black disabled:opacity-40"
                         />
                       </div>
-
                     ))}
-
                   </div>
 
                   <div className="grid grid-cols-[1fr_54px] gap-2 items-center mt-3 min-w-0">
@@ -414,28 +343,21 @@ export default function ScorecardSamplePage() {
                       {getHoleTotal(hole.hole)}
                     </div>
                   </div>
-
                 </div>
-
               </div>
             </div>
-
           ))}
-
         </section>
 
         {/* STICKY TOTAL */}
 
         <section className="fixed bottom-0 left-0 right-0 bg-black/95 border-t border-green-400/30 p-2">
           <div className="w-full max-w-[430px] mx-auto">
-
             <div className="bg-cyan-950/50 border border-cyan-400/30 rounded-3xl p-3">
-
               <div className="grid grid-cols-[96px_1fr] gap-3 items-center mb-3">
-
                 <div>
                   <p className="text-[10px] text-gray-400 font-bold">
-                    CURRENT TEAM TOTAL
+                    TEAM TOTAL
                   </p>
 
                   <p className="text-4xl font-black text-green-400">
@@ -444,9 +366,7 @@ export default function ScorecardSamplePage() {
                 </div>
 
                 <div className="grid grid-cols-4 gap-1 text-center text-[10px]">
-
                   {playerTotals.map((player) => (
-
                     <div key={player.id}>
                       <p className="text-gray-400 truncate">
                         {player.name.split(" ")[0]}
@@ -456,19 +376,43 @@ export default function ScorecardSamplePage() {
                         {player.total}
                       </p>
                     </div>
-
                   ))}
-
                 </div>
-
               </div>
 
-              <button className="w-full bg-green-400 text-black py-4 rounded-2xl font-black text-lg">
-                SUBMIT SCORECARD
-              </button>
+              {!isFinalized ? (
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    onClick={saveScorecard}
+                    className="bg-cyan-400 text-black py-4 rounded-2xl font-black text-sm"
+                  >
+                    UPDATE SCORECARD
+                  </button>
 
+                  <button
+                    onClick={finalizeRound}
+                    className="bg-green-400 text-black py-4 rounded-2xl font-black text-sm"
+                  >
+                    FINALIZE ROUND
+                  </button>
+                </div>
+              ) : (
+                <button
+                  onClick={reopenScorecard}
+                  className="w-full bg-red-500 text-white py-4 rounded-2xl font-black text-sm"
+                >
+                  REOPEN SCORECARD
+                </button>
+              )}
+
+              <p className="text-[10px] text-center text-gray-500 mt-2">
+                {isFinalized
+                  ? "Finalized and locked"
+                  : isSaved
+                    ? "Saved"
+                    : "Unsaved changes"}
+              </p>
             </div>
-
           </div>
         </section>
 

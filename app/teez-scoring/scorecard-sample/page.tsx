@@ -336,31 +336,33 @@ export default function ScorecardSamplePage() {
 
                 <div className="py-4 pr-3 min-w-0">
 
-                  <div className="flex flex-wrap items-center gap-2 mb-2">
-                    <p className="text-green-400 text-lg font-black">
-                      Par {hole.par}
-                    </p>
+ <div className="flex flex-wrap items-center gap-2 mb-2">
+  <p className="text-green-400 text-lg font-black">
+    Par {hole.par}
+  </p>
 
-                    <span className="text-gray-500">
-                      |
-                    </span>
-
-                    <p className="text-gray-300 text-sm">
-                      SI{" "}
-                    <p className="text-gray-300 text-sm">
-  Men SI{" "}
-  <span className="text-green-400 font-black">
-    {hole.menStroke}
+  <span className="text-gray-500">
+    |
   </span>
-</p>
 
-<p className="text-gray-300 text-sm">
-  Ladies SI{" "}
-  <span className="text-pink-300 font-black">
-    {hole.ladiesStroke}
+  <p className="text-gray-300 text-sm">
+    Men SI{" "}
+    <span className="text-green-400 font-black">
+      {hole.menStroke}
+    </span>
+  </p>
+
+  <span className="text-gray-500">
+    |
   </span>
-</p>
-                  </div>
+
+  <p className="text-gray-300 text-sm">
+    Ladies SI{" "}
+    <span className="text-pink-300 font-black">
+      {hole.ladiesStroke}
+    </span>
+  </p>
+</div>
 
                   <p className="text-[10px] text-gray-500 mb-3">
                     Club {hole.club}m · Champ {hole.championship}m · Ladies {hole.ladies}m

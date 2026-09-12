@@ -56,8 +56,9 @@ const holeImages = [
 export default function ScorecardSamplePage() {
   const [activeNine, setActiveNine] = useState<"front" | "back">("front");
   const [scores, setScores] = useState<Record<string, string>>({});
-  const [isSaved, setIsSaved] = useState(false);
-  const [isFinalized, setIsFinalized] = useState(false);
+const [isSaved, setIsSaved] = useState(false);
+const [isFinalized, setIsFinalized] = useState(false);
+const [updatedHoles, setUpdatedHoles] = useState<number[]>([]);
 
   const visibleHoles = holes.filter((hole) =>
     activeNine === "front" ? hole.hole <= 9 : hole.hole >= 10
@@ -105,30 +106,44 @@ export default function ScorecardSamplePage() {
     0
   );
 
-  const allScoresEntered = holes.every((hole) =>
-    players.every((player) => getScore(hole.hole, player.id) !== "")
-  );
-
-  function saveScorecard() {
-  setIsSaved(true);
-  alert("Scorecard updated. Leaderboard refreshed.");
-}
+ const allHolesUpdated =
+  updatedHoles.length === 18;
 
 function saveHoleScore(holeNumber: number) {
+  const holeComplete = players.every(
+    (player) =>
+      getScore(holeNumber, player.id) !== ""
+  );
+
+  if (!holeComplete) {
+    alert(`Please complete all player scores for hole ${holeNumber}.`);
+    return;
+  }
+
+  setUpdatedHoles((prev) =>
+    prev.includes(holeNumber)
+      ? prev
+      : [...prev, holeNumber]
+  );
+
   setIsSaved(true);
-  alert(`Hole ${holeNumber} score updated.`);
+
+  alert(
+    `Hole ${holeNumber} saved. Scorecard and leaderboard updated.`
+  );
 }
 
-  function finalizeRound() {
-    if (!allScoresEntered) {
-      alert("Please complete all 18 holes before finalizing.");
-      return;
-    }
-
-    setIsSaved(true);
-    setIsFinalized(true);
-    alert("Round finalized. Scorecard is now locked.");
+function finalizeRound() {
+  if (!allHolesUpdated) {
+    alert("Please update all 18 holes before finalizing.");
+    return;
   }
+
+  setIsSaved(true);
+  setIsFinalized(true);
+
+  alert("Round finalized. Scorecard is now locked.");
+}
 
   function reopenScorecard() {
     setIsFinalized(false);
@@ -354,7 +369,9 @@ function saveHoleScore(holeNumber: number) {
   disabled={isFinalized}
   className="w-full mt-3 bg-cyan-400 text-black rounded-xl py-3 font-black text-sm disabled:opacity-40"
 >
-  UPDATE HOLE {hole.hole} SCORE
+{updatedHoles.includes(hole.hole)
+  ? `HOLE ${hole.hole} UPDATED`
+  : `UPDATE HOLE ${hole.hole} SCORE`}
 </button>
                 </div>
               </div>
@@ -393,37 +410,28 @@ function saveHoleScore(holeNumber: number) {
                 </div>
               </div>
 
-              {!isFinalized ? (
-                <div className="grid grid-cols-2 gap-2">
-                  <button
-                    onClick={saveScorecard}
-                    className="bg-cyan-400 text-black py-4 rounded-2xl font-black text-sm"
-                  >
-                    UPDATE SCORECARD
-                  </button>
+            {!isFinalized && allHolesUpdated && (
+  <button
+    onClick={finalizeRound}
+    className="w-full bg-red-600 text-white py-4 rounded-2xl font-black text-sm animate-pulse shadow-[0_0_22px_rgba(239,68,68,1)]"
+  >
+    FINALIZE ROUND
+  </button>
+)}
 
-                  <button
-                    onClick={finalizeRound}
-                    className="bg-green-400 text-black py-4 rounded-2xl font-black text-sm"
-                  >
-                    FINALIZE ROUND
-                  </button>
-                </div>
-              ) : (
-                <button
-                  onClick={reopenScorecard}
-                  className="w-full bg-red-500 text-white py-4 rounded-2xl font-black text-sm"
-                >
-                  REOPEN SCORECARD
-                </button>
-              )}
+{isFinalized && (
+  <button
+    onClick={reopenScorecard}
+    className="w-full bg-red-500 text-white py-4 rounded-2xl font-black text-sm"
+  >
+    REOPEN SCORECARD
+  </button>
+)}
 
               <p className="text-[10px] text-center text-gray-500 mt-2">
-                {isFinalized
-                  ? "Finalized and locked"
-                  : isSaved
-                    ? "Saved"
-                    : "Unsaved changes"}
+             {isFinalized
+  ? "Finalized and locked"
+  : `${updatedHoles.length}/18 holes updated`}
               </p>
             </div>
           </div>

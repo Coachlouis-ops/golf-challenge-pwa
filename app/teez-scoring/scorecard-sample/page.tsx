@@ -5,7 +5,8 @@ import { useMemo, useState } from "react";
 type Hole = {
   hole: number;
   par: number;
-  stroke: number;
+  menStroke: number;
+  ladiesStroke: number;
   club: number;
   championship: number;
   ladies: number;
@@ -24,25 +25,25 @@ const players: Player[] = [
 ];
 
 const holes: Hole[] = [
-  { hole: 1, par: 4, stroke: 3, club: 344, championship: 398, ladies: 290 },
-  { hole: 2, par: 3, stroke: 9, club: 196, championship: 212, ladies: 112 },
-  { hole: 3, par: 5, stroke: 7, club: 539, championship: 550, ladies: 473 },
-  { hole: 4, par: 4, stroke: 1, club: 430, championship: 442, ladies: 377 },
-  { hole: 5, par: 5, stroke: 11, club: 512, championship: 522, ladies: 421 },
-  { hole: 6, par: 4, stroke: 13, club: 372, championship: 383, ladies: 309 },
-  { hole: 7, par: 3, stroke: 15, club: 169, championship: 186, ladies: 147 },
-  { hole: 8, par: 4, stroke: 5, club: 428, championship: 451, ladies: 351 },
-  { hole: 9, par: 4, stroke: 17, club: 335, championship: 361, ladies: 289 },
+  { hole: 1, par: 4, menStroke: 3, ladiesStroke: 7, club: 344, championship: 398, ladies: 290 },
+  { hole: 2, par: 3, menStroke: 9, ladiesStroke: 15, club: 196, championship: 212, ladies: 112 },
+  { hole: 3, par: 5, menStroke: 7, ladiesStroke: 1, club: 539, championship: 550, ladies: 473 },
+  { hole: 4, par: 4, menStroke: 1, ladiesStroke: 3, club: 430, championship: 442, ladies: 377 },
+  { hole: 5, par: 5, menStroke: 11, ladiesStroke: 5, club: 512, championship: 522, ladies: 421 },
+  { hole: 6, par: 4, menStroke: 13, ladiesStroke: 13, club: 372, championship: 383, ladies: 309 },
+  { hole: 7, par: 3, menStroke: 15, ladiesStroke: 11, club: 169, championship: 186, ladies: 147 },
+  { hole: 8, par: 4, menStroke: 5, ladiesStroke: 9, club: 428, championship: 451, ladies: 351 },
+  { hole: 9, par: 4, menStroke: 17, ladiesStroke: 17, club: 335, championship: 361, ladies: 289 },
 
-  { hole: 10, par: 4, stroke: 6, club: 339, championship: 386, ladies: 290 },
-  { hole: 11, par: 5, stroke: 18, club: 476, championship: 492, ladies: 448 },
-  { hole: 12, par: 3, stroke: 12, club: 179, championship: 202, ladies: 132 },
-  { hole: 13, par: 4, stroke: 2, club: 346, championship: 364, ladies: 305 },
-  { hole: 14, par: 4, stroke: 8, club: 394, championship: 408, ladies: 353 },
-  { hole: 15, par: 4, stroke: 16, club: 304, championship: 314, ladies: 264 },
-  { hole: 16, par: 3, stroke: 14, club: 164, championship: 184, ladies: 130 },
-  { hole: 17, par: 5, stroke: 10, club: 487, championship: 499, ladies: 427 },
-  { hole: 18, par: 4, stroke: 4, club: 383, championship: 398, ladies: 341 },
+  { hole: 10, par: 4, menStroke: 6, ladiesStroke: 8, club: 339, championship: 386, ladies: 290 },
+  { hole: 11, par: 5, menStroke: 18, ladiesStroke: 16, club: 476, championship: 492, ladies: 448 },
+  { hole: 12, par: 3, menStroke: 12, ladiesStroke: 12, club: 179, championship: 202, ladies: 132 },
+  { hole: 13, par: 4, menStroke: 2, ladiesStroke: 6, club: 346, championship: 364, ladies: 305 },
+  { hole: 14, par: 4, menStroke: 8, ladiesStroke: 4, club: 394, championship: 408, ladies: 353 },
+  { hole: 15, par: 4, menStroke: 16, ladiesStroke: 18, club: 304, championship: 314, ladies: 264 },
+  { hole: 16, par: 3, menStroke: 14, ladiesStroke: 14, club: 164, championship: 184, ladies: 130 },
+  { hole: 17, par: 5, menStroke: 10, ladiesStroke: 10, club: 487, championship: 499, ladies: 427 },
+  { hole: 18, par: 4, menStroke: 4, ladiesStroke: 2, club: 383, championship: 398, ladies: 341 },
 ];
 
 const holeImages = [
@@ -346,10 +347,19 @@ export default function ScorecardSamplePage() {
 
                     <p className="text-gray-300 text-sm">
                       SI{" "}
-                      <span className="text-green-400 font-black">
-                        {hole.stroke}
-                      </span>
-                    </p>
+                    <p className="text-gray-300 text-sm">
+  Men SI{" "}
+  <span className="text-green-400 font-black">
+    {hole.menStroke}
+  </span>
+</p>
+
+<p className="text-gray-300 text-sm">
+  Ladies SI{" "}
+  <span className="text-pink-300 font-black">
+    {hole.ladiesStroke}
+  </span>
+</p>
                   </div>
 
                   <p className="text-[10px] text-gray-500 mb-3">

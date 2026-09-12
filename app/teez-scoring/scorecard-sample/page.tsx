@@ -137,41 +137,23 @@ export default function ScorecardSamplePage() {
     <main className="min-h-screen bg-black text-white">
       <div className="w-full max-w-[430px] mx-auto bg-[#04100d] min-h-screen pb-44">
 
-      {/* HERO */}
+    {/* HERO */}
 
 <section
   className="relative px-4 pt-6 pb-6 bg-cover bg-center"
   style={{
     backgroundImage:
-      "linear-gradient(to bottom, rgba(0,0,0,0.15), rgba(0,0,0,0.96)), url('/hero_main.png')",
+      "linear-gradient(to bottom, rgba(0,0,0,0.35), rgba(0,0,0,0.96)), url('/jk6_logo.png')",
   }}
 >
-  <div className="flex items-center justify-between mb-6">
+  <div className="flex items-start justify-end mb-16">
 
-    <div className="flex items-center gap-3">
-      <img
-        src="/JK6_logo.png"
-        alt="JK6"
-        className="w-16 h-16 object-contain rounded-xl bg-white/90 p-1"
-      />
-
-      <div>
-        <div className="text-3xl font-black tracking-tight">
-          JK6
-        </div>
-
-        <div className="text-xs tracking-[0.22em] text-green-400 font-bold">
-          GOLF DAY
-        </div>
-      </div>
-    </div>
-
-    <div className="text-right">
-      <div className="text-xs tracking-[0.18em] text-gray-400 font-bold">
+    <div className="text-right bg-black/50 border border-white/10 rounded-xl px-3 py-2">
+      <div className="text-[10px] tracking-[0.18em] text-gray-400 font-bold">
         POWERED BY
       </div>
 
-      <div className="text-sm font-black text-gray-300">
+      <div className="text-xs font-black text-gray-300">
         TEEZ Golf Scoring
       </div>
     </div>

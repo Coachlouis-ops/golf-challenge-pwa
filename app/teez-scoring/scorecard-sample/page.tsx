@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { Suspense, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
 type Hole = {
@@ -54,7 +54,7 @@ const holeImages = [
   "/profile_image_1.png",
 ];
 
-export default function ScorecardSamplePage() {
+function ScorecardSampleContent() {
 
   const searchParams = useSearchParams();
 
@@ -447,5 +447,21 @@ function finalizeRound() {
 
       </div>
     </main>
+  );
+}
+
+export default function ScorecardSamplePage() {
+  return (
+    <Suspense
+      fallback={
+        <main className="min-h-screen bg-black text-white flex items-center justify-center">
+          <p className="text-green-400 font-black">
+            Loading scorecard...
+          </p>
+        </main>
+      }
+    >
+      <ScorecardSampleContent />
+    </Suspense>
   );
 }

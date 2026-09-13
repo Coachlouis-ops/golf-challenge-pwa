@@ -22,12 +22,12 @@ export default function TeezScoringPage() {
 
         {/* ACTIVE BUTTONS */}
 
-        <div className="grid md:grid-cols-3 gap-6 mb-12">
+        <div className="grid md:grid-cols-4 gap-6 mb-12">
 
           <button
-    onClick={() =>
-  router.push("/contact")
-}
+            onClick={() =>
+              router.push("/contact")
+            }
             className="
               bg-green-400
               text-black
@@ -52,9 +52,7 @@ export default function TeezScoringPage() {
 
           <button
             onClick={() =>
-              router.push(
-                "/teez-scoring/login"
-              )
+              router.push("/teez-scoring/login")
             }
             className="
               bg-cyan-400
@@ -73,6 +71,33 @@ export default function TeezScoringPage() {
 
             <p>
               Existing approved clubs login here.
+            </p>
+
+          </button>
+
+          <button
+            onClick={() =>
+              router.push("/teez-scoring/corporate-days")
+            }
+            className="
+              bg-red-600
+              text-white
+              rounded-3xl
+              p-10
+              text-left
+              font-bold
+              hover:scale-[1.02]
+              transition
+              shadow-[0_0_25px_rgba(220,38,38,0.55)]
+            "
+          >
+            <h2 className="text-3xl font-black mb-4">
+              CORPORATE DAYS
+            </h2>
+
+            <p>
+              Open live corporate golf day scorecards,
+              company lists and branded event scoreboards.
             </p>
 
           </button>

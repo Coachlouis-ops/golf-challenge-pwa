@@ -1,7 +1,7 @@
 "use client";
 
 import { Suspense, useEffect, useMemo, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { httpsCallable } from "firebase/functions";
 import { functions } from "@/src/lib/firebase";
 import { doc, getDoc } from "firebase/firestore";
@@ -79,6 +79,8 @@ const holeImages = [
 function ScorecardSampleContent() {
 
   const searchParams = useSearchParams();
+
+  const router = useRouter();
 
   const selectedTeam =
     searchParams.get("team") || "JK6";
@@ -597,63 +599,85 @@ function finalizeRound() {
           ))}
         </section>
 
-        {/* STICKY TOTAL */}
+  {/* STICKY TOTAL */}
 
-        <section className="fixed bottom-0 left-0 right-0 bg-black/95 border-t border-green-400/30 p-2">
-          <div className="w-full max-w-[430px] mx-auto">
-            <div className="bg-cyan-950/50 border border-cyan-400/30 rounded-3xl p-3">
-              <div className="grid grid-cols-[96px_1fr] gap-3 items-center mb-3">
-                <div>
-                  <p className="text-[10px] text-gray-400 font-bold">
-                    TEAM TOTAL
-                  </p>
+<section className="fixed bottom-0 left-0 right-0 bg-black/95 border-t border-green-400/30 p-2">
+  <div className="w-full max-w-[430px] mx-auto">
+    <div className="bg-cyan-950/50 border border-cyan-400/30 rounded-3xl p-3">
+      <div className="grid grid-cols-[96px_1fr] gap-3 items-center mb-3">
+        <div>
+          <p className="text-[10px] text-gray-400 font-bold">
+            TEAM TOTAL
+          </p>
 
-                  <p className="text-4xl font-black text-green-400">
-                    {teamTotal}
-                  </p>
-                </div>
+          <p className="text-4xl font-black text-green-400">
+            {teamTotal}
+          </p>
+        </div>
 
-                <div className="grid grid-cols-4 gap-1 text-center text-[10px]">
-                  {playerTotals.map((player) => (
-                    <div key={player.id}>
-                      <p className="text-gray-400 truncate">
-                        {player.name.split(" ")[0]}
-                      </p>
+        <div className="grid grid-cols-4 gap-1 text-center text-[10px]">
+          {playerTotals.map((player) => (
+            <div key={player.id}>
+              <p className="text-gray-400 truncate">
+                {player.name.split(" ")[0]}
+              </p>
 
-                      <p className="text-xl font-black">
-                        {player.total}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-            {!isFinalized && allHolesUpdated && (
-  <button
-    onClick={finalizeRound}
-    className="w-full bg-red-600 text-white py-4 rounded-2xl font-black text-sm animate-pulse shadow-[0_0_22px_rgba(239,68,68,1)]"
-  >
-    FINALIZE ROUND
-  </button>
-)}
-
-{isFinalized && (
-  <button
-    onClick={reopenScorecard}
-    className="w-full bg-red-500 text-white py-4 rounded-2xl font-black text-sm"
-  >
-    REOPEN SCORECARD
-  </button>
-)}
-
-              <p className="text-[10px] text-center text-gray-500 mt-2">
-             {isFinalized
-  ? "Finalized and locked"
-  : `${updatedHoles.length}/18 holes updated`}
+              <p className="text-xl font-black">
+                {player.total}
               </p>
             </div>
-          </div>
-        </section>
+          ))}
+        </div>
+      </div>
+
+      {!isFinalized && allHolesUpdated && (
+        <button
+          onClick={finalizeRound}
+          className="w-full bg-red-600 text-white py-4 rounded-2xl font-black text-sm animate-pulse shadow-[0_0_22px_rgba(239,68,68,1)]"
+        >
+          FINALIZE ROUND
+        </button>
+      )}
+
+      {isFinalized && (
+        <button
+          onClick={reopenScorecard}
+          className="w-full bg-red-500 text-white py-4 rounded-2xl font-black text-sm"
+        >
+          REOPEN SCORECARD
+        </button>
+      )}
+
+      <button
+        onClick={() =>
+          router.push("/teez-scoring/corporate-days/jk6-2026/companies")
+        }
+        className="
+          w-full
+          mt-3
+          bg-white/10
+          border
+          border-white/10
+          text-white
+          rounded-2xl
+          py-4
+          font-black
+          hover:border-cyan-400
+          hover:text-cyan-300
+          transition
+        "
+      >
+        BACK TO COMPANIES
+      </button>
+
+      <p className="text-[10px] text-center text-gray-500 mt-2">
+        {isFinalized
+          ? "Finalized and locked"
+          : `${updatedHoles.length}/18 holes updated`}
+      </p>
+    </div>
+  </div>
+</section>
 
       </div>
     </main>

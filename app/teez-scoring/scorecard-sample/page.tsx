@@ -322,6 +322,21 @@ const playerTotals = players.map((player) => {
   };
 });
 
+function getHoleTotal(holeNumber: number) {
+  return players.reduce(
+    (sum, player) =>
+      sum +
+      (
+        Number(
+          scores[
+            `${holeNumber}-${player.id}`
+          ] || 0
+        ) || 0
+      ),
+    0
+  );
+}
+
 const teamTotal =
   playerTotals.reduce(
     (sum, player) =>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 
 type Hole = {
   hole: number;
@@ -54,6 +55,13 @@ const holeImages = [
 ];
 
 export default function ScorecardSamplePage() {
+
+  const searchParams = useSearchParams();
+
+  const selectedTeam =
+    searchParams.get("team") || "JK6";
+
+
   const [activeNine, setActiveNine] = useState<"front" | "back">("front");
   const [scores, setScores] = useState<Record<string, string>>({});
 const [isSaved, setIsSaved] = useState(false);
@@ -197,9 +205,9 @@ function finalizeRound() {
             <div className="bg-cyan-950/40 border border-cyan-400/30 rounded-2xl p-3">
               <div className="text-green-400 text-2xl mb-2">👥</div>
 
-              <h2 className="font-black text-base">
-                JK6
-              </h2>
+             <h2 className="font-black text-base">
+  {selectedTeam}
+</h2>
 
               <p className="text-xs text-gray-400 mt-1">
                 Team / Company

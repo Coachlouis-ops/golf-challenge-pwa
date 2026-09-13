@@ -25,10 +25,7 @@ export default function CorporateDaysPage() {
 
         <section className="grid gap-4">
 
-          <button
-            onClick={() =>
-              router.push("/teez-scoring/corporate-days/jk6-2026")
-            }
+          <div
             className="
               relative
               overflow-hidden
@@ -39,8 +36,6 @@ export default function CorporateDaysPage() {
               p-5
               text-left
               shadow-[0_0_30px_rgba(220,38,38,0.35)]
-              hover:scale-[1.01]
-              transition
               min-h-[210px]
             "
           >
@@ -86,9 +81,31 @@ export default function CorporateDaysPage() {
               </div>
 
               <p className="text-gray-400 text-sm mt-4">
-                Open JK6 main dashboard, company scorecards and live scoreboard.
+                JK6 Annual Fundraiser Golf Day 2026.
               </p>
             </div>
+          </div>
+
+          <button
+            onClick={() =>
+              router.push("/teez-scoring/corporate-days/jk6-2026")
+            }
+            className="
+              w-full
+              bg-red-600
+              text-white
+              rounded-3xl
+              py-5
+              px-5
+              font-black
+              text-xl
+              animate-pulse
+              shadow-[0_0_25px_rgba(220,38,38,0.65)]
+              hover:scale-[1.01]
+              transition
+            "
+          >
+            ENTER JK6 GOLFDAY
           </button>
 
         </section>

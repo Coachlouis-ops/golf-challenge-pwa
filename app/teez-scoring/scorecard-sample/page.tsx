@@ -2,6 +2,8 @@
 
 import { Suspense, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import { httpsCallable } from "firebase/functions";
+import { functions } from "@/src/lib/firebase";
 
 type Hole = {
   hole: number;
@@ -18,12 +20,24 @@ type Player = {
   name: string;
 };
 
+
+
 const defaultPlayers: Player[] = [
   { id: "p1", name: "Player 1" },
   { id: "p2", name: "Player 2" },
   { id: "p3", name: "Player 3" },
   { id: "p4", name: "Player 4" },
 ];
+
+
+function slugifyCompanyName(name: string) {
+  return String(name)
+    .toLowerCase()
+    .replace(/&/g, "and")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
 
 const holes: Hole[] = [
   { hole: 1, par: 4, menStroke: 3, ladiesStroke: 7, club: 344, championship: 398, ladies: 290 },
@@ -62,6 +76,14 @@ function ScorecardSampleContent() {
     searchParams.get("team") || "JK6";
 
 
+
+ const participantId =
+  slugifyCompanyName(selectedTeam);
+
+const golfdayId =
+  "jk6-2026";   
+
+
  const [activeNine, setActiveNine] = useState<"front" | "back">("front");
 const [players, setPlayers] = useState<Player[]>(defaultPlayers);
 const [playersSaved, setPlayersSaved] = useState(false);
@@ -95,7 +117,7 @@ const [updatedHoles, setUpdatedHoles] = useState<number[]>([]);
   setPlayersSaved(false);
 }
 
-function savePlayers() {
+async function savePlayers() {
   const missingName = players.some(
     (player) => player.name.trim() === ""
   );
@@ -105,10 +127,31 @@ function savePlayers() {
     return;
   }
 
-  setPlayersSaved(true);
+  try {
+    const updateGolfDayParticipantPlayers =
+      httpsCallable(
+        functions,
+        "updateGolfDayParticipantPlayers"
+      );
 
-  alert("Player names saved.");
+    await updateGolfDayParticipantPlayers({
+      golfdayId,
+      participantId,
+      players,
+    });
+
+    setPlayersSaved(true);
+
+    alert("Player names saved to Firestore.");
+  } catch (error: any) {
+    console.error(error);
+    alert(
+      error.message ||
+        "Could not save player names."
+    );
+  }
 }
+
 
   function updateScore(hole: number, playerId: string, value: string) {
     if (isFinalized) return;

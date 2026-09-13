@@ -1,173 +1,249 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
+import {
+  collection,
+  onSnapshot,
+  query,
+} from "firebase/firestore";
+import { db } from "@/src/lib/firebase";
 
 type Team = {
-  id: string;
-  name: string;
-  total: number;
+  participantId: string;
+  companyName: string;
+  totalScore: number;
   finalized: boolean;
 };
 
-const starterTeams: Team[] = [
-  { id: "team-1", name: "JK6", total: 78, finalized: false },
-  { id: "team-2", name: "Vector Carts", total: 74, finalized: false },
-  { id: "team-3", name: "Sponsor Team", total: 82, finalized: true },
-  { id: "team-4", name: "Guest Team", total: 69, finalized: false },
-  { id: "team-5", name: "Woodhill Team", total: 76, finalized: false },
-];
+export default function ScoreboardSamplePage() {
+  const router = useRouter();
 
-export default function ScorecardDashboardSamplePage() {
-  const [teams, setTeams] = useState<Team[]>(starterTeams);
-  const [leaderboardLocked, setLeaderboardLocked] = useState(false);
+  const [teams, setTeams] = useState<Team[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const golfdayId = "jk6-2026";
+
+  useEffect(() => {
+    const participantsRef = collection(
+      db,
+      "golfdays",
+      golfdayId,
+      "participants"
+    );
+
+    const q = query(participantsRef);
+
+    const unsubscribe = onSnapshot(
+      q,
+      (snapshot) => {
+        const loadedTeams = snapshot.docs.map((docSnap) => {
+          const data = docSnap.data();
+
+          return {
+            participantId:
+              data.participantId || docSnap.id,
+
+            companyName:
+              data.companyName || docSnap.id,
+
+            totalScore:
+              Number(data.totalScore || 0),
+
+            finalized:
+              data.finalized === true,
+          };
+        });
+
+        setTeams(loadedTeams);
+        setLoading(false);
+      },
+      (error) => {
+        console.error(error);
+        setTeams([]);
+        setLoading(false);
+      }
+    );
+
+    return () => unsubscribe();
+  }, []);
 
   const rankedTeams = useMemo(() => {
-    return [...teams].sort((a, b) => b.total - a.total);
+    return [...teams].sort((a, b) => {
+      if (b.totalScore !== a.totalScore) {
+        return b.totalScore - a.totalScore;
+      }
+
+      return a.companyName.localeCompare(
+        b.companyName
+      );
+    });
   }, [teams]);
-
-  function updateTeamTotal(teamId: string, value: string) {
-    if (leaderboardLocked) return;
-
-    setTeams((prev) =>
-      prev.map((team) =>
-        team.id === teamId
-          ? {
-              ...team,
-              total: Number(value) || 0,
-              finalized: false,
-            }
-          : team
-      )
-    );
-  }
-
-  function updateLeaderboard() {
-    alert("Leaderboard updated.");
-  }
-
-  
-  function finalizeLeaderboard() {
-    setLeaderboardLocked(true);
-    alert("Leaderboard finalized and locked.");
-  }
-
-  function reopenLeaderboard() {
-    setLeaderboardLocked(false);
-    alert("Leaderboard reopened.");
-  }
 
   return (
     <main className="min-h-screen bg-black text-white px-4 py-6">
       <div className="w-full max-w-[520px] mx-auto">
 
-        <section className="relative bg-neutral-950 border border-white/10 rounded-3xl overflow-hidden mb-5">
+        <section className="relative bg-neutral-950 border border-green-500/40 rounded-3xl overflow-hidden mb-5 shadow-[0_0_35px_rgba(34,197,94,0.35)]">
           <div className="relative h-44 flex items-center justify-center bg-black">
             <img
               src="/jk6_logo.png"
               alt="JK6"
-              className="absolute inset-0 w-full h-full object-contain opacity-80"
+              className="absolute inset-0 w-full h-full object-contain opacity-85"
             />
 
-            <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/40 to-black" />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/35 to-black" />
           </div>
 
           <div className="p-4">
-            <h1 className="text-3xl font-black text-red-500 animate-pulse drop-shadow-[0_0_14px_rgba(239,68,68,1)]">
+            <p className="text-xs tracking-[0.3em] text-green-400 font-black">
+              LIVE SCOREBOARD
+            </p>
+
+            <h1 className="text-3xl font-black text-red-500 mt-2 animate-pulse drop-shadow-[0_0_14px_rgba(239,68,68,1)]">
               JK6 Annual Fundraiser Golf Day 2026
             </h1>
 
             <p className="text-cyan-300 font-black mt-2 animate-pulse drop-shadow-[0_0_14px_rgba(34,211,238,1)]">
-              Scoreboard · 4 Ball Alliance · Mystery Count
+              4 Ball Alliance · Mystery Count
+            </p>
+
+            <p className="text-gray-400 text-sm mt-3">
+              Team totals update automatically as scorecards are saved.
             </p>
           </div>
         </section>
 
-        <section className="bg-neutral-950 border border-white/10 rounded-3xl p-4">
+        <section className="grid grid-cols-3 gap-3 mb-5">
+          <div className="bg-neutral-950 border border-white/10 rounded-2xl p-3 text-center">
+            <p className="text-[10px] text-gray-500 font-black">
+              TEAMS
+            </p>
 
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <p className="text-xs tracking-[0.25em] text-green-400 font-black">
-                LIVE RANKINGS
-              </p>
-
-              <h2 className="text-2xl font-black">
-                Team Totals
-              </h2>
-            </div>
-
-            <div
-              className={`px-3 py-2 rounded-xl text-xs font-black ${
-                leaderboardLocked
-                  ? "bg-red-500 text-white"
-                  : "bg-yellow-400 text-black"
-              }`}
-            >
-              {leaderboardLocked ? "LOCKED" : "LIVE"}
-            </div>
+            <p className="text-2xl font-black text-green-400">
+              {teams.length}
+            </p>
           </div>
 
-          <div className="grid gap-3">
+          <div className="bg-neutral-950 border border-white/10 rounded-2xl p-3 text-center">
+            <p className="text-[10px] text-gray-500 font-black">
+              FINALIZED
+            </p>
+
+            <p className="text-2xl font-black text-red-400">
+              {
+                teams.filter(
+                  (team) => team.finalized
+                ).length
+              }
+            </p>
+          </div>
+
+          <div className="bg-neutral-950 border border-white/10 rounded-2xl p-3 text-center">
+            <p className="text-[10px] text-gray-500 font-black">
+              UPDATED
+            </p>
+
+            <p className="text-2xl font-black text-cyan-300">
+              {
+                teams.filter(
+                  (team) => team.totalScore > 0
+                ).length
+              }
+            </p>
+          </div>
+        </section>
+
+        {loading && (
+          <div className="bg-neutral-950 border border-white/10 rounded-3xl p-6 text-center">
+            <p className="text-green-400 font-black">
+              Loading live scoreboard...
+            </p>
+          </div>
+        )}
+
+        {!loading && rankedTeams.length === 0 && (
+          <div className="bg-neutral-950 border border-red-500/30 rounded-3xl p-6 text-center">
+            <p className="text-red-400 font-black">
+              No teams found.
+            </p>
+          </div>
+        )}
+
+        {!loading && rankedTeams.length > 0 && (
+          <section className="grid gap-3">
             {rankedTeams.map((team, index) => (
               <div
-                key={team.id}
-                className="bg-black/50 border border-white/10 rounded-2xl p-4"
+                key={team.participantId}
+                className="
+                  bg-neutral-950
+                  border
+                  border-green-400/20
+                  rounded-2xl
+                  p-4
+                  shadow-[0_0_18px_rgba(34,197,94,0.12)]
+                "
               >
-                <div className="grid grid-cols-[54px_1fr_82px] gap-3 items-center">
-                  <div className="text-3xl font-black text-green-400">
-                    #{index + 1}
+                <div className="grid grid-cols-[52px_1fr_82px] gap-3 items-center">
+                  <div className="text-center">
+                    <p className="text-[10px] text-gray-500 font-black">
+                      POS
+                    </p>
+
+                    <p className="text-3xl font-black text-green-400">
+                      {index + 1}
+                    </p>
                   </div>
 
                   <div className="min-w-0">
-                    <p className="font-black truncate">
-                      {team.name}
+                    <p className="text-lg font-black truncate">
+                      {team.companyName}
                     </p>
 
                     <p className="text-xs text-gray-500">
-                      {team.finalized ? "Finalized" : "Running"}
+                      {team.finalized
+                        ? "Finalized"
+                        : team.totalScore > 0
+                          ? "Score updated"
+                          : "Waiting for scores"}
                     </p>
                   </div>
 
-                  <input
-                    type="number"
-                    value={team.total}
-                    disabled={leaderboardLocked || team.finalized}
-                    onChange={(e) =>
-                      updateTeamTotal(team.id, e.target.value)
-                    }
-                    className="w-full bg-neutral-900 border border-cyan-400/30 rounded-xl px-2 py-3 text-center text-2xl font-black disabled:opacity-40"
-                  />
+                  <div className="text-right">
+                    <p className="text-[10px] text-gray-500 font-black">
+                      TOTAL
+                    </p>
+
+                    <p className="text-3xl font-black text-cyan-300">
+                      {team.totalScore}
+                    </p>
+                  </div>
                 </div>
               </div>
             ))}
-          </div>
+          </section>
+        )}
 
-          <div className="grid grid-cols-2 gap-3 mt-5">
-            {!leaderboardLocked ? (
-              <button
-                onClick={finalizeLeaderboard}
-                className="bg-green-400 text-black rounded-2xl py-4 font-black"
-              >
-                FINALIZE SCOREBOARD
-              </button>
-            ) : (
-              <button
-                onClick={reopenLeaderboard}
-                className="bg-red-500 text-white rounded-2xl py-4 font-black"
-              >
-               REOPEN SCOREBOARD
-              </button>
-            )}
-
-            <button
-              onClick={updateLeaderboard}
-              disabled={leaderboardLocked}
-              className="bg-cyan-400 text-black rounded-2xl py-4 font-black disabled:opacity-40"
-            >
-              UPDATE SCOREBOARD
-            </button>
-          </div>
-
-        </section>
+        <button
+          onClick={() =>
+            router.push("/teez-scoring/corporate-days/jk6-2026")
+          }
+          className="
+            mt-6
+            w-full
+            bg-white/10
+            border
+            border-white/10
+            rounded-2xl
+            py-4
+            font-black
+            hover:border-green-400
+            hover:text-green-400
+            transition
+          "
+        >
+          BACK TO JK6 DASHBOARD
+        </button>
 
       </div>
     </main>

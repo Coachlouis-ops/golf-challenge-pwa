@@ -78,21 +78,31 @@ const holeImages = [
 
 function ScorecardSampleContent() {
 
-  const searchParams = useSearchParams();
+ const searchParams = useSearchParams();
+const router = useRouter();
 
-  const router = useRouter();
+const selectedTeam =
+  searchParams.get("team") || "JK6";
 
-  const selectedTeam =
-    searchParams.get("team") || "JK6";
-
-
-
- const participantId =
+const participantId =
   slugifyCompanyName(selectedTeam);
 
 const golfdayId =
-  "jk6-2026";   
+  "jk6-2026";
 
+const [activeNine, setActiveNine] = useState<"front" | "back">("front");
+const [players, setPlayers] = useState<Player[]>(defaultPlayers);
+const [playersSaved, setPlayersSaved] = useState(false);
+const [loadingPlayers, setLoadingPlayers] = useState(true);
+const [scores, setScores] = useState<Record<string, string>>({});
+const [isSaved, setIsSaved] = useState(false);
+const [isFinalized, setIsFinalized] = useState(false);
+const [updatedHoles, setUpdatedHoles] = useState<number[]>([]);
+
+const visibleHoles =
+  activeNine === "front"
+    ? holes.filter((hole) => hole.hole <= 9)
+    : holes.filter((hole) => hole.hole >= 10);
 
 useEffect(() => {
   async function loadSavedScorecard() {
@@ -115,6 +125,7 @@ useEffect(() => {
         setPlayersSaved(false);
         setScores({});
         setUpdatedHoles([]);
+        setIsFinalized(false);
         return;
       }
 
@@ -192,6 +203,10 @@ useEffect(() => {
           );
 
       setUpdatedHoles(savedUpdatedHoles);
+
+      setIsFinalized(
+        data.finalized === true
+      );
     } catch (error) {
       console.error(error);
 
@@ -199,30 +214,16 @@ useEffect(() => {
       setPlayersSaved(false);
       setScores({});
       setUpdatedHoles([]);
+      setIsFinalized(false);
     } finally {
       setLoadingPlayers(false);
     }
   }
 
   loadSavedScorecard();
-}, [participantId, golfdayId]);
+}, [participantId]);
 
-
- const [activeNine, setActiveNine] = useState<"front" | "back">("front");
-const [players, setPlayers] = useState<Player[]>(defaultPlayers);
-const [playersSaved, setPlayersSaved] = useState(false);
-const [loadingPlayers, setLoadingPlayers] = useState(true);
-const [scores, setScores] = useState<Record<string, string>>({});
-const [isSaved, setIsSaved] = useState(false);
-const [isFinalized, setIsFinalized] = useState(false);
-const [updatedHoles, setUpdatedHoles] = useState<number[]>([]);
-
-  const visibleHoles = holes.filter((hole) =>
-    activeNine === "front" ? hole.hole <= 9 : hole.hole >= 10
-  );
-
-
-  function updatePlayerName(
+function updatePlayerName(
   playerId: string,
   value: string
 ) {
@@ -270,6 +271,7 @@ async function savePlayers() {
     alert("Player names saved to Firestore.");
   } catch (error: any) {
     console.error(error);
+
     alert(
       error.message ||
         "Could not save player names."
@@ -277,50 +279,57 @@ async function savePlayers() {
   }
 }
 
+function getScore(
+  holeNumber: number,
+  playerId: string
+) {
+  return scores[
+    `${holeNumber}-${playerId}`
+  ] || "";
+}
 
-  function updateScore(hole: number, playerId: string, value: string) {
-    if (isFinalized) return;
+function updateScore(
+  holeNumber: number,
+  playerId: string,
+  value: string
+) {
+  if (isFinalized) return;
 
-    const cleanValue =
-      value === ""
-        ? ""
-        : String(Math.max(0, Math.min(10, Number(value) || 0)));
+  setScores((prev) => ({
+    ...prev,
+    [`${holeNumber}-${playerId}`]:
+      value,
+  }));
+}
 
-    setScores((prev) => ({
-      ...prev,
-      [`${hole}-${playerId}`]: cleanValue,
-    }));
-
-    setIsSaved(false);
-  }
-
-  function getScore(hole: number, playerId: string) {
-    return scores[`${hole}-${playerId}`] || "";
-  }
-
-  function getHoleTotal(hole: number) {
-    return players.reduce(
-      (total, player) => total + (Number(getScore(hole, player.id)) || 0),
-      0
-    );
-  }
-
-  const playerTotals = useMemo(() => {
-    return players.map((player) => ({
-      ...player,
-      total: holes.reduce(
-        (total, hole) => total + (Number(getScore(hole.hole, player.id)) || 0),
-        0
+const playerTotals = players.map((player) => {
+  const total = holes.reduce(
+    (sum, hole) =>
+      sum +
+      (
+        Number(
+          scores[
+            `${hole.hole}-${player.id}`
+          ] || 0
+        ) || 0
       ),
-    }));
-  }, [scores]);
-
-  const teamTotal = playerTotals.reduce(
-    (total, player) => total + player.total,
     0
   );
 
- const allHolesUpdated =
+  return {
+    ...player,
+    total,
+  };
+});
+
+const teamTotal =
+  playerTotals.reduce(
+    (sum, player) =>
+      sum + player.total,
+    0
+  );
+
+const allHolesUpdated =
   updatedHoles.length === 18;
 
 async function saveHoleScore(holeNumber: number) {
@@ -363,25 +372,29 @@ async function saveHoleScore(holeNumber: number) {
       ? updatedHoles
       : [...updatedHoles, holeNumber];
 
-  const nextTotalScore = players.reduce(
-    (teamSum, player) => {
-      const playerTotal = holes.reduce(
-        (sum, hole) =>
-          sum +
-          (
-            Number(
-              nextScores[
-                `${hole.hole}-${player.id}`
-              ] || 0
-            ) || 0
-          ),
-        0
-      );
+  const nextPlayerTotals = players.map((player) => {
+    const total = holes.reduce(
+      (sum, hole) =>
+        sum +
+        (
+          Number(
+            nextScores[
+              `${hole.hole}-${player.id}`
+            ] || 0
+          ) || 0
+        ),
+      0
+    );
 
-      return teamSum + playerTotal;
-    },
-    0
-  );
+    return total;
+  });
+
+  const nextTotalScore =
+    nextPlayerTotals.reduce(
+      (sum, total) =>
+        sum + total,
+      0
+    );
 
   try {
     const updateGolfDayParticipantScore =

@@ -1,9 +1,17 @@
 "use client";
 
-import { Suspense, useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { httpsCallable } from "firebase/functions";
 import { functions } from "@/src/lib/firebase";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "@/src/lib/firebase";
+
+
+
+
+
+
 
 type Hole = {
   hole: number;
@@ -84,9 +92,76 @@ const golfdayId =
   "jk6-2026";   
 
 
+  useEffect(() => {
+  async function loadSavedPlayers() {
+    try {
+      setLoadingPlayers(true);
+
+      const participantRef = doc(
+        db,
+        "golfdays",
+        golfdayId,
+        "participants",
+        participantId
+      );
+
+      const participantSnap =
+        await getDoc(participantRef);
+
+      if (!participantSnap.exists()) {
+        setPlayers(defaultPlayers);
+        setPlayersSaved(false);
+        return;
+      }
+
+      const data =
+        participantSnap.data();
+
+      if (
+        Array.isArray(data.players) &&
+        data.players.length === 4
+      ) {
+        setPlayers(
+          data.players.map(
+            (
+              player: {
+                id?: string;
+                name?: string;
+              },
+              index: number
+            ) => ({
+              id:
+                player.id ||
+                `p${index + 1}`,
+              name:
+                player.name ||
+                `Player ${index + 1}`,
+            })
+          )
+        );
+
+        setPlayersSaved(true);
+      } else {
+        setPlayers(defaultPlayers);
+        setPlayersSaved(false);
+      }
+    } catch (error) {
+      console.error(error);
+      setPlayers(defaultPlayers);
+      setPlayersSaved(false);
+    } finally {
+      setLoadingPlayers(false);
+    }
+  }
+
+  loadSavedPlayers();
+}, [participantId]);
+
+
  const [activeNine, setActiveNine] = useState<"front" | "back">("front");
 const [players, setPlayers] = useState<Player[]>(defaultPlayers);
 const [playersSaved, setPlayersSaved] = useState(false);
+const [loadingPlayers, setLoadingPlayers] = useState(true);
 const [scores, setScores] = useState<Record<string, string>>({});
 const [isSaved, setIsSaved] = useState(false);
 const [isFinalized, setIsFinalized] = useState(false);
@@ -365,7 +440,7 @@ function finalizeRound() {
 
   <button
     onClick={savePlayers}
-    disabled={isFinalized}
+    disabled={isFinalized || loadingPlayers}
     className="
       w-full
       mt-3
@@ -378,7 +453,11 @@ function finalizeRound() {
       disabled:opacity-40
     "
   >
-    {playersSaved ? "PLAYERS SAVED" : "SAVE PLAYERS"}
+  {loadingPlayers
+  ? "LOADING PLAYERS..."
+  : playersSaved
+    ? "PLAYERS SAVED"
+    : "SAVE PLAYERS"}
   </button>
 </div>
         </section>

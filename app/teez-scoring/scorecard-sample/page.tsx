@@ -18,11 +18,11 @@ type Player = {
   name: string;
 };
 
-const players: Player[] = [
-  { id: "p1", name: "Louis Coetzee" },
-  { id: "p2", name: "Jaco Smith" },
-  { id: "p3", name: "Pieter van der Merwe" },
-  { id: "p4", name: "Mark Jacobs" },
+const defaultPlayers: Player[] = [
+  { id: "p1", name: "Player 1" },
+  { id: "p2", name: "Player 2" },
+  { id: "p3", name: "Player 3" },
+  { id: "p4", name: "Player 4" },
 ];
 
 const holes: Hole[] = [
@@ -62,8 +62,10 @@ function ScorecardSampleContent() {
     searchParams.get("team") || "JK6";
 
 
-  const [activeNine, setActiveNine] = useState<"front" | "back">("front");
-  const [scores, setScores] = useState<Record<string, string>>({});
+ const [activeNine, setActiveNine] = useState<"front" | "back">("front");
+const [players, setPlayers] = useState<Player[]>(defaultPlayers);
+const [playersSaved, setPlayersSaved] = useState(false);
+const [scores, setScores] = useState<Record<string, string>>({});
 const [isSaved, setIsSaved] = useState(false);
 const [isFinalized, setIsFinalized] = useState(false);
 const [updatedHoles, setUpdatedHoles] = useState<number[]>([]);
@@ -71,6 +73,42 @@ const [updatedHoles, setUpdatedHoles] = useState<number[]>([]);
   const visibleHoles = holes.filter((hole) =>
     activeNine === "front" ? hole.hole <= 9 : hole.hole >= 10
   );
+
+
+  function updatePlayerName(
+  playerId: string,
+  value: string
+) {
+  if (isFinalized) return;
+
+  setPlayers((prev) =>
+    prev.map((player) =>
+      player.id === playerId
+        ? {
+            ...player,
+            name: value,
+          }
+        : player
+    )
+  );
+
+  setPlayersSaved(false);
+}
+
+function savePlayers() {
+  const missingName = players.some(
+    (player) => player.name.trim() === ""
+  );
+
+  if (missingName) {
+    alert("Please enter all 4 player names.");
+    return;
+  }
+
+  setPlayersSaved(true);
+
+  alert("Player names saved.");
+}
 
   function updateScore(hole: number, playerId: string, value: string) {
     if (isFinalized) return;
@@ -118,6 +156,11 @@ const [updatedHoles, setUpdatedHoles] = useState<number[]>([]);
   updatedHoles.length === 18;
 
 function saveHoleScore(holeNumber: number) {
+  if (!playersSaved) {
+    alert("Please save the player names first.");
+    return;
+  }
+
   const holeComplete = players.every(
     (player) =>
       getScore(holeNumber, player.id) !== ""
@@ -237,19 +280,64 @@ function finalizeRound() {
             </div>
           </div>
 
-          <div className="bg-cyan-950/40 border border-cyan-400/30 rounded-2xl p-3">
-            <p className="text-[10px] tracking-[0.25em] text-gray-400 font-bold mb-3">
-              PLAYERS IN YOUR TEAM
-            </p>
+       <div className="bg-cyan-950/40 border border-cyan-400/30 rounded-2xl p-3">
+  <p className="text-[10px] tracking-[0.25em] text-gray-400 font-bold mb-3">
+    PLAYERS IN YOUR TEAM
+  </p>
 
-            <div className="grid grid-cols-2 gap-2 text-xs">
-              {players.map((player) => (
-                <div key={player.id} className="font-bold truncate">
-                  ♙ {player.name}
-                </div>
-              ))}
-            </div>
-          </div>
+  <div className="grid gap-2">
+    {players.map((player, index) => (
+      <div
+        key={player.id}
+        className="grid grid-cols-[78px_1fr] gap-2 items-center"
+      >
+        <p className="text-xs text-gray-400 font-bold">
+          Player {index + 1}
+        </p>
+
+        <input
+          value={player.name}
+          onChange={(e) =>
+            updatePlayerName(
+              player.id,
+              e.target.value
+            )
+          }
+          disabled={isFinalized}
+          className="
+            bg-black/40
+            border
+            border-white/10
+            rounded-xl
+            px-3
+            py-2
+            text-sm
+            font-bold
+            disabled:opacity-40
+          "
+        />
+      </div>
+    ))}
+  </div>
+
+  <button
+    onClick={savePlayers}
+    disabled={isFinalized}
+    className="
+      w-full
+      mt-3
+      bg-cyan-400
+      text-black
+      rounded-xl
+      py-3
+      font-black
+      text-sm
+      disabled:opacity-40
+    "
+  >
+    {playersSaved ? "PLAYERS SAVED" : "SAVE PLAYERS"}
+  </button>
+</div>
         </section>
 
         {/* TABS */}

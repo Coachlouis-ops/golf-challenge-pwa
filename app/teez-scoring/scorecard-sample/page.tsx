@@ -94,8 +94,8 @@ const golfdayId =
   "jk6-2026";   
 
 
-  useEffect(() => {
-  async function loadSavedPlayers() {
+useEffect(() => {
+  async function loadSavedScorecard() {
     try {
       setLoadingPlayers(true);
 
@@ -113,6 +113,8 @@ const golfdayId =
       if (!participantSnap.exists()) {
         setPlayers(defaultPlayers);
         setPlayersSaved(false);
+        setScores({});
+        setUpdatedHoles([]);
         return;
       }
 
@@ -147,17 +149,63 @@ const golfdayId =
         setPlayers(defaultPlayers);
         setPlayersSaved(false);
       }
+
+      const savedScores: Record<string, string> = {};
+
+      if (data.scores) {
+        Object.entries(data.scores).forEach(
+          ([holeKey, holeValue]) => {
+            const holeNumber =
+              Number(
+                holeKey.replace("hole", "")
+              );
+
+            if (
+              Number.isInteger(holeNumber) &&
+              Array.isArray(holeValue)
+            ) {
+              holeValue.forEach(
+                (scoreItem: any) => {
+                  savedScores[
+                    `${holeNumber}-${scoreItem.playerId}`
+                  ] = String(
+                    scoreItem.score ?? ""
+                  );
+                }
+              );
+            }
+          }
+        );
+      }
+
+      setScores(savedScores);
+
+      const savedUpdatedHoles =
+        Object.keys(data.scores || {})
+          .map((key) =>
+            Number(
+              key.replace("hole", "")
+            )
+          )
+          .filter((hole) =>
+            Number.isInteger(hole)
+          );
+
+      setUpdatedHoles(savedUpdatedHoles);
     } catch (error) {
       console.error(error);
+
       setPlayers(defaultPlayers);
       setPlayersSaved(false);
+      setScores({});
+      setUpdatedHoles([]);
     } finally {
       setLoadingPlayers(false);
     }
   }
 
-  loadSavedPlayers();
-}, [participantId]);
+  loadSavedScorecard();
+}, [participantId, golfdayId]);
 
 
  const [activeNine, setActiveNine] = useState<"front" | "back">("front");
@@ -275,7 +323,7 @@ async function savePlayers() {
  const allHolesUpdated =
   updatedHoles.length === 18;
 
-function saveHoleScore(holeNumber: number) {
+async function saveHoleScore(holeNumber: number) {
   if (!playersSaved) {
     alert("Please save the player names first.");
     return;
@@ -287,21 +335,84 @@ function saveHoleScore(holeNumber: number) {
   );
 
   if (!holeComplete) {
-    alert(`Please complete all player scores for hole ${holeNumber}.`);
+    alert(
+      `Please complete all player scores for hole ${holeNumber}.`
+    );
     return;
   }
 
-  setUpdatedHoles((prev) =>
-    prev.includes(holeNumber)
-      ? prev
-      : [...prev, holeNumber]
+  const holeScores = players.map((player) => ({
+    playerId: player.id,
+    score: Number(
+      getScore(holeNumber, player.id)
+    ),
+  }));
+
+  const nextScores = {
+    ...scores,
+  };
+
+  holeScores.forEach((holeScore) => {
+    nextScores[
+      `${holeNumber}-${holeScore.playerId}`
+    ] = String(holeScore.score);
+  });
+
+  const nextUpdatedHoles =
+    updatedHoles.includes(holeNumber)
+      ? updatedHoles
+      : [...updatedHoles, holeNumber];
+
+  const nextTotalScore = players.reduce(
+    (teamSum, player) => {
+      const playerTotal = holes.reduce(
+        (sum, hole) =>
+          sum +
+          (
+            Number(
+              nextScores[
+                `${hole.hole}-${player.id}`
+              ] || 0
+            ) || 0
+          ),
+        0
+      );
+
+      return teamSum + playerTotal;
+    },
+    0
   );
 
-  setIsSaved(true);
+  try {
+    const updateGolfDayParticipantScore =
+      httpsCallable(
+        functions,
+        "updateGolfDayParticipantScore"
+      );
 
-  alert(
-    `Hole ${holeNumber} saved. Scorecard and leaderboard updated.`
-  );
+    await updateGolfDayParticipantScore({
+      golfdayId,
+      participantId,
+      holeNumber,
+      holeScores,
+      totalScore: nextTotalScore,
+    });
+
+    setScores(nextScores);
+    setUpdatedHoles(nextUpdatedHoles);
+    setIsSaved(true);
+
+    alert(
+      `Hole ${holeNumber} saved to Firestore.`
+    );
+  } catch (error: any) {
+    console.error(error);
+
+    alert(
+      error.message ||
+        `Could not save hole ${holeNumber}.`
+    );
+  }
 }
 
 function finalizeRound() {

@@ -13,10 +13,7 @@ import {
   getDialCodeForCountry,
 } from "@/src/lib/countryCallingCodes";
 
-import {
-  attachGolfCourseAutocomplete,
-} from "@/src/lib/googleGolfAutocomplete";
-
+import GolfCourseSearch from "@/src/components/GolfCourseSearch";
 
 
 
@@ -164,7 +161,6 @@ const [phoneLocalNumber, setPhoneLocalNumber] =
     divisionInternationalPosition: 0,
   });
 
-  const clubInputRef = useRef<HTMLInputElement | null>(null);
 
   const [profile, setProfile] = useState<Profile>({
     uid: "",
@@ -304,44 +300,7 @@ useEffect(() => {
 }, [profile.country]);
 
 
- /* GOOGLE GOLF COURSE SEARCH */
-useEffect(() => {
-  if (!isEditing) return;
-  if (!clubInputRef.current) return;
-
-  let cleanup:
-    | (() => void)
-    | undefined;
-
-  attachGolfCourseAutocomplete(
-    clubInputRef.current,
-    (place) => {
-      setProfile((prev) => ({
-        ...prev,
-        club: place.name,
-        stateProvince:
-          place.stateProvince ||
-          prev.stateProvince,
-        country:
-          place.country ||
-          prev.country,
-      }));
-    }
-  )
-    .then((removeListener) => {
-      cleanup = removeListener;
-    })
-    .catch((error) => {
-      console.error(
-        "Golf course autocomplete error:",
-        error
-      );
-    });
-
-  return () => {
-    cleanup?.();
-  };
-}, [isEditing]);
+ 
 
 
     /* SAVE PROFILE */
@@ -758,29 +717,19 @@ router.replace("/dashboard");
       Golf Club
     </p>
 
-    <input
-      ref={clubInputRef}
-      className="w-full bg-[#1f1f1f] border border-gray-500 text-white px-3 py-2 rounded-md focus:border-green-400 focus:outline-none"
-      placeholder="Select Golf Club"
+    <GolfCourseSearch
       value={profile.club}
-      onMouseDown={(e) => {
-        if (!clubNoticeRead) {
-          e.preventDefault();
-          setShowClubNotice(true);
-        }
+      placeholder="Select Golf Club"
+      className="w-full bg-[#1f1f1f] border border-gray-500 text-white px-3 py-2 rounded-md focus:border-green-400 focus:outline-none"
+      onSelect={(course) => {
+        setProfile((prev) => ({
+          ...prev,
+          club: course.name,
+          stateProvince:
+            course.secondaryText ||
+            prev.stateProvince,
+        }));
       }}
-      onFocus={() => {
-        if (!clubNoticeRead) {
-          clubInputRef.current?.blur();
-          setShowClubNotice(true);
-        }
-      }}
-      onChange={(e) =>
-        setProfile({
-          ...profile,
-          club: e.target.value,
-        })
-      }
     />
   </div>
 )}

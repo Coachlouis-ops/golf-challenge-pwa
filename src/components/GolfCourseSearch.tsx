@@ -11,6 +11,8 @@ export type GolfCourseSearchResult = {
   name: string;
   description: string;
   secondaryText: string;
+  stateProvince: string;
+  country: string;
 };
 
 type Props = {
@@ -111,7 +113,33 @@ export default function GolfCourseSearch({
               Array.isArray(
                 data.results
               )
-                ? data.results
+                ? data.results.map(
+                    (
+                      result: any
+                    ) => ({
+                      placeId:
+                        result.placeId ||
+                        "",
+
+                      name:
+                        result.name ||
+                        "",
+
+                      description:
+                        result.description ||
+                        "",
+
+                      secondaryText:
+                        result.secondaryText ||
+                        "",
+
+                      stateProvince:
+                        "",
+
+                      country:
+                        "",
+                    })
+                  )
                 : [];
 
             setResults(
@@ -151,6 +179,80 @@ export default function GolfCourseSearch({
       controller.abort();
     };
   }, [searchValue]);
+
+  const selectCourse =
+    async (
+      course: GolfCourseSearchResult
+    ) => {
+      try {
+        setSearchValue(
+          course.name
+        );
+
+        setResults([]);
+        setOpen(false);
+        setLoading(true);
+
+        const response =
+          await fetch(
+            `/api/golf-courses/details?placeId=${encodeURIComponent(
+              course.placeId
+            )}`
+          );
+
+        const data =
+          await response.json();
+
+        if (!response.ok) {
+          console.error(
+            "Golf course details failed:",
+            data
+          );
+
+          onSelect(
+            course
+          );
+
+          return;
+        }
+
+        const selectedCourse: GolfCourseSearchResult =
+          {
+            ...course,
+
+            name:
+              data.name ||
+              course.name,
+
+            stateProvince:
+              data.stateProvince ||
+              "",
+
+            country:
+              data.country ||
+              "",
+          };
+
+        setSearchValue(
+          selectedCourse.name
+        );
+
+        onSelect(
+          selectedCourse
+        );
+      } catch (error) {
+        console.error(
+          "Golf course selection error:",
+          error
+        );
+
+        onSelect(
+          course
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
 
   return (
     <div className="relative w-full">
@@ -197,14 +299,7 @@ export default function GolfCourseSearch({
                   ) => {
                     event.preventDefault();
 
-                    setSearchValue(
-                      course.name
-                    );
-
-                    setResults([]);
-                    setOpen(false);
-
-                    onSelect(
+                    void selectCourse(
                       course
                     );
                   }}

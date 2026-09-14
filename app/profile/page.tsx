@@ -318,8 +318,8 @@ useEffect(() => {
 
       const autocomplete = new (window as any).google.maps.places.Autocomplete(
         clubInputRef.current,
-        {
-  types: ["golf_course"],
+  {
+  types: ["establishment"],
   fields: ["name", "address_components"],
 }
       );
@@ -368,9 +368,9 @@ useEffect(() => {
         script = document.createElement("script");
         script.id = scriptId;
         script.src =
-          "https://maps.googleapis.com/maps/api/js?key=" +
-          process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY +
-          "&libraries=places";
+  "https://maps.googleapis.com/maps/api/js?key=" +
+  process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY +
+  "&libraries=places&loading=async&v=weekly";
         script.async = true;
         script.defer = true;
         script.onload = tryInit;

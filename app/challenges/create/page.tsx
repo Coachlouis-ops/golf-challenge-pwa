@@ -516,7 +516,12 @@ const isValid =
   gameFormat,
   typeOfGame,
   scoringMethod,
+
   courseName: courseName.trim(),
+  courseStateProvince:
+    courseStateProvince.trim(),
+  courseCountry:
+    courseCountry.trim(),
 });
 
       const challengeId =

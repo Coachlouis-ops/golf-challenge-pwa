@@ -339,59 +339,136 @@ const [teamFormat, setTeamFormat] = useState("");
 
   const courseInputRef = useRef<HTMLInputElement | null>(null);
 
-  useEffect(() => {
-    const initAutocomplete = () => {
-      if (!(window as any).google || !courseInputRef.current) return false;
+ useEffect(() => {
+  let autocompleteElement: any = null;
+  let selectHandler: any = null;
 
-      const autocomplete =
-        new (window as any).google.maps.places.Autocomplete(
-          courseInputRef.current,
-          {
-            types: ["establishment"],
-          }
-        );
+  const initAutocomplete = async () => {
+    if (
+      !(window as any).google ||
+      !(window as any).google.maps ||
+      !courseInputRef.current
+    ) {
+      return false;
+    }
 
-      autocomplete.setFields(["name"]);
+    const { PlaceAutocompleteElement } =
+      await (window as any).google.maps.importLibrary(
+        "places"
+      );
 
-      autocomplete.addListener("place_changed", () => {
-        const place = autocomplete.getPlace();
-        if (!place || !place.name) return;
+    const originalInput =
+      courseInputRef.current;
 
-        setCourseName(place.name);
+    autocompleteElement =
+      new PlaceAutocompleteElement({
+        includedPrimaryTypes: [
+          "golf_course",
+        ],
       });
 
-      return true;
+    autocompleteElement.placeholder =
+      "Search golf course";
+
+    autocompleteElement.style.width =
+      "100%";
+
+    autocompleteElement.style.display =
+      "block";
+
+    originalInput.style.display = "none";
+
+    originalInput.parentElement?.insertBefore(
+      autocompleteElement,
+      originalInput
+    );
+
+    selectHandler = async (event: any) => {
+      const place =
+        event.placePrediction.toPlace();
+
+      await place.fetchFields({
+        fields: ["displayName"],
+      });
+
+      if (!place.displayName) return;
+
+      setCourseName(
+        place.displayName
+      );
     };
 
-    const tryInit = () => {
-      if (!initAutocomplete()) {
-        setTimeout(tryInit, 300);
-      }
-    };
+    autocompleteElement.addEventListener(
+      "gmp-select",
+      selectHandler
+    );
 
-    const scriptId = "google-maps-script";
+    return true;
+  };
 
-    if (!(window as any).google) {
-      let script = document.getElementById(
+  const tryInit = async () => {
+    const initialized =
+      await initAutocomplete();
+
+    if (!initialized) {
+      setTimeout(tryInit, 300);
+    }
+  };
+
+  const scriptId =
+    "google-maps-script";
+
+  if (!(window as any).google) {
+    let script =
+      document.getElementById(
         scriptId
       ) as HTMLScriptElement | null;
 
-      if (!script) {
-        script = document.createElement("script");
-        script.id = scriptId;
-        script.src =
-          "https://maps.googleapis.com/maps/api/js?key=" +
-          process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY +
-          "&libraries=places";
-        script.async = true;
-        script.defer = true;
-        script.onload = tryInit;
-        document.head.appendChild(script);
-      }
+    if (!script) {
+      script =
+        document.createElement(
+          "script"
+        );
+
+      script.id = scriptId;
+
+      script.src =
+        "https://maps.googleapis.com/maps/api/js?key=" +
+        process.env
+          .NEXT_PUBLIC_GOOGLE_MAPS_API_KEY +
+        "&libraries=places&loading=async";
+
+      script.async = true;
+      script.defer = true;
+      script.onload = tryInit;
+
+      document.head.appendChild(
+        script
+      );
     } else {
-      tryInit();
+      script.addEventListener(
+        "load",
+        tryInit
+      );
     }
-  }, []);
+  } else {
+    tryInit();
+  }
+
+  return () => {
+    if (
+      autocompleteElement &&
+      selectHandler
+    ) {
+      autocompleteElement.removeEventListener(
+        "gmp-select",
+        selectHandler
+      );
+    }
+
+    autocompleteElement?.remove();
+  };
+}, []);
 
   const selectedGame =
     GAME_ENGINE[typeOfGame];

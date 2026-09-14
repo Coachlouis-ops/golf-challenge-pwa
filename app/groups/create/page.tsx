@@ -45,15 +45,17 @@ export default function CreateGroupPage() {
   // LOAD CREATOR PROFILE
   // -------------------------------------------------
   useEffect(() => {
-    if (!user) return;
+  if (!user) return;
 
-    async function loadProfile() {
+  const uid = user.uid;
+
+  async function loadProfile() {
       try {
-        const profileRef = doc(
-          db,
-          "profiles",
-          user.uid
-        );
+       const profileRef = doc(
+  db,
+  "profiles",
+  uid
+);
 
         const profileSnap =
           await getDoc(profileRef);

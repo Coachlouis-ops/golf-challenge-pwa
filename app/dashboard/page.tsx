@@ -256,23 +256,39 @@ function DashboardContent() {
           </button>
 
           <button
-            onClick={() =>
-              openCompetitiveFeature(
-                "My Invites",
-                "/my-invites"
-              )
-            }
-            className={`arena-btn ${
-              competitiveFeaturesLocked
-                ? "locked-btn"
-                : ""
-            }`}
-          >
-            MY INVITES
-          </button>
+  onClick={() =>
+    openCompetitiveFeature(
+      "My Invites",
+      "/my-invites"
+    )
+  }
+  className={`arena-btn ${
+    competitiveFeaturesLocked
+      ? "locked-btn"
+      : ""
+  }`}
+>
+  MY INVITES
+</button>
 
-          <button
-            onClick={openProfile}
+<button
+  onClick={() =>
+    openCompetitiveFeature(
+      "My Groups",
+      "/groups"
+    )
+  }
+  className={`arena-btn ${
+    competitiveFeaturesLocked
+      ? "locked-btn"
+      : ""
+  }`}
+>
+  MY GROUPS
+</button>
+
+<button
+  onClick={openProfile}
             className={`arena-btn ${
               !user ? "locked-btn" : ""
             }`}

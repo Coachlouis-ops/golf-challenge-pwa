@@ -5,6 +5,16 @@ import { httpsCallable } from "firebase/functions";
 import { useRouter } from "next/navigation";
 import { functions } from "@/src/lib/firebase";
 import RequireAuth from "@/src/lib/RequireAuth";
+import {
+  attachGolfCourseAutocomplete,
+} from "@/src/lib/googleGolfAutocomplete";
+
+
+
+
+
+
+
 
 const TEAM_FORMATS = ["SINGLES", "PAIR", "FOURBALL"];
 
@@ -334,139 +344,65 @@ const [teamFormat, setTeamFormat] = useState("");
   const [gameFormat, setGameFormat] = useState("");
   const [typeOfGame, setTypeOfGame] = useState("");
   const [scoringMethod, setScoringMethod] = useState("");
+
+
+
   const [courseName, setCourseName] = useState("");
+
+const [
+  courseStateProvince,
+  setCourseStateProvince,
+] = useState("");
+
+const [
+  courseCountry,
+  setCourseCountry,
+] = useState("");
+
+
+
+
+
   const [loading, setLoading] = useState(false);
 
   const courseInputRef = useRef<HTMLInputElement | null>(null);
 
- useEffect(() => {
-  let autocompleteElement: any = null;
-  let selectHandler: any = null;
+/* GOOGLE GOLF COURSE SEARCH */
+useEffect(() => {
+  if (!courseInputRef.current) return;
 
-  const initAutocomplete = async () => {
-    if (
-      !(window as any).google ||
-      !(window as any).google.maps ||
-      !courseInputRef.current
-    ) {
-      return false;
-    }
+  let cleanup:
+    | (() => void)
+    | undefined;
 
-    const { PlaceAutocompleteElement } =
-      await (window as any).google.maps.importLibrary(
-        "places"
-      );
-
-    const originalInput =
-      courseInputRef.current;
-
-    autocompleteElement =
-      new PlaceAutocompleteElement({
-        includedPrimaryTypes: [
-          "golf_course",
-        ],
-      });
-
-    autocompleteElement.placeholder =
-      "Search golf course";
-
-    autocompleteElement.style.width =
-      "100%";
-
-    autocompleteElement.style.display =
-      "block";
-
-    originalInput.style.display = "none";
-
-    originalInput.parentElement?.insertBefore(
-      autocompleteElement,
-      originalInput
-    );
-
-    selectHandler = async (event: any) => {
-      const place =
-        event.placePrediction.toPlace();
-
-      await place.fetchFields({
-        fields: ["displayName"],
-      });
-
-      if (!place.displayName) return;
-
+  attachGolfCourseAutocomplete(
+    courseInputRef.current,
+    (place) => {
       setCourseName(
-        place.displayName
+        place.name
       );
-    };
 
-    autocompleteElement.addEventListener(
-      "gmp-select",
-      selectHandler
-    );
-
-    return true;
-  };
-
-  const tryInit = async () => {
-    const initialized =
-      await initAutocomplete();
-
-    if (!initialized) {
-      setTimeout(tryInit, 300);
-    }
-  };
-
-  const scriptId =
-    "google-maps-script";
-
-  if (!(window as any).google) {
-    let script =
-      document.getElementById(
-        scriptId
-      ) as HTMLScriptElement | null;
-
-    if (!script) {
-      script =
-        document.createElement(
-          "script"
-        );
-
-      script.id = scriptId;
-
-      script.src =
-        "https://maps.googleapis.com/maps/api/js?key=" +
-        process.env
-          .NEXT_PUBLIC_GOOGLE_MAPS_API_KEY +
-        "&libraries=places&loading=async";
-
-      script.async = true;
-      script.defer = true;
-      script.onload = tryInit;
-
-      document.head.appendChild(
-        script
+      setCourseStateProvince(
+        place.stateProvince
       );
-    } else {
-      script.addEventListener(
-        "load",
-        tryInit
+
+      setCourseCountry(
+        place.country
       );
     }
-  } else {
-    tryInit();
-  }
+  )
+    .then((removeListener) => {
+      cleanup = removeListener;
+    })
+    .catch((error) => {
+      console.error(
+        "Golf course autocomplete error:",
+        error
+      );
+    });
 
   return () => {
-    if (
-      autocompleteElement &&
-      selectHandler
-    ) {
-      autocompleteElement.removeEventListener(
-        "gmp-select",
-        selectHandler
-      );
-    }
-
-    autocompleteElement?.remove();
+    cleanup?.();
   };
 }, []);
 

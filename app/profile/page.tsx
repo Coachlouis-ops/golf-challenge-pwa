@@ -13,7 +13,9 @@ import {
   getDialCodeForCountry,
 } from "@/src/lib/countryCallingCodes";
 
-
+import {
+  attachGolfCourseAutocomplete,
+} from "@/src/lib/googleGolfAutocomplete";
 
 
 
@@ -302,84 +304,44 @@ useEffect(() => {
 }, [profile.country]);
 
 
-  /* GOOGLE CLUB SEARCH */
-  useEffect(() => {
-    if (!isEditing) return;
+ /* GOOGLE GOLF COURSE SEARCH */
+useEffect(() => {
+  if (!isEditing) return;
+  if (!clubInputRef.current) return;
 
-    const initAutocomplete = () => {
-      if (
-        !(window as any).google ||
-        !(window as any).google.maps ||
-        !(window as any).google.maps.places ||
-        !clubInputRef.current
-      ) {
-        return false;
-      }
+  let cleanup:
+    | (() => void)
+    | undefined;
 
-      const autocomplete = new (window as any).google.maps.places.Autocomplete(
-        clubInputRef.current,
-  {
-  types: ["establishment"],
-  fields: ["name", "address_components"],
-}
-      );
-
-      autocomplete.addListener("place_changed", () => {
-        const place = autocomplete.getPlace();
-        if (!place || !place.name) return;
-
-        let province = "";
-        let country = "";
-
-        if (place.address_components) {
-          place.address_components.forEach((component: any) => {
-            if (component.types.includes("administrative_area_level_1")) {
-              province = component.long_name;
-            }
-            if (component.types.includes("country")) {
-              country = component.long_name;
-            }
-          });
-        }
-
-        setProfile((prev) => ({
-          ...prev,
-          club: place.name || "",
-          stateProvince: province || prev.stateProvince,
-          country: country || prev.country,
-        }));
-      });
-
-      return true;
-    };
-
-    const tryInit = () => {
-      if (!initAutocomplete()) {
-        setTimeout(tryInit, 300);
-      }
-    };
-
-    const scriptId = "google-maps-script";
-
-    if (!(window as any).google) {
-      let script = document.getElementById(scriptId) as HTMLScriptElement | null;
-
-      if (!script) {
-        script = document.createElement("script");
-        script.id = scriptId;
-        script.src =
-  "https://maps.googleapis.com/maps/api/js?key=" +
-  process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY +
-  "&libraries=places&loading=async&v=weekly";
-        script.async = true;
-        script.defer = true;
-        script.onload = tryInit;
-        document.head.appendChild(script);
-      }
-    } else {
-      tryInit();
+  attachGolfCourseAutocomplete(
+    clubInputRef.current,
+    (place) => {
+      setProfile((prev) => ({
+        ...prev,
+        club: place.name,
+        stateProvince:
+          place.stateProvince ||
+          prev.stateProvince,
+        country:
+          place.country ||
+          prev.country,
+      }));
     }
-  }, [isEditing]);
+  )
+    .then((removeListener) => {
+      cleanup = removeListener;
+    })
+    .catch((error) => {
+      console.error(
+        "Golf course autocomplete error:",
+        error
+      );
+    });
+
+  return () => {
+    cleanup?.();
+  };
+}, [isEditing]);
 
 
     /* SAVE PROFILE */

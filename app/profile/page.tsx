@@ -718,19 +718,22 @@ router.replace("/dashboard");
     </p>
 
     <GolfCourseSearch
-      value={profile.club}
-      placeholder="Select Golf Club"
-      className="w-full bg-[#1f1f1f] border border-gray-500 text-white px-3 py-2 rounded-md focus:border-green-400 focus:outline-none"
-      onSelect={(course) => {
-        setProfile((prev) => ({
-          ...prev,
-          club: course.name,
-          stateProvince:
-            course.secondaryText ||
-            prev.stateProvince,
-        }));
-      }}
-    />
+  value={profile.club}
+  placeholder="Select Golf Club"
+  className="w-full bg-[#1f1f1f] border border-gray-500 text-white px-3 py-2 rounded-md focus:border-green-400 focus:outline-none"
+  onSelect={(course) => {
+    setProfile((prev) => ({
+      ...prev,
+      club: course.name,
+      stateProvince:
+        course.stateProvince ||
+        prev.stateProvince,
+      country:
+        course.country ||
+        prev.country,
+    }));
+  }}
+/>
   </div>
 )}
            {profileExists ? (

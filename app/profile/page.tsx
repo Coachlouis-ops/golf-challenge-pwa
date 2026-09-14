@@ -991,15 +991,11 @@ router.replace("/dashboard");
         </p>
       </div>
 
-     <button
+ <button
   type="button"
   onClick={() => {
     setClubNoticeRead(true);
     setShowClubNotice(false);
-
-    setTimeout(() => {
-      clubInputRef.current?.focus();
-    }, 100);
   }}
   className="w-full bg-green-500 hover:bg-green-400 text-black font-extrabold py-3 rounded-xl transition"
 >

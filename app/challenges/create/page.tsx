@@ -5,10 +5,7 @@ import { httpsCallable } from "firebase/functions";
 import { useRouter } from "next/navigation";
 import { functions } from "@/src/lib/firebase";
 import RequireAuth from "@/src/lib/RequireAuth";
-import {
-  attachGolfCourseAutocomplete,
-} from "@/src/lib/googleGolfAutocomplete";
-
+import GolfCourseSearch from "@/src/components/GolfCourseSearch";
 
 
 
@@ -365,46 +362,7 @@ const [
 
   const [loading, setLoading] = useState(false);
 
-  const courseInputRef = useRef<HTMLInputElement | null>(null);
-
-/* GOOGLE GOLF COURSE SEARCH */
-useEffect(() => {
-  if (!courseInputRef.current) return;
-
-  let cleanup:
-    | (() => void)
-    | undefined;
-
-  attachGolfCourseAutocomplete(
-    courseInputRef.current,
-    (place) => {
-      setCourseName(
-        place.name
-      );
-
-      setCourseStateProvince(
-        place.stateProvince
-      );
-
-      setCourseCountry(
-        place.country
-      );
-    }
-  )
-    .then((removeListener) => {
-      cleanup = removeListener;
-    })
-    .catch((error) => {
-      console.error(
-        "Golf course autocomplete error:",
-        error
-      );
-    });
-
-  return () => {
-    cleanup?.();
-  };
-}, []);
+  
 
   const selectedGame =
     GAME_ENGINE[typeOfGame];
@@ -700,29 +658,39 @@ const isValid =
 
 </div>
 
-          <input
-            ref={courseInputRef}
-            placeholder="Search Golf Course"
-            value={courseName}
-            onChange={(e) =>
-              setCourseName(e.target.value)
-            }
-            className="
-  bg-black
-  border-2 border-cyan-400
-  rounded-xl
-  px-5 py-5
-  text-lg sm:text-xl
-  font-bold
-  text-white
-  placeholder:text-cyan-300
-  placeholder:font-bold
-  outline-none
-  shadow-[0_0_20px_rgba(34,211,238,0.55)]
-  focus:border-cyan-300
-  focus:shadow-[0_0_35px_rgba(34,211,238,0.9)]
-  transition-all duration-300
-"
+       <GolfCourseSearch
+  value={courseName}
+  placeholder="Search Golf Course"
+  className="
+    w-full
+    bg-black
+    border-2 border-cyan-400
+    rounded-xl
+    px-5 py-5
+    text-lg sm:text-xl
+    font-bold
+    text-white
+    placeholder:text-cyan-300
+    placeholder:font-bold
+    outline-none
+    shadow-[0_0_20px_rgba(34,211,238,0.55)]
+    focus:border-cyan-300
+    focus:shadow-[0_0_35px_rgba(34,211,238,0.9)]
+    transition-all duration-300
+  "
+  onSelect={(course) => {
+    setCourseName(
+      course.name
+    );
+
+    setCourseStateProvince(
+      course.stateProvince
+    );
+
+    setCourseCountry(
+      course.country
+    );
+  }}
 />
 
           <CapsuleGroup

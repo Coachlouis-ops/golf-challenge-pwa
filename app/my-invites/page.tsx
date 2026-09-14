@@ -13,8 +13,15 @@ import { db, functions } from "@/src/lib/firebase";
 import { useAuth } from "@/src/lib/AuthContext";
 
 type InviteItem = {
+  id: string;
+  inviteType: "challenge" | "group";
+
   challengeId: string;
   challengeTitle: string;
+
+  groupId: string;
+  groupName: string;
+
   status: string;
   gameFormat: string;
   scoringMethod: string;
@@ -58,15 +65,49 @@ export default function MyInvitesPage() {
           }
         }
 
-        results.push({
-          challengeId: data.challengeId,
-          challengeTitle: challengeTitle || data.challengeTitle || "",
-          status: data.status,
-          gameFormat: gameFormat || data.gameFormat || "",
-          scoringMethod: scoringMethod || data.scoringMethod || "",
-          entryTokens: entryTokens || data.entryTokens || 0,
-          creatorName: data.creatorName || "",
-        });
+       results.push({
+  id: docSnap.id,
+
+  inviteType:
+    data.inviteType === "group"
+      ? "group"
+      : "challenge",
+
+  challengeId:
+    data.challengeId || "",
+
+  challengeTitle:
+    challengeTitle ||
+    data.challengeTitle ||
+    "",
+
+  groupId:
+    data.groupId || "",
+
+  groupName:
+    data.groupName || "",
+
+  status:
+    data.status || "pending",
+
+  gameFormat:
+    gameFormat ||
+    data.gameFormat ||
+    "",
+
+  scoringMethod:
+    scoringMethod ||
+    data.scoringMethod ||
+    "",
+
+  entryTokens:
+    entryTokens ||
+    data.entryTokens ||
+    0,
+
+  creatorName:
+    data.creatorName || "",
+});
       }
 
       setInvites(results);
@@ -85,6 +126,46 @@ export default function MyInvitesPage() {
 
     loadInvites(uid);
   }, [user]);
+
+
+async function handleAcceptGroup(
+  groupId: string
+) {
+  if (!user) return;
+
+  try {
+    setProcessingId(
+      `group-${groupId}`
+    );
+
+    const acceptGroupInvite =
+      httpsCallable(
+        functions,
+        "acceptGroupInvite"
+      );
+
+    await acceptGroupInvite({
+      groupId,
+    });
+
+    await loadInvites(
+      user.uid
+    );
+
+    router.push(
+      `/groups/${groupId}`
+    );
+  } catch (e: any) {
+    alert(
+      e.message ||
+      "Failed to accept group invite"
+    );
+  } finally {
+    setProcessingId(null);
+  }
+}
+
+
 
   async function handleAccept(challengeId: string) {
     if (!user) return;
@@ -162,71 +243,179 @@ export default function MyInvitesPage() {
           </p>
         )}
 
-        {invites.map((invite) => (
-          <div
-            key={invite.challengeId}
-            className="bg-black/60 border border-gray-700 rounded-xl p-5 flex flex-col gap-4"
-          >
-            <div className="flex justify-between items-center">
-              <h2 className="font-semibold text-lg">
-                {invite.challengeTitle}
-              </h2>
+        {invites.map((invite) => {
 
-              <span className="text-xs uppercase text-gray-400">
-                {invite.status}
-              </span>
-            </div>
+  const isGroupInvite =
+    invite.inviteType === "group";
 
-            <div className="text-sm text-gray-300 flex flex-col gap-1">
-              <p>
-                <strong>Format:</strong> {invite.gameFormat}
-              </p>
+  const processingKey =
+    isGroupInvite
+      ? `group-${invite.groupId}`
+      : invite.challengeId;
 
-              <p>
-                <strong>Scoring:</strong> {invite.scoringMethod}
-              </p>
+  return (
+    <div
+      key={invite.id}
+      className="bg-black/60 border border-gray-700 rounded-xl p-5 flex flex-col gap-4"
+    >
+      <div className="flex justify-between items-center">
 
-              <p>
-                <strong>Entry Tokens:</strong> {invite.entryTokens}
-              </p>
-
-              <p>
-                <strong>Created By:</strong> {invite.creatorName}
-              </p>
-            </div>
-
-            {invite.status === "pending" && (
-              <div className="flex gap-3">
-                <button
-                  onClick={() => handleAccept(invite.challengeId)}
-                  disabled={processingId === invite.challengeId}
-                  className="bg-green-500 text-black px-4 py-2 rounded"
-                >
-                  {processingId === invite.challengeId
-                    ? "Accepting..."
-                    : "Accept Match"}
-                </button>
-
-                <button
-                  onClick={() => handleDecline(invite.challengeId)}
-                  disabled={processingId === invite.challengeId}
-                  className="bg-gray-700 px-4 py-2 rounded"
-                >
-                  Decline
-                </button>
-              </div>
-            )}
-
-            {invite.status === "accepted" && (
-              <button
-                onClick={() => router.push(`/challenges/${invite.challengeId}`)}
-                className="bg-green-500 text-black px-4 py-2 rounded"
-              >
-                Open Match
-              </button>
-            )}
+        <div>
+          <div className="text-xs font-bold tracking-[0.2em] text-green-400 mb-1">
+            {isGroupInvite
+              ? "GROUP INVITATION"
+              : "MATCH INVITATION"}
           </div>
-        ))}
+
+          <h2 className="font-semibold text-lg">
+            {isGroupInvite
+              ? invite.groupName
+              : invite.challengeTitle}
+          </h2>
+        </div>
+
+        <span className="text-xs uppercase text-gray-400">
+          {invite.status}
+        </span>
+      </div>
+
+
+      {isGroupInvite ? (
+
+        <div className="text-sm text-gray-300 flex flex-col gap-1">
+
+          <p>
+            You have been invited to join this Teez Group.
+          </p>
+
+          <p>
+            <strong>Group:</strong>{" "}
+            {invite.groupName}
+          </p>
+
+          <p>
+            <strong>Created By:</strong>{" "}
+            {invite.creatorName}
+          </p>
+
+        </div>
+
+      ) : (
+
+        <div className="text-sm text-gray-300 flex flex-col gap-1">
+
+          <p>
+            <strong>Format:</strong>{" "}
+            {invite.gameFormat}
+          </p>
+
+          <p>
+            <strong>Scoring:</strong>{" "}
+            {invite.scoringMethod}
+          </p>
+
+          <p>
+            <strong>Entry Tokens:</strong>{" "}
+            {invite.entryTokens}
+          </p>
+
+          <p>
+            <strong>Created By:</strong>{" "}
+            {invite.creatorName}
+          </p>
+
+        </div>
+
+      )}
+
+
+      {invite.status === "pending" && (
+
+        <div className="flex gap-3">
+
+          {isGroupInvite ? (
+
+            <button
+              onClick={() =>
+                handleAcceptGroup(
+                  invite.groupId
+                )
+              }
+              disabled={
+                processingId ===
+                processingKey
+              }
+              className="bg-green-500 text-black px-4 py-2 rounded"
+            >
+              {processingId ===
+              processingKey
+                ? "Joining..."
+                : "Join Group"}
+            </button>
+
+          ) : (
+
+            <button
+              onClick={() =>
+                handleAccept(
+                  invite.challengeId
+                )
+              }
+              disabled={
+                processingId ===
+                processingKey
+              }
+              className="bg-green-500 text-black px-4 py-2 rounded"
+            >
+              {processingId ===
+              processingKey
+                ? "Accepting..."
+                : "Accept Match"}
+            </button>
+
+          )}
+
+          {!isGroupInvite && (
+            <button
+              onClick={() =>
+                handleDecline(
+                  invite.challengeId
+                )
+              }
+              disabled={
+                processingId ===
+                processingKey
+              }
+              className="bg-gray-700 px-4 py-2 rounded"
+            >
+              Decline
+            </button>
+          )}
+
+        </div>
+
+      )}
+
+
+      {!isGroupInvite &&
+        invite.status === "accepted" && (
+
+          <button
+            onClick={() =>
+              router.push(
+                `/challenges/${invite.challengeId}`
+              )
+            }
+            className="bg-green-500 text-black px-4 py-2 rounded"
+          >
+            Open Match
+          </button>
+
+        )}
+
+    </div>
+  );
+})}
       </div>
     </main>
   );

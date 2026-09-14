@@ -6,8 +6,8 @@ export default function HomeDashboardPage() {
   const router = useRouter();
 
   const enterApp = () => {
-    router.push("/");
-  };
+  router.push("/main");
+};
 
   const actions = [
     "PLAY A MATCH",

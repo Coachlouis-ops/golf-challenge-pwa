@@ -391,8 +391,8 @@ setRevealedBall({
                   </p>
 
                   <p className="mt-1 text-3xl font-black text-white">
-                    {boosterProgress}%
-                  </p>
+  {Math.round(boosterProgress)}%
+</p>
 
                 </div>
 

@@ -224,34 +224,40 @@ export default function HomePage() {
             Teez Golf Challenges is operated by Honey Badger Technologies PTY LTD.
             Subscriptions are processed through secure approved payment systems. </p>
 <div className="flex flex-col items-center gap-4">
-  <div className="flex justify-center gap-4 flex-wrap">
+  <div className="grid w-full max-w-2xl grid-cols-1 gap-4 sm:grid-cols-2">
+
+    {/* GREEN */}
     <button
       onClick={() => router.push("/register")}
-      className="bg-green-400 text-black px-8 py-3 rounded-full font-semibold animate-pulse shadow-[0_0_20px_rgba(34,197,94,0.8)] hover:scale-105 transition"
+      className="h-14 w-full rounded-full border border-green-300 bg-green-400 text-black font-bold animate-pulse shadow-[0_0_22px_rgba(34,197,94,0.9)] hover:scale-105 transition"
     >
       SUBSCRIBE
     </button>
 
+    {/* YELLOW */}
     <button
       onClick={() => router.push("/login")}
-      className="bg-green-400 text-black px-8 py-3 rounded-full font-semibold animate-pulse shadow-[0_0_20px_rgba(34,197,94,0.8)] hover:scale-105 transition"
+      className="h-14 w-full rounded-full border border-yellow-200 bg-yellow-300 text-black font-bold animate-pulse shadow-[0_0_22px_rgba(253,224,71,0.9)] hover:scale-105 transition"
     >
       LOGIN
     </button>
 
-       <button
+    {/* BLUE */}
+    <button
       onClick={() => router.push("/dashboard")}
-      className="border border-green-400 text-green-400 px-8 py-3 rounded-full font-semibold shadow-[0_0_18px_rgba(34,197,94,0.45)] hover:bg-green-400 hover:text-black hover:scale-105 transition"
+      className="h-14 w-full rounded-full border border-blue-300 bg-blue-500 text-white font-bold animate-pulse shadow-[0_0_22px_rgba(59,130,246,0.9)] hover:scale-105 transition"
     >
       VIEW FULL DASHBOARD
     </button>
 
+    {/* RED */}
     <button
       onClick={() => router.push("/teez-scoring")}
-      className="bg-cyan-400 text-black px-8 py-3 rounded-full font-semibold animate-pulse shadow-[0_0_20px_rgba(34,211,238,0.8)] hover:scale-105 transition"
+      className="h-14 w-full rounded-full border border-red-300 bg-red-500 text-white font-bold animate-pulse shadow-[0_0_22px_rgba(239,68,68,0.9)] hover:scale-105 transition"
     >
       TEEZ GOLF SCORING
     </button>
+
   </div>
 </div>
         </div>

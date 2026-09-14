@@ -632,9 +632,9 @@ export default function GroupDetailPage() {
       return;
     }
 
-    router.push(
-      `/groups/${group.groupId}/challenges/create`
-    );
+   router.push(
+  `/challenges/create?scope=group&groupId=${group.groupId}`
+);
   }
 
 

@@ -329,7 +329,17 @@ function CapsuleGroup({
 export default function CreateChallengePage() {
   const router = useRouter();
 
- const [challengeTitle, setChallengeTitle] = useState("");
+  const [challengeScope, setChallengeScope] =
+    useState<"normal" | "group">("normal");
+
+  const [groupId, setGroupId] =
+    useState<string | null>(null);
+
+  const [challengeTitle, setChallengeTitle] = useState("");
+
+
+
+
 const [entryTokens, setEntryTokens] = useState<string>("");
 
 const [nassauFront9Tokens, setNassauFront9Tokens] = useState<string>("");
@@ -361,6 +371,29 @@ const [
 
 
   const [loading, setLoading] = useState(false);
+
+
+  useEffect(() => {
+  const params =
+    new URLSearchParams(window.location.search);
+
+  const scope =
+    params.get("scope");
+
+  const suppliedGroupId =
+    params.get("groupId");
+
+  if (
+    scope === "group" &&
+    suppliedGroupId
+  ) {
+    setChallengeScope("group");
+    setGroupId(suppliedGroupId);
+  } else {
+    setChallengeScope("normal");
+    setGroupId(null);
+  }
+}, []);
 
   
 
@@ -454,7 +487,13 @@ const isValid =
       const createChallenge =
         httpsCallable(functions, "createChallenge");
 
-   const result: any = await createChallenge({
+const result: any = await createChallenge({
+  challengeScope,
+  groupId:
+    challengeScope === "group"
+      ? groupId
+      : null,
+
   challengeTitle: challengeTitle.trim(),
 
   entryTokens: isNassau
@@ -517,9 +556,11 @@ const isValid =
 
         <div className="relative z-10 w-full max-w-4xl bg-neutral-900/80 backdrop-blur-xl border border-neutral-700 rounded-2xl p-6 sm:p-10 shadow-[0_0_40px_rgba(0,255,120,0.25)] flex flex-col gap-7">
 
-          <h1 className="text-2xl sm:text-4xl font-bold text-green-400 text-center tracking-widest drop-shadow-[0_0_10px_#39FF14]">
-            CREATE CHALLENGE
-          </h1>
+        <h1 className="text-2xl sm:text-4xl font-bold text-green-400 text-center tracking-widest drop-shadow-[0_0_10px_#39FF14]">
+  {challengeScope === "group"
+    ? "CREATE GROUP CHALLENGE"
+    : "CREATE CHALLENGE"}
+</h1>
 
           <input
             placeholder="Challenge Title"

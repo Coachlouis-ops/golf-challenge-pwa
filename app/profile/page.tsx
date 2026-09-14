@@ -319,9 +319,9 @@ useEffect(() => {
       const autocomplete = new (window as any).google.maps.places.Autocomplete(
         clubInputRef.current,
         {
-          types: ["establishment"],
-          fields: ["name", "address_components"],
-        }
+  types: ["golf_course"],
+  fields: ["name", "address_components"],
+}
       );
 
       autocomplete.addListener("place_changed", () => {

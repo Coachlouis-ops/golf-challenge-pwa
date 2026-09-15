@@ -2,6 +2,42 @@
 
 import { useRouter } from "next/navigation";
 
+
+const sponsorLogos = [
+  "automovers1.png",
+  "bulls1.png",
+  "cellc1.png",
+  "cmv1.png",
+  "cross1.png",
+  "daimond1.png",
+  "fed1.png",
+  "finance1.png",
+  "flexon1.png",
+  "gobus1.png",
+  "golfc1.png",
+  "groot1.png",
+  "ibi1.png",
+  "issc1.png",
+  "jk6_1.png",
+  "joblack.png",
+  "kalah1.png",
+  "foton1.png",
+  "lepas1.png",
+  "localc1.png",
+  "mbale1.png",
+  "orion1.png",
+  "pelser1.png",
+  "sneller1.png",
+  "solarwarehouse1.png",
+  "dog1.png",
+  "whbo1.png",
+  "teez1.png",
+  "woodhill1.png",
+];
+
+
+
+
 export default function JK6MainDashboardPage() {
   const router = useRouter();
 
@@ -102,9 +138,58 @@ export default function JK6MainDashboardPage() {
             "
           >
             BACK TO CORPORATE DAYS
-          </button>
+                   </button>
 
         </section>
+
+        {/* SPONSORS */}
+        <section className="mt-8 pb-10">
+          <div className="text-center mb-6">
+            <p className="text-xs font-black tracking-[0.35em] text-red-500">
+              JK6 GOLF DAY 2026
+            </p>
+
+            <h2 className="mt-2 text-2xl font-black text-white">
+              SPONSORS & PARTNERS
+            </h2>
+
+            <div className="w-16 h-1 bg-red-500 rounded-full mx-auto mt-3 shadow-[0_0_12px_rgba(239,68,68,0.9)]" />
+          </div>
+
+          <div className="flex flex-col gap-4">
+            {sponsorLogos.map((logo) => (
+              <div
+                key={logo}
+                className="
+                  w-full
+                  min-h-[150px]
+                  bg-white
+                  rounded-3xl
+                  px-6
+                  py-5
+                  flex
+                  items-center
+                  justify-center
+                  border
+                  border-white/20
+                  shadow-[0_8px_30px_rgba(0,0,0,0.45)]
+                "
+              >
+                <img
+                  src={`/${logo}`}
+                  alt="JK6 Sponsor"
+                  className="
+                    w-full
+                    max-w-[340px]
+                    h-[110px]
+                    object-contain
+                  "
+                />
+              </div>
+            ))}
+          </div>
+        </section>
+
 
       </div>
     </main>

@@ -590,12 +590,6 @@ router.replace("/dashboard");
   Edit Profile
 </button>
 
-<button
-  onClick={() => router.push("/profile/my-career")}
-  className="w-full bg-black border-2 border-cyan-400 text-cyan-300 font-extrabold py-3 rounded-xl animate-pulse shadow-[0_0_24px_rgba(34,211,238,0.75)] hover:bg-cyan-400 hover:text-black hover:shadow-[0_0_38px_rgba(34,211,238,1)] transition-all duration-300"
->
-  My Career
-</button>
 
               <details className="bg-neutral-900 border border-green-500 rounded-xl p-4">
                 <summary className="cursor-pointer text-green-400 font-semibold">

@@ -2,8 +2,19 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "@/src/lib/AuthContext";
+
+
+import { doc, getDoc } from "firebase/firestore";
+import {
+  getFunctions,
+  httpsCallable,
+} from "firebase/functions";
+import { db } from "@/src/lib/firebase";
+
+const TOTAL_BOOSTERS = 200;
+
 
 type LockedFeature = {
   title: string;
@@ -21,6 +32,181 @@ function DashboardContent() {
 
   const [lockedFeature, setLockedFeature] =
     useState<LockedFeature | null>(null);
+
+
+    const [boosterBallsEarned, setBoosterBallsEarned] =
+  useState(0);
+
+const [boosterBallsOpened, setBoosterBallsOpened] =
+  useState(0);
+
+const [openedPositions, setOpenedPositions] =
+  useState<number[]>([]);
+
+const [openingBall, setOpeningBall] =
+  useState<number | null>(null);
+
+const [revealedBall, setRevealedBall] =
+  useState<{
+    number: number;
+    type: "career" | "improve_player";
+    boosterType: string;
+    rewardValue: number;
+  } | null>(null);
+
+const [openError, setOpenError] =
+  useState("");
+
+  useEffect(() => {
+  if (!user) return;
+
+  const uid = user.uid;
+
+  async function loadBoosterBoard() {
+    try {
+      const boosterRef = doc(
+        db,
+        "boosterBoards",
+        "2026",
+        "players",
+        uid
+      );
+
+      const boosterSnap =
+        await getDoc(boosterRef);
+
+      if (!boosterSnap.exists()) {
+        return;
+      }
+
+      const data = boosterSnap.data();
+
+      const earned = Number(
+        data.boosterBallsEarned ?? 0
+      );
+
+      const opened = Number(
+        data.boosterBallsOpened ?? 0
+      );
+
+      setBoosterBallsEarned(
+        Math.max(0, earned - opened)
+      );
+
+      setBoosterBallsOpened(opened);
+
+      const positions = Array.isArray(
+        data.openedPositions
+      )
+        ? data.openedPositions.map(
+            (position: unknown) =>
+              Number(position)
+          )
+        : [];
+
+      setOpenedPositions(
+        positions.filter(
+          (position: number) =>
+            Number.isInteger(position) &&
+            position >= 1 &&
+            position <= TOTAL_BOOSTERS
+        )
+      );
+    } catch (error) {
+      console.error(
+        "Unable to load Booster Board:",
+        error
+      );
+    }
+  }
+
+  loadBoosterBoard();
+}, [user]);
+
+
+async function handleOpenBoosterBall(
+  ballNumber: number
+) {
+  if (
+    !user ||
+    boosterBallsEarned <= 0 ||
+    openingBall !== null ||
+    openedPositions.includes(ballNumber)
+  ) {
+    return;
+  }
+
+  try {
+    setOpeningBall(ballNumber);
+    setOpenError("");
+    setRevealedBall(null);
+
+    const functions =
+      getFunctions(undefined, "europe-west1");
+
+    const openBoosterBall =
+      httpsCallable<
+        { ballNumber: number },
+        {
+          success: boolean;
+          ball: {
+            ballNumber: number;
+            ballType: "career" | "improve_player";
+            boosterType: string;
+            rewardValue: number;
+            boosterBallsEarned: number;
+            boosterBallsOpened: number;
+            boosterBallsAvailable: number;
+          };
+        }
+      >(
+        functions,
+        "openBoosterBall"
+      );
+
+    const response =
+      await openBoosterBall({
+        ballNumber,
+      });
+
+    const result = response.data.ball;
+
+    setOpenedPositions((current) =>
+      Array.from(
+        new Set([
+          ...current,
+          result.ballNumber,
+        ])
+      )
+    );
+
+    setBoosterBallsOpened(
+      result.boosterBallsOpened
+    );
+
+    setBoosterBallsEarned(
+      result.boosterBallsAvailable
+    );
+
+    setRevealedBall({
+      number: result.ballNumber,
+      type: result.ballType,
+      boosterType: result.boosterType,
+      rewardValue: result.rewardValue,
+    });
+  } catch (error) {
+    console.error(
+      "Unable to open Booster Ball:",
+      error
+    );
+
+    setOpenError(
+      "Unable to open this Booster Ball. Please try again."
+    );
+  } finally {
+    setOpeningBall(null);
+  }
+}
 
   const openCompetitiveFeature = (
     title: string,
@@ -209,6 +395,133 @@ function DashboardContent() {
             </div>
           )}
 
+{/* CHOOSE YOUR BOOSTER BALL */}
+{user && isSubscribed && (
+  <section className="mt-2 mb-6">
+    <div className="mb-4 text-center">
+      <p className="text-[9px] font-black uppercase tracking-[0.24em] text-cyan-400">
+        MYSTERY BOARD
+      </p>
+
+      <h2 className="mt-1 text-xl font-black text-white">
+        CHOOSE YOUR BOOSTER BALL
+      </h2>
+
+      <p className="mt-2 text-xs text-gray-300">
+        Balls Available:{" "}
+        <span className="font-black text-cyan-300">
+          {boosterBallsEarned}
+        </span>
+      </p>
+    </div>
+
+    <div className="rounded-2xl border border-cyan-400/40 bg-black/80 p-3 shadow-[0_0_30px_rgba(34,211,238,0.18)]">
+
+      {revealedBall && (
+        <div
+          className={`mb-4 rounded-xl border p-4 text-center ${
+            revealedBall.type === "improve_player"
+              ? "border-amber-400/50 bg-amber-400/[0.08]"
+              : "border-cyan-400/50 bg-cyan-400/[0.08]"
+          }`}
+        >
+          <p className="text-[9px] font-black uppercase tracking-[0.18em] text-gray-400">
+            Booster Ball {revealedBall.number}
+          </p>
+
+          <p
+            className={`mt-1 text-lg font-black uppercase ${
+              revealedBall.type === "improve_player"
+                ? "text-amber-300"
+                : "text-cyan-300"
+            }`}
+          >
+            {revealedBall.type === "career"
+              ? formatCareerBoosterType(
+                  revealedBall.boosterType
+                )
+              : formatBoosterType(
+                  revealedBall.boosterType
+                )}
+          </p>
+
+          {revealedBall.type === "career" &&
+            revealedBall.rewardValue > 0 && (
+              <p className="mt-2 text-xl font-black text-white">
+                +{revealedBall.rewardValue}{" "}
+                {formatCareerRewardUnit(
+                  revealedBall.boosterType
+                )}
+              </p>
+            )}
+
+          {revealedBall.type ===
+            "improve_player" && (
+            <button
+              type="button"
+              onClick={() =>
+                router.push(
+                  `/profile/rewards/improve-player/${revealedBall.boosterType}?ball=${revealedBall.number}`
+                )
+              }
+              className="mt-4 w-full rounded-xl border border-amber-400/50 bg-amber-400/10 px-4 py-3 text-xs font-black uppercase tracking-[0.14em] text-amber-300"
+            >
+              SELECT YOUR BOOSTER
+            </button>
+          )}
+        </div>
+      )}
+
+      {openError && (
+        <div className="mb-4 rounded-xl border border-red-400/40 bg-red-500/10 p-3 text-center text-xs font-bold text-red-300">
+          {openError}
+        </div>
+      )}
+
+      <div className="mb-3 flex items-center justify-between">
+        <p className="text-[8px] font-black uppercase tracking-[0.14em] text-gray-400">
+          20 ROWS × 10
+        </p>
+
+        <p className="text-[8px] font-black uppercase tracking-[0.14em] text-cyan-300">
+          {boosterBallsOpened} / 200 OPENED
+        </p>
+      </div>
+
+      <div className="grid grid-cols-10 gap-1">
+        {Array.from(
+          { length: TOTAL_BOOSTERS },
+          (_, index) => (
+            <DashboardBoosterPosition
+              key={index}
+              number={index + 1}
+              available={
+                boosterBallsEarned > 0 &&
+                openingBall === null &&
+                !openedPositions.includes(
+                  index + 1
+                )
+              }
+              opened={openedPositions.includes(
+                index + 1
+              )}
+              opening={
+                openingBall === index + 1
+              }
+              onOpen={() =>
+                handleOpenBoosterBall(
+                  index + 1
+                )
+              }
+            />
+          )
+        )}
+      </div>
+    </div>
+  </section>
+)}
+
+
           {/* MAIN DASHBOARD BUTTONS */}
           <div className="space-y-4">
 
@@ -286,6 +599,23 @@ function DashboardContent() {
             >
               MY PROFILE
             </button>
+
+<button
+  onClick={() =>
+    openCompetitiveFeature(
+      "My Career",
+      "/profile/my-career"
+    )
+  }
+  className={`arena-btn neon-blue ${
+    competitiveFeaturesLocked
+      ? "locked-btn"
+      : ""
+  }`}
+>
+  MY CAREER
+</button>
+
 
             <button
               onClick={() =>
@@ -670,4 +1000,118 @@ function DashboardContent() {
 
 export default function Dashboard() {
   return <DashboardContent />;
+}
+
+function DashboardBoosterPosition({
+  number,
+  available,
+  opened,
+  opening,
+  onOpen,
+}: {
+  number: number;
+  available: boolean;
+  opened: boolean;
+  opening: boolean;
+  onOpen: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onOpen}
+      disabled={!available || opening}
+      className={`relative aspect-square rounded-full border transition ${
+        opened
+          ? "cursor-default border-amber-400/60 bg-amber-300 opacity-80 shadow-[0_0_10px_rgba(251,191,36,0.25)]"
+          : available
+          ? "border-cyan-300/70 bg-white shadow-[0_0_12px_rgba(34,211,238,0.35)] active:scale-95"
+          : "cursor-default border-slate-600 bg-slate-300 opacity-55"
+      }`}
+    >
+      <div className="absolute inset-[3px] rounded-full bg-[radial-gradient(circle_at_30%_30%,#ffffff,#cfd8dc)]" />
+
+      <span
+        className={`absolute inset-0 z-10 flex items-center justify-center font-black ${
+          opened
+            ? "text-[10px] text-amber-900"
+            : "text-[8px] text-slate-700"
+        }`}
+      >
+        {opening
+          ? "..."
+          : opened
+          ? "✓"
+          : number}
+      </span>
+    </button>
+  );
+}
+
+function formatBoosterType(
+  boosterType: string
+) {
+  const names: Record<string, string> = {
+    player_protecting:
+      "Player Protecting Booster",
+
+    player_reload:
+      "Player Reload Booster",
+
+    player_tech:
+      "Player Technical Booster",
+
+    player_accessory:
+      "Player Accessories Booster",
+
+    player_image:
+      "Player Image Booster",
+  };
+
+  return (
+    names[boosterType] ||
+    "Improve Player Booster"
+  );
+}
+
+function formatCareerBoosterType(
+  boosterType: string
+) {
+  const names: Record<string, string> = {
+    career_points:
+      "Career Points Booster",
+
+    career_xp:
+      "Career XP Booster",
+
+    ranking_points:
+      "Ranking Points Booster",
+
+    race_points:
+      "Race Points Booster",
+  };
+
+  return (
+    names[boosterType] ||
+    "Career Booster"
+  );
+}
+
+function formatCareerRewardUnit(
+  boosterType: string
+) {
+  const names: Record<string, string> = {
+    career_points:
+      "CAREER POINTS",
+
+    career_xp:
+      "CAREER XP",
+
+    ranking_points:
+      "RANKING POINTS",
+
+    race_points:
+      "RACE POINTS",
+  };
+
+  return names[boosterType] || "POINTS";
 }

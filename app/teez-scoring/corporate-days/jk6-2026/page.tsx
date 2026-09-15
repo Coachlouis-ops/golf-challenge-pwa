@@ -21,6 +21,7 @@ const sponsorLogos = [
   "jk6_1.png",
   "joblack.png",
   "kalah1.png",
+  "lions1.png",
   "foton1.png",
   "lepas1.png",
   "localc1.png",

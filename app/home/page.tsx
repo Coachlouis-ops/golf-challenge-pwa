@@ -44,7 +44,7 @@ export default function HomeDashboardPage() {
             <div className="absolute inset-0 scale-110 rounded-full bg-blue-500/20 blur-3xl" />
 
             <img
-              src="/teez-app-icon-v4.png"
+              src="/transparent.png"
               alt="Teez Golf Challenges"
               className="relative w-[150px] drop-shadow-[0_0_28px_rgba(0,153,255,0.8)] sm:w-[185px] md:w-[220px]"
             />

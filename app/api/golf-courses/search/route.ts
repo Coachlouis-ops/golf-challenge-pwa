@@ -1,5 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 
+
+const TEEZ_CUSTOM_COURSES = [
+  {
+    placeId: "teez-sishen-golf-club",
+    name: "Sishen Golf Club",
+    description: "Sishen Golf Club, Northern Cape, South Africa",
+    secondaryText: "Northern Cape, South Africa",
+    stateProvince: "Northern Cape",
+    country: "South Africa",
+  },
+];
+
+
 export async function GET(
   request: NextRequest
 ) {
@@ -96,56 +109,72 @@ export async function GET(
       );
     }
 
-    const results =
-      (
-        googleData.suggestions ||
-        []
-      )
-        .map(
-          (suggestion: any) => {
-            const prediction =
-              suggestion
-                ?.placePrediction;
+   const googleResults =
+  (
+    googleData.suggestions ||
+    []
+  )
+    .map(
+      (suggestion: any) => {
+        const prediction =
+          suggestion?.placePrediction;
 
-            if (
-              !prediction
-            ) {
-              return null;
-            }
+        if (!prediction) {
+          return null;
+        }
 
-            return {
-              placeId:
-                prediction.placeId ||
-                "",
+        return {
+          placeId:
+            prediction.placeId || "",
 
-              name:
-                prediction
-                  .structuredFormat
-                  ?.mainText
-                  ?.text ||
-                prediction.text
-                  ?.text ||
-                "",
+          name:
+            prediction
+              .structuredFormat
+              ?.mainText
+              ?.text ||
+            prediction.text?.text ||
+            "",
 
-              description:
-                prediction.text
-                  ?.text ||
-                "",
+          description:
+            prediction.text?.text ||
+            "",
 
-              secondaryText:
-                prediction
-                  .structuredFormat
-                  ?.secondaryText
-                  ?.text ||
-                "",
-            };
-          }
-        )
-        .filter(Boolean);
+          secondaryText:
+            prediction
+              .structuredFormat
+              ?.secondaryText
+              ?.text ||
+            "",
+        };
+      }
+    )
+    .filter(Boolean);
 
-    return NextResponse.json({
-      results,
-    });
+const normalizedInput =
+  input.toLowerCase();
+
+const customResults =
+  TEEZ_CUSTOM_COURSES.filter(
+    (course) =>
+      course.name
+        .toLowerCase()
+        .includes(normalizedInput) ||
+      course.description
+        .toLowerCase()
+        .includes(normalizedInput)
+  );
+
+const results = [
+  ...customResults,
+  ...googleResults,
+];
+
+return NextResponse.json({
+  results,
+});
+
+
+
   } catch (error) {
     console.error(
       "Golf course search error:",

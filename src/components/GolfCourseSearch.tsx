@@ -184,6 +184,18 @@ export default function GolfCourseSearch({
     async (
       course: GolfCourseSearchResult
     ) => {
+
+      if (
+        course.placeId.startsWith("teez-")
+      ) {
+        setSearchValue(course.name);
+        setResults([]);
+        setOpen(false);
+
+        onSelect(course);
+        return;
+      }
+
       try {
         setSearchValue(
           course.name

@@ -283,7 +283,7 @@ async function handleOpenBoosterBall(
         <div className="flex justify-center pt-6 pb-2">
           <div className="relative w-[230px] h-[230px] drop-shadow-[0_0_35px_rgba(0,170,255,0.75)]">
             <Image
-              src="/teez-app-icon-v4.png"
+              src="/transparent.png"
               alt="Teez Golf Challenges"
               fill
               priority

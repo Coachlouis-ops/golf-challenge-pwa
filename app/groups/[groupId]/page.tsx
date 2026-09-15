@@ -18,6 +18,25 @@ import {
   functions,
 } from "@/src/lib/firebase";
 
+type LastChallengeResult = {
+  uid: string;
+  playerName: string;
+  battleName: string;
+  displayName: string;
+  position: number;
+  pointsEarned: number;
+  total: number;
+};
+
+type LastChallenge = {
+  challengeId: string;
+  challengeTitle: string;
+  gameFormat: string;
+  scoringMethod: string;
+  courseName: string;
+  results: LastChallengeResult[];
+};
+
 type Group = {
   groupId: string;
   groupName: string;
@@ -34,6 +53,8 @@ type Group = {
   memberCount: number;
 
   status: string;
+
+  lastChallenge: LastChallenge | null;
 };
 
 type GroupMember = {
@@ -46,6 +67,8 @@ type GroupMember = {
 
   role: string;
   status: string;
+
+  groupPoints: number;
 };
 
 type Profile = {
@@ -56,6 +79,9 @@ type Profile = {
   club: string;
   searchIndex: string;
 };
+
+
+
 
 export default function GroupDetailPage() {
   const { user } = useAuth();
@@ -181,8 +207,51 @@ export default function GroupDetailPage() {
           ),
 
         status:
-          data.status ||
-          "active",
+  data.status ||
+  "active",
+
+lastChallenge:
+  data.lastChallenge &&
+  typeof data.lastChallenge === "object"
+    ? {
+        challengeId:
+          String(
+            data.lastChallenge.challengeId ||
+            ""
+          ),
+
+        challengeTitle:
+          String(
+            data.lastChallenge.challengeTitle ||
+            ""
+          ),
+
+        gameFormat:
+          String(
+            data.lastChallenge.gameFormat ||
+            ""
+          ),
+
+        scoringMethod:
+          String(
+            data.lastChallenge.scoringMethod ||
+            ""
+          ),
+
+        courseName:
+          String(
+            data.lastChallenge.courseName ||
+            ""
+          ),
+
+        results:
+          Array.isArray(
+            data.lastChallenge.results
+          )
+            ? data.lastChallenge.results
+            : [],
+      }
+    : null,
       };
 
       // ----------------------------------------------------------
@@ -262,11 +331,16 @@ export default function GroupDetailPage() {
                   "member"
                 ),
 
-              status:
-                String(
-                  memberData.status ||
-                  "active"
-                ),
+             status:
+  String(
+    memberData.status ||
+    "active"
+  ),
+
+groupPoints:
+  Number(
+    memberData.groupPoints || 0
+  ),
             };
           }
         );
@@ -893,6 +967,160 @@ export default function GroupDetailPage() {
           </div>
 
         </section>
+
+
+
+        {/* ===================================================== */}
+        {/* OVERALL GROUP RANKING */}
+        {/* ===================================================== */}
+
+        <section className="border-2 border-yellow-400/50 bg-yellow-950/10 rounded-3xl p-5 shadow-[0_0_35px_rgba(250,204,21,0.12)]">
+
+          <div className="text-xs font-bold tracking-[0.25em] text-yellow-400">
+            GROUP COMPETITION
+          </div>
+
+          <h2 className="text-2xl font-black mt-1">
+            OVERALL GROUP RANKING
+          </h2>
+
+          <div className="flex flex-col gap-2 mt-5">
+
+            {[...members]
+              .sort(
+                (a, b) =>
+                  b.groupPoints -
+                  a.groupPoints
+              )
+              .map(
+                (member, index) => {
+
+                  const displayName =
+                    member.battleName ||
+                    `${member.name} ${member.surname}`.trim() ||
+                    "TEEZ Player";
+
+                  return (
+                    <div
+                      key={member.uid}
+                      className="flex items-center justify-between gap-4 border border-yellow-400/20 bg-black/50 rounded-xl px-4 py-3"
+                    >
+
+                      <div className="flex items-center gap-3">
+
+                        <div className="w-8 text-center text-yellow-400 font-black">
+                          {index + 1}.
+                        </div>
+
+                        <div className="font-bold text-white">
+                          {displayName}
+                        </div>
+
+                      </div>
+
+                      <div className="font-black text-yellow-400 whitespace-nowrap">
+                        {member.groupPoints} pts
+                      </div>
+
+                    </div>
+                  );
+                }
+              )}
+
+          </div>
+
+        </section>
+
+
+
+                {/* ===================================================== */}
+        {/* LAST CHALLENGE RESULTS */}
+        {/* ===================================================== */}
+
+        <section className="border-2 border-cyan-400/40 bg-cyan-950/10 rounded-3xl p-5 shadow-[0_0_35px_rgba(34,211,238,0.12)]">
+
+          <div className="text-xs font-bold tracking-[0.25em] text-cyan-300">
+            LATEST RESULT
+          </div>
+
+          <h2 className="text-2xl font-black mt-1">
+            LAST CHALLENGE RESULTS
+          </h2>
+
+          {group.lastChallenge ? (
+            <>
+
+              <div className="mt-4">
+
+                <div className="text-lg font-black text-white">
+                  {group.lastChallenge.challengeTitle ||
+                    "Group Challenge"}
+                </div>
+
+                <div className="text-sm text-gray-400 mt-1">
+                  {[
+                    group.lastChallenge.courseName,
+                    group.lastChallenge.gameFormat,
+                    group.lastChallenge.scoringMethod,
+                  ]
+                    .filter(Boolean)
+                    .join(" • ")}
+                </div>
+
+              </div>
+
+              <div className="flex flex-col gap-2 mt-5">
+
+                {group.lastChallenge.results
+                  .slice()
+                  .sort(
+                    (a, b) =>
+                      Number(a.position) -
+                      Number(b.position)
+                  )
+                  .map((result) => (
+
+                    <div
+                      key={result.uid}
+                      className="flex items-center justify-between gap-4 border border-cyan-400/20 bg-black/50 rounded-xl px-4 py-3"
+                    >
+
+                      <div className="flex items-center gap-3">
+
+                        <div className="w-8 text-center text-cyan-300 font-black">
+                          {result.position}.
+                        </div>
+
+                        <div className="font-bold text-white">
+                          {result.displayName ||
+                            result.battleName ||
+                            result.playerName ||
+                            "TEEZ Player"}
+                        </div>
+
+                      </div>
+
+                      <div className="font-black text-green-400 whitespace-nowrap">
+                        +{result.pointsEarned} pts
+                      </div>
+
+                    </div>
+
+                  ))}
+
+              </div>
+
+            </>
+          ) : (
+
+            <div className="mt-4 border border-neutral-700 bg-black/40 rounded-xl p-4 text-gray-400 text-sm">
+              No Group Challenge has been finalized yet.
+            </div>
+
+          )}
+
+        </section>
+
 
 
         {/* ===================================================== */}

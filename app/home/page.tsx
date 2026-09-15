@@ -69,30 +69,32 @@ export default function HomeDashboardPage() {
 <div className="mt-8 flex w-full max-w-xl flex-col gap-3 sm:mt-10">
 
   {/* OPEN APP */}
-  <button
-    onClick={() => router.push("/dashboard")}
-    className="
-      group relative overflow-hidden
-      rounded-xl border-2 border-green-300
-      bg-green-500/20
-      px-5 py-4
-      text-center text-sm font-black
-      uppercase tracking-[0.18em]
-      text-white
-      shadow-[0_0_24px_rgba(74,222,128,0.75),inset_0_0_18px_rgba(74,222,128,0.12)]
-      backdrop-blur-md
-      transition-all duration-300
-      animate-pulse
-      hover:scale-[1.025]
-      hover:bg-green-500/30
-      hover:shadow-[0_0_38px_rgba(74,222,128,1)]
-    "
-  >
-    <span className="relative">
-      OPEN APP
-    </span>
-  </button>
+<button
+  onClick={() => router.push("/dashboard")}
+  className="
+    group relative overflow-hidden
+    rounded-xl border border-blue-300/70
+    bg-blue-500/10
+    px-5 py-4
+    text-center text-xs font-black
+    uppercase tracking-[0.16em]
+    text-white
+    shadow-[0_0_18px_rgba(0,153,255,0.45),inset_0_0_18px_rgba(0,153,255,0.08)]
+    backdrop-blur-md
+    transition-all duration-300
+    hover:scale-[1.025]
+    hover:border-cyan-200
+    hover:bg-blue-500/25
+    hover:shadow-[0_0_32px_rgba(0,174,255,0.8),inset_0_0_22px_rgba(0,174,255,0.16)]
+    sm:text-sm
+  "
+>
+  <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
 
+  <span className="relative">
+    OPEN APP
+  </span>
+</button>
   {actions.map((action) => (
               <button
                 key={action}

@@ -19,7 +19,7 @@ const teams = [
   "GOBUSINESS",
   "GOLF CIRCLE",
   "GROOT FM",
-  "IBL",
+  "IBI",
   "ISSC",
   "JK6",
   "JO BLACK",

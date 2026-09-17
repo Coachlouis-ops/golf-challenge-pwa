@@ -138,6 +138,12 @@ const [isEditing, setIsEditing] = useState(false);
 const [profileExists, setProfileExists] = useState(false);
 const [showClubNotice, setShowClubNotice] = useState(false);
 const [clubNoticeRead, setClubNoticeRead] = useState(false);
+
+const [
+  profileValidationMessage,
+  setProfileValidationMessage,
+] = useState("");
+
 const [phoneCountryCode, setPhoneCountryCode] =
   useState("");
 
@@ -303,44 +309,129 @@ useEffect(() => {
  
 
 
-    /* SAVE PROFILE */
-  async function saveProfile() {
-    if (!user) return;
+   /* SAVE PROFILE */
+async function saveProfile() {
+  if (!user) return;
 
-    // DOB VALIDATION (YYYY/MM/DD)
-    const dobRegex = /^\d{4}\/\d{2}\/\d{2}$/;
+  if (!profile.name.trim()) {
+    setProfileValidationMessage(
+      "Please enter your Name."
+    );
+    return;
+  }
 
-    if (!dobRegex.test(profile.dateOfBirth)) {
-      alert(
-        "Date of Birth must be in format YYYY/MM/DD (e.g. 1977/12/30)"
-      );
-      return;
-    }
+  if (!profile.surname.trim()) {
+    setProfileValidationMessage(
+      "Please enter your Surname."
+    );
+    return;
+  }
 
-if (!phoneCountryCode) {
-  alert("Please select your country calling code.");
-  return;
-}
+  if (!profile.battleName.trim()) {
+    setProfileValidationMessage(
+      "Please enter your Battle Name."
+    );
+    return;
+  }
 
-if (!phoneLocalNumber.trim()) {
-  alert("Please enter your cellphone number.");
-  return;
-}
+  if (!profile.club.trim()) {
+    setProfileValidationMessage(
+      "Please select your Golf Club."
+    );
+    return;
+  }
 
-const normalizedPhoneNumber =
-  `${phoneCountryCode}${phoneLocalNumber}`.replace(
-    /[^\d+]/g,
-    ""
-  );
+  if (!profile.stateProvince.trim()) {
+    setProfileValidationMessage(
+      "Please enter your Province / State."
+    );
+    return;
+  }
 
-if (!/^\+[1-9]\d{6,14}$/.test(normalizedPhoneNumber)) {
-  alert(
-    "Please enter a valid international cellphone number."
-  );
-  return;
-}
+  if (!profile.country.trim()) {
+    setProfileValidationMessage(
+      "Please select your Country."
+    );
+    return;
+  }
 
-    setSaving(true);
+  if (!profile.division) {
+    setProfileValidationMessage(
+      "Please select your Player Division."
+    );
+    return;
+  }
+
+  if (!profile.dateOfBirth.trim()) {
+    setProfileValidationMessage(
+      "Please select your Date of Birth."
+    );
+    return;
+  }
+
+  const dobRegex =
+    /^\d{4}\/\d{2}\/\d{2}$/;
+
+  if (
+    !dobRegex.test(
+      profile.dateOfBirth
+    )
+  ) {
+    setProfileValidationMessage(
+      "Please select a valid Date of Birth."
+    );
+    return;
+  }
+
+  if (!profile.identificationType) {
+    setProfileValidationMessage(
+      "Please select your Identification Type."
+    );
+    return;
+  }
+
+  if (!profile.idNumber.trim()) {
+    setProfileValidationMessage(
+      profile.identificationType ===
+        "passport"
+        ? "Please enter your Passport Number."
+        : "Please enter your National ID Number."
+    );
+    return;
+  }
+
+  if (!phoneCountryCode) {
+    setProfileValidationMessage(
+      "Please select your cellphone Country Code."
+    );
+    return;
+  }
+
+  if (!phoneLocalNumber.trim()) {
+    setProfileValidationMessage(
+      "Please enter your Cellphone Number."
+    );
+    return;
+  }
+
+  const normalizedPhoneNumber =
+    `${phoneCountryCode}${phoneLocalNumber}`.replace(
+      /[^\d+]/g,
+      ""
+    );
+
+  if (
+    !/^\+[1-9]\d{6,14}$/.test(
+      normalizedPhoneNumber
+    )
+  ) {
+    setProfileValidationMessage(
+      "Please enter a valid international Cellphone Number."
+    );
+    return;
+  }
+
+  setSaving(true);
 
     try {
       // -------------------------------------------------
@@ -967,6 +1058,37 @@ router.replace("/dashboard");
           </div>
         )}
       </div>
+
+
+  {profileValidationMessage && (
+  <div className="fixed inset-0 z-[10000] bg-black/90 flex items-center justify-center px-4">
+    <div className="w-full max-w-md bg-neutral-950 border-2 border-cyan-400 rounded-2xl p-6 shadow-[0_0_40px_rgba(34,211,238,0.45)] space-y-5">
+      <div className="text-center space-y-3">
+        <h2 className="text-2xl font-extrabold text-cyan-300 drop-shadow-[0_0_12px_rgba(34,211,238,0.9)]">
+          COMPLETE YOUR PROFILE
+        </h2>
+
+        <p className="text-white text-base font-semibold leading-relaxed">
+          {profileValidationMessage}
+        </p>
+
+        <p className="text-sm text-gray-400">
+          All profile information must be completed before your profile can be saved.
+        </p>
+      </div>
+
+      <button
+        type="button"
+        onClick={() =>
+          setProfileValidationMessage("")
+        }
+        className="w-full bg-cyan-400 hover:bg-cyan-300 text-black font-extrabold py-3 rounded-xl shadow-[0_0_22px_rgba(34,211,238,0.55)] transition-all duration-300"
+      >
+        COMPLETE PROFILE
+      </button>
+    </div>
+  </div>
+)}    
 
 {showClubNotice && (
  <div className="fixed inset-0 z-[9999] bg-black/90 flex items-center justify-center px-4">

@@ -14,7 +14,7 @@ import {
   where,
 } from "firebase/firestore";
 import { httpsCallable } from "firebase/functions";
-
+import { useTeezNotification } from "@/src/components/TeezNotificationProvider";
 import ParticipantsList from "./ParticipantsList";
 import PlayerSummaryList from "./PlayerSummaryList";
 import ResultsList from "./ResultsList";
@@ -61,6 +61,11 @@ export default function ChallengeDetailPage() {
   const { user } = useAuth();
   const params = useParams();
   const router = useRouter();
+
+const { teezAlert, teezConfirm } =
+  useTeezNotification();
+
+
 
   const challengeId = Array.isArray(params?.challengeId)
     ? params.challengeId[0]
@@ -322,9 +327,16 @@ const snap = await getDoc(doc(db, "challenges", challengeId));
             : prev
         );
       }
-    } catch (e: any) {
-      alert(e.message || "Failed to update scoreboard");
-    } finally {
+   } catch (e: any) {
+  await teezAlert({
+    title: "SCOREBOARD NOT UPDATED",
+    message:
+      e?.message ||
+      "Failed to update the scoreboard.",
+    type: "error",
+    buttonText: "TRY AGAIN",
+  });
+} finally {
       setUpdating(false);
     }
   }
@@ -338,16 +350,22 @@ const snap = await getDoc(doc(db, "challenges", challengeId));
 
     setFinalizing(true);
 
-    const confirmFinalize = window.confirm(
-      "Are you sure you want to finalize this challenge?\n\nThis action cannot be undone."
-    );
+const confirmFinalize =
+  await teezConfirm({
+    title: "FINALIZE CHALLENGE",
+    message:
+      "Are you sure you want to finalize this challenge?\n\nThis action cannot be undone.",
+    type: "warning",
+    confirmText: "FINALIZE",
+    cancelText: "CANCEL",
+  });
 
-    if (!confirmFinalize) {
-      setFinalizing(false);
-      return;
-    }
+if (!confirmFinalize) {
+  setFinalizing(false);
+  return;
+}
 
-    try {
+try {
       const finalize = httpsCallable(functions, "finalizeChallenge");
 
       await finalize({ challengeId });
@@ -365,8 +383,15 @@ const snap = await getDoc(doc(db, "challenges", challengeId));
         );
       }
     } catch (e: any) {
-      alert(e.message || "Failed to finalize challenge");
-    } finally {
+  await teezAlert({
+    title: "CHALLENGE NOT FINALIZED",
+    message:
+      e?.message ||
+      "Failed to finalize the challenge.",
+    type: "error",
+    buttonText: "TRY AGAIN",
+  });
+} finally {
       setFinalizing(false);
     }
   }
@@ -392,8 +417,15 @@ const snap = await getDoc(doc(db, "challenges", challengeId));
       setSearchTerm("");
       setSearchResults([]);
     } catch (e: any) {
-      alert(e.message || "Invite failed");
-    } finally {
+  await teezAlert({
+    title: "INVITE NOT SENT",
+    message:
+      e?.message ||
+      "The player invite could not be sent.",
+    type: "error",
+    buttonText: "TRY AGAIN",
+  });
+} finally {
       setInvitingUid(null);
     }
   }

@@ -10,6 +10,9 @@ import { countries } from "@/src/lib/countries";
 
 import GolfCourseSearch from "@/src/components/GolfCourseSearch";
 
+import { useTeezNotification } from "@/src/components/TeezNotificationProvider";
+
+
 type PlayerProfile = {
   name?: string;
   surname?: string;
@@ -28,6 +31,7 @@ type GroupForm = {
 export default function CreateGroupPage() {
   const router = useRouter();
   const { user } = useAuth();
+  const { teezAlert } = useTeezNotification();
 
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -50,61 +54,67 @@ export default function CreateGroupPage() {
   const uid = user.uid;
 
   async function loadProfile() {
-      try {
-       const profileRef = doc(
-  db,
-  "profiles",
-  uid
-);
+  try {
+    const profileRef = doc(
+      db,
+      "profiles",
+      uid
+    );
 
-        const profileSnap =
-          await getDoc(profileRef);
+    const profileSnap =
+      await getDoc(profileRef);
 
-        if (!profileSnap.exists()) {
-          alert(
-            "Please complete your Teez Profile before creating a group."
-          );
+    if (!profileSnap.exists()) {
+      await teezAlert({
+        title: "PROFILE REQUIRED",
+        message:
+          "Please complete your Teez Profile before creating a group.",
+        type: "warning",
+        buttonText: "COMPLETE PROFILE",
+      });
 
-          router.replace("/profile");
-          return;
-        }
-
-        const profile =
-          profileSnap.data() as PlayerProfile;
-
-        const fullName =
-          `${profile.name || ""} ${
-            profile.surname || ""
-          }`.trim();
-
-        setCreatorName(fullName);
-
-        // Default the group location to the
-        // creator's existing profile.
-        setGroup((prev) => ({
-          ...prev,
-          club: profile.club || "",
-          stateProvince:
-            profile.stateProvince || "",
-          country:
-            profile.country || "",
-        }));
-      } catch (error) {
-        console.error(
-          "LOAD CREATOR PROFILE ERROR:",
-          error
-        );
-
-        alert(
-          "Unable to load your player profile."
-        );
-      } finally {
-        setLoading(false);
-      }
+      router.replace("/profile");
+      return;
     }
 
+    const profile =
+      profileSnap.data() as PlayerProfile;
+
+    const fullName =
+      `${profile.name || ""} ${
+        profile.surname || ""
+      }`.trim();
+
+    setCreatorName(fullName);
+
+    setGroup((prev) => ({
+      ...prev,
+      club: profile.club || "",
+      stateProvince:
+        profile.stateProvince || "",
+      country:
+        profile.country || "",
+    }));
+  } catch (error) {
+    console.error(
+      "LOAD CREATOR PROFILE ERROR:",
+      error
+    );
+
+    await teezAlert({
+      title: "PROFILE NOT LOADED",
+      message:
+        "Unable to load your player profile.",
+      type: "error",
+      buttonText: "CONTINUE",
+    });
+  } finally {
+    setLoading(false);
+  }
+}
+
     loadProfile();
-  }, [user, router]);
+  }, [user, router, teezAlert]);
 
   // -------------------------------------------------
   // CREATE GROUP
@@ -112,27 +122,49 @@ export default function CreateGroupPage() {
   async function createGroup() {
     if (!user) return;
 
-    if (!group.groupName.trim()) {
-      alert("Please enter a Group Name.");
-      return;
-    }
+  if (!group.groupName.trim()) {
+  await teezAlert({
+    title: "GROUP NAME REQUIRED",
+    message:
+      "Please enter a Group Name.",
+    type: "warning",
+    buttonText: "CONTINUE",
+  });
+  return;
+}
 
-    if (!group.club.trim()) {
-      alert("Please select a Golf Club.");
-      return;
-    }
+if (!group.club.trim()) {
+  await teezAlert({
+    title: "GOLF CLUB REQUIRED",
+    message:
+      "Please select a Golf Club.",
+    type: "warning",
+    buttonText: "CONTINUE",
+  });
+  return;
+}
 
-    if (!group.stateProvince.trim()) {
-      alert(
-        "Please enter the Province / State."
-      );
-      return;
-    }
+if (!group.stateProvince.trim()) {
+  await teezAlert({
+    title: "LOCATION REQUIRED",
+    message:
+      "Please enter the Province / State.",
+    type: "warning",
+    buttonText: "CONTINUE",
+  });
+  return;
+}
 
-    if (!group.country.trim()) {
-      alert("Please select a Country.");
-      return;
-    }
+if (!group.country.trim()) {
+  await teezAlert({
+    title: "COUNTRY REQUIRED",
+    message:
+      "Please select a Country.",
+    type: "warning",
+    buttonText: "CONTINUE",
+  });
+  return;
+}
 
     setSaving(true);
 
@@ -157,10 +189,16 @@ export default function CreateGroupPage() {
           group.country.trim(),
       });
 
-      alert("Group created successfully.");
+     await teezAlert({
+  title: "GROUP CREATED",
+  message:
+    "Your Teez Golf Group has been created successfully.",
+  type: "success",
+  buttonText: "OPEN GROUPS",
+});
 
-      // Saved groups live on the Group Profile Dashboard.
-      router.replace("/groups");
+// Saved groups live on the Group Profile Dashboard.
+router.replace("/groups");
     } catch (error: any) {
       console.error(
         "CREATE GROUP ERROR:",
@@ -173,20 +211,29 @@ export default function CreateGroupPage() {
             "Failed to create group."
         );
 
-      if (
-        message
-          .toLowerCase()
-          .includes(
-            "participation access"
-          )
-      ) {
-        alert(
-          "Active Participation Access is required to create a group."
-        );
-        return;
-      }
+     if (
+  message
+    .toLowerCase()
+    .includes(
+      "participation access"
+    )
+) {
+  await teezAlert({
+    title: "PARTICIPATION ACCESS REQUIRED",
+    message:
+      "Active Participation Access is required to create a group.",
+    type: "warning",
+    buttonText: "CONTINUE",
+  });
+  return;
+}
 
-      alert(message);
+await teezAlert({
+  title: "GROUP NOT CREATED",
+  message,
+  type: "error",
+  buttonText: "TRY AGAIN",
+});
     } finally {
       setSaving(false);
     }

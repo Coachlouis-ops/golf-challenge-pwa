@@ -11,6 +11,11 @@ import {
 import { httpsCallable } from "firebase/functions";
 import { db, functions } from "@/src/lib/firebase";
 import { useAuth } from "@/src/lib/AuthContext";
+import { useTeezNotification } from "@/src/components/TeezNotificationProvider";
+
+
+
+
 
 type InviteItem = {
   id: string;
@@ -32,6 +37,8 @@ type InviteItem = {
 export default function MyInvitesPage() {
   const { user } = useAuth();
   const router = useRouter();
+  const { teezAlert, teezConfirm } =
+    useTeezNotification();
 
   const [invites, setInvites] = useState<InviteItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -155,12 +162,16 @@ async function handleAcceptGroup(
     router.push(
       `/groups/${groupId}`
     );
-  } catch (e: any) {
-    alert(
-      e.message ||
-      "Failed to accept group invite"
-    );
-  } finally {
+ } catch (e: any) {
+  await teezAlert({
+    title: "GROUP INVITE NOT ACCEPTED",
+    message:
+      e?.message ||
+      "Failed to accept the Group invite.",
+    type: "error",
+    buttonText: "TRY AGAIN",
+  });
+} finally {
     setProcessingId(null);
   }
 }
@@ -170,12 +181,17 @@ async function handleAcceptGroup(
   async function handleAccept(challengeId: string) {
     if (!user) return;
 
-    const confirmed = window.confirm(
-      "Accepting this match will spend the listed entry tokens from your wallet."
-    );
+    const confirmed =
+  await teezConfirm({
+    title: "ACCEPT MATCH",
+    message:
+      "Accepting this match will spend the listed entry tokens from your wallet.",
+    type: "warning",
+    confirmText: "ACCEPT MATCH",
+    cancelText: "CANCEL",
+  });
 
-    if (!confirmed) return;
-
+if (!confirmed) return;
     try {
       setProcessingId(challengeId);
 
@@ -184,8 +200,15 @@ async function handleAcceptGroup(
       await acceptSecure({ challengeId });
       await loadInvites(user.uid);
     } catch (e: any) {
-      alert(e.message || "Failed to accept invite");
-    } finally {
+  await teezAlert({
+    title: "MATCH NOT ACCEPTED",
+    message:
+      e?.message ||
+      "Failed to accept the Match invite.",
+    type: "error",
+    buttonText: "TRY AGAIN",
+  });
+} finally {
       setProcessingId(null);
     }
   }
@@ -200,9 +223,16 @@ async function handleAcceptGroup(
 
       await declineSecure({ challengeId });
       await loadInvites(user.uid);
-    } catch (e: any) {
-      alert(e.message || "Failed to decline invite");
-    } finally {
+  } catch (e: any) {
+  await teezAlert({
+    title: "INVITE NOT DECLINED",
+    message:
+      e?.message ||
+      "Failed to decline the Match invite.",
+    type: "error",
+    buttonText: "TRY AGAIN",
+  });
+} finally {
       setProcessingId(null);
     }
   }

@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { functions } from "@/src/lib/firebase";
 import RequireAuth from "@/src/lib/RequireAuth";
 import GolfCourseSearch from "@/src/components/GolfCourseSearch";
-
+import { useTeezNotification } from "@/src/components/TeezNotificationProvider";
 
 
 
@@ -328,6 +328,7 @@ function CapsuleGroup({
 
 export default function CreateChallengePage() {
   const router = useRouter();
+  const { teezAlert } = useTeezNotification();
 
   const [challengeScope, setChallengeScope] =
     useState<"normal" | "group">("normal");
@@ -475,11 +476,17 @@ const isValid =
   scoringMethod &&
   courseName.trim().length > 0;
 
-  async function handleCreate() {
-    if (!isValid) {
-      alert("Please complete all fields correctly.");
-      return;
-    }
+ async function handleCreate() {
+  if (!isValid) {
+    await teezAlert({
+      title: "COMPLETE CHALLENGE",
+      message:
+        "Please complete all challenge information correctly before creating the match.",
+      type: "warning",
+      buttonText: "CONTINUE",
+    });
+    return;
+  }
 
     try {
       setLoading(true);
@@ -526,10 +533,20 @@ const result: any = await createChallenge({
 
       router.push(`/challenges/${challengeId}`);
     } catch (err: any) {
-      alert(
-        err.message || "Failed to create challenge"
-      );
-    } finally {
+  console.error(
+    "CREATE CHALLENGE ERROR:",
+    err
+  );
+
+  await teezAlert({
+    title: "CHALLENGE NOT CREATED",
+    message:
+      err?.message ||
+      "We could not create your challenge. Please try again.",
+    type: "error",
+    buttonText: "TRY AGAIN",
+  });
+} finally {
       setLoading(false);
     }
   }

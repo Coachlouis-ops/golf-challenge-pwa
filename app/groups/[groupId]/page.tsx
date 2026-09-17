@@ -13,6 +13,9 @@ import {
 import { httpsCallable } from "firebase/functions";
 
 import { useAuth } from "@/src/lib/AuthContext";
+
+import { useTeezNotification } from "@/src/components/TeezNotificationProvider";
+
 import {
   db,
   functions,
@@ -88,6 +91,9 @@ export default function GroupDetailPage() {
 
   const params = useParams();
   const router = useRouter();
+
+  const { teezAlert, teezConfirm } =
+    useTeezNotification();
 
   const groupId =
     Array.isArray(params?.groupId)
@@ -587,18 +593,26 @@ groupPoints:
       setSearchTerm("");
       setSearchResults([]);
 
-      alert(
-        "Group invite sent."
-      );
+      await teezAlert({
+  title: "INVITE SENT",
+  message:
+    "The Group invite has been sent successfully.",
+  type: "success",
+  buttonText: "CONTINUE",
+});
 
     } catch (err: any) {
 
-      alert(
-        err?.message ||
-        "Unable to send group invite."
-      );
+  await teezAlert({
+    title: "INVITE NOT SENT",
+    message:
+      err?.message ||
+      "Unable to send the Group invite.",
+    type: "error",
+    buttonText: "TRY AGAIN",
+  });
 
-    } finally {
+} finally {
 
       setInvitingUid(
         null
@@ -635,14 +649,19 @@ groupPoints:
       member.battleName ||
       "this player";
 
-    const confirmed =
-      window.confirm(
-        `Remove ${playerName} from this group?`
-      );
+   const confirmed =
+  await teezConfirm({
+    title: "REMOVE GROUP MEMBER",
+    message:
+      `Remove ${playerName} from this group?`,
+    type: "warning",
+    confirmText: "REMOVE",
+    cancelText: "CANCEL",
+  });
 
-    if (!confirmed) {
-      return;
-    }
+if (!confirmed) {
+  return;
+}
 
     try {
 
@@ -666,14 +685,18 @@ groupPoints:
 
       await loadGroup();
 
-    } catch (err: any) {
+  } catch (err: any) {
 
-      alert(
-        err?.message ||
-        "Unable to remove group member."
-      );
+  await teezAlert({
+    title: "MEMBER NOT REMOVED",
+    message:
+      err?.message ||
+      "Unable to remove the Group member.",
+    type: "error",
+    buttonText: "CONTINUE",
+  });
 
-    } finally {
+} finally {
 
       setRemovingUid(
         null
@@ -686,7 +709,7 @@ groupPoints:
   // CREATE GROUP CHALLENGE
   // ============================================================
 
-  function handleCreateChallenge() {
+  async function handleCreateChallenge() {
 
     if (
       !group ||
@@ -695,16 +718,20 @@ groupPoints:
       return;
     }
 
-    if (
-      group.memberCount < 2
-    ) {
+  if (
+  group.memberCount < 2
+) {
 
-      alert(
-        "Add at least one other participant before creating a group challenge."
-      );
+  await teezAlert({
+    title: "MORE PLAYERS REQUIRED",
+    message:
+      "Add at least one other participant before creating a Group Challenge.",
+    type: "warning",
+    buttonText: "CONTINUE",
+  });
 
-      return;
-    }
+  return;
+}
 
    router.push(
   `/challenges/create?scope=group&groupId=${group.groupId}`

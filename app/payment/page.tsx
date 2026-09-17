@@ -4,12 +4,13 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/src/lib/AuthContext";
 import Image from "next/image";
-
+import { useTeezNotification } from "@/src/components/TeezNotificationProvider";
 
 
 export default function PaymentPage() {
   const router = useRouter();
   const { user, loading } = useAuth();
+  const { teezAlert } = useTeezNotification();
 
   const [accepted, setAccepted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -24,10 +25,16 @@ export default function PaymentPage() {
     return;
   }
 
-  if (!accepted) {
-      alert("Accept the participation and legal terms first.");
-    return;
-  }
+ if (!accepted) {
+  await teezAlert({
+    title: "TERMS REQUIRED",
+    message:
+      "Accept the participation and legal terms before continuing to payment.",
+    type: "warning",
+    buttonText: "CONTINUE",
+  });
+  return;
+}
 
   try {
     setSubmitting(true);
@@ -70,10 +77,16 @@ export default function PaymentPage() {
       error
     );
 
-    alert(
-      error?.message ||
-        "Unable to start payment. Please try again."
-    );
+  await teezAlert({
+  title: "PAYMENT NOT STARTED",
+  message:
+    error?.message ||
+    "Unable to start payment. Please try again.",
+  type: "error",
+  buttonText: "TRY AGAIN",
+});
+
+setSubmitting(false);
 
     setSubmitting(false);
   }

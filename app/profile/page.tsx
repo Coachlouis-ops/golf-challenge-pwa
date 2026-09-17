@@ -14,6 +14,7 @@ import {
 } from "@/src/lib/countryCallingCodes";
 
 import GolfCourseSearch from "@/src/components/GolfCourseSearch";
+import { useTeezNotification } from "@/src/components/TeezNotificationProvider";
 
 
 
@@ -131,7 +132,7 @@ type RankingPosition = {
 export default function ProfilePage() {
   const router = useRouter();
   const { user } = useAuth();
-
+const { teezAlert } = useTeezNotification();
  const [loading, setLoading] = useState(true);
 const [saving, setSaving] = useState(false);
 const [isEditing, setIsEditing] = useState(false);
@@ -464,7 +465,13 @@ async function saveProfile() {
   searchIndex,
 }));
 
-      alert("Profile saved successfully.");
+  await teezAlert({
+  title: "PROFILE SAVED",
+  message: "Your Teez profile has been saved successfully.",
+  type: "success",
+  buttonText: "CONTINUE",
+});
+    
 
       setProfileExists(true);
       setIsEditing(false);

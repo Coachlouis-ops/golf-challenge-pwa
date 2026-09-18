@@ -27,13 +27,23 @@ import {
   storage,
 } from "@/src/lib/firebase";
 
+import { useTeezNotification } from "@/src/components/TeezNotificationProvider";
+
+
+
+
+
+
 export default function EditClubPage() {
 
   const { uid } =
     useParams();
 
-  const router =
-    useRouter();
+const router =
+  useRouter();
+
+const { teezAlert } =
+  useTeezNotification();
 
   const [clubName, setClubName] =
     useState("");
@@ -170,22 +180,23 @@ await updateDoc(
   }
 );
 
-      alert(
-        "Club updated"
-      );
+      await teezAlert({
+  message: "Club updated",
+  type: "success",
+});
 
-      router.push(
-        "/admin/scoring-clubs"
-      );
+router.push(
+  "/admin/scoring-clubs"
+);
 
     } catch (err) {
 
       console.error(err);
 
-      alert(
-        "Failed to save"
-      );
-
+     await teezAlert({
+  message: "Failed to save",
+  type: "error",
+});
     } finally {
 
       setLoading(false);

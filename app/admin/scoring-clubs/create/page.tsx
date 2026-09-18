@@ -15,9 +15,19 @@ import {
   storage,
 } from "@/src/lib/firebase";
 
+import { useTeezNotification } from "@/src/components/TeezNotificationProvider";
+
+
+
+
+
+
 export default function ScoringClubsPage() {
 
   const router = useRouter();
+
+const { teezAlert } = useTeezNotification();
+
 
   const [clubName, setClubName] = useState("");
   const [contactPerson, setContactPerson] = useState("");
@@ -35,10 +45,13 @@ const [password, setPassword] = useState("");
 
   async function createClub() {
 
-    if (!clubName || !email || !password) {
-      alert("Complete all required fields");
-      return;
-    }
+   if (!clubName || !email || !password) {
+  await teezAlert({
+    message: "Complete all required fields",
+    type: "warning",
+  });
+  return;
+}
 
     try {
 
@@ -99,17 +112,25 @@ await fetch(
   }
 );
 
-      alert("Scoring club created successfully");
+     await teezAlert({
+  message: "Scoring club created successfully",
+  type: "success",
+});
 
-      router.push(
-        "/admin/scoring-clubs"
-      );
+router.push(
+  "/admin/scoring-clubs"
+);
 
     } catch (err: any) {
 
       console.error(err);
 
-      alert(err.message);
+      await teezAlert({
+  message:
+    err?.message ||
+    "Unable to create scoring club",
+  type: "error",
+});
 
     } finally {
 

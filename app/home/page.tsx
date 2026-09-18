@@ -70,7 +70,7 @@ export default function HomeDashboardPage() {
 
   {/* OPEN APP */}
 <button
-  onClick={() => router.push("/dashboard")}
+ onClick={enterApp}
   className="
     group relative overflow-hidden
     rounded-xl border border-blue-300/70

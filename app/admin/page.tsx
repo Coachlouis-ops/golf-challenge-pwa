@@ -18,6 +18,7 @@ import {
   httpsCallable,
 } from "firebase/functions";
 import { useAuth } from "@/src/lib/AuthContext";
+import { useTeezNotification } from "@/src/components/TeezNotificationProvider";
 
 import {
   IMPROVE_PLAYER_BOOSTERS,
@@ -57,7 +58,7 @@ type MembershipPayment = {
 export default function AdminDashboard() {
   const router = useRouter();
   const { user } = useAuth();
-
+  const { teezAlert, teezConfirm } = useTeezNotification();
   const [testPlayerUid, setTestPlayerUid] =
   useState("");
 
@@ -74,10 +75,12 @@ async function grantTestBoosterBall() {
   const uid = testPlayerUid.trim();
 
   if (!uid) {
-    alert("Enter the player's UID.");
-    return;
-  }
-
+  await teezAlert({
+    message: "Enter the player's UID.",
+    type: "warning",
+  });
+  return;
+}
   try {
     setGrantingTestBall(true);
 
@@ -98,7 +101,10 @@ async function grantTestBoosterBall() {
 
     await grantBall({ uid });
 
-    alert("1 test Booster Ball granted.");
+  await teezAlert({
+  message: "1 test Booster Ball granted.",
+  type: "success",
+});
 
     setTestPlayerUid("");
   } catch (e: any) {
@@ -107,10 +113,12 @@ async function grantTestBoosterBall() {
       e
     );
 
-    alert(
-      e?.message ||
-        "Could not grant test Booster Ball."
-    );
+    await teezAlert({
+  message:
+    e?.message ||
+    "Could not grant test Booster Ball.",
+  type: "error",
+});
   } finally {
     setGrantingTestBall(false);
   }
@@ -119,10 +127,13 @@ async function grantTestBoosterBall() {
 async function openTestImprovePlayerBoosterBall() {
   const uid = testPlayerUid.trim();
 
-  if (!uid) {
-    alert("Enter the player's UID.");
-    return;
-  }
+if (!uid) {
+  await teezAlert({
+    message: "Enter the player's UID.",
+    type: "warning",
+  });
+  return;
+}
 
   try {
     setOpeningTestImproveBall(true);
@@ -150,20 +161,22 @@ async function openTestImprovePlayerBoosterBall() {
       await openImproveBall({ uid });
 
     const ball = response.data.ball;
-
-    alert(
-  `Improve Player Booster granted.\n\nBall: ${ball.ballNumber}\nCategory: ${ball.boosterType}`
-);
+await teezAlert({
+  message: `Improve Player Booster granted.\n\nBall: ${ball.ballNumber}\nCategory: ${ball.boosterType}`,
+  type: "success",
+});
   } catch (e: any) {
     console.error(
       "OPEN TEST IMPROVE PLAYER BALL ERROR:",
       e
     );
 
-    alert(
-      e?.message ||
-        "Could not open Improve Player Booster Ball."
-    );
+    await teezAlert({
+  message:
+    e?.message ||
+    "Could not open Improve Player Booster Ball.",
+  type: "error",
+});
   } finally {
     setOpeningTestImproveBall(false);
   }
@@ -276,10 +289,12 @@ async function updateBoosterRequestStatus(
       e
     );
 
-    alert(
-      e?.message ||
-        "Could not update Booster request."
-    );
+    await teezAlert({
+  message:
+    e?.message ||
+    "Could not update Booster request.",
+  type: "error",
+});
   }
 }
 
@@ -315,7 +330,14 @@ TEEZ Golf Challenges`
 
 
   async function approvePayment(payment: MembershipPayment) {
-    if (!confirm(`Approve membership payment for ${payment.email}?`)) return;
+  const confirmed = await teezConfirm({
+  message: `Approve membership payment for ${payment.email}?`,
+  type: "warning",
+  confirmText: "APPROVE",
+  cancelText: "CANCEL",
+});
+
+if (!confirmed) return;
 
     try {
       await updateDoc(doc(db, "membershipPayments", payment.id), {
@@ -334,25 +356,47 @@ TEEZ Golf Challenges`
 
       await loadMembershipPayments();
 
-      alert("Membership approved");
+      await teezAlert({
+  message: "Membership approved",
+  type: "success",
+});
     } catch (e: any) {
       console.log("APPROVE PAYMENT ERROR:", e);
-      alert(e.message || "Could not approve payment");
+     await teezAlert({
+  message:
+    e?.message ||
+    "Could not approve payment",
+  type: "error",
+});
     }
   }
 
   async function deletePayment(payment: MembershipPayment) {
-    if (!confirm(`Delete payment application for ${payment.email}?`)) return;
+    const confirmed = await teezConfirm({
+  message: `Delete payment application for ${payment.email}?`,
+  type: "warning",
+  confirmText: "DELETE",
+  cancelText: "CANCEL",
+});
 
+if (!confirmed) return;
     try {
       await deleteDoc(doc(db, "membershipPayments", payment.id));
 
       await loadMembershipPayments();
 
-      alert("Payment application deleted");
+     await teezAlert({
+  message: "Payment application deleted",
+  type: "success",
+});
     } catch (e: any) {
       console.log("DELETE PAYMENT ERROR:", e);
-      alert(e.message || "Could not delete payment application");
+    await teezAlert({
+  message:
+    e?.message ||
+    "Could not delete payment application",
+  type: "error",
+});
     }
   }
 

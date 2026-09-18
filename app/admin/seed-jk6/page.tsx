@@ -3,8 +3,11 @@
 import { useState } from "react";
 import { httpsCallable } from "firebase/functions";
 import { functions } from "@/src/lib/firebase";
+import { useTeezNotification } from "@/src/components/TeezNotificationProvider";
 
 export default function SeedJK6Page() {
+  const { teezAlert } = useTeezNotification();
+
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState("");
 
@@ -23,10 +26,16 @@ export default function SeedJK6Page() {
         JSON.stringify(response.data, null, 2)
       );
 
-      alert("JK6 Golfday seeded successfully.");
+   await teezAlert({
+  message: "JK6 Golfday seeded successfully.",
+  type: "success",
+});
     } catch (error: any) {
       console.error(error);
-      setResult(error.message || "Seed failed.");
+     await teezAlert({
+  message: error.message || "Seed failed.",
+  type: "error",
+});
       alert(error.message || "Seed failed.");
     } finally {
       setLoading(false);

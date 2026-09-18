@@ -525,9 +525,11 @@ router.replace("/dashboard");
           .toLowerCase()
           .includes("cellphone")
       ) {
-        alert(
-          "This cellphone number is already registered to another Teez account. Please use a different cellphone number."
-        );
+       await teezAlert({
+  message:
+    "This cellphone number is already registered to another Teez account. Please use a different cellphone number.",
+  type: "error",
+});
         return;
       }
 
@@ -537,9 +539,11 @@ router.replace("/dashboard");
           .toLowerCase()
           .includes("email")
       ) {
-        alert(
-          "This email address is already registered to another Teez account. Please login to the existing account."
-        );
+        await teezAlert({
+  message:
+    "This email address is already registered to another Teez account. Please login to the existing account.",
+  type: "error",
+});
         return;
       }
 
@@ -549,16 +553,20 @@ router.replace("/dashboard");
           .toLowerCase()
           .includes("phone")
       ) {
-        alert(
-          "Please enter a valid South African cellphone number, for example 0631234567."
-        );
+await teezAlert({
+  message:
+    "Please enter a valid South African cellphone number, for example 0631234567.",
+  type: "warning",
+});
         return;
       }
 
-      alert(
-        errorMessage ||
-          "Failed to save profile. Please try again."
-      );
+      await teezAlert({
+  message:
+    errorMessage ||
+    "Failed to save profile. Please try again.",
+  type: "error",
+});
     } finally {
       setSaving(false);
     }

@@ -16,6 +16,11 @@ import {
 import {
   httpsCallable,
 } from "firebase/functions";
+
+import { useTeezNotification } from "@/src/components/TeezNotificationProvider";
+
+
+
 type Club = {
   uid: string;
   clubName: string;
@@ -28,9 +33,12 @@ type Club = {
 
 export default function ScoringClubsDashboard() {
 
-  const router = useRouter();
+ const router = useRouter();
 
-  const [clubs, setClubs] = useState<Club[]>([]);
+const { teezAlert } =
+  useTeezNotification();
+
+const [clubs, setClubs] = useState<Club[]>([]);
 
   const toggleScoringClubStatus =
   httpsCallable(
@@ -52,9 +60,10 @@ async function toggleClub(
 
     console.error(err);
 
-    alert(
-      "Failed to update club"
-    );
+   await teezAlert({
+  message: "Failed to update club",
+  type: "error",
+});
 
   }
 }

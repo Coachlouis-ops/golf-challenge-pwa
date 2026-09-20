@@ -57,10 +57,78 @@ const [revealedBall, setRevealedBall] =
 const [openError, setOpenError] =
   useState("");
 
+useEffect(() => {
+  if (!user) {
+    setBattleCharacter(null);
+    return;
+  }
+
+  const uid = user.uid;
+
+  async function loadBattleCharacter() {
+    try {
+     const profileRef = doc(
+  db,
+  "profiles",
+  uid
+);
+
+      const profileSnap =
+        await getDoc(profileRef);
+
+      if (!profileSnap.exists()) {
+        setBattleCharacter(null);
+        return;
+      }
+
+      const data = profileSnap.data();
+
+      const imageUrl =
+        String(
+          data.battleCharacterImageUrl || ""
+        ).trim();
+
+      const name =
+        String(
+          data.battleCharacterName || ""
+        ).trim();
+
+      if (!imageUrl) {
+        setBattleCharacter(null);
+        return;
+      }
+
+      setBattleCharacter({
+        name,
+        imageUrl,
+      });
+    } catch (error) {
+      console.error(
+        "Unable to load Battle Character:",
+        error
+      );
+
+      setBattleCharacter(null);
+    }
+  }
+
+  loadBattleCharacter();
+}, [user]);
+
+
+const [battleCharacter, setBattleCharacter] =
+  useState<{
+    name: string;
+    imageUrl: string;
+  } | null>(null);
+
+
+
   useEffect(() => {
   if (!user) return;
 
   const uid = user.uid;
+
 
   async function loadBoosterBoard() {
     try {

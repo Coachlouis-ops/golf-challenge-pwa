@@ -12,7 +12,7 @@ import {
   serverTimestamp,
   updateDoc,
 } from "firebase/firestore";
-import { db } from "@/src/lib/firebase";
+import { db, storage } from "@/src/lib/firebase";
 import {
   getFunctions,
   httpsCallable,
@@ -24,7 +24,11 @@ import {
   IMPROVE_PLAYER_BOOSTERS,
 } from "@/src/data/improvePlayerBoosters";
 
-
+import {
+  getDownloadURL,
+  ref,
+  uploadBytes,
+} from "firebase/storage";
 
 type ImprovePlayerBoosterRequest = {
   id: string;
@@ -41,6 +45,18 @@ type ImprovePlayerBoosterRequest = {
   productImage: string;
   status: string;
   requestedAt?: any;
+};
+
+
+type BattleCharacterPlayer = {
+  uid: string;
+  name?: string;
+  surname?: string;
+  battleName?: string;
+  email?: string;
+  battleCharacterName?: string;
+  battleCharacterImageUrl?: string;
+  battleCharacterStoragePath?: string;
 };
 
 
@@ -182,6 +198,30 @@ await teezAlert({
   }
 }
 
+
+const [battleCharacterPlayers, setBattleCharacterPlayers] =
+  useState<BattleCharacterPlayer[]>([]);
+
+const [battleCharacterSearch, setBattleCharacterSearch] =
+  useState("");
+
+const [selectedBattleCharacterPlayer, setSelectedBattleCharacterPlayer] =
+  useState<BattleCharacterPlayer | null>(null);
+
+const [battleCharacterName, setBattleCharacterName] =
+  useState("");
+
+const [battleCharacterFile, setBattleCharacterFile] =
+  useState<File | null>(null);
+
+const [uploadingBattleCharacter, setUploadingBattleCharacter] =
+  useState(false);
+
+const [loadingBattleCharacterPlayers, setLoadingBattleCharacterPlayers] =
+  useState(false);
+
+
+
 const [payments, setPayments] =
   useState<MembershipPayment[]>([]);
 
@@ -202,7 +242,185 @@ const [
  useEffect(() => {
   loadMembershipPayments();
   loadBoosterRequests();
+  loadBattleCharacterPlayers();
 }, []);
+
+
+async function loadBattleCharacterPlayers() {
+  try {
+    setLoadingBattleCharacterPlayers(true);
+
+    const snap = await getDocs(
+      collection(db, "profiles")
+    );
+
+    const players = snap.docs.map((playerDoc) => ({
+      uid: playerDoc.id,
+      ...(playerDoc.data() as Omit<
+        BattleCharacterPlayer,
+        "uid"
+      >),
+    }));
+
+    players.sort((a, b) => {
+      const nameA =
+        `${a.name || ""} ${a.surname || ""}`.trim();
+
+      const nameB =
+        `${b.name || ""} ${b.surname || ""}`.trim();
+
+      return nameA.localeCompare(nameB);
+    });
+
+    setBattleCharacterPlayers(players);
+  } catch (e: any) {
+    console.error(
+      "LOAD BATTLE CHARACTER PLAYERS ERROR:",
+      e
+    );
+
+    await teezAlert({
+      message:
+        e?.message ||
+        "Could not load players.",
+      type: "error",
+    });
+  } finally {
+    setLoadingBattleCharacterPlayers(false);
+  }
+}
+
+async function assignBattleCharacter() {
+  if (!selectedBattleCharacterPlayer) {
+    await teezAlert({
+      message: "Select a player first.",
+      type: "warning",
+    });
+    return;
+  }
+
+  if (!battleCharacterName.trim()) {
+    await teezAlert({
+      message: "Enter the Battle Character name.",
+      type: "warning",
+    });
+    return;
+  }
+
+  if (!battleCharacterFile) {
+    await teezAlert({
+      message: "Select a Battle Character image.",
+      type: "warning",
+    });
+    return;
+  }
+
+  try {
+    setUploadingBattleCharacter(true);
+
+    const playerUid =
+      selectedBattleCharacterPlayer.uid;
+
+    const extension =
+      battleCharacterFile.name
+        .split(".")
+        .pop()
+        ?.toLowerCase() || "png";
+
+    const storagePath =
+      `battle-characters/${playerUid}/battle-character.${extension}`;
+
+    const imageRef = ref(
+      storage,
+      storagePath
+    );
+
+    await uploadBytes(
+      imageRef,
+      battleCharacterFile,
+      {
+        contentType:
+          battleCharacterFile.type ||
+          "image/png",
+      }
+    );
+
+    const imageUrl =
+      await getDownloadURL(imageRef);
+
+    const functions =
+      getFunctions(
+        undefined,
+        "europe-west1"
+      );
+
+    const assignCharacter = httpsCallable<
+      {
+        playerUid: string;
+        battleCharacterName: string;
+        battleCharacterImageUrl: string;
+        battleCharacterStoragePath: string;
+      },
+      {
+        success: boolean;
+      }
+    >(
+      functions,
+      "assignBattleCharacter"
+    );
+
+    await assignCharacter({
+      playerUid,
+      battleCharacterName:
+        battleCharacterName.trim(),
+      battleCharacterImageUrl:
+        imageUrl,
+      battleCharacterStoragePath:
+        storagePath,
+    });
+
+    await teezAlert({
+      message:
+        "Battle Character assigned successfully.",
+      type: "success",
+    });
+
+    setBattleCharacterFile(null);
+    setBattleCharacterName("");
+
+    await loadBattleCharacterPlayers();
+
+    setSelectedBattleCharacterPlayer(
+      (current) =>
+        current
+          ? {
+              ...current,
+              battleCharacterName:
+                battleCharacterName.trim(),
+              battleCharacterImageUrl:
+                imageUrl,
+              battleCharacterStoragePath:
+                storagePath,
+            }
+          : null
+    );
+  } catch (e: any) {
+    console.error(
+      "ASSIGN BATTLE CHARACTER ERROR:",
+      e
+    );
+
+    await teezAlert({
+      message:
+        e?.message ||
+        "Could not assign Battle Character.",
+      type: "error",
+    });
+  } finally {
+    setUploadingBattleCharacter(false);
+  }
+}
+
 
   async function loadMembershipPayments() {
     try {
@@ -441,6 +659,182 @@ if (!confirmed) return;
         >
           TEEZ SCORING CLUBS
         </button>
+
+
+ {/* BATTLE CHARACTER MANAGEMENT */}
+<div className="w-full max-w-[720px] border border-purple-400/50 bg-black/80 p-5 rounded-2xl">
+  <h2 className="text-center text-xl font-black text-purple-300">
+    BATTLE CHARACTER MANAGEMENT
+  </h2>
+
+  <p className="mt-2 text-center text-xs text-gray-400">
+    Search for a player and assign their Battle Character.
+  </p>
+
+  <input
+    type="text"
+    value={battleCharacterSearch}
+    onChange={(e) =>
+      setBattleCharacterSearch(e.target.value)
+    }
+    placeholder="Search name, Battle Name, email or UID"
+    className="mt-5 w-full border border-purple-400/40 bg-black px-4 py-3 text-sm text-white outline-none focus:border-purple-400"
+  />
+
+  {loadingBattleCharacterPlayers ? (
+    <p className="mt-4 text-center text-sm text-gray-400">
+      Loading players...
+    </p>
+  ) : battleCharacterSearch.trim() ? (
+    <div className="mt-3 max-h-64 overflow-y-auto border border-white/10">
+      {battleCharacterPlayers
+        .filter((player) => {
+          const search =
+            battleCharacterSearch
+              .trim()
+              .toLowerCase();
+
+          const searchable = [
+            player.name,
+            player.surname,
+            player.battleName,
+            player.email,
+            player.uid,
+          ]
+            .filter(Boolean)
+            .join(" ")
+            .toLowerCase();
+
+          return searchable.includes(search);
+        })
+        .slice(0, 10)
+        .map((player) => (
+          <button
+            key={player.uid}
+            type="button"
+            onClick={() => {
+              setSelectedBattleCharacterPlayer(
+                player
+              );
+
+              setBattleCharacterName(
+                player.battleCharacterName || ""
+              );
+
+              setBattleCharacterFile(null);
+              setBattleCharacterSearch("");
+            }}
+            className="w-full border-b border-white/10 px-4 py-3 text-left hover:bg-purple-500/20"
+          >
+            <p className="font-bold text-white">
+              {`${player.name || ""} ${
+                player.surname || ""
+              }`.trim() || "Unnamed Player"}
+            </p>
+
+            <p className="text-xs text-cyan-300">
+              {player.battleName
+                ? `Battle Name: ${player.battleName}`
+                : "No Battle Name"}
+            </p>
+
+            <p className="mt-1 break-all text-xs text-gray-500">
+              {player.email || player.uid}
+            </p>
+          </button>
+        ))}
+    </div>
+  ) : null}
+
+  {selectedBattleCharacterPlayer && (
+    <div className="mt-6 border border-purple-400/30 bg-zinc-950 p-5 rounded-xl">
+
+      <div className="grid grid-cols-1 md:grid-cols-[180px_1fr] gap-5">
+
+        <div className="flex min-h-[220px] items-center justify-center overflow-hidden border border-white/10 bg-black">
+          {selectedBattleCharacterPlayer.battleCharacterImageUrl ? (
+            <img
+              src={
+                selectedBattleCharacterPlayer.battleCharacterImageUrl
+              }
+              alt="Battle Character"
+              className="h-full w-full object-contain"
+            />
+          ) : (
+            <p className="px-4 text-center text-xs font-bold text-gray-500">
+              NO BATTLE CHARACTER ASSIGNED
+            </p>
+          )}
+        </div>
+
+        <div>
+          <p className="text-lg font-black text-white">
+            {`${selectedBattleCharacterPlayer.name || ""} ${
+              selectedBattleCharacterPlayer.surname || ""
+            }`.trim() || "Unnamed Player"}
+          </p>
+
+          <p className="mt-1 text-sm text-cyan-300">
+            {selectedBattleCharacterPlayer.battleName ||
+              "No Battle Name"}
+          </p>
+
+          <p className="mt-2 break-all text-xs text-gray-500">
+            UID: {selectedBattleCharacterPlayer.uid}
+          </p>
+
+          <label className="mt-5 block text-xs font-black uppercase tracking-wider text-purple-300">
+            Character Name
+          </label>
+
+          <input
+            type="text"
+            value={battleCharacterName}
+            onChange={(e) =>
+              setBattleCharacterName(
+                e.target.value
+              )
+            }
+            placeholder="e.g. THE MAGICIAN"
+            className="mt-2 w-full border border-white/20 bg-black px-4 py-3 text-sm text-white outline-none focus:border-purple-400"
+          />
+
+          <label className="mt-4 block text-xs font-black uppercase tracking-wider text-purple-300">
+            Character Image
+          </label>
+
+          <input
+            type="file"
+            accept="image/png,image/jpeg,image/webp"
+            onChange={(e) =>
+              setBattleCharacterFile(
+                e.target.files?.[0] || null
+              )
+            }
+            className="mt-2 block w-full text-sm text-gray-300"
+          />
+
+          {battleCharacterFile && (
+            <p className="mt-2 text-xs text-green-400">
+              Selected: {battleCharacterFile.name}
+            </p>
+          )}
+
+          <button
+            type="button"
+            onClick={assignBattleCharacter}
+            disabled={uploadingBattleCharacter}
+            className="mt-5 w-full bg-purple-500 px-4 py-3 text-sm font-black text-white shadow-[0_0_20px_rgba(168,85,247,0.6)] hover:bg-purple-400 disabled:opacity-50"
+          >
+            {uploadingBattleCharacter
+              ? "UPLOADING..."
+              : "UPLOAD & ASSIGN BATTLE CHARACTER"}
+          </button>
+        </div>
+      </div>
+    </div>
+  )}
+</div>       
 
 {/* BOOSTER BOARD TEST CONTROL */}
 <div className="w-full max-w-[520px] border border-amber-400/40 bg-black/70 p-5">

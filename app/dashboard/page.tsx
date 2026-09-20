@@ -463,6 +463,37 @@ async function handleOpenBoosterBall(
             </div>
           )}
 
+{/* PLAYER BATTLE CHARACTER */}
+{user && isSubscribed && battleCharacter && (
+  <section className="mb-6">
+    <div className="relative overflow-hidden rounded-2xl border border-purple-400/50 bg-black/70 shadow-[0_0_35px_rgba(168,85,247,0.25)]">
+
+      <div className="relative h-[420px] w-full">
+        <img
+          src={battleCharacter.imageUrl}
+          alt={battleCharacter.name || "Battle Character"}
+          className="h-full w-full object-contain"
+        />
+      </div>
+
+      {battleCharacter.name && (
+        <div className="border-t border-purple-400/30 bg-black/80 px-4 py-4 text-center">
+          <p className="text-[9px] font-black uppercase tracking-[0.25em] text-purple-300">
+            YOUR BATTLE CHARACTER
+          </p>
+
+          <h2 className="mt-1 text-2xl font-black uppercase text-white drop-shadow-[0_0_12px_rgba(168,85,247,0.9)]">
+            {battleCharacter.name}
+          </h2>
+        </div>
+      )}
+
+    </div>
+  </section>
+)}
+
+
+
 {/* CHOOSE YOUR BOOSTER BALL */}
 {user && isSubscribed && (
   <section className="mt-2 mb-6">

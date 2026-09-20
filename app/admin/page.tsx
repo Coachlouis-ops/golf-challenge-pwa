@@ -799,20 +799,24 @@ if (!confirmed) return;
             className="mt-2 w-full border border-white/20 bg-black px-4 py-3 text-sm text-white outline-none focus:border-purple-400"
           />
 
-          <label className="mt-4 block text-xs font-black uppercase tracking-wider text-purple-300">
-            Character Image
-          </label>
+       <label className="mt-4 block text-xs font-black uppercase tracking-wider text-purple-300">
+  Character Image
+</label>
 
-          <input
-            type="file"
-            accept="image/png,image/jpeg,image/webp"
-            onChange={(e) =>
-              setBattleCharacterFile(
-                e.target.files?.[0] || null
-              )
-            }
-            className="mt-2 block w-full text-sm text-gray-300"
-          />
+<label className="mt-2 flex w-full cursor-pointer items-center justify-center rounded-xl border-2 border-cyan-400 bg-cyan-400 px-4 py-4 text-sm font-black text-black shadow-[0_0_20px_rgba(34,211,238,0.5)] transition hover:bg-cyan-300">
+  + SELECT BATTLE CHARACTER IMAGE
+
+  <input
+    type="file"
+    accept="image/png,image/jpeg,image/webp"
+    onChange={(e) =>
+      setBattleCharacterFile(
+        e.target.files?.[0] || null
+      )
+    }
+    className="hidden"
+  />
+</label>
 
           {battleCharacterFile && (
             <p className="mt-2 text-xs text-green-400">

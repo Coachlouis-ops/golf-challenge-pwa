@@ -76,6 +76,11 @@ const { teezAlert, teezConfirm } =
   const [error, setError] = useState<string | null>(null);
 const [scoreInputs, setScoreInputs] = useState<Record<string, string>>({});
 
+const [resultEntryTypes, setResultEntryTypes] = useState<
+  Record<string, "win" | "lost" | "tie" | "score" | "">
+>({});
+
+
 const [nassauResults, setNassauResults] = useState<
   Record<
     string,
@@ -459,9 +464,20 @@ try {
 
 const allScoresEntered =
   players.length > 0 &&
-  players.every(
-    (player) => (scoreInputs[player.uid] || "").trim() !== ""
-  );
+  players.every((player) => {
+    if (challenge?.typeOfGame === "NASSAU") {
+      const result = nassauResults[player.uid];
+
+      return Boolean(
+        result?.front9 &&
+        result?.back9 &&
+        result?.game &&
+        result?.units
+      );
+    }
+
+    return (scoreInputs[player.uid] || "").trim() !== "";
+  });
 
 const canFinalize =
   allScoresEntered &&
@@ -469,7 +485,7 @@ const canFinalize =
   challenge.status !== "completed";
 
   return (
-    <main className="relative min-h-screen flex justify-center px-4 py-12 bg-black text-white overflow-hidden">
+    <main className="relative min-h-screen flex justify-center px-4 py-8 sm:py-12 bg-[#05030b] text-white overflow-hidden">
       {/* STADIUM LIGHT */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[400px] bg-green-400 opacity-10 blur-[120px] pointer-events-none" />
 
@@ -483,11 +499,11 @@ const canFinalize =
         alt="Badger illustration"
       />
 
-      <div className="relative z-10 w-full max-w-3xl flex flex-col gap-6">
+      <div className="relative z-10 w-full max-w-4xl flex flex-col gap-6">
         <div className="flex justify-end">
           <button
             onClick={handleRefresh}
-            className="bg-green-500 text-black px-4 py-2 rounded font-semibold shadow-[0_0_20px_rgba(57,255,20,0.6)] hover:scale-[1.02] transition"
+            className="bg-cyan-300 text-black px-5 py-3 rounded-xl font-black shadow-[0_0_24px_rgba(34,211,238,0.5)] hover:bg-cyan-200 hover:scale-[1.02] transition"
           >
             Refresh
           </button>
@@ -495,7 +511,7 @@ const canFinalize =
 
         <button
           onClick={() => router.push("/dashboard")}
-          className="mb-4 text-sm underline"
+          className="mb-2 self-start rounded-xl border border-white/20 bg-white/10 px-4 py-2 text-sm font-bold text-white hover:bg-white/20 transition"
         >
           Back to Dashboard
         </button>
@@ -607,7 +623,10 @@ const canFinalize =
           </div>
         )}
 
-        <h1 className="text-2xl font-semibold">{challenge.challengeTitle}</h1>
+        <div className="rounded-3xl border-2 border-purple-400 bg-gradient-to-r from-purple-950/90 via-fuchsia-950/75 to-black p-5 sm:p-6 shadow-[0_0_38px_rgba(168,85,247,0.35)]">
+          <div className="text-xs font-black tracking-[0.3em] text-purple-300">CHALLENGE</div>
+          <h1 className="mt-2 text-3xl sm:text-4xl font-black text-white">{challenge.challengeTitle}</h1>
+        </div>
 
         <div className="flex items-center gap-3">
           <span
@@ -627,7 +646,7 @@ const canFinalize =
           )}
         </div>
 
-        <div className="border rounded p-4 flex flex-col gap-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 rounded-3xl border-2 border-blue-400/80 bg-blue-950/35 p-5 shadow-[0_0_30px_rgba(59,130,246,0.22)]">
           <p>
             <strong>Course:</strong> {challenge.courseName}
           </p>
@@ -650,7 +669,7 @@ const canFinalize =
 
       {/* INVITE SECTION */}
 {isCreator && (
-<div className="border rounded p-4 flex flex-col gap-3">
+<div className="border-2 border-blue-400 bg-gradient-to-br from-blue-950/80 via-indigo-950/70 to-black rounded-3xl p-5 sm:p-6 flex flex-col gap-4 shadow-[0_0_38px_rgba(59,130,246,0.32)]">
 
          <div>
   <div className="text-red-400 text-xs tracking-[0.25em] font-extrabold">
@@ -747,7 +766,7 @@ const canFinalize =
 )}
 
       {/* PARTICIPANTS */}
-<div className="border border-red-500/20 bg-black/30 rounded-2xl p-4 shadow-[0_0_25px_rgba(255,0,0,0.15)]">
+<div className="border-2 border-violet-400/80 bg-gradient-to-br from-violet-950/70 via-purple-950/60 to-black rounded-3xl p-5 shadow-[0_0_32px_rgba(167,139,250,0.25)]">
   <div className="flex items-center justify-between mb-4">
     <div>
       <div className="text-red-400 text-xs tracking-[0.25em] font-bold">
@@ -773,141 +792,254 @@ const canFinalize =
 
 {/* ENTER RESULTS */}
 {isCreator && (
-  <div className="border-2 border-red-500 bg-neutral-900/95 rounded-2xl p-5 flex flex-col gap-5 shadow-[0_0_35px_rgba(255,0,0,0.45)]">
-
-    <div>
-      <div className="text-red-400 text-xs tracking-[0.25em] font-extrabold">
-        STEP 2
+  <div className="border-2 border-fuchsia-400 bg-gradient-to-br from-fuchsia-950/95 via-purple-950/95 to-black rounded-3xl p-5 sm:p-6 flex flex-col gap-5 shadow-[0_0_45px_rgba(217,70,239,0.42)]">
+    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+      <div>
+        <div className="inline-flex items-center rounded-full bg-fuchsia-400 px-3 py-1 text-[11px] tracking-[0.25em] font-black text-black">
+          STEP 2 · ACTION REQUIRED
+        </div>
+        <div className="text-3xl sm:text-4xl font-black text-white mt-3">
+          ENTER RESULTS
+        </div>
       </div>
 
-      <div className="text-3xl font-extrabold text-white mt-1">
-        ENTER SCORES / RESULTS
+      <div
+        className={`rounded-2xl border px-4 py-3 text-sm font-black ${
+          allScoresEntered
+            ? "border-green-300 bg-green-400 text-black shadow-[0_0_22px_rgba(74,222,128,0.45)]"
+            : "border-yellow-300 bg-yellow-300 text-black shadow-[0_0_22px_rgba(253,224,71,0.35)]"
+        }`}
+      >
+        {allScoresEntered ? "ALL RESULTS ENTERED" : "COMPLETE EVERY PLAYER"}
       </div>
     </div>
 
-    <div className="text-base font-medium text-white leading-relaxed">
-      Enter a score, points or result for every player.
-    </div>
-
-    <div className="text-sm font-bold text-red-200 bg-black/40 border border-red-500/40 rounded-xl p-3">
-      SCORE / POINTS / WIN / LOST / DRAW
-    </div>
-
-    <div className="text-sm font-semibold text-red-200 bg-red-950/60 border border-red-500 rounded-xl p-3">
-      All players must have a score/result entered before the scoreboard can
-      be updated.
+    <div className="rounded-2xl border border-fuchsia-300/60 bg-black/45 p-4 text-sm font-bold text-fuchsia-100">
+      Select the result for every player. Choose SCORE only when you need to enter a numeric score or points value.
     </div>
 
     {players.length === 0 && (
-      <p className="text-base font-semibold text-red-300">
-        STEP LOCKED — Add players and wait for them to accept before entering
-        scores/results.
-      </p>
+      <div className="rounded-2xl border-2 border-yellow-300 bg-yellow-300 px-4 py-4 text-black font-black">
+        LOCKED — ADD PLAYERS AND WAIT FOR THEM TO ACCEPT BEFORE ENTERING RESULTS.
+      </div>
     )}
 
-    {players.map((player) => (
-      <div
-        key={player.uid}
-        className="border-2 border-red-500/70 rounded-2xl p-4 bg-neutral-950 flex flex-col gap-3 shadow-[0_0_18px_rgba(255,0,0,0.20)]"
-      >
-        <label className="text-base font-bold text-white">
-          Score / Result for {player.displayName}
-        </label>
-
-      {challenge?.typeOfGame === "NASSAU" ? (
-  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-    {[
-      ["front9", "FRONT 9"],
-      ["back9", "BACK 9"],
-      ["game", "OVERALL GAME"],
-      ["units", "UNITS"],
-    ].map(([key, label]) => (
-      <div key={key} className="flex flex-col gap-2">
-        <div className="text-xs font-extrabold tracking-[0.18em] text-red-300">
-          {label}
-        </div>
-
-        <select
-          value={
-            nassauResults[player.uid]?.[
-              key as "front9" | "back9" | "game" | "units"
-            ] || ""
-          }
-          onChange={(e) => {
-            setNassauResults((prev) => ({
-              ...prev,
-              [player.uid]: {
-                front9: prev[player.uid]?.front9 || "",
-                back9: prev[player.uid]?.back9 || "",
-                game: prev[player.uid]?.game || "",
-                units: prev[player.uid]?.units || "",
-                [key]: e.target.value,
-              },
-            }));
-
-            setScoreboardUpdated(false);
-          }}
-          disabled={challenge?.status === "completed"}
-          className="w-full border-2 border-red-500 bg-white text-black text-base font-bold rounded-xl p-4 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-red-400"
+    <div className="flex flex-col gap-4">
+      {players.map((player, playerIndex) => (
+        <div
+          key={player.uid}
+          className="rounded-2xl border-2 border-fuchsia-400/80 bg-black/75 p-4 sm:p-5 shadow-[0_0_22px_rgba(217,70,239,0.22)]"
         >
-          <option value="">SELECT RESULT</option>
-          <option value="win">WIN</option>
-          <option value="lost">LOST</option>
-          <option value="draw">DRAW</option>
-        </select>
-      </div>
-    ))}
-  </div>
-) : challenge?.typeOfGame?.toLowerCase().includes("match") ? (
-  <select
-    value={scoreInputs[player.uid] || ""}
-    onChange={(e) => {
-      setScoreInputs((prev) => ({
-        ...prev,
-        [player.uid]: e.target.value,
-      }));
-      setScoreboardUpdated(false);
-    }}
-    disabled={challenge?.status === "completed"}
-    className="w-full border-2 border-red-500 bg-white text-black text-base font-bold rounded-xl p-4 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-red-400"
-  >
-    <option value="">SELECT RESULT</option>
-    <option value="win">WIN</option>
-    <option value="lost">LOST</option>
-    <option value="draw">DRAW</option>
-  </select>
-) : (
-  <input
-    type="text"
-    value={scoreInputs[player.uid] || ""}
-    onChange={(e) => {
-      setScoreInputs((prev) => ({
-        ...prev,
-        [player.uid]: e.target.value,
-      }));
-      setScoreboardUpdated(false);
-    }}
-    placeholder="SCORE / POINTS / WIN / LOST / DRAW"
-    disabled={challenge?.status === "completed"}
-    className="w-full border-2 border-red-500 bg-white text-black placeholder:text-gray-600 text-base font-bold rounded-xl p-4 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-red-400"
-  />
-)}
-      </div>
-    ))}
+          <div className="flex items-center justify-between gap-3 mb-4">
+            <div>
+              <div className="text-[10px] tracking-[0.24em] font-black text-fuchsia-300">
+                PLAYER {playerIndex + 1}
+              </div>
+              <div className="text-xl font-black text-white mt-1">
+                {player.displayName}
+              </div>
+            </div>
+
+            <div
+              className={`rounded-full px-3 py-1 text-xs font-black ${
+                challenge?.typeOfGame === "NASSAU"
+                  ? nassauResults[player.uid]?.front9 &&
+                    nassauResults[player.uid]?.back9 &&
+                    nassauResults[player.uid]?.game &&
+                    nassauResults[player.uid]?.units
+                    ? "bg-green-400 text-black"
+                    : "bg-yellow-300 text-black"
+                  : (scoreInputs[player.uid] || "").trim() !== ""
+                  ? "bg-green-400 text-black"
+                  : "bg-yellow-300 text-black"
+              }`}
+            >
+              {challenge?.typeOfGame === "NASSAU"
+                ? nassauResults[player.uid]?.front9 &&
+                  nassauResults[player.uid]?.back9 &&
+                  nassauResults[player.uid]?.game &&
+                  nassauResults[player.uid]?.units
+                  ? "COMPLETE"
+                  : "REQUIRED"
+                : (scoreInputs[player.uid] || "").trim() !== ""
+                ? "COMPLETE"
+                : "REQUIRED"}
+            </div>
+          </div>
+
+          {challenge?.typeOfGame === "NASSAU" ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {[
+                ["front9", "FRONT 9"],
+                ["back9", "BACK 9"],
+                ["game", "OVERALL GAME"],
+                ["units", "UNITS"],
+              ].map(([key, label]) => (
+                <div
+                  key={key}
+                  className="rounded-2xl border border-cyan-300/50 bg-cyan-950/30 p-3"
+                >
+                  <div className="text-xs font-black tracking-[0.18em] text-cyan-200 mb-2">
+                    {label}
+                  </div>
+
+                  <select
+                    value={
+                      nassauResults[player.uid]?.[
+                        key as "front9" | "back9" | "game" | "units"
+                      ] || ""
+                    }
+                    onChange={(e) => {
+                      setNassauResults((prev) => ({
+                        ...prev,
+                        [player.uid]: {
+                          front9: prev[player.uid]?.front9 || "",
+                          back9: prev[player.uid]?.back9 || "",
+                          game: prev[player.uid]?.game || "",
+                          units: prev[player.uid]?.units || "",
+                          [key]: e.target.value,
+                        },
+                      }));
+                      setScoreboardUpdated(false);
+                    }}
+                    disabled={challenge?.status === "completed"}
+                    className="w-full border-2 border-cyan-300 bg-white text-black text-base font-black rounded-xl p-4 disabled:opacity-50 focus:outline-none focus:ring-4 focus:ring-cyan-300/40"
+                  >
+                    <option value="">SELECT RESULT</option>
+                    <option value="win">WIN</option>
+                    <option value="lost">LOST</option>
+                    <option value="draw">TIE</option>
+                  </select>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="flex flex-col gap-3">
+              <div>
+                <div className="text-xs font-black tracking-[0.18em] text-fuchsia-200 mb-2">
+                  RESULT
+                </div>
+
+                <select
+                  value={resultEntryTypes[player.uid] || ""}
+                  onChange={(e) => {
+                    const selected = e.target.value as
+                      | "win"
+                      | "lost"
+                      | "tie"
+                      | "score"
+                      | "";
+
+                    setResultEntryTypes((prev) => ({
+                      ...prev,
+                      [player.uid]: selected,
+                    }));
+
+                    setScoreInputs((prev) => {
+                      const next = { ...prev };
+
+                      if (selected === "win") next[player.uid] = "win";
+                      else if (selected === "lost") next[player.uid] = "lost";
+                      else if (selected === "tie") next[player.uid] = "draw";
+                      else next[player.uid] = "";
+
+                      return next;
+                    });
+
+                    setScoreboardUpdated(false);
+                  }}
+                  disabled={challenge?.status === "completed"}
+                  className="w-full border-2 border-fuchsia-300 bg-white text-black text-base font-black rounded-xl p-4 disabled:opacity-50 focus:outline-none focus:ring-4 focus:ring-fuchsia-300/40"
+                >
+                  <option value="">SELECT RESULT</option>
+                  <option value="win">WIN</option>
+                  <option value="lost">LOST</option>
+                  <option value="tie">TIE</option>
+                  <option value="score">SCORE</option>
+                </select>
+              </div>
+
+              {resultEntryTypes[player.uid] === "score" && (
+                <div className="rounded-2xl border-2 border-yellow-300 bg-yellow-950/35 p-3">
+                  <div className="text-xs font-black tracking-[0.18em] text-yellow-200 mb-2">
+                    ENTER SCORE / POINTS
+                  </div>
+                  <input
+                    type="text"
+                    inputMode="decimal"
+                    value={scoreInputs[player.uid] || ""}
+                    onChange={(e) => {
+                      setScoreInputs((prev) => ({
+                        ...prev,
+                        [player.uid]: e.target.value,
+                      }));
+                      setScoreboardUpdated(false);
+                    }}
+                    placeholder="ENTER SCORE"
+                    disabled={challenge?.status === "completed"}
+                    className="w-full border-2 border-yellow-300 bg-white text-black placeholder:text-gray-500 text-lg font-black rounded-xl p-4 disabled:opacity-50 focus:outline-none focus:ring-4 focus:ring-yellow-300/40"
+                  />
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
 
     {/* STEP 3 - UPDATE SCOREBOARD */}
-    <div className="border-t border-red-500/40 pt-5">
-      <div className="text-red-400 text-xs tracking-[0.25em] font-extrabold">
-        STEP 3
+    <div
+      className={`rounded-3xl border-2 p-5 transition-all ${
+        allScoresEntered
+          ? "border-orange-300 bg-gradient-to-r from-orange-950/80 to-red-950/80 shadow-[0_0_35px_rgba(251,146,60,0.35)]"
+          : "border-gray-700 bg-neutral-950/80"
+      }`}
+    >
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
+        <div>
+          <div
+            className={`text-xs tracking-[0.25em] font-black ${
+              allScoresEntered ? "text-orange-300" : "text-gray-500"
+            }`}
+          >
+            STEP 3
+          </div>
+          <div
+            className={`text-2xl sm:text-3xl font-black mt-1 ${
+              allScoresEntered ? "text-white" : "text-gray-500"
+            }`}
+          >
+            UPDATE SCOREBOARD
+          </div>
+        </div>
+
+        <div
+          className={`rounded-full px-3 py-1 text-xs font-black ${
+            scoreboardUpdated
+              ? "bg-green-400 text-black"
+              : allScoresEntered
+              ? "bg-orange-400 text-black"
+              : "bg-gray-700 text-gray-300"
+          }`}
+        >
+          {scoreboardUpdated
+            ? "UPDATED"
+            : allScoresEntered
+            ? "READY"
+            : "LOCKED"}
+        </div>
       </div>
 
-      <div className="text-2xl font-extrabold text-white mt-1 mb-2">
-        UPDATE SCOREBOARD
-      </div>
-
-      <div className="text-sm text-red-200 mb-4">
-        Once every player has a score/result, update the scoreboard before
-        continuing.
+      <div
+        className={`mb-4 rounded-xl border p-3 text-sm font-bold ${
+          allScoresEntered
+            ? "border-orange-300/50 bg-black/30 text-orange-100"
+            : "border-gray-700 bg-black/30 text-gray-500"
+        }`}
+      >
+        {allScoresEntered
+          ? "All player results are complete. Update the scoreboard to unlock finalization."
+          : "Complete every required player result above to unlock this step."}
       </div>
 
       <button
@@ -916,125 +1048,109 @@ const canFinalize =
           updating ||
           challenge?.status === "completed" ||
           players.length === 0 ||
-          !players.every((player) => {
-  if (challenge?.typeOfGame === "NASSAU") {
-    const result = nassauResults[player.uid];
-
-    return (
-      result?.front9 &&
-      result?.back9 &&
-      result?.game &&
-      result?.units
-    );
-  }
-
-  return (scoreInputs[player.uid] || "").trim() !== "";
-})
+          !allScoresEntered
         }
-        className="w-full bg-red-600 border-2 border-red-400 text-white px-5 py-4 rounded-2xl text-lg font-extrabold tracking-wide shadow-[0_0_25px_rgba(255,0,0,0.55)] hover:bg-red-500 hover:shadow-[0_0_35px_rgba(255,0,0,0.8)] hover:scale-[1.02] transition-all disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none"
+        className="w-full rounded-2xl border-2 border-orange-200 bg-orange-400 px-5 py-4 text-lg font-black tracking-wide text-black shadow-[0_0_28px_rgba(251,146,60,0.5)] transition-all hover:bg-orange-300 hover:scale-[1.01] disabled:border-gray-700 disabled:bg-gray-800 disabled:text-gray-500 disabled:shadow-none disabled:cursor-not-allowed disabled:hover:scale-100"
       >
         {updating
           ? "UPDATING SCOREBOARD..."
           : players.length === 0
           ? "ADD PLAYERS TO CONTINUE"
-          : !players.every((player) => {
-    if (challenge?.typeOfGame === "NASSAU") {
-      const result = nassauResults[player.uid];
-
-      return (
-        result?.front9 &&
-        result?.back9 &&
-        result?.game &&
-        result?.units
-      );
-    }
-
-    return (scoreInputs[player.uid] || "").trim() !== "";
-  })
-? "ENTER ALL SCORES / RESULTS"
+          : !allScoresEntered
+          ? "ENTER ALL RESULTS TO CONTINUE"
+          : scoreboardUpdated
+          ? "SCOREBOARD UPDATED"
           : "UPDATE SCOREBOARD"}
       </button>
     </div>
   </div>
 )}
 
-
 {/* PLAYER SUMMARY */}
-        <div className="border border-red-500/20 bg-black/30 rounded-2xl p-4 shadow-[0_0_25px_rgba(255,0,0,0.15)]">
-          <div className="mb-4">
-            <div className="text-red-400 text-xs tracking-[0.25em] font-bold">
+<div className="border-2 border-cyan-400/80 bg-gradient-to-br from-cyan-950/70 via-blue-950/70 to-black rounded-3xl p-5 shadow-[0_0_35px_rgba(34,211,238,0.28)]">
+  <div className="flex items-center justify-between gap-3 mb-4">
+    <div>
+      <div className="text-cyan-300 text-xs tracking-[0.25em] font-black">
+        LIVE SCOREBOARD
+      </div>
+      <div className="text-2xl font-black text-white mt-1">
+        PLAYER SUMMARY
+      </div>
+    </div>
 
+    <div className="rounded-full bg-cyan-300 px-3 py-1 text-xs font-black text-black">
+      LIVE
+    </div>
+  </div>
 
-
-              LIVE SCOREBOARD
-            </div>
-            <div className="text-xl font-bold text-white mt-1">
-
-
-              PLAYER SUMMARY
-            </div>
-          </div>
-
-          <PlayerSummaryList challengeId={challengeId as string} />
-        </div>
-
+  <PlayerSummaryList challengeId={challengeId as string} />
+</div>
 
 {/* STEP 4 - FINALIZE */}
 {isCreator && challenge?.status !== "completed" && players.length > 0 && (
   <div
-    className={`border rounded-2xl p-5 flex flex-col gap-4 transition-all ${
+    className={`rounded-3xl border-2 p-5 sm:p-6 flex flex-col gap-4 transition-all ${
       canFinalize
-        ? "border-red-500 bg-red-950/30 shadow-[0_0_30px_rgba(255,0,0,0.35)]"
-        : "border-gray-700 bg-neutral-900/70"
+        ? "border-green-300 bg-gradient-to-br from-green-950/85 via-emerald-950/80 to-black shadow-[0_0_45px_rgba(74,222,128,0.45)]"
+        : "border-gray-700 bg-neutral-950/85"
     }`}
   >
-    <div>
-      <div
-        className={`text-xs tracking-[0.25em] font-extrabold ${
-          canFinalize ? "text-red-400" : "text-gray-500"
-        }`}
-      >
-        STEP 4
+    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+      <div>
+        <div
+          className={`text-xs tracking-[0.25em] font-black ${
+            canFinalize ? "text-green-300" : "text-gray-500"
+          }`}
+        >
+          STEP 4
+        </div>
+        <div
+          className={`text-3xl font-black mt-1 ${
+            canFinalize ? "text-white" : "text-gray-500"
+          }`}
+        >
+          FINALIZE CHALLENGE
+        </div>
       </div>
 
       <div
-        className={`text-2xl font-extrabold mt-1 ${
-          canFinalize ? "text-red-200" : "text-gray-400"
+        className={`rounded-full px-4 py-2 text-xs font-black ${
+          canFinalize
+            ? "bg-green-400 text-black"
+            : "bg-gray-700 text-gray-300"
         }`}
       >
-        FINALIZE CHALLENGE
+        {canFinalize ? "READY TO FINALIZE" : "LOCKED"}
       </div>
     </div>
 
     {!allScoresEntered ? (
-      <div className="text-sm font-bold text-yellow-300 bg-yellow-950/30 border border-yellow-500/40 rounded-xl p-3">
-        LOCKED — Enter a score/result for every player first.
+      <div className="text-sm font-black text-black bg-yellow-300 border-2 border-yellow-100 rounded-2xl p-4">
+        ACTION REQUIRED — ENTER A RESULT FOR EVERY PLAYER.
       </div>
     ) : !scoreboardUpdated ? (
-      <div className="text-sm font-bold text-yellow-300 bg-yellow-950/30 border border-yellow-500/40 rounded-xl p-3">
-        LOCKED — Update the scoreboard before finalizing.
+      <div className="text-sm font-black text-black bg-orange-400 border-2 border-orange-200 rounded-2xl p-4">
+        ACTION REQUIRED — UPDATE THE SCOREBOARD BEFORE FINALIZING.
       </div>
     ) : (
-      <div className="text-sm font-bold text-green-300 bg-green-950/30 border border-green-500/40 rounded-xl p-3">
-        READY — Scores/results have been entered and the scoreboard has been
-        updated.
+      <div className="text-sm font-black text-black bg-green-400 border-2 border-green-200 rounded-2xl p-4 shadow-[0_0_24px_rgba(74,222,128,0.35)]">
+        READY — RESULTS ARE COMPLETE AND THE SCOREBOARD HAS BEEN UPDATED.
       </div>
     )}
 
-    <div className="text-sm text-red-100 leading-relaxed">
-      Check the scoreboard carefully before finalizing. Once finalized, the
-      challenge cannot be reopened.
+    <div className={canFinalize ? "text-sm text-green-100" : "text-sm text-gray-500"}>
+      Check the scoreboard carefully. Once finalized, the challenge cannot be reopened.
     </div>
 
     <button
       onClick={handleFinalizeChallenge}
       disabled={finalizing || !canFinalize}
-      className="bg-red-600 text-white px-5 py-4 rounded-2xl text-lg font-extrabold tracking-wide hover:bg-red-500 hover:shadow-[0_0_25px_rgba(255,0,0,0.7)] hover:scale-[1.02] transition-all disabled:bg-gray-700 disabled:text-gray-400 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none"
+      className="w-full rounded-2xl border-2 border-green-200 bg-green-400 px-5 py-5 text-xl font-black tracking-wide text-black shadow-[0_0_32px_rgba(74,222,128,0.5)] transition-all hover:bg-green-300 hover:scale-[1.01] disabled:border-gray-700 disabled:bg-gray-800 disabled:text-gray-500 disabled:shadow-none disabled:cursor-not-allowed disabled:hover:scale-100"
     >
       {finalizing
         ? "FINALIZING..."
         : !allScoresEntered
-        ? "ENTER ALL SCORES TO CONTINUE"
+        ? "ENTER ALL RESULTS TO CONTINUE"
         : !scoreboardUpdated
         ? "UPDATE SCOREBOARD TO CONTINUE"
         : "FINALIZE CHALLENGE"}
@@ -1042,26 +1158,29 @@ const canFinalize =
   </div>
 )}
 
-    
+{/* RESULTS */}
+{showResults && (
+  <div className="border-2 border-yellow-300/80 bg-gradient-to-br from-yellow-950/65 via-amber-950/55 to-black rounded-3xl p-5 shadow-[0_0_35px_rgba(253,224,71,0.25)]">
+    <div className="flex items-center justify-between gap-3 mb-4">
+      <div>
+        <div className="text-yellow-300 text-xs tracking-[0.25em] font-black">
+          FINAL RESULTS
+        </div>
+        <div className="text-2xl font-black text-white mt-1">
+          RESULTS
+        </div>
+      </div>
 
-   
+      {challenge.status === "completed" && (
+        <div className="rounded-full bg-yellow-300 px-3 py-1 text-xs font-black text-black">
+          FINAL
+        </div>
+      )}
+    </div>
 
-        {/* RESULTS */}
-        {showResults && (
-          <div className="border border-red-500/20 bg-black/30 rounded-2xl p-4 shadow-[0_0_25px_rgba(255,0,0,0.15)]">
-            <div className="mb-4">
-              <div className="text-red-400 text-xs tracking-[0.25em] font-bold">
-
-
-
-                FINAL RESULTS
-              </div>
-              <div className="text-xl font-bold text-white mt-1">RESULTS</div>
-            </div>
-
-            <ResultsList challengeId={challengeId as string} />
-          </div>
-        )}
+    <ResultsList challengeId={challengeId as string} />
+  </div>
+)}
       </div>
     </main>
   );

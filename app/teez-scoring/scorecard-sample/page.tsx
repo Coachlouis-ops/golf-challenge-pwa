@@ -26,17 +26,15 @@ type Hole = {
 type Player = {
   id: string;
   name: string;
+  handicap: number | null;
 };
 
-
-
 const defaultPlayers: Player[] = [
-  { id: "p1", name: "Player 1" },
-  { id: "p2", name: "Player 2" },
-  { id: "p3", name: "Player 3" },
-  { id: "p4", name: "Player 4" },
+  { id: "p1", name: "Player 1", handicap: null },
+  { id: "p2", name: "Player 2", handicap: null },
+  { id: "p3", name: "Player 3", handicap: null },
+  { id: "p4", name: "Player 4", handicap: null },
 ];
-
 
 function slugifyCompanyName(name: string) {
   return String(name)
@@ -139,19 +137,27 @@ useEffect(() => {
         setPlayers(
           data.players.map(
             (
-              player: {
-                id?: string;
-                name?: string;
-              },
-              index: number
-            ) => ({
-              id:
-                player.id ||
-                `p${index + 1}`,
-              name:
-                player.name ||
-                `Player ${index + 1}`,
-            })
+             player: {
+  id?: string;
+  name?: string;
+  handicap?: number | null;
+},
+index: number
+) => ({
+  id:
+    player.id ||
+    `p${index + 1}`,
+
+  name:
+    player.name ||
+    `Player ${index + 1}`,
+
+  handicap:
+    player.handicap === null ||
+    player.handicap === undefined
+      ? null
+      : Number(player.handicap),
+})
           )
         );
 
@@ -243,13 +249,55 @@ function updatePlayerName(
   setPlayersSaved(false);
 }
 
+function updatePlayerHandicap(
+  playerId: string,
+  value: string
+) {
+  if (isFinalized) return;
+
+  const handicap =
+    value === ""
+      ? null
+      : Number(value);
+
+  setPlayers((prev) =>
+    prev.map((player) =>
+      player.id === playerId
+        ? {
+            ...player,
+            handicap,
+          }
+        : player
+    )
+  );
+
+  setPlayersSaved(false);
+}
+
 async function savePlayers() {
   const missingName = players.some(
-    (player) => player.name.trim() === ""
+    (player) =>
+      player.name.trim() === ""
   );
 
   if (missingName) {
     alert("Please enter all 4 player names.");
+    return;
+  }
+
+  const missingHandicap =
+    players.some(
+      (player) =>
+        player.handicap === null ||
+        !Number.isFinite(
+          Number(player.handicap)
+        )
+    );
+
+  if (missingHandicap) {
+    alert(
+      "Please enter a handicap for all 4 players."
+    );
     return;
   }
 
@@ -268,7 +316,9 @@ async function savePlayers() {
 
     setPlayersSaved(true);
 
-    alert("Player names saved to Firestore.");
+   alert(
+  "Player names and handicaps saved."
+);
   } catch (error: any) {
     console.error(error);
 
@@ -483,7 +533,7 @@ function finalizeRound() {
             </h1>
 
             <p className="text-lg font-black text-cyan-300 mt-3 animate-pulse drop-shadow-[0_0_14px_rgba(34,211,238,1)]">
-              4 Ball Alliance · Mystery Count
+              4 Ball Alliance · Scramble Drive · Mystery Count
             </p>
           </div>
         </section>
@@ -530,7 +580,7 @@ function finalizeRound() {
               <div className="text-green-400 text-2xl mb-1">🕚</div>
 
               <h3 className="text-lg font-black">
-                11:00am
+                10:00am
               </h3>
 
               <p className="text-xs text-gray-400">
@@ -544,40 +594,81 @@ function finalizeRound() {
     PLAYERS IN YOUR TEAM
   </p>
 
-  <div className="grid gap-2">
-    {players.map((player, index) => (
-      <div
-        key={player.id}
-        className="grid grid-cols-[78px_1fr] gap-2 items-center"
-      >
-        <p className="text-xs text-gray-400 font-bold">
-          Player {index + 1}
-        </p>
+<div className="grid gap-3">
+  {players.map((player, index) => (
+    <div
+      key={player.id}
+      className="
+        grid
+        grid-cols-[62px_1fr_76px]
+        gap-2
+        items-center
+      "
+    >
+      <p className="text-xs text-gray-400 font-bold">
+        P{index + 1}
+      </p>
 
-        <input
-          value={player.name}
-          onChange={(e) =>
-            updatePlayerName(
-              player.id,
-              e.target.value
-            )
-          }
-          disabled={isFinalized}
-          className="
-            bg-black/40
-            border
-            border-white/10
-            rounded-xl
-            px-3
-            py-2
-            text-sm
-            font-bold
-            disabled:opacity-40
-          "
-        />
-      </div>
-    ))}
-  </div>
+      <input
+        value={player.name}
+        onChange={(e) =>
+          updatePlayerName(
+            player.id,
+            e.target.value
+          )
+        }
+        disabled={isFinalized}
+        placeholder={`Player ${index + 1}`}
+        className="
+          min-w-0
+          bg-black/40
+          border
+          border-white/10
+          rounded-xl
+          px-3
+          py-2
+          text-sm
+          font-bold
+          disabled:opacity-40
+        "
+      />
+
+      <input
+        value={
+          player.handicap === null
+            ? ""
+            : player.handicap
+        }
+        onChange={(e) =>
+          updatePlayerHandicap(
+            player.id,
+            e.target.value
+          )
+        }
+        disabled={isFinalized}
+        type="number"
+        min="0"
+        step="0.1"
+        inputMode="decimal"
+        placeholder="HCP"
+        className="
+          w-full
+          bg-black/40
+          border
+          border-green-400/30
+          rounded-xl
+          px-2
+          py-2
+          text-center
+          text-sm
+          font-black
+          text-green-400
+          disabled:opacity-40
+        "
+      />
+    </div>
+  ))}
+</div>
 
   <button
     onClick={savePlayers}

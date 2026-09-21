@@ -87,6 +87,76 @@ const holes: Hole[] = [
   { hole: 18, par: 4, menStroke: 4, ladiesStroke: 2, club: 383, championship: 398, ladies: 341 },
 ];
 
+function getPlayingHandicap(
+  handicap: number | null
+) {
+  if (
+    handicap === null ||
+    !Number.isFinite(Number(handicap))
+  ) {
+    return 0;
+  }
+
+  return Math.max(
+    0,
+    Math.round(Number(handicap))
+  );
+}
+
+function getPlayerStrokeIndex(
+  hole: Hole,
+  player: Player
+) {
+  return player.strokeCategory === "ladies"
+    ? hole.ladiesStroke
+    : hole.menStroke;
+}
+
+function getStrokesReceived(
+  handicap: number | null,
+  strokeIndex: number
+) {
+  const playingHandicap =
+    getPlayingHandicap(handicap);
+
+  const baseStrokes =
+    Math.floor(playingHandicap / 18);
+
+  const remainder =
+    playingHandicap % 18;
+
+  return (
+    baseStrokes +
+    (remainder >= strokeIndex ? 1 : 0)
+  );
+}
+
+function getStablefordPoints(
+  grossScore: number,
+  hole: Hole,
+  player: Player
+) {
+  const strokeIndex =
+    getPlayerStrokeIndex(
+      hole,
+      player
+    );
+
+  const strokesReceived =
+    getStrokesReceived(
+      player.handicap,
+      strokeIndex
+    );
+
+  const nettScore =
+    grossScore - strokesReceived;
+
+  const points =
+    2 + (hole.par - nettScore);
+
+  return Math.max(0, points);
+}
+
 const holeImages = [
   "/hero_main.png",
   "/hero_main2.png",
@@ -94,6 +164,7 @@ const holeImages = [
   "/match_create_1.png",
   "/profile_image_1.png",
 ];
+
 
 function ScorecardSampleContent() {
 
@@ -113,7 +184,11 @@ const [activeNine, setActiveNine] = useState<"front" | "back">("front");
 const [players, setPlayers] = useState<Player[]>(defaultPlayers);
 const [playersSaved, setPlayersSaved] = useState(false);
 const [loadingPlayers, setLoadingPlayers] = useState(true);
-const [scores, setScores] = useState<Record<string, string>>({});
+const [scores, setScores] =
+  useState<Record<string, string>>({});
+
+const [points, setPoints] =
+  useState<Record<string, number>>({});
 const [isSaved, setIsSaved] = useState(false);
 const [isFinalized, setIsFinalized] = useState(false);
 const [updatedHoles, setUpdatedHoles] = useState<number[]>([]);
@@ -143,6 +218,7 @@ useEffect(() => {
         setPlayers(defaultPlayers);
         setPlayersSaved(false);
         setScores({});
+        setPoints({});
         setUpdatedHoles([]);
         setIsFinalized(false);
         return;
@@ -158,33 +234,36 @@ useEffect(() => {
         setPlayers(
           data.players.map(
             (
-             player: {
-  id?: string;
-  name?: string;
-  handicap?: number | null;
-  strokeCategory?: "men" | "ladies";
-},
-index: number
-) => ({
-  id:
-    player.id ||
-    `p${index + 1}`,
+              player: {
+                id?: string;
+                name?: string;
+                handicap?: number | null;
+                strokeCategory?: "men" | "ladies";
+              },
+              index: number
+            ) => ({
+              id:
+                player.id ||
+                `p${index + 1}`,
 
-  name:
-    player.name ||
-    `Player ${index + 1}`,
+              name:
+                player.name ||
+                `Player ${index + 1}`,
 
-  handicap:
-    player.handicap === null ||
-    player.handicap === undefined
-      ? null
-      : Number(player.handicap),
+              handicap:
+                player.handicap === null ||
+                player.handicap === undefined
+                  ? null
+                  : Number(
+                      player.handicap
+                    ),
 
-  strokeCategory:
-    player.strokeCategory === "ladies"
-      ? "ladies"
-      : "men",
-})
+              strokeCategory:
+                player.strokeCategory ===
+                "ladies"
+                  ? "ladies"
+                  : "men",
+            })
           )
         );
 
@@ -194,27 +273,49 @@ index: number
         setPlayersSaved(false);
       }
 
-      const savedScores: Record<string, string> = {};
+      const savedScores:
+        Record<string, string> = {};
+
+      const savedPoints:
+        Record<string, number> = {};
 
       if (data.scores) {
-        Object.entries(data.scores).forEach(
+        Object.entries(
+          data.scores
+        ).forEach(
           ([holeKey, holeValue]) => {
             const holeNumber =
               Number(
-                holeKey.replace("hole", "")
+                holeKey.replace(
+                  "hole",
+                  ""
+                )
               );
 
             if (
-              Number.isInteger(holeNumber) &&
-              Array.isArray(holeValue)
+              Number.isInteger(
+                holeNumber
+              ) &&
+              Array.isArray(
+                holeValue
+              )
             ) {
               holeValue.forEach(
                 (scoreItem: any) => {
-                  savedScores[
-                    `${holeNumber}-${scoreItem.playerId}`
-                  ] = String(
-                    scoreItem.score ?? ""
-                  );
+                  const key =
+                    `${holeNumber}-${scoreItem.playerId}`;
+
+                  savedScores[key] =
+                    String(
+                      scoreItem.score ??
+                      ""
+                    );
+
+                  savedPoints[key] =
+                    Number(
+                      scoreItem.points ||
+                      0
+                    );
                 }
               );
             }
@@ -222,20 +323,35 @@ index: number
         );
       }
 
-      setScores(savedScores);
+      setScores(
+        savedScores
+      );
+
+      setPoints(
+        savedPoints
+      );
 
       const savedUpdatedHoles =
-        Object.keys(data.scores || {})
+        Object.keys(
+          data.scores || {}
+        )
           .map((key) =>
             Number(
-              key.replace("hole", "")
+              key.replace(
+                "hole",
+                ""
+              )
             )
           )
           .filter((hole) =>
-            Number.isInteger(hole)
+            Number.isInteger(
+              hole
+            )
           );
 
-      setUpdatedHoles(savedUpdatedHoles);
+      setUpdatedHoles(
+        savedUpdatedHoles
+      );
 
       setIsFinalized(
         data.finalized === true
@@ -243,13 +359,27 @@ index: number
     } catch (error) {
       console.error(error);
 
-      setPlayers(defaultPlayers);
-      setPlayersSaved(false);
+      setPlayers(
+        defaultPlayers
+      );
+
+      setPlayersSaved(
+        false
+      );
+
       setScores({});
+
+      setPoints({});
+
       setUpdatedHoles([]);
-      setIsFinalized(false);
+
+      setIsFinalized(
+        false
+      );
     } finally {
-      setLoadingPlayers(false);
+      setLoadingPlayers(
+        false
+      );
     }
   }
 
@@ -387,6 +517,17 @@ function getScore(
   ] || "";
 }
 
+function getPoints(
+  holeNumber: number,
+  playerId: string
+) {
+  return (
+    points[
+      `${holeNumber}-${playerId}`
+    ] || 0
+  );
+}
+
 function updateScore(
   holeNumber: number,
   playerId: string,
@@ -401,36 +542,36 @@ function updateScore(
   }));
 }
 
-const playerTotals = players.map((player) => {
-  const total = holes.reduce(
-    (sum, hole) =>
-      sum +
-      (
-        Number(
-          scores[
-            `${hole.hole}-${player.id}`
-          ] || 0
-        ) || 0
-      ),
-    0
-  );
+const playerTotals =
+  players.map((player) => {
+    const total =
+      holes.reduce(
+        (sum, hole) =>
+          sum +
+          Number(
+            points[
+              `${hole.hole}-${player.id}`
+            ] || 0
+          ),
+        0
+      );
 
-  return {
-    ...player,
-    total,
-  };
-});
+    return {
+      ...player,
+      total,
+    };
+  });
 
-function getHoleTotal(holeNumber: number) {
+function getHoleTotal(
+  holeNumber: number
+) {
   return players.reduce(
     (sum, player) =>
       sum +
-      (
-        Number(
-          scores[
-            `${holeNumber}-${player.id}`
-          ] || 0
-        ) || 0
+      Number(
+        points[
+          `${holeNumber}-${player.id}`
+        ] || 0
       ),
     0
   );
@@ -446,16 +587,37 @@ const teamTotal =
 const allHolesUpdated =
   updatedHoles.length === 18;
 
-async function saveHoleScore(holeNumber: number) {
+async function saveHoleScore(
+  holeNumber: number
+) {
   if (!playersSaved) {
-    alert("Please save the player names first.");
+    alert(
+      "Please save the player names, handicaps and Men/Ladies selection first."
+    );
     return;
   }
 
-  const holeComplete = players.every(
-    (player) =>
-      getScore(holeNumber, player.id) !== ""
-  );
+  const hole =
+    holes.find(
+      (item) =>
+        item.hole === holeNumber
+    );
+
+  if (!hole) {
+    alert(
+      "Hole could not be found."
+    );
+    return;
+  }
+
+  const holeComplete =
+    players.every(
+      (player) =>
+        getScore(
+          holeNumber,
+          player.id
+        ) !== ""
+    );
 
   if (!holeComplete) {
     alert(
@@ -464,47 +626,106 @@ async function saveHoleScore(holeNumber: number) {
     return;
   }
 
-  const holeScores = players.map((player) => ({
-    playerId: player.id,
-    score: Number(
-      getScore(holeNumber, player.id)
-    ),
-  }));
+  const holeScores =
+    players.map((player) => {
+      const grossScore =
+        Number(
+          getScore(
+            holeNumber,
+            player.id
+          )
+        );
+
+      const strokeIndex =
+        getPlayerStrokeIndex(
+          hole,
+          player
+        );
+
+      const strokesReceived =
+        getStrokesReceived(
+          player.handicap,
+          strokeIndex
+        );
+
+      const nettScore =
+        grossScore -
+        strokesReceived;
+
+      const stablefordPoints =
+        getStablefordPoints(
+          grossScore,
+          hole,
+          player
+        );
+
+      return {
+        playerId:
+          player.id,
+
+        score:
+          grossScore,
+
+        points:
+          stablefordPoints,
+
+        strokeIndex,
+
+        strokesReceived,
+
+        nettScore,
+      };
+    });
 
   const nextScores = {
     ...scores,
   };
 
-  holeScores.forEach((holeScore) => {
-    nextScores[
-      `${holeNumber}-${holeScore.playerId}`
-    ] = String(holeScore.score);
-  });
+  const nextPoints = {
+    ...points,
+  };
+
+  holeScores.forEach(
+    (holeScore) => {
+      const key =
+        `${holeNumber}-${holeScore.playerId}`;
+
+      nextScores[key] =
+        String(
+          holeScore.score
+        );
+
+      nextPoints[key] =
+        holeScore.points;
+    }
+  );
 
   const nextUpdatedHoles =
-    updatedHoles.includes(holeNumber)
+    updatedHoles.includes(
+      holeNumber
+    )
       ? updatedHoles
-      : [...updatedHoles, holeNumber];
+      : [
+          ...updatedHoles,
+          holeNumber,
+        ];
 
-  const nextPlayerTotals = players.map((player) => {
-    const total = holes.reduce(
-      (sum, hole) =>
-        sum +
-        (
+  const nextPlayerPointTotals =
+    players.map((player) =>
+      holes.reduce(
+        (sum, currentHole) =>
+          sum +
           Number(
-            nextScores[
-              `${hole.hole}-${player.id}`
+            nextPoints[
+              `${currentHole.hole}-${player.id}`
             ] || 0
-          ) || 0
-        ),
-      0
+          ),
+        0
+      )
     );
 
-    return total;
-  });
-
   const nextTotalScore =
-    nextPlayerTotals.reduce(
+    nextPlayerPointTotals.reduce(
       (sum, total) =>
         sum + total,
       0
@@ -522,11 +743,22 @@ async function saveHoleScore(holeNumber: number) {
       participantId,
       holeNumber,
       holeScores,
-      totalScore: nextTotalScore,
+      totalScore:
+        nextTotalScore,
     });
 
-    setScores(nextScores);
-    setUpdatedHoles(nextUpdatedHoles);
+    setScores(
+      nextScores
+    );
+
+    setPoints(
+      nextPoints
+    );
+
+    setUpdatedHoles(
+      nextUpdatedHoles
+    );
+
     setIsSaved(true);
 
     alert(
@@ -859,37 +1091,98 @@ function finalizeRound() {
                     Club {hole.club}m · Champ {hole.championship}m · Ladies {hole.ladies}m
                   </p>
 
+<div className="grid grid-cols-[1fr_54px_48px] gap-2 mb-1 px-1">
+  <p className="text-[9px] text-gray-500 font-black">
+    PLAYER
+  </p>
+
+  <p className="text-[9px] text-gray-500 font-black text-center">
+    SCORE
+  </p>
+
+  <p className="text-[9px] text-green-400 font-black text-center">
+    PTS
+  </p>
+</div>
+
+
+
                   <div className="grid gap-2">
                     {players.map((player) => (
-                      <div
-                        key={player.id}
-                        className="grid grid-cols-[1fr_54px] gap-2 items-center min-w-0"
-                      >
-                        <div className="bg-black/40 border border-white/10 rounded-xl px-2 py-2 text-xs truncate min-w-0">
-                          {player.name}
-                        </div>
+  <div
+    key={player.id}
+    className="
+      grid
+      grid-cols-[1fr_54px_48px]
+      gap-2
+      items-center
+      min-w-0
+    "
+  >
+    <div className="bg-black/40 border border-white/10 rounded-xl px-2 py-2 text-xs truncate min-w-0">
+      {player.name}
+    </div>
 
-                        <input
-                          value={getScore(hole.hole, player.id)}
-                          onChange={(e) =>
-                            updateScore(hole.hole, player.id, e.target.value)
-                          }
-                          disabled={isFinalized}
-                          type="number"
-                          min="0"
-                          max="10"
-                          inputMode="numeric"
-                          placeholder="–"
-                          className="w-full bg-black/40 border border-cyan-400/30 rounded-xl px-1 py-2 text-center text-lg font-black disabled:opacity-40"
-                        />
-                      </div>
-                    ))}
+    <input
+      value={
+        getScore(
+          hole.hole,
+          player.id
+        )
+      }
+      onChange={(e) =>
+        updateScore(
+          hole.hole,
+          player.id,
+          e.target.value
+        )
+      }
+      disabled={isFinalized}
+      type="number"
+      min="1"
+      max="15"
+      inputMode="numeric"
+      placeholder="–"
+      className="
+        w-full
+        bg-black/40
+        border
+        border-cyan-400/30
+        rounded-xl
+        px-1
+        py-2
+        text-center
+        text-lg
+        font-black
+        disabled:opacity-40
+      "
+    />
+
+    <div
+      className="
+        border
+        border-green-400/30
+        rounded-xl
+        py-2
+        text-center
+        text-lg
+        font-black
+        text-green-400
+      "
+    >
+      {getPoints(
+        hole.hole,
+        player.id
+      )}
+    </div>
+  </div>
+))}
                   </div>
 
                   <div className="grid grid-cols-[1fr_54px] gap-2 items-center mt-3 min-w-0">
   <p className="font-bold text-gray-300 text-sm">
-    Hole Total
-  </p>
+  Hole Points
+</p>
 
   <div className="border border-green-400/40 rounded-xl px-1 py-2 text-center text-lg font-black text-green-400">
     {getHoleTotal(hole.hole)}
@@ -918,9 +1211,9 @@ function finalizeRound() {
     <div className="bg-cyan-950/50 border border-cyan-400/30 rounded-3xl p-3">
       <div className="grid grid-cols-[96px_1fr] gap-3 items-center mb-3">
         <div>
-          <p className="text-[10px] text-gray-400 font-bold">
-            TEAM TOTAL
-          </p>
+       <p className="text-[10px] text-gray-400 font-bold">
+  TEAM POINTS
+</p>
 
           <p className="text-4xl font-black text-green-400">
             {teamTotal}

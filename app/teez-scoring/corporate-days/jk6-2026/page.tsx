@@ -63,11 +63,11 @@ export default function JK6MainDashboardPage() {
             </h1>
 
             <p className="text-cyan-300 font-black mt-2 animate-pulse drop-shadow-[0_0_14px_rgba(34,211,238,1)]">
-              4 Ball Alliance · Mystery Count
-            </p>
+  4 Ball Alliance · Scramble Drive · Mystery Count
+</p>
 
             <p className="text-gray-400 text-sm mt-3">
-              Shotgun start · 11:00am · Woodhill Residential Estate & Country Club
+              Shotgun start · 10:00am · Woodhill Residential Estate & Country Club
             </p>
           </div>
         </section>

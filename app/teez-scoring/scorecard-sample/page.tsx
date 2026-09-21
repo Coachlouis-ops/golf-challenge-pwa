@@ -136,6 +136,13 @@ function getStablefordPoints(
   hole: Hole,
   player: Player
 ) {
+  if (
+    !Number.isFinite(grossScore) ||
+    grossScore <= 0
+  ) {
+    return 0;
+  }
+
   const strokeIndex =
     getPlayerStrokeIndex(
       hole,
@@ -1081,7 +1088,7 @@ function finalizeRound() {
       }
       disabled={isFinalized}
       type="number"
-      min="1"
+      min="0"
       max="15"
       inputMode="numeric"
       placeholder="–"

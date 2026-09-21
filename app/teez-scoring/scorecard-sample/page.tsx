@@ -164,14 +164,6 @@ function getStablefordPoints(
   return Math.max(0, points);
 }
 
-const holeImages = [
-  "/hero_main.png",
-  "/hero_main2.png",
-  "/hero-teez.jpg",
-  "/match_create_1.png",
-  "/profile_image_1.png",
-];
-
 
 function ScorecardSampleContent() {
 
@@ -985,173 +977,232 @@ function finalizeRound() {
           </div>
         </section>
 
-        {/* HOLE CARDS */}
+       {/* HOLE CARDS */}
 
-        <section className="px-3 mt-5 grid gap-4">
-          {visibleHoles.map((hole, index) => (
-            <div
-              key={hole.hole}
-              className="bg-cyan-950/30 border border-cyan-400/30 rounded-3xl overflow-hidden"
-            >
-              <div className="grid grid-cols-[105px_1fr] gap-3">
-                <div
-                  className="min-h-[235px] bg-cover bg-center relative"
-                  style={{
-                    backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,0.10), rgba(0,0,0,0.78)), url('${
-                      holeImages[index % holeImages.length]
-                    }')`,
-                  }}
-                >
-                  <div className="absolute top-4 left-3">
-                    <p className="text-[9px] tracking-[0.35em]">
-                      HOLE
-                    </p>
-
-                    <p className="text-6xl font-black">
-                      {hole.hole}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="py-4 pr-3 min-w-0">
-                  <div className="flex flex-wrap items-center gap-2 mb-2">
-                    <p className="text-green-400 text-lg font-black">
-                      Par {hole.par}
-                    </p>
-
-                    <span className="text-gray-500">|</span>
-
-                    <p className="text-gray-300 text-sm">
-                      Men SI{" "}
-                      <span className="text-green-400 font-black">
-                        {hole.menStroke}
-                      </span>
-                    </p>
-
-                    <p className="text-gray-300 text-sm">
-                      Ladies SI{" "}
-                      <span className="text-pink-300 font-black">
-                        {hole.ladiesStroke}
-                      </span>
-                    </p>
-                  </div>
-
-                  <p className="text-[10px] text-gray-500 mb-3">
-                    Club {hole.club}m · Champ {hole.championship}m · Ladies {hole.ladies}m
-                  </p>
-
-<div className="grid grid-cols-[1fr_54px_48px] gap-2 mb-1 px-1">
-  <p className="text-[9px] text-gray-500 font-black">
-    PLAYER
-  </p>
-
-  <p className="text-[9px] text-gray-500 font-black text-center">
-    SCORE
-  </p>
-
-  <p className="text-[9px] text-green-400 font-black text-center">
-    PTS
-  </p>
-</div>
-
-
-
-                  <div className="grid gap-2">
-                    {players.map((player) => (
-  <div
-    key={player.id}
-    className="
-      grid
-      grid-cols-[1fr_54px_48px]
-      gap-2
-      items-center
-      min-w-0
-    "
-  >
-    <div className="bg-black/40 border border-white/10 rounded-xl px-2 py-2 text-xs truncate min-w-0">
-      {player.name}
-    </div>
-
-    <input
-      value={
-        getScore(
-          hole.hole,
-          player.id
-        )
-      }
-      onChange={(e) =>
-        updateScore(
-          hole.hole,
-          player.id,
-          e.target.value
-        )
-      }
-      disabled={isFinalized}
-      type="number"
-      min="0"
-      max="15"
-      inputMode="numeric"
-      placeholder="–"
+<section className="px-3 mt-5 grid gap-4">
+  {visibleHoles.map((hole) => (
+    <div
+      key={hole.hole}
       className="
-        w-full
-        bg-black/40
+        bg-cyan-950/30
         border
         border-cyan-400/30
-        rounded-xl
-        px-1
-        py-2
-        text-center
-        text-lg
-        font-black
-        disabled:opacity-40
-      "
-    />
-
-    <div
-      className="
-        border
-        border-green-400/30
-        rounded-xl
-        py-2
-        text-center
-        text-lg
-        font-black
-        text-green-400
+        rounded-3xl
+        p-4
+        overflow-hidden
       "
     >
-      {getPoints(
-        hole.hole,
-        player.id
-      )}
-    </div>
-  </div>
-))}
-                  </div>
+      {/* HOLE HEADER */}
 
-                  <div className="grid grid-cols-[1fr_54px] gap-2 items-center mt-3 min-w-0">
-  <p className="font-bold text-gray-300 text-sm">
-  Hole Points
-</p>
+      <div className="flex items-start justify-between gap-3 mb-4">
+        <div>
+          <p className="text-[9px] tracking-[0.35em] text-gray-500">
+            HOLE
+          </p>
 
-  <div className="border border-green-400/40 rounded-xl px-1 py-2 text-center text-lg font-black text-green-400">
-    {getHoleTotal(hole.hole)}
-  </div>
-</div>
+          <p className="text-5xl font-black leading-none text-white">
+            {hole.hole}
+          </p>
+        </div>
 
-<button
-  onClick={() => saveHoleScore(hole.hole)}
-  disabled={isFinalized}
-  className="w-full mt-3 bg-cyan-400 text-black rounded-xl py-3 font-black text-sm disabled:opacity-40"
->
-{updatedHoles.includes(hole.hole)
-  ? `HOLE ${hole.hole} UPDATED`
-  : `UPDATE HOLE ${hole.hole} SCORE`}
-</button>
-                </div>
-              </div>
+        <div className="text-right">
+          <p className="text-green-400 text-xl font-black">
+            Par {hole.par}
+          </p>
+
+          <div className="flex justify-end gap-3 mt-1">
+            <p className="text-xs text-gray-300">
+              Men SI{" "}
+              <span className="text-green-400 font-black">
+                {hole.menStroke}
+              </span>
+            </p>
+
+            <p className="text-xs text-gray-300">
+              Ladies SI{" "}
+              <span className="text-pink-300 font-black">
+                {hole.ladiesStroke}
+              </span>
+            </p>
+          </div>
+
+          <p className="text-[10px] text-gray-500 mt-2">
+            Club {hole.club}m · Champ {hole.championship}m · Ladies {hole.ladies}m
+          </p>
+        </div>
+      </div>
+
+      {/* TABLE HEADER */}
+
+      <div
+        className="
+          grid
+          grid-cols-[minmax(0,1fr)_64px_58px]
+          gap-2
+          mb-2
+          px-1
+        "
+      >
+        <p className="text-[9px] text-gray-500 font-black">
+          PLAYER
+        </p>
+
+        <p className="text-[9px] text-gray-500 font-black text-center">
+          SCORE
+        </p>
+
+        <p className="text-[9px] text-green-400 font-black text-center">
+          PTS
+        </p>
+      </div>
+
+      {/* PLAYERS */}
+
+      <div className="grid gap-2">
+        {players.map((player) => (
+          <div
+            key={player.id}
+            className="
+              grid
+              grid-cols-[minmax(0,1fr)_64px_58px]
+              gap-2
+              items-center
+            "
+          >
+            <div
+              className="
+                bg-black/40
+                border
+                border-white/10
+                rounded-xl
+                px-3
+                py-3
+                text-sm
+                font-bold
+                min-w-0
+                truncate
+              "
+            >
+              {player.name}
             </div>
-          ))}
-        </section>
+
+            <input
+              value={
+                getScore(
+                  hole.hole,
+                  player.id
+                )
+              }
+              onChange={(e) =>
+                updateScore(
+                  hole.hole,
+                  player.id,
+                  e.target.value
+                )
+              }
+              disabled={isFinalized}
+              type="number"
+              min="0"
+              max="15"
+              inputMode="numeric"
+              placeholder="–"
+              className="
+                w-full
+                bg-black/40
+                border
+                border-cyan-400/30
+                rounded-xl
+                px-1
+                py-3
+                text-center
+                text-lg
+                font-black
+                disabled:opacity-40
+              "
+            />
+
+            <div
+              className="
+                border
+                border-green-400/30
+                rounded-xl
+                py-3
+                text-center
+                text-lg
+                font-black
+                text-green-400
+              "
+            >
+              {getPoints(
+                hole.hole,
+                player.id
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* HOLE TOTAL */}
+
+      <div
+        className="
+          grid
+          grid-cols-[1fr_64px]
+          gap-2
+          items-center
+          mt-4
+        "
+      >
+        <p className="font-bold text-gray-300 text-sm">
+          Hole Points
+        </p>
+
+        <div
+          className="
+            border
+            border-green-400/40
+            rounded-xl
+            py-2
+            text-center
+            text-lg
+            font-black
+            text-green-400
+          "
+        >
+          {getHoleTotal(
+            hole.hole
+          )}
+        </div>
+      </div>
+
+      <button
+        onClick={() =>
+          saveHoleScore(
+            hole.hole
+          )
+        }
+        disabled={isFinalized}
+        className="
+          w-full
+          mt-3
+          bg-cyan-400
+          text-black
+          rounded-xl
+          py-3
+          font-black
+          text-sm
+          disabled:opacity-40
+        "
+      >
+        {updatedHoles.includes(
+          hole.hole
+        )
+          ? `HOLE ${hole.hole} UPDATED`
+          : `UPDATE HOLE ${hole.hole} SCORE`}
+      </button>
+    </div>
+  ))}
+</section>
 
   {/* STICKY TOTAL */}
 

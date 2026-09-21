@@ -110,25 +110,37 @@ export default function CorporateDaysPage() {
 
         </section>
 
-        <button
-          onClick={() =>
-            router.push("/teez-scoring")
-          }
-          className="
-            mt-6
-            w-full
-            bg-white/10
-            border
-            border-white/10
-            rounded-2xl
-            py-4
-            font-black
-            hover:border-green-400
-            transition
-          "
-        >
-          BACK TO TEEZ SCORING
-        </button>
+    <button
+  disabled
+  className="
+    mt-6
+    w-full
+    bg-white/5
+    border
+    border-white/10
+    rounded-2xl
+    py-4
+    font-black
+    text-gray-600
+    cursor-not-allowed
+    opacity-50
+  "
+>
+  BACK TO TEEZ SCORING
+</button>
+
+<div className="flex justify-center mt-6 pb-4">
+  <img
+    src="/transparent.png"
+    alt="TEEZ Golf Challenges"
+    className="
+      w-full
+      max-w-[280px]
+      h-auto
+      object-contain
+    "
+  />
+</div>
 
       </div>
     </main>

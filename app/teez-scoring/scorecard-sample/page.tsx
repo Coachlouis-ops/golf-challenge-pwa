@@ -34,25 +34,25 @@ const defaultPlayers: Player[] = [
   {
     id: "p1",
     name: "Player 1",
-    handicap: null,
+    handicap: 0,
     strokeCategory: "men",
   },
   {
     id: "p2",
     name: "Player 2",
-    handicap: null,
+    handicap: 0,
     strokeCategory: "men",
   },
   {
     id: "p3",
     name: "Player 3",
-    handicap: null,
+    handicap: 0,
     strokeCategory: "men",
   },
   {
     id: "p4",
     name: "Player 4",
-    handicap: null,
+    handicap: 0,
     strokeCategory: "men",
   },
 ];
@@ -250,13 +250,7 @@ useEffect(() => {
                 player.name ||
                 `Player ${index + 1}`,
 
-              handicap:
-                player.handicap === null ||
-                player.handicap === undefined
-                  ? null
-                  : Number(
-                      player.handicap
-                    ),
+              handicap: 0,
 
               strokeCategory:
                 player.strokeCategory ===
@@ -406,30 +400,6 @@ function updatePlayerName(
   setPlayersSaved(false);
 }
 
-function updatePlayerHandicap(
-  playerId: string,
-  value: string
-) {
-  if (isFinalized) return;
-
-  const handicap =
-    value === ""
-      ? null
-      : Number(value);
-
-  setPlayers((prev) =>
-    prev.map((player) =>
-      player.id === playerId
-        ? {
-            ...player,
-            handicap,
-          }
-        : player
-    )
-  );
-
-  setPlayersSaved(false);
-}
 
 function updatePlayerStrokeCategory(
   playerId: string,
@@ -464,21 +434,7 @@ async function savePlayers() {
     return;
   }
 
-  const missingHandicap =
-    players.some(
-      (player) =>
-        player.handicap === null ||
-        !Number.isFinite(
-          Number(player.handicap)
-        )
-    );
-
-  if (missingHandicap) {
-    alert(
-      "Please enter a handicap for all 4 players."
-    );
-    return;
-  }
+  
 
   try {
     const updateGolfDayParticipantPlayers =
@@ -495,9 +451,11 @@ async function savePlayers() {
 
     setPlayersSaved(true);
 
-   alert(
-  "Player names and handicaps saved."
+  alert(
+  "Player details saved. All players play from handicap 0."
 );
+
+
   } catch (error: any) {
     console.error(error);
 
@@ -591,9 +549,9 @@ async function saveHoleScore(
   holeNumber: number
 ) {
   if (!playersSaved) {
-    alert(
-      "Please save the player names, handicaps and Men/Ladies selection first."
-    );
+   alert(
+  "Please save the player names and Men/Ladies selection first."
+);
     return;
   }
 
@@ -914,39 +872,23 @@ function finalizeRound() {
         "
       />
 
-      <input
-        value={
-          player.handicap === null
-            ? ""
-            : player.handicap
-        }
-        onChange={(e) =>
-          updatePlayerHandicap(
-            player.id,
-            e.target.value
-          )
-        }
-        disabled={isFinalized}
-        type="number"
-        min="0"
-        step="0.1"
-        inputMode="decimal"
-        placeholder="HCP"
-        className="
-          w-full
-          bg-black/40
-          border
-          border-green-400/30
-          rounded-xl
-          px-2
-          py-2
-          text-center
-          text-sm
-          font-black
-          text-green-400
-          disabled:opacity-40
-        "
-      />
+     <div
+  className="
+    w-full
+    bg-black/60
+    border
+    border-green-400/30
+    rounded-xl
+    px-2
+    py-2
+    text-center
+    text-sm
+    font-black
+    text-green-400
+  "
+>
+  0
+</div>
 
 <select
   value={player.strokeCategory}

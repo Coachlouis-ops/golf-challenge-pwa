@@ -192,6 +192,15 @@ const [isSaved, setIsSaved] = useState(false);
 const [isFinalized, setIsFinalized] = useState(false);
 const [updatedHoles, setUpdatedHoles] = useState<number[]>([]);
 
+const [accessChecked, setAccessChecked] = useState(false);
+const [accessAllowed, setAccessAllowed] = useState(false);
+const [scorecardAccessToken, setScorecardAccessToken] = useState("");
+
+const [showAdminReopen, setShowAdminReopen] = useState(false);
+const [adminCode, setAdminCode] = useState("");
+const [adminError, setAdminError] = useState("");
+const [adminLoading, setAdminLoading] = useState(false);
+
 const visibleHoles =
   activeNine === "front"
     ? holes.filter((hole) => hole.hole <= 9)
@@ -201,6 +210,65 @@ useEffect(() => {
   async function loadSavedScorecard() {
     try {
       setLoadingPlayers(true);
+
+      const storedAccessToken =
+        sessionStorage.getItem(
+          `jk6ScorecardAccess:${participantId}`
+        ) || "";
+
+      if (!storedAccessToken) {
+        setAccessAllowed(false);
+        setAccessChecked(true);
+
+        router.replace(
+          "/teez-scoring/corporate-days/jk6-2026/companies"
+        );
+
+        return;
+      }
+
+      const validateJK6ScorecardAccess =
+        httpsCallable(
+          functions,
+          "validateJK6ScorecardAccess"
+        );
+
+      const accessResult =
+        await validateJK6ScorecardAccess({
+          participantId,
+          accessToken: storedAccessToken,
+        });
+
+      const accessData =
+        accessResult.data as {
+          success?: boolean;
+          allowed?: boolean;
+        };
+
+      if (
+        accessData.success !== true ||
+        accessData.allowed !== true
+      ) {
+        sessionStorage.removeItem(
+          `jk6ScorecardAccess:${participantId}`
+        );
+
+        setAccessAllowed(false);
+        setAccessChecked(true);
+
+        router.replace(
+          "/teez-scoring/corporate-days/jk6-2026/companies"
+        );
+
+        return;
+      }
+
+      setScorecardAccessToken(
+        storedAccessToken
+      );
+
+      setAccessAllowed(true);
+      setAccessChecked(true);
 
       const participantRef = doc(
         db,
@@ -352,22 +420,15 @@ useEffect(() => {
     } catch (error) {
       console.error(error);
 
-      setPlayers(
-        defaultPlayers
+      sessionStorage.removeItem(
+        `jk6ScorecardAccess:${participantId}`
       );
 
-      setPlayersSaved(
-        false
-      );
+      setAccessAllowed(false);
+      setAccessChecked(true);
 
-      setScores({});
-
-      setPoints({});
-
-      setUpdatedHoles([]);
-
-      setIsFinalized(
-        false
+      router.replace(
+        "/teez-scoring/corporate-days/jk6-2026/companies"
       );
     } finally {
       setLoadingPlayers(
@@ -377,7 +438,7 @@ useEffect(() => {
   }
 
   loadSavedScorecard();
-}, [participantId]);
+}, [participantId, router]);
 
 function updatePlayerName(
   playerId: string,
@@ -446,6 +507,7 @@ async function savePlayers() {
       golfdayId,
       participantId,
       players,
+      accessToken: scorecardAccessToken,
     });
 
     setPlayersSaved(true);
@@ -702,6 +764,7 @@ async function saveHoleScore(
       holeScores,
       totalScore:
         nextTotalScore,
+      accessToken: scorecardAccessToken,
     });
 
     setScores(
@@ -731,21 +794,108 @@ async function saveHoleScore(
   }
 }
 
-function finalizeRound() {
+async function finalizeRound() {
   if (!allHolesUpdated) {
-    alert("Please update all 18 holes before finalizing.");
+    alert(
+      "Please update all 18 holes before submitting your scorecard."
+    );
     return;
   }
 
-  setIsSaved(true);
-  setIsFinalized(true);
+  const confirmed =
+    window.confirm(
+      "Submit your scorecard? Once submitted it will be locked and cannot be reopened by players."
+    );
 
-  alert("Round finalized. Scorecard is now locked.");
+  if (!confirmed) {
+    return;
+  }
+
+  try {
+    const finalizeGolfDayParticipant =
+      httpsCallable(
+        functions,
+        "finalizeGolfDayParticipant"
+      );
+
+    await finalizeGolfDayParticipant({
+      golfdayId,
+      participantId,
+      accessToken:
+        scorecardAccessToken,
+    });
+
+    setIsSaved(true);
+    setIsFinalized(true);
+
+    alert(
+      "Scorecard submitted and locked."
+    );
+  } catch (error: any) {
+    console.error(error);
+
+    alert(
+      error.message ||
+        "Could not submit the scorecard."
+    );
+  }
 }
 
-  function reopenScorecard() {
+async function reopenScorecard() {
+  if (!adminCode.trim()) {
+    setAdminError(
+      "Enter the admin code."
+    );
+    return;
+  }
+
+  try {
+    setAdminLoading(true);
+    setAdminError("");
+
+    const reopenGolfDayParticipant =
+      httpsCallable(
+        functions,
+        "reopenGolfDayParticipant"
+      );
+
+    await reopenGolfDayParticipant({
+      golfdayId,
+      participantId,
+      adminCode:
+        adminCode.trim(),
+    });
+
     setIsFinalized(false);
-    alert("Scorecard reopened for editing.");
+    setShowAdminReopen(false);
+    setAdminCode("");
+    setAdminError("");
+
+    alert(
+      "Scorecard reopened by admin."
+    );
+  } catch (error: any) {
+    console.error(error);
+
+    setAdminError(
+      "Incorrect admin code or reopen failed."
+    );
+  } finally {
+    setAdminLoading(false);
+  }
+}
+
+  if (
+    !accessChecked ||
+    !accessAllowed
+  ) {
+    return (
+      <main className="min-h-screen bg-black text-white flex items-center justify-center px-4">
+        <p className="text-cyan-300 font-black">
+          VERIFYING SCORECARD ACCESS...
+        </p>
+      </main>
+    );
   }
 
   return (
@@ -1240,16 +1390,20 @@ function finalizeRound() {
           onClick={finalizeRound}
           className="w-full bg-red-600 text-white py-4 rounded-2xl font-black text-sm animate-pulse shadow-[0_0_22px_rgba(239,68,68,1)]"
         >
-          FINALIZE ROUND
+          SUBMIT YOUR SCORECARD
         </button>
       )}
 
       {isFinalized && (
         <button
-          onClick={reopenScorecard}
+          onClick={() => {
+            setAdminCode("");
+            setAdminError("");
+            setShowAdminReopen(true);
+          }}
           className="w-full bg-red-500 text-white py-4 rounded-2xl font-black text-sm"
         >
-          REOPEN SCORECARD
+          ADMIN REOPEN SCORECARD
         </button>
       )}
 
@@ -1285,6 +1439,107 @@ function finalizeRound() {
 </section>
 
       </div>
+
+      {showAdminReopen && (
+        <div className="fixed inset-0 z-[70] bg-black/90 flex items-center justify-center px-4">
+          <div className="w-full max-w-[390px] bg-neutral-950 border border-red-500/40 rounded-3xl p-6">
+            <p className="text-xs tracking-[0.3em] text-red-400 font-black">
+              ADMIN ONLY
+            </p>
+
+            <h2 className="text-2xl font-black mt-2">
+              Reopen Scorecard
+            </h2>
+
+            <p className="text-gray-400 text-sm mt-2">
+              Enter the admin code to reopen this submitted scorecard.
+            </p>
+
+            <input
+              value={adminCode}
+              onChange={(e) => {
+                setAdminCode(
+                  e.target.value
+                );
+
+                setAdminError("");
+              }}
+              onKeyDown={(e) => {
+                if (
+                  e.key === "Enter" &&
+                  !adminLoading
+                ) {
+                  reopenScorecard();
+                }
+              }}
+              type="password"
+              autoFocus
+              placeholder="Admin code"
+              className="
+                w-full
+                mt-5
+                bg-black
+                border
+                border-white/20
+                rounded-2xl
+                px-4
+                py-4
+                text-center
+                text-lg
+                font-black
+                outline-none
+                focus:border-red-400
+              "
+            />
+
+            {adminError && (
+              <p className="text-red-400 text-sm font-black text-center mt-3">
+                {adminError}
+              </p>
+            )}
+
+            <button
+              onClick={reopenScorecard}
+              disabled={adminLoading}
+              className="
+                w-full
+                mt-4
+                bg-red-600
+                text-white
+                rounded-2xl
+                py-4
+                font-black
+                disabled:opacity-50
+              "
+            >
+              {adminLoading
+                ? "CHECKING..."
+                : "REOPEN SCORECARD"}
+            </button>
+
+            <button
+              onClick={() => {
+                setShowAdminReopen(false);
+                setAdminCode("");
+                setAdminError("");
+              }}
+              className="
+                w-full
+                mt-3
+                bg-white/10
+                border
+                border-white/10
+                rounded-2xl
+                py-4
+                font-black
+              "
+            >
+              CANCEL
+            </button>
+          </div>
+        </div>
+      )}
+
     </main>
   );
 }

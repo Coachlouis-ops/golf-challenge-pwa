@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 
 const teams = [
   "AUTO MOVERS",
-  "BLOU BULLE",
+  "VODACOM BULLS",
   "CELL C 1",
   "CELL C 2",
   "CMV",
@@ -17,7 +17,7 @@ const teams = [
   "FLEXON 3",
   "FLEXON 4",
   "GOBUSINESS",
-  "GOLF CIRCLE",
+  "THE GOLF CIRCLE",
   "GROOT FM",
   "IBI",
   "ISSC",
@@ -25,8 +25,8 @@ const teams = [
   "JO BLACK",
   "KALAHARI HORING",
   "LEPAS & FOTON",
-  "LIONS 1",
-  "LIONS 2",
+  "LIONS COACHES",
+  "LIONS PLAYERS",
   "LOCAL CHOICE",
   "MBALE",
   "ORION BULK",
@@ -37,7 +37,6 @@ const teams = [
   "TOPDOG",
   "WHBO",
 ];
-
 export default function JK6CompaniesPage() {
   const router = useRouter();
 

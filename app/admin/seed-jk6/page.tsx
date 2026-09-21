@@ -50,8 +50,8 @@ export default function SeedJK6Page() {
         </h1>
 
         <p className="text-gray-400 mb-6">
-          This creates golfdays / jk6-2026 / participants in Firestore.
-        </p>
+  This creates or updates the JK6 2026 golfday, company teams and player lists in Firestore.
+</p>
 
         <button
           onClick={seedJK6}

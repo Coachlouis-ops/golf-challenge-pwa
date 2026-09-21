@@ -1,238 +1,76 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-import {
-  collection,
-  onSnapshot,
-  query,
-} from "firebase/firestore";
-import { httpsCallable } from "firebase/functions";
-import {
-  db,
-  functions,
-} from "@/src/lib/firebase";
 
-type Team = {
-  participantId: string;
-  companyName: string;
-  competitionTotal: number;
-  finalized: boolean;
-};
+const sponsorLogos = [
+  "automovers1.png",
+  "bulls1.png",
+  "cellc1.png",
+  "cmv1.png",
+  "cross1.png",
+  "daimond1.png",
+  "fed1.png",
+  "finance1.png",
+  "flexon1.png",
+  "gobus1.png",
+  "golfc1.png",
+  "groot1.png",
+  "ibi1.png",
+  "issc1.png",
+  "jk6_1.png",
+  "joblack.png",
+  "kalah1.png",
+  "lions1.png",
+  "foton1.png",
+  "lepas1.png",
+  "localc1.png",
+  "mbale1.png",
+  "orion1.png",
+  "pelser1.png",
+  "sneller1.png",
+  "solarwarehouse1.png",
+  "dog1.png",
+  "whbo1.png",
+  "teez1.png",
+  "woodhill1.png",
+];
 
-export default function ScoreboardSamplePage() {
+export default function JK6MainDashboardPage() {
   const router = useRouter();
 
-  const [teams, setTeams] =
-    useState<Team[]>([]);
-
-  const [loading, setLoading] =
-    useState(true);
-
   const [
-    accessChecked,
-    setAccessChecked,
+    showScoreboardCode,
+    setShowScoreboardCode,
   ] = useState(false);
 
   const [
-    accessAllowed,
-    setAccessAllowed,
-  ] = useState(false);
+    scoreboardCode,
+    setScoreboardCode,
+  ] = useState("");
 
-  const golfdayId =
-    "jk6-2026";
+  const [
+    scoreboardError,
+    setScoreboardError,
+  ] = useState("");
 
-  useEffect(() => {
-    async function validateAccess() {
-      try {
-        const accessToken =
-          sessionStorage.getItem(
-            "jk6ScoreboardAccessToken"
-          );
-
-        if (!accessToken) {
-          setAccessAllowed(false);
-          setAccessChecked(true);
-
-          router.replace(
-            "/teez-scoring/corporate-days/jk6-2026"
-          );
-
-          return;
-        }
-
-        const validateJK6ScoreboardAccess =
-          httpsCallable(
-            functions,
-            "validateJK6ScoreboardAccess"
-          );
-
-        const result =
-          await validateJK6ScoreboardAccess({
-            accessToken,
-          });
-
-        const response =
-          result.data as {
-            success?: boolean;
-            allowed?: boolean;
-          };
-
-        if (
-          response.success !== true ||
-          response.allowed !== true
-        ) {
-          sessionStorage.removeItem(
-            "jk6ScoreboardAccessToken"
-          );
-
-          setAccessAllowed(false);
-          setAccessChecked(true);
-
-          router.replace(
-            "/teez-scoring/corporate-days/jk6-2026"
-          );
-
-          return;
-        }
-
-        setAccessAllowed(true);
-        setAccessChecked(true);
-      } catch (error) {
-        console.error(error);
-
-        sessionStorage.removeItem(
-          "jk6ScoreboardAccessToken"
-        );
-
-        setAccessAllowed(false);
-        setAccessChecked(true);
-
-        router.replace(
-          "/teez-scoring/corporate-days/jk6-2026"
-        );
-      }
-    }
-
-    validateAccess();
-  }, [router]);
-
-  useEffect(() => {
+  function openScoreboard() {
     if (
-      !accessChecked ||
-      !accessAllowed
+      scoreboardCode.trim() !== "6"
     ) {
+      setScoreboardError(
+        "Incorrect access code."
+      );
+
       return;
     }
 
-    const participantsRef =
-      collection(
-        db,
-        "golfdays",
-        golfdayId,
-        "participants"
-      );
+    setShowScoreboardCode(false);
+    setScoreboardCode("");
+    setScoreboardError("");
 
-    const q =
-      query(participantsRef);
-
-    const unsubscribe =
-      onSnapshot(
-        q,
-        (snapshot) => {
-          const loadedTeams =
-            snapshot.docs.map(
-              (docSnap) => {
-                const data =
-                  docSnap.data();
-
-                return {
-                  participantId:
-                    data.participantId ||
-                    docSnap.id,
-
-                  companyName:
-                    data.companyName ||
-                    docSnap.id,
-
-                  competitionTotal:
-                    Number(
-                      data.competitionTotal ||
-                        0
-                    ),
-
-                  finalized:
-                    data.finalized ===
-                    true,
-                };
-              }
-            );
-
-          setTeams(
-            loadedTeams
-          );
-
-          setLoading(
-            false
-          );
-        },
-        (error) => {
-          console.error(
-            error
-          );
-
-          setTeams(
-            []
-          );
-
-          setLoading(
-            false
-          );
-        }
-      );
-
-    return () =>
-      unsubscribe();
-  }, [
-    accessChecked,
-    accessAllowed,
-  ]);
-
-  const rankedTeams =
-    useMemo(() => {
-      return [
-        ...teams,
-      ].sort(
-        (a, b) => {
-          if (
-            b.competitionTotal !==
-            a.competitionTotal
-          ) {
-            return (
-              b.competitionTotal -
-              a.competitionTotal
-            );
-          }
-
-          return a.companyName.localeCompare(
-            b.companyName
-          );
-        }
-      );
-    }, [teams]);
-
-  if (
-    !accessChecked ||
-    !accessAllowed
-  ) {
-    return (
-      <main className="min-h-screen bg-black text-white flex items-center justify-center px-4">
-        <div className="text-center">
-          <p className="text-green-400 font-black">
-            VERIFYING SCOREBOARD ACCESS...
-          </p>
-        </div>
-      </main>
+    router.push(
+      "/teez-scoring/scoreboard-sample"
     );
   }
 
@@ -240,23 +78,19 @@ export default function ScoreboardSamplePage() {
     <main className="min-h-screen bg-black text-white px-4 py-6">
       <div className="w-full max-w-[520px] mx-auto">
 
-        <section className="relative bg-neutral-950 border border-green-500/40 rounded-3xl overflow-hidden mb-5 shadow-[0_0_35px_rgba(34,197,94,0.35)]">
-          <div className="relative h-44 flex items-center justify-center bg-black">
+        <section className="relative bg-neutral-950 border border-red-500/40 rounded-3xl overflow-hidden mb-5 shadow-[0_0_35px_rgba(220,38,38,0.35)]">
+          <div className="relative h-56 flex items-center justify-center bg-black">
             <img
               src="/jk6_logo.png"
               alt="JK6"
-              className="absolute inset-0 w-full h-full object-contain opacity-85"
+              className="absolute inset-0 w-full h-full object-contain opacity-90"
             />
 
             <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/35 to-black" />
           </div>
 
           <div className="p-4">
-            <p className="text-xs tracking-[0.3em] text-green-400 font-black">
-              LIVE SCOREBOARD
-            </p>
-
-            <h1 className="text-3xl font-black text-red-500 mt-2 animate-pulse drop-shadow-[0_0_14px_rgba(239,68,68,1)]">
+            <h1 className="text-3xl font-black text-red-500 animate-pulse drop-shadow-[0_0_14px_rgba(239,68,68,1)]">
               JK6 Annual Fundraiser Golf Day 2026
             </h1>
 
@@ -265,171 +99,262 @@ export default function ScoreboardSamplePage() {
             </p>
 
             <p className="text-gray-400 text-sm mt-3">
-              Competition totals update automatically as scorecards are saved.
+              Shotgun start · 10:00am · Woodhill Residential Estate & Country Club
             </p>
           </div>
         </section>
 
-        <section className="grid grid-cols-3 gap-3 mb-5">
-          <div className="bg-neutral-950 border border-white/10 rounded-2xl p-3 text-center">
-            <p className="text-[10px] text-gray-500 font-black">
-              TEAMS
-            </p>
+        <section className="grid gap-4">
 
-            <p className="text-2xl font-black text-green-400">
-              {teams.length}
-            </p>
-          </div>
+          <button
+            onClick={() =>
+              router.push(
+                "/teez-scoring/corporate-days/jk6-2026/companies"
+              )
+            }
+            className="
+              bg-cyan-400
+              text-black
+              rounded-3xl
+              p-6
+              text-left
+              font-black
+              hover:scale-[1.01]
+              transition
+              shadow-[0_0_25px_rgba(34,211,238,0.45)]
+            "
+          >
+            <h2 className="text-2xl font-black">
+              COMPANY SCORECARDS
+            </h2>
 
-          <div className="bg-neutral-950 border border-white/10 rounded-2xl p-3 text-center">
-            <p className="text-[10px] text-gray-500 font-black">
-              FINALIZED
+            <p className="text-sm mt-2 font-bold">
+              Select your company and open your live scoring card.
             </p>
+          </button>
 
-            <p className="text-2xl font-black text-red-400">
-              {
-                teams.filter(
-                  (team) =>
-                    team.finalized
-                ).length
-              }
-            </p>
-          </div>
+          <button
+            onClick={() => {
+              setScoreboardCode("");
+              setScoreboardError("");
+              setShowScoreboardCode(true);
+            }}
+            className="
+              bg-green-400
+              text-black
+              rounded-3xl
+              p-6
+              text-left
+              font-black
+              hover:scale-[1.01]
+              transition
+              shadow-[0_0_25px_rgba(74,222,128,0.45)]
+            "
+          >
+            <h2 className="text-2xl font-black">
+              LIVE SCOREBOARD
+            </h2>
 
-          <div className="bg-neutral-950 border border-white/10 rounded-2xl p-3 text-center">
-            <p className="text-[10px] text-gray-500 font-black">
-              UPDATED
+            <p className="text-sm mt-2 font-bold">
+              View the current ranked team totals.
             </p>
+          </button>
 
-            <p className="text-2xl font-black text-cyan-300">
-              {
-                teams.filter(
-                  (team) =>
-                    team.competitionTotal >
-                    0
-                ).length
-              }
-            </p>
-          </div>
+          <button
+            onClick={() =>
+              router.push(
+                "/teez-scoring/corporate-days"
+              )
+            }
+            className="
+              bg-white/10
+              border
+              border-white/10
+              text-white
+              rounded-3xl
+              p-5
+              font-black
+            "
+          >
+            BACK TO CORPORATE DAYS
+          </button>
+
         </section>
 
-        {loading && (
-          <div className="bg-neutral-950 border border-white/10 rounded-3xl p-6 text-center">
-            <p className="text-green-400 font-black">
-              Loading live scoreboard...
-            </p>
+        {showScoreboardCode && (
+          <div
+            className="
+              fixed
+              inset-0
+              z-50
+              bg-black/90
+              flex
+              items-center
+              justify-center
+              px-4
+            "
+          >
+            <div
+              className="
+                w-full
+                max-w-[420px]
+                bg-neutral-950
+                border
+                border-green-400/40
+                rounded-3xl
+                p-6
+                shadow-[0_0_35px_rgba(74,222,128,0.25)]
+              "
+            >
+              <p className="text-xs tracking-[0.3em] text-green-400 font-black">
+                LIVE SCOREBOARD
+              </p>
+
+              <h2 className="text-2xl font-black mt-2">
+                Enter Access Code
+              </h2>
+
+              <p className="text-gray-400 text-sm mt-2">
+                Enter the code to view the live leaderboard.
+              </p>
+
+              <input
+                value={scoreboardCode}
+                onChange={(e) => {
+                  setScoreboardCode(
+                    e.target.value
+                  );
+
+                  setScoreboardError("");
+                }}
+                onKeyDown={(e) => {
+                  if (
+                    e.key === "Enter"
+                  ) {
+                    openScoreboard();
+                  }
+                }}
+                type="password"
+                inputMode="numeric"
+                autoFocus
+                placeholder="Code"
+                className="
+                  w-full
+                  mt-5
+                  bg-black
+                  border
+                  border-white/20
+                  rounded-2xl
+                  px-4
+                  py-4
+                  text-center
+                  text-2xl
+                  font-black
+                  tracking-[0.35em]
+                  outline-none
+                  focus:border-green-400
+                "
+              />
+
+              {scoreboardError && (
+                <p className="text-red-400 text-sm font-black text-center mt-3">
+                  {scoreboardError}
+                </p>
+              )}
+
+              <button
+                onClick={
+                  openScoreboard
+                }
+                className="
+                  w-full
+                  mt-4
+                  bg-green-400
+                  text-black
+                  rounded-2xl
+                  py-4
+                  font-black
+                "
+              >
+                OPEN SCOREBOARD
+              </button>
+
+              <button
+                onClick={() => {
+                  setShowScoreboardCode(
+                    false
+                  );
+
+                  setScoreboardCode("");
+                  setScoreboardError("");
+                }}
+                className="
+                  w-full
+                  mt-3
+                  bg-white/10
+                  border
+                  border-white/10
+                  rounded-2xl
+                  py-4
+                  font-black
+                "
+              >
+                CANCEL
+              </button>
+            </div>
           </div>
         )}
 
-        {!loading &&
-          rankedTeams.length ===
-            0 && (
-            <div className="bg-neutral-950 border border-red-500/30 rounded-3xl p-6 text-center">
-              <p className="text-red-400 font-black">
-                No teams found.
-              </p>
-            </div>
-          )}
+        {/* SPONSORS */}
 
-        {!loading &&
-          rankedTeams.length >
-            0 && (
-            <section className="grid gap-3">
-              {rankedTeams.map(
-                (
-                  team,
-                  index
-                ) => (
-                  <div
-                    key={
-                      team.participantId
-                    }
+        <section className="mt-8 pb-10">
+          <div className="text-center mb-6">
+            <p className="text-xs font-black tracking-[0.35em] text-red-500">
+              JK6 GOLF DAY 2026
+            </p>
+
+            <h2 className="mt-2 text-2xl font-black text-white">
+              SPONSORS & PARTNERS
+            </h2>
+
+            <div className="w-16 h-1 bg-red-500 rounded-full mx-auto mt-3 shadow-[0_0_12px_rgba(239,68,68,0.9)]" />
+          </div>
+
+          <div className="flex flex-col gap-4">
+            {sponsorLogos.map(
+              (logo) => (
+                <div
+                  key={logo}
+                  className="
+                    w-full
+                    min-h-[150px]
+                    bg-white
+                    rounded-3xl
+                    px-6
+                    py-5
+                    flex
+                    items-center
+                    justify-center
+                    border
+                    border-white/20
+                    shadow-[0_8px_30px_rgba(0,0,0,0.45)]
+                  "
+                >
+                  <img
+                    src={`/${logo}`}
+                    alt="JK6 Sponsor"
                     className="
-                      bg-neutral-950
-                      border
-                      border-green-400/20
-                      rounded-2xl
-                      p-4
-                      shadow-[0_0_18px_rgba(34,197,94,0.12)]
+                      w-full
+                      max-w-[340px]
+                      h-[110px]
+                      object-contain
                     "
-                  >
-                    <div className="grid grid-cols-[52px_1fr_82px] gap-3 items-center">
-                      <div className="text-center">
-                        <p className="text-[10px] text-gray-500 font-black">
-                          POS
-                        </p>
-
-                        <p className="text-3xl font-black text-green-400">
-                          {
-                            index +
-                            1
-                          }
-                        </p>
-                      </div>
-
-                      <div className="min-w-0">
-                        <p className="text-lg font-black truncate">
-                          {
-                            team.companyName
-                          }
-                        </p>
-
-                        <p className="text-xs text-gray-500">
-                          {
-                            team.finalized
-                              ? "Finalized"
-                              : team.competitionTotal >
-                                  0
-                                ? "Score updated"
-                                : "Waiting for scores"
-                          }
-                        </p>
-                      </div>
-
-                      <div className="text-right">
-                        <p className="text-[10px] text-gray-500 font-black">
-                          TOTAL
-                        </p>
-
-                        <p className="text-3xl font-black text-cyan-300">
-                          {
-                            team.competitionTotal
-                          }
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                )
-              )}
-            </section>
-          )}
-
-        <button
-          onClick={() => {
-            sessionStorage.removeItem(
-              "jk6ScoreboardAccessToken"
-            );
-
-            router.push(
-              "/teez-scoring/corporate-days/jk6-2026"
-            );
-          }}
-          className="
-            mt-6
-            w-full
-            bg-white/10
-            border
-            border-white/10
-            rounded-2xl
-            py-4
-            font-black
-            hover:border-green-400
-            hover:text-green-400
-            transition
-          "
-        >
-          BACK TO JK6 DASHBOARD
-        </button>
+                  />
+                </div>
+              )
+            )}
+          </div>
+        </section>
 
       </div>
     </main>

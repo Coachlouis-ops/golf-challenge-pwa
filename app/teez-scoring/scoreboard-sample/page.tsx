@@ -1,13 +1,22 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import {
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+
 import { useRouter } from "next/navigation";
+
 import {
   collection,
   onSnapshot,
   query,
 } from "firebase/firestore";
-import { db } from "@/src/lib/firebase";
+
+import {
+  db,
+} from "@/src/lib/firebase";
 
 type Team = {
   participantId: string;
@@ -17,74 +26,92 @@ type Team = {
 };
 
 export default function ScoreboardSamplePage() {
-  const router = useRouter();
+  const router =
+    useRouter();
 
-  const [teams, setTeams] = useState<Team[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [
+    teams,
+    setTeams,
+  ] = useState<Team[]>([]);
 
-  const golfdayId = "jk6-2026";
+  const [
+    loading,
+    setLoading,
+  ] = useState(true);
+
+  const golfdayId =
+    "jk6-2026";
 
   useEffect(() => {
-    const participantsRef = collection(
-      db,
-      "golfdays",
-      golfdayId,
-      "participants"
-    );
+    const participantsRef =
+      collection(
+        db,
+        "golfdays",
+        golfdayId,
+        "participants"
+      );
 
-    const q = query(participantsRef);
+    const q =
+      query(
+        participantsRef
+      );
 
-    const unsubscribe = onSnapshot(
-      q,
-      (snapshot) => {
-        const loadedTeams = snapshot.docs.map(
-          (docSnap) => {
-            const data = docSnap.data();
+    const unsubscribe =
+      onSnapshot(
+        q,
 
-            return {
-              participantId:
-                data.participantId ||
-                docSnap.id,
+        (snapshot) => {
+          const loadedTeams =
+            snapshot.docs.map(
+              (docSnap) => {
+                const data =
+                  docSnap.data();
 
-              companyName:
-                data.companyName ||
-                docSnap.id,
+                return {
+                  participantId:
+                    data.participantId ||
+                    docSnap.id,
 
-              competitionTotal:
-                Number(
-                  data.competitionTotal ||
-                    0
-                ),
+                  companyName:
+                    data.companyName ||
+                    docSnap.id,
 
-              finalized:
-                data.finalized ===
-                true,
-            };
-          }
-        );
+                  competitionTotal:
+                    Number(
+                      data.competitionTotal ||
+                        0
+                    ),
 
-        setTeams(
-          loadedTeams
-        );
+                  finalized:
+                    data.finalized ===
+                    true,
+                };
+              }
+            );
 
-        setLoading(
-          false
-        );
-      },
-      (error) => {
-        console.error(
-          error
-        );
+          setTeams(
+            loadedTeams
+          );
 
-        setTeams(
-          []
-        );
+          setLoading(
+            false
+          );
+        },
 
-        setLoading(
-          false
-        );
-      }
-    );
+        (error) => {
+          console.error(
+            error
+          );
+
+          setTeams(
+            []
+          );
+
+          setLoading(
+            false
+          );
+        }
+      );
 
     return () =>
       unsubscribe();
@@ -106,8 +133,10 @@ export default function ScoreboardSamplePage() {
             );
           }
 
-          return a.companyName.localeCompare(
-            b.companyName
+          return (
+            a.companyName.localeCompare(
+              b.companyName
+            )
           );
         }
       );
@@ -118,6 +147,7 @@ export default function ScoreboardSamplePage() {
       <div className="w-full max-w-[520px] mx-auto">
 
         <section className="relative bg-neutral-950 border border-green-500/40 rounded-3xl overflow-hidden mb-5 shadow-[0_0_35px_rgba(34,197,94,0.35)]">
+
           <div className="relative h-44 flex items-center justify-center bg-black">
             <img
               src="/jk6_logo.png"
@@ -145,9 +175,11 @@ export default function ScoreboardSamplePage() {
               Competition totals update automatically as scorecards are saved.
             </p>
           </div>
+
         </section>
 
         <section className="grid grid-cols-3 gap-3 mb-5">
+
           <div className="bg-neutral-950 border border-white/10 rounded-2xl p-3 text-center">
             <p className="text-[10px] text-gray-500 font-black">
               TEAMS
@@ -188,6 +220,7 @@ export default function ScoreboardSamplePage() {
               }
             </p>
           </div>
+
         </section>
 
         {loading && (
@@ -212,6 +245,7 @@ export default function ScoreboardSamplePage() {
           rankedTeams.length >
             0 && (
             <section className="grid gap-3">
+
               {rankedTeams.map(
                 (
                   team,
@@ -231,6 +265,7 @@ export default function ScoreboardSamplePage() {
                     "
                   >
                     <div className="grid grid-cols-[52px_1fr_82px] gap-3 items-center">
+
                       <div className="text-center">
                         <p className="text-[10px] text-gray-500 font-black">
                           POS
@@ -274,10 +309,12 @@ export default function ScoreboardSamplePage() {
                           }
                         </p>
                       </div>
+
                     </div>
                   </div>
                 )
               )}
+
             </section>
           )}
 

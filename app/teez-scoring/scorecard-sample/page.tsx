@@ -27,13 +27,34 @@ type Player = {
   id: string;
   name: string;
   handicap: number | null;
+  strokeCategory: "men" | "ladies";
 };
 
 const defaultPlayers: Player[] = [
-  { id: "p1", name: "Player 1", handicap: null },
-  { id: "p2", name: "Player 2", handicap: null },
-  { id: "p3", name: "Player 3", handicap: null },
-  { id: "p4", name: "Player 4", handicap: null },
+  {
+    id: "p1",
+    name: "Player 1",
+    handicap: null,
+    strokeCategory: "men",
+  },
+  {
+    id: "p2",
+    name: "Player 2",
+    handicap: null,
+    strokeCategory: "men",
+  },
+  {
+    id: "p3",
+    name: "Player 3",
+    handicap: null,
+    strokeCategory: "men",
+  },
+  {
+    id: "p4",
+    name: "Player 4",
+    handicap: null,
+    strokeCategory: "men",
+  },
 ];
 
 function slugifyCompanyName(name: string) {
@@ -141,6 +162,7 @@ useEffect(() => {
   id?: string;
   name?: string;
   handicap?: number | null;
+  strokeCategory?: "men" | "ladies";
 },
 index: number
 ) => ({
@@ -157,6 +179,11 @@ index: number
     player.handicap === undefined
       ? null
       : Number(player.handicap),
+
+  strokeCategory:
+    player.strokeCategory === "ladies"
+      ? "ladies"
+      : "men",
 })
           )
         );
@@ -273,6 +300,28 @@ function updatePlayerHandicap(
 
   setPlayersSaved(false);
 }
+
+function updatePlayerStrokeCategory(
+  playerId: string,
+  value: "men" | "ladies"
+) {
+  if (isFinalized) return;
+
+  setPlayers((prev) =>
+    prev.map((player) =>
+      player.id === playerId
+        ? {
+            ...player,
+            strokeCategory: value,
+          }
+        : player
+    )
+  );
+
+  setPlayersSaved(false);
+}
+
+
 
 async function savePlayers() {
   const missingName = players.some(
@@ -596,15 +645,15 @@ function finalizeRound() {
 
 <div className="grid gap-3">
   {players.map((player, index) => (
-    <div
-      key={player.id}
-      className="
-        grid
-        grid-cols-[62px_1fr_76px]
-        gap-2
-        items-center
-      "
-    >
+  <div
+  key={player.id}
+  className="
+    grid
+    grid-cols-[38px_1fr_66px_78px]
+    gap-2
+    items-center
+  "
+>
       <p className="text-xs text-gray-400 font-bold">
         P{index + 1}
       </p>
@@ -666,6 +715,39 @@ function finalizeRound() {
           disabled:opacity-40
         "
       />
+
+<select
+  value={player.strokeCategory}
+  onChange={(e) =>
+    updatePlayerStrokeCategory(
+      player.id,
+      e.target.value as "men" | "ladies"
+    )
+  }
+  disabled={isFinalized}
+  className="
+    w-full
+    bg-black/40
+    border
+    border-cyan-400/30
+    rounded-xl
+    px-1
+    py-2
+    text-xs
+    font-black
+    text-cyan-300
+    disabled:opacity-40
+  "
+>
+  <option value="men">
+    MEN
+  </option>
+
+  <option value="ladies">
+    LADIES
+  </option>
+</select>
+
     </div>
   ))}
 </div>

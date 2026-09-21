@@ -54,9 +54,9 @@ export default function CorporateDaysPage() {
                 JK6 2026
               </h2>
 
-              <p className="text-cyan-300 font-black mt-2 animate-pulse drop-shadow-[0_0_14px_rgba(34,211,238,1)]">
-                4 Ball Alliance · Mystery Count
-              </p>
+             <p className="text-cyan-300 font-black mt-2 animate-pulse drop-shadow-[0_0_14px_rgba(34,211,238,1)]">
+  4 Ball Alliance · Scramble Drive · Mystery Count
+</p>
 
               <div className="grid grid-cols-2 gap-3 mt-5">
                 <div className="bg-black/50 border border-white/10 rounded-2xl p-3">
@@ -74,9 +74,9 @@ export default function CorporateDaysPage() {
                     START
                   </p>
 
-                  <p className="text-sm font-black mt-1">
-                    11:00am Shotgun
-                  </p>
+                 <p className="text-sm font-black mt-1">
+  10:00am Shotgun
+</p>
                 </div>
               </div>
 

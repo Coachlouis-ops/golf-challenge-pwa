@@ -31,7 +31,7 @@ const sponsorLogos = [
   "sneller1.png",
   "solarwarehouse1.png",
   "dog1.png",
-  "whbo1.png",
+  "wbho1.png",
   "teez1.png",
   "woodhill1.png",
 ];

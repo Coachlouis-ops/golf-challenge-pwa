@@ -38,7 +38,7 @@ const teams = [
   "SNELLER",
   "SOLAR WAREHOUSE",
   "TOPDOG",
-  "WHBO",
+  "WBHO",
 ];
 
 function slugifyCompanyName(name: string) {

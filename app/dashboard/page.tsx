@@ -40,6 +40,9 @@ function DashboardContent() {
 const [boosterBallsOpened, setBoosterBallsOpened] =
   useState(0);
 
+const [boosterPointsBalance, setBoosterPointsBalance] =
+  useState(0);
+
 const [openedPositions, setOpenedPositions] =
   useState<number[]>([]);
 
@@ -153,15 +156,26 @@ const [battleCharacter, setBattleCharacter] =
         data.boosterBallsEarned ?? 0
       );
 
-      const opened = Number(
-        data.boosterBallsOpened ?? 0
-      );
+     const opened = Number(
+  data.boosterBallsOpened ?? 0
+);
 
-      setBoosterBallsEarned(
-        Math.max(0, earned - opened)
-      );
+const pointsBalance = Number(
+  data.boosterPointsBalance ?? 0
+);
 
-      setBoosterBallsOpened(opened);
+setBoosterBallsEarned(
+  Math.max(0, earned - opened)
+);
+
+setBoosterBallsOpened(opened);
+
+setBoosterPointsBalance(
+  Math.max(
+    0,
+    Math.min(1000, pointsBalance)
+  )
+);
 
       const positions = Array.isArray(
         data.openedPositions
@@ -319,10 +333,26 @@ async function handleOpenBoosterBall(
     );
   }
 
-  const competitiveFeaturesLocked =
-    !user || !isSubscribed;
+const competitiveFeaturesLocked =
+  !user || !isSubscribed;
 
-  return (
+const pointsTarget = 1000;
+
+const pointsToNextBall =
+  boosterPointsBalance === 0
+    ? pointsTarget
+    : Math.max(
+        0,
+        pointsTarget - boosterPointsBalance
+      );
+
+const winningProgress =
+  Math.min(
+    100,
+    (boosterPointsBalance / pointsTarget) * 100
+  );
+
+return (
     <div className="relative min-h-screen overflow-hidden bg-black text-white">
 
       {/* FULL SCREEN NEON SPORTS BACKGROUND */}
@@ -360,16 +390,16 @@ async function handleOpenBoosterBall(
           </div>
         </div>
 
-        {/* TAGLINE */}
-        <div className="text-center mb-7">
-          <p className="text-[14px] sm:text-[15px] tracking-[3px] font-extrabold text-white drop-shadow-[0_0_12px_rgba(255,255,255,1)]">
-            SETTLE THE SCORE.
-          </p>
+{/* TAGLINE */}
+<div className="text-center mb-7">
+  <p className="text-[18px] sm:text-[20px] tracking-[4px] font-black text-white drop-shadow-[0_0_14px_rgba(255,255,255,1)]">
+    PLAY. MOVE. UNLOCK.
+  </p>
 
-          <p className="text-[12px] tracking-[4px] font-bold text-cyan-300 mt-1 drop-shadow-[0_0_12px_rgba(34,211,238,1)]">
-            PLAY WITH PURPOSE
-          </p>
-        </div>
+  <p className="mt-2 text-[10px] tracking-[3px] font-black text-cyan-300 uppercase drop-shadow-[0_0_12px_rgba(34,211,238,1)]">
+    EVERY ROUND MOVES YOU CLOSER
+  </p>
+</div>
 
         <div className="flex flex-col gap-4">
 
@@ -463,55 +493,157 @@ async function handleOpenBoosterBall(
             </div>
           )}
 
-{/* PLAYER BATTLE CHARACTER */}
-{user && isSubscribed && battleCharacter && (
+
+{/* WINNING ROAD */}
+{user && isSubscribed && (
   <section className="mb-6">
-    <div className="relative overflow-hidden rounded-2xl border border-purple-400/50 bg-black/70 shadow-[0_0_35px_rgba(168,85,247,0.25)]">
+    <div className="relative overflow-hidden rounded-3xl border-2 border-lime-300/70 bg-black/90 px-5 py-6 shadow-[0_0_45px_rgba(163,230,53,0.28)]">
 
-      <div className="relative h-[420px] w-full">
-        <img
-          src={battleCharacter.imageUrl}
-          alt={battleCharacter.name || "Battle Character"}
-          className="h-full w-full object-contain"
-        />
-      </div>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(163,230,53,0.14),transparent_45%),radial-gradient(circle_at_50%_100%,rgba(34,211,238,0.12),transparent_45%)] pointer-events-none" />
 
-      {battleCharacter.name && (
-        <div className="border-t border-purple-400/30 bg-black/80 px-4 py-4 text-center">
-          <p className="text-[9px] font-black uppercase tracking-[0.25em] text-purple-300">
-            YOUR BATTLE CHARACTER
+      <div className="relative z-10">
+
+        <div className="text-center">
+          <p className="text-[10px] font-black uppercase tracking-[0.28em] text-lime-300">
+            CONGRATULATIONS
           </p>
 
-          <h2 className="mt-1 text-2xl font-black uppercase text-white drop-shadow-[0_0_12px_rgba(168,85,247,0.9)]">
-            {battleCharacter.name}
-          </h2>
-        </div>
-      )}
+          <p className="mt-2 text-sm font-black uppercase tracking-[0.12em] text-white">
+            YOU HAVE EARNED
+          </p>
 
+          <div className="mt-2 text-7xl font-black leading-none text-white drop-shadow-[0_0_24px_rgba(163,230,53,0.9)]">
+            {boosterBallsEarned}
+          </div>
+
+          <p className="mt-2 text-xl font-black uppercase tracking-[0.12em] text-lime-300">
+            {boosterBallsEarned === 1
+              ? "BOOSTER BALL"
+              : "BOOSTER BALLS"}
+          </p>
+
+          {boosterBallsEarned > 0 ? (
+            <p className="mt-3 text-xs font-bold uppercase tracking-[0.12em] text-gray-300">
+              READY TO OPEN
+            </p>
+          ) : (
+            <p className="mt-3 text-xs font-bold uppercase tracking-[0.12em] text-gray-400">
+              KEEP PLAYING TO EARN YOUR NEXT BALL
+            </p>
+          )}
+        </div>
+
+        <div className="my-6 h-px bg-gradient-to-r from-transparent via-lime-300/60 to-transparent" />
+
+        <div className="text-center">
+          <p className="text-[10px] font-black uppercase tracking-[0.24em] text-cyan-300">
+            ROAD TO YOUR NEXT BALL
+          </p>
+
+          <div className="mt-5 flex items-center gap-3">
+
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-cyan-300 bg-cyan-300 text-xs font-black text-black shadow-[0_0_18px_rgba(34,211,238,0.8)]">
+              YOU
+            </div>
+
+            <div className="relative h-5 flex-1 overflow-hidden rounded-full border border-white/20 bg-black">
+              <div
+                className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-cyan-400 via-purple-400 to-lime-300 shadow-[0_0_18px_rgba(34,211,238,0.9)] transition-all duration-700"
+                style={{
+                  width: `${winningProgress}%`,
+                }}
+              />
+
+              <div className="absolute inset-0 flex items-center justify-center">
+                <span className="text-[8px] font-black tracking-[0.12em] text-white drop-shadow-[0_0_5px_rgba(0,0,0,1)]">
+                  {Math.round(winningProgress)}%
+                </span>
+              </div>
+            </div>
+
+            <div className="relative flex h-14 w-14 shrink-0 items-center justify-center rounded-full border-2 border-amber-300 bg-gradient-to-br from-yellow-200 via-amber-400 to-yellow-700 shadow-[0_0_25px_rgba(251,191,36,0.75)]">
+              <div className="absolute inset-[4px] rounded-full border border-yellow-100/70" />
+
+              <span className="relative text-xl font-black text-black">
+                T
+              </span>
+            </div>
+
+          </div>
+
+          <div className="mt-5">
+            <p className="text-3xl font-black text-white">
+              {boosterPointsBalance.toLocaleString()}
+              <span className="text-base text-gray-400">
+                {" "}/ {pointsTarget.toLocaleString()}
+              </span>
+            </p>
+
+            <p className="mt-1 text-[10px] font-black uppercase tracking-[0.18em] text-gray-400">
+              POINTS
+            </p>
+          </div>
+
+          <div className="mt-5 rounded-2xl border border-lime-300/40 bg-lime-300/[0.08] px-4 py-4">
+            <p className="text-[9px] font-black uppercase tracking-[0.22em] text-lime-300">
+              YOU NEED
+            </p>
+
+            <p className="mt-1 text-4xl font-black text-white drop-shadow-[0_0_14px_rgba(163,230,53,0.5)]">
+              {pointsToNextBall.toLocaleString()}
+            </p>
+
+            <p className="mt-1 text-xs font-black uppercase tracking-[0.16em] text-lime-300">
+              MORE POINTS TO EARN YOUR NEXT BALL
+            </p>
+          </div>
+
+          <p className="mt-4 text-xs font-bold leading-5 text-gray-300">
+            Complete challenges to move forward.
+            Winning and competitive performance can move you faster.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          onClick={() =>
+            openCompetitiveFeature(
+              "Create Challenge",
+              "/challenges/create"
+            )
+          }
+          className="mt-5 w-full rounded-2xl border-2 border-lime-300 bg-lime-300 px-4 py-4 text-sm font-black uppercase tracking-[0.16em] text-black shadow-[0_0_25px_rgba(163,230,53,0.55)] transition active:scale-[0.98]"
+        >
+          PLAY & MOVE
+        </button>
+
+      </div>
     </div>
   </section>
 )}
 
-
-
 {/* CHOOSE YOUR BOOSTER BALL */}
 {user && isSubscribed && (
   <section className="mt-2 mb-6">
+
     <div className="mb-4 text-center">
       <p className="text-[9px] font-black uppercase tracking-[0.24em] text-cyan-400">
-        MYSTERY BOARD
+        YOUR UNLOCKS
       </p>
 
-      <h2 className="mt-1 text-xl font-black text-white">
-        CHOOSE YOUR BOOSTER BALL
+      <h2 className="mt-1 text-xl font-black uppercase text-white">
+        OPEN YOUR BOOSTER BALL
       </h2>
 
-      <p className="mt-2 text-xs text-gray-300">
-        Balls Available:{" "}
-        <span className="font-black text-cyan-300">
-          {boosterBallsEarned}
-        </span>
-      </p>
+      {boosterBallsEarned > 0 ? (
+        <p className="mt-2 text-xs font-black uppercase tracking-[0.12em] text-lime-300">
+          CHOOSE ANY UNOPENED BALL
+        </p>
+      ) : (
+        <p className="mt-2 text-xs font-bold uppercase tracking-[0.12em] text-gray-400">
+          YOUR NEXT BALL IS STILL LOCKED
+        </p>
+      )}
     </div>
 
     <div className="rounded-2xl border border-cyan-400/40 bg-black/80 p-3 shadow-[0_0_30px_rgba(34,211,238,0.18)]">
@@ -621,182 +753,211 @@ async function handleOpenBoosterBall(
 )}
 
 
-          {/* MAIN DASHBOARD BUTTONS */}
-          <div className="space-y-4">
+      {/* PLAYER BATTLE CHARACTER */}
+{user && isSubscribed && battleCharacter && (
+  <section className="mb-6">
+    <div className="relative overflow-hidden rounded-2xl border border-purple-400/50 bg-black/70 shadow-[0_0_35px_rgba(168,85,247,0.25)]">
+      <div className="relative h-[360px] w-full">
+        <img
+          src={battleCharacter.imageUrl}
+          alt={
+            battleCharacter.name ||
+            "Battle Character"
+          }
+          className="h-full w-full object-contain"
+        />
+      </div>
 
-            <button
-              onClick={() =>
-                openCompetitiveFeature(
-                  "Create Challenge",
-                  "/challenges/create"
-                )
-              }
-              className={`arena-btn neon-pink ${
-                competitiveFeaturesLocked
-                  ? "locked-btn"
-                  : ""
-              }`}
-            >
-              CREATE CHALLENGE
-            </button>
+      {battleCharacter.name && (
+        <div className="border-t border-purple-400/30 bg-black/80 px-4 py-4 text-center">
+          <p className="text-[9px] font-black uppercase tracking-[0.25em] text-purple-300">
+            YOUR BATTLE CHARACTER
+          </p>
 
-            <button
-              onClick={() =>
-                openCompetitiveFeature(
-                  "My Challenges",
-                  "/my-challenges"
-                )
-              }
-              className={`arena-btn neon-purple ${
-                competitiveFeaturesLocked
-                  ? "locked-btn"
-                  : ""
-              }`}
-            >
-              MY CHALLENGES
-            </button>
+          <h2 className="mt-1 text-2xl font-black uppercase text-white drop-shadow-[0_0_12px_rgba(168,85,247,0.9)]">
+            {battleCharacter.name}
+          </h2>
+        </div>
+      )}
+    </div>
+  </section>
+)}
 
-            <button
-              onClick={() =>
-                openCompetitiveFeature(
-                  "My Invites",
-                  "/my-invites"
-                )
-              }
-              className={`arena-btn neon-blue ${
-                competitiveFeaturesLocked
-                  ? "locked-btn"
-                  : ""
-              }`}
-            >
-              MY INVITES
-            </button>
+{/* MAIN DASHBOARD BUTTONS */}
+<div className="space-y-4">
 
-            <button
-              onClick={() =>
-                openCompetitiveFeature(
-                  "My Groups",
-                  "/groups"
-                )
-              }
-              className={`arena-btn neon-orange ${
-                competitiveFeaturesLocked
-                  ? "locked-btn"
-                  : ""
-              }`}
-            >
-              MY GROUPS
-            </button>
+  <button
+    onClick={() =>
+      openCompetitiveFeature(
+        "Create Challenge",
+        "/challenges/create"
+      )
+    }
+    className={`arena-btn neon-pink ${
+      competitiveFeaturesLocked
+        ? "locked-btn"
+        : ""
+    }`}
+  >
+    CREATE CHALLENGE
+  </button>
 
-            <button
-              onClick={openProfile}
-              className={`arena-btn neon-cyan ${
-                !user
-                  ? "locked-btn"
-                  : ""
-              }`}
-            >
-              MY PROFILE
-            </button>
+  <button
+    onClick={() =>
+      openCompetitiveFeature(
+        "My Challenges",
+        "/my-challenges"
+      )
+    }
+    className={`arena-btn neon-purple ${
+      competitiveFeaturesLocked
+        ? "locked-btn"
+        : ""
+    }`}
+  >
+    MY CHALLENGES
+  </button>
 
-<button
-  onClick={() =>
-    openCompetitiveFeature(
-      "My Career",
-      "/profile/my-career"
-    )
-  }
-  className={`arena-btn neon-blue ${
-    competitiveFeaturesLocked
-      ? "locked-btn"
-      : ""
-  }`}
->
-  MY CAREER
-</button>
+  <button
+    onClick={() =>
+      openCompetitiveFeature(
+        "My Invites",
+        "/my-invites"
+      )
+    }
+    className={`arena-btn neon-blue ${
+      competitiveFeaturesLocked
+        ? "locked-btn"
+        : ""
+    }`}
+  >
+    MY INVITES
+  </button>
 
+  <button
+    onClick={() =>
+      openCompetitiveFeature(
+        "My Groups",
+        "/groups"
+      )
+    }
+    className={`arena-btn neon-orange ${
+      competitiveFeaturesLocked
+        ? "locked-btn"
+        : ""
+    }`}
+  >
+    MY GROUPS
+  </button>
 
-            <button
-              onClick={() =>
-                openCompetitiveFeature(
-                  "Token Wallet",
-                  "/wallet"
-                )
-              }
-              className={`arena-btn neon-green ${
-                competitiveFeaturesLocked
-                  ? "locked-btn"
-                  : ""
-              }`}
-            >
-              TOKEN WALLET
-            </button>
+  <button
+    onClick={openProfile}
+    className={`arena-btn neon-cyan ${
+      !user
+        ? "locked-btn"
+        : ""
+    }`}
+  >
+    MY PROFILE
+  </button>
 
-          </div>
+  <button
+    onClick={() =>
+      openCompetitiveFeature(
+        "My Career",
+        "/profile/my-career"
+      )
+    }
+    className={`arena-btn neon-blue ${
+      competitiveFeaturesLocked
+        ? "locked-btn"
+        : ""
+    }`}
+  >
+    MY CAREER
+  </button>
 
-          {/* ACCOUNT */}
-          <div className="glass-panel mt-4">
-            <p className="text-center text-xs tracking-[3px] text-white font-bold mb-4">
-              PARTICIPATION & ACCOUNT
-            </p>
+  <button
+    onClick={() =>
+      openCompetitiveFeature(
+        "Token Wallet",
+        "/wallet"
+      )
+    }
+    className={`arena-btn neon-green ${
+      competitiveFeaturesLocked
+        ? "locked-btn"
+        : ""
+    }`}
+  >
+    TOKEN WALLET
+  </button>
 
-            <div className="flex flex-col gap-3">
-              {!user && (
-                <>
-                  <button
-                    onClick={() =>
-                      router.push("/login")
-                    }
-                    className="arena-btn neon-blue"
-                  >
-                    LOG IN
-                  </button>
+</div>
 
-                  <button
-                    onClick={() =>
-                      router.push("/register")
-                    }
-                    className="arena-btn neon-green"
-                  >
-                    REGISTER
-                  </button>
-                </>
-              )}
+{/* ACCOUNT */}
+<div className="glass-panel mt-4">
+  <p className="text-center text-xs tracking-[3px] text-white font-bold mb-4">
+    PARTICIPATION & ACCOUNT
+  </p>
 
-              {user && !isSubscribed && (
-                <button
-                  onClick={() =>
-                    router.push("/payment")
-                  }
-                  className="arena-btn neon-green"
-                >
-                  ACTIVATE PARTICIPATION ACCESS
-                </button>
-              )}
+  <div className="flex flex-col gap-3">
+    {!user && (
+      <>
+        <button
+          onClick={() =>
+            router.push("/login")
+          }
+          className="arena-btn neon-blue"
+        >
+          LOG IN
+        </button>
 
-              {user && isSubscribed && (
-                <>
-                  <button
-                    onClick={() =>
-                      router.push("/wallet")
-                    }
-                    className="arena-btn neon-cyan"
-                  >
-                    VIEW TOKEN WALLET
-                  </button>
+        <button
+          onClick={() =>
+            router.push("/register")
+          }
+          className="arena-btn neon-green"
+        >
+          REGISTER
+        </button>
+      </>
+    )}
 
-                  <button
-                    onClick={() =>
-                      router.push("/wallet/top-up")
-                    }
-                    className="arena-btn neon-green"
-                  >
-                    TOP UP TEEZ PLAY TOKENS
-                  </button>
-                </>
-              )}
-            </div>
-          </div>
+    {user && !isSubscribed && (
+      <button
+        onClick={() =>
+          router.push("/payment")
+        }
+        className="arena-btn neon-green"
+      >
+        ACTIVATE PARTICIPATION ACCESS
+      </button>
+    )}
+
+    {user && isSubscribed && (
+      <>
+        <button
+          onClick={() =>
+            router.push("/wallet")
+          }
+          className="arena-btn neon-cyan"
+        >
+          VIEW TOKEN WALLET
+        </button>
+
+        <button
+          onClick={() =>
+            router.push("/wallet/top-up")
+          }
+          className="arena-btn neon-green"
+        >
+          TOP UP TEEZ PLAY TOKENS
+        </button>
+      </>
+    )}
+  </div>
+</div>
 
           {/* LEGAL */}
           <div className="glass-panel mt-1">

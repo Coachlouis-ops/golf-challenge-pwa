@@ -190,70 +190,85 @@ export default function HomePage() {
 
       {/* SLOGAN SECTION */}
 <section className="w-full max-w-4xl mx-auto text-center px-6 py-10">
-  <h2 className="text-3xl md:text-5xl font-bold text-green-400 drop-shadow-[0_0_18px_rgba(0,255,136,0.8)]">
-    For Those with a Competitive Spirit
-  </h2>
+<h2 className="text-3xl md:text-5xl font-black uppercase tracking-[0.08em] text-white drop-shadow-[0_0_18px_rgba(0,170,255,0.95)]">
+  ONLY FOR THE PASSIONATE
+</h2>
 
-  <p className="mt-5 text-gray-300 text-base md:text-lg leading-8">
-    Teez Golf Challenges brings skill-based golf competitions into a modern digital platform —
-    with secure payment access, player profiles, matchups and rankings.
-  </p>
+  <p className="mt-5 text-slate-300 text-base md:text-lg font-semibold tracking-[0.12em]">
+  Join. Grow. Experience.
+</p>
 </section>
 
 
-      {/* ================= WALLET SECTION ================= */}
-      <section className="bg-gray-100 text-black text-center py-20 px-6">
-        <div className="max-w-3xl mx-auto">
-          <h2 className="text-2xl md:text-3xl font-semibold mb-4">
-           Ready to Compete?
-          </h2>
-          <p className="text-gray-600 mb-8">
-            Join the Teez Golf Challenge for exciting matchups.
-            <br />
-            Compete. Win. Elevate your game.
-          </p>
-          <p className="text-xs text-gray-500 mb-6 max-w-xl mx-auto">
-            Teez Golf Challenges is operated by Honey Badger Technologies PTY LTD.
-            Subscriptions are processed through secure approved payment systems. </p>
-<div className="flex flex-col items-center gap-4">
-  <div className="grid w-full max-w-2xl grid-cols-1 gap-4 sm:grid-cols-2">
+    {/* ================= MAIN ACTION SECTION ================= */}
+<section className="relative overflow-hidden bg-[#020817] px-6 py-16 text-center text-white">
+  {/* BLUE GLOW BACKGROUND */}
+  <div className="pointer-events-none absolute left-1/2 top-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-500/10 blur-[120px]" />
 
-    {/* GREEN */}
-    <button
-      onClick={() => router.push("/register")}
-      className="h-14 w-full rounded-full border border-green-300 bg-green-400 text-black font-bold animate-pulse shadow-[0_0_22px_rgba(34,197,94,0.9)] hover:scale-105 transition"
-    >
-      SUBSCRIBE
-    </button>
+  <div className="relative z-10 mx-auto max-w-3xl">
+    <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.35em] text-blue-400">
+      TEEZ GOLF CHALLENGES
+    </p>
 
-    {/* YELLOW */}
-    <button
-      onClick={() => router.push("/login")}
-      className="h-14 w-full rounded-full border border-yellow-200 bg-yellow-300 text-black font-bold animate-pulse shadow-[0_0_22px_rgba(253,224,71,0.9)] hover:scale-105 transition"
-    >
-      LOGIN
-    </button>
+    <h2 className="mb-4 text-2xl font-black uppercase tracking-[0.08em] text-white md:text-4xl">
+      READY TO PLAY WITH PURPOSE?
+    </h2>
 
-    {/* BLUE */}
-    <button
-      onClick={() => router.push("/dashboard")}
-      className="h-14 w-full rounded-full border border-blue-300 bg-blue-500 text-white font-bold animate-pulse shadow-[0_0_22px_rgba(59,130,246,0.9)] hover:scale-105 transition"
-    >
-      VIEW FULL DASHBOARD
-    </button>
+    <p className="mb-10 text-base font-semibold tracking-[0.12em] text-slate-300 md:text-lg">
+      Join. Grow. Experience.
+    </p>
 
-    {/* RED */}
-    <button
-      onClick={() => router.push("/teez-scoring")}
-      className="h-14 w-full rounded-full border border-red-300 bg-red-500 text-white font-bold animate-pulse shadow-[0_0_22px_rgba(239,68,68,0.9)] hover:scale-105 transition"
-    >
-      TEEZ GOLF SCORING
-    </button>
+    {/* MAIN BUTTONS */}
+    <div className="mx-auto flex w-full max-w-md flex-col gap-4">
 
+      {/* LOGIN */}
+      <button
+        onClick={() => router.push("/login")}
+        className="h-14 w-full rounded-full border border-blue-300/80 bg-blue-500/10 text-sm font-black uppercase tracking-[0.16em] text-white shadow-[0_0_18px_rgba(0,170,255,0.65),inset_0_0_18px_rgba(0,170,255,0.12)] transition duration-300 hover:scale-[1.03] hover:bg-blue-500/20 hover:shadow-[0_0_30px_rgba(0,170,255,0.95)] animate-pulse"
+      >
+        LOGIN
+      </button>
+
+      {/* JOIN US */}
+      <button
+        onClick={() => router.push("/register")}
+        className="h-14 w-full rounded-full border border-blue-300/80 bg-blue-500/10 text-sm font-black uppercase tracking-[0.16em] text-white shadow-[0_0_18px_rgba(0,170,255,0.65),inset_0_0_18px_rgba(0,170,255,0.12)] transition duration-300 hover:scale-[1.03] hover:bg-blue-500/20 hover:shadow-[0_0_30px_rgba(0,170,255,0.95)] animate-pulse"
+      >
+        JOIN US
+      </button>
+
+      {/* PLAYER DASHBOARD */}
+      <button
+        onClick={() => router.push("/dashboard")}
+        className="h-14 w-full rounded-full border border-blue-300/80 bg-blue-500/10 text-sm font-black uppercase tracking-[0.16em] text-white shadow-[0_0_18px_rgba(0,170,255,0.65),inset_0_0_18px_rgba(0,170,255,0.12)] transition duration-300 hover:scale-[1.03] hover:bg-blue-500/20 hover:shadow-[0_0_30px_rgba(0,170,255,0.95)] animate-pulse"
+      >
+        VIEW PLAYER DASHBOARD
+      </button>
+
+      {/* GOLF SCORING */}
+      <button
+        onClick={() => router.push("/teez-scoring")}
+        className="h-14 w-full rounded-full border border-blue-300/80 bg-blue-500/10 text-sm font-black uppercase tracking-[0.16em] text-white shadow-[0_0_18px_rgba(0,170,255,0.65),inset_0_0_18px_rgba(0,170,255,0.12)] transition duration-300 hover:scale-[1.03] hover:bg-blue-500/20 hover:shadow-[0_0_30px_rgba(0,170,255,0.95)] animate-pulse"
+      >
+        GOLF SCORING SYSTEMS
+      </button>
+
+      {/* TOURS AND EVENTS PLACEHOLDER */}
+      <button
+        type="button"
+        className="h-14 w-full cursor-default rounded-full border border-blue-300/80 bg-blue-500/10 text-sm font-black uppercase tracking-[0.16em] text-white shadow-[0_0_18px_rgba(0,170,255,0.65),inset_0_0_18px_rgba(0,170,255,0.12)] animate-pulse"
+      >
+        TEEZ TOURS AND EVENTS
+      </button>
+
+    </div>
+
+    <p className="mx-auto mt-8 max-w-xl text-[10px] leading-5 text-slate-500">
+      Teez Golf Challenges is operated by Honey Badger Technologies PTY LTD.
+      Subscriptions are processed through secure approved payment systems.
+    </p>
   </div>
-</div>
-        </div>
-      </section>
+</section>
 
       {/* ================= BADGER IMAGE ================= */}
       <section className="py-16 px-6 flex justify-center">

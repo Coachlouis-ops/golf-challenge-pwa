@@ -189,21 +189,13 @@ export default function HomePage() {
 </header>
 
   {/* ================= MAIN HERO / ACTION AREA ================= */}
-<section className="relative overflow-hidden bg-[#020817] px-6 pb-14 pt-8 text-center text-white">
+<section className="relative overflow-hidden bg-[#020817] px-6 pb-10 pt-2 text-center text-white">
 
   {/* BLUE BACKGROUND GLOW */}
   <div className="pointer-events-none absolute left-1/2 top-1/2 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-500/10 blur-[130px]" />
 
   <div className="relative z-10 mx-auto max-w-4xl">
 
-    {/* TEEZ TEXT IMAGE */}
-    <div className="mx-auto mb-8 w-full max-w-3xl">
-      <img
-        src="/teez_text_01.png"
-        className="h-auto w-full object-contain"
-        alt="Teez Golf Challenges"
-      />
-    </div>
 
     {/* MAIN HEADING */}
     <h2 className="text-3xl font-black uppercase tracking-[0.08em] text-white drop-shadow-[0_0_18px_rgba(0,170,255,0.95)] md:text-5xl">

@@ -84,45 +84,44 @@ export default function TeezScoringInfoPage() {
         <div className="absolute -right-40 -top-40 h-[600px] w-[600px] rounded-full bg-[#d6b56c]/10 blur-[140px]" />
         <div className="absolute -bottom-48 -left-32 h-[600px] w-[600px] rounded-full bg-[#1b6b48]/20 blur-[140px]" />
 
-        <div className="relative mx-auto flex min-h-[92vh] max-w-7xl items-center px-6 py-20 lg:px-10">
-          <div className="grid w-full items-center gap-14 lg:grid-cols-[1.05fr_.95fr]">
-            <div>
-              <div className="mb-7 flex items-center gap-4">
-                <div className="h-px w-12 bg-[#d6b56c]" />
-                <p className="text-xs font-bold tracking-[0.32em] text-[#d6b56c] sm:text-sm">
-                  TEEZ SCORING — LIVE GOLF TECHNOLOGY
-                </p>
-              </div>
+       <div className="relative mx-auto flex min-h-[92vh] w-full max-w-7xl items-center px-5 py-14 sm:px-6 sm:py-20 lg:px-10">
+  <div className="grid min-w-0 w-full grid-cols-1 items-center gap-10 lg:grid-cols-[1.05fr_.95fr] lg:gap-14">
+    <div className="min-w-0 w-full">
+          <div className="mb-6 flex min-w-0 items-start gap-3 sm:mb-7 sm:items-center sm:gap-4">
+  <div className="mt-2 h-px w-8 shrink-0 bg-[#d6b56c] sm:mt-0 sm:w-12" />
 
-              <h1 className="max-w-4xl text-5xl font-black uppercase leading-[0.92] tracking-[-0.04em] sm:text-7xl lg:text-[88px]">
-                Run Your Entire
-                <span className="block text-[#d6b56c]">
-                  Golf Competition.
-                </span>
-                <span className="block">Live.</span>
-              </h1>
-
-              <p className="mt-8 max-w-2xl text-lg leading-8 text-[#d8d5cb] sm:text-xl">
+  <p className="min-w-0 text-[10px] font-bold leading-4 tracking-[0.22em] text-[#d6b56c] sm:text-sm sm:tracking-[0.32em]">
+    TEEZ SCORING — LIVE GOLF TECHNOLOGY
+  </p>
+</div>
+              <h1 className="w-full max-w-4xl text-[40px] font-black uppercase leading-[0.94] tracking-[-0.035em] sm:text-7xl lg:text-[88px]">
+  <span className="block">Run Your</span>
+  <span className="block">Entire</span>
+  <span className="block text-[#d6b56c]">Golf</span>
+  <span className="block text-[#d6b56c]">Competition.</span>
+  <span className="block">Live.</span>
+</h1>
+              <p className="mt-7 w-full max-w-2xl text-base leading-7 text-[#d8d5cb] sm:mt-8 sm:text-xl sm:leading-8">
                 Competition management, digital scoring, live leaderboards,
                 clubhouse broadcasting and final results — connected through
                 one golf scoring platform.
               </p>
 
-         <div className="mt-10 grid w-full max-w-xl gap-3 sm:grid-cols-3">
+        <div className="mt-9 grid min-w-0 w-full max-w-xl grid-cols-1 gap-3 sm:mt-10 sm:grid-cols-3">
   <button
     onClick={() =>
       document
         .getElementById("journey")
         ?.scrollIntoView({ behavior: "smooth" })
     }
-    className="w-full rounded-sm border border-[#f5f1e7]/30 px-4 py-4 text-xs font-black tracking-[0.08em] transition hover:border-[#d6b56c] hover:text-[#d6b56c]"
+    className="min-w-0 w-full rounded-sm border border-[#f5f1e7]/30 px-4 py-4 text-xs font-black tracking-[0.08em] transition hover:border-[#d6b56c] hover:text-[#d6b56c]"
   >
     EXPLORE THE SYSTEM
   </button>
 
   <button
     onClick={() => router.push("/teez-scoring")}
-    className="w-full rounded-sm border border-[#d6b56c] px-4 py-4 text-xs font-black tracking-[0.08em] text-[#d6b56c] transition hover:bg-[#d6b56c] hover:text-[#071c13]"
+   className="min-w-0 w-full rounded-sm border border-[#d6b56c] px-4 py-4 text-xs font-black tracking-[0.08em] text-[#d6b56c] transition hover:bg-[#d6b56c] hover:text-[#071c13]"
   >
     ENTER TEEZ SCORING
   </button>
@@ -134,7 +133,7 @@ export default function TeezScoringInfoPage() {
         "_blank"
       )
     }
-    className="w-full rounded-sm bg-[#d6b56c] px-4 py-4 text-xs font-black tracking-[0.08em] text-[#071c13] transition hover:bg-[#ead49d]"
+className="min-w-0 w-full rounded-sm bg-[#d6b56c] px-4 py-4 text-xs font-black tracking-[0.08em] text-[#071c13] transition hover:bg-[#ead49d]"
   >
     GET TEEZ SCORING
   </button>
@@ -144,24 +143,26 @@ export default function TeezScoringInfoPage() {
 
             {/* LIVE SCORING BOARD */}
            <div className="relative min-w-0">
-              <div className="border border-[#d6b56c]/40 bg-[#0b271c]/95 shadow-2xl">
-                <div className="flex items-center justify-between border-b border-white/10 px-5 py-4">
-                  <div>
-                    <p className="text-[10px] font-bold tracking-[0.28em] text-[#d6b56c]">
-                      LIVE COMPETITION
-                    </p>
-                    <p className="mt-1 text-xl font-black">
-                      TEEZ CHAMPIONSHIP
-                    </p>
-                  </div>
+              <div className="relative min-w-0 w-full max-w-full overflow-hidden">
+  <div className="min-w-0 w-full max-w-full overflow-hidden border border-[#d6b56c]/40 bg-[#0b271c]/95 shadow-2xl">
+               <div className="border-b border-white/10 px-4 py-4 sm:flex sm:items-center sm:justify-between sm:px-5">
+  <div className="min-w-0">
+    <p className="text-[9px] font-bold tracking-[0.22em] text-[#d6b56c] sm:text-[10px] sm:tracking-[0.28em]">
+      LIVE COMPETITION
+    </p>
 
-                  <div className="flex items-center gap-2 text-xs font-bold">
-                    <span className="h-2 w-2 animate-pulse rounded-full bg-red-500" />
-                    LIVE
-                  </div>
-                </div>
+    <p className="mt-1 text-lg font-black sm:text-xl">
+      TEEZ CHAMPIONSHIP
+    </p>
+  </div>
 
-             <div className="grid w-full grid-cols-[28px_minmax(0,1fr)_40px_34px] border-b border-white/10 bg-[#06160f] px-2 py-3 text-[8px] font-bold tracking-normal text-white/45 sm:grid-cols-[45px_1fr_55px_45px] sm:px-4 sm:text-[10px] sm:tracking-[0.18em]">
+  <div className="mt-3 flex items-center gap-2 text-[10px] font-bold sm:mt-0 sm:text-xs">
+    <span className="h-2 w-2 animate-pulse rounded-full bg-red-500" />
+    LIVE
+  </div>
+</div>
+
+            <div className="grid w-full grid-cols-[12%_52%_18%_18%] border-b border-white/10 bg-[#06160f] px-3 py-3 text-[8px] font-bold tracking-normal text-white/45 sm:grid-cols-[45px_1fr_55px_45px] sm:px-4 sm:text-[10px] sm:tracking-[0.18em]">
                   <span>POS</span>
                   <span>TEAM</span>
                   <span className="text-right">PTS</span>
@@ -171,7 +172,7 @@ export default function TeezScoringInfoPage() {
                 {leaderboard.map((row) => (
                   <div
                     key={row.team}
-                  className="grid w-full grid-cols-[28px_minmax(0,1fr)_40px_34px] items-center border-b border-white/10 px-2 py-4 sm:grid-cols-[45px_1fr_55px_45px] sm:px-4 sm:py-5"
+                className="grid w-full grid-cols-[12%_52%_18%_18%] items-center border-b border-white/10 px-3 py-4 sm:grid-cols-[45px_1fr_55px_45px] sm:px-4 sm:py-5"
                   >
                    <span className="text-base font-black text-[#d6b56c] sm:text-xl">
   {row.pos}
@@ -188,21 +189,22 @@ export default function TeezScoringInfoPage() {
                   </div>
                 ))}
 
-                <div className="flex items-center justify-between px-5 py-4 text-[10px] font-bold tracking-[0.2em] text-white/45">
-                  <span>POWERED BY TEEZ</span>
-                  <span>LIVE GOLF TECHNOLOGY</span>
-                </div>
+               <div className="grid grid-cols-2 gap-3 px-4 py-4 text-[8px] font-bold tracking-[0.14em] text-white/45 sm:px-5 sm:text-[10px] sm:tracking-[0.2em]">
+  <span>POWERED BY TEEZ</span>
+  <span className="text-right">LIVE GOLF TECHNOLOGY</span>
+</div>
               </div>
 
-              <div className="absolute -bottom-7 -left-6 hidden border border-white/10 bg-[#f5f1e7] px-6 py-4 text-[#071c13] shadow-xl sm:block">
+                      <div className="absolute -bottom-7 -left-6 hidden border border-white/10 bg-[#f5f1e7] px-6 py-4 text-[#071c13] shadow-xl sm:block">
                 <p className="text-[10px] font-black tracking-[0.2em] text-[#806c3e]">
                   ROUND STATUS
                 </p>
                 <p className="mt-1 text-2xl font-black">LIVE SCORING</p>
-              </div>
+                                 </div>
             </div>
           </div>
         </div>
+      </div>
       </section>
 
       {/* =========================================================

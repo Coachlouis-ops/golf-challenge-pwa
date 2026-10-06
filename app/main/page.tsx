@@ -200,14 +200,6 @@ export default function HomePage() {
   </p>
 </section>
 
-      {/* ================= HERO ================= */}
-      <section className="w-full">
-        <img
-          src="/hero_main.png"
-          className="w-full h-auto object-cover"
-          alt="Teez Hero"
-        />
-      </section>
 
       {/* ================= WALLET SECTION ================= */}
       <section className="bg-gray-100 text-black text-center py-20 px-6">

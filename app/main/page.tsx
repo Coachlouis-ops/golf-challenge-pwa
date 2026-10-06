@@ -270,14 +270,14 @@ export default function HomePage() {
   </div>
 </section>
 
-      {/* ================= BADGER IMAGE ================= */}
-      <section className="py-16 px-6 flex justify-center">
-        <img
-          src="/hero_main2.png"
-          className="w-full max-w-5xl object-contain"
-          alt="Teez Badger"
-        />
-      </section>
+ {/* ================= BADGER HERO IMAGE ================= */}
+<section className="w-full overflow-hidden">
+  <img
+    src="/hero_main2.png"
+    className="h-[600px] w-full object-cover object-center md:h-auto"
+    alt="Teez Badger"
+  />
+</section>
 
       {/* ================= STORY SECTION ================= */}
       <section className="bg-gray-100 text-black text-center py-20 px-6">

@@ -188,40 +188,35 @@ export default function HomePage() {
 
 </header>
 
-      {/* SLOGAN SECTION */}
-<section className="w-full max-w-4xl mx-auto text-center px-6 py-10">
-<h2 className="text-3xl md:text-5xl font-black uppercase tracking-[0.08em] text-white drop-shadow-[0_0_18px_rgba(0,170,255,0.95)]">
-  ONLY FOR THE PASSIONATE
-</h2>
+  {/* ================= MAIN HERO / ACTION AREA ================= */}
+<section className="relative overflow-hidden bg-[#020817] px-6 pb-14 pt-8 text-center text-white">
 
-  <p className="mt-5 text-slate-300 text-base md:text-lg font-semibold tracking-[0.12em]">
-  Join. Grow. Experience.
-</p>
-</section>
+  {/* BLUE BACKGROUND GLOW */}
+  <div className="pointer-events-none absolute left-1/2 top-1/2 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-500/10 blur-[130px]" />
 
+  <div className="relative z-10 mx-auto max-w-4xl">
 
-    {/* ================= MAIN ACTION SECTION ================= */}
-<section className="relative overflow-hidden bg-[#020817] px-6 py-16 text-center text-white">
-  {/* BLUE GLOW BACKGROUND */}
-  <div className="pointer-events-none absolute left-1/2 top-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-500/10 blur-[120px]" />
+    {/* TEEZ TEXT IMAGE */}
+    <div className="mx-auto mb-8 w-full max-w-3xl">
+      <img
+        src="/teez_text_01.png"
+        className="h-auto w-full object-contain"
+        alt="Teez Golf Challenges"
+      />
+    </div>
 
-  <div className="relative z-10 mx-auto max-w-3xl">
-    <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.35em] text-blue-400">
-      TEEZ GOLF CHALLENGES
-    </p>
-
-    <h2 className="mb-4 text-2xl font-black uppercase tracking-[0.08em] text-white md:text-4xl">
-      READY TO PLAY WITH PURPOSE?
+    {/* MAIN HEADING */}
+    <h2 className="text-3xl font-black uppercase tracking-[0.08em] text-white drop-shadow-[0_0_18px_rgba(0,170,255,0.95)] md:text-5xl">
+      ONLY FOR THE PASSIONATE
     </h2>
 
-    <p className="mb-10 text-base font-semibold tracking-[0.12em] text-slate-300 md:text-lg">
+    <p className="mt-4 text-base font-semibold tracking-[0.12em] text-slate-300 md:text-lg">
       Join. Grow. Experience.
     </p>
 
     {/* MAIN BUTTONS */}
-    <div className="mx-auto flex w-full max-w-md flex-col gap-4">
+    <div className="mx-auto mt-10 flex w-full max-w-md flex-col gap-4">
 
-      {/* LOGIN */}
       <button
         onClick={() => router.push("/login")}
         className="h-14 w-full rounded-full border border-blue-300/80 bg-blue-500/10 text-sm font-black uppercase tracking-[0.16em] text-white shadow-[0_0_18px_rgba(0,170,255,0.65),inset_0_0_18px_rgba(0,170,255,0.12)] transition duration-300 hover:scale-[1.03] hover:bg-blue-500/20 hover:shadow-[0_0_30px_rgba(0,170,255,0.95)] animate-pulse"
@@ -229,7 +224,6 @@ export default function HomePage() {
         LOGIN
       </button>
 
-      {/* JOIN US */}
       <button
         onClick={() => router.push("/register")}
         className="h-14 w-full rounded-full border border-blue-300/80 bg-blue-500/10 text-sm font-black uppercase tracking-[0.16em] text-white shadow-[0_0_18px_rgba(0,170,255,0.65),inset_0_0_18px_rgba(0,170,255,0.12)] transition duration-300 hover:scale-[1.03] hover:bg-blue-500/20 hover:shadow-[0_0_30px_rgba(0,170,255,0.95)] animate-pulse"
@@ -237,7 +231,6 @@ export default function HomePage() {
         JOIN US
       </button>
 
-      {/* PLAYER DASHBOARD */}
       <button
         onClick={() => router.push("/dashboard")}
         className="h-14 w-full rounded-full border border-blue-300/80 bg-blue-500/10 text-sm font-black uppercase tracking-[0.16em] text-white shadow-[0_0_18px_rgba(0,170,255,0.65),inset_0_0_18px_rgba(0,170,255,0.12)] transition duration-300 hover:scale-[1.03] hover:bg-blue-500/20 hover:shadow-[0_0_30px_rgba(0,170,255,0.95)] animate-pulse"
@@ -245,7 +238,6 @@ export default function HomePage() {
         VIEW PLAYER DASHBOARD
       </button>
 
-      {/* GOLF SCORING */}
       <button
         onClick={() => router.push("/teez-scoring")}
         className="h-14 w-full rounded-full border border-blue-300/80 bg-blue-500/10 text-sm font-black uppercase tracking-[0.16em] text-white shadow-[0_0_18px_rgba(0,170,255,0.65),inset_0_0_18px_rgba(0,170,255,0.12)] transition duration-300 hover:scale-[1.03] hover:bg-blue-500/20 hover:shadow-[0_0_30px_rgba(0,170,255,0.95)] animate-pulse"
@@ -253,7 +245,6 @@ export default function HomePage() {
         GOLF SCORING SYSTEMS
       </button>
 
-      {/* TOURS AND EVENTS PLACEHOLDER */}
       <button
         type="button"
         className="h-14 w-full cursor-default rounded-full border border-blue-300/80 bg-blue-500/10 text-sm font-black uppercase tracking-[0.16em] text-white shadow-[0_0_18px_rgba(0,170,255,0.65),inset_0_0_18px_rgba(0,170,255,0.12)] animate-pulse"
@@ -263,23 +254,11 @@ export default function HomePage() {
 
     </div>
 
-    <p className="mx-auto mt-8 max-w-xl text-[10px] leading-5 text-slate-500">
-      Teez Golf Challenges is operated by Honey Badger Technologies PTY LTD.
-      Subscriptions are processed through secure approved payment systems.
-    </p>
   </div>
 </section>
 
- {/* ================= TEEZ TEXT IMAGE ================= */}
-<section className="w-full bg-[#020817] px-4 pt-8 pb-4">
-  <div className="mx-auto max-w-5xl">
-    <img
-      src="/teez_text_01.png"
-      className="h-auto w-full object-contain"
-      alt="Teez Golf Challenges"
-    />
-  </div>
-</section>
+
+
 
 {/* ================= BADGER HERO IMAGE ================= */}
 <section className="w-full overflow-hidden bg-[#020817]">

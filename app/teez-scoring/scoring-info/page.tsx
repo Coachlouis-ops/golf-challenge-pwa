@@ -108,29 +108,42 @@ export default function TeezScoringInfoPage() {
                 one golf scoring platform.
               </p>
 
-              <div className="mt-10 flex flex-col gap-4 sm:flex-row">
-                <button
-                  onClick={() => router.push("/teez-scoring/apply")}
-                  className="rounded-sm bg-[#d6b56c] px-8 py-4 text-sm font-black tracking-[0.12em] text-[#071c13] transition hover:bg-[#ead49d]"
-                >
-                  GET TEEZ SCORING
-                </button>
+         <div className="mt-10 grid w-full max-w-xl gap-3 sm:grid-cols-3">
+  <button
+    onClick={() =>
+      document
+        .getElementById("journey")
+        ?.scrollIntoView({ behavior: "smooth" })
+    }
+    className="w-full rounded-sm border border-[#f5f1e7]/30 px-4 py-4 text-xs font-black tracking-[0.08em] transition hover:border-[#d6b56c] hover:text-[#d6b56c]"
+  >
+    EXPLORE THE SYSTEM
+  </button>
 
-                <button
-                  onClick={() =>
-                    document
-                      .getElementById("journey")
-                      ?.scrollIntoView({ behavior: "smooth" })
-                  }
-                  className="rounded-sm border border-[#f5f1e7]/30 px-8 py-4 text-sm font-black tracking-[0.12em] transition hover:border-[#d6b56c] hover:text-[#d6b56c]"
-                >
-                  EXPLORE THE SYSTEM
-                </button>
-              </div>
+  <button
+    onClick={() => router.push("/teez-scoring")}
+    className="w-full rounded-sm border border-[#d6b56c] px-4 py-4 text-xs font-black tracking-[0.08em] text-[#d6b56c] transition hover:bg-[#d6b56c] hover:text-[#071c13]"
+  >
+    ENTER TEEZ SCORING
+  </button>
+
+  <button
+    onClick={() =>
+      window.open(
+        "https://wa.me/27636501619?text=Hi%20TEEZ%2C%20I%20am%20interested%20in%20TEEZ%20Golf%20Scoring.",
+        "_blank"
+      )
+    }
+    className="w-full rounded-sm bg-[#d6b56c] px-4 py-4 text-xs font-black tracking-[0.08em] text-[#071c13] transition hover:bg-[#ead49d]"
+  >
+    GET TEEZ SCORING
+  </button>
+</div>
+
             </div>
 
             {/* LIVE SCORING BOARD */}
-            <div className="relative">
+           <div className="relative min-w-0">
               <div className="border border-[#d6b56c]/40 bg-[#0b271c]/95 shadow-2xl">
                 <div className="flex items-center justify-between border-b border-white/10 px-5 py-4">
                   <div>
@@ -148,7 +161,7 @@ export default function TeezScoringInfoPage() {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-[45px_1fr_55px_45px] border-b border-white/10 bg-[#06160f] px-4 py-3 text-[10px] font-bold tracking-[0.18em] text-white/45">
+              <div className="grid grid-cols-[34px_minmax(0,1fr)_44px_38px] border-b border-white/10 bg-[#06160f] px-3 py-3 text-[9px] font-bold tracking-[0.08em] text-white/45 sm:grid-cols-[45px_1fr_55px_45px] sm:px-4 sm:text-[10px] sm:tracking-[0.18em]">
                   <span>POS</span>
                   <span>TEAM</span>
                   <span className="text-right">PTS</span>
@@ -158,7 +171,7 @@ export default function TeezScoringInfoPage() {
                 {leaderboard.map((row) => (
                   <div
                     key={row.team}
-                    className="grid grid-cols-[45px_1fr_55px_45px] items-center border-b border-white/10 px-4 py-5"
+                   className="grid grid-cols-[34px_minmax(0,1fr)_44px_38px] items-center border-b border-white/10 px-3 py-4 sm:grid-cols-[45px_1fr_55px_45px] sm:px-4 sm:py-5"
                   >
                     <span className="text-xl font-black text-[#d6b56c]">
                       {row.pos}
@@ -235,18 +248,22 @@ export default function TeezScoringInfoPage() {
             broadcasting and final results.
           </p>
 
-          <div className="mt-16 grid gap-px overflow-hidden border border-[#c9c4b7] bg-[#c9c4b7] md:grid-cols-2 lg:grid-cols-4">
+     <div className="mt-10 grid grid-cols-2 gap-px overflow-hidden border border-[#c9c4b7] bg-[#c9c4b7] sm:mt-16 md:grid-cols-2 lg:grid-cols-4">
             {journey.map((step) => (
               <div
                 key={step.number}
-                className="min-h-[230px] bg-[#f8f6ef] p-7"
+              className="min-h-[185px] bg-[#f8f6ef] p-4 sm:min-h-[230px] sm:p-7"
               >
                 <p className="text-sm font-black text-[#a18443]">
                   {step.number}
                 </p>
-                <div className="my-5 h-px w-10 bg-[#a18443]" />
-                <h3 className="text-xl font-black">{step.title}</h3>
-                <p className="mt-4 leading-7 text-[#59645e]">
+                <div className="my-3 h-px w-8 bg-[#a18443] sm:my-5 sm:w-10" />
+
+<h3 className="text-sm font-black leading-tight sm:text-xl">
+  {step.title}
+</h3>
+
+<p className="mt-3 text-xs leading-5 text-[#59645e] sm:mt-4 sm:text-base sm:leading-7">
                   {step.text}
                 </p>
               </div>
@@ -388,8 +405,8 @@ export default function TeezScoringInfoPage() {
             </p>
           </div>
 
-          <div className="mt-14 overflow-hidden border border-white/15">
-            <div className="grid grid-cols-[55px_1fr_75px_60px] bg-[#d6b56c] px-5 py-4 text-xs font-black tracking-[0.15em] text-[#071c13]">
+         <div className="mt-10 w-full overflow-hidden border border-white/15 sm:mt-14">
+           <div className="grid grid-cols-[34px_minmax(0,1fr)_52px_42px] bg-[#d6b56c] px-3 py-4 text-[9px] font-black tracking-[0.06em] text-[#071c13] sm:grid-cols-[55px_1fr_75px_60px] sm:px-5 sm:text-xs sm:tracking-[0.15em]">
               <span>POS</span>
               <span>TEAM</span>
               <span className="text-right">TOTAL</span>
@@ -399,12 +416,14 @@ export default function TeezScoringInfoPage() {
             {leaderboard.map((row) => (
               <div
                 key={row.team}
-                className="grid grid-cols-[55px_1fr_75px_60px] items-center border-b border-white/10 px-5 py-6 last:border-b-0"
+                className="grid grid-cols-[34px_minmax(0,1fr)_52px_42px] items-center border-b border-white/10 px-3 py-5 last:border-b-0 sm:grid-cols-[55px_1fr_75px_60px] sm:px-5 sm:py-6"
               >
                 <span className="text-2xl font-black text-[#d6b56c]">
                   {row.pos}
                 </span>
-                <span className="text-lg font-black">{row.team}</span>
+               <span className="min-w-0 truncate pr-2 text-sm font-black sm:text-lg">
+  {row.team}
+</span>
                 <span className="text-right text-2xl font-black">
                   {row.score}
                 </span>
@@ -445,7 +464,9 @@ export default function TeezScoringInfoPage() {
                     <span className="font-black text-[#d6b56c]">
                       {row.pos}
                     </span>
-                    <span className="font-bold">{row.team}</span>
+                    <span className="min-w-0 truncate pr-2 text-sm font-bold sm:text-base">
+  {row.team}
+</span>
                     <span className="text-right font-black">
                       {row.score}
                     </span>
@@ -702,21 +723,6 @@ export default function TeezScoringInfoPage() {
             and event broadcasting together with TEEZ.
           </p>
 
-          <div className="mt-10 flex flex-col justify-center gap-4 sm:flex-row">
-            <button
-              onClick={() => router.push("/teez-scoring/apply")}
-              className="bg-[#d6b56c] px-9 py-5 text-sm font-black tracking-[0.12em] text-[#071c13] transition hover:bg-[#ead49d]"
-            >
-              APPLY FOR TEEZ SCORING
-            </button>
-
-            <button
-              onClick={() => router.push("/teez-scoring")}
-              className="border border-white/25 px-9 py-5 text-sm font-black tracking-[0.12em] transition hover:border-[#d6b56c] hover:text-[#d6b56c]"
-            >
-              ENTER TEEZ GOLF SCORING
-            </button>
-          </div>
 
           <div className="mt-16 border-t border-white/10 pt-8">
             <p className="text-xs font-black tracking-[0.25em] text-white/30">

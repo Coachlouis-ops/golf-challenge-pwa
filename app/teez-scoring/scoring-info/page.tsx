@@ -161,7 +161,7 @@ export default function TeezScoringInfoPage() {
                   </div>
                 </div>
 
-              <div className="grid grid-cols-[34px_minmax(0,1fr)_44px_38px] border-b border-white/10 bg-[#06160f] px-3 py-3 text-[9px] font-bold tracking-[0.08em] text-white/45 sm:grid-cols-[45px_1fr_55px_45px] sm:px-4 sm:text-[10px] sm:tracking-[0.18em]">
+             <div className="grid w-full grid-cols-[28px_minmax(0,1fr)_40px_34px] border-b border-white/10 bg-[#06160f] px-2 py-3 text-[8px] font-bold tracking-normal text-white/45 sm:grid-cols-[45px_1fr_55px_45px] sm:px-4 sm:text-[10px] sm:tracking-[0.18em]">
                   <span>POS</span>
                   <span>TEAM</span>
                   <span className="text-right">PTS</span>
@@ -171,18 +171,20 @@ export default function TeezScoringInfoPage() {
                 {leaderboard.map((row) => (
                   <div
                     key={row.team}
-                   className="grid grid-cols-[34px_minmax(0,1fr)_44px_38px] items-center border-b border-white/10 px-3 py-4 sm:grid-cols-[45px_1fr_55px_45px] sm:px-4 sm:py-5"
+                  className="grid w-full grid-cols-[28px_minmax(0,1fr)_40px_34px] items-center border-b border-white/10 px-2 py-4 sm:grid-cols-[45px_1fr_55px_45px] sm:px-4 sm:py-5"
                   >
-                    <span className="text-xl font-black text-[#d6b56c]">
-                      {row.pos}
-                    </span>
-                    <span className="font-bold">{row.team}</span>
-                    <span className="text-right text-xl font-black">
-                      {row.score}
-                    </span>
-                    <span className="text-right text-sm text-white/55">
-                      {row.status}
-                    </span>
+                   <span className="text-base font-black text-[#d6b56c] sm:text-xl">
+  {row.pos}
+</span>
+                 <span className="min-w-0 truncate pr-1 text-xs font-bold sm:pr-2 sm:text-base">
+  {row.team}
+</span>
+                    <span className="text-right text-base font-black sm:text-xl">
+  {row.score}
+</span>
+                    <span className="text-right text-xs text-white/55 sm:text-sm">
+  {row.status}
+</span>
                   </div>
                 ))}
 

@@ -231,7 +231,7 @@ export default function HomePage() {
       </button>
 
       <button
-        onClick={() => router.push("/teez-scoring")}
+       onClick={() => router.push("/teez-scoring/scoring-info")}
         className="h-14 w-full rounded-full border border-blue-300/80 bg-blue-500/10 text-sm font-black uppercase tracking-[0.16em] text-white shadow-[0_0_18px_rgba(0,170,255,0.65),inset_0_0_18px_rgba(0,170,255,0.12)] transition duration-300 hover:scale-[1.03] hover:bg-blue-500/20 hover:shadow-[0_0_30px_rgba(0,170,255,0.95)] animate-pulse"
       >
         GOLF SCORING SYSTEMS

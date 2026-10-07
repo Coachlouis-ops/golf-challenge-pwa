@@ -5,7 +5,7 @@ export type ImprovePlayerBoosterProduct = {
     | "player_reload"
     | "player_tech"
     | "player_accessory"
-    | "player_image";
+    | "race_top_8";
   productName: string;
   description: string;
   image: string;
@@ -38,22 +38,22 @@ export const IMPROVE_PLAYER_BOOSTERS: ImprovePlayerBoosterProduct[] = [
     image: "/boosters/player_protect002.png",
   },
 
-  {
+     {
     code: "protect-003",
     category: "player_protecting",
-    productName: "Golf Cap",
+    productName: "Umbrella",
     description:
-      "Premium golf cap - mens, ladies, various colours",
-    image: "/boosters/player_caps.png",
+      "Automatic Open Golf Umbrella - Extra Large Double Canopy, All-Weather Protection",
+    image: "/boosters/protecting/player_protect001.png",
   },
 
-  {
+   {
     code: "protect-004",
     category: "player_protecting",
-    productName: "Golf Cap",
+    productName: "Sunscreen",
     description:
-      "Premium golf cap - mens, ladies, various colours",
-    image: "/boosters/player_caps.png",
+      "Sun Lab - water resistant, non-greasy, non-sticky sport sunblock, SPF 50",
+    image: "/boosters/player_protect002.png",
   },
 
   {
@@ -86,19 +86,19 @@ export const IMPROVE_PLAYER_BOOSTERS: ImprovePlayerBoosterProduct[] = [
   {
     code: "protect-008",
     category: "player_protecting",
-    productName: "Golf Cap",
+    productName: "Umbrella",
     description:
-      "Premium golf cap - mens, ladies, various colours",
-    image: "/boosters/player_caps.png",
+      "Automatic Open Golf Umbrella - Extra Large Double Canopy, All-Weather Protection",
+    image: "/boosters/player_protect006.png",
   },
 
-  {
+    {
     code: "protect-009",
     category: "player_protecting",
-    productName: "Golf Cap",
+    productName: "Sunglasses",
     description:
-      "Premium golf cap - mens, ladies, various colours",
-    image: "/boosters/player_caps.png",
+      "6 x Stylish Square Frame Fashion Glasses",
+    image: "/boosters/player_image008.png",
   },
 
   {
@@ -318,101 +318,100 @@ export const IMPROVE_PLAYER_BOOSTERS: ImprovePlayerBoosterProduct[] = [
   },
 
 
+   // =========================================================
+  // RACE TO TOP 8
   // =========================================================
-  // PLAYER IMAGE
-  // =========================================================
 
   {
-    code: "image-001",
-    category: "player_image",
-    productName: "Golf Shirt",
+    code: "race-001",
+    category: "race_top_8",
+    productName: "10 Race Points",
     description:
-      "Premium golf shirt - mens, ladies, various colours",
-    image: "/boosters/player_shirts.png",
+      "Add 10 Race Points to your Race to the Final total.",
+    image: "/boosters/race_points.png",
   },
 
   {
-    code: "image-002",
-    category: "player_image",
-    productName: "Golf Shirt",
+    code: "race-002",
+    category: "race_top_8",
+    productName: "10 Race Points",
     description:
-      "Premium golf shirt - mens, ladies, various colours",
-    image: "/boosters/player_shirts.png",
+      "Add 10 Race Points to your Race to the Final total.",
+    image: "/boosters/race_points.png",
   },
 
   {
-    code: "image-003",
-    category: "player_image",
-    productName: "Golf Belts",
+    code: "race-003",
+    category: "race_top_8",
+    productName: "20 Race Points",
     description:
-      "3 x golf belts",
-    image: "/boosters/player_image003.png",
+      "Add 20 Race Points to your Race to the Final total.",
+    image: "/boosters/race_points.png",
   },
 
   {
-    code: "image-004",
-    category: "player_image",
-    productName: "Golf Shoes",
+    code: "race-004",
+    category: "race_top_8",
+    productName: "20 Race Points",
     description:
-      "Premium golf shoes - mens, ladies, various colours",
-    image: "/boosters/player_shoes.png",
+      "Add 20 Race Points to your Race to the Final total.",
+    image: "/boosters/race_points.png",
   },
 
   {
-    code: "image-005",
-    category: "player_image",
-    productName: "Golf Shoes",
+    code: "race-005",
+    category: "race_top_8",
+    productName: "20 Race Points",
     description:
-      "Premium golf shoes - mens, ladies, various colours",
-    image: "/boosters/player_shoes.png",
+      "Add 20 Race Points to your Race to the Final total.",
+    image: "/boosters/race_points.png",
   },
 
   {
-    code: "image-006",
-    category: "player_image",
-    productName: "Golf Shirt",
+    code: "race-006",
+    category: "race_top_8",
+    productName: "30 Race Points",
     description:
-      "Premium golf shirt - mens, ladies, various colours",
-    image: "/boosters/player_shirts.png",
+      "Add 30 Race Points to your Race to the Final total.",
+    image: "/boosters/race_points.png",
   },
 
   {
-    code: "image-007",
-    category: "player_image",
-    productName: "Golf Cap",
+    code: "race-007",
+    category: "race_top_8",
+    productName: "30 Race Points",
     description:
-      "Premium golf cap - mens, ladies, various colours",
-    image: "/boosters/player_caps.png",
+      "Add 30 Race Points to your Race to the Final total.",
+    image: "/boosters/race_points.png",
   },
 
   {
-    code: "image-008",
-    category: "player_image",
-    productName: "Sunglasses",
+    code: "race-008",
+    category: "race_top_8",
+    productName: "50 Race Points",
     description:
-      "6 x Stylish Square Frame Fashion Glasses",
-    image: "/boosters/player_image008.png",
+      "Add 50 Race Points to your Race to the Final total.",
+    image: "/boosters/race_points.png",
   },
 
   {
-    code: "image-009",
-    category: "player_image",
-    productName: "Golf Outfit Combo",
+    code: "race-009",
+    category: "race_top_8",
+    productName: "50 Race Points",
     description:
-      "Premium golf combo - mens, ladies, various colours",
-    image: "/boosters/player_image009.png",
+      "Add 50 Race Points to your Race to the Final total.",
+    image: "/boosters/race_points.png",
   },
 
   {
-    code: "image-010",
-    category: "player_image",
-    productName: "Golf Outfit Combo",
+    code: "race-010",
+    category: "race_top_8",
+    productName: "100 Race Points",
     description:
-      "Premium golf combo - mens, ladies, various colours",
-    image: "/boosters/player_image0010.png",
+      "Add 100 Race Points to your Race to the Final total.",
+    image: "/boosters/race_points.png",
   },
 ];
-
 
 export function getImprovePlayerBoosters(
   category: ImprovePlayerBoosterProduct["category"]

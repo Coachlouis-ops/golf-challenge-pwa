@@ -74,11 +74,12 @@ const [submitted, setSubmitted] =
           category: string;
           productCode: string;
         },
-        {
+             {
           success: boolean;
           request: {
-            requestId: string;
+            requestId: string | null;
             status: string;
+            racePointsAwarded?: number;
           };
         }
       >(
@@ -219,90 +220,161 @@ const [submitted, setSubmitted] =
           </section>
 
 
-          {/* DELIVERY PROCESS */}
+                   {category === "race_top_8" ? (
+            <>
+              {/* RACE POINTS PROCESS */}
 
-          <section className="border border-cyan-400/30 bg-[#071017] p-5">
+              <section className="border border-cyan-400/30 bg-[#071017] p-5">
 
-            <p className="text-[9px] font-black uppercase tracking-[0.20em] text-cyan-400">
-              What Happens Next
-            </p>
+                <p className="text-[9px] font-black uppercase tracking-[0.20em] text-cyan-400">
+                  What Happens Next
+                </p>
 
-            <div className="mt-4 space-y-3">
+                <div className="mt-4 space-y-3">
 
-              <ProcessStep
-                number="1"
-                text="Your selected Booster and unique item code are sent to TEEZ."
-              />
+                  <ProcessStep
+                    number="1"
+                    text="Confirm your selected Race Points reward."
+                  />
 
-              <ProcessStep
-                number="2"
-                text="TEEZ verifies the exact physical item selected."
-              />
+                  <ProcessStep
+                    number="2"
+                    text="Your Race Points are credited directly to your Race to the Final total."
+                  />
 
-              <ProcessStep
-                number="3"
-                text="You receive an email regarding delivery arrangements."
-              />
+                  <ProcessStep
+                    number="3"
+                    text="Your Booster Ball is permanently marked as claimed."
+                  />
 
-              <ProcessStep
-                number="4"
-                text="Your physical Booster is delivered to you."
-              />
+                </div>
 
-            </div>
-
-          </section>
+              </section>
 
 
-          {/* IMPORTANT */}
+              <section className="border border-amber-400/30 bg-amber-400/[0.05] p-4">
 
-          <section className="border border-amber-400/30 bg-amber-400/[0.05] p-4">
+                <p className="text-[9px] font-black uppercase tracking-[0.16em] text-amber-300">
+                  Race to Top 8
+                </p>
 
-            <p className="text-[9px] font-black uppercase tracking-[0.16em] text-amber-300">
-              Physical Booster
-            </p>
+                <p className="mt-2 text-xs leading-5 text-slate-400">
+                  This is a digital Race Points reward. No physical
+                  item or delivery request will be created.
+                </p>
 
-            <p className="mt-2 text-xs leading-5 text-slate-400">
-              No voucher or digital reward will be issued.
-              Fulfilment and delivery will be arranged directly
-              with you by email.
-            </p>
+              </section>
+            </>
+          ) : (
+            <>
+              {/* DELIVERY PROCESS */}
 
-          </section>
+              <section className="border border-cyan-400/30 bg-[#071017] p-5">
+
+                <p className="text-[9px] font-black uppercase tracking-[0.20em] text-cyan-400">
+                  What Happens Next
+                </p>
+
+                <div className="mt-4 space-y-3">
+
+                  <ProcessStep
+                    number="1"
+                    text="Your selected Booster and unique item code are sent to TEEZ."
+                  />
+
+                  <ProcessStep
+                    number="2"
+                    text="TEEZ verifies the exact physical item selected."
+                  />
+
+                  <ProcessStep
+                    number="3"
+                    text="You receive an email regarding delivery arrangements."
+                  />
+
+                  <ProcessStep
+                    number="4"
+                    text="Your physical Booster is delivered to you."
+                  />
+
+                </div>
+
+              </section>
+
+
+              {/* IMPORTANT */}
+
+              <section className="border border-amber-400/30 bg-amber-400/[0.05] p-4">
+
+                <p className="text-[9px] font-black uppercase tracking-[0.16em] text-amber-300">
+                  Physical Booster
+                </p>
+
+                <p className="mt-2 text-xs leading-5 text-slate-400">
+                  No voucher or digital reward will be issued.
+                  Fulfilment and delivery will be arranged directly
+                  with you by email.
+                </p>
+
+              </section>
+            </>
+          )}
 
 
           {/* HOOKUP PLACEHOLDER */}
 
-       {submitted ? (
-  <div className="border border-emerald-400/40 bg-emerald-400/[0.08] p-5 text-center">
-    <p className="text-sm font-black uppercase tracking-[0.12em] text-emerald-300">
-      Booster Request Submitted
-    </p>
+              {submitted ? (
+            <div className="border border-emerald-400/40 bg-emerald-400/[0.08] p-5 text-center">
 
-    <p className="mt-2 text-xs leading-5 text-slate-400">
-      TEEZ will contact you by email regarding fulfilment and delivery.
-    </p>
-  </div>
-) : (
-  <>
-    <button
-      type="button"
-      onClick={submitBoosterRequest}
-      disabled={submitting}
-      className="w-full bg-cyan-400 px-4 py-4 text-sm font-black uppercase tracking-[0.12em] text-black disabled:opacity-50"
-    >
-      {submitting
-        ? "Submitting..."
-        : "Submit Booster Request"}
-    </button>
+              <p className="text-sm font-black uppercase tracking-[0.12em] text-emerald-300">
+                {category === "race_top_8"
+                  ? "Race Points Claimed"
+                  : "Booster Request Submitted"}
+              </p>
 
-    {submitError && (
-      <p className="text-center text-xs font-bold text-red-300">
-        {submitError}
-      </p>
-    )}
-  </>
-)}
+              <p className="mt-2 text-xs leading-5 text-slate-400">
+                {category === "race_top_8"
+                  ? "Your Race Points have been added to your Race to the Final total."
+                  : "TEEZ will contact you by email regarding fulfilment and delivery."}
+              </p>
+
+              {category === "race_top_8" && (
+                <button
+                  type="button"
+                  onClick={() =>
+                    router.push("/player-booster-board")
+                  }
+                  className="mt-5 w-full bg-emerald-400 px-4 py-4 text-xs font-black uppercase tracking-[0.12em] text-black"
+                >
+                  Back to Booster Board
+                </button>
+              )}
+
+            </div>
+          ) : (
+            <>
+              <button
+                type="button"
+                onClick={submitBoosterRequest}
+                disabled={submitting}
+                className="w-full bg-cyan-400 px-4 py-4 text-sm font-black uppercase tracking-[0.12em] text-black disabled:opacity-50"
+              >
+                {submitting
+                  ? category === "race_top_8"
+                    ? "Claiming Race Points..."
+                    : "Submitting..."
+                  : category === "race_top_8"
+                  ? "Claim Race Points"
+                  : "Submit Booster Request"}
+              </button>
+
+              {submitError && (
+                <p className="text-center text-xs font-bold text-red-300">
+                  {submitError}
+                </p>
+              )}
+            </>
+          )}
 
         </div>
 

@@ -48,11 +48,11 @@ const CATEGORY_INFO: Record<
       "Choose one golf accessory booster.",
   },
 
-  player_image: {
-    title: "Player Image Booster",
-    eyebrow: "LOOK THE PART",
+  race_top_8: {
+    title: "Race to Top 8 Booster",
+    eyebrow: "CLIMB THE RACE",
     description:
-      "Choose one image booster for your on-course look.",
+      "Choose your Race Points reward and move closer to the Top 8.",
   },
 };
 
@@ -208,8 +208,10 @@ const ballNumber = searchParams.get("ball");
                 Choose Your Booster
               </h2>
 
-              <p className="mt-1 text-sm leading-5 text-slate-400">
-                Select the physical booster you want to receive.
+                           <p className="mt-1 text-sm leading-5 text-slate-400">
+                {category === "race_top_8"
+                  ? "Select the Race Points reward you want added to your Race to the Final total."
+                  : "Select the physical booster you want to receive."}
               </p>
 
             </div>

@@ -701,7 +701,8 @@ function BoosterPosition({
 function formatBoosterType(
   boosterType: string
 ) {
-  const names: Record<string, string> = {
+   const names: Record<string, string> = {
+
     player_protecting:
       "Player Protecting Booster",
 
@@ -714,8 +715,8 @@ function formatBoosterType(
     player_accessory:
       "Player Accessories Booster",
 
-    player_image:
-      "Player Image Booster",
+    race_top_8:
+      "Race to Top 8 Booster",
   };
 
   return (

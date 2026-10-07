@@ -806,8 +806,8 @@ function formatBoosterType(
   player_accessory:
     "Player Accessories Booster",
 
-  player_image:
-    "Player Image Booster",
+  race_top_8:
+    "Race to Top 8 Booster",
 };
 
   return (

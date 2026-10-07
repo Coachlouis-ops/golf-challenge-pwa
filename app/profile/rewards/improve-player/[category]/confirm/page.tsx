@@ -148,8 +148,10 @@ const ballNumber =
               </div>
 
 
-              <p className="mt-4 text-xs leading-5 text-slate-500">
-                Confirm this selection. The item code and product description will be used for fulfilment.
+                           <p className="mt-4 text-xs leading-5 text-slate-500">
+                {category === "race_top_8"
+                  ? "Confirm this selection. Your Race Points will be added directly to your Race to the Final total."
+                  : "Confirm this selection. The item code and product description will be used for fulfilment."}
               </p>
 
 
@@ -159,8 +161,10 @@ const ballNumber =
                   confirmSelection(product)
                 }
                 className="mt-5 w-full bg-amber-400 px-4 py-4 text-sm font-black uppercase tracking-[0.12em] text-black"
-              >
-                Confirm Booster
+                            >
+                {category === "race_top_8"
+                  ? "Claim Race Points"
+                  : "Confirm Booster"}
               </button>
 
             </div>

@@ -1,34 +1,33 @@
 
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import {
+  collection,
+  onSnapshot,
+  query,
+  where,
+} from "firebase/firestore";
+import { db } from "@/src/lib/firebase";
 
 type TeezEvent = {
   id: string;
   title: string;
   date: string;
+  time?: string;
   venue: string;
   location: string;
   description: string;
-  status: "confirmed" | "provisional";
+  imageUrl?: string;
+  status:
+    | "draft"
+    | "provisional"
+    | "confirmed"
+    | "completed"
+    | "cancelled";
+  published: boolean;
   featured?: boolean;
 };
-
-const EVENTS: TeezEvent[] = [
-  {
-    id: "grand-final-2027",
-    title: "TEEZ GRAND FINAL 2027",
-    date: "2027-09-01",
-    venue: "Venue to be announced",
-    location: "South Africa",
-    description: "The Race to the Final championship. September 2027.",
-    status: "provisional",
-    featured: true,
-  },
-];
-
-// Replace the provisional date when the official date is confirmed.
-// Events will later be loaded from Firestore through Admin Event Management.
 
 function formatDate(date: string) {
   return new Date(`${date}T12:00:00`).toLocaleDateString("en-ZA", {
@@ -63,9 +62,43 @@ export default function TeezFinalsPage() {
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [showCalendar, setShowCalendar] = useState(false);
 
-  const confirmedEvents = useMemo(
-    () => EVENTS.filter((event) => event.status === "confirmed"),
-    []
+  const [events, setEvents] = useState<TeezEvent[]>([]);
+  const [loadingEvents, setLoadingEvents] = useState(true);
+  const [eventsError, setEventsError] = useState(false);
+
+  useEffect(() => {
+    const eventsQuery = query(
+      collection(db, "teezEvents"),
+      where("published", "==", true)
+    );
+
+    const unsubscribe = onSnapshot(
+      eventsQuery,
+      (snapshot) => {
+        const rows: TeezEvent[] = snapshot.docs.map((eventDoc) => ({
+          id: eventDoc.id,
+          ...(eventDoc.data() as Omit<TeezEvent, "id">),
+        }));
+
+        rows.sort((a, b) => a.date.localeCompare(b.date));
+
+        setEvents(rows);
+        setLoadingEvents(false);
+        setEventsError(false);
+      },
+      (error) => {
+        console.error("LOAD PUBLIC TEEZ EVENTS ERROR:", error);
+        setEventsError(true);
+        setLoadingEvents(false);
+      }
+    );
+
+    return () => unsubscribe();
+  }, []);
+
+   const confirmedEvents = useMemo(
+    () => events.filter((event) => event.status === "confirmed"),
+    [events]
   );
 
   const days = useMemo(() => {
@@ -122,7 +155,9 @@ export default function TeezFinalsPage() {
     );
   }
 
-  const selectedEvents = EVENTS.filter((event) => event.date === selectedDate);
+    const selectedEvents = events.filter(
+    (event) => event.date === selectedDate
+  );
 
   return (
     <main className="min-h-screen overflow-x-hidden bg-[#070d19] text-white">
@@ -178,6 +213,21 @@ export default function TeezFinalsPage() {
 
         </section>
 
+               {/* Logo displayed on printed/PDF Events Schedule only */}
+        <div className="hidden print:flex print:flex-col print:items-center print:mb-6">
+          <img
+            src="/transparent.png"
+            alt="TEEZ Golf Challenges Logo"
+            className="h-24 w-auto max-w-full object-contain"
+          />
+          <h1 className="mt-3 text-center text-xl font-bold">
+            OFFICIAL EVENTS SCHEDULE
+          </h1>
+          <p className="mt-1 text-center text-sm">
+            www.teezgolfchallenges.com
+          </p>
+        </div>
+
         <section className="mb-5 rounded-2xl border border-white/10 bg-[#101a2b] p-4">
           <div className="mb-4">
             <h2 className="text-xl font-bold">Event Diary</h2>
@@ -186,26 +236,53 @@ export default function TeezFinalsPage() {
             </p>
           </div>
 
+         
+          {loadingEvents && (
+            <p className="mb-3 text-sm text-slate-400">
+              Loading events...
+            </p>
+          )}
+
+          {eventsError && (
+            <p className="mb-3 text-sm text-red-400">
+              Unable to load events. Please try again later.
+            </p>
+          )}
+
+          {!loadingEvents && !eventsError && events.length === 0 && (
+            <p className="mb-3 text-sm text-slate-400">
+              No published events available yet.
+            </p>
+          )}
+
           <div className="space-y-3">
-            {EVENTS.map((event) => (
+            {events.map((event) => (
               <article
                 key={event.id}
                 className="min-w-0 rounded-xl border border-white/10 bg-[#17243a] p-4"
               >
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <span className="text-xs font-bold text-cyan-300">
-                    {event.featured ? "SEPTEMBER 2027" : formatDate(event.date)}
+                    {formatDate(event.date)}
                   </span>
                   <span className="rounded-full border border-white/20 px-2 py-1 text-[10px] uppercase text-slate-300">
                     {event.status}
                   </span>
                 </div>
+
                 <h3 className="mt-2 break-words text-lg font-bold">
                   {event.title}
                 </h3>
-                <p className="mt-2 text-sm text-slate-300">{event.venue}</p>
-                <p className="text-xs text-slate-400">{event.location}</p>
-                <p className="mt-3 text-sm text-slate-300">
+
+                <p className="mt-2 text-sm text-slate-300">
+                  {event.venue}
+                </p>
+
+                <p className="text-xs text-slate-400">
+                  {event.location}
+                </p>
+
+                <p className="mt-3 whitespace-pre-wrap break-words text-sm text-slate-300">
                   {event.description}
                 </p>
               </article>
@@ -214,7 +291,10 @@ export default function TeezFinalsPage() {
         </section>
 
         <section className="rounded-2xl border border-white/10 bg-[#101a2b] p-4">
-          <h2 className="text-xl font-bold">TEEZ Events Calendar</h2>
+          <h2 className="text-xl font-bold">
+            TEEZ Events Calendar
+          </h2>
+
           <p className="mt-1 text-xs text-slate-400">
             View events or add confirmed dates to your personal calendar.
           </p>
@@ -227,6 +307,7 @@ export default function TeezFinalsPage() {
             >
               {showCalendar ? "Hide Calendar" : "View Calendar"}
             </button>
+
             <button
               type="button"
               onClick={downloadCalendar}
@@ -258,29 +339,44 @@ export default function TeezFinalsPage() {
                   type="button"
                   aria-label="Previous month"
                   onClick={() =>
-                    setMonth(new Date(month.getFullYear(), month.getMonth() - 1, 1))
+                    setMonth(
+                      new Date(
+                        month.getFullYear(),
+                        month.getMonth() - 1,
+                        1
+                      )
+                    )
                   }
                   className="rounded-lg border border-white/20 px-3 py-2"
                 >
                   ‹
                 </button>
+
                 <h3 className="text-center text-sm font-bold">
                   {month.toLocaleDateString("en-ZA", {
                     month: "long",
                     year: "numeric",
                   })}
                 </h3>
+
                 <button
                   type="button"
                   aria-label="Next month"
                   onClick={() =>
-                    setMonth(new Date(month.getFullYear(), month.getMonth() + 1, 1))
+                    setMonth(
+                      new Date(
+                        month.getFullYear(),
+                        month.getMonth() + 1,
+                        1
+                      )
+                    )
                   }
                   className="rounded-lg border border-white/20 px-3 py-2"
                 >
                   ›
                 </button>
               </div>
+
 
               <div className="grid grid-cols-7 gap-1 text-center">
                 {["M", "T", "W", "T", "F", "S", "S"].map((day, index) => (
@@ -290,7 +386,7 @@ export default function TeezFinalsPage() {
                 ))}
                 {days.map((day, index) => {
                   const key = day === null ? "" : dateKey(day);
-                  const hasEvent = EVENTS.some((event) => event.date === key);
+                                    const hasEvent = events.some((event) => event.date === key);
 
                   return (
                     <button

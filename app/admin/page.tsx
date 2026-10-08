@@ -650,16 +650,27 @@ if (!confirmed) return;
           TOKEN REDEMPTION REQUESTS
         </button>
 
-        <button
+               <button
           onClick={() => router.push("/admin/scoring-clubs")}
-          className="w-[320px] px-10 py-4 text-lg font-bold rounded-xl bg-green-400 text-black 
-          shadow-[0_0_20px_rgba(34,197,94,0.8)] 
-          hover:shadow-[0_0_40px_rgba(34,197,94,1)] 
+          className="w-[320px] px-10 py-4 text-lg font-bold rounded-xl bg-green-400 text-black
+          shadow-[0_0_20px_rgba(34,197,94,0.8)]
+          hover:shadow-[0_0_40px_rgba(34,197,94,1)]
           animate-pulse transition-all duration-300"
         >
           TEEZ SCORING CLUBS
         </button>
 
+        {/* EVENTS & FINALS MANAGEMENT */}
+        <button
+          onClick={() => router.push("/admin/events")}
+          className="w-full max-w-[320px] px-4 py-4 text-base sm:text-lg font-bold rounded-xl
+          bg-blue-500 text-white
+          shadow-[0_0_20px_rgba(59,130,246,0.65)]
+          hover:shadow-[0_0_40px_rgba(59,130,246,0.9)]
+          transition-all duration-300"
+        >
+          EVENTS & FINALS MANAGEMENT
+        </button>
 
  {/* BATTLE CHARACTER MANAGEMENT */}
 <div className="w-full max-w-[720px] border border-purple-400/50 bg-black/80 p-5 rounded-2xl">

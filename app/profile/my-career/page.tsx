@@ -8,10 +8,11 @@ import { useAuth } from "@/src/lib/AuthContext";
 import { db } from "@/src/lib/firebase";
 
 type RankingData = {
-  
+
   playerLevel?: number;
   careerXP?: number;
   careerPoints?: number;
+  eventsTokens?: number;
 
   matchesPlayed?: number;
   wins?: number;
@@ -177,9 +178,13 @@ export default function MyCareerPage() {
     stats?.careerXP ?? 0
   );
 
-  const careerPoints = Number(
-    stats?.careerPoints ?? 0
-  );
+const careerPoints = Number(
+  stats?.careerPoints ?? 0
+);
+
+const eventsTokens = Number(
+  stats?.eventsTokens ?? 0
+);
 
 
   const matchesPlayed = Number(
@@ -888,17 +893,12 @@ export default function MyCareerPage() {
               />
 
 
-              <ProgressTile
-                code="PTS"
-                title="Career Points"
-                value={careerPoints}
-                progress={Math.min(
-                  100,
-                  (careerPoints / 1000) * 100
-                )}
-                footer="Lifetime points"
-                accent="gold"
-              />
+            <MetricTile
+  code="EVT"
+  title="Events Tokens"
+  value={eventsTokens}
+  footer="Accumulated tokens earned through challenges"
+/>
 
           
             </div>

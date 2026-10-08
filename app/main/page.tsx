@@ -248,7 +248,7 @@ export default function HomePage() {
         type="button"
         className="h-14 w-full cursor-default rounded-full border border-blue-300/80 bg-blue-500/10 text-sm font-black uppercase tracking-[0.16em] text-white shadow-[0_0_18px_rgba(0,170,255,0.65),inset_0_0_18px_rgba(0,170,255,0.12)] animate-pulse"
       >
-        TEEZ TOURS AND EVENTS
+        TEEZ FINALS - "RACE TO" EVENTS
       </button>
 
     </div>

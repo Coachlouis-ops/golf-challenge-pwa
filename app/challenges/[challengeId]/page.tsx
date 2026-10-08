@@ -387,18 +387,16 @@ try {
             : prev
         );
       }
-    } catch (e: any) {
+   } catch (e: any) {
   await teezAlert({
-    title: "CHALLENGE NOT FINALIZED",
+    title: "FINALIZATION REQUIRES ATTENTION",
     message:
-      e?.message ||
-      "Failed to finalize the challenge.",
+      (e?.message || "The finalization could not be confirmed.") +
+      "\n\nThe Finalize button is locked. Contact the administrator to investigate.",
     type: "error",
-    buttonText: "TRY AGAIN",
+    buttonText: "OK",
   });
-} finally {
-      setFinalizing(false);
-    }
+}
   }
 
   // ===============================
@@ -482,7 +480,8 @@ const allScoresEntered =
 const canFinalize =
   allScoresEntered &&
   scoreboardUpdated &&
-  challenge.status !== "completed";
+  (challenge.status === "created" ||
+    challenge.status === "active");
 
   return (
     <main className="relative min-h-screen flex justify-center px-4 py-8 sm:py-12 bg-[#05030b] text-white overflow-hidden">

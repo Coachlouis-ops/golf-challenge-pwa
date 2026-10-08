@@ -134,10 +134,19 @@ export default function TeezFinalsPage() {
           <h1 className="mt-2 text-3xl font-black tracking-tight sm:text-5xl">
             EVENTS SCHEDULE
           </h1>
-          <p className="mt-2 text-sm text-slate-300">
-            YOUR ROAD TO THE FINAL
-          </p>
-        </header>
+       <p className="mt-2 text-sm text-slate-300">
+  YOUR ROAD TO THE FINAL
+</p>
+</header>
+
+{/* SELBORNE BANNER */}
+<div className="mb-6 w-full overflow-hidden rounded-2xl border border-cyan-500/30 shadow-[0_0_25px_rgba(0,170,255,0.2)]">
+  <img
+    src="/selborne_1.png"
+    alt="Selborne Golf Estate - TEEZ Finals"
+    className="block h-auto w-full object-cover"
+  />
+</div>
 
         <section className="mb-5 overflow-hidden rounded-2xl border border-cyan-500/30 bg-gradient-to-br from-[#173658] via-[#101d34] to-[#080e1c] p-5">
           <p className="text-xs font-bold uppercase tracking-widest text-cyan-300">
@@ -155,6 +164,18 @@ export default function TeezFinalsPage() {
           <p className="mt-4 text-xs text-slate-400">
             Official date and venue to be announced.
           </p>
+
+{/* SEPTEMBER GRAND FINAL IMAGE */}
+<div className="mt-5 w-full overflow-hidden rounded-xl border border-cyan-500/30">
+  <img
+    src="/sept_final_1.png"
+    alt="TEEZ Grand Final - September 2027"
+    className="block h-auto w-full object-cover"
+  />
+</div>
+
+
+
         </section>
 
         <section className="mb-5 rounded-2xl border border-white/10 bg-[#101a2b] p-4">

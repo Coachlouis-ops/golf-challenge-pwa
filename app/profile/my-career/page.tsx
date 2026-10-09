@@ -40,6 +40,8 @@ type CareerData = {
   club?: string;
   division?: string;
 
+  teezDollars?: number;
+
   ranking?: RankingData;
 
   lastChallenge?: {
@@ -186,6 +188,9 @@ const eventsTokens = Number(
   stats?.eventsTokens ?? 0
 );
 
+const teezDollars = Number(
+  career?.teezDollars ?? 0
+);
 
   const matchesPlayed = Number(
     stats?.matchesPlayed ?? 0
@@ -892,12 +897,21 @@ const eventsTokens = Number(
                 accent="green"
               />
 
-
-            <MetricTile
+<MetricTile
   code="EVT"
   title="Events Tokens"
-  value={eventsTokens}
-  footer="Accumulated tokens earned through challenges"
+  value={eventsTokens.toLocaleString("en-US")}
+  footer="Tokens earned toward TEEZ Events"
+/>
+
+<MetricTile
+  code="TEEZ$"
+  title="TEEZ Dollars"
+  value={`$${teezDollars.toLocaleString("en-US", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })}`}
+  footer="Fictional career winnings — no cash value"
 />
 
           

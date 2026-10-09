@@ -202,6 +202,34 @@ export default function RefundPolicyPage() {
           enforcement, these Terms, and applicable law.
         </p>
 
+                {/* TEEZ DIGITAL REWARDS */}
+        <h2 className="font-semibold text-white">
+          TEEZ Dollars and Events Tokens
+        </h2>
+
+        <p>
+          TEEZ Dollars are fictional career winnings recorded
+          within the Teez Golf Challenges Platform. They have
+          no cash value and cannot be withdrawn, redeemed,
+          transferred for payment, or exchanged for money,
+          vouchers, goods or services.
+        </p>
+
+        <p>
+          Events Tokens are separate digital reward points
+          allocated through qualifying golf challenges.
+          They cannot be withdrawn or converted into cash.
+          Their use is governed by the applicable Platform
+          event participation rules.
+        </p>
+
+        <p>
+          TEEZ Dollars and Events Tokens do not constitute
+          refundable cash balances. This does not affect
+          a user's statutory rights concerning payments
+          made to the Platform.
+        </p>
+
         {/* 7 */}
         <h2 className="font-semibold text-white">
           7. No Subscription Cancellation
@@ -520,7 +548,7 @@ export default function RefundPolicyPage() {
         </p>
 
         <p className="text-xs text-gray-500 pt-4">
-          Last updated: August 2026
+            Last updated: 9 October 2026
         </p>
 
         <button

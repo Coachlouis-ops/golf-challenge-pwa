@@ -13,7 +13,13 @@ import { db } from "@/src/lib/firebase";
 
 const TOTAL_BOOSTERS = 200;
 const CAREER_BOOSTERS = 150;
-const IMPROVE_PLAYER_BOOSTERS = 50;
+const TEEZ_DOLLARS_BOOSTERS = 25;
+const EVENTS_TOKENS_BOOSTERS = 25;
+
+type BoosterBallType =
+  | "career"
+  | "teez_dollars"
+  | "events_tokens";
 
 export default function GameBoosterBoardPage() {
   const router = useRouter();
@@ -38,7 +44,7 @@ const [openingBall, setOpeningBall] =
 const [revealedBall, setRevealedBall] =
   useState<{
     number: number;
-    type: "career" | "improve_player";
+   type: BoosterBallType;
     boosterType: string;
     rewardValue: number;
   } | null>(null);
@@ -153,7 +159,7 @@ async function handleOpenBoosterBall(
           success: boolean;
           ball: {
             ballNumber: number;
-          ballType: "career" | "improve_player";
+          ballType: "career" | "teez_dollars" | "events_tokens";
 boosterType: string;
 rewardValue: number;
 boosterBallsEarned: number;
@@ -313,27 +319,35 @@ setRevealedBall({
 
             <div className="overflow-hidden border border-cyan-400/30 bg-[#071017] shadow-[0_0_30px_rgba(34,211,238,0.08)]">
 
-              <div className="grid grid-cols-3 divide-x divide-white/10">
+           
+<div className="grid grid-cols-4 divide-x divide-white/10">
 
-                <SummaryTile
-                  title="Total"
-                  value={TOTAL_BOOSTERS}
-                  colour="text-white"
-                />
+  <SummaryTile
+    title="Total"
+    value={TOTAL_BOOSTERS}
+    colour="text-white"
+  />
 
-                <SummaryTile
-                  title="Career"
-                  value={CAREER_BOOSTERS}
-                  colour="text-cyan-300"
-                />
+  <SummaryTile
+    title="Career"
+    value={CAREER_BOOSTERS}
+    colour="text-cyan-300"
+  />
 
-              <SummaryTile
-  title="Improve Player"
-  value={IMPROVE_PLAYER_BOOSTERS}
-  colour="text-amber-300"
-/>
+  <SummaryTile
+    title="TEEZ Dollars"
+    value={TEEZ_DOLLARS_BOOSTERS}
+    colour="text-blue-300"
+  />
 
-              </div>
+  <SummaryTile
+    title="Events Tokens"
+    value={EVENTS_TOKENS_BOOSTERS}
+    colour="text-amber-300"
+  />
+
+</div>
+
 
               <div className="border-t border-white/10 p-5">
 
@@ -477,11 +491,16 @@ setRevealedBall({
     </p>
   </div>
 
- {revealedBall && (
+
+{/* BOOSTER BALL REWARD REVEAL */}
+
+{revealedBall && (
   <div
     className={`mb-4 border p-4 text-center ${
-      revealedBall.type === "improve_player"
+      revealedBall.type === "events_tokens"
         ? "border-amber-400/50 bg-amber-400/[0.08]"
+        : revealedBall.type === "teez_dollars"
+        ? "border-blue-400/50 bg-blue-400/[0.08]"
         : "border-cyan-400/50 bg-cyan-400/[0.08]"
     }`}
   >
@@ -491,8 +510,10 @@ setRevealedBall({
 
     <p
       className={`mt-1 text-xl font-black uppercase ${
-        revealedBall.type === "improve_player"
+        revealedBall.type === "events_tokens"
           ? "text-amber-300"
+          : revealedBall.type === "teez_dollars"
+          ? "text-blue-300"
           : "text-cyan-300"
       }`}
     >
@@ -500,36 +521,37 @@ setRevealedBall({
         ? formatCareerBoosterType(
             revealedBall.boosterType
           )
-        : formatBoosterType(
-            revealedBall.boosterType
-          )}
+        : revealedBall.type === "teez_dollars"
+        ? "TEEZ Dollars Booster"
+        : "Events Tokens Booster"}
     </p>
 
-    {revealedBall.type === "career" &&
-      revealedBall.rewardValue > 0 && (
-        <p className="mt-2 text-2xl font-black text-white">
-          +{revealedBall.rewardValue}{" "}
-          {formatCareerRewardUnit(
-            revealedBall.boosterType
-          )}
-        </p>
-      )}
+    {revealedBall.rewardValue > 0 && (
+      <p className="mt-3 text-3xl font-black text-white">
+        +{revealedBall.rewardValue.toLocaleString("en-ZA")}
+      </p>
+    )}
 
-    {revealedBall.type === "improve_player" && (
-      <button
-        type="button"
-        onClick={() =>
-        router.push(
-  `/profile/rewards/improve-player/${revealedBall.boosterType}?ball=${revealedBall.number}`
-)
-        }
-        className="mt-4 w-full border border-amber-400/40 bg-amber-400/[0.08] px-4 py-3 text-xs font-black uppercase tracking-[0.14em] text-amber-300"
-      >
-        Select Your Booster
-      </button>
+    {revealedBall.rewardValue > 0 && (
+      <p className="mt-1 text-xs font-black uppercase tracking-[0.14em] text-slate-300">
+        {revealedBall.type === "career"
+          ? formatCareerRewardUnit(
+              revealedBall.boosterType
+            )
+          : revealedBall.type === "teez_dollars"
+          ? "TEEZ DOLLARS"
+          : "EVENTS TOKENS"}
+      </p>
+    )}
+
+    {revealedBall.rewardValue > 0 && (
+      <p className="mt-3 text-[10px] font-bold uppercase tracking-[0.12em] text-emerald-300">
+        Reward Credited Successfully
+      </p>
     )}
   </div>
 )}
+
 
 {openError && (
   <div className="mb-4 border border-red-400/40 bg-red-500/[0.08] p-3 text-center text-xs font-bold text-red-300">
@@ -790,31 +812,6 @@ function WeightTile({
   );
 }
 
-function formatBoosterType(
-  boosterType: string
-) {
- const names: Record<string, string> = {
-  player_protecting:
-    "Player Protecting Booster",
-
-  player_reload:
-    "Player Reload Booster",
-
-  player_tech:
-    "Player Technical Booster",
-
-  player_accessory:
-    "Player Accessories Booster",
-
-  race_top_8:
-    "Race to Top 8 Booster",
-};
-
-  return (
-    names[boosterType] ||
-    "Improve Player Booster"
-  );
-}
 function formatCareerBoosterType(
   boosterType: string
 ) {

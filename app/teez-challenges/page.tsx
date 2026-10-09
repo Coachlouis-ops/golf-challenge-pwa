@@ -269,9 +269,13 @@ const handleExit = () => {
               The outcome is determined entirely by how you think and how you back it by play.
             </p>
 
-            <p>
-              Tokens are won through competition and can be redeemed for vouchers, products, 
-              and approved rewards, giving real value to strong performance on the course.
+                        <p>
+              Players use Play Tokens to enter golf challenges and build
+              their competitive golfing careers. Challenge performance
+              contributes to fictional TEEZ Dollars, Events Tokens,
+              career statistics and player rankings.
+              TEEZ Dollars have no cash value and cannot be
+              withdrawn, transferred or redeemed.
             </p>
 
             <p className="font-semibold text-black">
@@ -317,16 +321,20 @@ const handleExit = () => {
             <div className="text-center">
               <img src="/wallet.png" className="w-full mb-4" />
               <h3 className="font-semibold mb-2">Your Golf Wallet</h3>
-              <p className="text-gray-400 text-sm">
-                Buy tokens to fund your wallet. Enter a challenge by tokens. Win tokens, redeem tokens. See your wallet grow!
+                           <p className="text-gray-400 text-sm">
+                Purchase Play Tokens to enter golf challenges.
+                Earn fictional TEEZ Dollars through competition,
+                collect Events Tokens and track your progress
+                in your TEEZ Wallet.
               </p>
             </div>
-
             <div className="text-center">
               <img src="/voucher_badger.png" className="w-full mb-4" />
-              <h3 className="font-semibold mb-2">Redeem your Vouchers</h3>
+              <h3 className="font-semibold mb-2">Build Your TEEZ Career</h3>
               <p className="text-gray-400 text-sm">
-                Tokens can be redeemed for prizes, equipment, vouchers.
+                Earn TEEZ Dollars, collect Events Tokens,
+                improve your rankings and track your golfing achievements.
+                TEEZ Dollars cannot be redeemed or withdrawn.
               </p>
             </div>
 

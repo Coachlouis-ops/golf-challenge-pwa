@@ -311,7 +311,7 @@ export default function HomePage() {
       </p>
 
       <p>
-        71 Pine Grove, Nevada, USA
+        71 Silver Stream, Silver Lakes, Silver Lakes Road, Pretoria, South Africa, 0081 
       </p>
     </div>
 

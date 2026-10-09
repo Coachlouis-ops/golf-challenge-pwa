@@ -340,6 +340,37 @@ export default function TermsPage() {
           administrative error has occurred.
         </p>
 
+                <h2 className="font-semibold text-white">
+          TEEZ Dollars and Events Tokens
+        </h2>
+
+        <p>
+          TEEZ Dollars are fictional career winnings recorded
+          within the Teez Golf Challenges Platform. They are
+          used to represent a player's competitive achievements
+          and career performance.
+        </p>
+
+        <p>
+          TEEZ Dollars have no cash or monetary value, are not
+          legal tender or financial assets, and cannot be
+          withdrawn, redeemed, transferred for payment, sold,
+          or exchanged for money, vouchers, goods or services.
+        </p>
+
+        <p>
+          Events Tokens are separate digital reward points
+          allocated through qualifying golf challenges.
+          They are recorded independently from Teez Play Tokens
+          and TEEZ Dollars.
+        </p>
+
+        <p>
+          Events Tokens cannot be withdrawn or converted into
+          cash. Their use is subject to the Platform's applicable
+          event participation rules.
+        </p>
+
         <h2 className="font-semibold text-white">
           12. Golf Challenges
         </h2>
@@ -667,7 +698,7 @@ export default function TermsPage() {
         </p>
 
         <p className="text-xs text-gray-500 pt-4">
-          Last updated: August 2026
+            Last updated: 9 October 2026
         </p>
       </div>
 

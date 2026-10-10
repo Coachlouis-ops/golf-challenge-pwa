@@ -11,7 +11,6 @@ import {
   getDocs,
   orderBy,
   query,
-  limit,
 } from "firebase/firestore";
 
 type RacePlayer = {
@@ -50,59 +49,42 @@ export default function RaceToParadisePage() {
           );
         }
 
+        // Read the full ranked field so ties at the 120th position
+        // are included and the player's position is not capped at 120.
         const leaderboardQuery = query(
           collection(db, "playerRankings"),
-          orderBy("racePoints", "desc"),
-          limit(100)
+          orderBy("racePoints", "desc")
         );
 
-        const leaderboardSnap =
-          await getDocs(leaderboardQuery);
+        const leaderboardSnap = await getDocs(leaderboardQuery);
+        const ranked = leaderboardSnap.docs.map((rankingDoc) => ({
+          uid: rankingDoc.id,
+          racePoints: Number(rankingDoc.data().racePoints || 0),
+        }));
 
-        const rows: RacePlayer[] = [];
+        const playerIndex = ranked.findIndex((player) => player.uid === uid);
+        setGlobalPosition(playerIndex >= 0 ? playerIndex + 1 : null);
 
-        for (
-          const rankingDoc of leaderboardSnap.docs
-        ) {
-          const data = rankingDoc.data();
-
-          const profileSnap = await getDoc(
-            doc(db, "profiles", rankingDoc.id)
-          );
-
-          const profileData =
-            profileSnap.exists()
-              ? profileSnap.data()
-              : {};
-
-          rows.push({
-            uid: rankingDoc.id,
-
-            battleName:
-              profileData.battleName ||
-              `${profileData.name || ""} ${
-                profileData.surname || ""
-              }`.trim() ||
-              "TEEZ Player",
-
-            racePoints:
-              Number(data.racePoints || 0),
-          });
-        }
-
-        setLeaders(rows.slice(0, 8));
-
-        const playerIndex =
-          rows.findIndex(
-            (player) =>
-              player.uid === uid
-          );
-
-        setGlobalPosition(
-          playerIndex >= 0
-            ? playerIndex + 1
-            : null
+        const cutoff = ranked[119]?.racePoints;
+        const qualifiers = ranked.filter((player, index) =>
+          index < 120 || (cutoff !== undefined && player.racePoints === cutoff)
         );
+
+        const rows: RacePlayer[] = await Promise.all(
+          qualifiers.map(async (player) => {
+            const profileSnap = await getDoc(doc(db, "profiles", player.uid));
+            const profileData = profileSnap.exists() ? profileSnap.data() : {};
+            return {
+              ...player,
+              battleName:
+                profileData.battleName ||
+                `${profileData.name || ""} ${profileData.surname || ""}`.trim() ||
+                "TEEZ Player",
+            };
+          })
+        );
+
+        setLeaders(rows);
       } catch (error) {
         console.error(
           "Unable to load Race to the Final:",
@@ -118,7 +100,7 @@ export default function RaceToParadisePage() {
 
   const qualified =
     globalPosition !== null &&
-    globalPosition <= 8;
+    leaders.some((player) => player.uid === user?.uid);
 
   return (
     <main className="min-h-screen bg-[#030608] text-white">
@@ -193,7 +175,7 @@ export default function RaceToParadisePage() {
               <div className="mt-5 border-t border-amber-400/20 pt-4">
 
                 <p className="text-[9px] font-black uppercase tracking-[0.20em] text-amber-300">
-                  Global Top 8 + Ties Qualify
+                  Global Top 120 + Ties Qualify
                 </p>
 
               </div>
@@ -243,7 +225,7 @@ export default function RaceToParadisePage() {
               <RaceFlowStep
                 number="4"
                 title="QUALIFY"
-                text="Finish inside the Top 8 + ties"
+                text="Finish inside the Top 120 + ties"
                 amber
               />
 
@@ -303,7 +285,7 @@ export default function RaceToParadisePage() {
 
               <StatTile
                 label="Qualification"
-                value="TOP 8"
+                value="TOP 120"
                 footer="+ ties at the cut"
                 amber
               />
@@ -517,7 +499,7 @@ export default function RaceToParadisePage() {
                           </div>
 
                           <p className="mt-1 text-[8px] font-black uppercase tracking-[0.10em] text-slate-500">
-                            Qualification Zone
+                            {index < 120 ? "Qualification Zone" : "Qualified on Tie"}
                           </p>
 
                         </div>
@@ -540,7 +522,7 @@ export default function RaceToParadisePage() {
             <div className="border-x border-b border-amber-400/40 bg-amber-400/[0.07] px-4 py-3 text-center">
 
               <p className="text-[9px] font-black uppercase tracking-[0.14em] text-amber-300">
-                Championship Cut · Top 8 + Ties Qualify
+                Championship Cut · Top 120 + Ties Qualify
               </p>
 
             </div>
@@ -588,7 +570,7 @@ export default function RaceToParadisePage() {
                 <div className="mt-5 border border-amber-400/30 bg-amber-400/[0.07] px-4 py-4">
 
                   <p className="text-sm font-black text-white">
-                    TOP 8 + TIES
+                    TOP 120 + TIES
                   </p>
 
                   <p className="mt-1 text-[9px] font-black uppercase tracking-[0.14em] text-amber-300">

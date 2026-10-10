@@ -463,7 +463,7 @@ const teezDollars = Number(
         </p>
 
         <p className="mt-1 text-base font-black text-amber-300">
-          GLOBAL TOP 8
+          GLOBAL TOP 120
         </p>
 
       </div>
@@ -484,6 +484,63 @@ const teezDollars = Number(
 
   </button>
 
+</section>
+
+
+{/* RYDER CUP TEAM STANDINGS */}
+
+<section>
+  <SectionHeading
+    eyebrow="TEAM CHAMPIONSHIP"
+    title="Ryder Cup Team Standings"
+    description="The Top 16 TEEZ Dollars earners compete for selection to Team USA and Team Europe."
+  />
+
+  <button
+    type="button"
+    onClick={() => router.push("/profile/ryder-cup")}
+    className="group relative w-full overflow-hidden border border-blue-400/60 bg-[#050d1c] text-left shadow-[0_0_34px_rgba(59,130,246,0.14)] transition duration-200 active:scale-[0.99]"
+  >
+    <div className="relative p-5">
+      <p className="text-[9px] font-black uppercase tracking-[0.22em] text-blue-300">
+        TEEZ RYDER CUP
+      </p>
+
+      <h3 className="mt-2 text-xl font-black text-white">
+        TEAM USA vs TEAM EUROPE
+      </h3>
+
+      <p className="mt-3 text-sm leading-5 text-slate-400">
+        The Top 16 players on the TEEZ Dollars money list
+        qualify for two teams of eight, selected using
+        automatic snake seeding.
+      </p>
+
+      <div className="mt-5 grid grid-cols-2 gap-3">
+        <div className="border border-blue-400/30 bg-blue-400/[0.08] p-3">
+          <p className="text-sm font-black text-blue-300">
+            TEAM USA
+          </p>
+          <p className="mt-1 text-xs text-slate-400">
+            Captain: Rank #1
+          </p>
+        </div>
+
+        <div className="border border-amber-400/30 bg-amber-400/[0.08] p-3">
+          <p className="text-sm font-black text-amber-300">
+            TEAM EUROPE
+          </p>
+          <p className="mt-1 text-xs text-slate-400">
+            Captain: Rank #2
+          </p>
+        </div>
+      </div>
+
+      <p className="mt-5 text-[10px] font-black uppercase tracking-[0.14em] text-blue-300">
+        VIEW RYDER CUP STANDINGS →
+      </p>
+    </div>
+  </button>
 </section>
 
 

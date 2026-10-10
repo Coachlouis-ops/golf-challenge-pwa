@@ -210,7 +210,7 @@ const handleExit = () => {
         <div className="max-w-3xl mx-auto">
 
           <h2 className="text-xl md:text-2xl font-semibold mb-4">
-            The original game of golf was never a scorecard â€” it was a challenge between players.
+            The original game of golf was never a scorecard — it was a challenge between players.
           </h2>
 
           <p className="text-gray-600 mb-8">
@@ -243,13 +243,13 @@ const handleExit = () => {
           <div className="space-y-8 text-gray-700 text-base md:text-lg leading-8">
 
             <p>
-              Teez Golf Challenges is built around the original essence of golf â€” 
+              Teez Golf Challenges is built around the original essence of golf — 
               competition between players, where every round matters and every match has a winner.
             </p>
 
             <p>
               Golf was never meant to be played only against the course. 
-              At its core, it is a game of matchplay â€” player versus player, strategizing, 
+              At its core, it is a game of matchplay — player versus player, strategizing, 
               out thinking, where the combinations of decisions backed by skill determines the outcome.
             </p>
 
@@ -260,8 +260,8 @@ const handleExit = () => {
 
             <p>
               Players enter matches using tokens as entry credits and compete over real rounds of golf. 
-              Whether itâ€™s stroke play, matchplay, or challenge-based formats, each competition is designed 
-              to produce a clear result â€” a winner and a loser â€” just as the game was always intended.
+              Whether it’s stroke play, matchplay, or challenge-based formats, each competition is designed 
+              to produce a clear result — a winner and a loser — just as the game was always intended.
             </p>
 
             <p>
@@ -280,8 +280,8 @@ const handleExit = () => {
 
             <p className="font-semibold text-black">
               Teez Golf Challenges is not a betting platform. 
-              It is a structured, skill-based competitive system that restores the competitive edge of golf â€” 
-              where players donâ€™t just play rounds, they play to win.
+              It is a structured, skill-based competitive system that restores the competitive edge of golf — 
+              where players don’t just play rounds, they play to win.
             </p>
 
           </div>

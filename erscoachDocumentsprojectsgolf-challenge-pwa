@@ -1,0 +1,31 @@
+[1mdiff --git a/app/main/page.tsx b/app/main/page.tsx[m
+[1mindex 791da9d..3ddd5e5 100644[m
+[1m--- a/app/main/page.tsx[m
+[1m+++ b/app/main/page.tsx[m
+[36m@@ -1,4 +1,4 @@[m
+[31m-﻿[m
+[32m+[m
+ "use client";[m
+ [m
+ import { useRouter } from "next/navigation";[m
+[36m@@ -74,13 +74,13 @@[m [mexport default function HomePage() {[m
+   {/* INTERNATIONAL GOLF STRIP */}[m
+   <div className="mt-3 border-y border-white/10 py-2">[m
+     <div className="flex items-center justify-center gap-2">[m
+[31m-      <span className="text-base">ðŸ‡ºðŸ‡¸</span>[m
+[31m-      <span className="text-base">ðŸ‡¬ðŸ‡§</span>[m
+[31m-      <span className="text-base">ðŸ‡¿ðŸ‡¦</span>[m
+[31m-      <span className="text-base">ðŸ‡¦ðŸ‡º</span>[m
+[31m-      <span className="text-base">ðŸ‡¯ðŸ‡µ</span>[m
+[31m-      <span className="text-base">ðŸ‡¦ðŸ‡ª</span>[m
+[31m-      <span className="text-base">ðŸ‡ªðŸ‡º</span>[m
+[32m+[m[32m      <span className="text-base">≡ƒç║≡ƒç╕</span>[m
+[32m+[m[32m      <span className="text-base">≡ƒç¼≡ƒçº</span>[m
+[32m+[m[32m      <span className="text-base">≡ƒç┐≡ƒçª</span>[m
+[32m+[m[32m      <span className="text-base">≡ƒçª≡ƒç║</span>[m
+[32m+[m[32m      <span className="text-base">≡ƒç»≡ƒç╡</span>[m
+[32m+[m[32m      <span className="text-base">≡ƒçª≡ƒç¬</span>[m
+[32m+[m[32m      <span className="text-base">≡ƒç¬≡ƒç║</span>[m
+     </div>[m
+ [m
+     <p className="mt-1 text-center text-[8px] font-bold uppercase tracking-[0.22em] text-gray-400">[m

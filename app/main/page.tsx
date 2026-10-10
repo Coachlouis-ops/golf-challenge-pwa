@@ -1,4 +1,4 @@
-
+﻿
 "use client";
 
 import { useRouter } from "next/navigation";
@@ -74,13 +74,13 @@ export default function HomePage() {
   {/* INTERNATIONAL GOLF STRIP */}
   <div className="mt-3 border-y border-white/10 py-2">
     <div className="flex items-center justify-center gap-2">
-      <span className="text-base">🇺🇸</span>
-      <span className="text-base">🇬🇧</span>
-      <span className="text-base">🇿🇦</span>
-      <span className="text-base">🇦🇺</span>
-      <span className="text-base">🇯🇵</span>
-      <span className="text-base">🇦🇪</span>
-      <span className="text-base">🇪🇺</span>
+      <span className="text-base">ðŸ‡ºðŸ‡¸</span>
+      <span className="text-base">ðŸ‡¬ðŸ‡§</span>
+      <span className="text-base">ðŸ‡¿ðŸ‡¦</span>
+      <span className="text-base">ðŸ‡¦ðŸ‡º</span>
+      <span className="text-base">ðŸ‡¯ðŸ‡µ</span>
+      <span className="text-base">ðŸ‡¦ðŸ‡ª</span>
+      <span className="text-base">ðŸ‡ªðŸ‡º</span>
     </div>
 
     <p className="mt-1 text-center text-[8px] font-bold uppercase tracking-[0.22em] text-gray-400">
@@ -120,7 +120,7 @@ export default function HomePage() {
 
       {/* YOUTUBE */}
       <a
-        href="https://youtube.com/teezgolfchallenges"
+        href="https://www.youtube.com/@TEEZGOLFCHALLENGES"
         target="_blank"
         rel="noreferrer"
         aria-label="YouTube"
@@ -138,7 +138,7 @@ export default function HomePage() {
 
       {/* TIKTOK */}
       <a
-        href="https://tiktok.com/teezgolfchallenges"
+        href="https://www.tiktok.com/@teez.golf.challen"
         target="_blank"
         rel="noreferrer"
         aria-label="TikTok"
@@ -182,7 +182,7 @@ export default function HomePage() {
     </p>
 
     <p className="mt-1 text-[9px] text-gray-400">
-      admin@teezgolfchallenges.com · +27 63 650 1619
+      admin@teezgolfchallenges.com Â· +27 63 650 1619
     </p>
   </div>
 
@@ -399,7 +399,7 @@ export default function HomePage() {
       </a>
 
       <a
-        href="https://youtube.com/teezgolfchallenges"
+        href="https://www.youtube.com/@TEEZGOLFCHALLENGES"
         target="_blank"
         rel="noreferrer"
         aria-label="YouTube"
@@ -411,7 +411,7 @@ export default function HomePage() {
       </a>
 
       <a
-        href="https://tiktok.com/teezgolfchallenges"
+        href="https://www.tiktok.com/@teez.golf.challen"
         target="_blank"
         rel="noreferrer"
         aria-label="TikTok"
@@ -438,7 +438,7 @@ export default function HomePage() {
 
     <div className="mt-10 border-t border-blue-400/10 pt-6 text-center">
       <p className="text-[9px] uppercase tracking-[0.16em] text-slate-600">
-        TEEZ GOLF CHALLENGES · HONEY BADGER TECHNOLOGIES
+        TEEZ GOLF CHALLENGES Â· HONEY BADGER TECHNOLOGIES
       </p>
     </div>
 
@@ -486,5 +486,6 @@ export default function HomePage() {
     </main>
   );
 }
+
 
 

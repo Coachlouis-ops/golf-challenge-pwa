@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useRouter } from "next/navigation";
 import React from "react";
@@ -83,13 +83,13 @@ const handleExit = () => {
         </svg>
       </a>
 
-      <a href="https://youtube.com/teezgolfchallenges" target="_blank">
+      <a href="https://www.youtube.com/@TEEZGOLFCHALLENGES" target="_blank">
         <svg width="18" height="18" fill="#FF0000" viewBox="0 0 24 24">
           <path d="M23.5 6.2s-.2-1.7-.8-2.4c-.8-.9-1.7-.9-2.1-1C17.8 2.5 12 2.5 12 2.5h0s-5.8 0-8.6.3c-.4.1-1.3.1-2.1 1C.7 4.5.5 6.2.5 6.2S.3 8.2.3 10.2v1.6c0 2 .2 4 .2 4s.2 1.7.8 2.4c.8.9 1.9.9 2.4 1 1.7.2 7.3.3 7.3.3s5.8 0 8.6-.3c.4-.1 1.3-.1 2.1-1 .6-.7.8-2.4.8-2.4s.2-2 .2-4v-1.6c0-2-.2-4-.2-4zM9.8 14.7V7.9l6.4 3.4-6.4 3.4z"/>
         </svg>
       </a>
 
-      <a href="https://tiktok.com/teezgolfchallenges" target="_blank">
+      <a href="https://www.tiktok.com/@teez.golf.challen" target="_blank">
         <svg width="18" height="18" viewBox="0 0 24 24">
           <path fill="#25F4EE" d="M9 3v12.5a2.5 2.5 0 1 1-2.5-2.5H8V9H6.5A6.5 6.5 0 1 0 13 15.5V8.5c1.1 1 2.6 1.5 4 1.5V6.5c-1.6 0-3-1.3-3-3H9z"/>
         </svg>
@@ -210,7 +210,7 @@ const handleExit = () => {
         <div className="max-w-3xl mx-auto">
 
           <h2 className="text-xl md:text-2xl font-semibold mb-4">
-            The original game of golf was never a scorecard — it was a challenge between players.
+            The original game of golf was never a scorecard â€” it was a challenge between players.
           </h2>
 
           <p className="text-gray-600 mb-8">
@@ -243,13 +243,13 @@ const handleExit = () => {
           <div className="space-y-8 text-gray-700 text-base md:text-lg leading-8">
 
             <p>
-              Teez Golf Challenges is built around the original essence of golf — 
+              Teez Golf Challenges is built around the original essence of golf â€” 
               competition between players, where every round matters and every match has a winner.
             </p>
 
             <p>
               Golf was never meant to be played only against the course. 
-              At its core, it is a game of matchplay — player versus player, strategizing, 
+              At its core, it is a game of matchplay â€” player versus player, strategizing, 
               out thinking, where the combinations of decisions backed by skill determines the outcome.
             </p>
 
@@ -260,8 +260,8 @@ const handleExit = () => {
 
             <p>
               Players enter matches using tokens as entry credits and compete over real rounds of golf. 
-              Whether it’s stroke play, matchplay, or challenge-based formats, each competition is designed 
-              to produce a clear result — a winner and a loser — just as the game was always intended.
+              Whether itâ€™s stroke play, matchplay, or challenge-based formats, each competition is designed 
+              to produce a clear result â€” a winner and a loser â€” just as the game was always intended.
             </p>
 
             <p>
@@ -280,8 +280,8 @@ const handleExit = () => {
 
             <p className="font-semibold text-black">
               Teez Golf Challenges is not a betting platform. 
-              It is a structured, skill-based competitive system that restores the competitive edge of golf — 
-              where players don’t just play rounds, they play to win.
+              It is a structured, skill-based competitive system that restores the competitive edge of golf â€” 
+              where players donâ€™t just play rounds, they play to win.
             </p>
 
           </div>
@@ -392,13 +392,13 @@ const handleExit = () => {
         </svg>
       </a>
 
-      <a href="https://youtube.com/teezgolfchallenges" target="_blank" className="hover:scale-110 transition">
+      <a href="https://www.youtube.com/@TEEZGOLFCHALLENGES" target="_blank" className="hover:scale-110 transition">
         <svg width="22" height="22" fill="#FF0000" viewBox="0 0 24 24">
           <path d="M23.5 6.2s-.2-1.7-.8-2.4c-.8-.9-1.7-.9-2.1-1C17.8 2.5 12 2.5 12 2.5h0s-5.8 0-8.6.3c-.4.1-1.3.1-2.1 1C.7 4.5.5 6.2.5 6.2S.3 8.2.3 10.2v1.6c0 2 .2 4 .2 4s.2 1.7.8 2.4c.8.9 1.9.9 2.4 1 1.7.2 7.3.3 7.3.3s5.8 0 8.6-.3c.4-.1 1.3-.1 2.1-1 .6-.7.8-2.4.8-2.4s.2-2 .2-4v-1.6c0-2-.2-4-.2-4zM9.8 14.7V7.9l6.4 3.4-6.4 3.4z"/>
         </svg>
       </a>
 
-      <a href="https://tiktok.com/teezgolfchallenges" target="_blank" className="hover:scale-110 transition">
+      <a href="https://www.tiktok.com/@teez.golf.challen" target="_blank" className="hover:scale-110 transition">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="black">
           <path fill="#25F4EE" d="M9 3v12.5a2.5 2.5 0 1 1-2.5-2.5H8V9H6.5A6.5 6.5 0 1 0 13 15.5V8.5c1.1 1 2.6 1.5 4 1.5V6.5c-1.6 0-3-1.3-3-3H9z"/>
         </svg>
@@ -465,3 +465,4 @@ const handleExit = () => {
     </main>
   );
 }
+

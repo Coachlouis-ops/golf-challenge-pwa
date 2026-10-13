@@ -86,25 +86,32 @@ export default function PaymentPendingPage() {
             }
           );
 
-        const result =
-          await response.json();
+      const result =
+  await response.json();
 
-        if (
-          response.ok &&
-          result?.fulfilled === true
-        ) {
+if (response.status === 403) {
+  stopped = true;
+  setChecking(false);
+  setStatusMessage(
+    "This payment belongs to a different signed-in account. Please sign in with the account used to make the payment. If payment was deducted, do not pay again."
+  );
+  return;
+}
+
+if (
+  response.ok &&
+  result?.fulfilled === true
+) {
           stopped = true;
 
           setChecking(false);
 
-          setStatusMessage(
-            "Payment confirmed. Your membership is active and 100 Teez Tokens have been added to your wallet."
-          );
+        setStatusMessage(
+  "Payment confirmed! Your participation is active for 30 days, and 200 Play Tokens have been added to your wallet."
+);
 
-         setTimeout(() => {
-  router.replace(
-    "/login"
-  );
+setTimeout(() => {
+  router.replace("/dashboard");
 }, 1500);
 
           return;

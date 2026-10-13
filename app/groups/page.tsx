@@ -16,6 +16,7 @@ type Group = {
   groupId: string;
 
   groupName: string;
+  competitionType?: "individual" | "team";
 
   creatorUid: string;
   creatorName: string;
@@ -312,6 +313,18 @@ function GroupCard({
       </div>
 
       <div className="pt-3 border-t border-cyan-500/20 text-sm space-y-1 text-gray-300">
+
+
+       <p>
+    <strong className="text-cyan-300">
+      Competition:
+    </strong>{" "}
+    {group.competitionType === "team"
+      ? "TEAM COMPETITION"
+      : group.competitionType === "individual"
+      ? "INDIVIDUAL COMPETITION"
+      : "LEGACY GROUP"}
+  </p>
 
         <p>
           <strong className="text-cyan-300">

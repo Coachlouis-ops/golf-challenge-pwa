@@ -146,33 +146,23 @@ export async function POST(req: Request) {
     const requestBody =
       await req.json();
 
-      const product =
-      requestBody?.product as
-        | "participation_access"
-        | "token_topup_100"
-        | undefined;
+  const product =
+  requestBody?.product as
+    | "participation_access"
+    | undefined;
 
        // -----------------------------------
     // SERVER-SIDE PRODUCT SOURCE OF TRUTH
     // -----------------------------------
-    const products = {
-      participation_access: {
-        amount: 149,
-        tokens: 100,
-        participationAccess: true,
-      },
+const products = {
+  participation_access: {
+    amount: 69,
+    tokens: 200,
+    participationAccess: true,
+  },
+} as const;
 
-      token_topup_100: {
-        amount: 149,
-        tokens: 100,
-        participationAccess: false,
-      },
-    } as const;
-
-    if (
-      product !== "participation_access" &&
-      product !== "token_topup_100"
-    ) {
+   if (product !== "participation_access") {
       return NextResponse.json(
         {
           error: "Unsupported product",
@@ -219,9 +209,15 @@ export async function POST(req: Request) {
         ? userSnap.data()
         : null;
 
-    const participationActive =
-      userData?.participationStatus === "active" ||
-      userData?.subscriptionStatus === "active";
+  const expiresAt = userData?.subscriptionExpires;
+
+const expiryMillis =
+  expiresAt && typeof expiresAt.toMillis === "function"
+    ? expiresAt.toMillis()
+    : 0;
+
+const participationActive =
+  expiryMillis > Date.now();
 
     if (
       product === "participation_access" &&
@@ -230,7 +226,7 @@ export async function POST(req: Request) {
       return NextResponse.json(
         {
           error:
-            "Participation Access is already active. Use Token Top-Up to buy more Teez Play Tokens.",
+         "Your participation is active. You can renew when your current 30-day period expires.",
         },
         { status: 409 }
       );

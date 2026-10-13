@@ -2,27 +2,27 @@
 
 import { useRouter } from "next/navigation";
 
-export default function RefundPolicyPage() {
+export default function PaymentPolicyPage() {
   const router = useRouter();
 
   return (
     <div className="min-h-screen bg-black text-white flex flex-col">
       {/* HEADER */}
       <div className="px-6 pt-10 text-center">
-        <h1 className="text-2xl font-bold text-green-400">
-          Refund & Delivery Policy
-        </h1>
+       <h1 className="text-2xl font-bold text-green-400">
+  Payment & Subscription Policy
+</h1>
 
-        <p className="text-gray-400 text-sm mt-2">
-          Teez Golf Challenges payment, refund, digital delivery, token
-          correction, and user protection policy
-        </p>
+       <p className="text-gray-400 text-sm mt-2">
+  TEEZ Golf Challenges participation payments, 30-day access,
+  Play Token allocation, expiry, renewal, and payment terms.
+</p>
       </div>
 
       {/* CONTENT */}
       <div className="flex-1 overflow-y-auto px-6 mt-6 text-sm leading-relaxed space-y-5 max-w-3xl w-full mx-auto pb-10">
         <p className="font-semibold text-white">
-          Refund & Delivery Policy
+       Payment & Subscription Policy
         </p>
 
         <p>
@@ -55,41 +55,48 @@ export default function RefundPolicyPage() {
         <p>
           The current Participation Access purchase includes:
         </p>
+<ul className="list-disc pl-6 space-y-1">
+  <li>Participation Access payment: R69.</li>
+  <li>Participation period: 30 days from confirmed payment.</li>
+  <li>Included allocation: 200 TEEZ Play Tokens.</li>
+  <li>Payment type: One-time authorised payment.</li>
+  <li>No automatic renewal or recurring deduction.</li>
+</ul>
 
-        <ul className="list-disc pl-6 space-y-1">
-          <li>Participation Access payment: R149.</li>
-          <li>Included allocation: 100 Teez Play Tokens.</li>
-          <li>Payment type: One-time authorised payment.</li>
-          <li>No automatic renewal.</li>
-          <li>No recurring monthly deduction.</li>
-        </ul>
+<p>
+  Participation Access expires after 30 days. All unused wallet
+  Play Tokens expire at the end of that period, with no carryover.
+  Tokens already committed to unfinished challenges remain committed.
+</p>
 
-        <p>
-          Participation Access does not expire merely because the player does
-          not purchase additional Teez Play Tokens.
-        </p>
+<p>
+  To continue participating after expiry, the player must make
+  a new R69 payment. The new payment resets the available
+  Play Token balance to 200.
+</p>
 
-        {/* 2 */}
-        <h2 className="font-semibold text-white">
-          2. Teez Play Token Top-Ups
-        </h2>
+   {/* 2 */}
+<h2 className="font-semibold text-white">
+  2. Teez Play Token Allocation
+</h2>
 
-        <p>
-          Players with Participation Access may purchase additional Teez Play
-          Tokens when required.
-        </p>
+<p>
+  Each confirmed R69 Participation Access payment provides
+  200 TEEZ Play Tokens for the applicable 30-day participation
+  period.
+</p>
 
-        <p>
-          The current standard top-up includes:
-        </p>
+<p>
+  Additional Play Token purchases and top-ups are not available.
+  Unused wallet tokens expire at the end of the participation
+  period and cannot be carried forward.
+</p>
 
-        <ul className="list-disc pl-6 space-y-1">
-          <li>Top-up payment: R149.</li>
-          <li>Allocation: 100 Teez Play Tokens.</li>
-          <li>Payment type: One-time authorised payment.</li>
-          <li>No automatic top-up.</li>
-          <li>No recurring billing.</li>
-        </ul>
+<p>
+  A new participation payment resets the available Play Token
+  balance to 200. Tokens already committed to unfinished
+  challenges remain committed.
+</p>
 
         <p>
           A player chooses when to purchase additional Teez Play Tokens.
@@ -110,16 +117,17 @@ export default function RefundPolicyPage() {
         </p>
 
         <ul className="list-disc pl-6 space-y-1">
-          <li>Activate Participation Access.</li>
-          <li>Allocate 100 Teez Play Tokens.</li>
-          <li>Update the player&apos;s digital wallet.</li>
-          <li>Provide access to applicable Platform participation features.</li>
-        </ul>
+  <li>Activate Participation Access for 30 days.</li>
+  <li>Reset the available wallet balance to 200 TEEZ Play Tokens.</li>
+  <li>Record the participation expiry date.</li>
+  <li>Provide access to applicable Platform participation features.</li>
+</ul>
 
-        <p>
-          A successful standard Teez Play Token top-up is intended to allocate
-          an additional 100 Teez Play Tokens to the player&apos;s wallet.
-        </p>
+<p>
+  Participation Access and the 200 Play Tokens are activated
+  only after successful payment confirmation from Peach Payments.
+  No additional token top-ups are available.
+</p>
 
         <p>
           No physical goods, courier service, postal delivery, collection
@@ -196,11 +204,23 @@ export default function RefundPolicyPage() {
           <li>May only be used for approved Platform activities.</li>
         </ul>
 
-        <p>
-          Teez Play Tokens remain available in the player&apos;s wallet until
-          used, subject to legitimate Platform corrections, account
-          enforcement, these Terms, and applicable law.
-        </p>
+    <p>
+  TEEZ Play Tokens are valid for the player's 30-day
+  Participation Access period. All unused wallet tokens
+  expire when that period ends and cannot be carried over.
+</p>
+
+<p>
+  Tokens already committed to unfinished challenges remain
+  committed to those challenges. A new R69 participation
+  payment resets the available wallet balance to 200 tokens.
+</p>
+
+<p>
+  Token balances remain subject to legitimate Platform
+  corrections, account enforcement, these Terms,
+  and applicable law.
+</p>
 
                 {/* TEEZ DIGITAL REWARDS */}
         <h2 className="font-semibold text-white">
@@ -235,20 +255,27 @@ export default function RefundPolicyPage() {
           7. No Subscription Cancellation
         </h2>
 
-        <p>
-          Participation Access and standard Teez Play Token top-ups are
-          one-time purchases and are not recurring subscriptions.
-        </p>
+      <p>
+  Participation Access is purchased through a one-time R69 payment
+  and remains active for 30 days after payment confirmation.
+</p>
 
-        <p>
-          There is therefore no monthly subscription to cancel and no automatic
-          renewal that the player must stop.
-        </p>
+<p>
+  There is no automatic renewal, recurring subscription charge,
+  or monthly deduction to cancel.
+</p>
 
-        <p>
-          A player who does not wish to purchase additional Teez Play Tokens
-          simply does not initiate another top-up payment.
-        </p>
+<p>
+  Participation Access expires automatically after 30 days.
+  Players who wish to continue participating must manually
+  purchase another 30-day participation period.
+</p>
+
+<p>
+  Unused wallet tokens expire at the end of each participation
+  period. A new payment resets the available Play Token balance
+  to 200 tokens.
+</p>
 
         {/* 8 */}
         <h2 className="font-semibold text-white">
@@ -337,11 +364,24 @@ export default function RefundPolicyPage() {
           those tokens into cash or other external monetary value.
         </p>
 
-        <p>
-          Unused Teez Play Tokens remain available for future approved Platform
-          participation unless legitimately corrected or removed in accordance
-          with the Platform Terms & Conditions or applicable law.
-        </p>
+     <p>
+  All unused TEEZ Play Tokens in the player's available wallet
+  balance expire at the end of the 30-day Participation Access
+  period. Expired tokens cannot be carried over, refunded,
+  transferred, or reinstated merely because they were unused,
+  subject to applicable law.
+</p>
+
+<p>
+  Tokens already committed to unfinished challenges remain
+  committed and are not removed by the participation expiry process.
+</p>
+
+<p>
+  A new R69 Participation Access payment provides another
+  30-day period and resets the available wallet balance
+  to 200 TEEZ Play Tokens.
+</p>
 
         {/* 11 */}
         <h2 className="font-semibold text-white">
@@ -548,7 +588,7 @@ export default function RefundPolicyPage() {
         </p>
 
         <p className="text-xs text-gray-500 pt-4">
-            Last updated: 9 October 2026
+        Last updated: 13 October 2026
         </p>
 
         <button

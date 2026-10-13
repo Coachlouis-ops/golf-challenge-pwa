@@ -500,15 +500,7 @@ return (
           VIEW TOKEN WALLET
         </button>
 
-        <button
-          onClick={() =>
-            router.push("/wallet/top-up")
-          }
-          className="arena-btn neon-green"
-        >
-          TOP UP TEEZ PLAY TOKENS
-        </button>
-      </>
+           </>
     )}
   </div>
 </div>

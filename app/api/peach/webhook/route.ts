@@ -503,14 +503,27 @@ export async function POST(req: Request) {
       payment.product ===
       "participation_access";
 
-    const isTokenTopUp =
-      payment.product ===
-      "token_topup_100";
+   const isTokenTopUp =
+  payment.product ===
+  "token_topup_100";
 
-    if (
-      !isParticipationAccess &&
-      !isTokenTopUp
-    ) {
+// Honour previously created top-up payments,
+// but reject top-ups initiated after the change.
+const topUpCutoff =
+  Timestamp.fromDate(
+    new Date("2026-10-13T00:00:00+02:00")
+  );
+
+const legacyTopUpAllowed =
+  isTokenTopUp &&
+  payment.createdAt instanceof Timestamp &&
+  payment.createdAt.toMillis() <
+    topUpCutoff.toMillis();
+
+if (
+  !isParticipationAccess &&
+  !legacyTopUpAllowed
+) {
       console.error(
         "Unsupported Peach payment product.",
         {
@@ -565,15 +578,21 @@ export async function POST(req: Request) {
     // --------------------------------------------------
     await db.runTransaction(
       async (tx) => {
-        const [
-          freshPaymentSnap,
-          userSnap,
-          webhookEventSnap,
-        ] = await Promise.all([
-          tx.get(paymentRef),
-          tx.get(userRef),
-          tx.get(webhookEventRef),
-        ]);
+       const [
+  freshPaymentSnap,
+  userSnap,
+  walletSnap,
+  webhookEventSnap,
+] = await Promise.all([
+  tx.get(paymentRef),
+  tx.get(userRef),
+  tx.get(walletRef),
+  tx.get(webhookEventRef),
+]);
+
+// Wallet is read within the transaction so concurrent
+// token-expiry updates trigger Firestore conflict handling.
+void walletSnap;
 
         // Exact webhook already processed.
         if (
@@ -625,9 +644,15 @@ export async function POST(req: Request) {
         }
 
                const now =
-          Timestamp.now();
+  Timestamp.now();
 
-                if (isParticipationAccess) {
+const participationExpires =
+  Timestamp.fromMillis(
+    now.toMillis() +
+      30 * 24 * 60 * 60 * 1000
+  );
+
+if (isParticipationAccess) {
           tx.set(
             userRef,
             {
@@ -652,8 +677,8 @@ export async function POST(req: Request) {
               subscriptionStartedAt:
                 now,
 
-              subscriptionExpires:
-                null,
+             subscriptionExpires:
+  participationExpires,
 
               participationStatus:
                 "active",
@@ -672,15 +697,12 @@ export async function POST(req: Request) {
             {
               uid,
 
-              balance:
-                FieldValue.increment(
-                  100
-                ),
+    balance: 200,
 
-              subscriptionTokensIssued:
-                FieldValue.increment(
-                  100
-                ),
+subscriptionTokensIssued:
+  FieldValue.increment(
+    200
+  ),
 
               updatedAt:
                 now,

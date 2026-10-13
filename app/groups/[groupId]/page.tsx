@@ -43,6 +43,7 @@ type LastChallenge = {
 type Group = {
   groupId: string;
   groupName: string;
+  competitionType: "individual" | "team" | "legacy";
 
   creatorUid: string;
   creatorName: string;
@@ -71,6 +72,7 @@ type GroupMember = {
   role: string;
   status: string;
 
+  teamId: string;
   groupPoints: number;
 };
 
@@ -108,6 +110,31 @@ export default function GroupDetailPage() {
 
   const [members, setMembers] =
     useState<GroupMember[]>([]);
+
+
+type GroupTeam = {
+  teamId: string;
+  teamName: string;
+  memberUids: string[];
+  teamPoints: number;
+  wins: number;
+  losses: number;
+  draws: number;
+};
+
+const [teams, setTeams] =
+  useState<GroupTeam[]>([]);
+
+  const [newTeamName, setNewTeamName] =
+  useState("");
+
+const [creatingTeam, setCreatingTeam] =
+  useState(false);
+
+
+const [assigningMemberUid, setAssigningMemberUid] =
+  useState<string | null>(null);  
+
 
   const [invitedUids, setInvitedUids] =
     useState<string[]>([]);
@@ -172,11 +199,18 @@ export default function GroupDetailPage() {
           data.groupId ||
           groupSnap.id,
 
-        groupName:
-          data.groupName ||
-          "Unnamed Group",
+      groupName:
+  data.groupName ||
+  "Unnamed Group",
 
-        creatorUid:
+competitionType:
+  data.competitionType === "team"
+    ? "team"
+    : data.competitionType === "individual"
+    ? "individual"
+    : "legacy",
+
+creatorUid:
           data.creatorUid ||
           "",
 
@@ -343,10 +377,11 @@ lastChallenge:
     "active"
   ),
 
+teamId:
+  String(memberData.teamId || ""),
+
 groupPoints:
-  Number(
-    memberData.groupPoints || 0
-  ),
+  Number(memberData.groupPoints || 0),
             };
           }
         );
@@ -376,6 +411,43 @@ groupPoints:
       setMembers(
         loadedMembers
       );
+
+
+      // ----------------------------------------------------------
+// LOAD GROUP TEAMS
+// ----------------------------------------------------------
+
+if (loadedGroup.competitionType === "team") {
+  const teamsSnap = await getDocs(
+    collection(
+      db,
+      "groups",
+      String(groupId),
+      "teams"
+    )
+  );
+
+  const loadedTeams: GroupTeam[] =
+    teamsSnap.docs.map((teamDoc) => {
+      const teamData = teamDoc.data();
+
+      return {
+        teamId: teamDoc.id,
+        teamName: String(teamData.teamName || ""),
+        memberUids: Array.isArray(teamData.memberUids)
+          ? teamData.memberUids
+          : [],
+        teamPoints: Number(teamData.teamPoints || 0),
+        wins: Number(teamData.wins || 0),
+        losses: Number(teamData.losses || 0),
+        draws: Number(teamData.draws || 0),
+      };
+    });
+
+  setTeams(loadedTeams);
+} else {
+  setTeams([]);
+}
 
       // ----------------------------------------------------------
       // LOAD PENDING GROUP INVITES
@@ -621,6 +693,158 @@ groupPoints:
   }
 
 
+
+    // ============================================================
+  // CREATE GROUP TEAM
+  // ============================================================
+
+  async function handleCreateTeam() {
+    if (
+      !groupId ||
+      !isCreator ||
+      group?.competitionType !== "team" ||
+      creatingTeam
+    ) {
+      return;
+    }
+
+    const teamName = newTeamName.trim();
+
+    if (!teamName || teamName.length > 60) {
+      await teezAlert({
+        title: "INVALID TEAM NAME",
+        message: "Enter a team name of 1 to 60 characters.",
+        type: "warning",
+        buttonText: "CONTINUE",
+      });
+      return;
+    }
+
+    try {
+      setCreatingTeam(true);
+
+      const createGroupTeam = httpsCallable(
+        functions,
+        "createGroupTeam"
+      );
+
+      await createGroupTeam({
+        groupId: String(groupId),
+        teamName,
+      });
+
+      setNewTeamName("");
+
+      await loadGroup();
+
+      await teezAlert({
+        title: "TEAM CREATED",
+        message: `${teamName} has been created successfully.`,
+        type: "success",
+        buttonText: "CONTINUE",
+      });
+    } catch (err: any) {
+      await teezAlert({
+        title: "TEAM NOT CREATED",
+        message:
+          err?.message || "Unable to create the team.",
+        type: "error",
+        buttonText: "CONTINUE",
+      });
+    } finally {
+      setCreatingTeam(false);
+    }
+  }
+
+
+  // ============================================================
+  // ASSIGN OR TRANSFER TEAM MEMBER
+  // ============================================================
+
+  async function handleAssignTeamMember(
+    member: GroupMember,
+    teamId: string
+  ) {
+    if (
+      !groupId ||
+      !isCreator ||
+      group?.competitionType !== "team" ||
+      assigningMemberUid ||
+      !teamId ||
+      member.teamId === teamId
+    ) {
+      return;
+    }
+
+    const targetTeam = teams.find(
+      (team) => team.teamId === teamId
+    );
+
+    if (!targetTeam) return;
+
+    const playerName =
+      `${member.name} ${member.surname}`.trim() ||
+      member.battleName ||
+      "Player";
+
+    if (member.teamId) {
+      const confirmed = await teezConfirm({
+        title: "TRANSFER PLAYER",
+        message:
+          `Transfer ${playerName} to ${targetTeam.teamName}? ` +
+          "Previous team results and points will remain unchanged.",
+        type: "warning",
+        confirmText: "TRANSFER",
+        cancelText: "CANCEL",
+      });
+
+      if (!confirmed) return;
+    }
+
+    try {
+      setAssigningMemberUid(member.uid);
+
+      const assignGroupTeamMember = httpsCallable(
+        functions,
+        "assignGroupTeamMember"
+      );
+
+      await assignGroupTeamMember({
+        groupId: String(groupId),
+        teamId,
+        targetUid: member.uid,
+      });
+
+      await loadGroup();
+
+      await teezAlert({
+        title: member.teamId
+          ? "PLAYER TRANSFERRED"
+          : "PLAYER ASSIGNED",
+        message:
+          `${playerName} is now a member of ${targetTeam.teamName}.`,
+        type: "success",
+        buttonText: "CONTINUE",
+      });
+    } catch (err: any) {
+      await teezAlert({
+        title: "TEAM ASSIGNMENT FAILED",
+        message:
+          err?.message ||
+          "Unable to update the player's team.",
+        type: "error",
+        buttonText: "CONTINUE",
+      });
+    } finally {
+      setAssigningMemberUid(null);
+    }
+  }
+
+
+
+
+
+
   // ============================================================
   // REMOVE MEMBER
   // ============================================================
@@ -832,6 +1056,16 @@ if (!confirmed) {
             {group.groupName}
           </h1>
 
+          <div className="mt-3">
+  <span className="inline-block rounded-lg border border-cyan-400/50 bg-cyan-400/10 px-3 py-2 text-xs font-extrabold tracking-widest text-cyan-300">
+    {group.competitionType === "team"
+      ? "TEAM COMPETITION"
+      : group.competitionType === "individual"
+      ? "INDIVIDUAL COMPETITION"
+      : "LEGACY GROUP"}
+  </span>
+</div>
+
           <div className="mt-5 grid sm:grid-cols-2 gap-3 text-sm">
 
             <div>
@@ -924,7 +1158,7 @@ if (!confirmed) {
                     key={
                       member.uid
                     }
-                    className="border border-neutral-700 bg-black/50 rounded-2xl p-4 flex items-center justify-between gap-4"
+                    className="border border-neutral-700 bg-black/50 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
                   >
 
                     <div>
@@ -959,6 +1193,49 @@ if (!confirmed) {
                       </div>
 
                     </div>
+
+
+                    {group.competitionType === "team" && (
+  <div className="w-full sm:w-auto">
+    {isCreator ? (
+      <select
+        value={member.teamId}
+        onChange={(event) =>
+          handleAssignTeamMember(
+            member,
+            event.target.value
+          )
+        }
+        disabled={
+          assigningMemberUid === member.uid ||
+          teams.length === 0
+        }
+        className="w-full max-w-full rounded-xl border border-cyan-400/40 bg-neutral-950 px-3 py-2 text-sm text-white disabled:opacity-50"
+      >
+        <option value="" disabled>
+          {assigningMemberUid === member.uid
+            ? "UPDATING..."
+            : "UNASSIGNED"}
+        </option>
+
+        {teams.map((team) => (
+          <option
+            key={team.teamId}
+            value={team.teamId}
+          >
+            {team.teamName}
+          </option>
+        ))}
+      </select>
+    ) : (
+      <span className="text-xs font-bold text-cyan-300">
+        {teams.find(
+          (team) => team.teamId === member.teamId
+        )?.teamName || "UNASSIGNED"}
+      </span>
+    )}
+  </div>
+)}
 
 
                     {isCreator &&
@@ -1000,6 +1277,12 @@ if (!confirmed) {
         {/* ===================================================== */}
         {/* OVERALL GROUP RANKING */}
         {/* ===================================================== */}
+
+
+{group.competitionType === "individual" && (
+
+
+
 
         <section className="border-2 border-yellow-400/50 bg-yellow-950/10 rounded-3xl p-5 shadow-[0_0_35px_rgba(250,204,21,0.12)]">
 
@@ -1058,6 +1341,100 @@ if (!confirmed) {
 
         </section>
 
+)}
+
+
+
+{group.competitionType === "team" && isCreator && (
+  <section className="border-2 border-cyan-400/50 bg-neutral-950/90 rounded-3xl p-5">
+    <div className="text-xs font-bold tracking-[0.25em] text-cyan-300">
+      TEAM MANAGEMENT
+    </div>
+
+    <h2 className="text-2xl font-black mt-1">
+      CREATE TEAM
+    </h2>
+
+    <p className="text-sm text-gray-400 mt-2">
+      Create teams for your group competition.
+    </p>
+
+    <div className="flex flex-col sm:flex-row gap-3 mt-5">
+      <input
+        type="text"
+        maxLength={60}
+        value={newTeamName}
+        onChange={(event) =>
+          setNewTeamName(event.target.value)
+        }
+        placeholder="Enter team name"
+        className="min-w-0 flex-1 rounded-xl border border-cyan-400/40 bg-black p-3 text-white outline-none focus:border-cyan-300"
+      />
+
+      <button
+        type="button"
+        onClick={handleCreateTeam}
+        disabled={creatingTeam || !newTeamName.trim()}
+        className="rounded-xl bg-cyan-400 px-5 py-3 font-black text-black hover:bg-cyan-300 disabled:opacity-40"
+      >
+        {creatingTeam ? "CREATING..." : "CREATE TEAM"}
+      </button>
+    </div>
+  </section>
+)}
+
+
+{group.competitionType === "team" && (
+  <section className="border-2 border-yellow-400/50 bg-yellow-950/10 rounded-3xl p-5 shadow-[0_0_35px_rgba(250,204,21,0.12)]">
+
+    <div className="text-xs font-bold tracking-[0.25em] text-yellow-400">
+      TEAM COMPETITION
+    </div>
+
+    <h2 className="text-2xl font-black mt-1">
+      OVERALL TEAM RANKING
+    </h2>
+
+    <div className="flex flex-col gap-2 mt-5">
+      {teams.length === 0 ? (
+        <p className="text-sm text-gray-400">
+          No teams created yet.
+        </p>
+      ) : (
+        [...teams]
+          .sort((a, b) => b.teamPoints - a.teamPoints)
+          .map((team, index) => (
+            <div
+              key={team.teamId}
+              className="flex items-center justify-between gap-4 border border-yellow-400/20 bg-black/50 rounded-xl px-4 py-3"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-8 text-center text-yellow-400 font-black">
+                  {index + 1}.
+                </div>
+
+                <div>
+                  <div className="font-bold text-white">
+                    {team.teamName}
+                  </div>
+                  <div className="text-xs text-gray-400">
+                    {team.memberUids.length} players
+                    {" · "}
+                    {team.wins}W / {team.losses}L / {team.draws}D
+                  </div>
+                </div>
+              </div>
+
+              <div className="font-black text-yellow-400 whitespace-nowrap">
+                {team.teamPoints} pts
+              </div>
+            </div>
+          ))
+      )}
+    </div>
+
+  </section>
+)}
 
 
                 {/* ===================================================== */}

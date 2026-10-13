@@ -3,7 +3,8 @@
 import { useState, useEffect, useRef } from "react";
 import { httpsCallable } from "firebase/functions";
 import { useRouter } from "next/navigation";
-import { functions } from "@/src/lib/firebase";
+import { auth, db, functions } from "@/src/lib/firebase";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import RequireAuth from "@/src/lib/RequireAuth";
 import GolfCourseSearch from "@/src/components/GolfCourseSearch";
 import { useTeezNotification } from "@/src/components/TeezNotificationProvider";
@@ -330,11 +331,61 @@ export default function CreateChallengePage() {
   const router = useRouter();
   const { teezAlert } = useTeezNotification();
 
-  const [challengeScope, setChallengeScope] =
-    useState<"normal" | "group">("normal");
+const [challengeScope, setChallengeScope] =
+  useState<"normal" | "group">("group");
 
-  const [groupId, setGroupId] =
-    useState<string | null>(null);
+const [groupId, setGroupId] =
+  useState<string | null>(null);
+
+const [availableGroups, setAvailableGroups] = useState<
+  { id: string; name: string }[]
+>([]);
+
+const [loadingGroups, setLoadingGroups] = useState(true);
+
+
+useEffect(() => {
+  const unsubscribe = auth.onAuthStateChanged(async (user) => {
+    if (!user) {
+      setAvailableGroups([]);
+      setLoadingGroups(false);
+      return;
+    }
+
+    setLoadingGroups(true);
+
+    try {
+      const groupsQuery = query(
+        collection(db, "groups"),
+        where("creatorUid", "==", user.uid)
+      );
+
+      const snapshot = await getDocs(groupsQuery);
+
+      const groups = snapshot.docs
+        .filter((doc) => doc.data().status === "active")
+        .map((doc) => ({
+          id: doc.id,
+          name: String(
+            doc.data().groupName ||
+            doc.data().name ||
+            "Unnamed Group"
+          ),
+        }));
+
+      setAvailableGroups(groups);
+    } catch (error) {
+      console.error("LOAD GROUPS ERROR:", error);
+      setAvailableGroups([]);
+    } finally {
+      setLoadingGroups(false);
+    }
+  });
+
+  return () => unsubscribe();
+}, []);
+
+
 
   const [challengeTitle, setChallengeTitle] = useState("");
 
@@ -374,26 +425,15 @@ const [
   const [loading, setLoading] = useState(false);
 
 
-  useEffect(() => {
+useEffect(() => {
   const params =
     new URLSearchParams(window.location.search);
-
-  const scope =
-    params.get("scope");
 
   const suppliedGroupId =
     params.get("groupId");
 
-  if (
-    scope === "group" &&
-    suppliedGroupId
-  ) {
-    setChallengeScope("group");
-    setGroupId(suppliedGroupId);
-  } else {
-    setChallengeScope("normal");
-    setGroupId(null);
-  }
+  
+  setGroupId(suppliedGroupId || null);
 }, []);
 
   
@@ -461,6 +501,7 @@ const nassauTotalTokens =
 
 
 const isValid =
+Boolean(groupId?.trim()) &&
   challengeTitle.trim().length > 0 &&
   (
     isNassau
@@ -476,7 +517,21 @@ const isValid =
   scoringMethod &&
   courseName.trim().length > 0;
 
- async function handleCreate() {
+async function handleCreate() {
+  if (
+    !groupId ||
+    !availableGroups.some((group) => group.id === groupId)
+  ) {
+    await teezAlert({
+      title: "SELECT A GROUP",
+      message:
+        "Please select one of your active groups before creating a challenge.",
+      type: "warning",
+      buttonText: "CONTINUE",
+    });
+    return;
+  }
+
   if (!isValid) {
     await teezAlert({
       title: "COMPLETE CHALLENGE",
@@ -495,11 +550,8 @@ const isValid =
         httpsCallable(functions, "createChallenge");
 
 const result: any = await createChallenge({
-  challengeScope,
-  groupId:
-    challengeScope === "group"
-      ? groupId
-      : null,
+  challengeScope: "group",
+  groupId,
 
   challengeTitle: challengeTitle.trim(),
 
@@ -574,10 +626,61 @@ const result: any = await createChallenge({
         <div className="relative z-10 w-full max-w-4xl bg-neutral-900/80 backdrop-blur-xl border border-neutral-700 rounded-2xl p-6 sm:p-10 shadow-[0_0_40px_rgba(0,255,120,0.25)] flex flex-col gap-7">
 
         <h1 className="text-2xl sm:text-4xl font-bold text-green-400 text-center tracking-widest drop-shadow-[0_0_10px_#39FF14]">
-  {challengeScope === "group"
-    ? "CREATE GROUP CHALLENGE"
-    : "CREATE CHALLENGE"}
+CREATE GROUP CHALLENGE
 </h1>
+
+
+{/* GROUP SELECTION */}
+<div className="flex flex-col gap-3">
+  <label className="text-cyan-300 font-bold tracking-wider">
+    SELECT YOUR GROUP
+  </label>
+
+  {loadingGroups ? (
+    <p className="text-gray-400 text-sm">
+      Loading your groups...
+    </p>
+  ) : availableGroups.length === 0 ? (
+    <div className="rounded-xl border border-yellow-400/30 bg-yellow-500/10 p-4">
+      <p className="text-yellow-200 text-sm">
+        You have no active groups available for creating challenges.
+      </p>
+
+      <button
+        type="button"
+        onClick={() => router.push("/groups")}
+        className="mt-3 text-cyan-300 font-bold underline"
+      >
+        GO TO GROUPS
+      </button>
+    </div>
+  ) : (
+    <select
+      value={groupId || ""}
+      onChange={(e) => setGroupId(e.target.value || null)}
+      className="w-full min-w-0 bg-black border-2 border-cyan-400 rounded-xl px-4 py-4 text-white font-bold outline-none focus:border-cyan-300"
+    >
+      <option value="">-- Select a Group --</option>
+
+      {availableGroups.map((group) => (
+        <option key={group.id} value={group.id}>
+          {group.name}
+        </option>
+      ))}
+    </select>
+  )}
+</div>
+
+
+
+
+
+
+
+
+
+
+
 
           <input
             placeholder="Challenge Title"

@@ -110,11 +110,11 @@ setSubmitting(false);
          <h2 className="text-3xl font-semibold">
           Teez Participation Access
         </h2>
-
-        <p className="text-gray-400 max-w-xl">
-          Get access to Teez Golf Challenges and receive 100 Teez Play Tokens
-          after your payment is securely confirmed by Peach Payments.
-        </p>
+<p className="text-gray-400 max-w-xl">
+  Get 30 days of access to TEEZ Golf Challenges and receive
+  200 Play Tokens after your R69 payment is securely
+  confirmed by Peach Payments.
+</p>
       </div>
 
       <div className="bg-gradient-to-b from-zinc-900 to-black border border-orange-400/60 p-8 rounded-2xl shadow-[0_0_35px_rgba(255,153,51,0.18)] flex flex-col gap-6 text-center max-w-lg w-full">
@@ -133,7 +133,7 @@ setSubmitting(false);
         </div>
         <div>
           <p className="text-5xl font-bold text-white">
-            R149
+            R69
           </p>
 
           <p className="text-xs text-gray-500 mt-2">
@@ -141,10 +141,11 @@ setSubmitting(false);
           </p>
         </div>
 
-        <p className="text-sm text-gray-400">
-          Includes 100 Teez Play Tokens. Your tokens remain in your wallet
-          until you use them.
-        </p>
+       <p className="text-sm text-gray-400">
+  Includes 200 TEEZ Play Tokens and 30 days of participation.
+  Unused Play Tokens expire after 30 days and do not carry over.
+  No automatic renewal.
+</p>
 
                     <div className="bg-black/50 border border-orange-400/30 rounded-xl p-5 flex flex-col gap-4">
 
@@ -217,20 +218,27 @@ setSubmitting(false);
             .
           </p>
 
-          <p>
-            The R149 Participation Access payment includes 100 Teez Play Tokens.
-          </p>
+      <p>
+  The R69 Participation Access payment provides 30 days of
+  participation and includes 200 TEEZ Play Tokens.
+</p>
 
-          <p>
-            Participation Access does not expire and does not automatically
-            renew. No recurring monthly deduction is made.
-          </p>
+<p>
+  Participation Access expires 30 days after payment confirmation.
+  All unused wallet tokens expire at the end of this period
+  and cannot be carried over.
+</p>
 
-          <p>
-            Additional Teez Play Tokens can be purchased when required through
-            the Token Wallet.
-          </p>
+<p>
+  Participation does not renew automatically. No recurring
+  deductions are made. To continue participating after expiry,
+  a new R69 payment is required.
+</p>
 
+<p>
+  Each new participation payment resets the available Play Token
+  balance to 200 tokens. Additional token purchases are not available.
+</p>
 
           <p>
             Teez Tokens are digital play credits only. They have no cash value,
@@ -301,15 +309,18 @@ setSubmitting(false);
               onChange={(event) => setAccepted(event.target.checked)}
               className="mt-1"
             />
-
-                         <span>
-              I confirm that I have reviewed and accept the Website Terms &
-              Conditions, Platform Terms & Conditions, Payment & Subscription
-              Policy, Refund, Cancellation & Delivery Policy, and Privacy
-              Policy. I understand that the R149 payment provides Participation
-              Access and 100 Teez Play Tokens, does not automatically renew,
-              and that additional tokens can be purchased when required.
-            </span>
+<span>
+  I confirm that I have reviewed and accept the Website Terms &
+  Conditions, Platform Terms & Conditions, Payment & Subscription
+  Policy, Refund, Cancellation & Delivery Policy, and Privacy
+  Policy. I understand that my R69 payment provides 30 days of
+  Participation Access and 200 TEEZ Play Tokens. All unused
+  wallet tokens expire after 30 days with no carryover.
+  Participation does not renew automatically, and additional
+  token purchases are not available. A new R69 payment is
+  required to participate after expiry and resets my available
+  Play Token balance to 200.
+</span>
           </label>
         </div>
 

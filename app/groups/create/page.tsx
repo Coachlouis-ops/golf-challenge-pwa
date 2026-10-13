@@ -23,6 +23,7 @@ type PlayerProfile = {
 
 type GroupForm = {
   groupName: string;
+  competitionType: "individual" | "team" | "";
   club: string;
   stateProvince: string;
   country: string;
@@ -38,12 +39,13 @@ export default function CreateGroupPage() {
 
   const [creatorName, setCreatorName] = useState("");
 
-  const [group, setGroup] = useState<GroupForm>({
-    groupName: "",
-    club: "",
-    stateProvince: "",
-    country: "",
-  });
+ const [group, setGroup] = useState<GroupForm>({
+  groupName: "",
+  competitionType: "",
+  club: "",
+  stateProvince: "",
+  country: "",
+});
 
   // -------------------------------------------------
   // LOAD CREATOR PROFILE
@@ -133,6 +135,17 @@ export default function CreateGroupPage() {
   return;
 }
 
+if (!group.competitionType) {
+  await teezAlert({
+    title: "COMPETITION TYPE REQUIRED",
+    message:
+      "Please select Individual or Team competition.",
+    type: "warning",
+    buttonText: "CONTINUE",
+  });
+  return;
+}
+
 if (!group.club.trim()) {
   await teezAlert({
     title: "GOLF CLUB REQUIRED",
@@ -175,12 +188,15 @@ if (!group.country.trim()) {
           "createGroup"
         );
 
-      await createGroupFunction({
-        groupName:
-          group.groupName.trim(),
+     await createGroupFunction({
+  groupName:
+    group.groupName.trim(),
 
-        club:
-          group.club.trim(),
+  competitionType:
+    group.competitionType,
+
+  club:
+    group.club.trim(),
 
         stateProvince:
           group.stateProvince.trim(),
@@ -304,6 +320,63 @@ await teezAlert({
               })
             }
           />
+
+
+
+
+
+          {/* COMPETITION TYPE */}
+<div className="space-y-3">
+  <p className="text-xs font-extrabold tracking-widest text-cyan-300">
+    GROUP COMPETITION TYPE
+  </p>
+
+  <p className="text-xs text-gray-400">
+    Choose how members will compete and be ranked in this group.
+  </p>
+
+  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+    {[
+      {
+        value: "individual",
+        title: "INDIVIDUAL",
+        description: "Players compete individually.",
+      },
+      {
+        value: "team",
+        title: "TEAM",
+        description: "Players compete in teams.",
+      },
+    ].map((option) => (
+      <button
+        key={option.value}
+        type="button"
+        onClick={() =>
+          setGroup((prev) => ({
+            ...prev,
+            competitionType: option.value as "individual" | "team",
+          }))
+        }
+        className={`rounded-xl border-2 p-4 text-left transition ${
+          group.competitionType === option.value
+            ? "border-green-400 bg-green-400/10"
+            : "border-gray-700 bg-black"
+        }`}
+      >
+        <div className="font-extrabold text-white">
+          {option.title}
+        </div>
+        <div className="mt-2 text-xs text-gray-400">
+          {option.description}
+        </div>
+      </button>
+    ))}
+  </div>
+</div>
+
+
+
+
 
           {/* CREATOR NAME */}
           <LockedField

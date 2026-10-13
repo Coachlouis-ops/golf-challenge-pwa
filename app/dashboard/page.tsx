@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -241,15 +241,15 @@ return (
               </p>
 
               <p className="text-3xl font-black mt-5 text-center text-white">
-                R149
+                R69
               </p>
 
               <p className="text-xs text-gray-300 mt-2 text-center">
-                Includes Participation Access + 100 Teez Play Tokens
+                Includes Participation Access + 200 Play Tokens
               </p>
 
               <p className="text-xs text-gray-400 mt-2 text-center">
-                No automatic renewal. Top up more tokens whenever you need them.
+                No automatic renewal. Renew participation after 30 days.
               </p>
 
               <button
@@ -296,11 +296,11 @@ return (
               </p>
 
               <p className="text-3xl font-black mt-5 text-center">
-                R149
+                R69
               </p>
 
               <p className="text-xs text-gray-300 mt-2 text-center">
-                Includes 100 Teez Play Tokens
+                Includes 200 Play Tokens
               </p>
 
               <p className="text-xs text-gray-400 mt-2 text-center">
@@ -566,11 +566,11 @@ return (
                   </p>
 
                   <p className="text-3xl font-black mt-5">
-                    R149
+                    R69
                   </p>
 
                   <p className="text-xs text-gray-300 mt-2">
-                    Includes 100 Teez Play Tokens
+                    Includes 200 Play Tokens
                   </p>
 
                   <p className="text-xs text-gray-500 mt-2">
@@ -759,3 +759,4 @@ return (
 export default function Dashboard() {
   return <DashboardContent />;
 }
+

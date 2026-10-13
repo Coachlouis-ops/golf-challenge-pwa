@@ -321,133 +321,85 @@ return (
 
 
     
+
 {/* MAIN DASHBOARD BUTTONS */}
 <div className="space-y-4">
 
   <button
-    onClick={() =>
-      openCompetitiveFeature(
-        "Player Booster Board",
-        "/player-booster-board"
-      )
-    }
-    className={`arena-btn neon-green ${
-      competitiveFeaturesLocked
-        ? "locked-btn"
-        : ""
-    }`}
-  >
-    PLAYER BOOSTER BOARD
-  </button>
-
-  <button
-    onClick={() =>
-      openCompetitiveFeature(
-        "Create Challenge",
-        "/challenges/create"
-      )
-    }
-    className={`arena-btn neon-pink ${
-      competitiveFeaturesLocked
-        ? "locked-btn"
-        : ""
-    }`}
-  >
-    CREATE CHALLENGE
-  </button>
-
-  <button
-    onClick={() =>
-      openCompetitiveFeature(
-        "My Challenges",
-        "/my-challenges"
-      )
-    }
-    className={`arena-btn neon-purple ${
-      competitiveFeaturesLocked
-        ? "locked-btn"
-        : ""
-    }`}
-  >
-    MY CHALLENGES
-  </button>
-
-  <button
-    onClick={() =>
-      openCompetitiveFeature(
-        "My Invites",
-        "/my-invites"
-      )
-    }
-    className={`arena-btn neon-blue ${
-      competitiveFeaturesLocked
-        ? "locked-btn"
-        : ""
-    }`}
-  >
-    MY INVITES
-  </button>
-
-  <button
-    onClick={() =>
-      openCompetitiveFeature(
-        "My Groups",
-        "/groups"
-      )
-    }
+    onClick={() => openCompetitiveFeature("My Groups", "/groups")}
     className={`arena-btn neon-orange ${
-      competitiveFeaturesLocked
-        ? "locked-btn"
-        : ""
+      competitiveFeaturesLocked ? "locked-btn" : ""
     }`}
   >
     MY GROUPS
   </button>
 
   <button
-    onClick={openProfile}
-    className={`arena-btn neon-cyan ${
-      !user
-        ? "locked-btn"
-        : ""
+    onClick={() => openCompetitiveFeature("Token Wallet", "/wallet")}
+    className={`arena-btn neon-green ${
+      competitiveFeaturesLocked ? "locked-btn" : ""
     }`}
   >
-    MY PROFILE
+    TOKEN WALLET
   </button>
 
   <button
-    onClick={() =>
-      openCompetitiveFeature(
-        "My Career",
-        "/profile/my-career"
-      )
-    }
+    onClick={() => openCompetitiveFeature("Create Challenge", "/challenges/create")}
+    className={`arena-btn neon-pink ${
+      competitiveFeaturesLocked ? "locked-btn" : ""
+    }`}
+  >
+    CREATE CHALLENGE
+  </button>
+
+  <button
+    onClick={() => openCompetitiveFeature("My Invites", "/my-invites")}
     className={`arena-btn neon-blue ${
-      competitiveFeaturesLocked
-        ? "locked-btn"
-        : ""
+      competitiveFeaturesLocked ? "locked-btn" : ""
+    }`}
+  >
+    MY INVITES
+  </button>
+
+  <button
+    onClick={() => openCompetitiveFeature("My Challenges", "/my-challenges")}
+    className={`arena-btn neon-purple ${
+      competitiveFeaturesLocked ? "locked-btn" : ""
+    }`}
+  >
+    MY CHALLENGES
+  </button>
+
+  <button
+    onClick={() => openCompetitiveFeature("My Career", "/profile/my-career")}
+    className={`arena-btn neon-blue ${
+      competitiveFeaturesLocked ? "locked-btn" : ""
     }`}
   >
     MY CAREER
   </button>
 
   <button
-    onClick={() =>
-      openCompetitiveFeature(
-        "Token Wallet",
-        "/wallet"
-      )
-    }
+    onClick={() => openCompetitiveFeature("Player Booster Board", "/player-booster-board")}
     className={`arena-btn neon-green ${
-      competitiveFeaturesLocked
-        ? "locked-btn"
-        : ""
+      competitiveFeaturesLocked ? "locked-btn" : ""
     }`}
   >
-    TOKEN WALLET
+    PLAYER BOOSTER BOARD
+  </button>
+
+  <button
+    onClick={openProfile}
+    className={`arena-btn neon-cyan ${
+      !user ? "locked-btn" : ""
+    }`}
+  >
+    MY PROFILE
   </button>
 
 </div>
+
+
 
 {/* ACCOUNT */}
 <div className="glass-panel mt-4">

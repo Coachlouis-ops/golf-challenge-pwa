@@ -660,6 +660,33 @@ if (!confirmed) return;
           TEEZ SCORING CLUBS
         </button>
 
+
+<button
+  onClick={() =>
+    router.push(
+      "/admin/seed-scoring-event"
+    )
+  }
+  className="
+    w-[320px]
+    px-10
+    py-4
+    text-lg
+    font-bold
+    rounded-xl
+    bg-orange-400
+    text-black
+    shadow-[0_0_20px_rgba(251,146,60,0.8)]
+    hover:shadow-[0_0_40px_rgba(251,146,60,1)]
+    transition-all
+    duration-300
+  "
+>
+  SEED TEEZ SCORING EVENT
+</button>
+
+        
+
         {/* EVENTS & FINALS MANAGEMENT */}
         <button
           onClick={() => router.push("/admin/events")}

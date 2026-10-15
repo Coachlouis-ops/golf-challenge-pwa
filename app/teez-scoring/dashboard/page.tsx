@@ -3,7 +3,11 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
-import { auth, db } from "@/src/lib/firebase";
+import {
+  auth,
+  db,
+  functions,
+} from "@/src/lib/firebase";
 
 import {
   collection,
@@ -17,6 +21,10 @@ import {
 import {
   onAuthStateChanged,
 } from "firebase/auth";
+
+import {
+  httpsCallable,
+} from "firebase/functions";
 
 type Club = {
   clubName: string;
@@ -50,7 +58,12 @@ export default function ClubDashboard() {
     useState<CompetitionItem[]>([]);
 
   const [loading, setLoading] =
-    useState(true);
+  useState(true);
+
+const [
+  deletingCompetitionId,
+  setDeletingCompetitionId,
+] = useState<string | null>(null);
 
   useEffect(() => {
 
@@ -167,6 +180,63 @@ export default function ClubDashboard() {
     return () => unsub();
 
   }, [router]);
+
+
+ async function deleteCompetition(
+  competition: CompetitionItem
+) {
+  const confirmed =
+    window.confirm(
+      `DELETE COMPETITION?\n\n${competition.competitionName}\n${competition.competitionDate}\n\nThis cannot be undone.`
+    );
+
+  if (!confirmed) {
+    return;
+  }
+
+  try {
+    setDeletingCompetitionId(
+      competition.id
+    );
+
+    const deleteScoringCompetition =
+      httpsCallable(
+        functions,
+        "deleteScoringCompetition"
+      );
+
+    await deleteScoringCompetition({
+      competitionId:
+        competition.id,
+    });
+
+    setCompetitions((prev) =>
+      prev.filter(
+        (item) =>
+          item.id !==
+          competition.id
+      )
+    );
+
+    alert(
+      "Competition deleted successfully."
+    );
+  } catch (error: any) {
+    console.error(
+      "DELETE COMPETITION ERROR:",
+      error
+    );
+
+    alert(
+      error?.message ||
+        "Failed to delete competition."
+    );
+  } finally {
+    setDeletingCompetitionId(
+      null
+    );
+  }
+} 
 
   const activeCompetitions =
     competitions.filter(
@@ -411,27 +481,54 @@ export default function ClubDashboard() {
 
                       </div>
 
-                      <div className="flex flex-wrap gap-3">
+                   <div className="flex flex-wrap gap-3">
 
-                        <button
-                          onClick={() =>
-                            router.push(
-                              `/teez-scoring/competition/${competition.id}`
-                            )
-                          }
-                          className="
-                            bg-green-400
-                            text-black
-                            px-5
-                            py-3
-                            rounded-2xl
-                            font-black
-                          "
-                        >
-                          OPEN / EDIT
-                        </button>
+  <button
+    onClick={() =>
+      router.push(
+        `/teez-scoring/competition/${competition.id}`
+      )
+    }
+    className="
+      bg-green-400
+      text-black
+      px-5
+      py-3
+      rounded-2xl
+      font-black
+    "
+  >
+    OPEN / EDIT
+  </button>
 
-                      </div>
+  <button
+    onClick={() =>
+      deleteCompetition(
+        competition
+      )
+    }
+    disabled={
+      deletingCompetitionId ===
+      competition.id
+    }
+    className="
+      bg-red-600
+      text-white
+      px-5
+      py-3
+      rounded-2xl
+      font-black
+      hover:bg-red-500
+      disabled:opacity-50
+    "
+  >
+    {deletingCompetitionId ===
+    competition.id
+      ? "DELETING..."
+      : "DELETE"}
+  </button>
+
+</div>
 
                     </div>
 
@@ -525,6 +622,36 @@ export default function ClubDashboard() {
 >
   EXPORT PDF
 </button>
+
+
+<button
+  onClick={() =>
+    deleteCompetition(
+      competition
+    )
+  }
+  disabled={
+    deletingCompetitionId ===
+    competition.id
+  }
+  className="
+    bg-red-600
+    text-white
+    px-5
+    py-3
+    rounded-2xl
+    font-black
+    hover:bg-red-500
+    disabled:opacity-50
+  "
+>
+  {deletingCompetitionId ===
+  competition.id
+    ? "DELETING..."
+    : "DELETE"}
+</button>
+
+
 
                       </div>
 

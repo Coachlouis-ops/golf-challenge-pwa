@@ -71,8 +71,13 @@ const router = useRouter();
   const [loading, setLoading] =
     useState(true);
 
-  const [saving, setSaving] =
-    useState(false);
+const [saving, setSaving] =
+  useState(false);
+
+const [
+  hasUnsavedChanges,
+  setHasUnsavedChanges,
+] = useState(false);
 
   const [competition, setCompetition] =
     useState<Competition | null>(null);
@@ -175,7 +180,8 @@ async function loadCompetition() {
           }))
         : [];
 
-    setRows(cleanRows);
+setRows(cleanRows);
+setHasUnsavedChanges(false);
 
   } catch (e: any) {
 
@@ -252,9 +258,10 @@ async function saveCompetition() {
       }
     );
 
-    setRows(cleanRows);
+   setRows(cleanRows);
+setHasUnsavedChanges(false);
 
-    alert("Competition saved");
+alert("Competition saved");
 
   } catch (e: any) {
 
@@ -362,7 +369,8 @@ function generateTeeSheet() {
     );
   }
 
-  setRows(generatedRows);
+setRows(generatedRows);
+setHasUnsavedChanges(true);
 }
 
 // =========================
@@ -1168,6 +1176,8 @@ function updateRow(
         : r
     )
   );
+
+  setHasUnsavedChanges(true);
 }
 
 if (loading) {
@@ -1201,11 +1211,12 @@ return (
         <div className="flex items-center gap-5">
 
           <button
-            onClick={() =>
-              router.push(
-                "/teez-scoring/dashboard"
-              )
-            }
+  onClick={() =>
+    router.push(
+      "/teez-scoring/dashboard"
+    )
+  }
+  disabled={hasUnsavedChanges}
             className="
               bg-neutral-900
               border border-white/10
@@ -1235,7 +1246,8 @@ return (
 
         <div className="flex items-center gap-4">
 
-        <button
+       <button
+  disabled={hasUnsavedChanges}
   onClick={() =>
     router.push(
       `/teez-scoring/leaderboard/${competitionId}`
@@ -1249,12 +1261,15 @@ return (
     rounded-2xl
     font-bold
     shadow-[0_0_25px_rgba(34,211,238,0.7)]
+    disabled:opacity-30
+    disabled:cursor-not-allowed
   "
 >
   VIEW LEADERBOARD
 </button>
 
 <button
+  disabled={hasUnsavedChanges}
   onClick={() =>
     window.open(
       `/teez-scoring/live-scoreboard/${competitionId}`,
@@ -1269,109 +1284,123 @@ return (
     rounded-2xl
     font-bold
     shadow-[0_0_25px_rgba(168,85,247,0.7)]
+    disabled:opacity-30
+    disabled:cursor-not-allowed
   "
 >
   LIVE SCOREBOARD
 </button>
 
-          <button
-            onClick={updateLeaderboard}
-            className="
-              bg-yellow-400
-              text-black
-              px-6
-              py-4
-              rounded-2xl
-              font-bold
-              shadow-[0_0_25px_rgba(250,204,21,0.7)]
-            "
-          >
-            UPDATE LEADERBOARD
-          </button>
+<button
+  onClick={updateLeaderboard}
+  disabled={hasUnsavedChanges}
+  className="
+    bg-yellow-400
+    text-black
+    px-6
+    py-4
+    rounded-2xl
+    font-bold
+    shadow-[0_0_25px_rgba(250,204,21,0.7)]
+    disabled:opacity-30
+    disabled:cursor-not-allowed
+  "
+>
+  UPDATE LEADERBOARD
+</button>
 
-          <button
-            onClick={saveCompetition}
-            disabled={saving}
-            className="
-              bg-green-400
-              text-black
-              px-6
-              py-4
-              rounded-2xl
-              font-bold
-              shadow-[0_0_25px_rgba(34,197,94,0.7)]
-              disabled:opacity-50
-            "
-          >
-            {saving
-              ? "SAVING..."
-              : "SAVE COMPETITION"}
-          </button>
+<button
+  onClick={saveCompetition}
+  disabled={
+    saving ||
+    !hasUnsavedChanges
+  }
+  className="
+    bg-green-400
+    text-black
+    px-6
+    py-4
+    rounded-2xl
+    font-bold
+    shadow-[0_0_25px_rgba(34,197,94,0.7)]
+    disabled:opacity-50
+    disabled:cursor-not-allowed
+  "
+>
+  {saving
+    ? "SAVING..."
+    : hasUnsavedChanges
+    ? "SAVE COMPETITION"
+    : "SAVED"}
+</button>
 
-          <button
-            onClick={finalizeCompetition}
-            className="
-              bg-red-500
-              text-white
-              px-6
-              py-4
-              rounded-2xl
-              font-bold
-              shadow-[0_0_25px_rgba(239,68,68,0.7)]
-            "
-          >
-            FINALIZE COMPETITION
-          </button>
+<button
+  onClick={finalizeCompetition}
+  disabled={hasUnsavedChanges}
+  className="
+    bg-red-500
+    text-white
+    px-6
+    py-4
+    rounded-2xl
+    font-bold
+    shadow-[0_0_25px_rgba(239,68,68,0.7)]
+    disabled:opacity-30
+    disabled:cursor-not-allowed
+  "
+>
+  FINALIZE COMPETITION
+</button>
 
-        </div>
+</div>
 
-      </div>
+</div>
 
-      {/* SETTINGS */}
+{/* SETTINGS */}
 
-      <div className="grid md:grid-cols-4 gap-4 mb-10">
+<div className="grid md:grid-cols-4 gap-4 mb-10">
 
-        <div className="bg-neutral-900 rounded-2xl p-5">
-          <div className="text-xs text-gray-400 mb-2">
-            FORMAT
-          </div>
+  <div className="bg-neutral-900 rounded-2xl p-5">
+    <div className="text-xs text-gray-400 mb-2">
+      FORMAT
+    </div>
 
-          <div className="font-bold">
-            {competition.format}
-          </div>
-        </div>
+    <div className="font-bold">
+      {competition.format}
+    </div>
+  </div>
 
-        <div className="bg-neutral-900 rounded-2xl p-5">
-          <div className="text-xs text-gray-400 mb-2">
-            PLAYER CONFIG
-          </div>
+  <div className="bg-neutral-900 rounded-2xl p-5">
+    <div className="text-xs text-gray-400 mb-2">
+      PLAYER CONFIG
+    </div>
 
-          <div className="font-bold">
-            {competition.playerConfiguration}
-          </div>
-        </div>
+    <div className="font-bold">
+      {competition.playerConfiguration}
+    </div>
+  </div>
 
-        <div className="bg-neutral-900 rounded-2xl p-5">
-          <div className="text-xs text-gray-400 mb-2">
-            DIVISIONS
-          </div>
+  <div className="bg-neutral-900 rounded-2xl p-5">
+    <div className="text-xs text-gray-400 mb-2">
+      DIVISIONS
+    </div>
 
-          <div className="font-bold">
-            {competition.divisionStructure}
-          </div>
-        </div>
+    <div className="font-bold">
+      {competition.divisionStructure}
+    </div>
+  </div>
 
-        <div className="bg-neutral-900 rounded-2xl p-5">
-          <div className="text-xs text-gray-400 mb-2">
-            DATE
-          </div>
+  <div className="bg-neutral-900 rounded-2xl p-5">
+    <div className="text-xs text-gray-400 mb-2">
+      DATE
+    </div>
 
-          <div className="font-bold">
-            {competition.competitionDate}
-          </div>
-        </div>
+    <div className="font-bold">
+      {competition.competitionDate}
+    </div>
+  </div>
 
-      </div>
+</div>
 
 
 {/* TEE SHEET SETTINGS */}
@@ -1403,12 +1432,14 @@ return (
       <input
         type="time"
         value={competition.startTime}
-        onChange={(e) =>
-          setCompetition({
-            ...competition,
-            startTime: e.target.value,
-          })
-        }
+        onChange={(e) => {
+  setCompetition({
+    ...competition,
+    startTime: e.target.value,
+  });
+
+  setHasUnsavedChanges(true);
+}}
         className="
           w-full
           bg-black
@@ -1432,12 +1463,14 @@ return (
       <input
         type="time"
         value={competition.endTime}
-        onChange={(e) =>
-          setCompetition({
-            ...competition,
-            endTime: e.target.value,
-          })
-        }
+        onChange={(e) => {
+  setCompetition({
+    ...competition,
+    endTime: e.target.value,
+  });
+
+  setHasUnsavedChanges(true);
+}}
         className="
           w-full
           bg-black
@@ -1461,13 +1494,15 @@ return (
       <input
         type="number"
         value={competition.teeIntervals}
-        onChange={(e) =>
-          setCompetition({
-            ...competition,
-            teeIntervals:
-              Number(e.target.value) || 10,
-          })
-        }
+        onChange={(e) => {
+  setCompetition({
+    ...competition,
+    teeIntervals:
+      Number(e.target.value) || 10,
+  });
+
+  setHasUnsavedChanges(true);
+}}
         className="
           w-full
           bg-black
@@ -1490,12 +1525,14 @@ return (
 
       <select
         value={competition.teeMode}
-        onChange={(e) =>
-          setCompetition({
-            ...competition,
-            teeMode: e.target.value,
-          })
-        }
+      onChange={(e) => {
+  setCompetition({
+    ...competition,
+    teeMode: e.target.value,
+  });
+
+  setHasUnsavedChanges(true);
+}}
         className="
           w-full
           bg-black

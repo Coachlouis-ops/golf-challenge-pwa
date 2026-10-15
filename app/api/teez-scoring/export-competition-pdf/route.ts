@@ -265,42 +265,27 @@ export async function GET(req: Request) {
 
     function drawHeader() {
 
-      page.drawRectangle({
-        x: 0,
-        y: pageHeight - 120,
-        width: pageWidth,
-        height: 120,
-        color:
-          rgb(0.02, 0.02, 0.02),
-      });
+      const clubName =
+        safeText(
+          club.clubName ||
+            "Club Competition"
+        );
+
+      const clubNameSize = 22;
+
+      const clubNameWidth =
+        boldFont.widthOfTextAtSize(
+          clubName,
+          clubNameSize
+        );
 
       drawText(
-        "TEEZSCORE OFFICIAL RESULTS",
-        50,
-        pageHeight - 42,
-        9,
+        clubName,
+        (pageWidth - clubNameWidth) / 2,
+        pageHeight - 165,
+        clubNameSize,
         true,
-        rgb(0.13, 0.77, 0.37)
-      );
-
-      drawText(
-        club.clubName ||
-          "Club Competition",
-        50,
-        pageHeight - 70,
-        22,
-        true,
-        rgb(1, 1, 1)
-      );
-
-      drawText(
-        competition.competitionName ||
-          "",
-        50,
-        pageHeight - 93,
-        10,
-        false,
-        rgb(0.82, 0.82, 0.82)
+        rgb(0.05, 0.05, 0.05)
       );
     }
 
@@ -335,10 +320,10 @@ export async function GET(req: Request) {
         }
 
         page.drawImage(image, {
-          x: pageWidth - 130,
-          y: pageHeight - 105,
-          width: 75,
-          height: 75,
+          x: (pageWidth - 90) / 2,
+          y: pageHeight - 130,
+          width: 90,
+          height: 90,
         });
 
       } catch {
@@ -603,41 +588,33 @@ export async function GET(req: Request) {
       );
     }
 
-    drawHeader();
     await drawLogo();
+    drawHeader();
 
     y =
-      pageHeight - 155;
+      pageHeight - 195;
 
     drawCompetitionDetails();
 
+    const finalLeaderboard =
+      Array.isArray(competition.leaderboard)
+        ? (competition.leaderboard as LeaderboardRow[]).filter(
+            (row) => {
+              const position =
+                Number(row.position);
+
+              return (
+                Number.isFinite(position) &&
+                position >= 1 &&
+                position <= 28
+              );
+            }
+          )
+        : [];
+
     drawLeaderboard(
       "Overall Leaderboard",
-      Array.isArray(competition.leaderboard)
-        ? competition.leaderboard
-        : []
-    );
-
-    const divisionLeaderboards =
-      competition.divisionLeaderboards || {};
-
-    Object.entries(
-      divisionLeaderboards
-    ).forEach(([division, rows]) => {
-
-      drawLeaderboard(
-        `${division} Division Leaderboard`,
-        Array.isArray(rows)
-          ? rows as LeaderboardRow[]
-          : []
-      );
-
-    });
-
-    drawTeeSheet(
-      Array.isArray(competition.rows)
-        ? competition.rows
-        : []
+      finalLeaderboard
     );
 
     drawFooter();

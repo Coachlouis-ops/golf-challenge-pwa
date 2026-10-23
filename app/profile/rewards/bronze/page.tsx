@@ -210,7 +210,7 @@ export default function BronzeVaultPage() {
   );
 
     return (
-    <main className="min-h-screen bg-[#eef1f4] text-[#111827]">
+    <main className="min-h-screen bg-[#eef1f4] text-[#0c1830]">
       <div className="mx-auto max-w-md pb-14">
 
         {/* HEADER */}
@@ -319,7 +319,7 @@ export default function BronzeVaultPage() {
                     Vault Access Available
                   </p>
 
-                  <p className="mt-1 text-sm font-bold text-[#111827]">
+                  <p className="mt-1 text-sm font-bold text-[#0c1830]">
                     {availableKeys}{" "}
                     {availableKeys === 1 ? "key" : "keys"} available
                   </p>
@@ -338,7 +338,7 @@ export default function BronzeVaultPage() {
                 Vault Access
               </p>
 
-              <p className="mt-1 text-sm font-black text-[#111827]">
+              <p className="mt-1 text-sm font-black text-[#0c1830]">
                 No Vault Keys Available
               </p>
 
@@ -432,7 +432,7 @@ export default function BronzeVaultPage() {
               <button
                 type="button"
                 onClick={() => router.push("/profile/rewards")}
-                className="w-full border-t border-[#c9b37a] bg-[#0d1821] py-4 text-xs font-black uppercase tracking-[0.14em] text-white"
+                className="w-full border-t border-[#c9b37a] bg-[#0e1c34] py-4 text-xs font-black uppercase tracking-[0.14em] text-white"
               >
                 Continue to Silver Vault
               </button>
@@ -592,7 +592,7 @@ function CoinRevealModal({
   onClose: () => void;
 }) {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#07100c]/90 px-6 backdrop-blur-sm">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#07111e]/90 px-6 backdrop-blur-sm">
 
       <div className="w-full max-w-sm overflow-hidden border border-[#b9926c] bg-white shadow-[0_24px_70px_rgba(0,0,0,0.4)]">
 
@@ -618,7 +618,7 @@ function CoinRevealModal({
             Player Reward
           </p>
 
-          <h3 className="mt-2 text-2xl font-black tracking-tight text-[#111827]">
+          <h3 className="mt-2 text-2xl font-black tracking-tight text-[#0c1830]">
             {coin.rewardLabel}
           </h3>
 

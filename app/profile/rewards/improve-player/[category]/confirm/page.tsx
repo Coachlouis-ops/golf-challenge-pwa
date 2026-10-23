@@ -36,8 +36,8 @@ const ballNumber =
 
   if (!product) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-[#030608] px-5 text-white">
-        <div className="w-full max-w-md border border-red-400/30 bg-[#071017] p-6 text-center">
+      <main className="flex min-h-screen items-center justify-center bg-[#07111e] px-5 text-white">
+        <div className="w-full max-w-md border border-red-400/30 bg-[#0e1c34] p-6 text-center">
           <p className="text-sm font-black text-red-300">
             Booster selection not found.
           </p>
@@ -65,10 +65,10 @@ const ballNumber =
   }
 
   return (
-    <main className="min-h-screen bg-[#030608] text-white">
+    <main className="min-h-screen bg-[#07111e] text-white">
       <div className="mx-auto max-w-md pb-16">
 
-        <header className="sticky top-0 z-30 border-b border-cyan-400/30 bg-[#030608]/95 px-5 py-3 backdrop-blur-xl">
+        <header className="sticky top-0 z-30 border-b border-cyan-400/30 bg-[#07111e]/95 px-5 py-3 backdrop-blur-xl">
 
           <div className="flex items-center justify-between">
 

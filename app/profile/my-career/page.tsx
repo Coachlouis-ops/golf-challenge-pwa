@@ -146,16 +146,16 @@ export default function MyCareerPage() {
 
   if (loading) {
   return (
-    <main className="flex min-h-screen items-center justify-center bg-[#030608] px-6">
+    <main className="flex min-h-screen items-center justify-center bg-[#07111e] px-6">
 
-      <div className="relative overflow-hidden border border-cyan-400/30 bg-[#071017] px-10 py-8 text-center shadow-[0_0_35px_rgba(34,211,238,0.14)]">
+      <div className="relative overflow-hidden border border-cyan-400/30 bg-[#0e1c34] px-10 py-8 text-center shadow-[0_0_35px_rgba(30,224,108,0.14)]">
 
         <div className="absolute -right-10 -top-10 h-28 w-28 rounded-full bg-cyan-400/10 blur-3xl" />
 
         <img
           src="/teez-app-icon-v4.png"
           alt="TEEZ Golf Challenges"
-          className="relative mx-auto h-16 w-16 object-contain drop-shadow-[0_0_14px_rgba(34,211,238,0.7)]"
+          className="relative mx-auto h-16 w-16 object-contain drop-shadow-[0_0_14px_rgba(30,224,108,0.7)]"
         />
 
         <div className="relative mx-auto mt-5 h-9 w-9 animate-spin rounded-full border-2 border-cyan-400/20 border-t-cyan-300" />
@@ -230,19 +230,19 @@ const teezDollars = Number(
 
 
   return (
-    <main className="min-h-screen bg-[#030608] text-white">
+    <main className="min-h-screen bg-[#07111e] text-white">
   <div className="mx-auto max-w-md pb-16">
 
 {/* HEADER */}
 
-<header className="sticky top-0 z-30 border-b border-cyan-400/30 bg-[#030608]/95 px-5 py-3 backdrop-blur-xl">
+<header className="sticky top-0 z-30 border-b border-cyan-400/30 bg-[#07111e]/95 px-5 py-3 backdrop-blur-xl">
 
   <div className="flex items-center justify-between">
 
     <button
       type="button"
       onClick={() => router.back()}
-      className="flex h-10 w-10 items-center justify-center border border-cyan-400/30 bg-cyan-400/[0.05] text-2xl font-black text-cyan-300 shadow-[0_0_16px_rgba(34,211,238,0.15)]"
+      className="flex h-10 w-10 items-center justify-center border border-cyan-400/30 bg-cyan-400/[0.05] text-2xl font-black text-cyan-300 shadow-[0_0_16px_rgba(30,224,108,0.15)]"
       aria-label="Go back"
     >
       ‹
@@ -254,7 +254,7 @@ const teezDollars = Number(
       <img
         src="/teez-app-icon-v4.png"
         alt="TEEZ Golf Challenges"
-        className="h-16 w-16 object-contain drop-shadow-[0_0_14px_rgba(0,174,255,0.75)]"
+        className="h-16 w-16 object-contain drop-shadow-[0_0_14px_rgba(30,224,108,0.75)]"
       />
 
       <p className="mt-1 text-[8px] font-black uppercase tracking-[0.30em] text-cyan-400">
@@ -278,7 +278,7 @@ const teezDollars = Number(
 
       {/* PLAYER HERO */}
 
-<section className="relative overflow-hidden border border-cyan-400/30 bg-[#071017] shadow-[0_0_35px_rgba(34,211,238,0.10)]">
+<section className="relative overflow-hidden border border-cyan-400/30 bg-[#0e1c34] shadow-[0_0_35px_rgba(30,224,108,0.10)]">
 
   <div className="absolute -right-16 -top-16 h-44 w-44 rounded-full bg-cyan-400/10 blur-3xl" />
 
@@ -288,7 +288,7 @@ const teezDollars = Number(
 
     <div className="flex items-start gap-4">
 
-      <div className="flex h-16 w-16 shrink-0 items-center justify-center border border-cyan-400/40 bg-cyan-400/[0.06] shadow-[0_0_20px_rgba(34,211,238,0.10)]">
+      <div className="flex h-16 w-16 shrink-0 items-center justify-center border border-cyan-400/40 bg-cyan-400/[0.06] shadow-[0_0_20px_rgba(30,224,108,0.10)]">
 
         <span className="text-sm font-black tracking-[0.12em] text-cyan-300">
           TEEZ
@@ -499,7 +499,7 @@ const teezDollars = Number(
   <button
     type="button"
     onClick={() => router.push("/profile/ryder-cup")}
-    className="group relative w-full overflow-hidden border border-blue-400/60 bg-[#050d1c] text-left shadow-[0_0_34px_rgba(59,130,246,0.14)] transition duration-200 active:scale-[0.99]"
+    className="group relative w-full overflow-hidden border border-blue-400/60 bg-[#0c1830] text-left shadow-[0_0_34px_rgba(30,224,108,0.14)] transition duration-200 active:scale-[0.99]"
   >
     <div className="relative p-5">
       <p className="text-[9px] font-black uppercase tracking-[0.22em] text-blue-300">
@@ -558,7 +558,7 @@ const teezDollars = Number(
     onClick={() =>
       router.push("/profile/rewards")
     }
-    className="group relative w-full overflow-hidden border border-emerald-400/60 bg-[#04110c] text-left shadow-[0_0_34px_rgba(52,211,153,0.14)] transition duration-200 active:scale-[0.99]"
+    className="group relative w-full overflow-hidden border border-emerald-400/60 bg-[#0c1830] text-left shadow-[0_0_34px_rgba(52,211,153,0.14)] transition duration-200 active:scale-[0.99]"
   >
     <div className="pointer-events-none absolute -right-20 -top-20 h-48 w-48 rounded-full bg-emerald-400/10 blur-3xl" />
 
@@ -731,7 +731,7 @@ const teezDollars = Number(
 
        {/* CURRENT RANKINGS */}
 
-<section className="relative overflow-hidden border border-cyan-400/20 bg-[#050b10] p-4 shadow-[0_0_40px_rgba(34,211,238,0.08)]">
+<section className="relative overflow-hidden border border-cyan-400/20 bg-[#0b1730] p-4 shadow-[0_0_40px_rgba(30,224,108,0.08)]">
 
   <div className="pointer-events-none absolute -right-20 -top-20 h-48 w-48 rounded-full bg-cyan-400/[0.07] blur-3xl" />
 
@@ -1070,7 +1070,7 @@ function SectionHeading({
 
       <div className="mb-3 flex items-center gap-3">
 
-        <div className="h-[2px] w-8 bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.7)]" />
+        <div className="h-[2px] w-8 bg-cyan-400 shadow-[0_0_8px_rgba(30,224,108,0.7)]" />
 
         <p className="text-[9px] font-black uppercase tracking-[0.24em] text-cyan-400">
           {eyebrow}
@@ -1137,7 +1137,7 @@ function ProgressTile({
   const colour = colours[accent];
 
   return (
-    <div className="relative overflow-hidden border border-cyan-400/30 bg-[#071017] p-4 shadow-[0_0_26px_rgba(34,211,238,0.08)]">
+    <div className="relative overflow-hidden border border-cyan-400/30 bg-[#0e1c34] p-4 shadow-[0_0_26px_rgba(30,224,108,0.08)]">
 
       <div
         className="pointer-events-none absolute -right-10 -top-10 h-24 w-24 rounded-full blur-3xl"
@@ -1177,7 +1177,7 @@ function ProgressTile({
             }}
           >
 
-            <div className="flex h-[46px] w-[46px] items-center justify-center rounded-full bg-[#071017]">
+            <div className="flex h-[46px] w-[46px] items-center justify-center rounded-full bg-[#0e1c34]">
 
               <span
                 className="text-[10px] font-black"
@@ -1228,10 +1228,10 @@ function MetricTile({
 }) {
   return (
     <div
-      className={`relative overflow-hidden border bg-[#071017] p-4 ${
+      className={`relative overflow-hidden border bg-[#0e1c34] p-4 ${
         highlight
           ? "border-amber-400/60 shadow-[0_0_26px_rgba(251,191,36,0.14)]"
-          : "border-cyan-400/30 shadow-[0_0_24px_rgba(34,211,238,0.08)]"
+          : "border-cyan-400/30 shadow-[0_0_24px_rgba(30,224,108,0.08)]"
       }`}
     >
 
@@ -1261,7 +1261,7 @@ function MetricTile({
             className={`h-[2px] w-8 ${
               highlight
                 ? "bg-amber-300 shadow-[0_0_8px_rgba(251,191,36,0.8)]"
-                : "bg-cyan-300 shadow-[0_0_8px_rgba(34,211,238,0.7)]"
+                : "bg-cyan-300 shadow-[0_0_8px_rgba(30,224,108,0.7)]"
             }`}
           />
 
@@ -1320,7 +1320,7 @@ function RankingTile({
   const styles = {
     cyan: {
       border: "border-cyan-400/60",
-      glow: "shadow-[0_0_28px_rgba(34,211,238,0.18)]",
+      glow: "shadow-[0_0_28px_rgba(30,224,108,0.18)]",
       badge:
         "border-cyan-400/40 bg-cyan-400/[0.08] text-cyan-300",
       rank: "text-cyan-300",
@@ -1366,7 +1366,7 @@ function RankingTile({
     <button
       type="button"
       onClick={onClick}
-      className={`group relative w-full overflow-hidden border bg-[#071017] p-4 text-left transition duration-200 active:scale-[0.98] ${current.border} ${current.glow}`}
+      className={`group relative w-full overflow-hidden border bg-[#0e1c34] p-4 text-left transition duration-200 active:scale-[0.98] ${current.border} ${current.glow}`}
     >
 
       <div className="absolute -right-8 -top-8 h-24 w-24 rounded-full bg-white/[0.03] blur-2xl" />
@@ -1503,7 +1503,7 @@ function ActionTile({
       className={`group relative w-full overflow-hidden border p-5 text-left transition duration-200 active:scale-[0.99] ${
         premium
           ? "border-amber-400/60 bg-[#120e05] shadow-[0_0_28px_rgba(251,191,36,0.14)]"
-          : "border-cyan-400/40 bg-[#071017] shadow-[0_0_28px_rgba(34,211,238,0.12)]"
+          : "border-cyan-400/40 bg-[#0e1c34] shadow-[0_0_28px_rgba(30,224,108,0.12)]"
       }`}
     >
 
@@ -1521,7 +1521,7 @@ function ActionTile({
           className={`flex h-14 min-w-14 items-center justify-center border px-2 text-[9px] font-black tracking-[0.10em] ${
             premium
               ? "border-amber-400/50 bg-amber-400/[0.08] text-amber-300 shadow-[0_0_18px_rgba(251,191,36,0.12)]"
-              : "border-cyan-400/50 bg-cyan-400/[0.08] text-cyan-300 shadow-[0_0_18px_rgba(34,211,238,0.12)]"
+              : "border-cyan-400/50 bg-cyan-400/[0.08] text-cyan-300 shadow-[0_0_18px_rgba(30,224,108,0.12)]"
           }`}
         >
           {code}
@@ -1579,7 +1579,7 @@ function AchievementTile({
       className={`relative overflow-hidden border p-4 text-center ${
         unlocked
           ? "border-amber-400/60 bg-[#100c04] shadow-[0_0_26px_rgba(251,191,36,0.14)]"
-          : "border-slate-700 bg-[#071017]"
+          : "border-slate-700 bg-[#0e1c34]"
       }`}
     >
 

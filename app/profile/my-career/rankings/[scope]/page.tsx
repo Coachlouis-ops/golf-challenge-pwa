@@ -103,11 +103,11 @@ export default function CareerRankingPage() {
           : "Global Ranking";
 
   return (
-    <main className="min-h-screen bg-[#05080b] text-white">
+    <main className="min-h-screen bg-[#07111e] text-white">
 
       {/* HEADER */}
 
-      <header className="sticky top-0 z-30 border-b border-cyan-400/20 bg-[#05080b]/95 px-5 py-4 backdrop-blur">
+      <header className="sticky top-0 z-30 border-b border-cyan-400/20 bg-[#07111e]/95 px-5 py-4 backdrop-blur">
 
         <div className="mx-auto flex max-w-md items-center justify-between">
 
@@ -142,7 +142,7 @@ export default function CareerRankingPage() {
 
         {/* RANKING HERO */}
 
-        <section className="relative overflow-hidden border border-cyan-400/30 bg-[#081117] shadow-[0_0_35px_rgba(34,211,238,0.10)]">
+        <section className="relative overflow-hidden border border-cyan-400/30 bg-[#0e1c34] shadow-[0_0_35px_rgba(30,224,108,0.10)]">
 
           <div className="absolute right-[-50px] top-[-50px] h-36 w-36 rounded-full bg-cyan-400/10 blur-3xl" />
 
@@ -198,7 +198,7 @@ export default function CareerRankingPage() {
         {/* LOADING */}
 
         {loading && (
-          <div className="mt-5 border border-white/10 bg-[#081117] px-5 py-12 text-center">
+          <div className="mt-5 border border-white/10 bg-[#0e1c34] px-5 py-12 text-center">
 
             <div className="mx-auto h-8 w-8 animate-spin rounded-full border-2 border-white/10 border-t-cyan-400" />
 
@@ -232,7 +232,7 @@ export default function CareerRankingPage() {
 
               {/* COLUMN HEADERS */}
 
-              <div className="grid grid-cols-[52px_1fr_82px] border border-white/10 bg-[#0c151c] px-3 py-3">
+              <div className="grid grid-cols-[52px_1fr_82px] border border-white/10 bg-[#12243f] px-3 py-3">
 
                 <p className="text-[9px] font-black uppercase tracking-[0.12em] text-slate-500">
                   Rank
@@ -265,7 +265,7 @@ export default function CareerRankingPage() {
 
               {data.leaderboard.length ===
                 0 && (
-                <div className="border border-white/10 bg-[#081117] p-8 text-center">
+                <div className="border border-white/10 bg-[#0e1c34] p-8 text-center">
 
                   <p className="text-sm font-bold text-slate-400">
                     No ranked players found.
@@ -304,10 +304,10 @@ function LeaderboardRow({
     <div
       className={`relative grid grid-cols-[52px_1fr_82px] items-center border px-3 py-4 ${
         player.isCurrentPlayer
-          ? "border-cyan-400/60 bg-cyan-400/[0.08] shadow-[0_0_22px_rgba(34,211,238,0.12)]"
+          ? "border-cyan-400/60 bg-cyan-400/[0.08] shadow-[0_0_22px_rgba(30,224,108,0.12)]"
           : podium
             ? "border-yellow-500/20 bg-[#101417]"
-            : "border-white/10 bg-[#081117]"
+            : "border-white/10 bg-[#0e1c34]"
       }`}
     >
 

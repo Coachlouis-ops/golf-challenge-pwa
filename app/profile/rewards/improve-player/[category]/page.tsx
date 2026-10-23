@@ -81,8 +81,8 @@ const ballNumber = searchParams.get("ball");
 
   if (!categoryInfo) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-[#030608] px-5 text-white">
-        <div className="w-full max-w-md border border-red-400/30 bg-[#071017] p-6 text-center">
+      <main className="flex min-h-screen items-center justify-center bg-[#07111e] px-5 text-white">
+        <div className="w-full max-w-md border border-red-400/30 bg-[#0e1c34] p-6 text-center">
           <p className="text-sm font-black text-red-300">
             Booster category not found.
           </p>
@@ -110,19 +110,19 @@ const ballNumber = searchParams.get("ball");
   }
 
   return (
-    <main className="min-h-screen bg-[#030608] text-white">
+    <main className="min-h-screen bg-[#07111e] text-white">
       <div className="mx-auto max-w-md pb-16">
 
         {/* HEADER */}
 
-        <header className="sticky top-0 z-30 border-b border-cyan-400/30 bg-[#030608]/95 px-5 py-3 backdrop-blur-xl">
+        <header className="sticky top-0 z-30 border-b border-cyan-400/30 bg-[#07111e]/95 px-5 py-3 backdrop-blur-xl">
 
           <div className="flex items-center justify-between">
 
             <button
               type="button"
               onClick={() => router.back()}
-              className="flex h-10 w-10 items-center justify-center border border-cyan-400/30 bg-cyan-400/[0.05] text-2xl font-black text-cyan-300 shadow-[0_0_16px_rgba(34,211,238,0.15)]"
+              className="flex h-10 w-10 items-center justify-center border border-cyan-400/30 bg-cyan-400/[0.05] text-2xl font-black text-cyan-300 shadow-[0_0_16px_rgba(30,224,108,0.15)]"
               aria-label="Go back"
             >
               ‹
@@ -133,7 +133,7 @@ const ballNumber = searchParams.get("ball");
               <img
                 src="/teez-app-icon-v4.png"
                 alt="TEEZ Golf Challenges"
-                className="h-16 w-16 object-contain drop-shadow-[0_0_14px_rgba(0,174,255,0.75)]"
+                className="h-16 w-16 object-contain drop-shadow-[0_0_14px_rgba(30,224,108,0.75)]"
               />
 
               <p className="mt-1 text-[8px] font-black uppercase tracking-[0.30em] text-cyan-400">
@@ -196,7 +196,7 @@ const ballNumber = searchParams.get("ball");
 
               <div className="mb-3 flex items-center gap-3">
 
-                <div className="h-[2px] w-8 bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.7)]" />
+                <div className="h-[2px] w-8 bg-cyan-400 shadow-[0_0_8px_rgba(30,224,108,0.7)]" />
 
                 <p className="text-[9px] font-black uppercase tracking-[0.24em] text-cyan-400">
                   AVAILABLE BOOSTERS
@@ -227,7 +227,7 @@ const ballNumber = searchParams.get("ball");
                   onClick={() =>
                     selectProduct(product)
                   }
-                  className="group overflow-hidden border border-cyan-400/25 bg-[#071017] text-left transition active:scale-[0.98]"
+                  className="group overflow-hidden border border-cyan-400/25 bg-[#0e1c34] text-left transition active:scale-[0.98]"
                 >
 
                   <div className="aspect-square overflow-hidden bg-white">

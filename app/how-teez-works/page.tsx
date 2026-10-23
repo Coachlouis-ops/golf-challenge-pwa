@@ -94,7 +94,7 @@ function JourneySymbol({
   number: string;
 }) {
   return (
-    <div className="relative flex h-20 w-20 shrink-0 items-center justify-center rounded-full border border-blue-300/60 bg-[#061329] shadow-[0_0_28px_rgba(0,170,255,0.28),inset_0_0_20px_rgba(0,170,255,0.08)] sm:h-24 sm:w-24">
+    <div className="relative flex h-20 w-20 shrink-0 items-center justify-center rounded-full border border-blue-300/60 bg-[#07111e] shadow-[0_0_28px_rgba(30,224,108,0.28),inset_0_0_20px_rgba(30,224,108,0.08)] sm:h-24 sm:w-24">
       <div className="absolute inset-[6px] rounded-full border border-white/10" />
 
       <div className="relative text-center">
@@ -113,11 +113,11 @@ export default function HowTeezWorksPage() {
   const router = useRouter();
 
   return (
-    <main className="min-h-screen overflow-x-hidden bg-[#020817] text-white">
+    <main className="min-h-screen overflow-x-hidden bg-[#07111e] text-white">
       {/* =========================================================
           TOP NAVIGATION
       ========================================================= */}
-      <header className="sticky top-0 z-50 border-b border-blue-400/15 bg-[#020817]/95 backdrop-blur-xl">
+      <header className="sticky top-0 z-50 border-b border-blue-400/15 bg-[#07111e]/95 backdrop-blur-xl">
         <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6">
           <button
             type="button"
@@ -134,7 +134,7 @@ export default function HowTeezWorksPage() {
           <button
             type="button"
             onClick={() => router.push("/dashboard")}
-            className="min-w-0 rounded-full border border-blue-300/70 bg-blue-500/10 px-4 py-2.5 text-[9px] font-black uppercase tracking-[0.12em] text-white shadow-[0_0_16px_rgba(0,170,255,0.28)] transition hover:bg-blue-500/20 sm:text-[10px]"
+            className="min-w-0 rounded-full border border-blue-300/70 bg-blue-500/10 px-4 py-2.5 text-[9px] font-black uppercase tracking-[0.12em] text-white shadow-[0_0_16px_rgba(30,224,108,0.28)] transition hover:bg-blue-500/20 sm:text-[10px]"
           >
             ENTER TEEZ
           </button>
@@ -149,7 +149,7 @@ export default function HowTeezWorksPage() {
 
         <div className="relative z-10 mx-auto w-full max-w-4xl">
           <img
-            src="/transparent.png"
+            src="/brand/teez-stadium-tile.png"
             alt="TEEZ Golf Challenges"
             className="mx-auto h-auto w-full max-w-[180px] object-contain sm:max-w-[230px]"
           />
@@ -167,18 +167,17 @@ export default function HowTeezWorksPage() {
           </p>
 
           <h1 className="mx-auto mt-4 max-w-3xl text-3xl font-black uppercase leading-[1.02] tracking-[-0.025em] text-white sm:text-5xl lg:text-6xl">
-            PLAY GOLF.
-            <span className="block text-blue-300">BUILD YOUR CAREER.</span>
+            REAL GOLF.
+            <span className="block text-blue-300">REAL STAKES.</span>
           </h1>
 
           <p className="mx-auto mt-5 max-w-xl text-sm leading-6 text-slate-400 sm:text-base sm:leading-7">
-            Your golf. Your results. Your progression. One connected TEEZ
-            career.
+            Real golfers. Verified scores. One connected TEEZ career.
           </p>
 
           <div className="mx-auto mt-8 flex w-full max-w-md items-center justify-center gap-2">
             <span className="h-px flex-1 bg-gradient-to-r from-transparent to-blue-400/50" />
-            <span className="h-2 w-2 rounded-full bg-blue-300 shadow-[0_0_15px_rgba(0,170,255,1)]" />
+            <span className="h-2 w-2 rounded-full bg-blue-300 shadow-[0_0_15px_rgba(30,224,108,1)]" />
             <span className="h-px flex-1 bg-gradient-to-l from-transparent to-blue-400/50" />
           </div>
         </div>
@@ -264,7 +263,7 @@ export default function HowTeezWorksPage() {
 
           {/* REWARD FLOW */}
           <div className="mx-auto mt-12 flex w-full max-w-md flex-col items-center">
-            <div className="w-full rounded-2xl border border-blue-300/30 bg-blue-500/10 px-5 py-5 text-center shadow-[0_0_30px_rgba(0,170,255,0.12)]">
+            <div className="w-full rounded-2xl border border-blue-300/30 bg-blue-500/10 px-5 py-5 text-center shadow-[0_0_30px_rgba(30,224,108,0.12)]">
               <p className="text-[9px] font-black tracking-[0.24em] text-blue-300">
                 START HERE
               </p>
@@ -290,8 +289,8 @@ export default function HowTeezWorksPage() {
             <div className="h-9 w-px bg-blue-300/50" />
             <div className="mb-1 text-lg text-blue-300">↓</div>
 
-            <div className="w-full rounded-2xl border border-blue-300/50 bg-[#071b38] px-5 py-6 text-center shadow-[0_0_32px_rgba(0,170,255,0.22)]">
-              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full border-2 border-blue-300 bg-blue-400/10 shadow-[0_0_25px_rgba(0,170,255,0.55)]">
+            <div className="w-full rounded-2xl border border-blue-300/50 bg-[#071b38] px-5 py-6 text-center shadow-[0_0_32px_rgba(30,224,108,0.22)]">
+              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full border-2 border-blue-300 bg-blue-400/10 shadow-[0_0_25px_rgba(30,224,108,0.55)]">
                 <span className="text-xl font-black text-blue-200">B</span>
               </div>
 
@@ -315,7 +314,7 @@ export default function HowTeezWorksPage() {
                 key={reward.number}
                 className="min-w-0 rounded-2xl border border-blue-300/20 bg-gradient-to-b from-blue-500/[0.08] to-white/[0.02] p-5 text-center sm:p-7"
               >
-                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full border border-blue-300/50 bg-[#061329] shadow-[0_0_22px_rgba(0,170,255,0.22)]">
+                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full border border-blue-300/50 bg-[#07111e] shadow-[0_0_22px_rgba(30,224,108,0.22)]">
                   <span className="text-lg font-black text-blue-200">
                     {reward.symbol}
                   </span>
@@ -341,7 +340,7 @@ export default function HowTeezWorksPage() {
       {/* =========================================================
           CAREER MESSAGE
       ========================================================= */}
-      <section className="border-y border-blue-300/15 bg-gradient-to-b from-[#06152d] to-[#020817] px-5 py-16 text-center sm:px-6 sm:py-24">
+      <section className="border-y border-blue-300/15 bg-gradient-to-b from-[#06152d] to-[#07111e] px-5 py-16 text-center sm:px-6 sm:py-24">
         <div className="mx-auto max-w-4xl">
           <p className="text-[9px] font-black uppercase tracking-[0.28em] text-blue-300">
             YOUR GOLF HAS PURPOSE
@@ -385,7 +384,7 @@ export default function HowTeezWorksPage() {
       <section className="px-5 py-16 text-center sm:px-6 sm:py-20">
         <div className="mx-auto w-full max-w-xl">
           <img
-            src="/transparent.png"
+            src="/brand/teez-stadium-tile.png"
             alt="TEEZ Golf Challenges"
             className="mx-auto h-auto w-full max-w-[130px] object-contain"
           />
@@ -410,7 +409,7 @@ export default function HowTeezWorksPage() {
             <button
               type="button"
               onClick={() => router.push("/register")}
-              className="min-w-0 w-full rounded-full border border-blue-300 bg-blue-500/15 px-5 py-4 text-xs font-black uppercase tracking-[0.1em] text-white shadow-[0_0_22px_rgba(0,170,255,0.3)] transition hover:bg-blue-500/25"
+              className="min-w-0 w-full rounded-full border border-blue-300 bg-blue-500/15 px-5 py-4 text-xs font-black uppercase tracking-[0.1em] text-white shadow-[0_0_22px_rgba(30,224,108,0.3)] transition hover:bg-blue-500/25"
             >
               JOIN TEEZ
             </button>

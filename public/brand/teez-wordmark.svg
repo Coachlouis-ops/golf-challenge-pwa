@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 72" role="img" aria-labelledby="teezWordmarkTitle">
+  <title id="teezWordmarkTitle">TEEZ</title>
+  <rect x="2" y="8" width="56" height="56" rx="14" fill="#E4FF3A"/>
+  <path d="M18 50V18h3.4v9.2h18.2l-5.2 7.3 5.2 7.3H21.4V50H18z" fill="#10200C"/>
+  <circle cx="42" cy="22" r="2.3" fill="#10200C"/>
+  <text x="72" y="50" fill="#F4F8F2" font-family="Arial Black, Impact, sans-serif" font-size="42" letter-spacing="2">TEEZ</text>
+</svg>

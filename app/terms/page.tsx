@@ -725,7 +725,7 @@ export default function TermsPage() {
             onClick={() => router.push("/register")}
             className={`w-full py-4 rounded-2xl font-semibold text-lg ${
               accepted
-                ? "bg-[#00ff88] text-black shadow-[0_0_15px_#00ff88]"
+                ? "bg-[#1ee06c] text-black shadow-[0_0_15px_#1ee06c]"
                 : "bg-gray-700 text-gray-400 cursor-not-allowed"
             }`}
           >

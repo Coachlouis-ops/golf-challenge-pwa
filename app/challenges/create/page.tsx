@@ -699,9 +699,9 @@ CREATE GROUP CHALLENGE
   placeholder:text-cyan-300
   placeholder:font-bold
   outline-none
-  shadow-[0_0_20px_rgba(34,211,238,0.55)]
+  shadow-[0_0_20px_rgba(30,224,108,0.55)]
   focus:border-cyan-300
-  focus:shadow-[0_0_35px_rgba(34,211,238,0.9)]
+  focus:shadow-[0_0_35px_rgba(30,224,108,0.9)]
   transition-all duration-300
 "
 />
@@ -725,9 +725,9 @@ CREATE GROUP CHALLENGE
       placeholder:text-cyan-300
       placeholder:font-bold
       outline-none
-      shadow-[0_0_20px_rgba(34,211,238,0.55)]
+      shadow-[0_0_20px_rgba(30,224,108,0.55)]
       focus:border-cyan-300
-      focus:shadow-[0_0_35px_rgba(34,211,238,0.9)]
+      focus:shadow-[0_0_35px_rgba(30,224,108,0.9)]
       transition-all duration-300
     "
   />
@@ -738,7 +738,7 @@ CREATE GROUP CHALLENGE
       placeholder="Front 9 Tokens"
       value={nassauFront9Tokens}
       onChange={(e) => setNassauFront9Tokens(e.target.value)}
-      className="bg-black border-2 border-cyan-400 rounded-xl px-5 py-5 text-lg font-bold text-white placeholder:text-cyan-300 outline-none shadow-[0_0_20px_rgba(34,211,238,0.55)]"
+      className="bg-black border-2 border-cyan-400 rounded-xl px-5 py-5 text-lg font-bold text-white placeholder:text-cyan-300 outline-none shadow-[0_0_20px_rgba(30,224,108,0.55)]"
     />
 
     <input
@@ -746,7 +746,7 @@ CREATE GROUP CHALLENGE
       placeholder="Back 9 Tokens"
       value={nassauBack9Tokens}
       onChange={(e) => setNassauBack9Tokens(e.target.value)}
-      className="bg-black border-2 border-cyan-400 rounded-xl px-5 py-5 text-lg font-bold text-white placeholder:text-cyan-300 outline-none shadow-[0_0_20px_rgba(34,211,238,0.55)]"
+      className="bg-black border-2 border-cyan-400 rounded-xl px-5 py-5 text-lg font-bold text-white placeholder:text-cyan-300 outline-none shadow-[0_0_20px_rgba(30,224,108,0.55)]"
     />
 
     <input
@@ -754,7 +754,7 @@ CREATE GROUP CHALLENGE
       placeholder="Overall Game Tokens"
       value={nassauGameTokens}
       onChange={(e) => setNassauGameTokens(e.target.value)}
-      className="bg-black border-2 border-cyan-400 rounded-xl px-5 py-5 text-lg font-bold text-white placeholder:text-cyan-300 outline-none shadow-[0_0_20px_rgba(34,211,238,0.55)]"
+      className="bg-black border-2 border-cyan-400 rounded-xl px-5 py-5 text-lg font-bold text-white placeholder:text-cyan-300 outline-none shadow-[0_0_20px_rgba(30,224,108,0.55)]"
     />
 
     <input
@@ -762,7 +762,7 @@ CREATE GROUP CHALLENGE
       placeholder="Units Tokens"
       value={nassauUnitsTokens}
       onChange={(e) => setNassauUnitsTokens(e.target.value)}
-      className="bg-black border-2 border-cyan-400 rounded-xl px-5 py-5 text-lg font-bold text-white placeholder:text-cyan-300 outline-none shadow-[0_0_20px_rgba(34,211,238,0.55)]"
+      className="bg-black border-2 border-cyan-400 rounded-xl px-5 py-5 text-lg font-bold text-white placeholder:text-cyan-300 outline-none shadow-[0_0_20px_rgba(30,224,108,0.55)]"
     />
 
     <div className="sm:col-span-2 border border-green-400/30 bg-green-500/10 rounded-xl p-4 text-center">
@@ -806,7 +806,7 @@ CREATE GROUP CHALLENGE
           tracking-wide
           hover:bg-cyan-400
           hover:text-black
-          hover:shadow-[0_0_25px_rgba(34,211,238,0.6)]
+          hover:shadow-[0_0_25px_rgba(30,224,108,0.6)]
           transition-all
         "
       >
@@ -834,9 +834,9 @@ CREATE GROUP CHALLENGE
     placeholder:text-cyan-300
     placeholder:font-bold
     outline-none
-    shadow-[0_0_20px_rgba(34,211,238,0.55)]
+    shadow-[0_0_20px_rgba(30,224,108,0.55)]
     focus:border-cyan-300
-    focus:shadow-[0_0_35px_rgba(34,211,238,0.9)]
+    focus:shadow-[0_0_35px_rgba(30,224,108,0.9)]
     transition-all duration-300
   "
   onSelect={(course) => {

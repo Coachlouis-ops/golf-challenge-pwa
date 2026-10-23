@@ -7,7 +7,7 @@ export default function RedeemPage() {
 
   return (
     <main className="min-h-screen bg-black text-white flex flex-col items-center justify-center px-6">
-      <div className="w-full max-w-md border border-cyan-400/30 bg-[#071017] p-8 text-center">
+      <div className="w-full max-w-md border border-cyan-400/30 bg-[#0e1c34] p-8 text-center">
         <h1 className="text-2xl font-black text-cyan-300">
           TEEZ Rewards
         </h1>

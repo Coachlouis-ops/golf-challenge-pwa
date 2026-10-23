@@ -144,7 +144,7 @@ className="min-w-0 w-full rounded-sm bg-[#d6b56c] px-4 py-4 text-xs font-black t
             {/* LIVE SCORING BOARD */}
            <div className="relative min-w-0">
               <div className="relative min-w-0 w-full max-w-full overflow-hidden">
-  <div className="min-w-0 w-full max-w-full overflow-hidden border border-[#d6b56c]/40 bg-[#0b271c]/95 shadow-2xl">
+  <div className="min-w-0 w-full max-w-full overflow-hidden border border-[#d6b56c]/40 bg-[#0e1c34]/95 shadow-2xl">
                <div className="border-b border-white/10 px-4 py-4 sm:flex sm:items-center sm:justify-between sm:px-5">
   <div className="min-w-0">
     <p className="text-[9px] font-bold tracking-[0.22em] text-[#d6b56c] sm:text-[10px] sm:tracking-[0.28em]">
@@ -157,12 +157,12 @@ className="min-w-0 w-full rounded-sm bg-[#d6b56c] px-4 py-4 text-xs font-black t
   </div>
 
   <div className="mt-3 flex items-center gap-2 text-[10px] font-bold sm:mt-0 sm:text-xs">
-    <span className="h-2 w-2 animate-pulse rounded-full bg-red-500" />
+    <span className="stadium-live-dot" />
     LIVE
   </div>
 </div>
 
-            <div className="grid w-full grid-cols-[12%_52%_18%_18%] border-b border-white/10 bg-[#06160f] px-3 py-3 text-[8px] font-bold tracking-normal text-white/45 sm:grid-cols-[45px_1fr_55px_45px] sm:px-4 sm:text-[10px] sm:tracking-[0.18em]">
+            <div className="grid w-full grid-cols-[12%_52%_18%_18%] border-b border-white/10 bg-[#0c1830] px-3 py-3 text-[8px] font-bold tracking-normal text-white/45 sm:grid-cols-[45px_1fr_55px_45px] sm:px-4 sm:text-[10px] sm:tracking-[0.18em]">
                   <span>POS</span>
                   <span>TEAM</span>
                   <span className="text-right">PTS</span>
@@ -320,7 +320,7 @@ className="min-w-0 w-full rounded-sm bg-[#d6b56c] px-4 py-4 text-xs font-black t
 
           {/* SCORECARD MOCKUP */}
           <div className="mx-auto w-full max-w-[430px] rounded-[34px] border-[8px] border-[#161a17] bg-[#f4f1e8] p-4 text-[#071c13] shadow-2xl">
-            <div className="rounded-[22px] bg-[#0b271c] p-5 text-white">
+            <div className="rounded-[22px] bg-[#0e1c34] p-5 text-white">
               <p className="text-[10px] font-black tracking-[0.25em] text-[#d6b56c]">
                 LIVE SCORECARD
               </p>
@@ -371,7 +371,7 @@ className="min-w-0 w-full rounded-sm bg-[#d6b56c] px-4 py-4 text-xs font-black t
               </div>
             ))}
 
-            <div className="mt-4 flex items-center justify-between bg-[#0b271c] px-5 py-4 text-white">
+            <div className="mt-4 flex items-center justify-between bg-[#0e1c34] px-5 py-4 text-white">
               <span className="text-xs font-black tracking-[0.15em]">
                 TEAM TOTAL
               </span>
@@ -390,7 +390,7 @@ className="min-w-0 w-full rounded-sm bg-[#d6b56c] px-4 py-4 text-xs font-black t
         <div className="mx-auto max-w-7xl">
           <div className="max-w-4xl">
             <div className="mb-5 flex items-center gap-3">
-              <span className="h-2.5 w-2.5 animate-pulse rounded-full bg-red-500" />
+              <span className="stadium-live-dot" />
               <span className="text-xs font-black tracking-[0.3em] text-red-400">
                 LIVE
               </span>

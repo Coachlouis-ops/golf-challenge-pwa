@@ -1260,7 +1260,7 @@ return (
     py-4
     rounded-2xl
     font-bold
-    shadow-[0_0_25px_rgba(34,211,238,0.7)]
+    shadow-[0_0_25px_rgba(30,224,108,0.7)]
     disabled:opacity-30
     disabled:cursor-not-allowed
   "
@@ -1593,7 +1593,7 @@ return (
         py-3
         rounded-2xl
         font-bold
-        shadow-[0_0_25px_rgba(34,211,238,0.7)]
+        shadow-[0_0_25px_rgba(30,224,108,0.7)]
       "
     >
       GENERATE TEE SHEET

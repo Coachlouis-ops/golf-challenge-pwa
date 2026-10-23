@@ -173,7 +173,7 @@ export default function JK6CompaniesPage() {
               JK6 Company Scorecards
             </h1>
 
-            <p className="text-cyan-300 font-black mt-2 animate-pulse drop-shadow-[0_0_14px_rgba(34,211,238,1)]">
+            <p className="text-cyan-300 font-black mt-2 animate-pulse drop-shadow-[0_0_14px_rgba(30,224,108,1)]">
               Select your company to open your scorecard
             </p>
           </div>
@@ -200,7 +200,7 @@ export default function JK6CompaniesPage() {
                   p-4
                   text-left
                   hover:border-cyan-300
-                  hover:shadow-[0_0_20px_rgba(34,211,238,0.35)]
+                  hover:shadow-[0_0_20px_rgba(30,224,108,0.35)]
                   transition
                 "
               >
@@ -250,7 +250,7 @@ export default function JK6CompaniesPage() {
 
       {selectedTeam && (
         <div className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center px-4">
-          <div className="w-full max-w-[420px] bg-neutral-950 border border-cyan-400/40 rounded-3xl p-6 shadow-[0_0_35px_rgba(34,211,238,0.25)]">
+          <div className="w-full max-w-[420px] bg-neutral-950 border border-cyan-400/40 rounded-3xl p-6 shadow-[0_0_35px_rgba(30,224,108,0.25)]">
             <p className="text-xs tracking-[0.3em] text-cyan-300 font-black">
               COMPANY SCORECARD
             </p>

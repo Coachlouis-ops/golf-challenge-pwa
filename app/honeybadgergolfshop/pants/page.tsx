@@ -18,7 +18,7 @@ export default function PantsPage() {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   return (
-    <main className="relative text-white min-h-screen overflow-hidden bg-[#050816]">
+    <main className="relative text-white min-h-screen overflow-hidden bg-[#07111e]">
 
       {/* HERO IMAGE */}
       <div className="relative w-full h-[400px]">

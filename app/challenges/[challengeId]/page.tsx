@@ -502,7 +502,7 @@ const canFinalize =
         <div className="flex justify-end">
           <button
             onClick={handleRefresh}
-            className="bg-cyan-300 text-black px-5 py-3 rounded-xl font-black shadow-[0_0_24px_rgba(34,211,238,0.5)] hover:bg-cyan-200 hover:scale-[1.02] transition"
+            className="bg-cyan-300 text-black px-5 py-3 rounded-xl font-black shadow-[0_0_24px_rgba(30,224,108,0.5)] hover:bg-cyan-200 hover:scale-[1.02] transition"
           >
             Refresh
           </button>
@@ -645,7 +645,7 @@ const canFinalize =
           )}
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 rounded-3xl border-2 border-blue-400/80 bg-blue-950/35 p-5 shadow-[0_0_30px_rgba(59,130,246,0.22)]">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 rounded-3xl border-2 border-blue-400/80 bg-blue-950/35 p-5 shadow-[0_0_30px_rgba(30,224,108,0.22)]">
           <p>
             <strong>Course:</strong> {challenge.courseName}
           </p>
@@ -668,7 +668,7 @@ const canFinalize =
 
       {/* INVITE SECTION */}
 {isCreator && (
-<div className="border-2 border-blue-400 bg-gradient-to-br from-blue-950/80 via-indigo-950/70 to-black rounded-3xl p-5 sm:p-6 flex flex-col gap-4 shadow-[0_0_38px_rgba(59,130,246,0.32)]">
+<div className="border-2 border-blue-400 bg-gradient-to-br from-blue-950/80 via-indigo-950/70 to-black rounded-3xl p-5 sm:p-6 flex flex-col gap-4 shadow-[0_0_38px_rgba(30,224,108,0.32)]">
 
          <div>
   <div className="text-red-400 text-xs tracking-[0.25em] font-extrabold">
@@ -1066,7 +1066,7 @@ const canFinalize =
 )}
 
 {/* PLAYER SUMMARY */}
-<div className="border-2 border-cyan-400/80 bg-gradient-to-br from-cyan-950/70 via-blue-950/70 to-black rounded-3xl p-5 shadow-[0_0_35px_rgba(34,211,238,0.28)]">
+<div className="border-2 border-cyan-400/80 bg-gradient-to-br from-cyan-950/70 via-blue-950/70 to-black rounded-3xl p-5 shadow-[0_0_35px_rgba(30,224,108,0.28)]">
   <div className="flex items-center justify-between gap-3 mb-4">
     <div>
       <div className="text-cyan-300 text-xs tracking-[0.25em] font-black">

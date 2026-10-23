@@ -637,14 +637,14 @@ if (!confirmed) return;
 
       {/* CONTENT */}
       <div className="relative z-10 flex flex-col items-center gap-6 w-full max-w-5xl">
-        <h1 className="text-4xl font-bold mb-4 text-cyan-400 drop-shadow-[0_0_15px_#00f0ff]">
+        <h1 className="text-4xl font-bold mb-4 text-cyan-400 drop-shadow-[0_0_15px_#1ee06c]">
           ADMIN DASHBOARD
         </h1>
 
         <button
           onClick={() => router.push("/admin/redemptions")}
           className="w-[320px] px-10 py-4 text-lg font-bold rounded-xl bg-cyan-400 text-black 
-          shadow-[0_0_20px_#00f0ff] hover:shadow-[0_0_40px_#00f0ff] 
+          shadow-[0_0_20px_#1ee06c] hover:shadow-[0_0_40px_#1ee06c] 
           animate-pulse transition-all duration-300"
         >
           TOKEN REDEMPTION REQUESTS
@@ -692,8 +692,8 @@ if (!confirmed) return;
           onClick={() => router.push("/admin/events")}
           className="w-full max-w-[320px] px-4 py-4 text-base sm:text-lg font-bold rounded-xl
           bg-blue-500 text-white
-          shadow-[0_0_20px_rgba(59,130,246,0.65)]
-          hover:shadow-[0_0_40px_rgba(59,130,246,0.9)]
+          shadow-[0_0_20px_rgba(30,224,108,0.65)]
+          hover:shadow-[0_0_40px_rgba(30,224,108,0.9)]
           transition-all duration-300"
         >
           EVENTS & FINALS MANAGEMENT
@@ -841,7 +841,7 @@ if (!confirmed) return;
   Character Image
 </label>
 
-<label className="mt-2 flex w-full cursor-pointer items-center justify-center rounded-xl border-2 border-cyan-400 bg-cyan-400 px-4 py-4 text-sm font-black text-black shadow-[0_0_20px_rgba(34,211,238,0.5)] transition hover:bg-cyan-300">
+<label className="mt-2 flex w-full cursor-pointer items-center justify-center rounded-xl border-2 border-cyan-400 bg-cyan-400 px-4 py-4 text-sm font-black text-black shadow-[0_0_20px_rgba(30,224,108,0.5)] transition hover:bg-cyan-300">
   + SELECT BATTLE CHARACTER IMAGE
 
   <input

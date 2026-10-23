@@ -61,7 +61,7 @@ export default function VerifyEmailPage() {
         type="button"
         onClick={resendEmail}
         disabled={!user || sending}
-        className="w-full max-w-md px-6 py-3 rounded-xl bg-[#00ff88] text-black font-semibold mb-4 disabled:opacity-40"
+        className="w-full max-w-md px-6 py-3 rounded-xl bg-[#1ee06c] text-black font-semibold mb-4 disabled:opacity-40"
       >
         {sending ? "Sending..." : "Resend Verification Email"}
       </button>
@@ -69,7 +69,7 @@ export default function VerifyEmailPage() {
       <button
         type="button"
         onClick={() => router.push("/login")}
-        className="w-full max-w-md px-6 py-3 rounded-xl bg-[#00ff88] text-black font-semibold"
+        className="w-full max-w-md px-6 py-3 rounded-xl bg-[#1ee06c] text-black font-semibold"
       >
         Continue to Login
       </button>

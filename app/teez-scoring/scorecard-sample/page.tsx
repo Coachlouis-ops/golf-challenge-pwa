@@ -920,7 +920,7 @@ async function reopenScorecard() {
               JK6 Annual Fundraiser Golf Day 2026
             </h1>
 
-            <p className="text-lg font-black text-cyan-300 mt-3 animate-pulse drop-shadow-[0_0_14px_rgba(34,211,238,1)]">
+            <p className="text-lg font-black text-cyan-300 mt-3 animate-pulse drop-shadow-[0_0_14px_rgba(30,224,108,1)]">
               4 Ball Alliance · Scramble Drive · Mystery Count
             </p>
           </div>

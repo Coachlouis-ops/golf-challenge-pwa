@@ -694,7 +694,7 @@ export default function PrivacyPolicyPage() {
             <button
               type="button"
               onClick={() => router.back()}
-              className="w-full py-4 rounded-2xl font-semibold text-lg bg-[#00ff88] text-black shadow-[0_0_15px_#00ff88] mt-4"
+              className="w-full py-4 rounded-2xl font-semibold text-lg bg-[#1ee06c] text-black shadow-[0_0_15px_#1ee06c] mt-4"
             >
               Back
             </button>

@@ -136,7 +136,7 @@ const unsubUser = onSnapshot(userRef, (snap) => {
             Play Tokens Balance
           </p>
 
-         <p className="text-6xl font-bold text-green-400 mt-3 drop-shadow-[0_0_12px_#00ff88]">
+         <p className="text-6xl font-bold text-green-400 mt-3 drop-shadow-[0_0_12px_#1ee06c]">
   {participationActive ? balance : 0}
 </p>
 

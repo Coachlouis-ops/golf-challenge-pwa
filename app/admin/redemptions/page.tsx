@@ -181,7 +181,7 @@ const highValueRequests =
   p-6 rounded-3xl
   border border-cyan-400/20
   bg-gradient-to-br from-zinc-900 to-black
-  shadow-[0_0_35px_rgba(34,211,238,0.12)]
+  shadow-[0_0_35px_rgba(30,224,108,0.12)]
   flex flex-col xl:flex-row
   justify-between gap-6
 "
@@ -320,7 +320,7 @@ const highValueRequests =
         font-extrabold tracking-wide
         hover:bg-cyan-400
         hover:scale-[1.02]
-        shadow-[0_0_25px_rgba(34,211,238,0.45)]
+        shadow-[0_0_25px_rgba(30,224,108,0.45)]
         transition-all
       "
     >

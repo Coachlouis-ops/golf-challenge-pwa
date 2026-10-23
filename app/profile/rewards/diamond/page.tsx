@@ -199,7 +199,7 @@ export default function DiamondVaultPage() {
   );
 
   return (
-    <main className="min-h-screen bg-[#eef1f4] text-[#111827]">
+    <main className="min-h-screen bg-[#eef1f4] text-[#0c1830]">
       <div className="mx-auto max-w-md pb-14">
 
         {/* HEADER */}
@@ -235,7 +235,7 @@ export default function DiamondVaultPage() {
 
           {/* HERO */}
 
-          <section className="overflow-hidden border border-[#607887] bg-[#0d1821] shadow-[0_8px_22px_rgba(15,23,42,0.16)]">
+          <section className="overflow-hidden border border-[#607887] bg-[#0e1c34] shadow-[0_8px_22px_rgba(15,23,42,0.16)]">
 
             <div className="flex items-start gap-4 border-b border-white/10 p-5">
 
@@ -429,7 +429,7 @@ export default function DiamondVaultPage() {
                 </p>
               </div>
 
-              <div className="border-t border-[#c9b37a] bg-[#0d1821] px-5 py-4">
+              <div className="border-t border-[#c9b37a] bg-[#0e1c34] px-5 py-4">
                 <p className="text-xs font-black uppercase tracking-[0.14em] text-white">
                   Career Vault Complete
                 </p>
@@ -584,11 +584,11 @@ function CoinRevealModal({
     coin.rewardType === "racePoints";
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#07100c]/90 px-6 backdrop-blur-sm">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#07111e]/90 px-6 backdrop-blur-sm">
 
       <div className="w-full max-w-sm overflow-hidden border border-[#92a8b5] bg-white shadow-[0_24px_70px_rgba(0,0,0,0.4)]">
 
-        <div className="bg-[#0d1821] px-6 py-5 text-center">
+        <div className="bg-[#0e1c34] px-6 py-5 text-center">
           <p className="text-[9px] font-black uppercase tracking-[0.22em] text-[#c5d3dc]">
             Diamond Vault · Coin {coin.coinNumber}
           </p>

@@ -117,7 +117,7 @@ const handleExit = () => {
       onClick={() => router.push("/honeybadgergolfshop")}
       className="px-6 py-2 rounded-xl text-sm font-semibold 
       bg-cyan-400 text-black 
-      shadow-[0_0_20px_rgba(34,211,238,1)] 
+      shadow-[0_0_20px_rgba(30,224,108,1)] 
       animate-pulse hover:scale-110 transition"
     >
       Honey Badger Golf Shop

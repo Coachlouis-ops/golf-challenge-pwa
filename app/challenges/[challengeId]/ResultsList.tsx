@@ -80,13 +80,19 @@ export default function ResultsList({
           </tr>
         </thead>
         <tbody>
-          {rows.map((r) => (
+          {rows.map((r) => {
+            const value = getDisplayValue(r);
+
+            return (
             <tr key={r.uid} className="border-t">
               <td className="p-2">{r.position ?? "—"}</td>
               <td className="p-2">{r.displayName ?? r.uid}</td>
-              <td className="p-2">{getDisplayValue(r)}</td>
+              <td className={value === "Win" ? "stadium-win p-2" : "p-2"}>
+                {value}
+              </td>
             </tr>
-          ))}
+            );
+          })}
         </tbody>
       </table>
     </div>

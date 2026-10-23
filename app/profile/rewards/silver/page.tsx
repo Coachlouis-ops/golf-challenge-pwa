@@ -231,7 +231,7 @@ export default function SilverVaultPage() {
 
   return (
 
-    <main className="min-h-screen bg-[#eef1f4] text-[#111827]">
+    <main className="min-h-screen bg-[#eef1f4] text-[#0c1830]">
 
       <div className="mx-auto max-w-md pb-14">
 
@@ -274,7 +274,7 @@ export default function SilverVaultPage() {
 
           {/* HERO */}
 
-          <section className="overflow-hidden border border-[#7b8490] bg-[#111820] shadow-[0_8px_22px_rgba(15,23,42,0.16)]">
+          <section className="overflow-hidden border border-[#7b8490] bg-[#0c1830] shadow-[0_8px_22px_rgba(15,23,42,0.16)]">
 
             <div className="flex items-start gap-4 border-b border-white/10 p-5">
 
@@ -361,7 +361,7 @@ export default function SilverVaultPage() {
               Silver Vault Feature
             </p>
 
-            <h3 className="mt-1 text-base font-black text-[#111827]">
+            <h3 className="mt-1 text-base font-black text-[#0c1830]">
               Race to Final Rewards Active
             </h3>
 
@@ -515,7 +515,7 @@ export default function SilverVaultPage() {
                 onClick={() =>
                   router.push("/profile/rewards")
                 }
-                className="w-full border-t border-[#c9b37a] bg-[#0d1821] py-4 text-xs font-black uppercase tracking-[0.14em] text-white"
+                className="w-full border-t border-[#c9b37a] bg-[#0e1c34] py-4 text-xs font-black uppercase tracking-[0.14em] text-white"
               >
                 Continue to Gold Vault
               </button>
@@ -697,7 +697,7 @@ function CoinRevealModal({
 
   return (
 
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#07100c]/90 px-6 backdrop-blur-sm">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#07111e]/90 px-6 backdrop-blur-sm">
 
       <div className={`w-full max-w-sm overflow-hidden border bg-white shadow-[0_24px_70px_rgba(0,0,0,0.4)] ${
         isRaceReward
@@ -705,7 +705,7 @@ function CoinRevealModal({
           : "border-[#9ca3af]"
       }`}>
 
-        <div className="bg-[#111820] px-6 py-5 text-center">
+        <div className="bg-[#0c1830] px-6 py-5 text-center">
 
           <p className="text-[9px] font-black uppercase tracking-[0.22em] text-[#c4c8cd]">
             Silver Vault · Coin {coin.coinNumber}

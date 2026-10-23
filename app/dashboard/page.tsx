@@ -164,16 +164,16 @@ return (
         <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/90" />
 
         {/* NEON ATMOSPHERE */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,rgba(0,170,255,0.17),transparent_35%),radial-gradient(circle_at_80%_30%,rgba(140,255,0,0.16),transparent_35%),radial-gradient(circle_at_50%_75%,rgba(168,85,247,0.13),transparent_40%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,rgba(30,224,108,0.17),transparent_35%),radial-gradient(circle_at_80%_30%,rgba(140,255,0,0.16),transparent_35%),radial-gradient(circle_at_50%_75%,rgba(168,85,247,0.13),transparent_40%)]" />
       </div>
 
       <main className="relative z-10 w-full max-w-md mx-auto px-5 pb-12">
 
         {/* LOGO */}
         <div className="flex justify-center pt-6 pb-2">
-          <div className="relative w-[230px] h-[230px] drop-shadow-[0_0_35px_rgba(0,170,255,0.75)]">
+          <div className="relative w-[230px] h-[230px] drop-shadow-[0_0_35px_rgba(30,224,108,0.75)]">
             <Image
-              src="/transparent.png"
+              src="/brand/teez-stadium-tile.png"
               alt="Teez Golf Challenges"
               fill
               priority
@@ -188,7 +188,7 @@ return (
     PLAY. MOVE. UNLOCK.
   </p>
 
-  <p className="mt-2 text-[10px] tracking-[3px] font-black text-cyan-300 uppercase drop-shadow-[0_0_12px_rgba(34,211,238,1)]">
+  <p className="mt-2 text-[10px] tracking-[3px] font-black text-cyan-300 uppercase drop-shadow-[0_0_12px_rgba(30,224,108,1)]">
     EVERY ROUND MOVES YOU CLOSER
   </p>
 </div>
@@ -230,7 +230,7 @@ return (
 
           {/* NOT LOGGED IN */}
           {!user && (
-            <div className="glass-panel border-cyan-400 shadow-[0_0_35px_rgba(34,211,238,0.35)]">
+            <div className="glass-panel border-cyan-400 shadow-[0_0_35px_rgba(30,224,108,0.35)]">
               <p className="text-cyan-300 font-extrabold tracking-wide text-center">
                 EXPLORE THE FULL TEEZ DASHBOARD
               </p>
@@ -521,7 +521,7 @@ return (
       {lockedFeature && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 px-6">
 
-          <div className="relative w-full max-w-sm overflow-hidden rounded-3xl border-2 border-cyan-400/70 bg-black/95 p-6 text-center shadow-[0_0_55px_rgba(34,211,238,0.45)]">
+          <div className="relative w-full max-w-sm overflow-hidden rounded-3xl border-2 border-cyan-400/70 bg-black/95 p-6 text-center shadow-[0_0_55px_rgba(30,224,108,0.45)]">
 
             <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 via-purple-500/10 to-lime-500/10 pointer-events-none" />
 
@@ -682,12 +682,12 @@ return (
         }
 
         .neon-cyan {
-          border: 2px solid #22d3ee;
+          border: 2px solid #1ee06c;
           box-shadow:
-            0 0 10px rgba(34, 211, 238, 0.9),
-            0 0 24px rgba(34, 211, 238, 0.48),
-            inset 0 0 12px rgba(34, 211, 238, 0.12);
-          text-shadow: 0 0 8px #22d3ee;
+            0 0 10px rgba(30, 224, 108, 0.9),
+            0 0 24px rgba(30, 224, 108, 0.48),
+            inset 0 0 12px rgba(30, 224, 108, 0.12);
+          text-shadow: 0 0 8px #1ee06c;
         }
 
         .neon-green {

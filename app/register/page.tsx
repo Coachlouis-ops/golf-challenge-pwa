@@ -148,7 +148,7 @@ export default function RegisterPage() {
         disabled={loading || !accepted}
         className={`w-full max-w-md py-4 rounded-2xl font-semibold text-lg transition ${
           accepted && !loading
-            ? "bg-[#00ff88] text-black shadow-[0_0_15px_#00ff88]"
+            ? "bg-[#1ee06c] text-black shadow-[0_0_15px_#1ee06c]"
             : "bg-gray-700 text-gray-400 cursor-not-allowed"
         }`}
       >

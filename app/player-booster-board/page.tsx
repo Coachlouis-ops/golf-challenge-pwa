@@ -322,16 +322,16 @@ export default function PlayerBoosterBoard() {
 
         <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/95" />
 
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_25%,rgba(0,170,255,0.17),transparent_35%),radial-gradient(circle_at_80%_30%,rgba(140,255,0,0.14),transparent_35%),radial-gradient(circle_at_50%_75%,rgba(168,85,247,0.13),transparent_40%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_25%,rgba(30,224,108,0.17),transparent_35%),radial-gradient(circle_at_80%_30%,rgba(140,255,0,0.14),transparent_35%),radial-gradient(circle_at_50%_75%,rgba(168,85,247,0.13),transparent_40%)]" />
       </div>
 
       <main className="relative z-10 mx-auto w-full max-w-md px-4 pb-12">
 
         {/* LOGO */}
         <div className="flex justify-center pt-5">
-          <div className="relative h-[150px] w-[150px] drop-shadow-[0_0_30px_rgba(0,170,255,0.75)]">
+          <div className="relative h-[150px] w-[150px] drop-shadow-[0_0_30px_rgba(30,224,108,0.75)]">
             <Image
-              src="/transparent.png"
+              src="/brand/teez-stadium-tile.png"
               alt="Teez Golf Challenges"
               fill
               priority
@@ -369,7 +369,7 @@ export default function PlayerBoosterBoard() {
         <section className="mb-6">
           <div className="relative overflow-hidden rounded-3xl border-2 border-lime-300/70 bg-black/90 px-5 py-6 shadow-[0_0_45px_rgba(163,230,53,0.28)]">
 
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(163,230,53,0.14),transparent_45%),radial-gradient(circle_at_50%_100%,rgba(34,211,238,0.12),transparent_45%)] pointer-events-none" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(163,230,53,0.14),transparent_45%),radial-gradient(circle_at_50%_100%,rgba(30,224,108,0.12),transparent_45%)] pointer-events-none" />
 
             <div className="relative z-10">
 
@@ -412,13 +412,13 @@ export default function PlayerBoosterBoard() {
 
                 <div className="mt-5 flex items-center gap-3">
 
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-cyan-300 bg-cyan-300 text-xs font-black text-black shadow-[0_0_18px_rgba(34,211,238,0.8)]">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-cyan-300 bg-cyan-300 text-xs font-black text-black shadow-[0_0_18px_rgba(30,224,108,0.8)]">
                     YOU
                   </div>
 
                   <div className="relative h-5 min-w-0 flex-1 overflow-hidden rounded-full border border-white/20 bg-black">
                     <div
-                      className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-cyan-400 via-purple-400 to-lime-300 shadow-[0_0_18px_rgba(34,211,238,0.9)] transition-all duration-700"
+                      className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-cyan-400 via-purple-400 to-lime-300 shadow-[0_0_18px_rgba(30,224,108,0.9)] transition-all duration-700"
                       style={{
                         width: `${winningProgress}%`,
                       }}
@@ -517,7 +517,7 @@ export default function PlayerBoosterBoard() {
             )}
           </div>
 
-          <div className="rounded-2xl border border-cyan-400/40 bg-black/80 p-3 shadow-[0_0_30px_rgba(34,211,238,0.18)]">
+          <div className="rounded-2xl border border-cyan-400/40 bg-black/80 p-3 shadow-[0_0_30px_rgba(30,224,108,0.18)]">
 
             {revealedBall && (
               <div
@@ -675,7 +675,7 @@ function BoosterPosition({
         opened
           ? "cursor-default border-amber-400/60 bg-amber-300 opacity-80 shadow-[0_0_10px_rgba(251,191,36,0.25)]"
           : available
-          ? "border-cyan-300/70 bg-white shadow-[0_0_12px_rgba(34,211,238,0.35)] active:scale-95"
+          ? "border-cyan-300/70 bg-white shadow-[0_0_12px_rgba(30,224,108,0.35)] active:scale-95"
           : "cursor-default border-slate-600 bg-slate-300 opacity-55"
       }`}
     >

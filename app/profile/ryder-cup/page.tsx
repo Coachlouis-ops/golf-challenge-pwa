@@ -83,9 +83,9 @@ export default function RyderCupPage() {
     : null;
 
   return (
-    <main className="min-h-screen bg-[#030608] text-white">
+    <main className="min-h-screen bg-[#07111e] text-white">
       <div className="mx-auto max-w-md pb-16">
-        <header className="sticky top-0 z-30 border-b border-cyan-400/30 bg-[#030608]/95 px-5 py-3 backdrop-blur-xl">
+        <header className="sticky top-0 z-30 border-b border-cyan-400/30 bg-[#07111e]/95 px-5 py-3 backdrop-blur-xl">
           <div className="flex items-center justify-between">
             <button type="button" onClick={() => router.back()} aria-label="Go back"
               className="flex h-10 w-10 items-center justify-center border border-cyan-400/30 bg-cyan-400/[0.05] text-2xl font-black text-cyan-300">‹</button>
@@ -98,7 +98,7 @@ export default function RyderCupPage() {
         </header>
 
         <div className="space-y-6 px-4 pt-5">
-          <section className="border border-cyan-400/40 bg-[#071017] p-5 text-center shadow-[0_0_32px_rgba(34,211,238,0.12)]">
+          <section className="border border-cyan-400/40 bg-[#0e1c34] p-5 text-center shadow-[0_0_32px_rgba(30,224,108,0.12)]">
             <p className="text-[10px] font-black uppercase tracking-[0.2em] text-cyan-300">USA vs Europe</p>
             <h2 className="mt-2 text-2xl font-black">TOP 16 TEEZ DOLLARS</h2>
             <p className="mt-3 text-sm leading-5 text-slate-400">
@@ -155,7 +155,7 @@ function TeamSection({ title, players, color, currentUid }: {
   const accent = color === "blue" ? "text-blue-300" : "text-amber-300";
   const border = color === "blue" ? "border-blue-400/40" : "border-amber-400/40";
   return (
-    <section className={`overflow-hidden border ${border} bg-[#071017]`}>
+    <section className={`overflow-hidden border ${border} bg-[#0e1c34]`}>
       <div className={`border-b ${border} px-4 py-4`}>
         <h3 className={`text-lg font-black ${accent}`}>{title}</h3>
         <p className="mt-1 text-[10px] uppercase tracking-widest text-slate-500">TEEZ Dollars ranking · Snake seeding</p>

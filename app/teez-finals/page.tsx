@@ -175,7 +175,7 @@ export default function TeezFinalsPage() {
 </header>
 
 {/* SELBORNE BANNER */}
-<div className="mb-6 w-full overflow-hidden rounded-2xl border border-cyan-500/30 shadow-[0_0_25px_rgba(0,170,255,0.2)]">
+<div className="mb-6 w-full overflow-hidden rounded-2xl border border-cyan-500/30 shadow-[0_0_25px_rgba(30,224,108,0.2)]">
   <img
     src="/selborne_1.png"
     alt="Selborne Golf Estate - TEEZ Finals"
@@ -216,7 +216,7 @@ export default function TeezFinalsPage() {
                {/* Logo displayed on printed/PDF Events Schedule only */}
         <div className="hidden print:flex print:flex-col print:items-center print:mb-6">
           <img
-            src="/transparent.png"
+            src="/brand/teez-stadium-tile.png"
             alt="TEEZ Golf Challenges Logo"
             className="h-24 w-auto max-w-full object-contain"
           />
@@ -228,7 +228,7 @@ export default function TeezFinalsPage() {
           </p>
         </div>
 
-        <section className="mb-5 rounded-2xl border border-white/10 bg-[#101a2b] p-4">
+        <section className="mb-5 rounded-2xl border border-white/10 bg-[#0e1c34] p-4">
           <div className="mb-4">
             <h2 className="text-xl font-bold">Event Diary</h2>
             <p className="mt-1 text-xs text-slate-400">
@@ -290,7 +290,7 @@ export default function TeezFinalsPage() {
           </div>
         </section>
 
-        <section className="rounded-2xl border border-white/10 bg-[#101a2b] p-4">
+        <section className="rounded-2xl border border-white/10 bg-[#0e1c34] p-4">
           <h2 className="text-xl font-bold">
             TEEZ Events Calendar
           </h2>
@@ -399,7 +399,7 @@ export default function TeezFinalsPage() {
                           ? "bg-cyan-400 font-bold text-[#06101c]"
                           : hasEvent
                             ? "border border-cyan-400 bg-cyan-400/20 text-cyan-200"
-                            : "bg-[#101a2b] text-slate-300"
+                            : "bg-[#0e1c34] text-slate-300"
                       }`}
                     >
                       {day}

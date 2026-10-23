@@ -1022,7 +1022,7 @@ if (!confirmed) {
 
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[400px] bg-cyan-400 opacity-10 blur-[130px] pointer-events-none" />
 
-      <div className="absolute inset-0 opacity-20 pointer-events-none bg-[radial-gradient(circle,#22d3ee_1px,transparent_1px)] bg-[size:40px_40px]" />
+      <div className="absolute inset-0 opacity-20 pointer-events-none bg-[radial-gradient(circle,#1ee06c_1px,transparent_1px)] bg-[size:40px_40px]" />
 
 
       <div className="relative z-10 max-w-3xl mx-auto flex flex-col gap-6">
@@ -1046,7 +1046,7 @@ if (!confirmed) {
         {/* GROUP HEADER */}
         {/* ===================================================== */}
 
-        <section className="border-2 border-cyan-400/70 bg-neutral-950/90 rounded-3xl p-6 shadow-[0_0_35px_rgba(34,211,238,0.25)]">
+        <section className="border-2 border-cyan-400/70 bg-neutral-950/90 rounded-3xl p-6 shadow-[0_0_35px_rgba(30,224,108,0.25)]">
 
           <div className="text-xs font-bold tracking-[0.3em] text-cyan-300">
             GROUP PROFILE
@@ -1441,7 +1441,7 @@ if (!confirmed) {
         {/* LAST CHALLENGE RESULTS */}
         {/* ===================================================== */}
 
-        <section className="border-2 border-cyan-400/40 bg-cyan-950/10 rounded-3xl p-5 shadow-[0_0_35px_rgba(34,211,238,0.12)]">
+        <section className="border-2 border-cyan-400/40 bg-cyan-950/10 rounded-3xl p-5 shadow-[0_0_35px_rgba(30,224,108,0.12)]">
 
           <div className="text-xs font-bold tracking-[0.25em] text-cyan-300">
             LATEST RESULT

@@ -219,18 +219,18 @@ setRevealedBall({
 }
 
   return (
-    <main className="min-h-screen bg-[#030608] text-white">
+    <main className="min-h-screen bg-[#07111e] text-white">
       <div className="mx-auto max-w-md pb-16">
 
         {/* HEADER */}
 
-      <header className="sticky top-0 z-30 border-b border-cyan-400/30 bg-[#030608]/95 px-5 py-3 backdrop-blur-xl">
+      <header className="sticky top-0 z-30 border-b border-cyan-400/30 bg-[#07111e]/95 px-5 py-3 backdrop-blur-xl">
           <div className="flex items-center justify-between">
 
             <button
               type="button"
               onClick={() => router.back()}
-              className="flex h-10 w-10 items-center justify-center border border-cyan-400/30 bg-cyan-400/[0.05] text-2xl font-black text-cyan-300 shadow-[0_0_16px_rgba(34,211,238,0.15)]"
+              className="flex h-10 w-10 items-center justify-center border border-cyan-400/30 bg-cyan-400/[0.05] text-2xl font-black text-cyan-300 shadow-[0_0_16px_rgba(30,224,108,0.15)]"
               aria-label="Go back"
             >
               ‹
@@ -241,7 +241,7 @@ setRevealedBall({
               <img
                 src="/teez-app-icon-v4.png"
                 alt="TEEZ Golf Challenges"
-                className="h-16 w-16 object-contain drop-shadow-[0_0_14px_rgba(0,174,255,0.75)]"
+                className="h-16 w-16 object-contain drop-shadow-[0_0_14px_rgba(30,224,108,0.75)]"
               />
 
               <p className="mt-1 text-[8px] font-black uppercase tracking-[0.30em] text-cyan-400">
@@ -264,7 +264,7 @@ setRevealedBall({
 
           {/* HERO */}
 
-          <section className="relative overflow-hidden border border-cyan-400/30 bg-[#071017] shadow-[0_0_35px_rgba(34,211,238,0.10)]">
+          <section className="relative overflow-hidden border border-cyan-400/30 bg-[#0e1c34] shadow-[0_0_35px_rgba(30,224,108,0.10)]">
 
            <div className="pointer-events-none absolute -right-16 -top-16 h-44 w-44 rounded-full bg-cyan-400/10 blur-3xl" />
 
@@ -317,7 +317,7 @@ setRevealedBall({
               description="Progress through 200 mystery Booster Balls during your season"
             />
 
-            <div className="overflow-hidden border border-cyan-400/30 bg-[#071017] shadow-[0_0_30px_rgba(34,211,238,0.08)]">
+            <div className="overflow-hidden border border-cyan-400/30 bg-[#0e1c34] shadow-[0_0_30px_rgba(30,224,108,0.08)]">
 
            
 <div className="grid grid-cols-4 divide-x divide-white/10">
@@ -366,7 +366,7 @@ setRevealedBall({
                 <div className="mt-3 h-3 overflow-hidden bg-slate-800">
 
                  <div
-  className="h-full bg-cyan-400 shadow-[0_0_12px_rgba(34,211,238,0.7)]"
+  className="h-full bg-cyan-400 shadow-[0_0_12px_rgba(30,224,108,0.7)]"
                     style={{
                       width: `${Math.min(
                         100,
@@ -394,7 +394,7 @@ setRevealedBall({
   description="Tokens Played + Tokens Won + Participation + Achievements build your Booster Progress"
 />
 
-           <div className="relative overflow-hidden border border-cyan-400/30 bg-[#071017] p-5 shadow-[0_0_30px_rgba(34,211,238,0.08)]">
+           <div className="relative overflow-hidden border border-cyan-400/30 bg-[#0e1c34] p-5 shadow-[0_0_30px_rgba(30,224,108,0.08)]">
 
               <div className="flex items-center justify-between">
 
@@ -427,7 +427,7 @@ setRevealedBall({
               <div className="mt-5 h-3 overflow-hidden bg-slate-800">
 
                 <div
-                  className="h-full bg-cyan-400 shadow-[0_0_12px_rgba(34,211,238,0.7)]"
+                  className="h-full bg-cyan-400 shadow-[0_0_12px_rgba(30,224,108,0.7)]"
                   style={{
                     width: `${Math.min(
                       100,
@@ -477,7 +477,7 @@ setRevealedBall({
               description="Earn a Booster Ball, then choose an available position to reveal your mystery Booster"
             />
 
-           <div className="border border-cyan-400/30 bg-[#071017] p-3 shadow-[0_0_34px_rgba(34,211,238,0.08)]">
+           <div className="border border-cyan-400/30 bg-[#0e1c34] p-3 shadow-[0_0_34px_rgba(30,224,108,0.08)]">
 
   <div className="mb-3 flex items-center justify-between">
     <p className="text-[8px] font-black uppercase tracking-[0.14em] text-slate-500">
@@ -660,7 +660,7 @@ function BoosterBall({
 }) {
   return (
     <div
-    className={`relative shrink-0 rounded-full border-2 border-cyan-300/70 bg-white shadow-[0_0_22px_rgba(34,211,238,0.24)] ${
+    className={`relative shrink-0 rounded-full border-2 border-cyan-300/70 bg-white shadow-[0_0_22px_rgba(30,224,108,0.24)] ${
         size === "large"
           ? "h-20 w-20"
           : "h-12 w-12"
@@ -674,7 +674,7 @@ function BoosterBall({
       <div className="absolute bottom-[26%] left-[35%] h-[6%] w-[6%] rounded-full bg-slate-300/70" />
 
       {size === "large" && (
-        <span className="absolute inset-0 z-10 flex items-center justify-center text-[9px] font-black tracking-[0.08em] text-[#07110d]">
+        <span className="absolute inset-0 z-10 flex items-center justify-center text-[9px] font-black tracking-[0.08em] text-[#0c1830]">
           TEEZ
         </span>
       )}
@@ -706,7 +706,7 @@ function BoosterPosition({
   opened
     ? "cursor-default border-amber-400/60 bg-amber-300 opacity-80 shadow-[0_0_10px_rgba(251,191,36,0.25)]"
     : available
-  ? "border-cyan-300/70 bg-white shadow-[0_0_12px_rgba(34,211,238,0.22)] active:scale-95"
+  ? "border-cyan-300/70 bg-white shadow-[0_0_12px_rgba(30,224,108,0.22)] active:scale-95"
       : "cursor-default border-slate-600 bg-slate-300 opacity-55"
 }`}
     >
@@ -742,7 +742,7 @@ function SectionHeading({
 
       <div className="mb-3 flex items-center gap-3">
 
-       <div className="h-[2px] w-8 bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.7)]" />
+       <div className="h-[2px] w-8 bg-cyan-400 shadow-[0_0_8px_rgba(30,224,108,0.7)]" />
 
 <p className="text-[9px] font-black uppercase tracking-[0.24em] text-cyan-400">
   {eyebrow}

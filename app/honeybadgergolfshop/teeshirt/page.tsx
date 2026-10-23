@@ -16,7 +16,7 @@ export default function TeeshirtPage() {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   return (
-    <main className="relative text-white min-h-screen bg-[#050816]">
+    <main className="relative text-white min-h-screen bg-[#07111e]">
 
       {/* HEADER */}
       <div className="px-4 py-4 flex items-center justify-between border-b border-white/10">

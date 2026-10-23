@@ -58,7 +58,7 @@ export default function HomePage() {
   return (
     <main className="bg-black text-white">
 {/* ================= HEADER ================= */}
-<header className="w-full bg-[#07110d] px-4 py-3 text-white">
+<header className="w-full bg-[#0c1830] px-4 py-3 text-white">
 
   {/* BRAND */}
   <div className="text-center">
@@ -84,7 +84,7 @@ export default function HomePage() {
     </div>
 
     <p className="mt-1 text-center text-[8px] font-bold uppercase tracking-[0.22em] text-gray-400">
-      Global Golf Competition Platform
+      Player vs player
     </p>
   </div>
 
@@ -189,7 +189,7 @@ export default function HomePage() {
 </header>
 
   {/* ================= MAIN HERO / ACTION AREA ================= */}
-<section className="relative overflow-hidden bg-[#020817] px-6 pb-10 pt-2 text-center text-white">
+<section className="relative overflow-hidden bg-[#07111e] px-6 pb-10 pt-2 text-center text-white">
 
   {/* BLUE BACKGROUND GLOW */}
   <div className="pointer-events-none absolute left-1/2 top-1/2 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-500/10 blur-[130px]" />
@@ -198,12 +198,12 @@ export default function HomePage() {
 
 
     {/* MAIN HEADING */}
-    <h2 className="text-3xl font-black uppercase tracking-[0.08em] text-white drop-shadow-[0_0_18px_rgba(0,170,255,0.95)] md:text-5xl">
-      ONLY FOR THE PASSIONATE
+    <h2 className="text-3xl font-black uppercase tracking-[0.08em] text-white drop-shadow-[0_0_18px_rgba(30,224,108,0.95)] md:text-5xl">
+      REAL GOLF. REAL STAKES.
     </h2>
 
     <p className="mt-4 text-base font-semibold tracking-[0.12em] text-slate-300 md:text-lg">
-      Join. Grow. Experience.
+      Real golfers. Verified scores.
     </p>
 
        {/* MAIN BUTTONS */}
@@ -211,35 +211,35 @@ export default function HomePage() {
 
       <button
         onClick={() => router.push("/how-teez-works")}
-        className="h-14 w-full rounded-full border border-blue-300/80 bg-blue-500/10 text-sm font-black uppercase tracking-[0.16em] text-white shadow-[0_0_18px_rgba(0,170,255,0.65),inset_0_0_18px_rgba(0,170,255,0.12)] transition duration-300 hover:scale-[1.03] hover:bg-blue-500/20 hover:shadow-[0_0_30px_rgba(0,170,255,0.95)] animate-pulse"
+        className="h-14 w-full rounded-full border border-blue-300/80 bg-blue-500/10 text-sm font-black uppercase tracking-[0.16em] text-white shadow-[0_0_18px_rgba(30,224,108,0.65),inset_0_0_18px_rgba(30,224,108,0.12)] transition duration-300 hover:scale-[1.03] hover:bg-blue-500/20 hover:shadow-[0_0_30px_rgba(30,224,108,0.95)] animate-pulse"
       >
         HOW TEEZ WORKS
       </button>
 
       <button
         onClick={() => router.push("/login")}
-        className="h-14 w-full rounded-full border border-blue-300/80 bg-blue-500/10 text-sm font-black uppercase tracking-[0.16em] text-white shadow-[0_0_18px_rgba(0,170,255,0.65),inset_0_0_18px_rgba(0,170,255,0.12)] transition duration-300 hover:scale-[1.03] hover:bg-blue-500/20 hover:shadow-[0_0_30px_rgba(0,170,255,0.95)] animate-pulse"
+        className="h-14 w-full rounded-full border border-blue-300/80 bg-blue-500/10 text-sm font-black uppercase tracking-[0.16em] text-white shadow-[0_0_18px_rgba(30,224,108,0.65),inset_0_0_18px_rgba(30,224,108,0.12)] transition duration-300 hover:scale-[1.03] hover:bg-blue-500/20 hover:shadow-[0_0_30px_rgba(30,224,108,0.95)] animate-pulse"
       >
         LOGIN
       </button>
 
       <button
         onClick={() => router.push("/register")}
-        className="h-14 w-full rounded-full border border-blue-300/80 bg-blue-500/10 text-sm font-black uppercase tracking-[0.16em] text-white shadow-[0_0_18px_rgba(0,170,255,0.65),inset_0_0_18px_rgba(0,170,255,0.12)] transition duration-300 hover:scale-[1.03] hover:bg-blue-500/20 hover:shadow-[0_0_30px_rgba(0,170,255,0.95)] animate-pulse"
+        className="h-14 w-full rounded-full border border-blue-300/80 bg-blue-500/10 text-sm font-black uppercase tracking-[0.16em] text-white shadow-[0_0_18px_rgba(30,224,108,0.65),inset_0_0_18px_rgba(30,224,108,0.12)] transition duration-300 hover:scale-[1.03] hover:bg-blue-500/20 hover:shadow-[0_0_30px_rgba(30,224,108,0.95)] animate-pulse"
       >
         JOIN US
       </button>
 
       <button
         onClick={() => router.push("/dashboard")}
-        className="h-14 w-full rounded-full border border-blue-300/80 bg-blue-500/10 text-sm font-black uppercase tracking-[0.16em] text-white shadow-[0_0_18px_rgba(0,170,255,0.65),inset_0_0_18px_rgba(0,170,255,0.12)] transition duration-300 hover:scale-[1.03] hover:bg-blue-500/20 hover:shadow-[0_0_30px_rgba(0,170,255,0.95)] animate-pulse"
+        className="h-14 w-full rounded-full border border-blue-300/80 bg-blue-500/10 text-sm font-black uppercase tracking-[0.16em] text-white shadow-[0_0_18px_rgba(30,224,108,0.65),inset_0_0_18px_rgba(30,224,108,0.12)] transition duration-300 hover:scale-[1.03] hover:bg-blue-500/20 hover:shadow-[0_0_30px_rgba(30,224,108,0.95)] animate-pulse"
       >
         VIEW PLAYER DASHBOARD
       </button>
 
       <button
        onClick={() => router.push("/teez-scoring/scoring-info")}
-        className="h-14 w-full rounded-full border border-blue-300/80 bg-blue-500/10 text-sm font-black uppercase tracking-[0.16em] text-white shadow-[0_0_18px_rgba(0,170,255,0.65),inset_0_0_18px_rgba(0,170,255,0.12)] transition duration-300 hover:scale-[1.03] hover:bg-blue-500/20 hover:shadow-[0_0_30px_rgba(0,170,255,0.95)] animate-pulse"
+        className="h-14 w-full rounded-full border border-blue-300/80 bg-blue-500/10 text-sm font-black uppercase tracking-[0.16em] text-white shadow-[0_0_18px_rgba(30,224,108,0.65),inset_0_0_18px_rgba(30,224,108,0.12)] transition duration-300 hover:scale-[1.03] hover:bg-blue-500/20 hover:shadow-[0_0_30px_rgba(30,224,108,0.95)] animate-pulse"
       >
         GOLF SCORING SYSTEMS
       </button>
@@ -247,7 +247,7 @@ export default function HomePage() {
     <button
   type="button"
   onClick={() => router.push("/teez-finals")}
-  className="h-14 w-full rounded-full border border-blue-300/80 bg-blue-500/10 px-3 text-center text-xs font-black uppercase tracking-[0.08em] text-white shadow-[0_0_18px_rgba(0,170,255,0.65),inset_0_0_18px_rgba(0,170,255,0.12)] transition duration-300 hover:bg-blue-500/20 animate-pulse sm:text-sm sm:tracking-[0.16em]"
+  className="h-14 w-full rounded-full border border-blue-300/80 bg-blue-500/10 px-3 text-center text-xs font-black uppercase tracking-[0.08em] text-white shadow-[0_0_18px_rgba(30,224,108,0.65),inset_0_0_18px_rgba(30,224,108,0.12)] transition duration-300 hover:bg-blue-500/20 animate-pulse sm:text-sm sm:tracking-[0.16em]"
 >
   TEEZ FINALS - "RACE TO" EVENTS
 </button>
@@ -261,16 +261,16 @@ export default function HomePage() {
 
 
 {/* ================= BADGER HERO IMAGE ================= */}
-<section className="w-full overflow-hidden bg-[#020817]">
+<section className="flex w-full items-center justify-center overflow-hidden bg-[#07111e] py-8">
   <img
-    src="/hero_main2.png"
-    className="h-[600px] w-full object-cover object-center md:h-auto"
+    src="/brand/teez-stadium-tile.png"
+    className="h-[420px] w-auto max-w-full object-contain"
     alt="Teez Badger"
   />
 </section>
       
   {/* ================= FOOTER ================= */}
-<footer className="relative overflow-hidden border-t border-blue-400/20 bg-[#020817] px-6 py-14 text-white">
+<footer className="relative overflow-hidden border-t border-blue-400/20 bg-[#07111e] px-6 py-14 text-white">
 
   {/* BACKGROUND GLOW */}
   <div className="pointer-events-none absolute left-1/2 top-0 h-[300px] w-[600px] -translate-x-1/2 rounded-full bg-blue-500/10 blur-[120px]" />
@@ -279,12 +279,12 @@ export default function HomePage() {
 
     {/* BRAND */}
     <div className="mb-10 text-center">
-      <p className="text-lg font-black uppercase tracking-[0.18em] text-white drop-shadow-[0_0_14px_rgba(0,170,255,0.8)]">
+      <p className="text-lg font-black uppercase tracking-[0.18em] text-white drop-shadow-[0_0_14px_rgba(30,224,108,0.8)]">
         TEEZ GOLF CHALLENGES
       </p>
 
       <p className="mt-2 text-[10px] uppercase tracking-[0.22em] text-blue-300">
-        Play With Purpose
+        Real golf. Real golfers. Real stakes.
       </p>
 
       <p className="mt-3 text-xs text-slate-500">
@@ -391,7 +391,7 @@ export default function HomePage() {
         target="_blank"
         rel="noreferrer"
         aria-label="Facebook"
-        className="flex h-10 w-10 items-center justify-center rounded-full border border-blue-300/30 bg-blue-500/10 shadow-[0_0_14px_rgba(0,170,255,0.25)] transition hover:scale-110 hover:border-blue-300 hover:shadow-[0_0_22px_rgba(0,170,255,0.65)]"
+        className="flex h-10 w-10 items-center justify-center rounded-full border border-blue-300/30 bg-blue-500/10 shadow-[0_0_14px_rgba(30,224,108,0.25)] transition hover:scale-110 hover:border-blue-300 hover:shadow-[0_0_22px_rgba(30,224,108,0.65)]"
       >
         <svg width="18" height="18" fill="white" viewBox="0 0 24 24">
           <path d="M22 12a10 10 0 1 0-11.5 9.87v-6.99H8v-2.88h2.5V9.41c0-2.47 1.47-3.84 3.72-3.84 1.08 0 2.2.19 2.2.19v2.42h-1.24c-1.23 0-1.61.76-1.61 1.54v1.85H16l-.4 2.88h-2.21v6.99A10 10 0 0 0 22 12z" />
@@ -403,7 +403,7 @@ export default function HomePage() {
         target="_blank"
         rel="noreferrer"
         aria-label="YouTube"
-        className="flex h-10 w-10 items-center justify-center rounded-full border border-blue-300/30 bg-blue-500/10 shadow-[0_0_14px_rgba(0,170,255,0.25)] transition hover:scale-110 hover:border-blue-300 hover:shadow-[0_0_22px_rgba(0,170,255,0.65)]"
+        className="flex h-10 w-10 items-center justify-center rounded-full border border-blue-300/30 bg-blue-500/10 shadow-[0_0_14px_rgba(30,224,108,0.25)] transition hover:scale-110 hover:border-blue-300 hover:shadow-[0_0_22px_rgba(30,224,108,0.65)]"
       >
         <svg width="19" height="19" fill="white" viewBox="0 0 24 24">
           <path d="M23.5 6.2s-.2-1.7-.8-2.4c-.8-.9-1.7-.9-2.1-1C17.8 2.5 12 2.5 12 2.5s-5.8 0-8.6.3c-.4.1-1.3.1-2.1 1C.7 4.5.5 6.2.5 6.2S.3 8.2.3 10.2v1.6c0 2 .2 4 .2 4s.2 1.7.8 2.4c.8.9 1.9.9 2.4 1 1.7.2 7.3.3 7.3.3s5.8 0 8.6-.3c.4-.1 1.3-.1 2.1-1 .6-.7.8-2.4.8-2.4s.2-2 .2-4v-1.6c0-2-.2-4-.2-4zM9.8 14.7V7.9l6.4 3.4-6.4 3.4z" />
@@ -415,7 +415,7 @@ export default function HomePage() {
         target="_blank"
         rel="noreferrer"
         aria-label="TikTok"
-        className="flex h-10 w-10 items-center justify-center rounded-full border border-blue-300/30 bg-blue-500/10 shadow-[0_0_14px_rgba(0,170,255,0.25)] transition hover:scale-110 hover:border-blue-300 hover:shadow-[0_0_22px_rgba(0,170,255,0.65)]"
+        className="flex h-10 w-10 items-center justify-center rounded-full border border-blue-300/30 bg-blue-500/10 shadow-[0_0_14px_rgba(30,224,108,0.25)] transition hover:scale-110 hover:border-blue-300 hover:shadow-[0_0_22px_rgba(30,224,108,0.65)]"
       >
         <svg width="18" height="18" viewBox="0 0 24 24" fill="white">
           <path d="M9 3v12.5a2.5 2.5 0 1 1-2.5-2.5H8V9H6.5A6.5 6.5 0 1 0 13 15.5V8.5c1.1 1 2.6 1.5 4 1.5V6.5c-1.6 0-3-1.3-3-3H9z" />
@@ -427,7 +427,7 @@ export default function HomePage() {
         target="_blank"
         rel="noreferrer"
         aria-label="Instagram"
-        className="flex h-10 w-10 items-center justify-center rounded-full border border-blue-300/30 bg-blue-500/10 shadow-[0_0_14px_rgba(0,170,255,0.25)] transition hover:scale-110 hover:border-blue-300 hover:shadow-[0_0_22px_rgba(0,170,255,0.65)]"
+        className="flex h-10 w-10 items-center justify-center rounded-full border border-blue-300/30 bg-blue-500/10 shadow-[0_0_14px_rgba(30,224,108,0.25)] transition hover:scale-110 hover:border-blue-300 hover:shadow-[0_0_22px_rgba(30,224,108,0.65)]"
       >
         <svg width="18" height="18" viewBox="0 0 24 24" fill="white">
           <path d="M7 2C4.2 2 2 4.2 2 7v10c0 2.8 2.2 5 5 5h10c2.8 0 5-2.2 5-5V7c0-2.8-2.2-5-5-5H7zm5 4.8A5.2 5.2 0 1 1 6.8 12 5.2 5.2 0 0 1 12 6.8zm6.5-.3a1.2 1.2 0 1 1-1.2-1.2 1.2 1.2 0 0 1 1.2 1.2zM12 9.3A2.7 2.7 0 1 0 14.7 12 2.7 2.7 0 0 0 12 9.3z" />

@@ -6,18 +6,18 @@ export default function HowCareerWorksPage() {
   const router = useRouter();
 
   return (
-    <main className="min-h-screen bg-[#030608] text-white">
+    <main className="min-h-screen bg-[#07111e] text-white">
       <div className="mx-auto max-w-md pb-16">
 
         {/* HEADER */}
 
-        <header className="sticky top-0 z-30 border-b border-cyan-400/30 bg-[#030608]/95 px-5 py-3 backdrop-blur-xl">
+        <header className="sticky top-0 z-30 border-b border-cyan-400/30 bg-[#07111e]/95 px-5 py-3 backdrop-blur-xl">
           <div className="flex items-center justify-between">
 
             <button
               type="button"
               onClick={() => router.back()}
-              className="flex h-10 w-10 items-center justify-center border border-cyan-400/30 bg-cyan-400/[0.05] text-2xl font-black text-cyan-300 shadow-[0_0_16px_rgba(34,211,238,0.15)]"
+              className="flex h-10 w-10 items-center justify-center border border-cyan-400/30 bg-cyan-400/[0.05] text-2xl font-black text-cyan-300 shadow-[0_0_16px_rgba(30,224,108,0.15)]"
               aria-label="Go back"
             >
               ‹
@@ -27,7 +27,7 @@ export default function HowCareerWorksPage() {
               <img
                 src="/teez-app-icon-v4.png"
                 alt="TEEZ Golf Challenges"
-                className="h-16 w-16 object-contain drop-shadow-[0_0_14px_rgba(0,174,255,0.75)]"
+                className="h-16 w-16 object-contain drop-shadow-[0_0_14px_rgba(30,224,108,0.75)]"
               />
 
               <p className="mt-1 text-[8px] font-black uppercase tracking-[0.30em] text-cyan-400">
@@ -49,7 +49,7 @@ export default function HowCareerWorksPage() {
 
           {/* HERO */}
 
-          <section className="relative overflow-hidden border border-cyan-400/30 bg-[#071017] shadow-[0_0_35px_rgba(34,211,238,0.10)]">
+          <section className="relative overflow-hidden border border-cyan-400/30 bg-[#0e1c34] shadow-[0_0_35px_rgba(30,224,108,0.10)]">
 
             <div className="pointer-events-none absolute -right-16 -top-16 h-44 w-44 rounded-full bg-cyan-400/10 blur-3xl" />
 
@@ -121,7 +121,7 @@ export default function HowCareerWorksPage() {
               description="Three things determine the competitive value of your result."
             />
 
-            <div className="border border-cyan-400/30 bg-[#071017] p-5 shadow-[0_0_30px_rgba(34,211,238,0.08)]">
+            <div className="border border-cyan-400/30 bg-[#0e1c34] p-5 shadow-[0_0_30px_rgba(30,224,108,0.08)]">
 
               <FactorCard
                 number="1"
@@ -149,7 +149,7 @@ export default function HowCareerWorksPage() {
                 <div className="h-7 w-px bg-cyan-400/40" />
               </div>
 
-              <div className="border border-cyan-300/50 bg-cyan-400/[0.08] px-4 py-5 text-center shadow-[0_0_24px_rgba(34,211,238,0.10)]">
+              <div className="border border-cyan-300/50 bg-cyan-400/[0.08] px-4 py-5 text-center shadow-[0_0_24px_rgba(30,224,108,0.10)]">
 
                 <p className="text-[9px] font-black uppercase tracking-[0.20em] text-cyan-400">
                   Result
@@ -182,7 +182,7 @@ export default function HowCareerWorksPage() {
               description="Your Competition Score drives your TEEZ career progression."
             />
 
-            <div className="border border-cyan-400/30 bg-[#071017] p-5">
+            <div className="border border-cyan-400/30 bg-[#0e1c34] p-5">
 
               <div className="border border-cyan-400/40 bg-cyan-400/[0.07] px-4 py-4 text-center">
 
@@ -252,7 +252,7 @@ export default function HowCareerWorksPage() {
               description="Build your reputation from your golf club to the global leaderboard."
             />
 
-            <div className="overflow-hidden border border-cyan-400/30 bg-[#071017]">
+            <div className="overflow-hidden border border-cyan-400/30 bg-[#0e1c34]">
 
               <RankingStep
                 level="GLOBAL"
@@ -361,7 +361,7 @@ export default function HowCareerWorksPage() {
               description="Your activity on TEEZ builds progress toward mystery Booster Balls."
             />
 
-            <div className="relative overflow-hidden border border-cyan-400/30 bg-[#071017] p-5 shadow-[0_0_34px_rgba(34,211,238,0.08)]">
+            <div className="relative overflow-hidden border border-cyan-400/30 bg-[#0e1c34] p-5 shadow-[0_0_34px_rgba(30,224,108,0.08)]">
 
               <div className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-cyan-400/10 blur-3xl" />
 
@@ -502,7 +502,7 @@ export default function HowCareerWorksPage() {
 
           {/* FINAL MESSAGE */}
 
-          <section className="relative overflow-hidden border border-cyan-400/30 bg-[#071017] px-5 py-8 text-center shadow-[0_0_35px_rgba(34,211,238,0.08)]">
+          <section className="relative overflow-hidden border border-cyan-400/30 bg-[#0e1c34] px-5 py-8 text-center shadow-[0_0_35px_rgba(30,224,108,0.08)]">
 
             <div className="pointer-events-none absolute left-1/2 top-0 h-32 w-32 -translate-x-1/2 rounded-full bg-cyan-400/10 blur-3xl" />
 
@@ -511,7 +511,7 @@ export default function HowCareerWorksPage() {
               <img
                 src="/teez-app-icon-v4.png"
                 alt="TEEZ Golf Challenges"
-                className="mx-auto h-20 w-20 object-contain drop-shadow-[0_0_18px_rgba(0,174,255,0.75)]"
+                className="mx-auto h-20 w-20 object-contain drop-shadow-[0_0_18px_rgba(30,224,108,0.75)]"
               />
 
               <p className="mt-4 text-[9px] font-black uppercase tracking-[0.26em] text-cyan-400">
@@ -590,7 +590,7 @@ function SectionHeading({
             className={`mt-1 h-[2px] w-8 ${
               amber
                 ? "bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.6)]"
-                : "bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.7)]"
+                : "bg-cyan-400 shadow-[0_0_8px_rgba(30,224,108,0.7)]"
             }`}
           />
 
@@ -621,7 +621,7 @@ function FlowCard({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex items-stretch border border-cyan-400/30 bg-[#071017] p-3">
+    <div className="flex items-stretch border border-cyan-400/30 bg-[#0e1c34] p-3">
       {children}
     </div>
   );
@@ -639,7 +639,7 @@ function FlowItem({
 
       <div className="mx-auto flex h-11 w-11 items-center justify-center rounded-full border border-cyan-400/40 bg-cyan-400/[0.07]">
 
-        <div className="h-2.5 w-2.5 rounded-full bg-cyan-300 shadow-[0_0_10px_rgba(34,211,238,0.8)]" />
+        <div className="h-2.5 w-2.5 rounded-full bg-cyan-300 shadow-[0_0_10px_rgba(30,224,108,0.8)]" />
 
       </div>
 
@@ -815,7 +815,7 @@ function StatCard({
   text: string;
 }) {
   return (
-    <div className="border border-cyan-400/20 bg-[#071017] px-3 py-4">
+    <div className="border border-cyan-400/20 bg-[#0e1c34] px-3 py-4">
 
       <p className="text-[10px] font-black text-cyan-300">
         {title}
@@ -836,7 +836,7 @@ function StatCard({
 
 function BoosterBall() {
   return (
-    <div className="relative h-20 w-20 rounded-full border-2 border-cyan-300/70 bg-white shadow-[0_0_24px_rgba(34,211,238,0.25)]">
+    <div className="relative h-20 w-20 rounded-full border-2 border-cyan-300/70 bg-white shadow-[0_0_24px_rgba(30,224,108,0.25)]">
 
       <div className="absolute inset-[5px] rounded-full border border-slate-300 bg-[radial-gradient(circle_at_30%_30%,#ffffff,#d7e0e3)]" />
 
@@ -844,7 +844,7 @@ function BoosterBall() {
       <div className="absolute right-[24%] top-[32%] h-[6%] w-[6%] rounded-full bg-slate-300/70" />
       <div className="absolute bottom-[26%] left-[35%] h-[6%] w-[6%] rounded-full bg-slate-300/70" />
 
-      <span className="absolute inset-0 z-10 flex items-center justify-center text-[9px] font-black tracking-[0.08em] text-[#07110d]">
+      <span className="absolute inset-0 z-10 flex items-center justify-center text-[9px] font-black tracking-[0.08em] text-[#0c1830]">
         TEEZ
       </span>
 

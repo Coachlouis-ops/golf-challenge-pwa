@@ -214,7 +214,7 @@ export default function GoldVaultPage() {
   );
 
   return (
-    <main className="min-h-screen bg-[#eef1f4] text-[#111827]">
+    <main className="min-h-screen bg-[#eef1f4] text-[#0c1830]">
       <div className="mx-auto max-w-md pb-14">
 
         {/* HEADER */}
@@ -447,7 +447,7 @@ export default function GoldVaultPage() {
                 onClick={() =>
                   router.push("/profile/rewards")
                 }
-                className="w-full border-t border-[#c9b37a] bg-[#0d1821] py-4 text-xs font-black uppercase tracking-[0.14em] text-white"
+                className="w-full border-t border-[#c9b37a] bg-[#0e1c34] py-4 text-xs font-black uppercase tracking-[0.14em] text-white"
               >
                 Continue to Diamond Vault
               </button>
@@ -597,7 +597,7 @@ function CoinRevealModal({
     coin.rewardType === "racePoints";
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#07100c]/90 px-6 backdrop-blur-sm">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#07111e]/90 px-6 backdrop-blur-sm">
       <div className="w-full max-w-sm overflow-hidden border border-[#c9b37a] bg-white shadow-[0_24px_70px_rgba(0,0,0,0.4)]">
 
         <div className="bg-[#18160f] px-6 py-5 text-center">

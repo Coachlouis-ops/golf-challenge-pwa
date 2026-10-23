@@ -289,7 +289,7 @@ function GroupCard({
     <button
       type="button"
       onClick={onClick}
-      className="w-full text-left bg-neutral-900 border border-cyan-500/60 rounded-xl p-5 space-y-3 shadow-[0_0_18px_rgba(34,211,238,0.18)] hover:border-cyan-300 transition"
+      className="w-full text-left bg-neutral-900 border border-cyan-500/60 rounded-xl p-5 space-y-3 shadow-[0_0_18px_rgba(30,224,108,0.18)] hover:border-cyan-300 transition"
     >
 
       <div className="flex items-start justify-between gap-3">

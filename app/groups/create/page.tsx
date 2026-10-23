@@ -297,7 +297,7 @@ await teezAlert({
         </div>
 
         {/* GROUP PROFILE CARD */}
-        <div className="bg-neutral-900 border border-cyan-500/60 rounded-2xl p-5 space-y-5 shadow-[0_0_24px_rgba(34,211,238,0.18)]">
+        <div className="bg-neutral-900 border border-cyan-500/60 rounded-2xl p-5 space-y-5 shadow-[0_0_24px_rgba(30,224,108,0.18)]">
 
           <div>
             <p className="text-xs text-cyan-300 font-extrabold tracking-[0.18em]">

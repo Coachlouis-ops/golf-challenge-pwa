@@ -54,7 +54,7 @@ export default function CorporateDaysPage() {
                 JK6 2026
               </h2>
 
-             <p className="text-cyan-300 font-black mt-2 animate-pulse drop-shadow-[0_0_14px_rgba(34,211,238,1)]">
+             <p className="text-cyan-300 font-black mt-2 animate-pulse drop-shadow-[0_0_14px_rgba(30,224,108,1)]">
   4 Ball Alliance · Scramble Drive · Mystery Count
 </p>
 
@@ -131,7 +131,7 @@ export default function CorporateDaysPage() {
 
 <div className="flex justify-center mt-6 pb-4">
   <img
-    src="/transparent.png"
+    src="/brand/teez-stadium-tile.png"
     alt="TEEZ Golf Challenges"
     className="
       w-full

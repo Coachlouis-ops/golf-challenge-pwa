@@ -634,16 +634,16 @@ await teezAlert({
         {/* PLAYER CARD */}
         {profileExists && !isEditing && (
           <>
-            <div className="bg-neutral-900 border border-cyan-400 rounded-xl p-6 space-y-2 shadow-[0_0_24px_rgba(34,211,238,0.28)]">
-              <h2 className="text-2xl font-extrabold text-cyan-300 animate-pulse drop-shadow-[0_0_12px_rgba(34,211,238,0.95)]">
+            <div className="bg-neutral-900 border border-cyan-400 rounded-xl p-6 space-y-2 shadow-[0_0_24px_rgba(30,224,108,0.28)]">
+              <h2 className="text-2xl font-extrabold text-cyan-300 animate-pulse drop-shadow-[0_0_12px_rgba(30,224,108,0.95)]">
                 {profile.battleName}
               </h2>
 
-              <p className="text-sm font-semibold text-cyan-200 drop-shadow-[0_0_8px_rgba(34,211,238,0.75)]">
+              <p className="text-sm font-semibold text-cyan-200 drop-shadow-[0_0_8px_rgba(30,224,108,0.75)]">
                 {profile.name} {profile.surname}
               </p>
 
-              <div className="pt-3 border-t border-cyan-500/40 text-sm space-y-1 text-cyan-200 drop-shadow-[0_0_7px_rgba(34,211,238,0.65)]">
+              <div className="pt-3 border-t border-cyan-500/40 text-sm space-y-1 text-cyan-200 drop-shadow-[0_0_7px_rgba(30,224,108,0.65)]">
                 <p><strong className="text-cyan-300">Club:</strong> {profile.club}</p>
                 <p><strong className="text-cyan-300">Province:</strong> {profile.stateProvince}</p>
                 <p><strong className="text-cyan-300">Country:</strong> {profile.country}</p>
@@ -662,7 +662,7 @@ await teezAlert({
 
             {/* GLOBAL RANKINGS */}
             <div className="space-y-2">
-              <p className="text-xs text-cyan-300 font-extrabold tracking-[0.18em] drop-shadow-[0_0_9px_rgba(34,211,238,0.9)]">
+              <p className="text-xs text-cyan-300 font-extrabold tracking-[0.18em] drop-shadow-[0_0_9px_rgba(30,224,108,0.9)]">
                 YOUR RANKINGS
               </p>
 
@@ -676,7 +676,7 @@ await teezAlert({
 
             {/* DIVISION RANKINGS */}
             <div className="space-y-2">
-              <p className="text-xs text-cyan-300 font-extrabold tracking-[0.18em] drop-shadow-[0_0_9px_rgba(34,211,238,0.9)]">
+              <p className="text-xs text-cyan-300 font-extrabold tracking-[0.18em] drop-shadow-[0_0_9px_rgba(30,224,108,0.9)]">
                 {profile.division?.toUpperCase()} DIVISION RANKINGS
               </p>
 
@@ -1077,9 +1077,9 @@ await teezAlert({
 
   {profileValidationMessage && (
   <div className="fixed inset-0 z-[10000] bg-black/90 flex items-center justify-center px-4">
-    <div className="w-full max-w-md bg-neutral-950 border-2 border-cyan-400 rounded-2xl p-6 shadow-[0_0_40px_rgba(34,211,238,0.45)] space-y-5">
+    <div className="w-full max-w-md bg-neutral-950 border-2 border-cyan-400 rounded-2xl p-6 shadow-[0_0_40px_rgba(30,224,108,0.45)] space-y-5">
       <div className="text-center space-y-3">
-        <h2 className="text-2xl font-extrabold text-cyan-300 drop-shadow-[0_0_12px_rgba(34,211,238,0.9)]">
+        <h2 className="text-2xl font-extrabold text-cyan-300 drop-shadow-[0_0_12px_rgba(30,224,108,0.9)]">
           COMPLETE YOUR PROFILE
         </h2>
 
@@ -1097,7 +1097,7 @@ await teezAlert({
         onClick={() =>
           setProfileValidationMessage("")
         }
-        className="w-full bg-cyan-400 hover:bg-cyan-300 text-black font-extrabold py-3 rounded-xl shadow-[0_0_22px_rgba(34,211,238,0.55)] transition-all duration-300"
+        className="w-full bg-cyan-400 hover:bg-cyan-300 text-black font-extrabold py-3 rounded-xl shadow-[0_0_22px_rgba(30,224,108,0.55)] transition-all duration-300"
       >
         COMPLETE PROFILE
       </button>
@@ -1160,9 +1160,9 @@ function RankCardAdvanced({
   const isDown = change < 0;
 
   return (
-    <div className="bg-neutral-900 border border-cyan-500/60 rounded-lg p-4 text-center space-y-1 shadow-[0_0_18px_rgba(34,211,238,0.18)]">
-      <p className="text-xs font-bold text-cyan-300 drop-shadow-[0_0_7px_rgba(34,211,238,0.85)]">{title}</p>
-      <p className="text-2xl font-extrabold text-cyan-300 drop-shadow-[0_0_10px_rgba(34,211,238,0.95)]">#{value}</p>
+    <div className="bg-neutral-900 border border-cyan-500/60 rounded-lg p-4 text-center space-y-1 shadow-[0_0_18px_rgba(30,224,108,0.18)]">
+      <p className="text-xs font-bold text-cyan-300 drop-shadow-[0_0_7px_rgba(30,224,108,0.85)]">{title}</p>
+      <p className="text-2xl font-extrabold text-cyan-300 drop-shadow-[0_0_10px_rgba(30,224,108,0.95)]">#{value}</p>
       <p
         className={`text-xs ${
           isUp ? "text-green-400" : isDown ? "text-red-400" : "text-cyan-200"
@@ -1224,9 +1224,9 @@ function Input({
 
 function TokenCard({ title, value }: { title: string; value: number }) {
   return (
-    <div className="bg-neutral-900 border border-cyan-500/60 rounded-lg p-4 text-center shadow-[0_0_18px_rgba(34,211,238,0.18)]">
-      <p className="text-xs font-bold text-cyan-300 drop-shadow-[0_0_7px_rgba(34,211,238,0.85)]">{title}</p>
-      <p className="text-2xl font-extrabold text-cyan-300 drop-shadow-[0_0_10px_rgba(34,211,238,0.95)]">{value}</p>
+    <div className="bg-neutral-900 border border-cyan-500/60 rounded-lg p-4 text-center shadow-[0_0_18px_rgba(30,224,108,0.18)]">
+      <p className="text-xs font-bold text-cyan-300 drop-shadow-[0_0_7px_rgba(30,224,108,0.85)]">{title}</p>
+      <p className="text-2xl font-extrabold text-cyan-300 drop-shadow-[0_0_10px_rgba(30,224,108,0.95)]">{value}</p>
     </div>
   );
 }

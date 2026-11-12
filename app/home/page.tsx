@@ -6,16 +6,8 @@ export default function HomeDashboardPage() {
   const router = useRouter();
 
   const enterApp = () => {
-  router.push("/main");
-};
-
-  const actions = [
-    "PLAY A MATCH",
-    "CREATE A CHALLENGE",
-    "CREATE YOUR GROUP",
-    "BUILD YOUR GOLFING CAREER",
-    "CREATE PERSONALIZED LIVE GOLFDAY SCORING",
-  ];
+    router.push("/main");
+  };
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-[#020817] text-white">
@@ -61,14 +53,17 @@ export default function HomeDashboardPage() {
             </h1>
 
             <p className="mt-3 text-xs font-bold uppercase tracking-[0.26em] text-gray-300 sm:text-sm">
-              Build Your Golf Career
+              BET – PLAY – WIN
+            </p>
+            <p className="mt-2 text-xs font-bold tracking-[0.08em] text-gray-300 sm:text-sm">
+              The World 1st real golf betting platform
             </p>
           </div>
 
        {/* BUTTONS */}
 <div className="mt-8 flex w-full max-w-xl flex-col gap-3 sm:mt-10">
 
-  {/* OPEN APP */}
+  {/* ENTER TEEZ GOLF CHALLENGES */}
 <button
  onClick={enterApp}
   className="
@@ -92,37 +87,9 @@ export default function HomeDashboardPage() {
   <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
 
   <span className="relative">
-    OPEN APP
+    ENTER TEEZ GOLF CHALLENGES
   </span>
 </button>
-  {actions.map((action) => (
-              <button
-                key={action}
-                onClick={enterApp}
-                className="
-                  group relative overflow-hidden
-                  rounded-xl border border-blue-300/70
-                  bg-blue-500/10
-                  px-5 py-4
-                  text-center text-xs font-black
-                  uppercase tracking-[0.16em]
-                  text-white
-                  shadow-[0_0_18px_rgba(0,153,255,0.45),inset_0_0_18px_rgba(0,153,255,0.08)]
-                  backdrop-blur-md
-                  transition-all duration-300
-                  animate-pulse
-                  hover:scale-[1.025]
-                  hover:border-cyan-200
-                  hover:bg-blue-500/25
-                  hover:shadow-[0_0_32px_rgba(0,174,255,0.8),inset_0_0_22px_rgba(0,174,255,0.16)]
-                  sm:text-sm
-                "
-              >
-                <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
-
-                <span className="relative">{action}</span>
-              </button>
-            ))}
           </div>
         </div>
 

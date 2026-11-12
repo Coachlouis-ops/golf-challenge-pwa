@@ -223,35 +223,6 @@ export default function HomePage() {
         LOGIN
       </button>
 
-      <button
-        onClick={() => router.push("/register")}
-        className="h-14 w-full rounded-full border border-blue-300/80 bg-blue-500/10 text-sm font-black uppercase tracking-[0.16em] text-white shadow-[0_0_18px_rgba(0,170,255,0.65),inset_0_0_18px_rgba(0,170,255,0.12)] transition duration-300 hover:scale-[1.03] hover:bg-blue-500/20 hover:shadow-[0_0_30px_rgba(0,170,255,0.95)] animate-pulse"
-      >
-        JOIN US
-      </button>
-
-      <button
-        onClick={() => router.push("/dashboard")}
-        className="h-14 w-full rounded-full border border-blue-300/80 bg-blue-500/10 text-sm font-black uppercase tracking-[0.16em] text-white shadow-[0_0_18px_rgba(0,170,255,0.65),inset_0_0_18px_rgba(0,170,255,0.12)] transition duration-300 hover:scale-[1.03] hover:bg-blue-500/20 hover:shadow-[0_0_30px_rgba(0,170,255,0.95)] animate-pulse"
-      >
-        VIEW PLAYER DASHBOARD
-      </button>
-
-      <button
-       onClick={() => router.push("/teez-scoring/scoring-info")}
-        className="h-14 w-full rounded-full border border-blue-300/80 bg-blue-500/10 text-sm font-black uppercase tracking-[0.16em] text-white shadow-[0_0_18px_rgba(0,170,255,0.65),inset_0_0_18px_rgba(0,170,255,0.12)] transition duration-300 hover:scale-[1.03] hover:bg-blue-500/20 hover:shadow-[0_0_30px_rgba(0,170,255,0.95)] animate-pulse"
-      >
-        GOLF SCORING SYSTEMS
-      </button>
-
-    <button
-  type="button"
-  onClick={() => router.push("/teez-finals")}
-  className="h-14 w-full rounded-full border border-blue-300/80 bg-blue-500/10 px-3 text-center text-xs font-black uppercase tracking-[0.08em] text-white shadow-[0_0_18px_rgba(0,170,255,0.65),inset_0_0_18px_rgba(0,170,255,0.12)] transition duration-300 hover:bg-blue-500/20 animate-pulse sm:text-sm sm:tracking-[0.16em]"
->
-  TEEZ FINALS - "RACE TO" EVENTS
-</button>
-
     </div>
 
   </div>

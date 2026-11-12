@@ -8,9 +8,9 @@ import { db, functions } from "@/src/lib/firebase";
 import {
   doc,
   getDoc,
-  updateDoc,
   collection,
   getDocs,
+  type DocumentData,
 } from "firebase/firestore";
 import { httpsCallable } from "firebase/functions";
 import { useTeezNotification } from "@/src/components/TeezNotificationProvider";
@@ -28,7 +28,6 @@ import {
   scoringLabel,
   type MatchSetup,
 } from "@/src/lib/challengeMatch";
-import MatchLineup from "@/src/components/MatchLineup";
 
 type Challenge = {
   challengeId: string;
@@ -54,7 +53,7 @@ status: string;
   creatorUid: string;
   participants?: string[];
   joinCode?: string;
-  createdAt?: any;
+  createdAt?: unknown;
 };
 
 type Player = {
@@ -125,7 +124,7 @@ const [scoreboardUpdated, setScoreboardUpdated] = useState(false);
           return;
         }
 
-        const data = snap.data() as any;
+        const data: DocumentData = snap.data();
 
        setChallenge({
   challengeId: data.challengeId || snap.id,
@@ -168,8 +167,8 @@ if (
 
 
         setLoading(false);
-      } catch (e: any) {
-        setError(e.message || "Failed to load challenge");
+      } catch (error: unknown) {
+        setError(error instanceof Error ? error.message : "Failed to load challenge");
         setLoading(false);
       }
     })();
@@ -219,7 +218,7 @@ if (
       const snap = await getDoc(ref);
 
       if (snap.exists()) {
-        const data = snap.data() as any;
+        const data: DocumentData = snap.data();
 
         setChallenge({
           challengeId: data.challengeId || snap.id,
@@ -310,12 +309,13 @@ const snap = await getDoc(doc(db, "challenges", challengeId));
             : prev
         );
       }
-   } catch (e: any) {
+   } catch (error: unknown) {
   await teezAlert({
     title: "SCOREBOARD NOT UPDATED",
     message:
-      e?.message ||
-      "Failed to update the scoreboard.",
+      error instanceof Error
+        ? error.message
+        : "Failed to update the scoreboard.",
     type: "error",
     buttonText: "TRY AGAIN",
   });
@@ -365,11 +365,13 @@ try {
             : prev
         );
       }
-   } catch (e: any) {
+   } catch (error: unknown) {
   await teezAlert({
     title: "FINALIZATION REQUIRES ATTENTION",
     message:
-      (e?.message || "The finalization could not be confirmed.") +
+      (error instanceof Error
+        ? error.message
+        : "The finalization could not be confirmed.") +
       "\n\nThe Finalize button is locked. Contact the administrator to investigate.",
     type: "error",
     buttonText: "OK",
@@ -443,6 +445,9 @@ const canFinalize =
       />
 
       <div className="relative z-10 w-full max-w-4xl flex flex-col gap-6">
+        <h1 className="text-center text-4xl font-black uppercase tracking-[0.18em] text-blue-200 animate-pulse drop-shadow-[0_0_18px_rgba(96,165,250,0.95)] sm:text-5xl">
+          Scoreboard
+        </h1>
         <div className="flex justify-end">
           <button
             onClick={handleRefresh}
@@ -507,6 +512,8 @@ const canFinalize =
               ];
             }
 
+            if (title === "WAITING FOR ACCEPTANCE") return null;
+
             return (
               <div className="border border-red-500/40 bg-red-950/30 backdrop-blur-md rounded-2xl p-5 shadow-[0_0_35px_rgba(255,0,0,0.35)]">
                 <div className="flex items-center justify-between mb-4">
@@ -569,7 +576,7 @@ const canFinalize =
 
         <div className="rounded-3xl border-2 border-purple-400 bg-gradient-to-r from-purple-950/90 via-fuchsia-950/75 to-black p-5 sm:p-6 shadow-[0_0_38px_rgba(168,85,247,0.35)]">
           <div className="text-xs font-black tracking-[0.3em] text-purple-300">CHALLENGE</div>
-          <h1 className="mt-2 text-3xl sm:text-4xl font-black text-white">{challenge.challengeTitle}</h1>
+          <h2 className="mt-2 text-3xl sm:text-4xl font-black text-white">{challenge.challengeTitle}</h2>
         </div>
 
         <div className="flex items-center gap-3">
@@ -621,41 +628,6 @@ const canFinalize =
             </p>
           )}
         </div>
-
-        {challenge.matchSetup && (
-          <MatchLineup
-            setup={challenge.matchSetup}
-            locked={
-              !isCreator ||
-              !canEditMatch(
-                challenge.status,
-                Boolean(challenge.resultsSubmitted) || scoreboardUpdated
-              )
-            }
-            onChange={async (next) => {
-              if (!challengeId) return;
-              try {
-                await updateDoc(doc(db, "challenges", challengeId), {
-                  matchSetup: next,
-                });
-                setChallenge((current) =>
-                  current ? { ...current, matchSetup: next } : current
-                );
-              } catch (saveError: unknown) {
-                const messageText =
-                  saveError instanceof Error
-                    ? saveError.message
-                    : "The spot could not be updated on this match.";
-                await teezAlert({
-                  title: "LINEUP NOT SAVED",
-                  message: messageText,
-                  type: "error",
-                  buttonText: "OK",
-                });
-              }
-            }}
-          />
-        )}
 
         {isCreator &&
           canEditMatch(

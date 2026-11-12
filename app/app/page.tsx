@@ -32,7 +32,7 @@ export default function LandingPage() {
       {/* ACTION BUTTONS */}
       <div className="relative z-20 px-4 mt-6 flex flex-col gap-4 max-w-md mx-auto">
         <button
-          onClick={() => router.push("/terms")}
+          onClick={() => router.push("/register")}
           className="w-full py-4 rounded-2xl bg-[#00ff88] text-black font-bold shadow-[0_0_15px_#00ff88]"
         >
           Register

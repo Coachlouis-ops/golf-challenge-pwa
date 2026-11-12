@@ -66,7 +66,7 @@ export async function POST(req: Request) {
               </div>
 
               <p style="font-size:12px; color:#888;">
-                Teez Golf Challenges is operated by Honey Badger Technologies PTY LTD.
+                ABC Bookmakers owns and runs the player platform. TEEZ Golf Challenges is the golf game offered on it.
               </p>
             </div>
           `,

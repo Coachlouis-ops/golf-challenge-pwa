@@ -7,12 +7,12 @@ const steps = [
   {
     number: "01",
     title: "REGISTER",
-    text: "Register with your email address and password, confirm you are 18 or older, and accept the Platform Terms & Conditions and Privacy Policy.",
+    text: "Register with your email address and password, confirm you are 18 or older, and accept the ABC Bookmakers policies.",
   },
   {
     number: "02",
-    title: "FUND YOUR WALLET",
-    text: "Fund your TEEZ wallet securely by card or instant EFT via Peach Payments. Funds stay in your wallet until you use them in a match.",
+    title: "FUND YOUR ACCOUNT",
+    text: "Fund your ABC Bookmakers player account by card or instant EFT via Peach Payments. Funds stay in that account until you use them in a match.",
   },
   {
     number: "03",
@@ -27,7 +27,7 @@ const steps = [
   {
     number: "05",
     title: "PAYMENT GETS SETTLED AUTOMATICALLY",
-    text: "Once the result is confirmed, winnings are paid into the winners' TEEZ wallets automatically.",
+    text: "Once the result is confirmed, ABC Bookmakers credits the winnings to the winners' player accounts automatically.",
   },
 ];
 

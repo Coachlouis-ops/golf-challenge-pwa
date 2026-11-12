@@ -71,7 +71,8 @@ export default function ContactPage() {
     <div className="max-w-2xl w-full text-center mb-12">
 
       <p className="text-gray-400 text-sm mb-4">
-        Teez Golf Challenges is operated by Honey Badger Technologies PTY LTD.
+        ABC Bookmakers owns and runs the player platform. TEEZ Golf Challenges
+        is the golf game offered on it.
       </p>
 
       <p className="text-gray-400 text-sm">

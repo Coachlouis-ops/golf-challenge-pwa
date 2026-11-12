@@ -159,9 +159,8 @@ const handleExit = () => {
           </p>
 
           <p className="text-xs text-gray-500 mb-6 max-w-xl mx-auto">
-            Teez Golf Challenges is operated by Honey Badger Technologies PTY LTD. 
-            All payments are made to Honey Badger Technologies PTY LTD for digital tokens and membership access to participate in skill-based challenges. 
-            Tokens are non-refundable, non-transferable, and cannot be exchanged for cash.
+            ABC Bookmakers owns and runs the player platform. TEEZ Golf Challenges is the golf game offered on it.
+            Play tokens are non-refundable, non-transferable, and cannot be exchanged for cash.
           </p>
 
          <div className="flex flex-col items-center gap-4">
@@ -363,7 +362,7 @@ const handleExit = () => {
       <div className="flex flex-col gap-3 justify-center md:justify-start text-xs">
 
         <span
-          onClick={() => router.push("/legal/terms")}
+          onClick={() => router.push("/bookmaker/terms")}
           className="underline cursor-pointer hover:text-gray-800"
         >
           Terms & Conditions

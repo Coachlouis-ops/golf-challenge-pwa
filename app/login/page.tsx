@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { doc, getDoc } from "firebase/firestore";
 
 import { login, db } from "@/src/lib/firebase";
+import { readJoinReturn } from "@/src/lib/challengeMatch";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -50,6 +51,12 @@ async function handleRouting(uid: string) {
     : null;
 
   const role = userData?.role || "player";
+
+  const joinReturn = readJoinReturn();
+  if (joinReturn && role !== "admin") {
+    router.replace(joinReturn);
+    return;
+  }
 
   if (role === "admin") {
     router.replace("/admin");

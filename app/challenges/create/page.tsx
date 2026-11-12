@@ -1,1170 +1,570 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { httpsCallable } from "firebase/functions";
 import { useRouter } from "next/navigation";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  updateDoc,
+  where,
+} from "firebase/firestore";
 import { auth, db, functions } from "@/src/lib/firebase";
-import { collection, getDocs, query, where } from "firebase/firestore";
 import RequireAuth from "@/src/lib/RequireAuth";
 import GolfCourseSearch from "@/src/components/GolfCourseSearch";
+import SiteFooter from "@/src/components/SiteFooter";
+import MatchLineup from "@/src/components/MatchLineup";
 import { useTeezNotification } from "@/src/components/TeezNotificationProvider";
+import {
+  BET_AMOUNTS,
+  type ScoringMethod,
+  formatRand,
+  withinPlayingSpotCap,
+} from "@/src/lib/gameEngine";
+import {
+  type MatchSetup,
+  type PlayMode,
+  MODE_OPTIONS,
+  buildMatchSetup,
+  canEditMatch,
+  resultsHaveBeenSubmitted,
+  formatLabel,
+  formatsForMode,
+  guideLines,
+  isCallableFieldError,
+  joinPath,
+  legacyOnlyPayload,
+  modeLabel,
+  readMatchSetup,
+  scoringLabel,
+  setupIsReady,
+  toCallablePayload,
+  whatsAppInviteUrl,
+} from "@/src/lib/challengeMatch";
 
+const fieldClass =
+  "w-full bg-black border-2 border-cyan-400 rounded-xl px-4 py-4 text-base font-bold text-white outline-none shadow-[0_0_18px_rgba(34,211,238,0.35)] focus:border-cyan-200";
 
-
-
-
-
-const TEAM_FORMATS = ["SINGLES", "PAIR", "FOURBALL"];
-
-const GAME_FORMATS = [
-  "STROKE_PLAY",
-  "NETT_PLAY",
-  "POINTS_GAME",
-  "MATCH_PLAY",
-];
-
-const TYPE_OF_GAME = [
-  "SINGLES",
-  "BETTER_BALL",
-  "WORST_BALL",
-  "AGGREGATE",
-  "MULTIPLICATION",
-  "NASSAU",
-  "SKINS",
-  "SIX_SIX_SIX",
-  "QUOTA",
-  "WOLF",
-  "LONE_RANGER",
-  "CHICAGO",
-  "FLAGS",
-  "VEGAS",
-];
-
-
-const SCORING_METHODS = ["STROKES", "POINTS"];
-
-const GAME_PRESETS = [
-  {
-    name: "CLASSIC MATCHPLAY",
-    teamFormat: "SINGLES",
-    gameFormat: "MATCH_PLAY",
-    typeOfGame: "SINGLES",
-    scoringMethod: "POINTS",
-  },
-
-  {
-    name: "SOCIAL BETTER BALL",
-    teamFormat: "PAIR",
-    gameFormat: "POINTS_GAME",
-    typeOfGame: "BETTER_BALL",
-    scoringMethod: "POINTS",
-  },
-
-  {
-    name: "TOURNAMENT STROKE PLAY",
-    teamFormat: "SINGLES",
-    gameFormat: "STROKE_PLAY",
-    typeOfGame: "SINGLES",
-    scoringMethod: "STROKES",
-  },
-
-  {
-    name: "VEGAS SHOWDOWN",
-    teamFormat: "PAIR",
-    gameFormat: "POINTS_GAME",
-    typeOfGame: "VEGAS",
-    scoringMethod: "POINTS",
-  },
-
-  {
-    name: "WEEKEND SKINS",
-    teamFormat: "SINGLES",
-    gameFormat: "POINTS_GAME",
-    typeOfGame: "SKINS",
-    scoringMethod: "POINTS",
-  },
-];
-
-const GAME_ENGINE: Record<
-  string,
-  {
-    description: string;
-    gameplay: string;
-    outcome: string;
-    recommendedTeam: string[];
-    recommendedScoring: string[];
-    players: string;
-    atmosphere: string;
-    warning?: string;
-  }
-> = {
-  SINGLES: {
-    description:
-      "Classic individual golf competition where every player competes for the best overall result.",
-    gameplay:
-      "Each golfer plays their own round independently with no shared scoring.",
-    outcome:
-      "Lowest strokes or highest points wins depending on scoring setup.",
-    recommendedTeam: ["SINGLES"],
-    recommendedScoring: ["STROKES", "POINTS"],
-    players: "2+ Players",
-    atmosphere: "Competitive / Traditional",
-  },
-
-  BETTER_BALL: {
-    description:
-      "Two-player teams where the best score on each hole counts for the team.",
-    gameplay:
-      "Partners support each other while only the strongest score contributes.",
-    outcome:
-      "Team with best cumulative hole performance wins.",
-    recommendedTeam: ["PAIR", "FOURBALL"],
-    recommendedScoring: ["POINTS", "STROKES"],
-    players: "4+ Players",
-    atmosphere: "Strategic / Team Based",
-  },
-
-  WORST_BALL: {
-    description:
-      "Team pressure format where the worst score on each hole counts.",
-    gameplay:
-      "Every player matters because mistakes heavily impact the team.",
-    outcome:
-      "Lowest total worst-ball score wins.",
-    recommendedTeam: ["PAIR", "FOURBALL"],
-    recommendedScoring: ["STROKES"],
-    players: "4+ Players",
-    atmosphere: "High Pressure / Punishing",
-  },
-
-  AGGREGATE: {
-    description:
-      "All team scores combine together for a full team total.",
-    gameplay:
-      "Every score contributes directly to the final outcome.",
-    outcome:
-      "Lowest combined team score wins.",
-    recommendedTeam: ["PAIR", "FOURBALL"],
-    recommendedScoring: ["STROKES"],
-    players: "4+ Players",
-    atmosphere: "Balanced Team Competition",
-  },
-
-  MULTIPLICATION: {
-    description:
-      "Aggressive scoring format multiplying scores for dramatic swings.",
-    gameplay:
-      "One bad hole can massively affect the standings.",
-    outcome:
-      "Lowest multiplied total wins.",
-    recommendedTeam: ["PAIR"],
-    recommendedScoring: ["POINTS"],
-    players: "2-4 Players",
-    atmosphere: "High Risk / Explosive",
-  },
-
-  NASSAU: {
-  description:
-    "Four-part challenge separating Front 9, Back 9, Overall Game and Units.",
-  gameplay:
-    "Each section is played as an independent result inside the same round.",
-  outcome:
-    "A player can independently win, lose or draw the Front 9, Back 9, Overall Game and Units.",
-  recommendedTeam: ["SINGLES", "PAIR"],
-  recommendedScoring: ["POINTS"],
-  players: "2-4 Players",
-  atmosphere: "Classic Nassau Challenge",
-},
-
-  SKINS: {
-   description:
-  "Each hole becomes its own individual scoring challenge.",
-    gameplay:
-      "Winning a hole outright earns the skin. Ties carry over.",
-  outcome:
-  "Player/team with the most skins wins the match.",
-    recommendedTeam: ["SINGLES", "PAIR"],
-    recommendedScoring: ["POINTS"],
-    players: "2+ Players",
-    atmosphere: "Aggressive / Momentum Based",
-  },
-
-  SIX_SIX_SIX: {
-    description:
-      "The format changes every six holes creating strategic variety.",
-    gameplay:
-      "Different scoring systems rotate throughout the round.",
-    outcome:
-      "Best adapted overall performance wins.",
-    recommendedTeam: ["PAIR", "FOURBALL"],
-    recommendedScoring: ["POINTS"],
-    players: "4+ Players",
-    atmosphere: "Fun / Dynamic",
-  },
-
-  QUOTA: {
-    description:
-      "Players compete against a target quota based on handicap ability.",
-    gameplay:
-      "Stableford-style points are compared to personal targets.",
-    outcome:
-      "Player exceeding quota by the largest margin wins.",
-    recommendedTeam: ["SINGLES"],
-    recommendedScoring: ["POINTS"],
-    players: "2+ Players",
-    atmosphere: "Fair Handicap Competition",
-  },
-
-  WOLF: {
-    description:
-      "Rotating captain format with strategic partner selection.",
-    gameplay:
-      "Each hole has a designated Wolf who chooses to play solo or with a partner.",
-    outcome:
-      "Highest accumulated points wins.",
-    recommendedTeam: ["FOURBALL"],
-    recommendedScoring: ["POINTS"],
-    players: "4 Players",
-    atmosphere: "Strategic / Social Pressure",
-    warning:
-      "WOLF works best with exactly 4 players.",
-  },
-
-  LONE_RANGER: {
-    description:
-      "One rotating player becomes the designated counted score.",
-    gameplay:
-      "Each hole requires a specific player's score to count.",
-    outcome:
-      "Best managed rotation strategy wins.",
-    recommendedTeam: ["FOURBALL"],
-    recommendedScoring: ["POINTS"],
-    players: "4 Players",
-    atmosphere: "Team Strategy",
-  },
-
-  CHICAGO: {
-    description:
-      "Points-based format where players start with negative values.",
-    gameplay:
-      "Strong holes progressively erase negative starting points.",
-    outcome:
-      "Highest final adjusted points wins.",
-    recommendedTeam: ["SINGLES"],
-    recommendedScoring: ["POINTS"],
-    players: "2+ Players",
-    atmosphere: "Recovery / Momentum",
-  },
-
-  FLAGS: {
-    description:
-      "Players continue until allocated strokes are exhausted.",
-    gameplay:
-      "A flag marks the exact finishing position when strokes run out.",
-    outcome:
-      "Player reaching furthest wins.",
-    recommendedTeam: ["SINGLES"],
-    recommendedScoring: ["STROKES"],
-    players: "2+ Players",
-    atmosphere: "Survival Challenge",
-  },
-
-  VEGAS: {
-    description:
-      "Team scores combine into two-digit numbers for each hole.",
-    gameplay:
-      "Lower scores create significantly stronger combinations.",
-    outcome:
-      "Lowest combined Vegas total wins.",
-    recommendedTeam: ["PAIR"],
-    recommendedScoring: ["POINTS"],
-    players: "4 Players",
-    atmosphere: "High Pressure / Strategic",
-    warning:
-      "VEGAS scoring can create extremely large score swings.",
-  },
-};
-
-function CapsuleGroup({
-  title,
-  items,
-  selected,
-  onSelect,
-}: {
-  title: string;
-  items: string[];
-  selected: string;
-  onSelect: (val: string) => void;
-}) {
-  return (
-    <div className="flex flex-col gap-3">
-      <h3 className="font-semibold text-green-400 tracking-wider">
-        {title}
-      </h3>
-
-      <div className="flex flex-wrap gap-2">
-        {items.map((item) => {
-          const isSelected = selected === item;
-
-          return (
-            <button
-              key={item}
-              type="button"
-              onClick={() => onSelect(item)}
-              className={`px-3 py-2 rounded-full border text-xs sm:text-sm whitespace-nowrap flex-shrink-0 transition-all duration-300
-                ${
-                  isSelected
-                    ? "bg-green-400 text-black border-green-400 shadow-[0_0_20px_#39FF14] scale-105"
-                    : "bg-neutral-800 text-gray-300 border-neutral-600 hover:border-green-400 hover:shadow-[0_0_10px_#39FF14]"
-                }`}
-            >
-              {item}
-            </button>
-          );
-        })}
-      </div>
-    </div>
-  );
+function freshSetup(): MatchSetup {
+  return buildMatchSetup({
+    title: "",
+    mode: "singles",
+    format: "stroke_play",
+    scoringMethod: "strokes",
+    betAmount: 0,
+    sideCount: 2,
+    playersPerSide: 1,
+    courseName: "",
+    courseStateProvince: "",
+    courseCountry: "",
+  });
 }
 
 export default function CreateChallengePage() {
   const router = useRouter();
   const { teezAlert } = useTeezNotification();
+  const [setup, setSetup] = useState<MatchSetup>(freshSetup);
+  const [savedId, setSavedId] = useState<string | null>(null);
+  const [status, setStatus] = useState("created");
+  const [resultsSubmitted, setResultsSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [showGuide, setShowGuide] = useState(false);
+  const [groupId, setGroupId] = useState<string | null>(null);
+  const [groupChoices, setGroupChoices] = useState<{ id: string; name: string }[]>([]);
+  const [askForGroup, setAskForGroup] = useState(false);
 
-const [challengeScope, setChallengeScope] =
-  useState<"normal" | "group">("group");
+  const locked = setup.detailsLocked;
+  const formats = formatsForMode(setup.mode);
+  const guide = useMemo(() => guideLines(setup), [setup]);
 
-const [groupId, setGroupId] =
-  useState<string | null>(null);
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const suppliedGroupId = params.get("groupId");
+    const challengeId = params.get("challengeId");
+    if (suppliedGroupId) setGroupId(suppliedGroupId);
 
-const [availableGroups, setAvailableGroups] = useState<
-  { id: string; name: string }[]
->([]);
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
+      if (!user) return;
 
-const [loadingGroups, setLoadingGroups] = useState(true);
+      if (!suppliedGroupId) {
+        const snapshot = await getDocs(
+          query(collection(db, "groups"), where("creatorUid", "==", user.uid))
+        );
+        setGroupChoices(
+          snapshot.docs
+            .filter((item) => item.data().status === "active")
+            .map((item) => ({
+              id: item.id,
+              name: String(item.data().groupName || item.data().name || "Unnamed group"),
+            }))
+        );
+      }
 
+      if (!challengeId) return;
 
-useEffect(() => {
-  const unsubscribe = auth.onAuthStateChanged(async (user) => {
-    if (!user) {
-      setAvailableGroups([]);
-      setLoadingGroups(false);
+      const snap = await getDoc(doc(db, "challenges", challengeId));
+      if (!snap.exists()) return;
+      const data = snap.data();
+      if (data.creatorUid !== user.uid) return;
+
+      const loaded = readMatchSetup(data);
+      if (loaded) {
+        setSetup({ ...loaded, detailsLocked: true });
+      }
+      setSavedId(challengeId);
+      setStatus(String(data.status || "created"));
+      setResultsSubmitted(resultsHaveBeenSubmitted(data));
+      if (data.groupId) setGroupId(String(data.groupId));
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  function reshape(next: Partial<MatchSetup> & { mode?: PlayMode; format?: string }) {
+    const mode = next.mode || setup.mode;
+    const format =
+      next.format ||
+      (next.mode && next.mode !== setup.mode ? formatsForMode(mode)[0].value : setup.format);
+
+    setSetup(
+      buildMatchSetup({
+        title: next.title ?? setup.title,
+        mode,
+        format,
+        scoringMethod: (next.scoringMethod || setup.scoringMethod) as ScoringMethod,
+        betAmount: next.betAmount ?? setup.betAmount,
+        sideCount: next.sideCount ?? setup.sideCount,
+        playersPerSide: next.playersPerSide ?? setup.playersPerSide,
+        courseName: next.courseName ?? setup.courseName,
+        courseStateProvince: next.courseStateProvince ?? setup.courseStateProvince,
+        courseCountry: next.courseCountry ?? setup.courseCountry,
+        previous: setup,
+      })
+    );
+    setShowGuide(false);
+  }
+
+  async function openInvite(sideName: string, spotNumber: number, spotId: string, sideId: string) {
+    if (!savedId) {
+      await teezAlert({
+        title: "SAVE THE MATCH FIRST",
+        message:
+          "Create the game before sending the invite. The link then carries this side and this spot, so the player is placed there when they accept.",
+        type: "warning",
+        buttonText: "CONTINUE",
+      });
       return;
     }
 
-    setLoadingGroups(true);
+    const joinUrl = `${window.location.origin}${joinPath(savedId, sideId, spotId)}`;
+    const url = whatsAppInviteUrl({
+      title: setup.title.trim() || "your match",
+      sideName,
+      spotNumber,
+      joinUrl,
+    });
+    window.open(url, "_blank", "noopener,noreferrer");
+  }
 
-    try {
-      const groupsQuery = query(
-        collection(db, "groups"),
-        where("creatorUid", "==", user.uid)
-      );
+  async function persistSetup(next: MatchSetup, id: string) {
+    await updateDoc(doc(db, "challenges", id), toCallablePayload(next, groupId));
+  }
 
-      const snapshot = await getDocs(groupsQuery);
-
-      const groups = snapshot.docs
-        .filter((doc) => doc.data().status === "active")
-        .map((doc) => ({
-          id: doc.id,
-          name: String(
-            doc.data().groupName ||
-            doc.data().name ||
-            "Unnamed Group"
-          ),
-        }));
-
-      setAvailableGroups(groups);
-    } catch (error) {
-      console.error("LOAD GROUPS ERROR:", error);
-      setAvailableGroups([]);
-    } finally {
-      setLoadingGroups(false);
+  async function handleCreateGame() {
+    const problem = setupIsReady(setup);
+    if (problem) {
+      await teezAlert({
+        title: "MATCH NOT READY",
+        message: problem,
+        type: "warning",
+        buttonText: "CONTINUE",
+      });
+      return;
     }
-  });
 
-  return () => unsubscribe();
-}, []);
-
-
-
-  const [challengeTitle, setChallengeTitle] = useState("");
-
-
-
-
-const [entryTokens, setEntryTokens] = useState<string>("");
-
-const [nassauFront9Tokens, setNassauFront9Tokens] = useState<string>("");
-const [nassauBack9Tokens, setNassauBack9Tokens] = useState<string>("");
-const [nassauGameTokens, setNassauGameTokens] = useState<string>("");
-const [nassauUnitsTokens, setNassauUnitsTokens] = useState<string>("");
-
-const [teamFormat, setTeamFormat] = useState("");
-  const [gameFormat, setGameFormat] = useState("");
-  const [typeOfGame, setTypeOfGame] = useState("");
-  const [scoringMethod, setScoringMethod] = useState("");
-
-
-
-  const [courseName, setCourseName] = useState("");
-
-const [
-  courseStateProvince,
-  setCourseStateProvince,
-] = useState("");
-
-const [
-  courseCountry,
-  setCourseCountry,
-] = useState("");
-
-
-
-
-
-  const [loading, setLoading] = useState(false);
-
-
-useEffect(() => {
-  const params =
-    new URLSearchParams(window.location.search);
-
-  const suppliedGroupId =
-    params.get("groupId");
-
-  
-  setGroupId(suppliedGroupId || null);
-}, []);
-
-  
-
-  const selectedGame =
-    GAME_ENGINE[typeOfGame];
-
-const compatibilityWarnings: string[] = [];
-
-if (
-  typeOfGame === "VEGAS" &&
-  teamFormat &&
-  teamFormat !== "PAIR"
-) {
-  compatibilityWarnings.push(
-    "VEGAS is usually played in PAIRS."
-  );
-}
-
-if (
-  typeOfGame === "WOLF" &&
-  teamFormat &&
-  teamFormat !== "FOURBALL"
-) {
-  compatibilityWarnings.push(
-    "WOLF works best in FOURBALL format."
-  );
-}
-
-if (
-  typeOfGame === "BETTER_BALL" &&
-  scoringMethod &&
-  scoringMethod !== "POINTS"
-) {
-  compatibilityWarnings.push(
-    "BETTER BALL is most commonly played using POINTS scoring."
-  );
-}
-
-if (
-  typeOfGame === "WORST_BALL" &&
-  scoringMethod === "STROKES"
-) {
-  compatibilityWarnings.push(
-    "Excellent setup for WORST BALL pressure scoring."
-  );
-}
-
-if (
-  gameFormat === "MATCH_PLAY" &&
-  typeOfGame === "AGGREGATE"
-) {
-  compatibilityWarnings.push(
-    "AGGREGATE is less commonly used in MATCH PLAY."
-  );
-}
-
-const isNassau = typeOfGame === "NASSAU";
-
-const nassauTotalTokens =
-  Number(nassauFront9Tokens || 0) +
-  Number(nassauBack9Tokens || 0) +
-  Number(nassauGameTokens || 0) +
-  Number(nassauUnitsTokens || 0);
-
-
-const isValid =
-Boolean(groupId?.trim()) &&
-  challengeTitle.trim().length > 0 &&
-  (
-    isNassau
-      ? Number(nassauFront9Tokens) > 0 &&
-        Number(nassauBack9Tokens) > 0 &&
-        Number(nassauGameTokens) > 0 &&
-        Number(nassauUnitsTokens) > 0
-      : Number(entryTokens) > 0
-  ) &&
-  teamFormat &&
-  gameFormat &&
-  typeOfGame &&
-  scoringMethod &&
-  courseName.trim().length > 0;
-
-async function handleCreate() {
-  if (
-    !groupId ||
-    !availableGroups.some((group) => group.id === groupId)
-  ) {
-    await teezAlert({
-      title: "SELECT A GROUP",
-      message:
-        "Please select one of your active groups before creating a challenge.",
-      type: "warning",
-      buttonText: "CONTINUE",
-    });
-    return;
-  }
-
-  if (!isValid) {
-    await teezAlert({
-      title: "COMPLETE CHALLENGE",
-      message:
-        "Please complete all challenge information correctly before creating the match.",
-      type: "warning",
-      buttonText: "CONTINUE",
-    });
-    return;
-  }
+    if (
+      (setup.mode === "teams" || setup.mode === "groups") &&
+      !withinPlayingSpotCap(setup.sideCount, setup.playersPerSide)
+    ) {
+      return;
+    }
 
     try {
       setLoading(true);
+      const createChallenge = httpsCallable(functions, "createChallenge");
+      let challengeId = savedId;
 
-      const createChallenge =
-        httpsCallable(functions, "createChallenge");
+      if (!challengeId) {
+        try {
+          const result = await createChallenge(toCallablePayload(setup, groupId));
+          challengeId = String((result.data as { challengeId?: string }).challengeId || "");
+        } catch (error: unknown) {
+          const callableError = error as { code?: string; message?: string };
+          const message = String(callableError.message || "");
+          if (message.toLowerCase().includes("group") && !groupId) {
+            setAskForGroup(true);
+            throw error;
+          }
 
-const result: any = await createChallenge({
-  challengeScope: "group",
-  groupId,
+          if (!isCallableFieldError(callableError)) throw error;
 
-  challengeTitle: challengeTitle.trim(),
-
-  entryTokens: isNassau
-    ? nassauTotalTokens
-    : Number(entryTokens),
-
-  nassauTokens: isNassau
-    ? {
-        front9: Number(nassauFront9Tokens || 0),
-        back9: Number(nassauBack9Tokens || 0),
-        game: Number(nassauGameTokens || 0),
-        units: Number(nassauUnitsTokens || 0),
+          const retry = await createChallenge(legacyOnlyPayload(setup, groupId));
+          challengeId = String((retry.data as { challengeId?: string }).challengeId || "");
+        }
       }
-    : null,
 
-  teamFormat,
-  gameFormat,
-  typeOfGame,
-  scoringMethod,
+      if (!challengeId) {
+        throw new Error("The match was not given an id.");
+      }
 
-  courseName: courseName.trim(),
-  courseStateProvince:
-    courseStateProvince.trim(),
-  courseCountry:
-    courseCountry.trim(),
-});
+      const lockedSetup = { ...setup, detailsLocked: true };
+      try {
+        await persistSetup(lockedSetup, challengeId);
+      } catch {
+        await teezAlert({
+          title: "MATCH SAVED WITH A LIMIT",
+          message:
+            "The match was created, but the lineup could not be written onto the match record from this page. The save function may still be keeping only the original fields.",
+          type: "warning",
+          buttonText: "CONTINUE",
+        });
+      }
 
-      const challengeId =
-        result.data.challengeId;
-
-      router.push(`/challenges/${challengeId}`);
-    } catch (err: any) {
-  console.error(
-    "CREATE CHALLENGE ERROR:",
-    err
-  );
-
-  await teezAlert({
-    title: "CHALLENGE NOT CREATED",
-    message:
-      err?.message ||
-      "We could not create your challenge. Please try again.",
-    type: "error",
-    buttonText: "TRY AGAIN",
-  });
-} finally {
+      setSetup(lockedSetup);
+      setSavedId(challengeId);
+      setShowGuide(false);
+      window.history.replaceState(null, "", `/challenges/create?challengeId=${challengeId}`);
+    } catch (error: unknown) {
+      const messageText =
+        error instanceof Error ? error.message : "The match could not be saved.";
+      await teezAlert({
+        title: "MATCH NOT CREATED",
+        message: messageText,
+        type: "error",
+        buttonText: "TRY AGAIN",
+      });
+    } finally {
       setLoading(false);
     }
   }
 
+  function handleEdit() {
+    if (!canEditMatch(status, resultsSubmitted)) {
+      void teezAlert({
+        title: "MATCH IS CLOSED",
+        message: "This match can no longer be edited because results have been entered.",
+        type: "warning",
+        buttonText: "CONTINUE",
+      });
+      return;
+    }
+
+    setSetup((current) => ({ ...current, detailsLocked: false }));
+    setShowGuide(false);
+  }
+
+  const sideWord = setup.mode === "groups" ? "groups" : "teams";
+
   return (
     <RequireAuth>
-      <main className="min-h-screen flex justify-center items-center px-4 py-16 text-white relative overflow-hidden bg-black">
-
-        <div className="absolute inset-0 opacity-20 animate-pulse pointer-events-none bg-[radial-gradient(circle,#39FF14_1px,transparent_1px)] bg-[size:40px_40px]" />
-
-        <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[400px] bg-green-400 opacity-10 blur-[120px] animate-pulse"></div>
-        </div>
-
-        <img
-          src="/badger-left.png"
-          className="hidden lg:block absolute left-0 bottom-0 h-[90%] opacity-25 animate-pulse"
-        />
-
-        <img
-          src="/badger-right.png"
-          className="hidden lg:block absolute right-0 bottom-0 h-[90%] opacity-25 animate-pulse"
-        />
-
-        <div className="relative z-10 w-full max-w-4xl bg-neutral-900/80 backdrop-blur-xl border border-neutral-700 rounded-2xl p-6 sm:p-10 shadow-[0_0_40px_rgba(0,255,120,0.25)] flex flex-col gap-7">
-
-        <h1 className="text-2xl sm:text-4xl font-bold text-green-400 text-center tracking-widest drop-shadow-[0_0_10px_#39FF14]">
-CREATE GROUP CHALLENGE
-</h1>
-
-
-{/* GROUP SELECTION */}
-<div className="flex flex-col gap-3">
-  <label className="text-cyan-300 font-bold tracking-wider">
-    SELECT YOUR GROUP
-  </label>
-
-  {loadingGroups ? (
-    <p className="text-gray-400 text-sm">
-      Loading your groups...
-    </p>
-  ) : availableGroups.length === 0 ? (
-    <div className="rounded-xl border border-yellow-400/30 bg-yellow-500/10 p-4">
-      <p className="text-yellow-200 text-sm">
-        You have no active groups available for creating challenges.
-      </p>
-
-      <button
-        type="button"
-        onClick={() => router.push("/groups")}
-        className="mt-3 text-cyan-300 font-bold underline"
-      >
-        GO TO GROUPS
-      </button>
-    </div>
-  ) : (
-    <select
-      value={groupId || ""}
-      onChange={(e) => setGroupId(e.target.value || null)}
-      className="w-full min-w-0 bg-black border-2 border-cyan-400 rounded-xl px-4 py-4 text-white font-bold outline-none focus:border-cyan-300"
-    >
-      <option value="">-- Select a Group --</option>
-
-      {availableGroups.map((group) => (
-        <option key={group.id} value={group.id}>
-          {group.name}
-        </option>
-      ))}
-    </select>
-  )}
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-          <input
-            placeholder="Challenge Title"
-            value={challengeTitle}
-            onChange={(e) =>
-              setChallengeTitle(e.target.value)
-            }
-          className="
-  bg-black
-  border-2 border-cyan-400
-  rounded-xl
-  px-5 py-5
-  text-lg sm:text-xl
-  font-bold
-  text-white
-  placeholder:text-cyan-300
-  placeholder:font-bold
-  outline-none
-  shadow-[0_0_20px_rgba(34,211,238,0.55)]
-  focus:border-cyan-300
-  focus:shadow-[0_0_35px_rgba(34,211,238,0.9)]
-  transition-all duration-300
-"
-/>
-
-         {!isNassau ? (
-  <input
-    type="number"
-    placeholder="Entry Tokens"
-    value={entryTokens}
-    onChange={(e) =>
-      setEntryTokens(e.target.value)
-    }
-    className="
-      bg-black
-      border-2 border-cyan-400
-      rounded-xl
-      px-5 py-5
-      text-lg sm:text-xl
-      font-bold
-      text-white
-      placeholder:text-cyan-300
-      placeholder:font-bold
-      outline-none
-      shadow-[0_0_20px_rgba(34,211,238,0.55)]
-      focus:border-cyan-300
-      focus:shadow-[0_0_35px_rgba(34,211,238,0.9)]
-      transition-all duration-300
-    "
-  />
-) : (
-  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-    <input
-      type="number"
-      placeholder="Front 9 Tokens"
-      value={nassauFront9Tokens}
-      onChange={(e) => setNassauFront9Tokens(e.target.value)}
-      className="bg-black border-2 border-cyan-400 rounded-xl px-5 py-5 text-lg font-bold text-white placeholder:text-cyan-300 outline-none shadow-[0_0_20px_rgba(34,211,238,0.55)]"
-    />
-
-    <input
-      type="number"
-      placeholder="Back 9 Tokens"
-      value={nassauBack9Tokens}
-      onChange={(e) => setNassauBack9Tokens(e.target.value)}
-      className="bg-black border-2 border-cyan-400 rounded-xl px-5 py-5 text-lg font-bold text-white placeholder:text-cyan-300 outline-none shadow-[0_0_20px_rgba(34,211,238,0.55)]"
-    />
-
-    <input
-      type="number"
-      placeholder="Overall Game Tokens"
-      value={nassauGameTokens}
-      onChange={(e) => setNassauGameTokens(e.target.value)}
-      className="bg-black border-2 border-cyan-400 rounded-xl px-5 py-5 text-lg font-bold text-white placeholder:text-cyan-300 outline-none shadow-[0_0_20px_rgba(34,211,238,0.55)]"
-    />
-
-    <input
-      type="number"
-      placeholder="Units Tokens"
-      value={nassauUnitsTokens}
-      onChange={(e) => setNassauUnitsTokens(e.target.value)}
-      className="bg-black border-2 border-cyan-400 rounded-xl px-5 py-5 text-lg font-bold text-white placeholder:text-cyan-300 outline-none shadow-[0_0_20px_rgba(34,211,238,0.55)]"
-    />
-
-    <div className="sm:col-span-2 border border-green-400/30 bg-green-500/10 rounded-xl p-4 text-center">
-      <div className="text-xs tracking-[0.25em] text-green-400 font-bold">
-        TOTAL ENTRY TOKENS
-      </div>
-
-      <div className="text-3xl font-extrabold text-white mt-1">
-        {nassauTotalTokens}
-      </div>
-    </div>
-  </div>
-)}
-
-{/* ================= GAME PRESETS ================= */}
-
-<div className="flex flex-col gap-3">
-
-  <div className="text-sm font-bold tracking-[0.25em] text-cyan-300">
-    QUICK GAME PRESETS
-  </div>
-
-  <div className="flex flex-wrap gap-3">
-
-    {GAME_PRESETS.map((preset) => (
-
-      <button
-        key={preset.name}
-        type="button"
-        onClick={() => {
-          setTeamFormat(preset.teamFormat);
-          setGameFormat(preset.gameFormat);
-          setTypeOfGame(preset.typeOfGame);
-          setScoringMethod(preset.scoringMethod);
-        }}
-        className="
-          px-4 py-3 rounded-2xl
-          bg-cyan-500/10
-          border border-cyan-400/30
-          text-cyan-300 text-xs font-bold
-          tracking-wide
-          hover:bg-cyan-400
-          hover:text-black
-          hover:shadow-[0_0_25px_rgba(34,211,238,0.6)]
-          transition-all
-        "
-      >
-        {preset.name}
-      </button>
-
-    ))}
-
-  </div>
-
-</div>
-
-       <GolfCourseSearch
-  value={courseName}
-  placeholder="Search Golf Course"
-  className="
-    w-full
-    bg-black
-    border-2 border-cyan-400
-    rounded-xl
-    px-5 py-5
-    text-lg sm:text-xl
-    font-bold
-    text-white
-    placeholder:text-cyan-300
-    placeholder:font-bold
-    outline-none
-    shadow-[0_0_20px_rgba(34,211,238,0.55)]
-    focus:border-cyan-300
-    focus:shadow-[0_0_35px_rgba(34,211,238,0.9)]
-    transition-all duration-300
-  "
-  onSelect={(course) => {
-    setCourseName(
-      course.name
-    );
-
-    setCourseStateProvince(
-      course.stateProvince
-    );
-
-    setCourseCountry(
-      course.country
-    );
-  }}
-/>
-
-          <CapsuleGroup
-            title="Team Format"
-            items={TEAM_FORMATS}
-            selected={teamFormat}
-            onSelect={setTeamFormat}
-          />
-
-          <CapsuleGroup
-            title="Game Format"
-            items={GAME_FORMATS}
-            selected={gameFormat}
-            onSelect={setGameFormat}
-          />
-
-          <CapsuleGroup
-            title="Type Of Game"
-            items={TYPE_OF_GAME}
-            selected={typeOfGame}
-            onSelect={setTypeOfGame}
-          />
-
-          <CapsuleGroup
-            title="Scoring Method"
-            items={SCORING_METHODS}
-            selected={scoringMethod}
-            onSelect={setScoringMethod}
-          />
-
-          {/* ================= GAME ENGINE GUIDE ================= */}
-
-          {selectedGame && (
-            <div className="border border-green-400/30 bg-black/40 rounded-3xl p-6 shadow-[0_0_35px_rgba(57,255,20,0.25)] flex flex-col gap-5">
-
-              <div>
-
-                <div className="text-xs tracking-[0.3em] text-green-400 font-bold animate-pulse">
-                  GAME ENGINE GUIDE
-                </div>
-
-                <div className="text-3xl font-extrabold text-white mt-2">
-                  {typeOfGame}
-                </div>
-
-                <div className="flex flex-wrap gap-2 mt-4">
-
-  <span
-    className={`px-3 py-1 rounded-full text-xs font-bold
-    ${
-      selectedGame.recommendedTeam.includes(teamFormat)
-        ? "bg-green-400 text-black"
-        : "bg-red-500 text-white"
-    }`}
-  >
-    TEAM FORMAT:
-    {selectedGame.recommendedTeam.includes(teamFormat)
-      ? " COMPATIBLE"
-      : " NOT RECOMMENDED"}
-  </span>
-
-  <span
-    className={`px-3 py-1 rounded-full text-xs font-bold
-    ${
-      selectedGame.recommendedScoring.includes(scoringMethod)
-        ? "bg-green-400 text-black"
-        : "bg-red-500 text-white"
-    }`}
-  >
-    SCORING:
-    {selectedGame.recommendedScoring.includes(scoringMethod)
-      ? " COMPATIBLE"
-      : " NOT RECOMMENDED"}
-  </span>
-
-</div>
-
-              </div>
-
-              <div className="text-gray-200 leading-relaxed">
-                {selectedGame.description}
-              </div>
-
-              <div className="border border-cyan-400/20 bg-cyan-500/5 rounded-2xl p-4 flex flex-col gap-2">
-
-  <div className="text-cyan-300 font-bold text-sm tracking-wider">
-    LIVE GAME SUMMARY
-  </div>
-
-  <div className="text-sm text-gray-300">
-    You are creating a
-    <span className="text-green-400 font-bold">
-      {" "}{typeOfGame}
-    </span>
-    {" "}challenge using
-    <span className="text-green-400 font-bold">
-      {" "}{teamFormat || "No Team Format"}
-    </span>
-    {" "}with
-    <span className="text-green-400 font-bold">
-      {" "}{scoringMethod || "No Scoring"}
-    </span>
-    {" "}scoring.
-  </div>
-
-  <div className="text-sm text-gray-400">
-    Expected atmosphere:
-    <span className="text-white">
-      {" "}{selectedGame.atmosphere}
-    </span>
-  </div>
-
-</div>
-
-              <div className="grid md:grid-cols-2 gap-4">
-
-                <div className="border border-green-400/20 rounded-2xl p-4 bg-black/30">
-                  <div className="text-green-400 font-bold mb-2">
-                    GAMEPLAY
-                  </div>
-
-                  <div className="text-sm text-gray-300">
-                    {selectedGame.gameplay}
-                  </div>
-                </div>
-
-
-
-                <div className="border border-green-400/20 rounded-2xl p-4 bg-black/30">
-                  <div className="text-green-400 font-bold mb-2">
-                    OUTCOME
-                  </div>
-
-                  <div className="text-sm text-gray-300">
-                    {selectedGame.outcome}
-                  </div>
-                </div>
-
-                <div className="border border-green-400/20 rounded-2xl p-4 bg-black/30">
-                  <div className="text-green-400 font-bold mb-2">
-                    RECOMMENDED TEAM FORMAT
-                  </div>
-
-                  <div className="flex flex-wrap gap-2">
-                    {selectedGame.recommendedTeam.map(
-                      (team) => (
-                        <span
-                          key={team}
-                          className={`px-3 py-1 rounded-full text-xs font-bold
-                            ${
-                              teamFormat === team
-                                ? "bg-green-400 text-black"
-                                : "bg-neutral-800 text-gray-300"
-                            }`}
-                        >
-                          {team}
-                        </span>
-                      )
-                    )}
-                  </div>
-                </div>
-
-                <div className="border border-green-400/20 rounded-2xl p-4 bg-black/30">
-                  <div className="text-green-400 font-bold mb-2">
-                    RECOMMENDED SCORING
-                  </div>
-
-                  <div className="flex flex-wrap gap-2">
-                    {selectedGame.recommendedScoring.map(
-                      (score) => (
-                        <span
-                          key={score}
-                          className={`px-3 py-1 rounded-full text-xs font-bold
-                            ${
-                              scoringMethod === score
-                                ? "bg-green-400 text-black"
-                                : "bg-neutral-800 text-gray-300"
-                            }`}
-                        >
-                          {score}
-                        </span>
-                      )
-                    )}
-                  </div>
-                </div>
-
-              </div>
-
-              <div className="grid md:grid-cols-2 gap-4">
-
-                <div className="border border-purple-400/20 bg-purple-500/5 rounded-2xl p-4 flex flex-col gap-3">
-
-  <div className="text-purple-300 font-bold tracking-wider text-sm">
-    GAME ENGINE ANALYSIS
-  </div>
-
-  <div className="grid md:grid-cols-3 gap-3">
-
-    <div className="bg-black/40 rounded-xl p-3 border border-purple-400/10">
-      <div className="text-xs text-gray-400">
-        BEST FOR
-      </div>
-
-      <div className="text-sm text-white font-semibold mt-1">
-        {selectedGame.players}
-      </div>
-    </div>
-
-    <div className="bg-black/40 rounded-xl p-3 border border-purple-400/10">
-      <div className="text-xs text-gray-400">
-        STYLE
-      </div>
-
-      <div className="text-sm text-white font-semibold mt-1">
-        {selectedGame.atmosphere}
-      </div>
-    </div>
-
-    <div className="bg-black/40 rounded-xl p-3 border border-purple-400/10">
-      <div className="text-xs text-gray-400">
-        GAME MODE
-      </div>
-
-      <div className="text-sm text-white font-semibold mt-1">
-        {gameFormat || "Not Selected"}
-      </div>
-    </div>
-
-  </div>
-
-</div>
-
-                <div className="border border-green-400/20 rounded-2xl p-4 bg-black/30">
-                  <div className="text-green-400 font-bold mb-2">
-                    RECOMMENDED PLAYERS
-                  </div>
-
-                  <div className="text-sm text-gray-300">
-                    {selectedGame.players}
-                  </div>
-                </div>
-
-                <div className="border border-green-400/20 rounded-2xl p-4 bg-black/30">
-                  <div className="text-green-400 font-bold mb-2">
-                    ATMOSPHERE
-                  </div>
-
-                  <div className="text-sm text-gray-300">
-                    {selectedGame.atmosphere}
-                  </div>
-                </div>
-
-              </div>
-
-              {compatibilityWarnings.length > 0 && (
-  <div className="flex flex-col gap-3">
-
-    {compatibilityWarnings.map((warning, index) => (
-
-      <div
-        key={index}
-        className={`
-          rounded-2xl p-4 text-sm border
-          ${
-            warning.toLowerCase().includes("excellent")
-              ? "border-green-400/30 bg-green-500/10 text-green-200"
-              : "border-yellow-400/30 bg-yellow-500/10 text-yellow-200"
-          }
-        `}
-      >
-        {warning.toLowerCase().includes("excellent")
-          ? "✓ "
-          : "⚠ "}
-        {warning}
-      </div>
-
-    ))}
-
-  </div>
-)}
-
-              {selectedGame.warning && (
-                <div className="border border-yellow-400/30 bg-yellow-500/10 rounded-2xl p-4 text-yellow-200 text-sm">
-                  ⚠ {selectedGame.warning}
-                </div>
-              )}
-
+      <main className="relative min-h-screen overflow-hidden bg-black px-4 py-8 text-white">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle,#39FF14_1px,transparent_1px)] bg-[size:40px_40px] opacity-20" />
+        <div className="pointer-events-none absolute left-1/2 top-0 h-[360px] w-[900px] -translate-x-1/2 bg-green-400 opacity-10 blur-[120px]" />
+
+        <div className="relative z-10 mx-auto flex w-full max-w-3xl flex-col gap-6 rounded-2xl border border-neutral-700 bg-neutral-900/80 p-4 shadow-[0_0_40px_rgba(0,255,120,0.25)] backdrop-blur-xl sm:p-8">
+          <button
+            type="button"
+            onClick={() => router.push("/dashboard")}
+            className="self-start text-xs font-bold text-gray-300 underline"
+          >
+            Back
+          </button>
+
+          <label className="block">
+            <span className="sr-only">Match title</span>
+            <input
+              value={setup.title}
+              disabled={locked}
+              placeholder="Match title"
+              onChange={(event) =>
+                setSetup((current) => ({ ...current, title: event.target.value }))
+              }
+              className="w-full bg-transparent text-center text-3xl font-black tracking-wide text-green-400 outline-none placeholder:text-green-400/50 disabled:opacity-80 sm:text-5xl"
+            />
+          </label>
+
+          <label className="flex flex-col gap-2 text-sm font-bold text-cyan-300">
+            Total players
+            <select
+              disabled={locked}
+              value={setup.mode}
+              onChange={(event) => reshape({ mode: event.target.value as PlayMode })}
+              className={fieldClass}
+            >
+              {MODE_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+            <span className="text-xs font-medium text-gray-400">
+              {MODE_OPTIONS.find((option) => option.value === setup.mode)?.detail}
+            </span>
+          </label>
+
+          {(setup.mode === "teams" || setup.mode === "groups") && (
+            <div className="grid grid-cols-2 gap-3">
+              <label className="text-sm font-bold text-cyan-300">
+                {setup.mode === "groups" ? "Groups" : "Teams"}
+                <input
+                  type="number"
+                  min={2}
+                  disabled={locked}
+                  value={setup.sideCount}
+                  onChange={(event) =>
+                    reshape({ sideCount: Number(event.target.value || 2) })
+                  }
+                  className={`${fieldClass} mt-2`}
+                />
+              </label>
+              <label className="text-sm font-bold text-cyan-300">
+                Players
+                <input
+                  type="number"
+                  min={1}
+                  disabled={locked}
+                  value={setup.playersPerSide}
+                  onChange={(event) =>
+                    reshape({ playersPerSide: Number(event.target.value || 1) })
+                  }
+                  className={`${fieldClass} mt-2`}
+                />
+              </label>
+              <p className="col-span-2 text-sm text-gray-300">
+                {setup.sideCount} {sideWord} of {setup.playersPerSide} players.
+                {withinPlayingSpotCap(setup.sideCount, setup.playersPerSide)
+                  ? ""
+                  : " That is over the 248 playing-spot limit."}
+              </p>
             </div>
           )}
 
-          <button
-            onClick={handleCreate}
-            disabled={!isValid || loading}
-            className="mt-6 py-4 rounded-xl font-bold text-black text-lg bg-green-400 hover:bg-green-300 transition-all duration-300 shadow-[0_0_25px_#39FF14] hover:shadow-[0_0_50px_#39FF14] disabled:opacity-50"
-          >
-           {loading
-  ? "Creating Match..."
-  : "CREATE MATCH"}
-          </button>
+          {(setup.mode === "teams" || setup.mode === "groups") && (
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+              {setup.sides.map((side, index) => (
+                <label key={side.id} className="text-sm font-bold text-cyan-300">
+                  {setup.mode === "groups" ? `Group ${index + 1}` : `Team ${index + 1}`}
+                  <input
+                    disabled={locked}
+                    value={side.name}
+                    onChange={(event) =>
+                      setSetup((current) => ({
+                        ...current,
+                        sides: current.sides.map((item) =>
+                          item.id === side.id ? { ...item, name: event.target.value } : item
+                        ),
+                      }))
+                    }
+                    className={`${fieldClass} mt-2`}
+                  />
+                </label>
+              ))}
+            </div>
+          )}
 
-          <div className="w-full h-[3px] bg-neutral-800 overflow-hidden rounded-full">
-            <div className="h-full w-1/2 bg-green-400 animate-[pulse_2s_infinite]"></div>
+          <div>
+            <p className="mb-2 text-sm font-bold text-cyan-300">Format</p>
+            <div className="flex flex-wrap gap-2">
+              {formats.map((format) => (
+                <button
+                  key={format.value}
+                  type="button"
+                  disabled={locked}
+                  onClick={() => reshape({ format: format.value })}
+                  className={`rounded-full border px-3 py-2 text-xs font-bold sm:text-sm ${
+                    setup.format === format.value
+                      ? "border-green-400 bg-green-400 text-black"
+                      : "border-neutral-600 bg-neutral-800 text-gray-200"
+                  }`}
+                >
+                  {format.label}
+                </button>
+              ))}
+            </div>
           </div>
 
+          {setup.mode !== "singles" && (
+            <div>
+              <p className="mb-2 text-sm font-bold text-cyan-300">Scoring method</p>
+              <div className="flex flex-wrap gap-2">
+                {(["strokes", "points", "matchplay"] as ScoringMethod[]).map((method) => (
+                  <button
+                    key={method}
+                    type="button"
+                    disabled={locked}
+                    onClick={() => reshape({ scoringMethod: method })}
+                    className={`rounded-full border px-3 py-2 text-xs font-bold sm:text-sm ${
+                      setup.scoringMethod === method
+                        ? "border-green-400 bg-green-400 text-black"
+                        : "border-neutral-600 bg-neutral-800 text-gray-200"
+                    }`}
+                  >
+                    {scoringLabel(method)}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <div>
+            <p className="mb-2 text-sm font-bold text-cyan-300">Add bet</p>
+            <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
+              {BET_AMOUNTS.map((amount) => (
+                <button
+                  key={amount}
+                  type="button"
+                  disabled={locked}
+                  onClick={() => setSetup((current) => ({ ...current, betAmount: amount }))}
+                  className={`rounded-xl border py-3 text-sm font-black ${
+                    setup.betAmount === amount
+                      ? "border-green-400 bg-green-400 text-black"
+                      : "border-cyan-400/40 bg-black text-white"
+                  }`}
+                >
+                  {formatRand(amount)}
+                </button>
+              ))}
+            </div>
+            <p className="mt-2 text-xs text-gray-400">Per player.</p>
+          </div>
+
+          <div>
+            <p className="mb-2 text-sm font-bold text-cyan-300">Select golf course</p>
+            {locked ? (
+              <p className={`${fieldClass} text-white`}>{setup.courseName}</p>
+            ) : (
+              <GolfCourseSearch
+                value={setup.courseName}
+                placeholder="Select golf course"
+                className={fieldClass}
+                onSelect={(course) =>
+                  setSetup((current) => ({
+                    ...current,
+                    courseName: course.name,
+                    courseStateProvince: course.stateProvince,
+                    courseCountry: course.country,
+                  }))
+                }
+              />
+            )}
+          </div>
+
+          <MatchLineup
+            setup={setup}
+            locked={locked}
+            onChange={setSetup}
+            onInvite={(side, spot) =>
+              void openInvite(side.name, spot.number, spot.id, side.id)
+            }
+          />
+
+          {askForGroup && (
+            <label className="flex flex-col gap-2 text-sm font-bold text-yellow-200">
+              The current save still needs one of your groups
+              <select
+                value={groupId || ""}
+                onChange={(event) => setGroupId(event.target.value || null)}
+                className={fieldClass}
+              >
+                <option value="">Choose a group</option>
+                {groupChoices.map((group) => (
+                  <option key={group.id} value={group.id}>
+                    {group.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+          )}
+
+          {showGuide && (
+            <section className="rounded-3xl border border-green-400/40 bg-black/60 p-5">
+              <p className="text-xs font-bold tracking-[0.25em] text-green-400">
+                GAME ENGINE GUIDE
+              </p>
+              <h2 className="mt-2 text-2xl font-black">{setup.title.trim()}</h2>
+              <dl className="mt-4 flex flex-col gap-3">
+                {guide.map((line) => (
+                  <div key={line.label}>
+                    <dt className="text-xs font-bold uppercase tracking-wide text-cyan-300">
+                      {line.label}
+                    </dt>
+                    <dd className="text-sm text-gray-100">{line.value}</dd>
+                  </div>
+                ))}
+              </dl>
+              <button
+                type="button"
+                onClick={() => void handleCreateGame()}
+                disabled={loading}
+                className="mt-5 w-full rounded-xl bg-green-400 py-4 text-lg font-black text-black disabled:opacity-50"
+              >
+                {loading ? "Saving..." : savedId ? "Save game" : "Create game"}
+              </button>
+            </section>
+          )}
+
+          {!showGuide && (
+            <button
+              type="button"
+              disabled={locked || loading}
+              onClick={async () => {
+                const problem = setupIsReady(setup);
+                if (problem) {
+                  await teezAlert({
+                    title: "MATCH NOT READY",
+                    message: problem,
+                    type: "warning",
+                    buttonText: "CONTINUE",
+                  });
+                  return;
+                }
+                setShowGuide(true);
+              }}
+              className="rounded-xl bg-green-400 py-4 text-lg font-black text-black disabled:opacity-50"
+            >
+              Create match
+            </button>
+          )}
+
           <button
-            onClick={() => router.push("/dashboard")}
-            className="text-center text-xs text-gray-400 hover:text-green-400 transition-all mt-4"
+            type="button"
+            onClick={handleEdit}
+            disabled={!savedId}
+            className="rounded-xl border border-cyan-300 py-3 text-sm font-black text-cyan-200 disabled:opacity-40"
           >
-            ← Back to Dashboard
+            Edit match
           </button>
 
+          {savedId && (
+            <button
+              type="button"
+              onClick={() => router.push(`/challenges/${savedId}`)}
+              className="text-sm font-bold text-green-300 underline"
+            >
+              Open {modeLabel(setup.mode).toLowerCase()} match
+            </button>
+          )}
+
+          <p className="text-center text-xs text-gray-500">
+            {formatLabel(setup.format)} · {scoringLabel(setup.scoringMethod)}
+            {setup.betAmount ? ` · ${formatRand(setup.betAmount)} per player` : ""}
+          </p>
         </div>
       </main>
+      <SiteFooter />
     </RequireAuth>
   );
 }

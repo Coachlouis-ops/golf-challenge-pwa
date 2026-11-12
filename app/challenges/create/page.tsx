@@ -283,16 +283,21 @@ export default function CreateChallengePage() {
             Back
           </button>
 
-          <label className="block">
-            <span className="sr-only">Match title</span>
+          <label className="flex flex-col gap-2">
+            <span className="text-sm font-bold tracking-[0.22em] text-cyan-200">
+              MATCH TITLE
+            </span>
             <input
+              type="text"
+              name="matchTitle"
+              required
               value={setup.title}
               disabled={locked}
-              placeholder="Match title"
+              placeholder="Enter the name of your match"
               onChange={(event) =>
                 setSetup((current) => ({ ...current, title: event.target.value }))
               }
-              className="w-full bg-transparent text-center text-3xl font-black tracking-wide text-green-400 outline-none placeholder:text-green-400/50 disabled:opacity-80 sm:text-5xl"
+              className="w-full rounded-xl border-2 border-zinc-300 bg-black px-4 py-4 text-base font-semibold text-white outline-none placeholder:text-zinc-400 shadow-[0_0_16px_rgba(212,212,216,0.28)] focus:border-cyan-300 focus:shadow-[0_0_24px_rgba(34,211,238,0.85)] disabled:opacity-70 sm:text-lg"
             />
           </label>
 

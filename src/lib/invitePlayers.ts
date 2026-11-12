@@ -25,17 +25,14 @@ export function playerLabel(player: {
   return full || battle || "Player";
 }
 
-export function inviteTargets(
-  setup: InviteSetup,
-  creatorUid?: string | null
-): InviteTarget[] {
+export function inviteTargets(setup: InviteSetup): InviteTarget[] {
   const seen = new Set<string>();
   const targets: InviteTarget[] = [];
 
   for (const side of setup.sides) {
     for (const spot of side.spots) {
       const uid = spot.playerUid.trim();
-      if (!uid || uid === creatorUid || seen.has(uid)) continue;
+      if (!uid || seen.has(uid)) continue;
       seen.add(uid);
       targets.push({
         uid,

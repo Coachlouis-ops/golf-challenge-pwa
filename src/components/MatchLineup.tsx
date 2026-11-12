@@ -17,7 +17,6 @@ export type PlayerPick = {
 type Props = {
   setup: MatchSetup;
   locked: boolean;
-  creatorUid?: string | null;
   onChange: (setup: MatchSetup) => void;
   onPickPlayer?: (spotId: string, player: PlayerPick) => Promise<void> | void;
   onRemovePlayer?: (spotId: string, playerUid: string) => Promise<void> | void;
@@ -33,7 +32,6 @@ function placedUidKey(setup: MatchSetup): string {
 export default function MatchLineup({
   setup,
   locked,
-  creatorUid,
   onChange,
   onPickPlayer,
   onRemovePlayer,
@@ -53,7 +51,6 @@ export default function MatchLineup({
     let cancelled = false;
     const term = searchTerm.trim().toLowerCase();
     const excluded = new Set(placedKey.split("|").filter(Boolean));
-    if (creatorUid) excluded.add(creatorUid);
 
     (async () => {
       setSearching(true);
@@ -103,7 +100,7 @@ export default function MatchLineup({
     return () => {
       cancelled = true;
     };
-  }, [creatorUid, openSpotId, placedKey, searchTerm]);
+  }, [openSpotId, placedKey, searchTerm]);
 
   useEffect(() => {
     if (!openSpotId || searchTerm.trim().length < 2) {

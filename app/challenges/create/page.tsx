@@ -82,7 +82,6 @@ export default function CreateChallengePage() {
   const [askForGroup, setAskForGroup] = useState(false);
   const [walletBalance, setWalletBalance] = useState<number | null>(null);
   const [needsMoney, setNeedsMoney] = useState(false);
-  const [creatorUid, setCreatorUid] = useState<string | null>(null);
 
   const locked = setup.detailsLocked;
   const formats = formatsForMode(setup.mode);
@@ -96,7 +95,6 @@ export default function CreateChallengePage() {
 
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (!user) return;
-      setCreatorUid(user.uid);
       setWalletBalance(await getWalletBalance(user.uid));
 
       if (!suppliedGroupId) {
@@ -185,7 +183,7 @@ export default function CreateChallengePage() {
   async function sendPlacedInvites(challengeId: string, next: MatchSetup) {
     const failures: string[] = [];
 
-    for (const target of inviteTargets(next, creatorUid || auth.currentUser?.uid)) {
+    for (const target of inviteTargets(next)) {
       try {
         await sendOneInvite(challengeId, target.uid);
       } catch (error: unknown) {
@@ -210,15 +208,8 @@ export default function CreateChallengePage() {
   }
 
   async function addPlayer(spotId: string, player: PlayerPick) {
-    const uid = creatorUid || auth.currentUser?.uid || "";
-    if (!player.uid || player.uid === uid) {
-      await teezAlert({
-        title: "PLAYER NOT ADDED",
-        message: "The match creator is not invited from this search.",
-        type: "warning",
-        buttonText: "CONTINUE",
-      });
-      throw new Error("Creator excluded");
+    if (!player.uid) {
+      throw new Error("Player has no id");
     }
 
     const alreadyPlaced = setup.sides.some((side) =>
@@ -634,7 +625,6 @@ export default function CreateChallengePage() {
           <MatchLineup
             setup={setup}
             locked={locked}
-            creatorUid={creatorUid}
             onChange={setSetup}
             onPickPlayer={addPlayer}
             onRemovePlayer={removePlayer}

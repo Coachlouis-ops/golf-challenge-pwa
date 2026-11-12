@@ -1,9 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 
+import { bookmakerPolicies } from "@/app/bookmaker/policies";
 import { auth } from "@/src/lib/firebase";
 
 export default function RegisterPage() {
@@ -52,9 +54,12 @@ export default function RegisterPage() {
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center gap-6 bg-black text-white font-sans px-6 py-10">
-      <h1 className="text-3xl font-semibold text-center">
-        Create Your Player Account
-      </h1>
+      <div className="text-center">
+        <h1 className="text-3xl font-semibold">ABC Bookmakers</h1>
+        <h2 className="mt-2 text-xl font-medium">
+          Create your players account
+        </h2>
+      </div>
 
       <p className="text-sm text-gray-400 text-center max-w-md">
         Register your account, create your player profile, and activate your
@@ -89,41 +94,19 @@ export default function RegisterPage() {
 
       <div className="w-full max-w-md border border-white/10 bg-white/5 rounded-xl p-4 space-y-4">
         <p className="text-sm font-semibold text-green-400">
-          Review the Legal Policies
+          Review the ABC Bookmakers Legal Policies
         </p>
 
         <div className="flex flex-col gap-2 text-sm">
-          <button
-            type="button"
-            onClick={() => router.push("/terms")}
-            className="text-left text-green-400 underline"
-          >
-            Platform Terms & Conditions
-          </button>
-
-          <button
-            type="button"
-            onClick={() => router.push("/privacy")}
-            className="text-left text-green-400 underline"
-          >
-            Privacy Policy
-          </button>
-
-          <button
-            type="button"
-            onClick={() => router.push("/legal/payment-policy")}
-            className="text-left text-green-400 underline"
-          >
-            Payment & Subscription Policy
-          </button>
-
-          <button
-            type="button"
-            onClick={() => router.push("/legal/refund-policy")}
-            className="text-left text-green-400 underline"
-          >
-            Refund, Cancellation & Delivery Policy
-          </button>
+          {bookmakerPolicies.map((policy) => (
+            <Link
+              key={policy.href}
+              href={policy.href}
+              className="text-left text-green-400 underline"
+            >
+              {policy.label}
+            </Link>
+          ))}
         </div>
 
         <label className="flex items-start gap-3">
@@ -135,9 +118,10 @@ export default function RegisterPage() {
           />
 
           <span className="text-sm text-gray-300">
-            I have reviewed and accept the Platform Terms & Conditions, Privacy
-            Policy, Payment & Subscription Policy, and Refund, Cancellation &
-            Delivery Policy.
+            I have reviewed and accept the ABC Bookmakers Terms & Conditions,
+            ABC Bookmakers Privacy Policy, Responsible Gambling Policy, FICA &
+            Anti-Money Laundering Policy, Betting Rules, and Deposits &
+            Withdrawals Policy.
           </span>
         </label>
       </div>

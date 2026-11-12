@@ -11,8 +11,6 @@ import {
   updateDoc,
   collection,
   getDocs,
-  query,
-  where,
 } from "firebase/firestore";
 import { httpsCallable } from "firebase/functions";
 import { useTeezNotification } from "@/src/components/TeezNotificationProvider";
@@ -59,15 +57,6 @@ status: string;
   createdAt?: any;
 };
 
-type Profile = {
-  uid: string;
-  name: string;
-  surname: string;
-  battleName: string;
-  club: string;
-  searchIndex: string;
-};
-
 type Player = {
   uid: string;
   displayName: string;
@@ -111,11 +100,8 @@ const [nassauResults, setNassauResults] = useState<
 
 const [updating, setUpdating] = useState(false);
 
-  const [searchTerm, setSearchTerm] = useState("");
-  const [searchResults, setSearchResults] = useState<Profile[]>([]);
   const [invitedUids, setInvitedUids] = useState<string[]>([]);
   const [players, setPlayers] = useState<Player[]>([]);
-  const [invitingUid, setInvitingUid] = useState<string | null>(null);
 
 const [finalizing, setFinalizing] = useState(false);
 const [scoreboardUpdated, setScoreboardUpdated] = useState(false);
@@ -219,36 +205,6 @@ if (
       }
     })();
   }, [challengeId]);
-
-  // ===============================
-  // LIVE SEARCH
-  // ===============================
-  useEffect(() => {
-    if (searchTerm.trim().length < 2) {
-      setSearchResults([]);
-      return;
-    }
-
-    const runSearch = async () => {
-      const term = searchTerm.toLowerCase();
-
-      const q = query(
-        collection(db, "profiles"),
-        where("searchIndex", ">=", term),
-        where("searchIndex", "<=", term + "\uf8ff")
-      );
-
-      const snap = await getDocs(q);
-
-      const results: Profile[] = snap.docs
-        .map((d) => d.data() as Profile)
-        .filter((p) => p.searchIndex && p.searchIndex.length > 0);
-
-      setSearchResults(results);
-    };
-
-    runSearch();
-  }, [searchTerm]);
 
   // ===============================
   // MANUAL REFRESH
@@ -421,40 +377,6 @@ try {
 }
   }
 
-  // ===============================
-  // INVITE
-  // ===============================
-  async function handleInvite(targetUid: string) {
-    if (!user || !challengeId) return;
-
-    try {
-      setInvitingUid(targetUid);
-
-      const sendInvite = httpsCallable(functions, "sendInvite");
-
-      await sendInvite({
-        challengeId,
-        targetUid,
-      });
-
-      setInvitedUids((prev) => [...prev, targetUid]);
-
-      setSearchTerm("");
-      setSearchResults([]);
-    } catch (e: any) {
-  await teezAlert({
-    title: "INVITE NOT SENT",
-    message:
-      e?.message ||
-      "The player invite could not be sent.",
-    type: "error",
-    buttonText: "TRY AGAIN",
-  });
-} finally {
-      setInvitingUid(null);
-    }
-  }
-
   if (!user) {
     return (
       <main className="min-h-screen flex items-center justify-center">
@@ -549,15 +471,16 @@ const canFinalize =
 
             let title = "INVITE PLAYERS";
             let message =
-              "Invite players by searching their names in the Invite Players tab.";
+              "Add players from Edit match. Search a registered player by name and send the invite from there.";
             let notes: string[] = [
               "Players who accepted your challenge will appear in the Participants section below.",
-              "The creator of the challenge must also invite and accept themselves to enter the challenge.",
+              "Open Edit match to place a registered player in an open spot.",
             ];
 
             if (invitedUids.length > 0 && acceptedPlayers === 0) {
               title = "WAITING FOR ACCEPTANCE";
-              message = "Search and invite next player.";
+              message =
+                "Waiting for invited players to accept. Add another player from Edit match.";
               notes = [
                 "Waiting for invited players to accept the challenge.",
               ];
@@ -731,15 +654,6 @@ const canFinalize =
                 });
               }
             }}
-            onInvite={(side, spot) => {
-              const joinUrl = `${window.location.origin}${`/challenges/${challenge.challengeId}/join?side=${encodeURIComponent(side.id)}&spot=${encodeURIComponent(spot.id)}`}`;
-              const text = `You are invited to ${challenge.challengeTitle}. Your place is ${side.name}, spot ${spot.number}. Accept the place here: ${joinUrl}`;
-              window.open(
-                `https://wa.me/?text=${encodeURIComponent(text)}`,
-                "_blank",
-                "noopener,noreferrer"
-              );
-            }}
           />
         )}
 
@@ -758,104 +672,6 @@ const canFinalize =
             Edit match
           </button>
         )}
-
-      {/* INVITE SECTION */}
-{isCreator && (
-<div className="border-2 border-blue-400 bg-gradient-to-br from-blue-950/80 via-indigo-950/70 to-black rounded-3xl p-5 sm:p-6 flex flex-col gap-4 shadow-[0_0_38px_rgba(59,130,246,0.32)]">
-
-         <div>
-  <div className="text-red-400 text-xs tracking-[0.25em] font-extrabold">
-    STEP 1
-  </div>
-
-  <h2 className="text-2xl font-extrabold text-white mt-1">
-    ADD PLAYERS
-  </h2>
-
-  <p className="text-sm text-red-200 mt-2">
-    Search for each player and send an invite. Players must accept the
-    challenge before their scores/results can be entered.
-  </p>
-</div>
-
-          <div className="flex flex-col gap-2">
-            <input
-              type="text"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Search player name, surname, club or battle name"
-              className="border border-red-500/30 bg-black/40 text-white rounded-xl p-3 focus:outline-none focus:border-red-400 focus:shadow-[0_0_15px_rgba(255,0,0,0.4)] transition"
-            />
-
-            <div className="text-xs text-red-300">
-              Search and invite players one-by-one. Accepted players will
-              automatically appear in Participants below.
-            </div>
-          </div>
-
-          {searchResults.map((p) => {
-            const isYou = user.uid === p.uid;
-            const alreadyInvited = invitedUids.includes(p.uid);
-            const alreadyPlayer = players.some(
-              (player) => String(player.uid) === String(p.uid)
-            );
-
-            return (
-              <div
-                key={p.uid}
-                className="border rounded p-3 flex justify-between items-center"
-              >
-                <div>
-                  <div className="font-medium">
-                    {p.name} {p.surname} ({p.battleName})
-                  </div>
-                  <div className="text-xs text-gray-500">{p.club}</div>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  {isYou && (
-                    <span className="text-xs px-2 py-1 bg-blue-100 text-black rounded">
-                      You
-                    </span>
-                  )}
-
-                  {alreadyPlayer && (
-                    <span className="text-xs px-2 py-1 bg-green-100 text-black rounded">
-                      Player
-                    </span>
-                  )}
-
-                  {alreadyInvited && !alreadyPlayer && (
-                    <span className="text-xs px-2 py-1 bg-yellow-100 text-black rounded">
-                      Invited
-                    </span>
-                  )}
-
-                  <button
-                    disabled={
-                      !isCreator ||
-                      alreadyInvited ||
-                      alreadyPlayer ||
-                      invitingUid === p.uid
-                    }
-                    onClick={() => handleInvite(p.uid)}
-                    className="px-4 py-2 rounded-xl font-semibold transition-all bg-red-600 text-white hover:bg-red-500 hover:shadow-[0_0_20px_rgba(255,0,0,0.6)] hover:scale-[1.03] disabled:opacity-30 disabled:hover:scale-100"
-                  >
-                    {invitingUid === p.uid
-                      ? "Sending..."
-                      : alreadyPlayer
-                      ? "Joined"
-                      : alreadyInvited
-                      ? "Invited"
-                      : "Invite"}
-                  </button>
-                </div>
-              </div>
-            );
-          })}
-
-       </div>
-)}
 
       {/* PARTICIPANTS */}
 <div className="border-2 border-violet-400/80 bg-gradient-to-br from-violet-950/70 via-purple-950/60 to-black rounded-3xl p-5 shadow-[0_0_32px_rgba(167,139,250,0.25)]">

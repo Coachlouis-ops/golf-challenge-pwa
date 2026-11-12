@@ -5,6 +5,7 @@ import { httpsCallable } from "firebase/functions";
 import { useRouter } from "next/navigation";
 import {
   collection,
+  deleteDoc,
   doc,
   getDoc,
   getDocs,
@@ -18,7 +19,7 @@ import { formatWalletRand } from "@/src/lib/walletMoney";
 import RequireAuth from "@/src/lib/RequireAuth";
 import GolfCourseSearch from "@/src/components/GolfCourseSearch";
 import SiteFooter from "@/src/components/SiteFooter";
-import MatchLineup from "@/src/components/MatchLineup";
+import MatchLineup, { type PlayerPick } from "@/src/components/MatchLineup";
 import { useTeezNotification } from "@/src/components/TeezNotificationProvider";
 import {
   BET_AMOUNTS,
@@ -33,18 +34,20 @@ import {
   buildMatchSetup,
   canEditMatch,
   resultsHaveBeenSubmitted,
+  assignSpot,
+  clearSpot,
   formatLabel,
   formatsForMode,
   guideLines,
+  inviteTargets,
   isCallableFieldError,
-  joinPath,
   legacyOnlyPayload,
   modeLabel,
+  playerLabel,
   readMatchSetup,
   scoringLabel,
   setupIsReady,
   toCallablePayload,
-  whatsAppInviteUrl,
 } from "@/src/lib/challengeMatch";
 
 const fieldClass =
@@ -79,6 +82,7 @@ export default function CreateChallengePage() {
   const [askForGroup, setAskForGroup] = useState(false);
   const [walletBalance, setWalletBalance] = useState<number | null>(null);
   const [needsMoney, setNeedsMoney] = useState(false);
+  const [creatorUid, setCreatorUid] = useState<string | null>(null);
 
   const locked = setup.detailsLocked;
   const formats = formatsForMode(setup.mode);
@@ -92,6 +96,7 @@ export default function CreateChallengePage() {
 
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (!user) return;
+      setCreatorUid(user.uid);
       setWalletBalance(await getWalletBalance(user.uid));
 
       if (!suppliedGroupId) {
@@ -152,30 +157,153 @@ export default function CreateChallengePage() {
     setShowGuide(false);
   }
 
-  async function openInvite(sideName: string, spotNumber: number, spotId: string, sideId: string) {
-    if (!savedId) {
-      await teezAlert({
-        title: "SAVE THE MATCH FIRST",
-        message:
-          "Create the game before sending the invite. The link then carries this side and this spot, so the player is placed there when they accept.",
-        type: "warning",
-        buttonText: "CONTINUE",
-      });
-      return;
-    }
-
-    const joinUrl = `${window.location.origin}${joinPath(savedId, sideId, spotId)}`;
-    const url = whatsAppInviteUrl({
-      title: setup.title.trim() || "your match",
-      sideName,
-      spotNumber,
-      joinUrl,
-    });
-    window.open(url, "_blank", "noopener,noreferrer");
+  function inviteAlreadyCovered(error: unknown): boolean {
+    const code = String((error as { code?: string }).code || "").toLowerCase();
+    const message = String((error as { message?: string }).message || "")
+      .trim()
+      .toLowerCase();
+    if (code.includes("already-exists") || message.includes("already")) return true;
+    return (
+      code.includes("failed-precondition") &&
+      (message === "" || message === "failed-precondition")
+    );
   }
 
   async function persistSetup(next: MatchSetup, id: string) {
     await updateDoc(doc(db, "challenges", id), toCallablePayload(next, groupId));
+  }
+
+  async function saveLineup(next: MatchSetup, id: string) {
+    await updateDoc(doc(db, "challenges", id), { matchSetup: next });
+  }
+
+  async function sendOneInvite(challengeId: string, targetUid: string) {
+    const sendInvite = httpsCallable(functions, "sendInvite");
+    await sendInvite({ challengeId, targetUid });
+  }
+
+  async function sendPlacedInvites(challengeId: string, next: MatchSetup) {
+    const failures: string[] = [];
+
+    for (const target of inviteTargets(next, creatorUid || auth.currentUser?.uid)) {
+      try {
+        await sendOneInvite(challengeId, target.uid);
+      } catch (error: unknown) {
+        if (inviteAlreadyCovered(error)) continue;
+        const message = error instanceof Error ? error.message : "Invite failed";
+        failures.push(`${target.name}: ${message}`);
+      }
+    }
+
+    return failures;
+  }
+
+  async function removePendingInvite(challengeId: string, targetUid: string) {
+    const inviteRef = doc(db, "challenges", challengeId, "invites", targetUid);
+    const snap = await getDoc(inviteRef);
+    if (!snap.exists()) return "missing" as const;
+    const status = String(snap.data().status || "pending").toLowerCase();
+    if (status !== "pending") return "kept" as const;
+    await deleteDoc(inviteRef);
+    await deleteDoc(doc(db, "userInvites", targetUid, "invites", challengeId));
+    return "removed" as const;
+  }
+
+  async function addPlayer(spotId: string, player: PlayerPick) {
+    const uid = creatorUid || auth.currentUser?.uid || "";
+    if (!player.uid || player.uid === uid) {
+      await teezAlert({
+        title: "PLAYER NOT ADDED",
+        message: "The match creator is not invited from this search.",
+        type: "warning",
+        buttonText: "CONTINUE",
+      });
+      throw new Error("Creator excluded");
+    }
+
+    const alreadyPlaced = setup.sides.some((side) =>
+      side.spots.some((spot) => spot.playerUid === player.uid && spot.id !== spotId)
+    );
+    if (alreadyPlaced) {
+      await teezAlert({
+        title: "PLAYER ALREADY PLACED",
+        message: "That player is already in another spot.",
+        type: "warning",
+        buttonText: "CONTINUE",
+      });
+      throw new Error("Player already placed");
+    }
+
+    if (savedId) {
+      try {
+        await sendOneInvite(savedId, player.uid);
+      } catch (error: unknown) {
+        if (!inviteAlreadyCovered(error)) {
+          const message = error instanceof Error ? error.message : "The invite could not be sent.";
+          await teezAlert({
+            title: "INVITE NOT SENT",
+            message,
+            type: "error",
+            buttonText: "TRY AGAIN",
+          });
+          throw error;
+        }
+      }
+    }
+
+    const next = assignSpot(setup, spotId, playerLabel(player), player.uid);
+    setSetup(next);
+
+    if (!savedId) return;
+
+    try {
+      await saveLineup(next, savedId);
+    } catch {
+      await teezAlert({
+        title: "INVITE SENT",
+        message: `${playerLabel(player)} is invited. The spot was not written onto the match record from this page.`,
+        type: "warning",
+        buttonText: "CONTINUE",
+      });
+    }
+  }
+
+  async function removePlayer(spotId: string, playerUid: string) {
+    const next = clearSpot(setup, spotId);
+    setSetup(next);
+
+    if (!savedId) return;
+
+    let inviteBlocked = false;
+    if (playerUid) {
+      try {
+        await removePendingInvite(savedId, playerUid);
+      } catch (error) {
+        console.error("Pending invite was not deleted", error);
+        inviteBlocked = true;
+      }
+    }
+
+    try {
+      await saveLineup(next, savedId);
+    } catch {
+      await teezAlert({
+        title: "SPOT NOT SAVED",
+        message: "This spot was cleared on this page, but the match record did not update.",
+        type: "warning",
+        buttonText: "CONTINUE",
+      });
+    }
+
+    if (inviteBlocked) {
+      await teezAlert({
+        title: "SPOT CLEARED",
+        message:
+          "This spot is open again. The pending invite could not be deleted from this page, so the player may still see it in My Invites.",
+        type: "warning",
+        buttonText: "CONTINUE",
+      });
+    }
   }
 
   async function handleCreateGame() {
@@ -250,6 +378,16 @@ export default function CreateChallengePage() {
           title: "MATCH SAVED WITH A LIMIT",
           message:
             "The match was created, but the lineup could not be written onto the match record from this page. The save function may still be keeping only the original fields.",
+          type: "warning",
+          buttonText: "CONTINUE",
+        });
+      }
+
+      const inviteFailures = await sendPlacedInvites(challengeId, lockedSetup);
+      if (inviteFailures.length > 0) {
+        await teezAlert({
+          title: "SOME INVITES WERE NOT SENT",
+          message: `The match is saved. These players were not invited:\n${inviteFailures.join("\n")}\nUse Edit match, remove that spot, and add the player again.`,
           type: "warning",
           buttonText: "CONTINUE",
         });
@@ -489,13 +627,17 @@ export default function CreateChallengePage() {
             )}
           </div>
 
+          <p className="text-xs leading-5 text-gray-400">
+            Search a registered player for each open spot. Creating the game sends
+            those invites. On a saved match, Add player sends the invite immediately.
+          </p>
           <MatchLineup
             setup={setup}
             locked={locked}
+            creatorUid={creatorUid}
             onChange={setSetup}
-            onInvite={(side, spot) =>
-              void openInvite(side.name, spot.number, spot.id, side.id)
-            }
+            onPickPlayer={addPlayer}
+            onRemovePlayer={removePlayer}
           />
 
           {askForGroup && (

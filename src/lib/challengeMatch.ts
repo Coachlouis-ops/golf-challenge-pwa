@@ -12,6 +12,10 @@ import {
   winnerExplanation,
   withinPlayingSpotCap,
 } from "@/src/lib/gameEngine";
+import { inviteTargets, playerLabel } from "@/src/lib/invitePlayers";
+
+export { inviteTargets, playerLabel };
+export type { InviteTarget } from "@/src/lib/invitePlayers";
 
 export type PlayMode = PlayModeType;
 
@@ -317,6 +321,10 @@ export function guideLines(setup: MatchSetup): { label: string; value: string }[
     },
     { label: "Bet per player", value: formatRand(setup.betAmount) },
     {
+      label: "Invited players",
+      value: invitedPlayersLine(setup),
+    },
+    {
       label: "Course",
       value: [setup.courseName, setup.courseStateProvince, setup.courseCountry]
         .filter(Boolean)
@@ -325,19 +333,14 @@ export function guideLines(setup: MatchSetup): { label: string; value: string }[
   ];
 }
 
-export function whatsAppInviteUrl(input: {
-  title: string;
-  sideName: string;
-  spotNumber: number;
-  joinUrl: string;
-}): string {
-  const text = [
-    `You are invited to ${input.title}.`,
-    `Your place is ${input.sideName}, spot ${input.spotNumber}.`,
-    `Accept the place here: ${input.joinUrl}`,
-  ].join(" ");
+function invitedPlayersLine(setup: MatchSetup): string {
+  const placed = setup.sides.flatMap((side) =>
+    side.spots
+      .filter((spot) => spot.playerUid.trim())
+      .map((spot) => `${spot.playerName.trim() || "Player"} · ${side.name} spot ${spot.number}`)
+  );
 
-  return `https://wa.me/?text=${encodeURIComponent(text)}`;
+  return placed.length > 0 ? placed.join(", ") : "No players placed yet.";
 }
 
 export const JOIN_RETURN_KEY = "teezJoinReturn";
@@ -350,15 +353,6 @@ export function readJoinReturn(): string | null {
   }
   sessionStorage.removeItem(JOIN_RETURN_KEY);
   return value;
-}
-
-export function joinPath(challengeId: string, sideId: string, spotId: string): string {
-  const params = new URLSearchParams({
-    side: sideId,
-    spot: spotId,
-  });
-
-  return `/challenges/${challengeId}/join?${params.toString()}`;
 }
 
 export function toCallablePayload(setup: MatchSetup, groupId: string | null) {

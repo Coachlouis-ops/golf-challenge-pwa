@@ -10,6 +10,7 @@ import {
   bookmakerPolicyAcceptanceList,
 } from "@/app/bookmaker/policies";
 import { auth } from "@/src/lib/firebase";
+import { readJoinReturn } from "@/src/lib/challengeMatch";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -40,7 +41,7 @@ export default function RegisterPage() {
         password
       );
 
-      router.push("/profile");
+      router.push(readJoinReturn() || "/profile");
     } catch (error: any) {
       if (error?.code === "auth/email-already-in-use") {
         alert(

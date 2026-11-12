@@ -8,6 +8,7 @@ import { db, functions } from "@/src/lib/firebase";
 import {
   doc,
   getDoc,
+  updateDoc,
   collection,
   getDocs,
   query,
@@ -19,6 +20,18 @@ import ParticipantsList from "./ParticipantsList";
 import PlayerSummaryList from "./PlayerSummaryList";
 import ResultsList from "./ResultsList";
 
+import {
+  canEditMatch,
+  resultsHaveBeenSubmitted,
+  formatLabel,
+  formatRand,
+  modeLabel,
+  readMatchSetup,
+  scoringLabel,
+  type MatchSetup,
+} from "@/src/lib/challengeMatch";
+import MatchLineup from "@/src/components/MatchLineup";
+
 type Challenge = {
   challengeId: string;
   challengeTitle: string;
@@ -28,6 +41,9 @@ type Challenge = {
   teamFormat: string;
   typeOfGame: string;
  entryTokens: number;
+  betAmount?: number;
+  matchSetup?: MatchSetup | null;
+  resultsSubmitted?: boolean;
 
 nassauTokens?: {
   front9: number;
@@ -134,6 +150,9 @@ const [scoreboardUpdated, setScoreboardUpdated] = useState(false);
   teamFormat: data.teamFormat || "—",
   typeOfGame: data.typeOfGame || "—",
  entryTokens: data.entryTokens || 0,
+  betAmount: Number(data.betAmount || data.entryTokens || 0),
+  matchSetup: readMatchSetup(data),
+  resultsSubmitted: resultsHaveBeenSubmitted(data),
 
 nassauTokens: data.nassauTokens
   ? {
@@ -255,6 +274,9 @@ if (
           teamFormat: data.teamFormat || "—",
           typeOfGame: data.typeOfGame || "—",
           entryTokens: data.entryTokens || 0,
+  betAmount: Number(data.betAmount || data.entryTokens || 0),
+  matchSetup: readMatchSetup(data),
+  resultsSubmitted: resultsHaveBeenSubmitted(data),
           status: data.status || "—",
           creatorUid: data.creatorUid,
           joinCode: data.joinCode,
@@ -650,21 +672,92 @@ const canFinalize =
             <strong>Course:</strong> {challenge.courseName}
           </p>
           <p>
-            <strong>Game Format:</strong> {challenge.gameFormat}
+            <strong>Mode:</strong>{" "}
+            {challenge.matchSetup ? modeLabel(challenge.matchSetup.mode) : challenge.teamFormat}
           </p>
           <p>
-            <strong>Scoring Method:</strong> {challenge.scoringMethod}
+            <strong>Format:</strong>{" "}
+            {challenge.matchSetup ? formatLabel(challenge.matchSetup.format) : challenge.gameFormat}
           </p>
           <p>
-            <strong>Team Format:</strong> {challenge.teamFormat}
+            <strong>Scoring method:</strong>{" "}
+            {challenge.matchSetup
+              ? scoringLabel(challenge.matchSetup.scoringMethod)
+              : challenge.scoringMethod}
           </p>
           <p>
-            <strong>Type of Game:</strong> {challenge.typeOfGame}
+            <strong>Bet per player:</strong>{" "}
+            {formatRand(Number(challenge.betAmount || challenge.entryTokens || 0))}
           </p>
-          <p>
-            <strong>Entry Tokens:</strong> {challenge.entryTokens}
-          </p>
+          {challenge.matchSetup && (
+            <p>
+              <strong>
+                {challenge.matchSetup.mode === "groups" ? "Groups" : "Sides"}:
+              </strong>{" "}
+              {challenge.matchSetup.sides.map((side) => side.name).join(", ")}
+            </p>
+          )}
         </div>
+
+        {challenge.matchSetup && (
+          <MatchLineup
+            setup={challenge.matchSetup}
+            locked={
+              !isCreator ||
+              !canEditMatch(
+                challenge.status,
+                Boolean(challenge.resultsSubmitted) || scoreboardUpdated
+              )
+            }
+            onChange={async (next) => {
+              if (!challengeId) return;
+              try {
+                await updateDoc(doc(db, "challenges", challengeId), {
+                  matchSetup: next,
+                });
+                setChallenge((current) =>
+                  current ? { ...current, matchSetup: next } : current
+                );
+              } catch (saveError: unknown) {
+                const messageText =
+                  saveError instanceof Error
+                    ? saveError.message
+                    : "The spot could not be updated on this match.";
+                await teezAlert({
+                  title: "LINEUP NOT SAVED",
+                  message: messageText,
+                  type: "error",
+                  buttonText: "OK",
+                });
+              }
+            }}
+            onInvite={(side, spot) => {
+              const joinUrl = `${window.location.origin}${`/challenges/${challenge.challengeId}/join?side=${encodeURIComponent(side.id)}&spot=${encodeURIComponent(spot.id)}`}`;
+              const text = `You are invited to ${challenge.challengeTitle}. Your place is ${side.name}, spot ${spot.number}. Accept the place here: ${joinUrl}`;
+              window.open(
+                `https://wa.me/?text=${encodeURIComponent(text)}`,
+                "_blank",
+                "noopener,noreferrer"
+              );
+            }}
+          />
+        )}
+
+        {isCreator &&
+          canEditMatch(
+            challenge.status,
+            Boolean(challenge.resultsSubmitted) || scoreboardUpdated
+          ) && (
+          <button
+            type="button"
+            onClick={() =>
+              router.push(`/challenges/create?challengeId=${challenge.challengeId}`)
+            }
+            className="self-start rounded-xl border border-cyan-300 px-4 py-3 text-sm font-black text-cyan-200"
+          >
+            Edit match
+          </button>
+        )}
 
       {/* INVITE SECTION */}
 {isCreator && (

@@ -3,6 +3,13 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/src/lib/AuthContext";
+import {
+  formatLabel,
+  formatRand,
+  modeLabel,
+  readMatchSetup,
+  scoringLabel,
+} from "@/src/lib/challengeMatch";
 import { db } from "@/src/lib/firebase";
 import {
   collection,
@@ -17,6 +24,9 @@ type Challenge = {
   courseName: string;
   gameFormat: string;
   entryTokens: number;
+  modeLabelText: string;
+  formatLabelText: string;
+  scoringLabelText: string;
   status: string;
   creatorUid: string;
   createdAt?: any;
@@ -76,7 +86,16 @@ function addChallenge(
     gameFormat:
       data.gameFormat || "—",
     entryTokens:
-      Number(data.entryTokens || 0),
+      Number(data.betAmount || data.entryTokens || 0),
+    modeLabelText: readMatchSetup(data)
+      ? modeLabel(readMatchSetup(data)!.mode)
+      : data.teamFormat || "—",
+    formatLabelText: readMatchSetup(data)
+      ? formatLabel(readMatchSetup(data)!.format)
+      : data.gameFormat || "—",
+    scoringLabelText: readMatchSetup(data)
+      ? scoringLabel(readMatchSetup(data)!.scoringMethod)
+      : data.scoringMethod || "—",
     status:
       data.status || "pending",
     creatorUid:
@@ -224,13 +243,18 @@ setChallenges(rows);
                   </div>
                 </div>
 
-                <div className="flex flex-wrap gap-6 text-sm">
+                <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
                   <span>
-                    <strong>Format:</strong> {challenge.gameFormat}
+                    <strong>Mode:</strong> {challenge.modeLabelText}
                   </span>
-
                   <span>
-                    <strong>Entry Tokens:</strong> {challenge.entryTokens}
+                    <strong>Format:</strong> {challenge.formatLabelText}
+                  </span>
+                  <span>
+                    <strong>Scoring:</strong> {challenge.scoringLabelText}
+                  </span>
+                  <span>
+                    <strong>Bet per player:</strong> {formatRand(challenge.entryTokens)}
                   </span>
                 </div>
 

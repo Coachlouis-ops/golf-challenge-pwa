@@ -2,6 +2,13 @@
 
 import { useEffect, useState } from "react";
 import { useAuth } from "@/src/lib/AuthContext";
+import {
+  formatLabel,
+  formatRand,
+  modeLabel,
+  readMatchSetup,
+  scoringLabel,
+} from "@/src/lib/challengeMatch";
 import { db } from "@/src/lib/firebase";
 import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
 
@@ -12,6 +19,9 @@ type Challenge = {
   courseName: string;
   gameFormat: string;
   entryTokens: number;
+  modeLabelText: string;
+  formatLabelText: string;
+  scoringLabelText: string;
   status: string;
   createdAt?: any;
 };
@@ -65,7 +75,16 @@ export default function ChallengesPage() {
           gameFormat:
             data.gameFormat || "",
           entryTokens:
-            Number(data.entryTokens || 0),
+            Number(data.betAmount || data.entryTokens || 0),
+          modeLabelText: readMatchSetup(data)
+            ? modeLabel(readMatchSetup(data)!.mode)
+            : data.teamFormat || "",
+          formatLabelText: readMatchSetup(data)
+            ? formatLabel(readMatchSetup(data)!.format)
+            : data.gameFormat || "",
+          scoringLabelText: readMatchSetup(data)
+            ? scoringLabel(readMatchSetup(data)!.scoringMethod)
+            : data.scoringMethod || "",
           status:
             data.status || "created",
           createdAt:
@@ -86,7 +105,16 @@ export default function ChallengesPage() {
           gameFormat:
             data.gameFormat || "",
           entryTokens:
-            Number(data.entryTokens || 0),
+            Number(data.betAmount || data.entryTokens || 0),
+          modeLabelText: readMatchSetup(data)
+            ? modeLabel(readMatchSetup(data)!.mode)
+            : data.teamFormat || "",
+          formatLabelText: readMatchSetup(data)
+            ? formatLabel(readMatchSetup(data)!.format)
+            : data.gameFormat || "",
+          scoringLabelText: readMatchSetup(data)
+            ? scoringLabel(readMatchSetup(data)!.scoringMethod)
+            : data.scoringMethod || "",
           status:
             data.status || "created",
           createdAt:
@@ -205,16 +233,19 @@ export default function ChallengesPage() {
                 {c.courseName}
               </p>
 
-              <div className="flex gap-6 text-sm">
-
+              <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
                 <span>
-                  <strong>Format:</strong> {c.gameFormat}
+                  <strong>Mode:</strong> {c.modeLabelText || "—"}
                 </span>
-
                 <span>
-                  <strong>Tokens:</strong> {c.entryTokens}
+                  <strong>Format:</strong> {c.formatLabelText || c.gameFormat || "—"}
                 </span>
-
+                <span>
+                  <strong>Scoring:</strong> {c.scoringLabelText || "—"}
+                </span>
+                <span>
+                  <strong>Bet per player:</strong> {formatRand(c.entryTokens)}
+                </span>
               </div>
 
             </div>

@@ -66,11 +66,11 @@ return (
       {/* FULL SCREEN NEON SPORTS BACKGROUND */}
       <div className="fixed inset-0">
         <Image
-          src="/vs-energy.png"
-          alt="Teez Neon Arena"
+          src="/money_versus.png"
+          alt="Green honey badger versus blue honey badger"
           fill
           priority
-          className="object-cover object-center"
+          className="object-contain object-center lg:object-cover"
         />
 
         {/* DARKEN BACKGROUND FOR READABILITY */}

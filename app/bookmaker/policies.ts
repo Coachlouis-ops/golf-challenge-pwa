@@ -1,0 +1,30 @@
+export const bookmakerPolicies = [
+  {
+    href: "/bookmaker/terms",
+    label: "ABC Bookmakers Terms & Conditions",
+  },
+  {
+    href: "/bookmaker/privacy",
+    label: "ABC Bookmakers Privacy Policy",
+  },
+  {
+    href: "/bookmaker/responsible-gambling",
+    label: "Responsible Gambling Policy",
+  },
+  {
+    href: "/bookmaker/fica-aml",
+    label: "FICA & Anti-Money Laundering Policy",
+  },
+  {
+    href: "/bookmaker/betting-rules",
+    label: "Betting Rules",
+  },
+  {
+    href: "/bookmaker/deposits-withdrawals",
+    label: "Deposits & Withdrawals Policy",
+  },
+] as const;
+
+export type BookmakerPolicy = (typeof bookmakerPolicies)[number];
+
+export const bookmakerPolicyUpdated = "12 November 2026";

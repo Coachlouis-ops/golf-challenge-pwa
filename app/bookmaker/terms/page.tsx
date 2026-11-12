@@ -5,6 +5,7 @@ import {
   PolicyList,
   PolicySection,
 } from "@/app/bookmaker/_components/PolicyDocument";
+import { bookmakerPolicyAcceptanceList } from "@/app/bookmaker/policies";
 
 export const metadata: Metadata = {
   title: "ABC Bookmakers Terms & Conditions",
@@ -17,7 +18,7 @@ export default function BookmakerTermsPage() {
     <PolicyDocument
       currentHref="/bookmaker/terms"
       title="ABC Bookmakers Terms & Conditions"
-      summary="These terms are the contract between you and ABC Bookmakers for your player betting account. Read them with the other five policies before you create the account."
+      summary="These terms are the contract between you and ABC Bookmakers for your player betting account. Read them with the other ABC Bookmakers policies before you create the account."
     >
       <PolicySection title="1. These terms">
         <p>
@@ -27,14 +28,11 @@ export default function BookmakerTermsPage() {
         </p>
         <p>
           By ticking the acceptance box on the registration page, you confirm
-          that you have read and accept these Terms & Conditions, the ABC
-          Bookmakers Privacy Policy, the Responsible Gambling Policy, the
-          FICA & Anti-Money Laundering Policy, the Betting Rules, and the
-          Deposits & Withdrawals Policy.
+          that you have read and accept the {bookmakerPolicyAcceptanceList()}.
         </p>
         <p>
-          If you do not accept all six policies, do not create an account and
-          do not place a bet.
+          If you do not accept all of these policies, do not create an account
+          and do not place a bet.
         </p>
       </PolicySection>
 
@@ -86,6 +84,9 @@ export default function BookmakerTermsPage() {
             "FICA & Anti-Money Laundering Policy, which explains identity, address, and source-of-funds checks.",
             "Betting Rules, which explain acceptance, confirmation, settlement, void bets, and disputes.",
             "Deposits & Withdrawals Policy, which explains how money moves into and out of your betting account.",
+            "Cookie Policy, which explains the storage used to keep you signed in and to remember a cookie choice.",
+            "Acceptable Use Policy, which explains the conduct required when you use your player account.",
+            "Community & Competition Rules, which explain how players take part in a TEEZ Golf Challenge on that account.",
           ]}
         />
         <p>

@@ -273,7 +273,7 @@ export default function HomePage() {
 
   <button
     type="button"
-    onClick={() => router.push("/legal/cookie-policy")}
+    onClick={() => router.push("/bookmaker/cookies")}
     className="underline text-xs text-gray-300 hover:text-white transition"
   >
     Cookie Policy

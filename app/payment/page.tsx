@@ -5,6 +5,10 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/src/lib/AuthContext";
 import Image from "next/image";
 import { useTeezNotification } from "@/src/components/TeezNotificationProvider";
+import {
+  bookmakerPolicies,
+  bookmakerPolicyAcceptanceList,
+} from "@/app/bookmaker/policies";
 
 
 export default function PaymentPage() {
@@ -212,10 +216,8 @@ setSubmitting(false);
 
           <p>
             Participation Access is provided by{" "}
-            <strong>
-              Honey Badger Technologies (PTY) LTD
-            </strong>
-            .
+            <strong>ABC Bookmakers</strong>. TEEZ Golf Challenges is the golf
+            game offered on that account.
           </p>
 
       <p>
@@ -258,47 +260,16 @@ setSubmitting(false);
   </p>
 
   <div className="flex flex-col items-start gap-3">
-
-    <button
-      type="button"
-      onClick={() => router.push("/legal/terms")}
-      className="text-left text-green-400 underline hover:text-green-300"
-    >
-      Website Terms & Conditions
-    </button>
-
-    <button
-      type="button"
-      onClick={() => router.push("/terms")}
-      className="text-left text-green-400 underline hover:text-green-300"
-    >
-      Platform Terms & Conditions
-    </button>
-
-    <button
-      type="button"
-      onClick={() => router.push("/legal/payment-policy")}
-      className="text-left text-green-400 underline hover:text-green-300"
-    >
-      Payment & Subscription Policy
-    </button>
-
-    <button
-      type="button"
-      onClick={() => router.push("/legal/refund-policy")}
-      className="text-left text-green-400 underline hover:text-green-300"
-    >
-      Refund, Cancellation & Delivery Policy
-    </button>
-
-    <button
-      type="button"
-      onClick={() => router.push("/privacy")}
-      className="text-left text-green-400 underline hover:text-green-300"
-    >
-      Privacy Policy
-    </button>
-
+    {bookmakerPolicies.map((policy) => (
+      <button
+        key={policy.href}
+        type="button"
+        onClick={() => router.push(policy.href)}
+        className="text-left text-green-400 underline hover:text-green-300"
+      >
+        {policy.label}
+      </button>
+    ))}
   </div>
 </div>
 
@@ -310,10 +281,8 @@ setSubmitting(false);
               className="mt-1"
             />
 <span>
-  I confirm that I have reviewed and accept the Website Terms &
-  Conditions, Platform Terms & Conditions, Payment & Subscription
-  Policy, Refund, Cancellation & Delivery Policy, and Privacy
-  Policy. I understand that my R69 payment provides 30 days of
+  I confirm that I have reviewed and accept the {bookmakerPolicyAcceptanceList()}.
+  I understand that my R69 payment provides 30 days of
   Participation Access and 200 TEEZ Play Tokens. All unused
   wallet tokens expire after 30 days with no carryover.
   Participation does not renew automatically, and additional
@@ -345,8 +314,8 @@ setSubmitting(false);
         </p>
 
         <p className="text-xs text-gray-400">
-          Your dashboard unlocks only after Teez receives verified payment
-          confirmation from Peach Payments.
+          Your dashboard unlocks only after ABC Bookmakers receives verified
+          payment confirmation from Peach Payments.
         </p>
       </div>
 

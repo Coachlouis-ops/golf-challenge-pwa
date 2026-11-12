@@ -2,6 +2,8 @@
 
 import { useRouter } from "next/navigation";
 
+import { bookmakerPolicies } from "@/app/bookmaker/policies";
+
 export default function SiteFooter() {
   const router = useRouter();
 
@@ -42,63 +44,19 @@ export default function SiteFooter() {
         </div>
 
         <div className="mx-auto mb-10 flex max-w-3xl flex-wrap justify-center gap-x-5 gap-y-3 text-center text-[10px] uppercase tracking-[0.08em] text-slate-400">
-          <button
-            onClick={() => router.push("/legal/terms")}
-            className="transition hover:text-blue-300"
-          >
-            Website Terms & Conditions
-          </button>
+          {bookmakerPolicies.map((policy) => (
+            <button
+              key={policy.href}
+              type="button"
+              onClick={() => router.push(policy.href)}
+              className="transition hover:text-blue-300"
+            >
+              {policy.label}
+            </button>
+          ))}
 
           <button
-            onClick={() => router.push("/terms")}
-            className="transition hover:text-blue-300"
-          >
-            Platform Terms & Conditions
-          </button>
-
-          <button
-            onClick={() => router.push("/legal/payment-policy")}
-            className="transition hover:text-blue-300"
-          >
-            Payment & Subscription Policy
-          </button>
-
-          <button
-            onClick={() => router.push("/legal/refund-policy")}
-            className="transition hover:text-blue-300"
-          >
-            Refund, Cancellation & Delivery Policy
-          </button>
-
-          <button
-            onClick={() => router.push("/privacy")}
-            className="transition hover:text-blue-300"
-          >
-            Privacy Policy
-          </button>
-
-          <button
-            onClick={() => router.push("/legal/cookie-policy")}
-            className="transition hover:text-blue-300"
-          >
-            Cookie Policy
-          </button>
-
-          <button
-            onClick={() => router.push("/legal/acceptable-use")}
-            className="transition hover:text-blue-300"
-          >
-            Acceptable Use Policy
-          </button>
-
-          <button
-            onClick={() => router.push("/legal/community-rules")}
-            className="transition hover:text-blue-300"
-          >
-            Community & Competition Rules
-          </button>
-
-          <button
+            type="button"
             onClick={() => router.push("/contact")}
             className="transition hover:text-blue-300"
           >

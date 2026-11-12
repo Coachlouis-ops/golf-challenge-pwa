@@ -5,7 +5,10 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 
-import { bookmakerPolicies } from "@/app/bookmaker/policies";
+import {
+  bookmakerPolicies,
+  bookmakerPolicyAcceptanceList,
+} from "@/app/bookmaker/policies";
 import { auth } from "@/src/lib/firebase";
 
 export default function RegisterPage() {
@@ -118,10 +121,7 @@ export default function RegisterPage() {
           />
 
           <span className="text-sm text-gray-300">
-            I have reviewed and accept the ABC Bookmakers Terms & Conditions,
-            ABC Bookmakers Privacy Policy, Responsible Gambling Policy, FICA &
-            Anti-Money Laundering Policy, Betting Rules, and Deposits &
-            Withdrawals Policy.
+            I have reviewed and accept the {bookmakerPolicyAcceptanceList()}.
           </span>
         </label>
       </div>

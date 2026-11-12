@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/src/lib/AuthContext";
+import SiteFooter from "@/src/components/SiteFooter";
 
 
 import { doc, getDoc } from "firebase/firestore";
@@ -29,10 +30,14 @@ function DashboardContent() {
   const [lockedFeature, setLockedFeature] =
     useState<LockedFeature | null>(null);
 
+  const [battleCharacter, setBattleCharacter] =
+    useState<{
+      name: string;
+      imageUrl: string;
+    } | null>(null);
 
 useEffect(() => {
   if (!user) {
-    setBattleCharacter(null);
     return;
   }
 
@@ -88,15 +93,6 @@ useEffect(() => {
   loadBattleCharacter();
 }, [user]);
 
-
-const [battleCharacter, setBattleCharacter] =
-  useState<{
-    name: string;
-    imageUrl: string;
-  } | null>(null);
-
-
-
   const openCompetitiveFeature = (
     title: string,
     route: string
@@ -118,18 +114,6 @@ const [battleCharacter, setBattleCharacter] =
     }
 
     router.push(route);
-  };
-
-  const openProfile = () => {
-    if (!user) {
-      setLockedFeature({
-        title: "My Profile",
-        reason: "login",
-      });
-      return;
-    }
-
-    router.push("/profile");
   };
 
   if (loading) {
@@ -254,11 +238,11 @@ return (
 
               <button
                 onClick={() =>
-                  router.push("/legal/payment-policy")
+                  router.push("/bookmaker/deposits-withdrawals")
                 }
                 className="w-full mt-3 text-xs text-cyan-300 underline hover:text-white"
               >
-                View Payment & Participation Policy
+                View Deposits & Withdrawals Policy
               </button>
 
               <div className="grid grid-cols-2 gap-3 mt-5">
@@ -326,24 +310,6 @@ return (
 <div className="space-y-4">
 
   <button
-    onClick={() => openCompetitiveFeature("My Groups", "/groups")}
-    className={`arena-btn neon-orange ${
-      competitiveFeaturesLocked ? "locked-btn" : ""
-    }`}
-  >
-    MY GROUPS
-  </button>
-
-  <button
-    onClick={() => openCompetitiveFeature("Token Wallet", "/wallet")}
-    className={`arena-btn neon-green ${
-      competitiveFeaturesLocked ? "locked-btn" : ""
-    }`}
-  >
-    TOKEN WALLET
-  </button>
-
-  <button
     onClick={() => openCompetitiveFeature("Create Challenge", "/challenges/create")}
     className={`arena-btn neon-pink ${
       competitiveFeaturesLocked ? "locked-btn" : ""
@@ -368,33 +334,6 @@ return (
     }`}
   >
     MY CHALLENGES
-  </button>
-
-  <button
-    onClick={() => openCompetitiveFeature("My Career", "/profile/my-career")}
-    className={`arena-btn neon-blue ${
-      competitiveFeaturesLocked ? "locked-btn" : ""
-    }`}
-  >
-    MY CAREER
-  </button>
-
-  <button
-    onClick={() => openCompetitiveFeature("Player Booster Board", "/player-booster-board")}
-    className={`arena-btn neon-green ${
-      competitiveFeaturesLocked ? "locked-btn" : ""
-    }`}
-  >
-    PLAYER BOOSTER BOARD
-  </button>
-
-  <button
-    onClick={openProfile}
-    className={`arena-btn neon-cyan ${
-      !user ? "locked-btn" : ""
-    }`}
-  >
-    MY PROFILE
   </button>
 
 </div>
@@ -457,55 +396,6 @@ return (
   </div>
 </div>
 
-          {/* LEGAL */}
-          <div className="glass-panel mt-1">
-            <p className="text-center text-xs tracking-[3px] text-white font-bold mb-5">
-              LEGAL & POLICIES
-            </p>
-
-            <div className="flex flex-col gap-4 text-center">
-              <button
-                onClick={() =>
-                  router.push("/terms")
-                }
-                className="policy-link"
-              >
-                PLATFORM TERMS & CONDITIONS
-              </button>
-
-              <button
-                onClick={() =>
-                  router.push(
-                    "/legal/payment-policy"
-                  )
-                }
-                className="policy-link"
-              >
-                PAYMENT & PARTICIPATION POLICY
-              </button>
-
-              <button
-                onClick={() =>
-                  router.push(
-                    "/legal/refund-policy"
-                  )
-                }
-                className="policy-link"
-              >
-                REFUND, CANCELLATION & DELIVERY POLICY
-              </button>
-
-              <button
-                onClick={() =>
-                  router.push("/privacy")
-                }
-                className="policy-link"
-              >
-                PRIVACY POLICY
-              </button>
-            </div>
-          </div>
-
           <button
             onClick={() =>
               router.push("/")
@@ -516,6 +406,10 @@ return (
           </button>
         </div>
       </main>
+
+      <div className="relative z-10">
+        <SiteFooter />
+      </div>
 
       {/* LOCKED FEATURE MODAL */}
       {lockedFeature && (

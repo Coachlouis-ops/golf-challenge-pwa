@@ -20,7 +20,6 @@ export default function PlayerBoosterBoard() {
   const {
     user,
     loading,
-    isSubscribed,
   } = useAuth();
 
   const [boosterBallsEarned, setBoosterBallsEarned] =
@@ -243,43 +242,6 @@ export default function PlayerBoosterBoard() {
             className="mt-6 w-full rounded-2xl border-2 border-cyan-400 bg-black px-4 py-4 text-sm font-black text-white"
           >
             LOG IN
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  if (!isSubscribed) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-black px-6 text-white">
-        <div className="w-full max-w-sm text-center">
-          <p className="text-xl font-black">
-            PLAYER BOOSTER BOARD
-          </p>
-
-          <p className="mt-3 text-sm text-gray-400">
-            Activate Participation Access to
-            unlock your Booster Board.
-          </p>
-
-          <button
-            type="button"
-            onClick={() =>
-              router.push("/payment")
-            }
-            className="mt-6 w-full rounded-2xl border-2 border-lime-300 bg-lime-300 px-4 py-4 text-sm font-black text-black"
-          >
-            ACTIVATE PARTICIPATION ACCESS
-          </button>
-
-          <button
-            type="button"
-            onClick={() =>
-              router.push("/dashboard")
-            }
-            className="mt-4 text-xs font-black uppercase tracking-[0.14em] text-gray-400 underline"
-          >
-            BACK TO DASHBOARD
           </button>
         </div>
       </div>

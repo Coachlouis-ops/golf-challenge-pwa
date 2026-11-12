@@ -18,6 +18,8 @@ import {
   FieldValue,
 } from "firebase-admin/firestore";
 
+import { isWalletDepositAmount } from "@/src/lib/walletMoney";
+
 const PEACH_AUTH_URL =
   "https://dashboard.peachpayments.com/api/oauth/token";
 
@@ -146,39 +148,19 @@ export async function POST(req: Request) {
     const requestBody =
       await req.json();
 
-  const product =
-  requestBody?.product as
-    | "participation_access"
-    | undefined;
+    const requestedAmount = Number(requestBody?.amount);
 
-       // -----------------------------------
-    // SERVER-SIDE PRODUCT SOURCE OF TRUTH
-    // -----------------------------------
-const products = {
-  participation_access: {
-    amount: 69,
-    tokens: 200,
-    participationAccess: true,
-  },
-} as const;
-
-   if (product !== "participation_access") {
+    if (!isWalletDepositAmount(requestedAmount)) {
       return NextResponse.json(
         {
-          error: "Unsupported product",
+          error: "Choose R25, R50, R75, R100, R150, R200 or R250.",
         },
         { status: 400 }
       );
     }
 
-    const selectedProduct =
-      products[product];
-
-    const amount =
-      selectedProduct.amount;
-
-    const tokens =
-      selectedProduct.tokens;
+    const amount = requestedAmount;
+    const product = "wallet_deposit";
 
     const currency = "ZAR";
     const paymentType = "DB";
@@ -194,43 +176,6 @@ const products = {
 
     const db =
       getFirestore();
-
-        // -----------------------------------
-    // PARTICIPATION ACCESS / TOP-UP RULES
-    // -----------------------------------
-    const userRef =
-      db.collection("users").doc(uid);
-
-    const userSnap =
-      await userRef.get();
-
-    const userData =
-      userSnap.exists
-        ? userSnap.data()
-        : null;
-
-  const expiresAt = userData?.subscriptionExpires;
-
-const expiryMillis =
-  expiresAt && typeof expiresAt.toMillis === "function"
-    ? expiresAt.toMillis()
-    : 0;
-
-const participationActive =
-  expiryMillis > Date.now();
-
-    if (
-      product === "participation_access" &&
-      participationActive
-    ) {
-      return NextResponse.json(
-        {
-          error:
-         "Your participation is active. You can renew when your current 30-day period expires.",
-        },
-        { status: 409 }
-      );
-    }
 
     // -----------------------------------
     // UNIQUE INTERNAL PAYMENT REFERENCE
@@ -259,10 +204,8 @@ const participationActive =
 
       currency,
 
-             entitlement: {
-        tokens,
-        participationAccess:
-          selectedProduct.participationAccess,
+      entitlement: {
+        walletCredit: amount,
       },
 
       paymentProvider:

@@ -140,6 +140,10 @@ export async function POST(req: Request) {
           "not_fulfilled",
         paymentId:
           paymentDoc.id,
+        amount:
+          Number(payment.expectedAmount || 0),
+        currency:
+          payment.currency || "ZAR",
       },
       { status: 200 }
     );

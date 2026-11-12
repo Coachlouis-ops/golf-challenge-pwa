@@ -81,7 +81,7 @@ How Teez Golf Challenges Works
         5. Challenge Rewards
   </h2>
   <p>
-        Play Tokens used to enter a challenge contribute to the challenge reward pool.
+        The rand bet from each player's wallet is the stake for that match.
     <br /><br />
 
     <strong>Matchplay Challenges:</strong><br />
@@ -163,7 +163,7 @@ How Teez Golf Challenges Works
               improve your rankings and earn TEEZ rewards.
               <br /><br />
 
-              <strong>Play Tokens:</strong> Used to enter golf challenges.
+              <strong>Wallet:</strong> Rand deposited with ABC Bookmakers is used for the bet on a TEEZ Golf Challenge.
               <br /><br />
 
               <strong>TEEZ Dollars:</strong> Fictional career winnings

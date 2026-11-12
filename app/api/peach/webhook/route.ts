@@ -499,6 +499,10 @@ export async function POST(req: Request) {
         // --------------------------------------------------
     // SUPPORTED PEACH PRODUCTS
     // --------------------------------------------------
+    const isWalletDeposit =
+      payment.product ===
+      "wallet_deposit";
+
     const isParticipationAccess =
       payment.product ===
       "participation_access";
@@ -521,6 +525,7 @@ const legacyTopUpAllowed =
     topUpCutoff.toMillis();
 
 if (
+  !isWalletDeposit &&
   !isParticipationAccess &&
   !legacyTopUpAllowed
 ) {
@@ -646,63 +651,24 @@ void walletSnap;
                const now =
   Timestamp.now();
 
-const participationExpires =
-  Timestamp.fromMillis(
-    now.toMillis() +
-      30 * 24 * 60 * 60 * 1000
-  );
+const walletCredit = Number(
+  freshPayment.expectedAmount
+);
 
-if (isParticipationAccess) {
-          tx.set(
-            userRef,
-            {
-              uid,
-
-              email:
-                payment.email || "",
-
-              role:
-                userSnap.exists
-                  ? userSnap.get(
-                      "role"
-                    ) || "player"
-                  : "player",
-
-              subscriptionStatus:
-                "active",
-
-              subscriptionPlan:
-                "participation_access",
-
-              subscriptionStartedAt:
-                now,
-
-             subscriptionExpires:
-  participationExpires,
-
-              participationStatus:
-                "active",
-
-              participationActivatedAt:
-                now,
-
-              updatedAt:
-                now,
-            },
-            { merge: true }
-          );
-
+if (
+  (isWalletDeposit || isParticipationAccess) &&
+  Number.isFinite(walletCredit) &&
+  walletCredit > 0
+) {
           tx.set(
             walletRef,
             {
               uid,
 
-    balance: 200,
-
-subscriptionTokensIssued:
-  FieldValue.increment(
-    200
-  ),
+              balance:
+                FieldValue.increment(
+                  walletCredit
+                ),
 
               updatedAt:
                 now,
@@ -713,6 +679,8 @@ subscriptionTokensIssued:
             { merge: true }
           );
         }
+
+void userSnap;
 
         if (isTokenTopUp) {
           tx.set(
@@ -807,7 +775,7 @@ subscriptionTokensIssued:
     );
 
     console.log(
-      "Peach membership payment processed.",
+      "Peach wallet deposit processed.",
       {
         webhookId,
         checkoutId,

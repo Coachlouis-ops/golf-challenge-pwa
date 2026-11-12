@@ -19,7 +19,6 @@ function DashboardContent() {
   const {
     user,
     loading,
-    isSubscribed,
   } = useAuth();
 
   const [lockedFeature, setLockedFeature] =
@@ -37,14 +36,6 @@ function DashboardContent() {
       return;
     }
 
-    if (!isSubscribed) {
-      setLockedFeature({
-        title,
-        reason: "subscription",
-      });
-      return;
-    }
-
     router.push(route);
   };
 
@@ -56,8 +47,7 @@ function DashboardContent() {
     );
   }
 
-const competitiveFeaturesLocked =
-  !user || !isSubscribed;
+const competitiveFeaturesLocked = !user;
 
 
 return (
@@ -119,20 +109,8 @@ return (
               </p>
 
               <p className="text-sm text-gray-200 mt-3 leading-6 text-center">
-                Log in to create your player profile and activate
-                Participation Access.
-              </p>
-
-              <p className="text-3xl font-black mt-5 text-center text-white">
-                R69
-              </p>
-
-              <p className="text-xs text-gray-300 mt-2 text-center">
-                Includes Participation Access + 200 Play Tokens
-              </p>
-
-              <p className="text-xs text-gray-400 mt-2 text-center">
-                No automatic renewal. Renew participation after 30 days.
+                Log in, add rand to your wallet, then create a match.
+                The wallet must cover the bet for each player.
               </p>
 
               <button
@@ -166,28 +144,15 @@ return (
             </div>
           )}
 
-          {/* LOGGED IN BUT NOT ACTIVATED */}
-          {user && !isSubscribed && (
+          {user && (
             <div className="glass-panel border-lime-400 shadow-[0_0_35px_rgba(163,230,53,0.32)]">
               <p className="text-lime-300 font-extrabold tracking-wide text-center">
-                ACTIVATE PARTICIPATION ACCESS
+                WALLET
               </p>
 
               <p className="text-sm text-gray-200 mt-3 leading-6 text-center">
-                Activate Participation Access to unlock challenges,
-                rankings, invites, live scoring and your Teez Play Token Wallet.
-              </p>
-
-              <p className="text-3xl font-black mt-5 text-center">
-                R69
-              </p>
-
-              <p className="text-xs text-gray-300 mt-2 text-center">
-                Includes 200 Play Tokens
-              </p>
-
-              <p className="text-xs text-gray-400 mt-2 text-center">
-                One-time authorised payment. No automatic renewal.
+                Add R25 to R250 before you create or join a match. The
+                balance has to cover the bet per player.
               </p>
 
               <button
@@ -196,7 +161,7 @@ return (
                 }
                 className="w-full mt-5 h-12 rounded-xl font-extrabold neon-green"
               >
-                ACTIVATE PARTICIPATION ACCESS
+                ADD MONEY
               </button>
             </div>
           )}
@@ -242,7 +207,7 @@ return (
 {/* ACCOUNT */}
 <div className="glass-panel mt-4">
   <p className="text-center text-xs tracking-[3px] text-white font-bold mb-4">
-    PARTICIPATION & ACCOUNT
+    WALLET & ACCOUNT
   </p>
 
   <div className="flex flex-col gap-3">
@@ -268,29 +233,15 @@ return (
       </>
     )}
 
-    {user && !isSubscribed && (
+    {user && (
       <button
         onClick={() =>
-          router.push("/payment")
+          router.push("/wallet")
         }
-        className="arena-btn neon-green"
+        className="arena-btn neon-cyan"
       >
-        ACTIVATE PARTICIPATION ACCESS
+        VIEW WALLET
       </button>
-    )}
-
-    {user && isSubscribed && (
-      <>
-        <button
-          onClick={() =>
-            router.push("/wallet")
-          }
-          className="arena-btn neon-cyan"
-        >
-          VIEW TOKEN WALLET
-        </button>
-
-           </>
     )}
   </div>
 </div>
@@ -355,19 +306,7 @@ return (
               ) : (
                 <>
                   <p className="text-sm text-gray-300 mt-4 leading-6">
-                    Activate Participation Access to unlock this competitive feature.
-                  </p>
-
-                  <p className="text-3xl font-black mt-5">
-                    R69
-                  </p>
-
-                  <p className="text-xs text-gray-300 mt-2">
-                    Includes 200 Play Tokens
-                  </p>
-
-                  <p className="text-xs text-gray-500 mt-2">
-                    One-time authorised payment. No automatic renewal.
+                    Add money to your wallet. The balance has to cover the bet per player.
                   </p>
 
                   <button
@@ -376,7 +315,7 @@ return (
                     }
                     className="arena-btn neon-green mt-6"
                   >
-                    ACTIVATE PARTICIPATION ACCESS
+                    ADD MONEY
                   </button>
                 </>
               )}

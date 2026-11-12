@@ -107,7 +107,9 @@ if (
           setChecking(false);
 
         setStatusMessage(
-  "Payment confirmed! Your participation is active for 30 days, and 200 Play Tokens have been added to your wallet."
+  result?.amount
+    ? `Payment confirmed. ${Number(result.amount).toLocaleString("en-ZA", { style: "currency", currency: "ZAR" })} has been added to your wallet.`
+    : "Payment confirmed. The deposit has been added to your wallet."
 );
 
 setTimeout(() => {
@@ -126,7 +128,7 @@ setTimeout(() => {
           setChecking(false);
 
           setStatusMessage(
-            "The payment was cancelled. No membership or tokens were issued."
+            "The payment was cancelled. Nothing was added to your wallet."
           );
 
           return;
@@ -137,7 +139,7 @@ setTimeout(() => {
           "uncertain"
         ) {
           setStatusMessage(
-            "Peach Payments is still confirming the final payment status. No membership or tokens will be issued until payment is confirmed."
+            "Peach Payments is still confirming the final payment status. Nothing is added to your wallet until the payment is confirmed."
           );
         } else {
           setStatusMessage(
@@ -151,7 +153,7 @@ setTimeout(() => {
           setChecking(false);
 
           setStatusMessage(
-            "Payment confirmation is taking longer than expected. Your account will activate automatically once Peach Payments confirms the payment."
+            "Payment confirmation is taking longer than expected. Your wallet is credited only after Peach Payments confirms the payment."
           );
 
           return;
@@ -173,7 +175,7 @@ setTimeout(() => {
           setChecking(false);
 
           setStatusMessage(
-            "We could not confirm the payment yet. Your account will only activate once Peach Payments confirms it."
+            "We could not confirm the payment yet. Your wallet is credited only after Peach Payments confirms it."
           );
 
           return;
@@ -212,11 +214,7 @@ setTimeout(() => {
         </p>
 
         <div className="bg-black/40 border border-neutral-700 rounded-xl p-4 text-sm text-gray-400">
-          Your membership and{" "}
-          <span className="text-green-400 font-semibold">
-            100 Teez Tokens
-          </span>{" "}
-          are issued only after Peach Payments securely confirms the payment.
+          Your wallet is credited only after Peach Payments securely confirms the payment.
         </div>
 
         {checking && (

@@ -13,6 +13,8 @@ import {
   where,
 } from "firebase/firestore";
 import { auth, db, functions } from "@/src/lib/firebase";
+import { getWalletBalance } from "@/src/lib/walletBalance";
+import { formatWalletRand } from "@/src/lib/walletMoney";
 import RequireAuth from "@/src/lib/RequireAuth";
 import GolfCourseSearch from "@/src/components/GolfCourseSearch";
 import SiteFooter from "@/src/components/SiteFooter";
@@ -75,6 +77,8 @@ export default function CreateChallengePage() {
   const [groupId, setGroupId] = useState<string | null>(null);
   const [groupChoices, setGroupChoices] = useState<{ id: string; name: string }[]>([]);
   const [askForGroup, setAskForGroup] = useState(false);
+  const [walletBalance, setWalletBalance] = useState<number | null>(null);
+  const [needsMoney, setNeedsMoney] = useState(false);
 
   const locked = setup.detailsLocked;
   const formats = formatsForMode(setup.mode);
@@ -88,6 +92,7 @@ export default function CreateChallengePage() {
 
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (!user) return;
+      setWalletBalance(await getWalletBalance(user.uid));
 
       if (!suppliedGroupId) {
         const snapshot = await getDocs(
@@ -191,6 +196,23 @@ export default function CreateChallengePage() {
     ) {
       return;
     }
+
+    const uid = auth.currentUser?.uid;
+    const balance = uid ? await getWalletBalance(uid) : 0;
+    setWalletBalance(balance);
+
+    if (balance < setup.betAmount) {
+      setNeedsMoney(true);
+      await teezAlert({
+        title: "WALLET DOES NOT COVER THE BET",
+        message: `This match needs ${formatWalletRand(setup.betAmount)} per player. Your wallet has ${formatWalletRand(balance)}. Add money, then create the game.`,
+        type: "warning",
+        buttonText: "CONTINUE",
+      });
+      return;
+    }
+
+    setNeedsMoney(false);
 
     try {
       setLoading(true);
@@ -519,6 +541,17 @@ export default function CreateChallengePage() {
                 {loading ? "Saving..." : savedId ? "Save game" : "Create game"}
               </button>
             </section>
+          )}
+
+          {needsMoney && (
+            <button
+              type="button"
+              onClick={() => router.push("/payment")}
+              className="rounded-xl border border-green-400 py-3 text-sm font-black text-green-300"
+            >
+              Add money
+              {walletBalance !== null ? ` · wallet ${formatWalletRand(walletBalance)}` : ""}
+            </button>
           )}
 
           {!showGuide && (

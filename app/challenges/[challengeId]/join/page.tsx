@@ -7,6 +7,8 @@ import { httpsCallable } from "firebase/functions";
 import { db, functions } from "@/src/lib/firebase";
 import { useAuth } from "@/src/lib/AuthContext";
 import { JOIN_RETURN_KEY, readMatchSetup } from "@/src/lib/challengeMatch";
+import { getWalletBalance } from "@/src/lib/walletBalance";
+import { formatWalletRand } from "@/src/lib/walletMoney";
 
 function JoinChallengeSpotPage() {
   const { user, loading } = useAuth();
@@ -40,6 +42,28 @@ function JoinChallengeSpotPage() {
 
     (async () => {
       try {
+        const challengeSnap = await getDoc(doc(db, "challenges", challengeId));
+        if (!challengeSnap.exists()) {
+          throw new Error("This match no longer exists.");
+        }
+
+        const challengeData = challengeSnap.data();
+        const setupPreview = readMatchSetup(challengeData);
+        const bet = Number(
+          setupPreview?.betAmount ||
+            challengeData.betAmount ||
+            challengeData.entryTokens ||
+            0
+        );
+        const balance = await getWalletBalance(uid);
+
+        if (bet > 0 && balance < bet) {
+          setMessage(
+            `This match needs ${formatWalletRand(bet)} per player. Your wallet has ${formatWalletRand(balance)}.`
+          );
+          return;
+        }
+
         const acceptInvite = httpsCallable(functions, "acceptInviteSecure");
         await acceptInvite({ challengeId });
 
@@ -98,7 +122,18 @@ function JoinChallengeSpotPage() {
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-black px-6 text-center text-white">
-      <p className="max-w-md text-sm text-gray-200">{displayMessage}</p>
+      <div className="flex max-w-md flex-col items-center gap-4">
+        <p className="text-sm text-gray-200">{displayMessage}</p>
+        {displayMessage.includes("Your wallet has") && (
+          <button
+            type="button"
+            onClick={() => router.push("/payment")}
+            className="rounded-xl bg-green-400 px-5 py-3 text-sm font-black text-black"
+          >
+            Add money
+          </button>
+        )}
+      </div>
     </main>
   );
 }

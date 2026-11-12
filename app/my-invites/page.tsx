@@ -10,6 +10,9 @@ import {
 } from "firebase/firestore";
 import { httpsCallable } from "firebase/functions";
 import { db, functions } from "@/src/lib/firebase";
+import { getWalletBalance } from "@/src/lib/walletBalance";
+import { formatWalletRand } from "@/src/lib/walletMoney";
+import { readMatchSetup } from "@/src/lib/challengeMatch";
 import { useAuth } from "@/src/lib/AuthContext";
 import { useTeezNotification } from "@/src/components/TeezNotificationProvider";
 
@@ -185,7 +188,7 @@ async function handleAcceptGroup(
   await teezConfirm({
     title: "ACCEPT MATCH",
     message:
-      "Accepting this match will spend the listed entry tokens from your wallet.",
+      "Accepting this match uses the bet per player from your wallet.",
     type: "warning",
     confirmText: "ACCEPT MATCH",
     cancelText: "CANCEL",
@@ -194,6 +197,25 @@ async function handleAcceptGroup(
 if (!confirmed) return;
     try {
       setProcessingId(challengeId);
+
+      const challengeSnap = await getDoc(doc(db, "challenges", challengeId));
+      const challengeData = challengeSnap.exists() ? challengeSnap.data() : null;
+      const setup = readMatchSetup(challengeData);
+      const bet = Number(
+        setup?.betAmount || challengeData?.betAmount || challengeData?.entryTokens || 0
+      );
+      const balance = await getWalletBalance(user.uid);
+
+      if (bet > 0 && balance < bet) {
+        await teezAlert({
+          title: "WALLET DOES NOT COVER THE BET",
+          message: `This match needs ${formatWalletRand(bet)} per player. Your wallet has ${formatWalletRand(balance)}.`,
+          type: "warning",
+          buttonText: "ADD MONEY",
+        });
+        router.push("/payment");
+        return;
+      }
 
       const acceptSecure = httpsCallable(functions, "acceptInviteSecure");
 

@@ -59,7 +59,17 @@ status: string;
 type Player = {
   uid: string;
   displayName: string;
+  resultVerified: boolean;
 };
+
+function readPlayer(entry: { id: string; get: (field: string) => unknown }): Player {
+  return {
+    uid: entry.id,
+    displayName: String(entry.get("displayName") || entry.id),
+    resultVerified:
+      entry.get("resultVerified") === true || entry.get("resultAccepted") === true,
+  };
+}
 
 export default function ChallengeDetailPage() {
   const { user } = useAuth();
@@ -186,12 +196,7 @@ if (
           collection(db, "challenges", challengeId, "players")
         );
 
-        const playersData = playersSnap.docs.map((d) => ({
-          uid: d.id,
-          displayName: d.get("displayName") || d.id,
-        }));
-
-        setPlayers(playersData);
+        setPlayers(playersSnap.docs.map(readPlayer));
 
         const invitesSnap = await getDocs(
           collection(db, "challenges", challengeId, "invites")
@@ -243,12 +248,7 @@ if (
         collection(db, "challenges", challengeId, "players")
       );
 
-      const playersData = playersSnap.docs.map((d) => ({
-        uid: d.id,
-        displayName: d.get("displayName") || d.id,
-      }));
-
-      setPlayers(playersData);
+      setPlayers(playersSnap.docs.map(readPlayer));
 
       const invitesSnap = await getDocs(
         collection(db, "challenges", challengeId, "invites")
@@ -466,88 +466,49 @@ const canFinalize =
 
                {isCreator ? (
           (() => {
-            const acceptedPlayers = players.length;
-            const pendingInvites = invitedUids.filter(
-              (uid) =>
-                !players.some(
-                  (player) => String(player.uid) === String(uid)
-                )
-            ).length;
-
-            let title = "INVITE PLAYERS";
-            let message =
-              "Add players from Edit match. Search a registered player by name and send the invite from there.";
-            let notes: string[] = [
-              "Players who accepted your challenge will appear in the Participants section below.",
-              "Open Edit match to place a registered player in an open spot.",
-            ];
-
-            if (invitedUids.length > 0 && acceptedPlayers === 0) {
-              title = "WAITING FOR ACCEPTANCE";
-              message =
-                "Waiting for invited players to accept. Add another player from Edit match.";
-              notes = [
-                "Waiting for invited players to accept the challenge.",
-              ];
-            }
-
-            if (
-              acceptedPlayers > 0 &&
-              challenge.status !== "completed"
-            ) {
-              title = "ENTER RESULTS";
-              message =
-                "After completion of challenge enter the scores/results - update scoreboard, scoreboard can be updated as scores are being added, once finalized the challenge cannot be reopened.";
-              notes = [
-                "Accepted players are listed in the Participants section below.",
-              ];
-            }
-
-            if (challenge.status === "completed") {
-              title = "CHALLENGE COMPLETED";
-              message =
-                "See My Challenges for results and My Profile for rankings and prizes.";
-              notes = [
-                "This challenge has been finalized successfully.",
-              ];
-            }
-
-            if (title === "WAITING FOR ACCEPTANCE") return null;
+            const joined = players.length;
+            const invited = new Set([
+              ...invitedUids,
+              ...players.map((player) => player.uid),
+            ]).size;
+            const resultsProposed =
+              Boolean(challenge.resultsSubmitted) || scoreboardUpdated;
+            const verified = resultsProposed
+              ? players.filter((player) => player.resultVerified).length
+              : 0;
 
             return (
               <div className="border border-red-500/40 bg-red-950/30 backdrop-blur-md rounded-2xl p-5 shadow-[0_0_35px_rgba(255,0,0,0.35)]">
-                <div className="flex items-center justify-between mb-4">
-                  <div>
-                    <div className="text-xs tracking-[0.3em] text-red-400 font-bold">
-                      CHALLENGE GUIDE
-                    </div>
+                <div className="text-xs tracking-[0.3em] text-red-400 font-bold">
+                  GAME STATUS
+                </div>
 
-                    <div className="text-2xl font-extrabold text-red-300 mt-1">
-                      {title}
-                    </div>
+                <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-3">
+                  <div className="rounded-xl border border-red-500/30 bg-black/40 px-3 py-4 text-center">
+                    <p className="text-[10px] font-black uppercase tracking-[0.14em] text-red-300">
+                      Players invited
+                    </p>
+                    <p className="mt-2 text-4xl font-black text-white">{invited}</p>
                   </div>
-
-                  <div className="text-right text-xs text-red-200 space-y-1">
-                    <div>Players Joined: {acceptedPlayers}</div>
-                    <div>Pending Invites: {pendingInvites}</div>
-                    <div>Status: {challenge.status}</div>
+                  <div className="rounded-xl border border-red-500/30 bg-black/40 px-3 py-4 text-center">
+                    <p className="text-[10px] font-black uppercase tracking-[0.14em] text-red-300">
+                      Players joined
+                    </p>
+                    <p className="mt-2 text-4xl font-black text-white">{joined}</p>
+                  </div>
+                  <div className="rounded-xl border border-red-500/30 bg-black/40 px-3 py-4 text-center">
+                    <p className="text-[10px] font-black uppercase tracking-[0.14em] text-red-300">
+                      Players verified
+                    </p>
+                    <p className="mt-2 text-4xl font-black text-white">
+                      {verified} of {joined}
+                    </p>
                   </div>
                 </div>
 
-                <div className="text-sm text-red-100 leading-relaxed">
-                  {message}
-                </div>
-
-                <div className="mt-4 flex flex-col gap-2">
-                  {notes.map((note, index) => (
-                    <div
-                      key={index}
-                      className="text-xs text-red-200 bg-black/30 border border-red-500/20 rounded-lg px-3 py-2"
-                    >
-                      • {note}
-                    </div>
-                  ))}
-                </div>
+                <p className="mt-4 text-right text-xs text-red-200">
+                  Status: {challenge.status}
+                </p>
               </div>
             );
           })()

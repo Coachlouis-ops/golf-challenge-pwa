@@ -48,22 +48,6 @@ export default function MembershipGuard({
         return;
       }
 
-      // ---------------- SUBSCRIPTION CHECK ----------------
-      const userRef = doc(db, "users", uid);
-      const userSnap = await getDoc(userRef);
-
-      if (!userSnap.exists()) {
-        router.replace("/payment");
-        return;
-      }
-
-      const userData = userSnap.data();
-
-      if (userData.subscriptionStatus !== "active") {
-        router.replace("/payment");
-        return;
-      }
-
       setAllowed(true);
     })();
   }, [user, loading, router]);

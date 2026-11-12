@@ -13,8 +13,6 @@ import { db } from "@/src/lib/firebase";
 
 const TOTAL_BOOSTERS = 200;
 const CAREER_BOOSTERS = 150;
-const TEEZ_DOLLARS_BOOSTERS = 25;
-const EVENTS_TOKENS_BOOSTERS = 25;
 
 type BoosterBallType =
   | "career"
@@ -320,7 +318,7 @@ setRevealedBall({
             <div className="overflow-hidden border border-cyan-400/30 bg-[#071017] shadow-[0_0_30px_rgba(34,211,238,0.08)]">
 
            
-<div className="grid grid-cols-4 divide-x divide-white/10">
+<div className="grid grid-cols-2 divide-x divide-white/10">
 
   <SummaryTile
     title="Total"
@@ -332,18 +330,6 @@ setRevealedBall({
     title="Career"
     value={CAREER_BOOSTERS}
     colour="text-cyan-300"
-  />
-
-  <SummaryTile
-    title="TEEZ Dollars"
-    value={TEEZ_DOLLARS_BOOSTERS}
-    colour="text-blue-300"
-  />
-
-  <SummaryTile
-    title="Events Tokens"
-    value={EVENTS_TOKENS_BOOSTERS}
-    colour="text-amber-300"
   />
 
 </div>
@@ -521,9 +507,7 @@ setRevealedBall({
         ? formatCareerBoosterType(
             revealedBall.boosterType
           )
-        : revealedBall.type === "teez_dollars"
-        ? "TEEZ Dollars Booster"
-        : "Events Tokens Booster"}
+        : "Booster"}
     </p>
 
     {revealedBall.rewardValue > 0 && (
@@ -538,9 +522,7 @@ setRevealedBall({
           ? formatCareerRewardUnit(
               revealedBall.boosterType
             )
-          : revealedBall.type === "teez_dollars"
-          ? "TEEZ DOLLARS"
-          : "EVENTS TOKENS"}
+          : "REWARD"}
       </p>
     )}
 

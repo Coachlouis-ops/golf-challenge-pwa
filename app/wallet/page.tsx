@@ -11,8 +11,6 @@ export default function WalletPage() {
   const { user } = useAuth();
   const router = useRouter();
   const [balance, setBalance] = useState(0);
-  const [teezDollars, setTeezDollars] = useState(0);
-  const [eventsTokens, setEventsTokens] = useState(0);
   const [lifetimeSpent, setLifetimeSpent] = useState(0);
 
 
@@ -32,35 +30,9 @@ export default function WalletPage() {
      
     });
 
-      const profileRef = doc(db, "profiles", user.uid);
-
-    const unsubProfile = onSnapshot(profileRef, (snap) => {
-      if (!snap.exists()) {
-        setTeezDollars(0);
-        return;
-      }
-
-      const data = snap.data();
-      setTeezDollars(Number(data.teezDollars ?? 0));
-    });
-
-    const rankingRef = doc(db, "playerRankings", user.uid);
-
-    const unsubRanking = onSnapshot(rankingRef, (snap) => {
-      if (!snap.exists()) {
-        setEventsTokens(0);
-        return;
-      }
-
-      const data = snap.data();
-      setEventsTokens(Number(data.eventsTokens ?? 0));
-    });
-
     return () => {
-  unsub();
-  unsubProfile();
-  unsubRanking();
-};
+      unsub();
+    };
   }, [user]);
 
   return (
@@ -72,8 +44,8 @@ export default function WalletPage() {
           </h1>
 
           <p className="text-gray-400 text-sm">
-            Rand in your ABC Bookmakers wallet is used to enter a TEEZ Golf
-            Challenge. TEEZ Dollars and Events Tokens are separate.
+            Rand in your ABC Bookmakers wallet is used for the bet on a TEEZ Golf
+            Challenge.
           </p>
         </div>
 
@@ -99,42 +71,6 @@ export default function WalletPage() {
         </button>
         </div>
 
-
-              {/* TEEZ DOLLARS & EVENTS TOKENS */}
-        <div className="grid grid-cols-2 gap-4">
-
-          <div className="bg-neutral-900 border border-cyan-400 rounded-xl p-5 text-center shadow-[0_0_20px_rgba(0,255,255,0.12)]">
-            <p className="text-xs text-cyan-300 uppercase tracking-wider">
-              TEEZ Dollars
-            </p>
-
-            <p className="text-2xl font-bold text-cyan-400 mt-3">
-              ${teezDollars.toLocaleString("en-US", {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              })}
-            </p>
-
-            <p className="text-xs text-gray-400 mt-2">
-              Fictional career winnings
-            </p>
-          </div>
-
-          <div className="bg-neutral-900 border border-purple-400 rounded-xl p-5 text-center shadow-[0_0_20px_rgba(168,85,247,0.12)]">
-            <p className="text-xs text-purple-300 uppercase tracking-wider">
-              Events Tokens
-            </p>
-
-            <p className="text-2xl font-bold text-purple-400 mt-3">
-              {eventsTokens.toLocaleString("en-US")}
-            </p>
-
-            <p className="text-xs text-gray-400 mt-2">
-              Events allocation balance
-            </p>
-          </div>
-
-        </div>
 
         <div className="grid grid-cols-1 gap-4">
        
@@ -168,19 +104,6 @@ export default function WalletPage() {
   player. The balance does not expire.
 </p>
 
-          <p>
-            <strong className="text-cyan-400">TEEZ Dollars:</strong>{" "}
-            Fictional career rewards earned through challenge winnings
-            and achievements. They have no monetary value and cannot
-            be spent, withdrawn, redeemed, or transferred.
-          </p>
-
-          <p>
-            <strong className="text-purple-400">Events Tokens:</strong>{" "}
-            Separate tokens allocated through the TEEZ Events system.
-            They are not wallet rand or TEEZ Dollars and cannot
-            be withdrawn or exchanged for cash.
-          </p>
         </div>
 
 

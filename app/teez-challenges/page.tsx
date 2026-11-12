@@ -271,10 +271,7 @@ const handleExit = () => {
                         <p>
               Players use the rand in their ABC Bookmakers wallet to enter golf challenges and build
               their competitive golfing careers. Challenge performance
-              contributes to fictional TEEZ Dollars, Events Tokens,
-              career statistics and player rankings.
-              TEEZ Dollars have no cash value and cannot be
-              withdrawn, transferred or redeemed.
+              contributes to career statistics and player rankings.
             </p>
 
             <p className="font-semibold text-black">
@@ -321,19 +318,15 @@ const handleExit = () => {
               <img src="/wallet.png" className="w-full mb-4" />
               <h3 className="font-semibold mb-2">Your Golf Wallet</h3>
                            <p className="text-gray-400 text-sm">
-                Add rand to your wallet to enter golf challenges.
-                Earn fictional TEEZ Dollars through competition,
-                collect Events Tokens and track your progress
-                in your TEEZ Wallet.
+                Add rand to your wallet to enter golf challenges
+                and track your progress in your wallet.
               </p>
             </div>
             <div className="text-center">
               <img src="/voucher_badger.png" className="w-full mb-4" />
               <h3 className="font-semibold mb-2">Build Your TEEZ Career</h3>
               <p className="text-gray-400 text-sm">
-                Earn TEEZ Dollars, collect Events Tokens,
-                improve your rankings and track your golfing achievements.
-                TEEZ Dollars cannot be redeemed or withdrawn.
+                Improve your rankings and track your golfing achievements.
               </p>
             </div>
 

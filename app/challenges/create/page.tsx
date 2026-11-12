@@ -5,12 +5,10 @@ import { httpsCallable } from "firebase/functions";
 import { useRouter } from "next/navigation";
 import {
   collection,
-  deleteDoc,
   doc,
   getDoc,
   getDocs,
   query,
-  updateDoc,
   where,
 } from "firebase/firestore";
 import { auth, db, functions } from "@/src/lib/firebase";
@@ -167,12 +165,35 @@ export default function CreateChallengePage() {
     );
   }
 
-  async function persistSetup(next: MatchSetup, id: string) {
-    await updateDoc(doc(db, "challenges", id), toCallablePayload(next, groupId));
+  function serverMessage(error: unknown, fallback: string): string {
+    const message = error instanceof Error ? error.message.trim() : "";
+    return message || fallback;
+  }
+
+  async function saveMatchSetup(input: {
+    challengeId: string;
+    setup?: object;
+    removeInviteUids?: string[];
+  }) {
+    const updateMatchSetup = httpsCallable(functions, "updateMatchSetup");
+    const result = await updateMatchSetup(input);
+    const data =
+      result.data && typeof result.data === "object"
+        ? (result.data as { success?: unknown; removed?: unknown; kept?: unknown })
+        : {};
+
+    return {
+      success: Boolean(data.success),
+      removed: Array.isArray(data.removed) ? data.removed.map(String) : [],
+      kept: Array.isArray(data.kept) ? data.kept.map(String) : [],
+    };
   }
 
   async function saveLineup(next: MatchSetup, id: string) {
-    await updateDoc(doc(db, "challenges", id), { matchSetup: next });
+    await saveMatchSetup({
+      challengeId: id,
+      setup: { matchSetup: next },
+    });
   }
 
   async function sendOneInvite(challengeId: string, targetUid: string) {
@@ -188,23 +209,12 @@ export default function CreateChallengePage() {
         await sendOneInvite(challengeId, target.uid);
       } catch (error: unknown) {
         if (inviteAlreadyCovered(error)) continue;
-        const message = error instanceof Error ? error.message : "Invite failed";
+        const message = serverMessage(error, "Invite failed");
         failures.push(`${target.name}: ${message}`);
       }
     }
 
     return failures;
-  }
-
-  async function removePendingInvite(challengeId: string, targetUid: string) {
-    const inviteRef = doc(db, "challenges", challengeId, "invites", targetUid);
-    const snap = await getDoc(inviteRef);
-    if (!snap.exists()) return "missing" as const;
-    const status = String(snap.data().status || "pending").toLowerCase();
-    if (status !== "pending") return "kept" as const;
-    await deleteDoc(inviteRef);
-    await deleteDoc(doc(db, "userInvites", targetUid, "invites", challengeId));
-    return "removed" as const;
   }
 
   async function addPlayer(spotId: string, player: PlayerPick) {
@@ -230,10 +240,9 @@ export default function CreateChallengePage() {
         await sendOneInvite(savedId, player.uid);
       } catch (error: unknown) {
         if (!inviteAlreadyCovered(error)) {
-          const message = error instanceof Error ? error.message : "The invite could not be sent.";
           await teezAlert({
             title: "INVITE NOT SENT",
-            message,
+            message: serverMessage(error, "The invite could not be sent."),
             type: "error",
             buttonText: "TRY AGAIN",
           });
@@ -249,10 +258,10 @@ export default function CreateChallengePage() {
 
     try {
       await saveLineup(next, savedId);
-    } catch {
+    } catch (error: unknown) {
       await teezAlert({
         title: "INVITE SENT",
-        message: `${playerLabel(player)} is invited. The spot was not written onto the match record from this page.`,
+        message: `${playerLabel(player)} is invited. ${serverMessage(error, "The spot was not written onto the match record from this page.")}`,
         type: "warning",
         buttonText: "CONTINUE",
       });
@@ -260,37 +269,37 @@ export default function CreateChallengePage() {
   }
 
   async function removePlayer(spotId: string, playerUid: string) {
+    const removedName =
+      setup.sides
+        .flatMap((side) => side.spots)
+        .find((spot) => spot.id === spotId)?.playerName || "That player";
     const next = clearSpot(setup, spotId);
     setSetup(next);
 
     if (!savedId) return;
 
-    let inviteBlocked = false;
-    if (playerUid) {
-      try {
-        await removePendingInvite(savedId, playerUid);
-      } catch (error) {
-        console.error("Pending invite was not deleted", error);
-        inviteBlocked = true;
-      }
-    }
-
     try {
-      await saveLineup(next, savedId);
-    } catch {
+      const result = await saveMatchSetup({
+        challengeId: savedId,
+        setup: { matchSetup: next },
+        ...(playerUid ? { removeInviteUids: [playerUid] } : {}),
+      });
+
+      if (playerUid && result.kept.includes(playerUid)) {
+        await teezAlert({
+          title: "PLAYER ALREADY ACCEPTED",
+          message: `${removedName} already accepted this match, so their place stays paid.`,
+          type: "warning",
+          buttonText: "CONTINUE",
+        });
+      }
+    } catch (error: unknown) {
       await teezAlert({
         title: "SPOT NOT SAVED",
-        message: "This spot was cleared on this page, but the match record did not update.",
-        type: "warning",
-        buttonText: "CONTINUE",
-      });
-    }
-
-    if (inviteBlocked) {
-      await teezAlert({
-        title: "SPOT CLEARED",
-        message:
-          "This spot is open again. The pending invite could not be deleted from this page, so the player may still see it in My Invites.",
+        message: serverMessage(
+          error,
+          "This spot was cleared on this page, but the match record did not update."
+        ),
         type: "warning",
         buttonText: "CONTINUE",
       });
@@ -337,6 +346,7 @@ export default function CreateChallengePage() {
       setLoading(true);
       const createChallenge = httpsCallable(functions, "createChallenge");
       let challengeId = savedId;
+      let createdWithLegacyFields = false;
 
       if (!challengeId) {
         try {
@@ -354,6 +364,7 @@ export default function CreateChallengePage() {
 
           const retry = await createChallenge(legacyOnlyPayload(setup, groupId));
           challengeId = String((retry.data as { challengeId?: string }).challengeId || "");
+          createdWithLegacyFields = true;
         }
       }
 
@@ -362,15 +373,10 @@ export default function CreateChallengePage() {
       }
 
       const lockedSetup = { ...setup, detailsLocked: true };
-      try {
-        await persistSetup(lockedSetup, challengeId);
-      } catch {
-        await teezAlert({
-          title: "MATCH SAVED WITH A LIMIT",
-          message:
-            "The match was created, but the lineup could not be written onto the match record from this page. The save function may still be keeping only the original fields.",
-          type: "warning",
-          buttonText: "CONTINUE",
+      if (savedId || createdWithLegacyFields) {
+        await saveMatchSetup({
+          challengeId,
+          setup: toCallablePayload(lockedSetup, groupId),
         });
       }
 
@@ -389,11 +395,9 @@ export default function CreateChallengePage() {
       setShowGuide(false);
       window.history.replaceState(null, "", `/challenges/create?challengeId=${challengeId}`);
     } catch (error: unknown) {
-      const messageText =
-        error instanceof Error ? error.message : "The match could not be saved.";
       await teezAlert({
-        title: "MATCH NOT CREATED",
-        message: messageText,
+        title: savedId ? "MATCH NOT SAVED" : "MATCH NOT CREATED",
+        message: serverMessage(error, "The match could not be saved."),
         type: "error",
         buttonText: "TRY AGAIN",
       });
@@ -722,7 +726,7 @@ export default function CreateChallengePage() {
             <button
               type="button"
               onClick={() => router.push(`/challenges/${savedId}`)}
-              className="text-sm font-bold text-green-300 underline"
+              className="w-full rounded-xl bg-green-400 py-4 text-lg font-black text-black"
             >
               Open {modeLabel(setup.mode).toLowerCase()} match
             </button>

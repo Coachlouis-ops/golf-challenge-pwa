@@ -235,9 +235,9 @@ router.replace("/groups");
     )
 ) {
   await teezAlert({
-    title: "PARTICIPATION ACCESS REQUIRED",
+    title: "GROUP NOT CREATED",
     message:
-      "Active Participation Access is required to create a group.",
+      "The group service still refused this request. If it mentions participation, that check is in Cloud Functions and was not changed here.",
     type: "warning",
     buttonText: "CONTINUE",
   });

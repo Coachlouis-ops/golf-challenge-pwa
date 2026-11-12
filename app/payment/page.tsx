@@ -6,9 +6,20 @@ import { useAuth } from "@/src/lib/AuthContext";
 import Image from "next/image";
 import { useTeezNotification } from "@/src/components/TeezNotificationProvider";
 import {
-  bookmakerPolicies,
-  bookmakerPolicyAcceptanceList,
-} from "@/app/bookmaker/policies";
+  WALLET_DEPOSIT_AMOUNTS,
+  formatWalletRand,
+} from "@/src/lib/walletMoney";
+
+const depositPolicies = [
+  {
+    href: "/bookmaker/terms",
+    label: "ABC Bookmakers Terms & Conditions",
+  },
+  {
+    href: "/bookmaker/deposits-withdrawals",
+    label: "Deposits & Withdrawals Policy",
+  },
+] as const;
 
 
 export default function PaymentPage() {
@@ -18,6 +29,7 @@ export default function PaymentPage() {
 
   const [accepted, setAccepted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [amount, setAmount] = useState<number | null>(null);
 
 
 
@@ -29,11 +41,11 @@ export default function PaymentPage() {
     return;
   }
 
- if (!accepted) {
+ if (!amount || !accepted) {
   await teezAlert({
     title: "TERMS REQUIRED",
     message:
-      "Accept the participation and legal terms before continuing to payment.",
+      "Choose a deposit and accept the deposit terms before continuing to payment.",
     type: "warning",
     buttonText: "CONTINUE",
   });
@@ -54,7 +66,7 @@ export default function PaymentPage() {
           Authorization: `Bearer ${idToken}`,
         },
                 body: JSON.stringify({
-          product: "participation_access",
+          amount,
         }),
       }
     );
@@ -108,16 +120,16 @@ setSubmitting(false);
     <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center gap-10 px-6 py-10">
       <div className="text-center flex flex-col gap-3">
         <h1 className="text-5xl font-bold text-green-400">
-          ACTIVATE YOUR GAME
+          ADD MONEY
         </h1>
 
          <h2 className="text-3xl font-semibold">
-          Teez Participation Access
+          ABC Bookmakers wallet
         </h2>
 <p className="text-gray-400 max-w-xl">
-  Get 30 days of access to TEEZ Golf Challenges and receive
-  200 Play Tokens after your R69 payment is securely
-  confirmed by Peach Payments.
+  Add rand to your player wallet. TEEZ Golf Challenges is the golf game
+  you play from that balance. Peach Payments confirms the deposit before
+  it is credited.
 </p>
       </div>
 
@@ -128,28 +140,35 @@ setSubmitting(false);
           </p>
 
           <h3 className="text-2xl font-bold text-white">
-            Participation Access
+            Wallet deposit
           </h3>
 
           <p className="text-sm font-semibold text-orange-400">
             Powered by Peach Payments
           </p>
         </div>
-        <div>
-          <p className="text-5xl font-bold text-white">
-            R69
-          </p>
-
-          <p className="text-xs text-gray-500 mt-2">
-            One-time authorised payment
-          </p>
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+          {WALLET_DEPOSIT_AMOUNTS.map((value) => (
+            <button
+              key={value}
+              type="button"
+              onClick={() => setAmount(value)}
+              className={`rounded-xl border-2 py-4 text-lg font-black ${
+                amount === value
+                  ? "border-green-400 bg-green-400 text-black"
+                  : "border-zinc-500 bg-black text-white"
+              }`}
+            >
+              {formatWalletRand(value)}
+            </button>
+          ))}
         </div>
 
-       <p className="text-sm text-gray-400">
-  Includes 200 TEEZ Play Tokens and 30 days of participation.
-  Unused Play Tokens expire after 30 days and do not carry over.
-  No automatic renewal.
-</p>
+        <p className="text-sm text-gray-400">
+          {amount
+            ? `${formatWalletRand(amount)} will be added to your wallet after Peach Payments confirms it.`
+            : "Choose how much to add. The same amounts are used when you place a bet."}
+        </p>
 
                     <div className="bg-black/50 border border-orange-400/30 rounded-xl p-5 flex flex-col gap-4">
 
@@ -211,47 +230,18 @@ setSubmitting(false);
 
         <div className="text-left bg-black/40 border border-zinc-700 rounded-xl p-5 space-y-4 text-sm text-gray-300">
                    <p className="text-green-400 font-semibold">
-            Participation and Payment Terms
+            Deposit terms
           </p>
 
           <p>
-            Participation Access is provided by{" "}
-            <strong>ABC Bookmakers</strong>. TEEZ Golf Challenges is the golf
-            game offered on that account.
+            ABC Bookmakers runs the player platform and holds your wallet.
+            TEEZ Golf Challenges is the golf game offered on it.
           </p>
-
-      <p>
-  The R69 Participation Access payment provides 30 days of
-  participation and includes 200 TEEZ Play Tokens.
-</p>
-
-<p>
-  Participation Access expires 30 days after payment confirmation.
-  All unused wallet tokens expire at the end of this period
-  and cannot be carried over.
-</p>
-
-<p>
-  Participation does not renew automatically. No recurring
-  deductions are made. To continue participating after expiry,
-  a new R69 payment is required.
-</p>
-
-<p>
-  Each new participation payment resets the available Play Token
-  balance to 200 tokens. Additional token purchases are not available.
-</p>
 
           <p>
-            Teez Tokens are digital play credits only. They have no cash value,
-            cannot be redeemed, withdrawn, sold, transferred for payment, or
-            converted into money, cryptocurrency, vouchers, goods, services, or
-            external rewards.
-          </p>
-
-                  <p>
-            No physical goods are delivered. Participation Access and Teez Play
-            Tokens are delivered digitally through the Platform.
+            The amount you choose is the amount Peach Payments asks you to
+            authorise. It is credited to your wallet only after that payment
+            is confirmed. Nothing is taken again later.
           </p>
 
         <div className="border-t border-zinc-700 pt-4">
@@ -260,7 +250,7 @@ setSubmitting(false);
   </p>
 
   <div className="flex flex-col items-start gap-3">
-    {bookmakerPolicies.map((policy) => (
+    {depositPolicies.map((policy) => (
       <button
         key={policy.href}
         type="button"
@@ -281,14 +271,8 @@ setSubmitting(false);
               className="mt-1"
             />
 <span>
-  I confirm that I have reviewed and accept the {bookmakerPolicyAcceptanceList()}.
-  I understand that my R69 payment provides 30 days of
-  Participation Access and 200 TEEZ Play Tokens. All unused
-  wallet tokens expire after 30 days with no carryover.
-  Participation does not renew automatically, and additional
-  token purchases are not available. A new R69 payment is
-  required to participate after expiry and resets my available
-  Play Token balance to 200.
+  I have reviewed and accept the ABC Bookmakers Terms & Conditions
+  and the Deposits & Withdrawals Policy.
 </span>
           </label>
         </div>
@@ -296,9 +280,9 @@ setSubmitting(false);
                <button
           type="button"
           onClick={activateSubscription}
-          disabled={!accepted || submitting}
+          disabled={!accepted || !amount || submitting}
           className={`w-full py-4 rounded-xl font-bold transition shadow-lg ${
-            accepted && !submitting
+            accepted && amount && !submitting
               ? "bg-orange-400 hover:bg-orange-300 text-black shadow-[0_0_25px_rgba(251,146,60,0.35)]"
               : "bg-gray-700 text-gray-400 cursor-not-allowed"
           }`}
@@ -314,8 +298,8 @@ setSubmitting(false);
         </p>
 
         <p className="text-xs text-gray-400">
-          Your dashboard unlocks only after ABC Bookmakers receives verified
-          payment confirmation from Peach Payments.
+          The deposit is added to your wallet only after ABC Bookmakers
+          receives verified payment confirmation from Peach Payments.
         </p>
       </div>
 

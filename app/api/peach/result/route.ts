@@ -58,8 +58,8 @@ export async function POST(req: Request) {
     }
 
     // IMPORTANT:
-    // This browser redirect does NOT fulfil
-    // membership or credit tokens.
+    // This browser redirect does NOT credit
+    // the wallet.
     //
     // The server-side Peach webhook/status
     // verification remains the source of truth.

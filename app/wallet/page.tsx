@@ -5,71 +5,19 @@ import { useRouter } from "next/navigation";
 import { doc, onSnapshot } from "firebase/firestore";
 import { db } from "@/src/lib/firebase";
 import { useAuth } from "@/src/lib/AuthContext";
+import { formatWalletRand } from "@/src/lib/walletMoney";
 
 export default function WalletPage() {
   const { user } = useAuth();
   const router = useRouter();
   const [balance, setBalance] = useState(0);
-
-
-
-const [subscriptionExpires, setSubscriptionExpires] =
-  useState<Date | null>(null);
-
-const [currentTime, setCurrentTime] =
-  useState(() => Date.now());
-
-useEffect(() => {
-  const timer = window.setInterval(() => {
-    setCurrentTime(Date.now());
-  }, 60_000);
-
-  return () => window.clearInterval(timer);
-}, []);
-
-const millisecondsRemaining = subscriptionExpires
-  ? Math.max(0, subscriptionExpires.getTime() - currentTime)
-  : 0;
-
-const daysRemaining = Math.ceil(
-  millisecondsRemaining / (1000 * 60 * 60 * 24)
-);
-
-const participationActive =
-  subscriptionExpires !== null &&
-  millisecondsRemaining > 0;
-
-
-
-
-
   const [teezDollars, setTeezDollars] = useState(0);
   const [eventsTokens, setEventsTokens] = useState(0);
   const [lifetimeSpent, setLifetimeSpent] = useState(0);
-  const [subscriptionTokensIssued, setSubscriptionTokensIssued] = useState(0);
 
 
   useEffect(() => {
     if (!user) return;
-
-
-const userRef = doc(db, "users", user.uid);
-
-const unsubUser = onSnapshot(userRef, (snap) => {
-  if (!snap.exists()) {
-    setSubscriptionExpires(null);
-    return;
-  }
-
-  const expiry = snap.data().subscriptionExpires;
-
-  if (expiry && typeof expiry.toDate === "function") {
-    setSubscriptionExpires(expiry.toDate());
-  } else {
-    setSubscriptionExpires(null);
-  }
-});
-
 
 
     const ref = doc(db, "wallets", user.uid);
@@ -79,9 +27,8 @@ const unsubUser = onSnapshot(userRef, (snap) => {
 
       const data = snap.data();
 
-      setBalance(data.balance || 0);
-      setLifetimeSpent(data.lifetimeSpent || 0);
-      setSubscriptionTokensIssued(data.subscriptionTokensIssued || 0);
+      setBalance(Number(data.balance || 0));
+      setLifetimeSpent(Number(data.lifetimeSpent || 0));
      
     });
 
@@ -110,7 +57,6 @@ const unsubUser = onSnapshot(userRef, (snap) => {
     });
 
     return () => {
-  unsubUser();
   unsub();
   unsubProfile();
   unsubRanking();
@@ -122,73 +68,36 @@ const unsubUser = onSnapshot(userRef, (snap) => {
       <div className="w-full max-w-md space-y-8">
         <div className="text-center space-y-3">
                   <h1 className="text-4xl font-bold text-green-400">
-            My TEEZ Wallet
+            My wallet
           </h1>
 
           <p className="text-gray-400 text-sm">
-            Track your Play Tokens, TEEZ Dollars
-            and Events Tokens in one place.
+            Rand in your ABC Bookmakers wallet is used to enter a TEEZ Golf
+            Challenge. TEEZ Dollars and Events Tokens are separate.
           </p>
         </div>
 
         <div className="bg-neutral-900 border border-green-500 rounded-2xl p-8 text-center shadow-[0_0_25px_rgba(0,255,136,0.15)]">
                 <p className="text-sm text-gray-400 uppercase tracking-widest">
-            Play Tokens Balance
+            Wallet balance
           </p>
 
-         <p className="text-6xl font-bold text-green-400 mt-3 drop-shadow-[0_0_12px_#00ff88]">
-  {participationActive ? balance : 0}
+         <p className="text-5xl font-bold text-green-400 mt-3 drop-shadow-[0_0_12px_#00ff88]">
+  {formatWalletRand(balance)}
 </p>
 
         <p className="text-gray-400 mt-2">
-  {participationActive
-    ? "Available Play Tokens for entering challenges"
-    : "Play Tokens unavailable — participation expired"}
+  Available for the bet on a TEEZ Golf Challenge
 </p>
+
+        <button
+          type="button"
+          onClick={() => router.push("/payment")}
+          className="mt-6 w-full rounded-xl bg-green-400 py-4 text-lg font-black text-black"
+        >
+          Add money
+        </button>
         </div>
-
-
-{/* PARTICIPATION EXPIRY COUNTDOWN */}
-<div className="bg-neutral-900 border border-cyan-400 rounded-2xl p-6 text-center space-y-3">
-  <p className="text-sm font-bold text-cyan-300 uppercase tracking-widest">
-    Participation Status
-  </p>
-
-  {participationActive ? (
-    <>
-      <p className="text-green-400 text-xl font-bold">
-        ACTIVE
-      </p>
-
-      <p className="text-4xl font-extrabold text-white">
-        {daysRemaining}
-        <span className="text-lg text-gray-400 ml-2">
-          {daysRemaining === 1 ? "Day" : "Days"} Remaining
-        </span>
-      </p>
-
-      <p className="text-sm text-gray-400">
-        Expires:{" "}
-        {subscriptionExpires?.toLocaleDateString("en-ZA", {
-          day: "numeric",
-          month: "long",
-          year: "numeric",
-        })}
-      </p>
-    </>
-  ) : (
-    <>
-      <p className="text-red-400 text-xl font-bold">
-        EXPIRED / INACTIVE
-      </p>
-
-      <p className="text-sm text-gray-400">
-        Renew your R69 participation to receive
-        200 Play Tokens for another 30 days.
-      </p>
-    </>
-  )}
-</div>
 
 
               {/* TEEZ DOLLARS & EVENTS TOKENS */}
@@ -227,7 +136,7 @@ const unsubUser = onSnapshot(userRef, (snap) => {
 
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4">
        
           <div className="bg-neutral-900 border border-neutral-700 rounded-xl p-5 text-center">
             <p className="text-xs text-gray-400">
@@ -235,22 +144,12 @@ const unsubUser = onSnapshot(userRef, (snap) => {
             </p>
 
            <p className="text-2xl font-bold text-white mt-2">
-  {lifetimeSpent.toLocaleString("en-US")}
+  {formatWalletRand(lifetimeSpent)}
 </p>
 
 <p className="text-xs text-gray-500 mt-2">
-  Total Play Tokens used across all participation periods
+  Recorded spend from this wallet
 </p>
-          </div>
-
-          <div className="bg-neutral-900 border border-neutral-700 rounded-xl p-5 text-center">
-                      <p className="text-xs text-gray-400">
-              Participation Tokens
-            </p>
-
-            <p className="text-2xl font-bold text-white mt-2">
-              {subscriptionTokensIssued}
-            </p>
           </div>
 
         
@@ -258,17 +157,15 @@ const unsubUser = onSnapshot(userRef, (snap) => {
 
                <div className="bg-black/40 border border-neutral-700 rounded-xl p-5 text-sm text-gray-400 space-y-3">
           <p className="text-green-400 font-semibold">
-            TEEZ Wallet Rules
+            Wallet rules
           </p>
 
           <p>
-  <strong className="text-green-400">Play Tokens:</strong>{" "}
-  Each R69 participation payment provides 200 Play Tokens
-  valid for 30 days. Tokens are used to enter TEEZ Golf
-  Challenges and have no cash value.
-  Unused tokens expire at the end of the 30-day period
-  and do not carry over. Renewing participation resets
-  the Play Token balance to 200.
+  <strong className="text-green-400">Rand balance:</strong>{" "}
+  Deposits of R25, R50, R75, R100, R150, R200 or R250 are added
+  to this wallet after Peach Payments confirms them. A match can
+  be created or joined only when the balance covers the bet per
+  player. The balance does not expire.
 </p>
 
           <p>
@@ -281,7 +178,7 @@ const unsubUser = onSnapshot(userRef, (snap) => {
           <p>
             <strong className="text-purple-400">Events Tokens:</strong>{" "}
             Separate tokens allocated through the TEEZ Events system.
-            They are not Play Tokens or TEEZ Dollars and cannot
+            They are not wallet rand or TEEZ Dollars and cannot
             be withdrawn or exchanged for cash.
           </p>
         </div>

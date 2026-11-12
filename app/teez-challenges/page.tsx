@@ -269,7 +269,7 @@ const handleExit = () => {
             </p>
 
                         <p>
-              Players use Play Tokens to enter golf challenges and build
+              Players use the rand in their ABC Bookmakers wallet to enter golf challenges and build
               their competitive golfing careers. Challenge performance
               contributes to fictional TEEZ Dollars, Events Tokens,
               career statistics and player rankings.
@@ -321,7 +321,7 @@ const handleExit = () => {
               <img src="/wallet.png" className="w-full mb-4" />
               <h3 className="font-semibold mb-2">Your Golf Wallet</h3>
                            <p className="text-gray-400 text-sm">
-                Purchase Play Tokens to enter golf challenges.
+                Add rand to your wallet to enter golf challenges.
                 Earn fictional TEEZ Dollars through competition,
                 collect Events Tokens and track your progress
                 in your TEEZ Wallet.

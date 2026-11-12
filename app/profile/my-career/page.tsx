@@ -12,8 +12,6 @@ type RankingData = {
   playerLevel?: number;
   careerXP?: number;
   careerPoints?: number;
-  eventsTokens?: number;
-
   matchesPlayed?: number;
   wins?: number;
   losses?: number;
@@ -39,8 +37,6 @@ type CareerData = {
   surname?: string;
   club?: string;
   division?: string;
-
-  teezDollars?: number;
 
   ranking?: RankingData;
 
@@ -182,14 +178,6 @@ export default function MyCareerPage() {
 
 const careerPoints = Number(
   stats?.careerPoints ?? 0
-);
-
-const eventsTokens = Number(
-  stats?.eventsTokens ?? 0
-);
-
-const teezDollars = Number(
-  career?.teezDollars ?? 0
 );
 
   const matchesPlayed = Number(
@@ -493,7 +481,7 @@ const teezDollars = Number(
   <SectionHeading
     eyebrow="TEAM CHAMPIONSHIP"
     title="Ryder Cup Team Standings"
-    description="The Top 16 TEEZ Dollars earners compete for selection to Team USA and Team Europe."
+    description="The leading players are seeded into Team USA and Team Europe."
   />
 
   <button
@@ -511,9 +499,8 @@ const teezDollars = Number(
       </h3>
 
       <p className="mt-3 text-sm leading-5 text-slate-400">
-        The Top 16 players on the TEEZ Dollars money list
-        qualify for two teams of eight, selected using
-        automatic snake seeding.
+        The leading players qualify for two teams of eight,
+        selected using automatic snake seeding.
       </p>
 
       <div className="mt-5 grid grid-cols-2 gap-3">
@@ -954,24 +941,6 @@ const teezDollars = Number(
                 accent="green"
               />
 
-<MetricTile
-  code="EVT"
-  title="Events Tokens"
-  value={eventsTokens.toLocaleString("en-US")}
-  footer="Tokens earned toward TEEZ Events"
-/>
-
-<MetricTile
-  code="TEEZ$"
-  title="TEEZ Dollars"
-  value={`$${teezDollars.toLocaleString("en-US", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  })}`}
-  footer="Fictional career winnings — no cash value"
-/>
-
-          
             </div>
           </section> 
 

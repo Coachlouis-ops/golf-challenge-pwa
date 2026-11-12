@@ -92,24 +92,7 @@ How Teez Golf Challenges Works
     • 2–8 Players: Only 8 positions for prizes<br />
     • 8+ Players: Top 25% of players receive prizes<br /><br />
 
-        Challenge entry tokens are allocated according to the
-     TEEZ Golf Challenges rewards system:
-     <br /><br />
-
-     <strong>25%:</strong> Permanently removed from circulation.
-     <br />
-     <strong>15%:</strong> Allocated to Events Tokens.
-     <br />
-     <strong>60%:</strong> Allocated to player winnings,
-     recorded as fictional TEEZ Dollars.
-     <br /><br />
-
-     Each winning Play Token is valued at $14.90 in
-     fictional TEEZ Dollars.
-     <br /><br />
-
-     TEEZ Dollars have no cash value and cannot be
-     withdrawn, transferred or redeemed.
+        The stake is the rand bet each player commits from the ABC Bookmakers wallet.
   </p>
 </section>
 
@@ -166,17 +149,8 @@ How Teez Golf Challenges Works
               <strong>Wallet:</strong> Rand deposited with ABC Bookmakers is used for the bet on a TEEZ Golf Challenge.
               <br /><br />
 
-              <strong>TEEZ Dollars:</strong> Fictional career winnings
-              that reflect your achievements. They have no cash value
-              and cannot be withdrawn or redeemed.
-              <br /><br />
-
-              <strong>Events Tokens:</strong> Earned through challenge
-              participation and tracked separately in your player profile.
-              <br /><br />
-
               Track your progress, career statistics and rewards
-              through your TEEZ Wallet and My Career dashboard.
+              through your wallet and My Career dashboard.
             </p>
           </section>
 

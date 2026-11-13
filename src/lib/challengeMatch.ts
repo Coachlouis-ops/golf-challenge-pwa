@@ -440,6 +440,7 @@ export function resultsHaveBeenSubmitted(
 
   if (
     data.resultsSubmitted ||
+    Number(data.resultsRevision || 0) > 0 ||
     data.finalized ||
     data.finalised ||
     data.scoreboardUpdated

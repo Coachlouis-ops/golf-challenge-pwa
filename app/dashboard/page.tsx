@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useAuth } from "@/src/lib/AuthContext";
 import SiteFooter from "@/src/components/SiteFooter";
+import WalletWinNotice from "@/src/components/WalletWinNotice";
 
 
 
@@ -152,8 +153,10 @@ return (
 
               <p className="text-sm text-gray-200 mt-3 leading-6 text-center">
                 Add R25 to R250 before you create or join a match. The
-                balance has to cover the bet per player.
+                balance has to cover the bet per player. A finalised
+                challenge pays 90% of the stakes to the winner.
               </p>
+              <WalletWinNotice />
 
               <button
                 onClick={() =>

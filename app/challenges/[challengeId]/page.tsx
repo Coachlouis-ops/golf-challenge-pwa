@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useAuth } from "@/src/lib/AuthContext";
 import { db, functions } from "@/src/lib/firebase";
@@ -10,6 +10,7 @@ import {
   getDoc,
   collection,
   getDocs,
+  onSnapshot,
   type DocumentData,
 } from "firebase/firestore";
 import { httpsCallable } from "firebase/functions";
@@ -28,6 +29,7 @@ import {
   scoringLabel,
   type MatchSetup,
 } from "@/src/lib/challengeMatch";
+import { playerVerifiedForRevision } from "@/src/lib/resultVerification";
 
 type Challenge = {
   challengeId: string;
@@ -41,6 +43,7 @@ type Challenge = {
   betAmount?: number;
   matchSetup?: MatchSetup | null;
   resultsSubmitted?: boolean;
+  resultsRevision: number;
 
 nassauTokens?: {
   front9: number;
@@ -60,7 +63,14 @@ type Player = {
   uid: string;
   displayName: string;
   resultVerified: boolean;
+  verifiedRevision: number | null;
 };
+
+function revisionOrNull(value: unknown): number | null {
+  if (value == null || value === "") return null;
+  const revision = Number(value);
+  return Number.isFinite(revision) ? revision : null;
+}
 
 function readPlayer(entry: { id: string; get: (field: string) => unknown }): Player {
   return {
@@ -68,6 +78,39 @@ function readPlayer(entry: { id: string; get: (field: string) => unknown }): Pla
     displayName: String(entry.get("displayName") || entry.id),
     resultVerified:
       entry.get("resultVerified") === true || entry.get("resultAccepted") === true,
+    verifiedRevision: revisionOrNull(entry.get("verifiedRevision")),
+  };
+}
+
+function readChallenge(id: string, data: DocumentData): Challenge {
+  const participants = Array.isArray(data.participants) ? data.participants : [];
+
+  return {
+    challengeId: String(data.challengeId || id),
+    challengeTitle: String(data.challengeTitle || "—"),
+    courseName: String(data.courseName || "—"),
+    gameFormat: String(data.gameFormat || "—"),
+    scoringMethod: String(data.scoringMethod || "—"),
+    teamFormat: String(data.teamFormat || "—"),
+    typeOfGame: String(data.typeOfGame || "—"),
+    entryTokens: Number(data.entryTokens || 0),
+    betAmount: Number(data.betAmount || data.entryTokens || 0),
+    matchSetup: readMatchSetup(data),
+    resultsSubmitted: resultsHaveBeenSubmitted(data),
+    resultsRevision: Number(data.resultsRevision || 0),
+    nassauTokens: data.nassauTokens
+      ? {
+          front9: Number(data.nassauTokens.front9 || 0),
+          back9: Number(data.nassauTokens.back9 || 0),
+          game: Number(data.nassauTokens.game || 0),
+          units: Number(data.nassauTokens.units || 0),
+        }
+      : undefined,
+    status: String(data.status || "—"),
+    creatorUid: String(data.creatorUid || ""),
+    participants,
+    joinCode: data.joinCode ? String(data.joinCode) : undefined,
+    createdAt: data.createdAt,
   };
 }
 
@@ -113,9 +156,21 @@ const [updating, setUpdating] = useState(false);
   const [players, setPlayers] = useState<Player[]>([]);
 
 const [finalizing, setFinalizing] = useState(false);
+const [verifying, setVerifying] = useState(false);
 const [scoreboardUpdated, setScoreboardUpdated] = useState(false);
+const [hasUnsavedScoreEdits, setHasUnsavedScoreEdits] = useState(false);
+const resultsWerePosted = useRef(false);
 
   const isCreator = user && challenge && challenge.creatorUid === user.uid;
+
+  useEffect(() => {
+    const posted = Boolean(challenge?.resultsSubmitted);
+    if (resultsWerePosted.current && !posted) {
+      setScoreboardUpdated(false);
+      setHasUnsavedScoreEdits(false);
+    }
+    resultsWerePosted.current = posted;
+  }, [challenge?.resultsSubmitted]);
 
   // ===============================
   // LOAD CHALLENGE
@@ -123,66 +178,35 @@ const [scoreboardUpdated, setScoreboardUpdated] = useState(false);
   useEffect(() => {
     if (!user || !challengeId) return;
 
-    (async () => {
-      try {
-        const ref = doc(db, "challenges", challengeId);
-        const snap = await getDoc(ref);
-
+    const unsubscribe = onSnapshot(
+      doc(db, "challenges", challengeId),
+      (snap) => {
         if (!snap.exists()) {
           setError("Challenge not found");
           setLoading(false);
           return;
         }
 
-        const data: DocumentData = snap.data();
+        const data = snap.data();
+        const participants = Array.isArray(data.participants) ? data.participants : [];
 
-       setChallenge({
-  challengeId: data.challengeId || snap.id,
-  challengeTitle: data.challengeTitle || "—",
-  courseName: data.courseName || "—",
-  gameFormat: data.gameFormat || "—",
-  scoringMethod: data.scoringMethod || "—",
-  teamFormat: data.teamFormat || "—",
-  typeOfGame: data.typeOfGame || "—",
- entryTokens: data.entryTokens || 0,
-  betAmount: Number(data.betAmount || data.entryTokens || 0),
-  matchSetup: readMatchSetup(data),
-  resultsSubmitted: resultsHaveBeenSubmitted(data),
+        if (data.creatorUid !== user.uid && !participants.includes(user.uid)) {
+          router.replace("/my-challenges");
+          return;
+        }
 
-nassauTokens: data.nassauTokens
-  ? {
-      front9: Number(data.nassauTokens.front9 || 0),
-      back9: Number(data.nassauTokens.back9 || 0),
-      game: Number(data.nassauTokens.game || 0),
-      units: Number(data.nassauTokens.units || 0),
-    }
-  : undefined,
-
-status: data.status || "â€”",
-  creatorUid: data.creatorUid,
-  participants: data.participants || [],
-  joinCode: data.joinCode,
-  createdAt: data.createdAt,
-});
-
-const participants = data.participants || [];
-
-if (
-  data.creatorUid !== user.uid &&
-  !participants.includes(user.uid)
-) {
-  router.replace("/my-challenges");
-  return;
-}
-
-
+        setChallenge(readChallenge(snap.id, data));
+        setError(null);
         setLoading(false);
-      } catch (error: unknown) {
-        setError(error instanceof Error ? error.message : "Failed to load challenge");
+      },
+      (loadError) => {
+        setError(loadError.message || "Failed to load challenge");
         setLoading(false);
       }
-    })();
-  }, [user, challengeId]);
+    );
+
+    return () => unsubscribe();
+  }, [user, challengeId, router]);
 
   // ===============================
   // LOAD INVITED + PLAYERS
@@ -190,24 +214,30 @@ if (
   useEffect(() => {
     if (!challengeId) return;
 
-    (async () => {
-      try {
-        const playersSnap = await getDocs(
-          collection(db, "challenges", challengeId, "players")
-        );
-
-        setPlayers(playersSnap.docs.map(readPlayer));
-
-        const invitesSnap = await getDocs(
-          collection(db, "challenges", challengeId, "invites")
-        );
-
-        const invited = invitesSnap.docs.map((d) => d.id);
-        setInvitedUids(invited);
-      } catch (e) {
-        console.error("Failed to load players/invites", e);
+    const unsubscribePlayers = onSnapshot(
+      collection(db, "challenges", challengeId, "players"),
+      (snap) => {
+        setPlayers(snap.docs.map(readPlayer));
+      },
+      (loadError) => {
+        console.error("Failed to load players", loadError);
       }
-    })();
+    );
+
+    const unsubscribeInvites = onSnapshot(
+      collection(db, "challenges", challengeId, "invites"),
+      (snap) => {
+        setInvitedUids(snap.docs.map((entry) => entry.id));
+      },
+      (loadError) => {
+        console.error("Failed to load invites", loadError);
+      }
+    );
+
+    return () => {
+      unsubscribePlayers();
+      unsubscribeInvites();
+    };
   }, [challengeId]);
 
   // ===============================
@@ -223,25 +253,7 @@ if (
       const snap = await getDoc(ref);
 
       if (snap.exists()) {
-        const data: DocumentData = snap.data();
-
-        setChallenge({
-          challengeId: data.challengeId || snap.id,
-          challengeTitle: data.challengeTitle || "—",
-          courseName: data.courseName || "—",
-          gameFormat: data.gameFormat || "—",
-          scoringMethod: data.scoringMethod || "—",
-          teamFormat: data.teamFormat || "—",
-          typeOfGame: data.typeOfGame || "—",
-          entryTokens: data.entryTokens || 0,
-  betAmount: Number(data.betAmount || data.entryTokens || 0),
-  matchSetup: readMatchSetup(data),
-  resultsSubmitted: resultsHaveBeenSubmitted(data),
-          status: data.status || "—",
-          creatorUid: data.creatorUid,
-          joinCode: data.joinCode,
-          createdAt: data.createdAt,
-        });
+        setChallenge(readChallenge(snap.id, snap.data()));
       }
 
       const playersSnap = await getDocs(
@@ -296,15 +308,19 @@ await updateScoreboard({
 });
 
 setScoreboardUpdated(true);
+setHasUnsavedScoreEdits(false);
 
 const snap = await getDoc(doc(db, "challenges", challengeId));
 
       if (snap.exists()) {
+        const saved = readChallenge(snap.id, snap.data());
         setChallenge((prev) =>
           prev
             ? {
                 ...prev,
-                status: snap.get("status"),
+                status: saved.status,
+                resultsSubmitted: true,
+                resultsRevision: saved.resultsRevision || prev.resultsRevision,
               }
             : prev
         );
@@ -379,6 +395,28 @@ try {
 }
   }
 
+  async function handleVerifyResults() {
+    if (!challengeId || verifying) return;
+
+    try {
+      setVerifying(true);
+      const verifyChallengeResult = httpsCallable(functions, "verifyChallengeResult");
+      await verifyChallengeResult({ challengeId });
+    } catch (verifyError: unknown) {
+      await teezAlert({
+        title: "RESULTS NOT VERIFIED",
+        message:
+          verifyError instanceof Error
+            ? verifyError.message
+            : "The results could not be verified.",
+        type: "error",
+        buttonText: "TRY AGAIN",
+      });
+    } finally {
+      setVerifying(false);
+    }
+  }
+
   if (!user) {
     return (
       <main className="min-h-screen flex items-center justify-center">
@@ -423,11 +461,51 @@ const allScoresEntered =
     return (scoreInputs[player.uid] || "").trim() !== "";
   });
 
+const resultsPosted = Boolean(challenge.resultsSubmitted) || scoreboardUpdated;
+const verifiedCount = players.filter((player) =>
+  playerVerifiedForRevision(player, challenge.resultsRevision)
+).length;
+const allPlayersVerified =
+  players.length > 0 && verifiedCount === players.length;
+const needsScoreboardSave = !resultsPosted || hasUnsavedScoreEdits;
+const currentPlayer = players.find((player) => player.uid === user.uid) || null;
+const currentPlayerVerified = currentPlayer
+  ? playerVerifiedForRevision(currentPlayer, challenge.resultsRevision)
+  : false;
+
 const canFinalize =
-  allScoresEntered &&
-  scoreboardUpdated &&
-  (challenge.status === "created" ||
-    challenge.status === "active");
+  players.length > 0 &&
+  resultsPosted &&
+  !hasUnsavedScoreEdits &&
+  allPlayersVerified &&
+  (challenge.status === "created" || challenge.status === "active");
+
+const verifyCard = currentPlayer && resultsPosted && challenge.status !== "completed" ? (
+  <section className="rounded-3xl border-2 border-blue-400/80 bg-gradient-to-br from-blue-950/80 via-emerald-950/40 to-black p-5 shadow-[0_0_32px_rgba(59,130,246,0.28)]">
+    <p className="text-xs font-black tracking-[0.25em] text-blue-300">YOUR RESULT</p>
+    <h3 className="mt-1 text-2xl font-black text-white">VERIFY RESULTS</h3>
+    <p className="mt-3 text-sm font-bold text-emerald-200">
+      {verifiedCount} of {players.length} players verified
+    </p>
+    <p className="mt-2 text-sm leading-6 text-blue-100">
+      Review the Player Summary below, then confirm these results.
+    </p>
+    {currentPlayerVerified ? (
+      <p className="mt-4 inline-flex rounded-full bg-emerald-400 px-4 py-2 text-sm font-black text-black">
+        YOU VERIFIED THESE RESULTS
+      </p>
+    ) : (
+      <button
+        type="button"
+        disabled={verifying}
+        onClick={() => void handleVerifyResults()}
+        className="mt-4 w-full rounded-2xl bg-emerald-400 py-4 text-lg font-black text-black disabled:opacity-50"
+      >
+        {verifying ? "VERIFYING..." : "VERIFY RESULTS"}
+      </button>
+    )}
+  </section>
+) : null;
 
   return (
     <main className="relative min-h-screen flex justify-center px-4 py-8 sm:py-12 bg-[#05030b] text-white overflow-hidden">
@@ -471,11 +549,7 @@ const canFinalize =
               ...invitedUids,
               ...players.map((player) => player.uid),
             ]).size;
-            const resultsProposed =
-              Boolean(challenge.resultsSubmitted) || scoreboardUpdated;
-            const verified = resultsProposed
-              ? players.filter((player) => player.resultVerified).length
-              : 0;
+            const verified = resultsPosted ? verifiedCount : 0;
 
             return (
               <div className="border border-red-500/40 bg-red-950/30 backdrop-blur-md rounded-2xl p-5 shadow-[0_0_35px_rgba(255,0,0,0.35)]">
@@ -512,27 +586,33 @@ const canFinalize =
               </div>
             );
           })()
-        ) : (
+        ) : challenge.status === "completed" ? (
           <div className="border border-blue-500/40 bg-blue-950/30 backdrop-blur-md rounded-2xl p-5 shadow-[0_0_35px_rgba(0,120,255,0.25)]">
             <div className="text-xs tracking-[0.3em] text-blue-400 font-bold">
               CHALLENGE DETAILS
             </div>
-
             <div className="text-2xl font-extrabold text-blue-200 mt-1">
-              VIEW-ONLY ACCESS
+              CHALLENGE COMPLETED
             </div>
-
             <p className="text-sm text-blue-100 leading-relaxed mt-4">
-              You are participating in this challenge. You can view the
-              challenge details, participants, live scoreboard and final
-              results.
-            </p>
-
-            <p className="text-xs text-blue-300 bg-black/30 border border-blue-500/20 rounded-lg px-3 py-2 mt-4">
-              Only the challenge creator can invite players, enter scores,
-              update the scoreboard and finalize the challenge.
+              All results are verified and this challenge is finalized.
             </p>
           </div>
+        ) : !resultsPosted || !currentPlayer ? (
+          <div className="border border-blue-500/40 bg-blue-950/30 backdrop-blur-md rounded-2xl p-5 shadow-[0_0_35px_rgba(0,120,255,0.25)]">
+            <div className="text-xs tracking-[0.3em] text-blue-400 font-bold">
+              CHALLENGE DETAILS
+            </div>
+            <div className="text-2xl font-extrabold text-blue-200 mt-1">
+              WAITING FOR RESULTS
+            </div>
+            <p className="text-sm text-blue-100 leading-relaxed mt-4">
+              The match creator will enter the results and update the scoreboard.
+              Once updated, review the Player Summary below and tap Verify results.
+            </p>
+          </div>
+        ) : (
+          verifyCard
         )}
 
         <div className="rounded-3xl border-2 border-purple-400 bg-gradient-to-r from-purple-950/90 via-fuchsia-950/75 to-black p-5 sm:p-6 shadow-[0_0_38px_rgba(168,85,247,0.35)]">
@@ -742,6 +822,7 @@ const canFinalize =
                         },
                       }));
                       setScoreboardUpdated(false);
+                      setHasUnsavedScoreEdits(true);
                     }}
                     disabled={challenge?.status === "completed"}
                     className="w-full border-2 border-cyan-300 bg-white text-black text-base font-black rounded-xl p-4 disabled:opacity-50 focus:outline-none focus:ring-4 focus:ring-cyan-300/40"
@@ -788,6 +869,7 @@ const canFinalize =
                     });
 
                     setScoreboardUpdated(false);
+                    setHasUnsavedScoreEdits(true);
                   }}
                   disabled={challenge?.status === "completed"}
                   className="w-full border-2 border-fuchsia-300 bg-white text-black text-base font-black rounded-xl p-4 disabled:opacity-50 focus:outline-none focus:ring-4 focus:ring-fuchsia-300/40"
@@ -815,6 +897,7 @@ const canFinalize =
                         [player.uid]: e.target.value,
                       }));
                       setScoreboardUpdated(false);
+                      setHasUnsavedScoreEdits(true);
                     }}
                     placeholder="ENTER SCORE"
                     disabled={challenge?.status === "completed"}
@@ -863,7 +946,7 @@ const canFinalize =
               : "bg-gray-700 text-gray-300"
           }`}
         >
-          {scoreboardUpdated
+          {resultsPosted && !hasUnsavedScoreEdits
             ? "UPDATED"
             : allScoresEntered
             ? "READY"
@@ -899,13 +982,15 @@ const canFinalize =
           ? "ADD PLAYERS TO CONTINUE"
           : !allScoresEntered
           ? "ENTER ALL RESULTS TO CONTINUE"
-          : scoreboardUpdated
+          : resultsPosted && !hasUnsavedScoreEdits
           ? "SCOREBOARD UPDATED"
           : "UPDATE SCOREBOARD"}
       </button>
     </div>
   </div>
 )}
+
+{isCreator && verifyCard}
 
 {/* PLAYER SUMMARY */}
 <div className="border-2 border-cyan-400/80 bg-gradient-to-br from-cyan-950/70 via-blue-950/70 to-black rounded-3xl p-5 shadow-[0_0_35px_rgba(34,211,238,0.28)]">
@@ -924,7 +1009,11 @@ const canFinalize =
     </div>
   </div>
 
-  <PlayerSummaryList challengeId={challengeId as string} />
+  <PlayerSummaryList
+    challengeId={challengeId as string}
+    showVerification={resultsPosted}
+    resultsRevision={challenge.resultsRevision}
+  />
 </div>
 
 {/* STEP 4 - FINALIZE */}
@@ -965,13 +1054,13 @@ const canFinalize =
       </div>
     </div>
 
-    {!allScoresEntered ? (
-      <div className="text-sm font-black text-black bg-yellow-300 border-2 border-yellow-100 rounded-2xl p-4">
-        ACTION REQUIRED — ENTER A RESULT FOR EVERY PLAYER.
-      </div>
-    ) : !scoreboardUpdated ? (
+    {needsScoreboardSave ? (
       <div className="text-sm font-black text-black bg-orange-400 border-2 border-orange-200 rounded-2xl p-4">
         ACTION REQUIRED — UPDATE THE SCOREBOARD BEFORE FINALIZING.
+      </div>
+    ) : !allPlayersVerified ? (
+      <div className="text-sm font-black text-black bg-yellow-300 border-2 border-yellow-100 rounded-2xl p-4">
+        WAITING FOR PLAYERS — ALL JOINED PLAYERS MUST VERIFY THE RESULTS ({verifiedCount} OF {players.length} VERIFIED).
       </div>
     ) : (
       <div className="text-sm font-black text-black bg-green-400 border-2 border-green-200 rounded-2xl p-4 shadow-[0_0_24px_rgba(74,222,128,0.35)]">
@@ -990,10 +1079,10 @@ const canFinalize =
     >
       {finalizing
         ? "FINALIZING..."
-        : !allScoresEntered
-        ? "ENTER ALL RESULTS TO CONTINUE"
-        : !scoreboardUpdated
+        : needsScoreboardSave
         ? "UPDATE SCOREBOARD TO CONTINUE"
+        : !allPlayersVerified
+        ? "WAITING FOR ALL PLAYERS TO VERIFY"
         : "FINALIZE CHALLENGE"}
     </button>
   </div>

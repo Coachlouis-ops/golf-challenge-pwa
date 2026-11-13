@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "@/src/lib/firebase";
+import { playerVerifiedForRevision } from "@/src/lib/resultVerification";
 
 type PlayerSummary = {
   uid: string;
@@ -10,12 +11,18 @@ type PlayerSummary = {
   position?: number;
   total?: number;
   status?: string;
+  resultVerified: boolean;
+  verifiedRevision: number | null;
 };
 
 export default function PlayerSummaryList({
   challengeId,
+  showVerification = false,
+  resultsRevision = 0,
 }: {
   challengeId: string;
+  showVerification?: boolean;
+  resultsRevision?: number;
 }) {
   const [loading, setLoading] = useState(true);
   const [items, setItems] = useState<PlayerSummary[]>([]);
@@ -39,6 +46,13 @@ export default function PlayerSummaryList({
     position: d.get("position"),
     total: d.get("total"),
     status: d.get("resultText") || d.get("status"),
+    resultVerified:
+      d.get("resultVerified") === true || d.get("resultAccepted") === true,
+    verifiedRevision: (() => {
+      const raw = d.get("verifiedRevision");
+      const revision = Number(raw);
+      return raw == null || raw === "" || !Number.isFinite(revision) ? null : revision;
+    })(),
   };
 });
 
@@ -75,6 +89,7 @@ export default function PlayerSummaryList({
             <th className="p-2 text-left">Player</th>
             <th className="p-2 text-left">Total</th>
             <th className="p-2 text-left">Status</th>
+            {showVerification && <th className="p-2 text-left">Check</th>}
           </tr>
         </thead>
         <tbody>
@@ -84,6 +99,19 @@ export default function PlayerSummaryList({
               <td className="p-2">{p.displayName ?? p.uid}</td>
               <td className="p-2">{p.total ?? "—"}</td>
               <td className="p-2">{p.status ?? "—"}</td>
+              {showVerification && (
+                <td className="p-2">
+                  <span
+                    className={`inline-flex rounded-full px-2 py-1 text-[10px] font-black uppercase ${
+                      playerVerifiedForRevision(p, resultsRevision)
+                        ? "bg-emerald-400 text-black"
+                        : "bg-yellow-300 text-black"
+                    }`}
+                  >
+                    {playerVerifiedForRevision(p, resultsRevision) ? "Verified" : "Pending"}
+                  </span>
+                </td>
+              )}
             </tr>
           ))}
         </tbody>

@@ -238,7 +238,7 @@ setChallenges(rows);
                           : "bg-blue-600 text-white"
                       }`}
                     >
-                      {isCreator ? "Creator Controls" : "View Only"}
+                      {isCreator ? "Creator Controls" : "Player"}
                     </span>
                   </div>
                 </div>

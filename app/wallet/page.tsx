@@ -6,12 +6,15 @@ import { doc, onSnapshot } from "firebase/firestore";
 import { db } from "@/src/lib/firebase";
 import { useAuth } from "@/src/lib/AuthContext";
 import { formatWalletRand } from "@/src/lib/walletMoney";
+import WalletWinNotice from "@/src/components/WalletWinNotice";
+import { readWinNotice, type WinNotice } from "@/src/lib/winNotice";
 
 export default function WalletPage() {
   const { user } = useAuth();
   const router = useRouter();
   const [balance, setBalance] = useState(0);
   const [lifetimeSpent, setLifetimeSpent] = useState(0);
+  const [winNotice, setWinNotice] = useState<WinNotice | null>(null);
 
 
   useEffect(() => {
@@ -27,6 +30,7 @@ export default function WalletPage() {
 
       setBalance(Number(data.balance || 0));
       setLifetimeSpent(Number(data.lifetimeSpent || 0));
+      setWinNotice(readWinNotice(data.lastWinNotice));
      
     });
 
@@ -57,6 +61,7 @@ export default function WalletPage() {
          <p className="text-5xl font-bold text-green-400 mt-3 drop-shadow-[0_0_12px_#00ff88]">
   {formatWalletRand(balance)}
 </p>
+        <WalletWinNotice notice={winNotice} />
 
         <p className="text-gray-400 mt-2">
   Available for the bet on a TEEZ Golf Challenge
@@ -101,7 +106,9 @@ export default function WalletPage() {
   Deposits of R25, R50, R75, R100, R150, R200 or R250 are added
   to this wallet after Peach Payments confirms them. A match can
   be created or joined only when the balance covers the bet per
-  player. The balance does not expire.
+  player. When a challenge is finalised, 90% of the players&apos; stakes
+  is paid in rand to the winner&apos;s wallet. ABC Bookmakers keeps 10%
+  as the platform fee. The balance does not expire.
 </p>
 
         </div>

@@ -79,43 +79,92 @@ export default function PlayerSummaryList({
   if (!items.length) return <p>No player summary data.</p>;
 
   return (
-    <div className="border rounded p-4 flex flex-col gap-3">
+    <div className="w-full max-w-full overflow-hidden rounded border border-white/15 p-3 sm:p-4">
       <h2 className="text-lg font-semibold">Player Summary</h2>
 
-      <table className="w-full border border-gray-200 text-sm">
-        <thead className="bg-gray-100">
-          <tr>
-            <th className="p-2 text-left">Pos</th>
-            <th className="p-2 text-left">Player</th>
-            <th className="p-2 text-left">Total</th>
-            <th className="p-2 text-left">Status</th>
-            {showVerification && <th className="p-2 text-left">Check</th>}
-          </tr>
-        </thead>
-        <tbody>
-          {items.map((p) => (
-            <tr key={p.uid} className="border-t">
-              <td className="p-2">{p.position ?? "—"}</td>
-              <td className="p-2">{p.displayName ?? p.uid}</td>
-              <td className="p-2">{p.total ?? "—"}</td>
-              <td className="p-2">{p.status ?? "—"}</td>
+      <div className="mt-3 flex flex-col gap-3 sm:hidden">
+        {items.map((player) => {
+          const verified = playerVerifiedForRevision(player, resultsRevision);
+          return (
+            <article
+              key={player.uid}
+              className="w-full max-w-full rounded-xl border border-white/15 bg-black/40 p-3"
+            >
+              <div className="flex items-start gap-3">
+                <p className="shrink-0 text-lg font-black text-cyan-200">
+                  #{player.position ?? "—"}
+                </p>
+                <p className="min-w-0 break-words text-sm font-bold text-white">
+                  {player.displayName ?? player.uid}
+                </p>
+              </div>
+              <dl className="mt-3 grid grid-cols-2 gap-2 text-sm">
+                <div>
+                  <dt className="text-[10px] font-black uppercase tracking-wide text-cyan-300">
+                    Total
+                  </dt>
+                  <dd className="mt-1 font-bold text-white">{player.total ?? "—"}</dd>
+                </div>
+                <div>
+                  <dt className="text-[10px] font-black uppercase tracking-wide text-cyan-300">
+                    Status
+                  </dt>
+                  <dd className="mt-1 break-words font-bold text-white">
+                    {player.status ?? "—"}
+                  </dd>
+                </div>
+              </dl>
               {showVerification && (
-                <td className="p-2">
-                  <span
-                    className={`inline-flex rounded-full px-2 py-1 text-[10px] font-black uppercase ${
-                      playerVerifiedForRevision(p, resultsRevision)
-                        ? "bg-emerald-400 text-black"
-                        : "bg-yellow-300 text-black"
-                    }`}
-                  >
-                    {playerVerifiedForRevision(p, resultsRevision) ? "Verified" : "Pending"}
-                  </span>
-                </td>
+                <p
+                  className={`mt-3 inline-flex rounded-full px-3 py-1 text-xs font-black uppercase ${
+                    verified ? "bg-emerald-400 text-black" : "bg-yellow-300 text-black"
+                  }`}
+                >
+                  {verified ? "Verified" : "Pending"}
+                </p>
               )}
+            </article>
+          );
+        })}
+      </div>
+
+      <div className="mt-3 hidden w-full max-w-full overflow-x-auto sm:block">
+        <table className="w-full border border-white/15 text-sm">
+          <thead className="bg-cyan-950/60 text-cyan-200">
+            <tr>
+              <th className="p-3 text-left font-black">Pos</th>
+              <th className="p-3 text-left font-black">Player</th>
+              <th className="p-3 text-left font-black">Total</th>
+              <th className="p-3 text-left font-black">Status</th>
+              {showVerification && <th className="p-3 text-left font-black">Check</th>}
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {items.map((player) => {
+              const verified = playerVerifiedForRevision(player, resultsRevision);
+              return (
+                <tr key={player.uid} className="border-t border-white/10">
+                  <td className="p-3">{player.position ?? "—"}</td>
+                  <td className="min-w-0 break-words p-3">{player.displayName ?? player.uid}</td>
+                  <td className="p-3">{player.total ?? "—"}</td>
+                  <td className="break-words p-3">{player.status ?? "—"}</td>
+                  {showVerification && (
+                    <td className="p-3">
+                      <span
+                        className={`inline-flex rounded-full px-2 py-1 text-[10px] font-black uppercase ${
+                          verified ? "bg-emerald-400 text-black" : "bg-yellow-300 text-black"
+                        }`}
+                      >
+                        {verified ? "Verified" : "Pending"}
+                      </span>
+                    </td>
+                  )}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

@@ -68,27 +68,29 @@ export default function ResultsList({
   if (!rows.length) return <p>No results available.</p>;
 
   return (
-    <div className="border rounded p-4 flex flex-col gap-3">
+    <div className="flex w-full max-w-full flex-col gap-3 overflow-hidden rounded border border-white/15 p-3 sm:p-4">
       <h2 className="text-lg font-semibold">Leaderboard</h2>
 
-      <table className="w-full border border-gray-200 text-sm">
-        <thead className="bg-gray-100">
-          <tr>
-            <th className="p-2 text-left">Pos</th>
-            <th className="p-2 text-left">Player</th>
-            <th className="p-2 text-left">Result</th>
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map((r) => (
-            <tr key={r.uid} className="border-t">
-              <td className="p-2">{r.position ?? "—"}</td>
-              <td className="p-2">{r.displayName ?? r.uid}</td>
-              <td className="p-2">{getDisplayValue(r)}</td>
+      <div className="w-full max-w-full overflow-x-auto">
+        <table className="w-full border border-white/15 text-sm">
+          <thead className="bg-cyan-950/60 text-cyan-200">
+            <tr>
+              <th className="p-2 text-left font-black">Pos</th>
+              <th className="p-2 text-left font-black">Player</th>
+              <th className="p-2 text-left font-black">Result</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {rows.map((r) => (
+              <tr key={r.uid} className="border-t border-white/10">
+                <td className="p-2">{r.position ?? "—"}</td>
+                <td className="break-words p-2">{r.displayName ?? r.uid}</td>
+                <td className="p-2">{getDisplayValue(r)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

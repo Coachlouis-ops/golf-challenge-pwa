@@ -114,9 +114,12 @@ export default function GolfCourseSearch({
                 data.results
               )
                 ? data.results.map(
-                    (
-                      result: any
-                    ) => ({
+                    (result: {
+                      placeId?: string;
+                      name?: string;
+                      description?: string;
+                      secondaryText?: string;
+                    }) => ({
                       placeId:
                         result.placeId ||
                         "",
@@ -149,9 +152,10 @@ export default function GolfCourseSearch({
             setOpen(
               nextResults.length > 0
             );
-          } catch (error: any) {
+          } catch (error: unknown) {
             if (
-              error?.name !==
+              !(error instanceof Error) ||
+              error.name !==
               "AbortError"
             ) {
               console.error(
@@ -298,7 +302,7 @@ export default function GolfCourseSearch({
 
       {open &&
         results.length > 0 && (
-          <div className="absolute z-[100] mt-1 w-full overflow-hidden rounded-xl border border-gray-700 bg-neutral-950 shadow-2xl">
+          <div className="absolute z-[100] mt-1 max-h-[60vh] w-full overflow-y-auto rounded-xl border border-gray-700 bg-neutral-950 shadow-2xl">
             {results.map(
               (course) => (
                 <button
